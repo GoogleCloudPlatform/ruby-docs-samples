@@ -17,7 +17,7 @@ scaffolding for other frameworks and use cases.
 
    ```
    bundle install
-   bundle exec rake
+   bundle exec rake spec
    ```
 
 ## Contributing changes

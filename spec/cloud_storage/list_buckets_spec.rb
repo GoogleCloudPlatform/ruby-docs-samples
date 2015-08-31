@@ -14,7 +14,7 @@
 
 # Specs for list_buckets.rb
 require "cloud_storage/list_buckets"
-require "test_constants"
+require "spec_helper"
 
 RSpec.describe "list buckets sample" do
   it "lists buckets" do

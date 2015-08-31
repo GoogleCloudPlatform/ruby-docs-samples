@@ -1,4 +1,5 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
+
 # Copyright 2015 Google, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -45,5 +46,4 @@ if __FILE__ == $PROGRAM_NAME
   abort "Usage: #{__FILE__} <project-id>" if ARGV.length < 1
   list_buckets(ARGV[0])
 end
-
 # [END all]
