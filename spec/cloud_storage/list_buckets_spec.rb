@@ -12,13 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Specs for list_buckets.rb
-require "cloud_storage/list_buckets"
 require "spec_helper"
+require "cloud_storage/list_buckets"
 
-RSpec.describe "list buckets sample" do
-  it "lists buckets" do
-    expect { list_buckets(PROJECT_ID) }.to output(Regexp.new(BUCKET_NAME)).
-      to_stdout
+RSpec.describe "List buckets sample" do
+  before do
+    @sample = Samples::CloudStorage::ListBuckets.new
+  end
+
+  it "lists buckets in provided project" do
+    expect { @sample.list_buckets PROJECT_ID }.to(
+      output(/#{BUCKET_NAME}/).to_stdout)
   end
 end

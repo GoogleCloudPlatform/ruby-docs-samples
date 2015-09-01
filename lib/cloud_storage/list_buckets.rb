@@ -14,36 +14,38 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# A short sample demonstrating making an authenticated api request.
-#
-# Specifically, it creates a Service object to the Google Cloud Storage api, and
-# uses Application Default Credentials to authenticate.
-#
-# [START all]
-require "google/apis/storage_v1"
-require "googleauth"
+module Samples
+  module CloudStorage
+    # A short sample demonstrating making an authenticated api request.
+    #
+    # Specifically, it creates a Service object to the Google Cloud Storage api,
+    # and uses Application Default Credentials to authenticate.
+    class ListBuckets
+      # [START list_buckets]
+      require "google/apis/storage_v1"
 
-# Alias the module for greater brevity
-Storage = Google::Apis::StorageV1
+      # Alias the Google Cloud Storage module
+      Storage = Google::Apis::StorageV1
 
-def create_storage_service
-  storage = Storage::StorageService.new
-  storage.authorization = Google::Auth.get_application_default(
-    [Storage::AUTH_DEVSTORAGE_READ_ONLY]
-  )
+      def list_buckets project_id
+        # Create Storage service that uses Application Default Credentials
+        storage = Storage::StorageService.new
+        storage.authorization = Google::Auth.get_application_default(
+          Storage::AUTH_DEVSTORAGE_READ_ONLY
+        )
 
-  storage
-end
-
-def list_buckets(project_id)
-  storage = create_storage_service
-  storage.list_buckets(project_id).items.each do |bucket|
-    puts bucket.name
+        # Make the api call to list buckets owned by the default credentials.
+        storage.list_buckets(project_id).items.each do |bucket|
+          puts bucket.name
+        end
+      end
+      # [END list_buckets]
+    end
   end
 end
 
 if __FILE__ == $PROGRAM_NAME
-  abort "Usage: #{__FILE__} <project-id>" if ARGV.length < 1
-  list_buckets(ARGV[0])
+  project_id = ARGV.shift
+
+  Samples::CloudStorage::ListBuckets.new.list_buckets project_id
 end
-# [END all]
