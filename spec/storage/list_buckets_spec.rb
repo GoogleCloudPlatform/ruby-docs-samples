@@ -13,11 +13,11 @@
 # limitations under the License.
 
 require "spec_helper"
-require "cloud_storage/list_buckets"
+require "storage/list_buckets"
 
 RSpec.describe "List buckets sample" do
   before do
-    @sample = Samples::CloudStorage::ListBuckets.new
+    @sample = Samples::Storage::ListBuckets.new
   end
 
   it "lists buckets in provided project" do

@@ -15,7 +15,7 @@
 # limitations under the License.
 
 module Samples
-  module CloudStorage
+  module Storage
     # A short sample demonstrating making an authenticated api request.
     #
     # Specifically, it creates a Service object to the Google Cloud Storage api,
@@ -51,5 +51,5 @@ end
 if __FILE__ == $PROGRAM_NAME
   project_id = ARGV.shift
 
-  Samples::CloudStorage::ListBuckets.new.list_buckets project_id
+  Samples::Storage::ListBuckets.new.list_buckets project_id
 end
