@@ -11,12 +11,16 @@ scaffolding for other frameworks and use cases.
 
 ## Run Locally
 1. Clone this repo.
-
    ```
    git clone https://github.com/GoogleCloudPlatform/ruby-docs-samples.git
    ```
-1. Run the tests from the command line.
 
+1. Change directories to the sample that you want to test. Example:
+   ```
+   cd ruby-docs-samples/storage
+   ```
+
+1. Run the tests from the command line.
    ```
    bundle install
    bundle exec rake spec
