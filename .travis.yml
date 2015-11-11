@@ -30,6 +30,7 @@ env:
   matrix:
   - TEST_DIR=storage
   - TEST_DIR=pubsub
+  - TEST_DIR=bigquery
 
 before_install:
 #ENCRYPT YOUR PRIVATE KEY (If you need authentication)
