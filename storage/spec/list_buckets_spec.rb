@@ -12,8 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "spec_helper"
-require "storage/list_buckets"
+require_relative "spec_helper"
+require_relative "../list_buckets"
 
 RSpec.describe "List buckets sample" do
   before do

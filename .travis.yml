@@ -24,12 +24,12 @@ cache:
     - vendor/bundle
 
 env:
-- TEST_DIR=storage
-  PATH=$PATH:$HOME/gcloud/google-cloud-sdk/bin
-  GOOGLE_APPLICATION_CREDENTIALS=$TRAVIS_BUILD_DIR/client_secrets.json
-- TEST_DIR=pubsub
-  PATH=$PATH:$HOME/gcloud/google-cloud-sdk/bin
-  GOOGLE_APPLICATION_CREDENTIALS=$TRAVIS_BUILD_DIR/client_secrets.json
+  global:
+  - PATH=$PATH:$HOME/gcloud/google-cloud-sdk/bin
+  - GOOGLE_APPLICATION_CREDENTIALS=$TRAVIS_BUILD_DIR/client_secrets.json
+  matrix:
+  - TEST_DIR=storage
+  - TEST_DIR=pubsub
 
 before_install:
 #ENCRYPT YOUR PRIVATE KEY (If you need authentication)
