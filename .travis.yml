@@ -1,3 +1,17 @@
+# Copyright 2015 Google, Inc
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 sudo: false
 language: ruby
 rvm:
@@ -5,12 +19,17 @@ rvm:
 - 2.0.0
 
 cache:
-  directories:
-  - $HOME/gcloud/
-  - vendor/bundle
+  - directories:
+    - $HOME/gcloud/
+    - vendor/bundle
 
 env:
-- PATH=$PATH:$HOME/gcloud/google-cloud-sdk/bin GOOGLE_APPLICATION_CREDENTIALS=$TRAVIS_BUILD_DIR/client_secrets.json #Other environment variables on same line
+  global:
+  - PATH=$PATH:$HOME/gcloud/google-cloud-sdk/bin
+  - GOOGLE_APPLICATION_CREDENTIALS=$TRAVIS_BUILD_DIR/client_secrets.json
+  matrix:
+  - TEST_DIR=storage
+  - TEST_DIR=pubsub
 
 before_install:
 #ENCRYPT YOUR PRIVATE KEY (If you need authentication)
@@ -23,7 +42,6 @@ before_install:
 # 4. Commit changes:
 #       $ git add client_secrets.json.enc
 #       $ git commit client_secrets.json.enc .travis.yml
-
 - openssl aes-256-cbc -K $encrypted_d7762b201054_key -iv $encrypted_d7762b201054_iv
   -in client_secrets.json.enc -out client_secrets.json -d
 - if [ ! -d $HOME/gcloud/google-cloud-sdk ]; then
@@ -40,8 +58,8 @@ before_install:
   fi
 
 install:
-  #Add app specific setup here
-  #Use '-q' to disable interactive prompts
+- cd $TEST_DIR
+- bundle install --deployment --path ../vendor/bundle --jobs=3 --retry=3
 
 script:
 - bundle exec rake rubocop

@@ -12,15 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-Style/StringLiterals:
-  EnforcedStyle: double_quotes
-Style/MethodDefParentheses:
-  EnforcedStyle: require_no_parentheses
-Style/NumericLiterals:
-  Enabled: false
-Style/SpaceAroundOperators:
-  Enabled: false
-Metrics/ClassLength:
-  Enabled: false
-Style/EmptyElse:
-  Enabled: false
+require_relative "spec_helper"
+require_relative "../list_buckets"
+
+RSpec.describe "List buckets sample" do
+  before do
+    @sample = Samples::Storage::ListBuckets.new
+  end
+
+  it "lists buckets in provided project" do
+    expect { @sample.list_buckets PROJECT_ID }.to(
+      output(/#{BUCKET_NAME}/).to_stdout)
+  end
+end

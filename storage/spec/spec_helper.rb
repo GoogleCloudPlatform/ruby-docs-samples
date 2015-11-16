@@ -12,16 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "spec_helper"
-require "storage/list_buckets"
+require "rspec"
 
-RSpec.describe "List buckets sample" do
-  before do
-    @sample = Samples::Storage::ListBuckets.new
-  end
-
-  it "lists buckets in provided project" do
-    expect { @sample.list_buckets PROJECT_ID }.to(
-      output(/#{BUCKET_NAME}/).to_stdout)
-  end
-end
+PROJECT_ID="cloud-samples-tests"
+BUCKET_NAME="cloud-samples-tests"
