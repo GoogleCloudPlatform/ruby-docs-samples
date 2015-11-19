@@ -24,3 +24,5 @@ Metrics/ClassLength:
   Enabled: false
 Style/EmptyElse:
   Enabled: false
+Style/LineEndConcatenation:
+  Enabled: false

@@ -31,8 +31,8 @@ module Samples
         # [END build_service]
 
         # [START run_query]
-        sql = "SELECT TOP(corpus, 10) as title, COUNT(*) as unique_words " \
-              + "FROM [publicdata:samples.shakespeare]"
+        sql = "SELECT TOP(corpus, 10) as title, COUNT(*) as unique_words " +
+              "FROM [publicdata:samples.shakespeare]"
         results = bigquery.query sql
         # [END run_query]
 
