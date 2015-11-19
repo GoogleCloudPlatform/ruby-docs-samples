@@ -12,17 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-Style/StringLiterals:
-  EnforcedStyle: double_quotes
-Style/MethodDefParentheses:
-  EnforcedStyle: require_no_parentheses
-Style/NumericLiterals:
-  Enabled: false
-Style/SpaceAroundOperators:
-  Enabled: false
-Metrics/ClassLength:
-  Enabled: false
-Style/EmptyElse:
-  Enabled: false
-Style/LineEndConcatenation:
-  Enabled: false
+require_relative "spec_helper"
+require_relative "../shakespeare"
+
+RSpec.describe "Show Shakespeare words sample" do
+  before do
+    @sample = Samples::BigQuery::Shakespeare.new
+  end
+
+  it "lists number of unique words in shakespeare" do
+    expect { @sample.unique_words PROJECT_ID }.to(
+      output(/hamlet/).to_stdout)
+  end
+end
