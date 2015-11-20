@@ -48,5 +48,6 @@ module Samples
       project_id = ARGV.shift
       Shakespeare.new.unique_words project_id
     end
+    # [END all]
   end
 end
