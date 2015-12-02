@@ -15,11 +15,13 @@
 # limitations under the License.
 
 module Samples
+  # Cloud Storage Samples module
   module Storage
     # A short sample demonstrating making an authenticated api request.
     #
     # Specifically, it creates a Service object to the Google Cloud Storage api,
     # and uses Application Default Credentials to authenticate.
+    # [START all]
     class ListBuckets
       # [START list_buckets]
       require "google/apis/storage_v1"
@@ -45,11 +47,12 @@ module Samples
       end
       # [END list_buckets]
     end
+
+    if __FILE__ == $PROGRAM_NAME
+      project_id = ARGV.shift
+
+      ListBuckets.new.list_buckets project_id
+    end
+    # [END all]
   end
-end
-
-if __FILE__ == $PROGRAM_NAME
-  project_id = ARGV.shift
-
-  Samples::Storage::ListBuckets.new.list_buckets project_id
 end
