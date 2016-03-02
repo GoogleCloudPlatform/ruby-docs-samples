@@ -29,7 +29,7 @@ services.
 
         cd <sample-folder>/
         bundle
-        bundle exec rackup
+        bundle exec ruby app.rb
 
 1. Visit the application at [http://localhost:8080](http://localhost:8080).
 
