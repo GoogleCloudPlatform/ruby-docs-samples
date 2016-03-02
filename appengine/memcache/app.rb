@@ -13,6 +13,7 @@
 # limitations under the License.
 
 require "sinatra"
+require "dalli"
 
 memcached_address = ENV["MEMCACHE_PORT_11211_TCP_ADDR"] || "localhost"
 memcached_port    = ENV["MEMCACHE_PORT_11211_TCP_PORT"] || 11211

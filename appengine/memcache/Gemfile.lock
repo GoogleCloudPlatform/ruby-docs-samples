@@ -1,6 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    dalli (2.7.6)
     rack (1.6.4)
     rack-protection (1.5.3)
       rack
@@ -14,7 +15,8 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  dalli
   sinatra
 
 BUNDLED WITH
-   1.10.6
+   1.11.2
