@@ -12,12 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-source "https://rubygems.org"
+require File.expand_path("../../../../spec/e2e", __FILE__)
+require "rspec"
+require "net/http"
 
-gem "sinatra"
+RSpec.describe "Hello World E2E test" do
+  before do
+    @url = E2E.url
+  end
 
-group :test do
-  gem "rake"
-  gem "rubocop"
-  gem "rspec"
+  it "displays hello world text" do
+    expect(URI.parse(@url)).to eq("Hello world!")
+  end
 end

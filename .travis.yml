@@ -31,6 +31,11 @@ env:
   - TEST_DIR=storage
   - TEST_DIR=pubsub
   - TEST_DIR=bigquery
+matrix:
+  # e2e tests only need to run on one ruby version
+  include:
+  - rvm: 2.2.3
+    env: TEST_DIR=appengine/hello_world
 
 before_install:
 #ENCRYPT YOUR PRIVATE KEY (If you need authentication)
