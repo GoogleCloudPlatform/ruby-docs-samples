@@ -31,6 +31,19 @@ describe "Pub/Sub sample" do
     subscription.delete if subscription
   end
 
+  # Pub/Sub calls may not respond immediately.
+  # Wrap expectations that may require multiple attempts with #expect_with_retry.
+  def expect_with_retry attempts: 5
+    begin
+      attempt_number ||= 0
+      yield
+    rescue RSpec::Expectations::ExpectationNotMetError
+      attempt_number += 1
+      retry if attempt_number < attempts
+      raise
+    end
+  end
+
   before :each do
     cleanup!
     allow(Gcloud).to receive(:new).with("my-gcp-project-id").and_return(@gcloud)
@@ -47,7 +60,7 @@ describe "Pub/Sub sample" do
     expect(topic.name).to include(TOPIC_NAME)
   end
 
-  it "creates sub" do
+  it "creates subscription" do
     expect(@pubsub.subscription(SUBSCRIPTION_NAME)).to be nil
     @pubsub.create_topic TOPIC_NAME
 
@@ -105,20 +118,17 @@ describe "Pub/Sub sample" do
     )
     @pubsub.topic(TOPIC_NAME).publish message
 
-    begin
-      attempts ||= 0
+    expect_with_retry do
       expect { pull_messages }.to output(/#{message}/).to_stdout
-    rescue RSpec::Expectations::ExpectationNotMetError
-      attempts += 1
-      retry if attempts < 5
-      raise
     end
   end
 
   it "lists topics" do
     @pubsub.topic TOPIC_NAME, autocreate: true
 
-    expect { list_topics }.to output(/#{TOPIC_NAME}/).to_stdout
+    expect_with_retry do
+      expect { list_topics }.to output(/#{TOPIC_NAME}/).to_stdout
+    end
   end
 
   it "lists subscriptions" do
@@ -128,7 +138,9 @@ describe "Pub/Sub sample" do
       autocreate: true
     )
 
-    expect { list_subscriptions }.to output(/#{SUBSCRIPTION_NAME}/).to_stdout
+    expect_with_retry do
+      expect { list_subscriptions }.to output(/#{SUBSCRIPTION_NAME}/).to_stdout
+    end
   end
 
   after :all do
