@@ -12,12 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-source "https://rubygems.org"
+require "rspec/core/rake_task"
+RSpec::Core::RakeTask.new(:spec)
 
-gem "sinatra"
+require "rubocop/rake_task"
+RuboCop::RakeTask.new
 
-group :test do
-  gem "rake"
-  gem "rubocop"
-  gem "rspec"
-end
+task default: :spec
