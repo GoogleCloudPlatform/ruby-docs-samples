@@ -26,3 +26,9 @@ Style/EmptyElse:
   Enabled: false
 Style/LineEndConcatenation:
   Enabled: false
+Metrics/MethodLength:
+  Max: 15
+Lint/UselessAssignment:
+  Enabled: false
+Style/MutableConstant:
+  Enabled: false

@@ -12,7 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "spec_helper"
+require "sinatra"
+require "json"
+require "base64"
 
-RSpec.describe "Pub/Sub test test" do
+post "/push" do
+  message = JSON.parse request.body.read
+  data = Base64.decode64 message["message"]["data"]
+  logger.info "Pushed Message: #{data}"
+  response.status = 204
 end
+
+set :port, 8080
