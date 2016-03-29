@@ -32,16 +32,14 @@ describe "Pub/Sub sample" do
   end
 
   # Pub/Sub calls may not respond immediately.
-  # Wrap expectations that may require multiple attempts with #expect_with_retry.
+  # Wrap expectations that may require multiple attempts with this method.
   def expect_with_retry attempts: 5
-    begin
-      attempt_number ||= 0
-      yield
-    rescue RSpec::Expectations::ExpectationNotMetError
-      attempt_number += 1
-      retry if attempt_number < attempts
-      raise
-    end
+    attempt_number ||= 0
+    yield
+  rescue RSpec::Expectations::ExpectationNotMetError
+    attempt_number += 1
+    retry if attempt_number < attempts
+    raise
   end
 
   before :each do
