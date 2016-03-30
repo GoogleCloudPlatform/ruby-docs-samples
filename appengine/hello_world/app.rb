@@ -12,8 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START app]
 require "sinatra"
 
 get "/" do
   "Hello world!"
 end
+# [END app]
