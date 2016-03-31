@@ -30,7 +30,7 @@ class E2E
         end
 
         @attempted = true
-        build_id = ENV["TRAVIS_BUILD_ID"]
+        build_id = ENV["BUILD_ID"]
         self.deploy(test_dir, build_id)
       end
     end
@@ -79,9 +79,9 @@ class E2E
 
     def cleanup(test_dir, build_id = nil)
       # determine build number
-      build_id ||= ENV['TRAVIS_BUILD_ID']
+      build_id ||= ENV['BUILD_ID']
       if build_id.nil?
-        self.output "you must pass a build ID or define ENV[\"TRAVIS_BUILD_ID\"]"
+        self.output "you must pass a build ID or define ENV[\"BUILD_ID\"]"
         return 1
       end
 

@@ -16,10 +16,10 @@
 source "https://rubygems.org"
 
 gem "sinatra"
-gem "rake"
 # [END dependencies]
 
 group :test do
+  gem "rake"
   gem "rubocop"
   gem "rspec"
 end
