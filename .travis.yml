@@ -27,7 +27,6 @@ env:
   global:
   - PATH=$PATH:$HOME/gcloud/google-cloud-sdk/bin
   - GOOGLE_APPLICATION_CREDENTIALS=$TRAVIS_BUILD_DIR/client_secrets.json
-  - GCLOUD_PROJECT=cloud-samples-tests
   matrix:
   - TEST_DIR=storage
   - TEST_DIR=pubsub
