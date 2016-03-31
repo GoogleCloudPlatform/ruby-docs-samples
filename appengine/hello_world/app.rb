@@ -12,7 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "rspec"
+# [START app]
+require "sinatra"
 
-PROJECT_ID=ENV["GOOGLE_PROJECT_ID"]
-BUCKET_NAME=ENV["GOOGLE_PROJECT_ID"]
+get "/" do
+  "Hello world!"
+end
+# [END app]

@@ -12,7 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+require File.expand_path("../../../../spec/e2e", __FILE__)
 require "rspec"
+require "net/http"
 
-PROJECT_ID=ENV["GOOGLE_PROJECT_ID"]
-BUCKET_NAME=ENV["GOOGLE_PROJECT_ID"]
+RSpec.describe "Hello World E2E test" do
+  before do
+    @url = E2E.url
+  end
+
+  it "displays hello world text" do
+    uri = URI.parse(@url)
+    response = Net::HTTP.get(uri)
+    expect(response).to eq("Hello world!")
+  end
+end

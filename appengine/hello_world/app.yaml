@@ -12,7 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "rspec"
-
-PROJECT_ID=ENV["GOOGLE_PROJECT_ID"]
-BUCKET_NAME=ENV["GOOGLE_PROJECT_ID"]
+# [START app_yaml]
+runtime: ruby
+vm: true
+entrypoint: bundle exec ruby app.rb -p $PORT
+# [END app_yaml]

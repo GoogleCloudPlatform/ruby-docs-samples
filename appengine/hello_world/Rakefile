@@ -12,7 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "rspec"
+require "rspec/core/rake_task"
+RSpec::Core::RakeTask.new(:spec)
 
-PROJECT_ID=ENV["GOOGLE_PROJECT_ID"]
-BUCKET_NAME=ENV["GOOGLE_PROJECT_ID"]
+require "rubocop/rake_task"
+RuboCop::RakeTask.new
+
+task default: :spec

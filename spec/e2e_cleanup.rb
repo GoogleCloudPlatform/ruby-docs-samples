@@ -1,10 +1,9 @@
-# Copyright 2015 Google, Inc
-#
+# Copyright 2015, Google, Inc.
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#     http://www.apache.org/licenses/LICENSE-2.0
+#    http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -12,7 +11,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "rspec"
+require File.expand_path("../e2e", __FILE__)
 
-PROJECT_ID=ENV["GOOGLE_PROJECT_ID"]
-BUCKET_NAME=ENV["GOOGLE_PROJECT_ID"]
+if ARGV.size < 1
+  puts "usage: ruby spec/e2e_cleanup.rb TEST_DIR [BUILD_ID]"
+  exit 1
+end
+
+E2E.cleanup(ARGV[0], ARGV[1])

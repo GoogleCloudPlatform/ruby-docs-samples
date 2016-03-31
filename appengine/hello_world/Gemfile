@@ -12,7 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "rspec"
+# [START dependencies]
+source "https://rubygems.org"
 
-PROJECT_ID=ENV["GOOGLE_PROJECT_ID"]
-BUCKET_NAME=ENV["GOOGLE_PROJECT_ID"]
+gem "sinatra"
+# [END dependencies]
+
+group :test do
+  gem "rake"
+  gem "rubocop"
+  gem "rspec"
+end

@@ -27,7 +27,6 @@ env:
   global:
   - PATH=$PATH:$HOME/gcloud/google-cloud-sdk/bin
   - GOOGLE_APPLICATION_CREDENTIALS=$TRAVIS_BUILD_DIR/client_secrets.json
-  - GCLOUD_PROJECT=cloud-samples-tests
   matrix:
   - TEST_DIR=storage
   - TEST_DIR=pubsub
@@ -44,7 +43,7 @@ before_install:
 # 4. Commit changes:
 #       $ git add client_secrets.json.enc
 #       $ git commit client_secrets.json.enc .travis.yml
-- openssl aes-256-cbc -K $encrypted_d7762b201054_key -iv $encrypted_d7762b201054_iv
+- openssl aes-256-cbc -K $encrypted_aeb4e2af7332_key -iv $encrypted_aeb4e2af7332_iv
   -in client_secrets.json.enc -out client_secrets.json -d
 - if [ ! -d $HOME/gcloud/google-cloud-sdk ]; then
   mkdir -p $HOME/gcloud &&

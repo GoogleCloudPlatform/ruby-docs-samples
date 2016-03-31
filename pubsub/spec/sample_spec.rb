@@ -20,7 +20,7 @@ describe "Pub/Sub sample" do
   SUBSCRIPTION_NAME = "my-subscription"
 
   before :all do
-    @gcloud = Gcloud.new ENV["GCLOUD_PROJECT"]
+    @gcloud = Gcloud.new ENV["GOOGLE_PROJECT_ID"]
     @pubsub = @gcloud.pubsub
   end
 
@@ -86,7 +86,7 @@ describe "Pub/Sub sample" do
       ).and_return(
         @pubsub.topic(TOPIC_NAME).subscribe(
           subscription_name,
-          endpoint: "https://#{ENV['GCLOUD_PROJECT']}.appspot.com/push"
+          endpoint: "https://#{ENV['GOOGLE_PROJECT_ID']}.appspot.com/push"
         ))
 
     expect { create_push_subscription }.to \

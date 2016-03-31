@@ -14,4 +14,4 @@
 
 require "rspec"
 
-PROJECT_ID="cloud-samples-tests"
+PROJECT_ID=ENV["GOOGLE_PROJECT_ID"]
