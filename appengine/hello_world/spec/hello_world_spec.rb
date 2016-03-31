@@ -22,6 +22,8 @@ RSpec.describe "Hello World E2E test" do
   end
 
   it "displays hello world text" do
-    expect(URI.parse(@url)).to eq("Hello world!")
+    uri = URI.parse(@url)
+    response = Net::HTTP.get(uri)
+    expect(response).to eq("Hello world!")
   end
 end
