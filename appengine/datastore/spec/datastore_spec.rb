@@ -12,25 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-Style/StringLiterals:
-  EnforcedStyle: double_quotes
-Style/MethodDefParentheses:
-  EnforcedStyle: require_no_parentheses
-Style/NumericLiterals:
-  Enabled: false
-Style/SpaceAroundOperators:
-  Enabled: false
-Metrics/ClassLength:
-  Enabled: false
-Style/EmptyElse:
-  Enabled: false
-Style/LineEndConcatenation:
-  Enabled: false
-Metrics/MethodLength:
-  Max: 15
-Lint/UselessAssignment:
-  Enabled: false
-Style/MutableConstant:
-  Enabled: false
-Lint/ShadowingOuterLocalVariable:
-  Enabled: false
+require File.expand_path("../../../../spec/e2e", __FILE__)
+require "rspec"
+require "net/http"
+
+RSpec.describe "Datastore E2E test" do
+  before do
+    @url = E2E.url
+  end
+
+  it "returns what we expect" do
+    uri = URI.parse(@url)
+    response = Net::HTTP.get(uri)
+    expect(response).to include("Last 10 visits:")
+    expect(response).to include("Time:")
+    expect(response).to include("UTC Addr:")
+  end
+end
