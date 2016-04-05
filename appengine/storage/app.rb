@@ -17,23 +17,24 @@ require "gcloud"
 
 gcloud  = Gcloud.new
 storage = gcloud.storage
-bucket  = storage.bucket ENV["CLOUD_STORAGE_BUCKET"]
+bucket  = storage.bucket ENV["GCLOUD_STORAGE_BUCKET"]
 
 get "/" do
   # Present the user with an upload form
   %{
     <form method="POST" action="/upload" enctype="multipart/form-data">
       <input type="file" name="file">
-      <input type="submit">
+      <input type="submit" value="Upload">
     </form>
   }
 end
 
 post "/upload" do
+  file_path = params[:file][:tempfile].path
+  file_name = params[:file][:filename]
+
   # Upload file to Google Cloud Storage bucket
-  file = bucket.create_file params[:file][:tempfile].path,
-                            params[:file][:filename],
-                            acl: "public"
+  file = bucket.create_file file_path, file_name, acl: "public"
 
   # The public URL can be used to directly access the uploaded file via HTTP
   file.public_url
