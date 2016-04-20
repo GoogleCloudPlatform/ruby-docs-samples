@@ -1,4 +1,4 @@
-# Copyright 2015 Google, Inc
+# Copyright 2016 Google, Inc
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,25 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-Style/StringLiterals:
-  EnforcedStyle: double_quotes
-Style/MethodDefParentheses:
-  EnforcedStyle: require_no_parentheses
-Style/NumericLiterals:
-  Enabled: false
-Style/SpaceAroundOperators:
-  Enabled: false
-Metrics/ClassLength:
-  Enabled: false
-Style/EmptyElse:
-  Enabled: false
-Style/LineEndConcatenation:
-  Enabled: false
-Metrics/MethodLength:
-  Max: 15
-Lint/UselessAssignment:
-  Enabled: false
-Style/MutableConstant:
-  Enabled: false
-Lint/ShadowingOuterLocalVariable:
-  Enabled: false
+runtime: ruby
+vm: true
+entrypoint: bundle exec ruby app.rb -p 8080
+# [START substitute]
+env_variables:
+    PUBSUB_TOPIC: <your-topic-name>
+    # This token is used to verify that requests originate from your
+    # application. It can be any sufficiently random string.
+    PUBSUB_VERIFICATION_TOKEN: <your-token>
+# [END substitute]
