@@ -21,12 +21,12 @@ bucket  = storage.bucket ENV["GCLOUD_STORAGE_BUCKET"]
 
 get "/" do
   # Present the user with an upload form
-  %{
+  %(
     <form method="POST" action="/upload" enctype="multipart/form-data">
       <input type="file" name="file">
       <input type="submit" value="Upload">
     </form>
-  }
+  )
 end
 
 post "/upload" do

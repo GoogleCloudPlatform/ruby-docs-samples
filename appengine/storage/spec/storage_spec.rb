@@ -19,26 +19,29 @@ require "capybara/poltergeist"
 
 Capybara.current_driver = :poltergeist
 
-RSpec.describe "Google Cloud Storage on Google App Engine flexible environment", type: :feature do
-
+RSpec.describe "Cloud Storage on Google App Engine", type: :feature do
   before :all do
     app_yaml = File.expand_path("../../app.yaml", __FILE__)
-    configuration = File.read(app_yaml).
-      sub("<your-project-id>", ENV["GCLOUD_PROJECT"]).
-      sub("<your-bucket-name>", ENV["GCLOUD_STORAGE_BUCKET"])
+    configuration = File.read(app_yaml)
+                        .sub("<your-project-id>", ENV["GCLOUD_PROJECT"])
+                        .sub("<your-bucket-name>", ENV["GCLOUD_STORAGE_BUCKET"])
     File.write(app_yaml, configuration)
 
     @url = E2E.url
   end
 
   it "can upload and get public URL of uploaded file" do
+    file_path = File.expand_path("../ruby-storage-test-upload.txt", __FILE__)
+
     visit @url
-    attach_file "file", File.expand_path("../ruby-storage-test-upload.txt", __FILE__)
+    attach_file "file", file_path
     click_button "Upload"
 
     uploaded_file_public_url = find("body").text
 
     visit uploaded_file_public_url
-    expect(find("body").text).to eq "This is the content of the test-upload.txt file"
+    expect(find("body").text).to eq(
+      "This is the content of the test-upload.txt file"
+    )
   end
 end
