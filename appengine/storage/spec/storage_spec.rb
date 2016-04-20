@@ -22,10 +22,10 @@ Capybara.current_driver = :poltergeist
 RSpec.describe "Google Cloud Storage on Google App Engine flexible environment", type: :feature do
 
   before :all do
-    app_yaml = File.expand_path("../app.yaml", __FILE__)
+    app_yaml = File.expand_path("../../app.yaml", __FILE__)
     configuration = File.read(app_yaml).
       sub("<your-project-id>", ENV["GCLOUD_PROJECT"]).
-      sub("<your-bucket-name>"), ENV["GCLOUD_STORAGE_BUCKET"]
+      sub("<your-bucket-name>", ENV["GCLOUD_STORAGE_BUCKET"])
     File.write(app_yaml, configuration)
 
     @url = E2E.url
