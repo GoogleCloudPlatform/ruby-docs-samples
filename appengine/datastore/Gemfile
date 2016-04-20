@@ -12,15 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#[START all]
+# [START dependencies]
 source "https://rubygems.org"
 
 gem "sinatra"
 gem "gcloud"
+# [END dependencies]
 
 group :test do
   gem "rake"
   gem "rubocop"
   gem "rspec"
 end
-#[END all]
