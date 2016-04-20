@@ -15,10 +15,10 @@
 runtime: ruby
 vm: true
 entrypoint: bundle exec ruby app.rb -p 8080
-# [START substitute]
+# [START env_variables]
 env_variables:
     PUBSUB_TOPIC: <your-topic-name>
     # This token is used to verify that requests originate from your
     # application. It can be any sufficiently random string.
     PUBSUB_VERIFICATION_TOKEN: <your-token>
-# [END substitute]
+# [END env_variables]
