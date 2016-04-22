@@ -1,4 +1,4 @@
-# Copyright 2015 Google, Inc
+# Copyright 2016 Google, Inc
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,27 +16,10 @@ require "digest/sha2"
 require "sinatra"
 require "sequel"
 
-DB = Sequel.mysql2(
-  host:     ENV["MYSQL_HOST"],
-  user:     ENV["MYSQL_USER"],
-  password: ENV["MYSQL_PASSWORD"],
-  database: ENV["MYSQL_DATABASE"]
-)
-
-puts([
-  host:     ENV["MYSQL_HOST"],
-  user:     ENV["MYSQL_USER"],
-  password: ENV["MYSQL_PASSWORD"],
-  database: ENV["MYSQL_DATABASE"]
-].inspect)
-
-unless DB.tables.include? :visits
-  DB.create_table "visits" do
-    primary_key :id
-    String :user_ip
-    Time   :timestamp
-  end
-end
+DB = Sequel.mysql2 host: ENV["MYSQL_HOST"],
+                   user: ENV["MYSQL_USER"],
+                   password: ENV["MYSQL_PASSWORD"],
+                   database: ENV["MYSQL_DATABASE"]
 
 get "/" do
   # Save visit in database
@@ -47,7 +30,7 @@ get "/" do
 
   response.write "Last 10 visits:\n"
 
-  DB[:visits].order(Sequel.desc(:timestamp)).each do |visit|
+  DB[:visits].order(Sequel.desc(:timestamp)).limit(10).each do |visit|
     response.write "Time: #{visit[:timestamp]} Addr: #{visit[:user_ip]}\n"
   end
 

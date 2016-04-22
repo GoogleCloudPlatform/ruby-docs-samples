@@ -12,18 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START dependencies]
-source "https://rubygems.org"
+require "sequel"
 
-gem "sinatra"
-gem "mysql2"
-gem "sequel"
-# [END dependencies]
+DB = Sequel.mysql2 host: ENV["MYSQL_HOST"],
+                   user: ENV["MYSQL_USER"],
+                   password: ENV["MYSQL_PASSWORD"],
+                   database: ENV["MYSQL_DATABASE"]
 
-group :test do
-  gem "rake"
-  gem "rubocop"
-  gem "rspec"
-  gem "capybara"
-  gem "poltergeist"
+DB.create_table :visits do
+  primary_key :id
+  String :user_ip
+  Time   :timestamp
 end

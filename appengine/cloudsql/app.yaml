@@ -1,4 +1,4 @@
-# Copyright 2015 Google, Inc
+# Copyright 2016 Google, Inc
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,3 +15,13 @@
 runtime: ruby
 vm: true
 entrypoint: bundle exec ruby app.rb -p $PORT
+
+# [START env_variables]
+env_variables:
+  # Replace user, password, and host with the values obtained when
+  # configuring your Cloud SQL instance.
+  MYSQL_HOST: <your-cloudsql-host>
+  MYSQL_USER: <your-cloudsql-user>
+  MYSQL_PASSWORD: <your-cloudsql-password>
+  MYSQL_DATABASE: <your-cloudsql-database>
+# [END env_variables]
