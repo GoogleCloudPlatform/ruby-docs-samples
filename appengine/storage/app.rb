@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START all]
 require "sinatra"
 require "gcloud"
 
@@ -39,3 +40,4 @@ post "/upload" do
   # The public URL can be used to directly access the uploaded file via HTTP
   file.public_url
 end
+# [END all]
