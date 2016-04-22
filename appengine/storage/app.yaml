@@ -18,6 +18,5 @@ vm: true
 entrypoint: bundle exec ruby app.rb -p 8080
 
 env_variables:
-  GCLOUD_PROJECT: <your-project-id>
   GCLOUD_STORAGE_BUCKET: <your-bucket-name>
 # [END app_yaml]
