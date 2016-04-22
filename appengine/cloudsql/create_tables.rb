@@ -22,7 +22,7 @@ DB = Sequel.mysql2 host: ENV["MYSQL_HOST"],
 
 DB.create_table :visits do
   primary_key :id
-  String :user_ip
-  Time   :timestamp
+  String      :user_ip
+  Time        :timestamp
 end
 # [END all]
