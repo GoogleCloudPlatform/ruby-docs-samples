@@ -17,6 +17,7 @@ source "https://rubygems.org"
 
 gem "sinatra"
 gem "gcloud"
+# [END dependencies]
 
 group :test do
   gem "rake"
@@ -25,4 +26,3 @@ group :test do
   gem "capybara"
   gem "poltergeist"
 end
-# [END dependencies]
