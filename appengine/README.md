@@ -23,13 +23,13 @@ services.
 
 1. Clone this repo.
 
-        git clone https://github.com/GoogleCloudPlatform/<REPO NAME>.git
+        git clone https://github.com/GoogleCloudPlatform/ruby-docs-samples.git
 
 1. Open a sample folder, install dependencies, and run the sample:
 
-        cd <sample-folder>/
-        bundle
-        bundle exec ruby app.rb
+        cd appengine/<sample-folder>/
+        bundle install
+        bundle exec ruby app.rb -p 8080
 
 1. Visit the application at [http://localhost:8080](http://localhost:8080).
 

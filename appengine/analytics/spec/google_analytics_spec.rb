@@ -12,11 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START app_yaml]
-runtime: ruby
-vm: true
-entrypoint: bundle exec ruby app.rb -p $PORT
+require File.expand_path("../../../../spec/e2e", __FILE__)
+require "rspec"
+require "capybara/rspec"
+require "capybara/poltergeist"
 
-env_variables:
-  GA_TRACKING_ID: <your-tracking-id>
-# [END app_yaml]
+Capybara.current_driver = :poltergeist
+
+RSpec.describe "Google Analytics on Google App Engine", type: :feature do
+  before :all do
+    @url = E2E.url
+  end
+
+  it "can track visit event" do
+    visit @url
+
+    expect(page).to have_content "Event tracked"
+  end
+end
