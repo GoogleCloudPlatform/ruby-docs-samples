@@ -1,4 +1,4 @@
-# Copyright 2015 Google, Inc
+# Copyright 2016 Google, Inc
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,19 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START all]
 require "sinatra"
-require "memcached"
+require "memcache"
 
 memcached_address = ENV["MEMCACHE_PORT_11211_TCP_ADDR"] || "localhost"
 memcached_port    = ENV["MEMCACHE_PORT_11211_TCP_PORT"] || 11211
 
-memcached = Memcached.new "#{memcached_address}:#{memcached_port}"
+memcache = MemCache.new "#{memcached_address}:#{memcached_port}"
 
 # Set initial value of counter
-memcached.set "counter", "1", 0, false
+memcache.set "counter", 0, 0, true
 
 get "/" do
-  value = memcached.increment "counter"
+  value = memcache.incr "counter"
 
   "Counter value is #{value}"
 end
+# [END all]
