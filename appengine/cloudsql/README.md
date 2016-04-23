@@ -1,7 +1,7 @@
-# Ruby Cloud SQL sample on Google App Engine
+# Ruby Cloud SQL sample on Google App Engine flexible environment
 
 This sample demonstrates how to use [Cloud SQL](https://cloud.google.com/sql/)
-on [Google App Engine Managed VMs](https://cloud.google.com/appengine).
+on [Google App Engine flexible environment](https://cloud.google.com/appengine/docs/flexible/).
 
 ## Setup
 
