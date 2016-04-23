@@ -27,7 +27,7 @@ RSpec.describe "Cloud Storage on Google App Engine", type: :feature do
   it "can send email" do
     visit @url
 
-    fill_in "recipient", with: "test-email-addr-1234@google.com"
+    fill_in "recipient", with: "recipient@example.com"
     click_button "Send email"
 
     # SendGrid::Exception was successully caught and rendered
