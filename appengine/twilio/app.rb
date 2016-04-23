@@ -43,9 +43,9 @@ get "/sms/send" do
   client = Twilio::REST::Client.new
 
   client.messages.create(
-    from: '+14159341234',
+    from: TWILIO_NUMBER,
     to:   params[:to]
-    body: 'Hey there!'
+    body: "Hello from Google App Engine"
   )
 end
 # [END send_sms]
