@@ -37,6 +37,7 @@ post "/call/receive" do
 end
 # [END receive_call]
 
+# [START send_sms]
 # Sends a simple SMS message.
 get "/sms/send" do
   client = Twilio::REST::Client.new
@@ -47,5 +48,6 @@ get "/sms/send" do
     body: 'Hey there!'
   )
 end
+# [END send_sms]
 
 # "/sms/receive"
