@@ -1,7 +1,7 @@
-# Memcached sample for Google App Engine
+# Memcached sample for Google App Engine flexible environment
 
 This sample demonstrates accessing Memcached from Ruby on
-[Google App Engine Managed VMs](https://cloud.google.com/appengine).
+[Google App Engine flexible environment](https://cloud.google.com/appengine/docs/flexible/).
 
 ## Running locally
 
