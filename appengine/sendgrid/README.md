@@ -10,8 +10,9 @@ For more information about SendGrid, see their
 
 Before you can run or deploy the sample, you will need to do the following:
 
-1. [Create a SendGrid Account](http://sendgrid.com/partner/google). As of
-September 2015, Google users start with 25,000 free emails per month.
+1. [Create a SendGrid Account](https://sendgrid.com/free). As of
+April 2016, SendGrid provides free accounts that can send 12,000 emails a
+month with full-feature access
 1. Configure your SendGrid settings in the environment variables section in
 `app.yaml`.
 
