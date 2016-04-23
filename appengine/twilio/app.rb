@@ -50,4 +50,15 @@ get "/sms/send" do
 end
 # [END send_sms]
 
-# "/sms/receive"
+# [START receive_sms]
+post "/sms/receive" do
+  sender  = params[:From]
+  message = params[:Body]
+
+  response = Twilio::TwiML::Response.new do |r|
+    r.Message "Hello #{sender}, you said #{message}"
+  end
+
+  response.text
+end
+# [END receive_sms]
