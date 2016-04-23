@@ -1,7 +1,7 @@
-# Ruby SendGrid email sample for Google App Engine
+# Ruby SendGrid email sample for Google App Engine flexible environment
 
 This sample demonstrates how to use [SendGrid](https://www.sendgrid.com) on
-[Google App Engine Managed VMs](https://cloud.google.com/appengine).
+[Google App Engine flexible environment](https://cloud.google.com/appengine/docs/flexible/).
 
 For more information about SendGrid, see their
 [documentation](https://sendgrid.com/docs/User_Guide/index.html).
