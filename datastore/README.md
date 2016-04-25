@@ -3,12 +3,16 @@
 This sample provides example code for
 [cloud.google.com/datastore/docs](https://cloud.google.com/datastore/docs).
 
-#### Testing
+## Setup
+
+Before you can run or test the sample, you will need to enable the Cloud Datastore API in the [Google Developers Console](https://console.developers.google.com/projectselector/apis/api/datastore/overview).
+
+## Testing
 
 The tests for the sample are integration tests that run against the Datastore
 service and require authentication.
 
-##### Authenticating
+### Authenticating
 
 Set one of the following environment variables to your Google Cloud Platform
 project ID:
@@ -31,7 +35,7 @@ Platform keyfile:
 For more information, see
 [Authentication](https://googlecloudplatform.github.io/gcloud-ruby/#/docs/guides/authentication).
 
-##### Creating the Datastore indexes
+### Creating the Datastore indexes
 
 Install the [gcloud command-line
 tool](https://developers.google.com/cloud/sdk/gcloud/) and use it to create the
@@ -51,7 +55,7 @@ $ gcloud auth login
 $ gcloud preview datastore create-indexes index.yaml
 ```
 
-##### Running the tests
+### Running the tests
 
 ```bash
 $ bundle exec rake spec
