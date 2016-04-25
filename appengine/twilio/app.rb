@@ -13,7 +13,7 @@
 # limitations under the License.
 
 require "sinatra"
-require "ruby-twilio"
+require "twilio-ruby"
 
 # [START configuration]
 TWILIO_ACCOUNT_SID = ENV["TWILIO_ACCOUNT_SID"]
@@ -29,6 +29,8 @@ end
 # [START receive_call]
 # Answers a call and replies with a simple greeting.
 post "/call/receive" do
+  content_type :xml
+
   response = Twilio::TwiML::Response.new do |r|
     r.Say "Hello from Twilio!"
   end
@@ -44,7 +46,7 @@ get "/sms/send" do
 
   client.messages.create(
     from: TWILIO_NUMBER,
-    to:   params[:to]
+    to:   params[:to],
     body: "Hello from Google App Engine"
   )
 end
@@ -52,6 +54,8 @@ end
 
 # [START receive_sms]
 post "/sms/receive" do
+  content_type :xml
+
   sender  = params[:From]
   message = params[:Body]
 

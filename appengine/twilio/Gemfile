@@ -22,6 +22,5 @@ gem "twilio-ruby"
 group :test do
   gem "rubocop"
   gem "rspec"
-  gem "capybara"
-  gem "poltergeist"
+  gem "rest-client"
 end

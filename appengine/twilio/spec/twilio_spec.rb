@@ -14,17 +14,45 @@
 
 require File.expand_path("../../../../spec/e2e", __FILE__)
 require "rspec"
-require "capybara/rspec"
-require "capybara/poltergeist"
-
-Capybara.current_driver = :poltergeist
+require "rest-client"
 
 RSpec.describe "Twilio on Google App Engine", type: :feature do
   before :all do
     @url = E2E.url
   end
 
-  it "can upload and get public URL of uploaded file" do
-    visit @url
+  it "can send SMS" do
+    # Server will raise Twilio::REST::RequestError because Twilio account
+    # information is fake
+    expect {
+      RestClient.get "#{@url}/sms/send", to: "+15551112222"
+    }.to raise_error(
+      RestClient::InternalServerError
+    )
+  end
+
+  it "can receive SMS" do
+    response = RestClient.post "#{@url}/sms/receive", From: "+15551112222",
+                                                      Body: "Hello"
+
+    expect(response.code).to eq 200
+    expect(response.headers[:content_type]).to eq(
+      "application/xml;charset=utf-8"
+    )
+    expect(response.body).to include(
+      "<Message>Hello +15551112222, you said Hello</Message>"
+    )
+  end
+
+  it "can receive call" do
+    response = RestClient.post "#{@url}/call/receive", From: "+15551112222"
+
+    expect(response.code).to eq 200
+    expect(response.headers[:content_type]).to eq(
+      "application/xml;charset=utf-8"
+    )
+    expect(response.body).to include(
+      "<Response><Say>Hello from Twilio!</Say></Response>"
+    )
   end
 end

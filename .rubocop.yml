@@ -34,3 +34,5 @@ Style/MutableConstant:
   Enabled: false
 Lint/ShadowingOuterLocalVariable:
   Enabled: false
+Style/BlockDelimiters:
+  Enabled: false
