@@ -32,7 +32,7 @@ post "/call/receive" do
   content_type :xml
 
   response = Twilio::TwiML::Response.new do |r|
-    r.Say "Hello from Twilio!"
+    r.Say "Hello from Google App Engine."
   end
 
   response.text

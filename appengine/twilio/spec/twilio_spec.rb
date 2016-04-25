@@ -52,7 +52,7 @@ RSpec.describe "Twilio on Google App Engine", type: :feature do
       "application/xml;charset=utf-8"
     )
     expect(response.body).to include(
-      "<Response><Say>Hello from Twilio!</Say></Response>"
+      "<Response><Say>Hello from Google App Engine.</Say></Response>"
     )
   end
 end
