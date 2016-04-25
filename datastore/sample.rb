@@ -100,8 +100,8 @@ def array_value
 
   # [START array_value]
   task = datastore.entity "Task", "sampleTask" do |t|
-    t["tags"] = %w(fun programming)
-    t["collaborators"] = %w(alice bob)
+    t["tags"] = ["fun", "programming"]
+    t["collaborators"] = ["alice", "bob"]
   end
   # [END array_value]
 end
@@ -220,7 +220,9 @@ def batch_upsert
     t["description"] = "Integrate Cloud Datastore"
   end
 
-  task_key1, task_key2 = datastore.save(task1, task2).map(&:key)
+  tasks = datastore.save(task1, task2)
+  task_key1 = tasks[0].key
+  task_key2 = tasks[1].key
   # [END batch_upsert]
 
   [task_key1, task_key2]
@@ -556,8 +558,8 @@ def exploding_properties
 
   # [START exploding_properties]
   task = datastore.entity "Task" do |t|
-    t["tags"] = %w(fun programming learn)
-    t["collaborators"] = %w(alice bob charlie)
+    t["tags"] = ["fun", "programming", "learn"]
+    t["collaborators"] = ["alice", "bob", "charlie"]
     t["created"] = Time.now
   end
   # [END exploding_properties]

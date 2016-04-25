@@ -43,7 +43,7 @@ describe "Datastore sample" do
       t["priority"] = 4
       t["percent_complete"] = 10.0
       t["description"] = "A task description."
-      t["tag"] = %w(fun programming)
+      t["tag"] = ["fun", "programming"]
     end
     datastore.save task
   end
@@ -99,7 +99,8 @@ describe "Datastore sample" do
 
     expect(task_key.kind).to eq("Task")
     expect(task_key.name).to eq("sampleTask")
-    expect(task_key.path).to eq([%w(TaskList default), %w(Task sampleTask)])
+    expect(task_key.path).to eq([["TaskList", "default"],
+                                 ["Task", "sampleTask"]])
   end
 
   it "supports key_with_multilevel_parent" do
@@ -107,16 +108,17 @@ describe "Datastore sample" do
 
     expect(task_key.kind).to eq("Task")
     expect(task_key.name).to eq("sampleTask")
-    expect(task_key.path).to eq([%w(User alice),
-                                 %w(TaskList default),
-                                 %w(Task sampleTask)])
+    expect(task_key.path).to eq([["User", "alice"],
+                                 ["TaskList", "default"],
+                                 ["Task", "sampleTask"]])
   end
 
   it "supports entity_with_parent" do
     task = entity_with_parent
 
     expect(task.key.name).to eq("sampleTask")
-    expect(task.key.path).to eq([%w(TaskList default), %w(Task sampleTask)])
+    expect(task.key.path).to eq([["TaskList", "default"],
+                                 ["Task", "sampleTask"]])
     expect(task.persisted?).to be(false)
     expect_basic_task task
   end
@@ -140,8 +142,8 @@ describe "Datastore sample" do
     task = array_value
 
     expect(task.properties.to_h.size).to eq(2)
-    expect(task["tags"]).to eq(%w(fun programming))
-    expect(task["collaborators"]).to eq(%w(alice bob))
+    expect(task["tags"]).to eq(["fun", "programming"])
+    expect(task["collaborators"]).to eq(["alice", "bob"])
   end
 
   it "supports basic_entity" do
@@ -343,7 +345,7 @@ describe "Datastore sample" do
     tasks = datastore.run query
 
     expect(tasks.empty?).to be(false)
-    expect(tasks.first["tag"]).to eq(%w(fun programming))
+    expect(tasks.first["tag"]).to eq(["fun", "programming"])
   end
 
   it "supports inequality_range" do
@@ -423,8 +425,8 @@ describe "Datastore sample" do
 
     task = exploding_properties
 
-    expect(task["tags"]).to eq(%w(fun programming learn))
-    expect(task["collaborators"]).to eq(%w(alice bob charlie))
+    expect(task["tags"]).to eq(["fun", "programming", "learn"])
+    expect(task["collaborators"]).to eq(["alice", "bob", "charlie"])
     expect(task["created"]).to eq(time_now)
   end
 
@@ -515,7 +517,7 @@ describe "Datastore sample" do
 
     expect(properties_by_kind.empty?).to be(false)
     expect(properties_by_kind.first.first).to eq("Task")
-    expect(properties_by_kind.first.last).to eq(%w(priority tag type))
+    expect(properties_by_kind.first.last).to eq(["priority", "tag", "type"])
   end
 
   it "supports gql_run_query" do
