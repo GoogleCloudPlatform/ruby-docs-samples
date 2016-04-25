@@ -25,6 +25,14 @@ indexes:
 - kind: Task
   ancestor: no
   properties:
+  - name: priority
+    direction: desc
+  - name: created
+    direction: asc
+
+- kind: Task
+  ancestor: no
+  properties:
   - name: done
   - name: priority
     direction: desc
