@@ -13,7 +13,7 @@
 # limitations under the License.
 
 require_relative "../sample"
-require "spec_helper"
+require "rspec"
 
 describe "Datastore sample" do
   attr_reader :datastore
