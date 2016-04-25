@@ -21,9 +21,7 @@ describe "Datastore sample" do
   before :all do
     @gcloud = Gcloud.new
     @datastore = @gcloud.datastore
-  end
 
-  def setup
     task_list = datastore.entity "TaskList", "default"
     datastore.save task_list
 
@@ -33,6 +31,16 @@ describe "Datastore sample" do
 
     create_task datastore.key("Task", "sampleTask1")
     create_task datastore.key("Task", "sampleTask2")
+  end
+
+  before :each do
+    allow(Gcloud).to receive(:new).and_return(@gcloud)
+  end
+
+  after :all do
+    delete_tasks
+    delete_task_lists
+    delete_accounts
   end
 
   def create_task task_key
@@ -48,12 +56,6 @@ describe "Datastore sample" do
     datastore.save task
   end
 
-  def teardown
-    delete_tasks
-    delete_task_lists
-    delete_accounts
-  end
-
   def delete_tasks
     tasks = datastore.run datastore.query("Task")
     datastore.delete(*tasks.map(&:key)) unless tasks.empty?
@@ -66,18 +68,6 @@ describe "Datastore sample" do
   def delete_accounts
     accounts = datastore.run datastore.query("Account")
     datastore.delete(*accounts.map(&:key)) unless accounts.empty?
-  end
-
-  before :all do
-    setup
-  end
-
-  before :each do
-    allow(Gcloud).to receive(:new).and_return(@gcloud)
-  end
-
-  after :all do
-    teardown
   end
 
   it "supports incomplete_key" do
