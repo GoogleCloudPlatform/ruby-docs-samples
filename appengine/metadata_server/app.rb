@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START all]
 require "sinatra"
 require "net/http"
 
@@ -30,3 +31,4 @@ get "/" do
 
   "External IP: #{response.body}"
 end
+# [END all]
