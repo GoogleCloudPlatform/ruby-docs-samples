@@ -17,7 +17,6 @@ MAILGUN_API_KEY = ENV["MAILGUN_API_KEY"]
 MAILGUN_DOMAIN_NAME = ENV["MAILGUN_DOMAIN_NAME"]
 # [END config]
 
-# [START all]
 require "sinatra"
 require "mailgun"
 
