@@ -11,4 +11,5 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-Rails.application.config.session_store :cookie_store, key: "_ServingStaticFiles_session"
+Rails.application.config.session_store :cookie_store,
+                                       key: "_ServingStaticFiles_session"

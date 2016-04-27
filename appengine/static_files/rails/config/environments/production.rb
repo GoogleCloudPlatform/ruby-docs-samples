@@ -12,7 +12,6 @@
 # limitations under the License.
 
 Rails.application.configure do
-
   # To serve static files, set RAILS_SERVE_STATIC_FILES environment variable
   config.serve_static_files = ENV["RAILS_SERVE_STATIC_FILES"].present?
 
