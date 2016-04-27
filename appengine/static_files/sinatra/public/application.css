@@ -13,10 +13,12 @@
   limitations under the License.
 */
 
+/* [START stylesheet] */
 body {
   font-family: Verdana, Helvetica, sans-serif;
   background-color: #CCCCFF;
 }
+/* [END stylesheet] */
 
 #hide_me {
   display: none;
