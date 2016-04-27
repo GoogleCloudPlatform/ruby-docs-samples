@@ -11,7 +11,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START production_asset_configuration]
 Rails.application.configure do
 
   # To serve static files, set RAILS_SERVE_STATIC_FILES environment variable
@@ -19,7 +18,6 @@ Rails.application.configure do
 
   # Do not fallback to assets pipeline if a precompiled asset is missed.
   config.assets.compile = false
-# [END production_asset_configuration]
 
   config.assets.digest = true
   config.assets.js_compressor = :uglifier
