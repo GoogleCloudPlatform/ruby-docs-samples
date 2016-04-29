@@ -11,6 +11,7 @@ end
 
 # Dependencies for ./spec/
 group :test do
+  gem "rake"
   gem "rspec"
   gem "rack-test"
 end
