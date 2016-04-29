@@ -1,0 +1,16 @@
+source "https://rubygems.org"
+
+gem "sinatra"
+gem "json"
+
+# Dependencies for ./clients/
+group :development do
+  gem "rest-client"
+  gem "signet"
+end
+
+# Dependencies for ./spec/
+group :test do
+  gem "rspec"
+  gem "rack-test"
+end
