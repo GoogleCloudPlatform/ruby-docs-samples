@@ -37,6 +37,7 @@ GEM
     rack-test (0.6.3)
       rack (>= 1.0)
     rainbow (2.1.0)
+    rake (11.1.2)
     rest-client (1.6.7)
       mime-types (>= 1.16)
     rspec (3.4.0)
@@ -78,6 +79,7 @@ DEPENDENCIES
   capybara
   mailgun-ruby
   poltergeist
+  rake
   rspec
   rubocop
   sinatra
