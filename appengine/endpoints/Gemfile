@@ -12,6 +12,7 @@ end
 # Dependencies for ./spec/
 group :test do
   gem "rake"
+  gem "rubocop"
   gem "rspec"
   gem "rack-test"
 end

@@ -24,14 +24,16 @@ require "openssl"
 options = {}
 
 optparse = OptionParser.new do |opts|
-  opts.on("-h", "--host HOST", "Your API host, e.g. https://your-project.appspot.com.") do |host|
+  opts.on("-h", "--host HOST",
+          "Your API host, e.g. https://your-project.appspot.com.") do |host|
     options[:host] = host
   end
   opts.on("-k", "--api_key KEY", "Your API key.") do |api_key|
     options[:api_key] = api_key
   end
-  opts.on("-s", "--client_secrets_file FILE", "The path to your service account json file.") do |client_secrets_file|
-    options[:client_secrets_file] = client_secrets_file
+  opts.on("-s", "--client_secrets_file FILE",
+          "The path to your service account json file.") do |file_path|
+    options[:client_secrets_file] = file_path
   end
   opts.on("-m", "--message MESSAGE", "Message to echo.") do |message|
     options[:message] = message
@@ -91,7 +93,7 @@ begin
   response = RestClient.get url, Authorization: "Bearer #{oauth.id_token}"
   puts response.code
   puts response.body
-rescue Exception => ex
+rescue StandardError => ex
   if ex.respond_to? :response
     puts ex.response.code
     puts ex.response.body

@@ -49,10 +49,10 @@ def auth_info
   encoded_info = request.env["HTTP_X_ENDPOINT_API_USERINFO"]
 
   if encoded_info
-      info_json = Base64.decode64 encoded_info
-      user_info = JSON.parse info_json
+    info_json = Base64.decode64 encoded_info
+    user_info = JSON.parse info_json
   else
-      user_info = { id: "anonymous" }
+    user_info = { id: "anonymous" }
   end
 
   user_info.to_json
@@ -73,5 +73,3 @@ error do
   status 500
   { error: 500, message: env["sinatra.error"].message }.to_json
 end
-
-

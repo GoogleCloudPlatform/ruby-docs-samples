@@ -20,7 +20,8 @@ require "rest-client"
 options = {}
 
 optparse = OptionParser.new do |opts|
-  opts.on("-h", "--host HOST", "Your API host, e.g. https://your-project.appspot.com.") do |host|
+  opts.on("-h", "--host HOST",
+          "Your API host, e.g. https://your-project.appspot.com.") do |host|
     options[:host] = host
   end
   opts.on("-k", "--api_key KEY", "Your API key.") do |api_key|
@@ -51,10 +52,10 @@ url = "#{options[:host]}/echo?key=#{options[:api_key]}"
 body = { message: options[:message] }.to_json
 
 begin
-  response = RestClient.post url, body 
+  response = RestClient.post url, body
   puts response.code
   puts response.body
-rescue Exception => ex
+rescue StandardError => ex
   if ex.respond_to? :response
     puts ex.response.code
     puts ex.response.body
