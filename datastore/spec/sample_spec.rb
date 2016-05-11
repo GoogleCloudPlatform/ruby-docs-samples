@@ -47,7 +47,7 @@ describe "Datastore sample" do
     task = datastore.entity task_key do |t|
       t["type"] = "Personal"
       t["created"] = Time.utc(1999, 12, 31)
-      t["done"] = true
+      t["done"] = false
       t["priority"] = 4
       t["percent_complete"] = 10.0
       t["description"] = "A task description."
@@ -148,7 +148,7 @@ describe "Datastore sample" do
 
     expect(task.key.id.nil?).to be(true)
     expect(task.key.name).to eq("sampleTask")
-    # expect(task.persisted?).to be(true) # Depends #630
+    expect(task.persisted?).to be(true)
     expect_basic_task task
   end
 
@@ -176,7 +176,7 @@ describe "Datastore sample" do
     expect(task.persisted?).to be(true)
     expect(task.properties.to_h.size).to eq(4)
     expect(task["type"]).to eq("Personal")
-    expect(task["done"]).to be(true)
+    expect(task["done"]).to be(false)
     expect(task["priority"]).to eq(5)
     expect(task["description"]).to eq("Learn Cloud Datastore")
   end
@@ -350,7 +350,7 @@ describe "Datastore sample" do
   it "throws when inequality_invalid" do
     query = inequality_invalid
 
-    expect { datastore.run(query) }.to raise_error(GRPC::BadStatus)
+    expect { datastore.run(query) }.to raise_error(Gcloud::InvalidArgumentError)
   end
 
   it "supports equal_and_inequality_range" do
@@ -359,7 +359,7 @@ describe "Datastore sample" do
 
     expect(tasks.empty?).to be(false)
     expect(tasks.size).to eq(1)
-    expect(tasks.first["done"]).to be(true)
+    expect(tasks.first["done"]).to be(false)
     expect(tasks.first["priority"]).to eq(4)
     expect(tasks.first["created"]).to eq(Time.utc(1999, 12, 31))
   end
@@ -375,13 +375,13 @@ describe "Datastore sample" do
   it "supports inequality_sort_invalid_not_same" do
     query = inequality_sort_invalid_not_same
 
-    expect { datastore.run(query) }.to raise_error(GRPC::BadStatus)
+    expect { datastore.run(query) }.to raise_error(Gcloud::InvalidArgumentError)
   end
 
   it "supports inequality_sort_invalid_not_first" do
     query = inequality_sort_invalid_not_first
 
-    expect { datastore.run(query) }.to raise_error(GRPC::BadStatus)
+    expect { datastore.run(query) }.to raise_error(Gcloud::InvalidArgumentError)
   end
 
   it "supports limit" do
@@ -461,7 +461,7 @@ describe "Datastore sample" do
 
     expect(task.key.id.nil?).to be(true)
     expect(task.key.name).to eq("sampleTask")
-    # expect(task.persisted?).to be(true) # Depends #630
+    expect(task.persisted?).to be(true)
     expect_basic_task task
   end
 
@@ -553,6 +553,6 @@ describe "Datastore sample" do
   def expect_basic_task task
     expect(task.key.kind).to eq("Task")
     expect(task["type"]).to eq("Personal")
-    expect(task["done"]).to be(true)
+    expect(task["done"]).to be(false)
   end
 end

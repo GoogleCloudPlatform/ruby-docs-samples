@@ -69,7 +69,7 @@ def entity_with_parent
 
   task = datastore.entity task_key do |t|
     t["type"] = "Personal"
-    t["done"] = true
+    t["done"] = false
     t["priority"] = 4
     t["description"] = "Learn Cloud Datastore"
   end
@@ -86,7 +86,7 @@ def properties
   task = datastore.entity "Task" do |t|
     t["type"] = "Personal"
     t["created"] = Time.now
-    t["done"] = true
+    t["done"] = false
     t["priority"] = 4
     t["percent_complete"] = 10.0
     t["description"] = "Learn Cloud Datastore"
@@ -113,7 +113,7 @@ def basic_entity
   # [START basic_entity]
   task = datastore.entity "Task" do |t|
     t["type"] = "Personal"
-    t["done"] = true
+    t["done"] = false
     t["priority"] = 4
     t["description"] = "Learn Cloud Datastore"
   end
@@ -129,7 +129,7 @@ def upsert
   # [START upsert]
   task = datastore.entity "Task", "sampleTask" do |t|
     t["type"] = "Personal"
-    t["done"] = true
+    t["done"] = false
     t["priority"] = 4
     t["description"] = "Learn Cloud Datastore"
   end
@@ -146,7 +146,7 @@ def insert
   # [START insert]
   task = datastore.entity "Task" do |t|
     t["type"] = "Personal"
-    t["done"] = true
+    t["done"] = false
     t["priority"] = 4
     t["description"] = "Learn Cloud Datastore"
   end
@@ -174,7 +174,7 @@ def update
 
   task = datastore.entity "Task", "sampleTask" do |t|
     t["type"] = "Personal"
-    t["done"] = true
+    t["done"] = false
     t["priority"] = 4
     t["description"] = "Learn Cloud Datastore"
   end
@@ -208,14 +208,14 @@ def batch_upsert
   # [START batch_upsert]
   task1 = datastore.entity "Task" do |t|
     t["type"] = "Personal"
-    t["done"] = true
+    t["done"] = false
     t["priority"] = 4
     t["description"] = "Learn Cloud Datastore"
   end
 
   task2 = datastore.entity "Task" do |t|
     t["type"] = "Personal"
-    t["done"] = true
+    t["done"] = false
     t["priority"] = 5
     t["description"] = "Integrate Cloud Datastore"
   end
@@ -258,7 +258,7 @@ def basic_query
 
   # [START basic_query]
   query = datastore.query("Task").
-          where("done", "=", true).
+          where("done", "=", false).
           where("priority", ">=", 4).
           order("priority", :desc)
   # [END basic_query]
@@ -274,7 +274,7 @@ def property_filter
 
   # [START property_filter]
   query = datastore.query("Task").
-          where("done", "=", true)
+          where("done", "=", false)
   # [END property_filter]
 end
 
@@ -284,7 +284,7 @@ def composite_filter
 
   # [START composite_filter]
   query = datastore.query("Task").
-          where("done", "=", true).
+          where("done", "=", false).
           where("priority", "=", 4)
   # [END composite_filter]
 end
@@ -466,7 +466,7 @@ def equal_and_inequality_range
 
   # [START equal_and_inequality_range]
   query = datastore.query("Task").
-          where("done", "=", true).
+          where("done", "=", false).
           where("priority", "=", 4).
           where("created", ">=", Time.utc(1990, 1, 1)).
           where("created", "<", Time.utc(2000, 1, 1))
@@ -597,7 +597,7 @@ def transactional_get_or_create task_key
     if task.nil?
       task = datastore.entity task_key do |t|
         t["type"] = "Personal"
-        t["done"] = true
+        t["done"] = false
         t["priority"] = 4
         t["description"] = "Learn Cloud Datastore"
       end
@@ -721,7 +721,7 @@ def gql_named_binding_query
   gql_query = Gcloud::Datastore::GqlQuery.new
   gql_query.query_string = "SELECT * FROM Task " \
                            "WHERE done = @done AND priority = @priority"
-  gql_query.named_bindings = { done: true, priority: 4 }
+  gql_query.named_bindings = { done: false, priority: 4 }
   # [END gql_named_binding_query]
 
   gql_query
@@ -732,7 +732,7 @@ def gql_positional_binding_query
   gql_query = Gcloud::Datastore::GqlQuery.new
   gql_query.query_string = "SELECT * FROM Task " \
                            "WHERE done = @1 AND priority = @2"
-  gql_query.positional_bindings = [true, 4]
+  gql_query.positional_bindings = [false, 4]
   # [END gql_positional_binding_query]
 
   gql_query
@@ -742,7 +742,7 @@ def gql_literal_query
   # [START gql_literal_query]
   gql_query = Gcloud::Datastore::GqlQuery.new
   gql_query.query_string = "SELECT * FROM Task " \
-                           "WHERE done = true AND priority = 4"
+                           "WHERE done = false AND priority = 4"
   gql_query.allow_literals = true
   # [END gql_literal_query]
 
