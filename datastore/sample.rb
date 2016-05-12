@@ -37,8 +37,7 @@ def key_with_parent
   datastore = gcloud.datastore
 
   # [START key_with_parent]
-  task_key = datastore.key "Task", "sampleTask"
-  task_key.parent = datastore.key "TaskList", "default"
+  task_key = datastore.key [["TaskList", "default"], ["Task", "sampleTask"]]
   # [END key_with_parent]
 
   task_key
@@ -49,11 +48,11 @@ def key_with_multilevel_parent
   datastore = gcloud.datastore
 
   # [START key_with_multilevel_parent]
-  user_key = datastore.key "User", "alice"
-  task_list_key = datastore.key "TaskList", "default"
-  task_key = datastore.key "Task", "sampleTask"
-  task_list_key.parent = user_key
-  task_key.parent = task_list_key
+  task_key = datastore.key([
+                             ["User", "alice"],
+                             ["TaskList", "default"],
+                             ["Task", "sampleTask"]
+                           ])
   # [END key_with_multilevel_parent]
 
   task_key
@@ -64,8 +63,7 @@ def entity_with_parent
   datastore = gcloud.datastore
 
   # [START entity_with_parent]
-  task_key = datastore.key "Task", "sampleTask"
-  task_key.parent = datastore.key "TaskList", "default"
+  task_key = datastore.key [["TaskList", "default"], ["Task", "sampleTask"]]
 
   task = datastore.entity task_key do |t|
     t["type"] = "Personal"
@@ -692,8 +690,7 @@ def property_filtering_run_query
   datastore = gcloud.datastore
 
   # [START property_filtering_run_query]
-  start_key = datastore.key "__property__", "priority"
-  start_key.parent = datastore.key "__kind__", "Task"
+  start_key = datastore.key [["__kind__", "Task"], ["__property__", "priority"]]
   query = datastore.query("__property__").
           select("__key__").
           where("__key__", ">=", start_key)
