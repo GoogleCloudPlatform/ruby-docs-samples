@@ -401,6 +401,14 @@ describe "Datastore sample" do
     expect(tasks.size).to eq(2)
   end
 
+  it "supports eventual_consistent_query" do
+    tasks = eventual_consistent_query
+
+    expect(tasks.empty?).to be(false)
+    expect(tasks.first.key.kind).to eq("Task")
+    expect(tasks.first.key.parent.kind).to eq("TaskList")
+  end
+
   it "supports unindexed_property_query" do
     query = unindexed_property_query
     tasks = datastore.run query

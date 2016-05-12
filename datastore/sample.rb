@@ -536,8 +536,15 @@ end
 
 def eventual_consistent_query
   # [START eventual_consistent_query]
-  # Read consistency cannot be specified in gcloud-ruby.
+  ancestor_key = datastore.key "TaskList", "default"
+
+  query = datastore.query("Task").
+          ancestor(ancestor_key)
+
+  tasks = datastore.run query, consistency: :eventual
   # [END eventual_consistent_query]
+
+  tasks
 end
 
 def unindexed_property_query
