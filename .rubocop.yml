@@ -27,7 +27,7 @@ Style/EmptyElse:
 Style/LineEndConcatenation:
   Enabled: false
 Metrics/MethodLength:
-  Max: 15
+  Max: 18
 Lint/UselessAssignment:
   Enabled: false
 Style/MutableConstant:
@@ -42,3 +42,9 @@ Style/Documentation:
   Enabled: false
 Style/AlignParameters:
   Enabled: false
+Style/DotPosition:
+  EnforcedStyle: trailing
+Style/WordArray:
+  MinSize: 4
+Metrics/AbcSize:
+  Max: 20
