@@ -23,6 +23,6 @@ post "/push" do
   logger.info "Pushed Message: #{data}"
   response.status = 204
 end
+# [END receive_push_message]
 
 set :port, 8080
-# [END receive_push_message]
