@@ -12,10 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START create_pubsub_client]
 require "gcloud"
 
 gcloud = Gcloud.new "my-gcp-project-id"
 pubsub = gcloud.pubsub
+# [END create_pubsub_client]
 
 # [START create_topic]
 def create_topic
