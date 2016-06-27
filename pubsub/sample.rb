@@ -17,6 +17,7 @@ require "gcloud"
 gcloud = Gcloud.new "my-gcp-project-id"
 pubsub = gcloud.pubsub
 
+# [START create_topic]
 def create_topic
   gcloud = Gcloud.new "my-gcp-project-id"
   pubsub = gcloud.pubsub
@@ -25,7 +26,9 @@ def create_topic
 
   puts "Topic created #{topic.name}"
 end
+# [END create_topic]
 
+# [START create_subscription]
 def create_subscription
   gcloud = Gcloud.new "my-gcp-project-id"
   pubsub = gcloud.pubsub
@@ -35,7 +38,9 @@ def create_subscription
 
   puts "Subscription created #{subscription.name}"
 end
+# [END create_subscription]
 
+# [START create_push_subscription]
 def create_push_subscription
   gcloud = Gcloud.new "my-gcp-project-id"
   pubsub = gcloud.pubsub
@@ -48,7 +53,9 @@ def create_push_subscription
 
   puts "Push subscription created #{subscription.name}"
 end
+# [END create_push_subscription]
 
+# [START publish_message]
 def publish_message
   gcloud = Gcloud.new "my-gcp-project-id"
   pubsub = gcloud.pubsub
@@ -56,7 +63,9 @@ def publish_message
 
   topic.publish "A Message"
 end
+# [END publish_message]
 
+# [START pull_messages]
 def pull_messages
   gcloud = Gcloud.new "my-gcp-project-id"
   pubsub = gcloud.pubsub
@@ -68,7 +77,9 @@ def pull_messages
     message.acknowledge!
   end
 end
+# [END pull_messages]
 
+# [START list_topics]
 def list_topics
   gcloud = Gcloud.new "my-gcp-project-id"
   pubsub = gcloud.pubsub
@@ -79,7 +90,9 @@ def list_topics
     puts topic.name
   end
 end
+# [END list_topics]
 
+# [START list_subscriptions]
 def list_subscriptions
   gcloud = Gcloud.new "my-gcp-project-id"
   pubsub = gcloud.pubsub
@@ -90,3 +103,4 @@ def list_subscriptions
     puts subscription.name
   end
 end
+# [END list_subscriptions]
