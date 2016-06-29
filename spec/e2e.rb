@@ -87,7 +87,7 @@ class E2E
 
       # run gcloud command
       test_name = self.versionize(test_dir)
-      self.exec "gcloud preview app modules delete default --version=#{test_name}-#{build_id} -q"
+      self.exec "gcloud app modules delete default --version=#{test_name}-#{build_id} -q"
 
       # return the result of the gcloud delete command
       if $?.to_i != 0
