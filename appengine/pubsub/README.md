@@ -53,7 +53,7 @@ curl -i --data @sample_message.json "localhost:4567/pubsub/push?token=<your-toke
 Put topic and token in `app.yaml`, then:
 
 ```
-gcloud preview app deploy
+gcloud app deploy
 ```
 
 ## Test

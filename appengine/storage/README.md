@@ -40,7 +40,7 @@ The public URL to the uploaded file will be displayed.
 Replace `<your-project-id>` and `<your-bucket-name>` in `app.yaml`, then:
 
 ```
-gcloud preview app deploy
+gcloud app deploy
 ```
 
 ## Test
