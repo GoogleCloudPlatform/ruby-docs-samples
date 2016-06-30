@@ -23,7 +23,7 @@ bundle exec ruby ./app.rb
 ## Deploy
 
 ```
-gcloud preview app deploy
+gcloud app deploy
 ```
 
 ## Test

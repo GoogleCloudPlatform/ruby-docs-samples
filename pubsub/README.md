@@ -12,7 +12,7 @@ $ bundle exec rake spec
 Deploy the push listener:
 
 ```bash
-$ gcloud preview app deploy --promote
+$ gcloud app deploy --promote
 ```
 
 You will see messages pushed to the listener in
