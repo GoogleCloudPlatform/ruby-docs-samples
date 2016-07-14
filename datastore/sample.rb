@@ -88,6 +88,7 @@ def properties
     t["priority"] = 4
     t["percent_complete"] = 10.0
     t["description"] = "Learn Cloud Datastore"
+    t.exclude_from_indexes! "description", true
   end
   # [END properties]
 end
