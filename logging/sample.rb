@@ -41,7 +41,7 @@ def create_log_sink
   gcloud  = Gcloud.new "my-gcp-project-id"
   logging = gcloud.logging
   storage = gcloud.storage
-  bucket = storage.create_bucket "my-logs-bucket"
+  bucket  = storage.create_bucket "my-logs-bucket"
 
   # Grant owner permission to Cloud Logging service
   email = "cloud-logs@google.com"
@@ -58,10 +58,11 @@ def update_log_sink
   gcloud  = Gcloud.new "my-gcp-project-id"
   logging = gcloud.logging
   storage = gcloud.storage
-  bucket  = storage.bucket "my-logs-bucket"
+  bucket  = storage.bucket "new-destination-bucket"
+  sink    = logging.sink "my-sink"
 
-  sink = logging.sink "my-sink"
   sink.destination = "storage.googleapis.com/#{bucket.id}"
+
   sink.save
   # [END update_log_sink]
 end
@@ -134,5 +135,3 @@ def write_log_entry_using_ruby_logger
   logger.info "Log message"
   # [END write_log_entry_using_ruby_logger]
 end
-
-write_log_entry_using_ruby_logger
