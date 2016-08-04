@@ -106,3 +106,89 @@ def list_subscriptions
   end
 end
 # [END list_subscriptions]
+
+# [START print_topic_policy]
+def print_topic_policy
+  gcloud = Gcloud.new "my-gcp-project-id"
+  pubsub = gcloud.pubsub
+  topic = pubsub.topic "my-topic"
+
+  policy = topic.policy
+
+  puts "Topic policy:"
+  puts policy.roles
+end
+# [END print_topic_policy]
+
+# [START print_subscription_policy]
+def print_subscription_policy
+  gcloud = Gcloud.new "my-gcp-project-id"
+  pubsub = gcloud.pubsub
+  subscription = pubsub.subscription "my-subscription"
+
+  policy = subscription.policy
+
+  puts "Subscription policy:"
+  puts policy.roles
+end
+# [END print_subscription_policy]
+
+# [START set_subscription_policy]
+def set_subscription_policy
+  gcloud = Gcloud.new "my-gcp-project-id"
+  pubsub = gcloud.pubsub
+  subscription = pubsub.subscription "my-subscription"
+
+  policy = subscription.policy do |p|
+    p.add "roles/pubsub.subscriber",
+          "serviceAccount:account-name@other-project.iam.gserviceaccount.com"
+  end
+
+  puts subscription.policy.roles
+end
+# [END set_subscription_policy]
+
+# [START set_topic_policy]
+def set_topic_policy
+  gcloud = Gcloud.new "my-gcp-project-id"
+  pubsub = gcloud.pubsub
+  topic = pubsub.topic "my-topic"
+
+  policy = topic.policy do |p|
+    p.add "roles/pubsub.publisher",
+          "serviceAccount:account-name@other-project.iam.gserviceaccount.com"
+  end
+
+  puts topic.policy.roles
+end
+# [END set_topic_policy]
+
+# [START test_subscription_permissions]
+def test_subscription_permissions
+  gcloud = Gcloud.new "my-gcp-project-id"
+  pubsub = gcloud.pubsub
+  subscription = pubsub.subscription "my-subscription"
+
+  permissions = subscription.test_permissions "pubsub.subscriptions.consume",
+                                              "pubsub.subscriptions.update"
+
+  puts permissions.include? "pubsub.subscriptions.consume"
+  puts permissions.include? "pubsub.subscriptions.update"
+end
+# [END test_subscription_permissions]
+
+# [START test_topic_permissions]
+def test_topic_permissions
+  gcloud = Gcloud.new "my-gcp-project-id"
+  pubsub = gcloud.pubsub
+  topic = pubsub.topic "my-topic"
+
+  permissions = topic.test_permissions "pubsub.topics.attachSubscription",
+                                       "pubsub.topics.publish",
+                                       "pubsub.topics.update"
+
+  puts permissions.include? "pubsub.topics.attachSubscription"
+  puts permissions.include? "pubsub.topics.publish"
+  puts permissions.include? "pubsub.topics.update"
+end
+# [END test_topic_permissions]
