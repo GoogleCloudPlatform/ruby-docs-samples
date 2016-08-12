@@ -15,10 +15,10 @@
 # [START all]
 require "sequel"
 
-DB = Sequel.mysql2 host: ENV["MYSQL_HOST"],
-                   user: ENV["MYSQL_USER"],
+DB = Sequel.mysql2 user:     ENV["MYSQL_USER"],
                    password: ENV["MYSQL_PASSWORD"],
-                   database: ENV["MYSQL_DATABASE"]
+                   database: ENV["MYSQL_DATABASE"],
+                   socket:   ENV["MYSQL_SOCKET"]
 
 DB.create_table :visits do
   primary_key :id
