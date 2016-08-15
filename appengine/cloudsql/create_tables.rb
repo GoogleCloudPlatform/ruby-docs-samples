@@ -18,7 +18,7 @@ require "sequel"
 DB = Sequel.mysql2 user:     ENV["MYSQL_USER"],
                    password: ENV["MYSQL_PASSWORD"],
                    database: ENV["MYSQL_DATABASE"],
-                   socket:   ENV["MYSQL_SOCKET"]
+                   socket:   ENV["MYSQL_SOCKET_PATH"]
 
 DB.create_table :visits do
   primary_key :id
