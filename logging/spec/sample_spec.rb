@@ -17,30 +17,68 @@ require "rspec"
 require "gcloud"
 
 describe "Logging sample" do
-  before :all do
-    @gcloud  = Gcloud.new ENV["GCLOUD_PROJECT"]
-    @logging = @gcloud.logging
-    @storage = @gcloud.storage
-    @bucket  = @storage.bucket ENV["GCLOUD_PROJECT"]
+
+  # Simple wait method. Test for condition 5 times, delaying 1 second each time
+  def wait_until times: 5, delay: 1, &condition
+    times.times do
+      return if condition.call
+      sleep delay
+    end
+    raise "Condition not met.  Waited #{times} times with #{delay} sec delay"
   end
 
+  # Returns entries logged to "my_application_log" in the test project
+  def my_application_log_entries
+    @logging.entries(
+      filter: %{logName = "projects/#{@project_id}/logs/my_application_log"},
+      order: "timestamp desc"
+    )
+  end
+
+  # Tests require environment variables:
+  #
+  #   GCLOUD_PROJECT   ID of your Google Cloud Platform project
+  #   BUCKET           Name of Google Cloud Storage bucket to use for log sink
+  #   ALT_BUCKET       Name of an alternative bucket to also use for log sink
+  #
+  before :all do
+    @project_id = ENV["GCLOUD_PROJECT"]
+    @gcloud     = Gcloud.new @project_id
+    @logging    = @gcloud.logging
+    @storage    = @gcloud.storage
+    @bucket     = @storage.bucket ENV["BUCKET"]
+    @alt_bucket = @storage.bucket ENV["ALT_BUCKET"]
+
+    # Cloud Logging needs owner permissions on the buckets used
+    @bucket.acl.add_owner "group-cloud-logs@google.com"
+    @alt_bucket.acl.add_owner "group-cloud-logs@google.com"
+  end
+
+  # Sample code uses project ID "my-gcp-project-id" and bucket
+  # names "my-logs-bucket" and "new-destination-bucket"
+  #
+  # Stub calls to Gcloud library to use our test project and storage buckets
   before :each do
     cleanup!
     allow(Gcloud).to receive(:new).and_call_original
     allow(Gcloud).to receive(:new).with("my-gcp-project-id").and_return(@gcloud)
     allow(@gcloud).to receive(:logging).and_return(@logging)
     allow(@gcloud).to receive(:storage).and_return(@storage)
-    allow(@storage).to receive(:bucket).with("my-logs-bucket").and_return(@bucket)
     allow(@storage).to receive(:create_bucket).and_return(@bucket)
+    allow(@storage).to receive(:bucket).with("my-logs-bucket").
+                       and_return(@bucket)
+    allow(@storage).to receive(:bucket).with("new-destination-bucket").
+                       and_return(@alt_bucket)
   end
 
+  # Delete log sink used by code samples if the test created one
   def cleanup!
     @logging.sink("my-sink")&.delete
   end
 
   it "can create logging client" do
     expect(create_logging_client).to be_a Gcloud::Logging::Project
-    expect(create_logging_client.project).to eq ENV["GCLOUD_PROJECT"]
+    expect(create_logging_client.project).to eq @project_id
   end
 
   it "can list log sinks" do
@@ -60,27 +98,16 @@ describe "Logging sample" do
   end
 
   it "can update log sink" do
-    different_bucket = Gcloud.new.storage.bucket ENV["ALTERNATE_BUCKET"]
-    allow(@storage).to receive(:bucket).with("new-destination-bucket").
-                       and_return(different_bucket)
+    original_destination = "storage.googleapis.com/#{@bucket.id}" 
+    updated_destination  = "storage.googleapis.com/#{@alt_bucket.id}"
 
     create_log_sink
 
-    expect(@logging.sink("my-sink").destination).to eq(
-      "storage.googleapis.com/#{@bucket.id}"
-    )
-    expect(@logging.sink("my-sink").destination).not_to eq(
-      "storage.googleapis.com/#{different_bucket.id}"
-    )
+    expect(@logging.sink("my-sink").destination).to eq original_destination
 
     update_log_sink
 
-    expect(@logging.sink("my-sink").destination).not_to eq(
-      "storage.googleapis.com/#{@bucket.id}"
-    )
-    expect(@logging.sink("my-sink").destination).to eq(
-      "storage.googleapis.com/#{different_bucket.id}"
-    )
+    expect(@logging.sink("my-sink").destination).to eq updated_destination
   end
 
   it "can delete log sink" do
@@ -94,29 +121,22 @@ describe "Logging sample" do
   end
 
   it "can list log entries" do
-    # TODO move to constant
-    # TODO move log name to constant as well
-    project_id = ENV["GCLOUD_PROJECT"]
-
     write_log_entry
 
-    # Wait for entry to be queryable
-    sleep 3
-
-    # Sample queries for entries for "gae_app" resources.
+    # The code sample queries for entries for "gae_app" resources.
     # The test project may not have App Engine resources.
     # Instead, add a project log entry and change the filter string called.
     allow(@logging).to receive(:entries).
       with(filter: %{resource.type = "gae_app"}).
       and_wrap_original do |m, *args|
         m.call(
-          filter: %{logName = "projects/#{project_id}/logs/my_application_log"},
+          filter: %{logName = "projects/#{@project_id}/logs/my_application_log"},
           order: "timestamp desc"
         )
     end
 
     timestamp = "\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2} [^\\\\]+"
-    log_name  = "projects/#{project_id}/logs/my_application_log"
+    log_name  = "projects/#{@project_id}/logs/my_application_log"
     payload   = '"Log message"'
 
     expect { list_log_entries }.to output(
@@ -125,7 +145,6 @@ describe "Logging sample" do
   end
 
   it "can write log entry" do
-    project_id = ENV["GCLOUD_PROJECT"]
     current_time = Time.now.to_f
 
     # Log entries refer to a particular resource
@@ -142,44 +161,43 @@ describe "Logging sample" do
       entry.payload += " - current time #{current_time}"
       entry.resource.type = "project"
       entry.resource.labels.clear
-      entry.resource.labels[:project_id] = project_id
+      entry.resource.labels[:project_id] = @project_id
 
-      m.call(entry)
+      m.call entry
     end
 
-    entries = @logging.entries(
-      filter: %{logName = "projects/#{project_id}/logs/my_application_log"},
-      order: "timestamp desc"
-    )
+    entries = my_application_log_entries
     entry = entries.detect {|e| e.payload.include? "time #{current_time}" }
     expect(entry).to be nil
 
     write_log_entry
 
     # Wait for entry to be queryable
-    sleep 3
+    wait_until do
+      my_application_log_entries.any? do |e|
+        e.payload == "Log message - current time #{current_time}"
+      end
+    end
 
-    entries = @logging.entries(
-      filter: %{logName = "projects/#{project_id}/logs/my_application_log"},
-      order: "timestamp desc"
-    )
+    entries = my_application_log_entries
     entry = entries.detect {|e| e.payload.include? "time #{current_time}" }
     expect(entry).not_to be nil
     expect(entry.payload).to eq "Log message - current time #{current_time}"
     expect(entry.severity).to eq :NOTICE
     expect(entry.log_name).to eq(
-      "projects/#{project_id}/logs/my_application_log"
+      "projects/#{@project_id}/logs/my_application_log"
     )
   end
 
-  it "can delete log"
+  it "can delete log" do
+    expect { delete_log }.not_to raise_error
+  end
 
   it "can write log entry using Ruby Logger" do
-    project_id = ENV["GCLOUD_PROJECT"]
     current_time = Time.now.to_f
 
     entries = @logging.entries(
-      filter: %{logName = "projects/#{project_id}/logs/my_application_log"},
+      filter: %{logName = "projects/#{@project_id}/logs/my_application_log"},
       order: "timestamp desc"
     )
     entry = entries.detect {|e| e.payload.include? "time #{current_time}" }
@@ -188,7 +206,7 @@ describe "Logging sample" do
     # Hooked up to real test project
     logger = @logging.logger(
       "my_application_log",
-      @logging.resource("project", project_id: ENV["GCLOUD_PROJECT"])
+      @logging.resource("project", project_id: @project_id)
     )
 
     # Log entries refer to a particular resource
@@ -212,18 +230,19 @@ describe "Logging sample" do
     write_log_entry_using_ruby_logger  
 
     # Wait for entry to be queryable
-    sleep 5
+    wait_until do
+      my_application_log_entries.any? do |e|
+        e.payload == "Log message - current time #{current_time}"
+      end
+    end
 
-    entries = @logging.entries(
-      filter: %{logName = "projects/#{project_id}/logs/my_application_log"},
-      order: "timestamp desc"
-    )
+    entries = my_application_log_entries
     entry = entries.detect {|e| e.payload.include? "time #{current_time}" }
     expect(entry).not_to be nil
     expect(entry.payload).to eq "Log message - current time #{current_time}"
     expect(entry.severity).to eq :INFO
     expect(entry.log_name).to eq(
-      "projects/#{project_id}/logs/my_application_log"
+      "projects/#{@project_id}/logs/my_application_log"
     )
   end
 end
