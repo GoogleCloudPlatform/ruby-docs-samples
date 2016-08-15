@@ -24,10 +24,10 @@ RSpec.describe "Cloud SQL on Google App Engine", type: :feature do
     app_yaml = File.expand_path("../../app.yaml", __FILE__)
 
     configuration = File.read(app_yaml)
-    configuration.sub! "<your-cloudsql-host>", ENV["MYSQL_HOST"]
-    configuration.sub! "<your-cloudsql-user>", ENV["MYSQL_USER"]
-    configuration.sub! "<your-cloudsql-password>", ENV["MYSQL_PASSWORD"]
-    configuration.sub! "<your-cloudsql-database>", ENV["MYSQL_DATABASE"]
+    configuration.sub! "[YOUR_USER]",        ENV["MYSQL_USER"]
+    configuration.sub! "[YOUR_PASSWORD]",    ENV["MYSQL_PASSWORD"]
+    configuration.sub! "[YOUR_DATABASE]",    ENV["MYSQL_DATABASE"]
+    configuration.sub! "[YOUR_SOCKET_PATH]", ENV["MYSQL_SOCKET_PATH"]
 
     File.write(app_yaml, configuration)
 
