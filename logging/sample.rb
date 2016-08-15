@@ -113,14 +113,14 @@ def write_log_entry
 end
 
 def delete_log
-# [START delete_log]
+  # [START delete_log]
   require "gcloud"
 
   gcloud  = Gcloud.new "my-gcp-project-id"
   logging = gcloud.logging
 
   logging.delete_log "my_application_log"
-# [END delete_log]
+  # [END delete_log]
 end
 
 def write_log_entry_using_ruby_logger
@@ -129,8 +129,10 @@ def write_log_entry_using_ruby_logger
 
   gcloud   = Gcloud.new "my-gcp-project-id"
   logging  = gcloud.logging
-  resource = logging.resource "gae_app", module_id: "default", version_id: "20160101t163030"
-  logger   = logging.logger "my_application_log", resource
+  resource = logging.resource "gae_app", module_id: "default",
+                                         version_id: "20160101t163030"
+
+  logger = logging.logger "my_application_log", resource
 
   logger.info "Log message"
   # [END write_log_entry_using_ruby_logger]

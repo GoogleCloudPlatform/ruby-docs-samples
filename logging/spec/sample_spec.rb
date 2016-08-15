@@ -27,10 +27,15 @@ describe "Logging sample" do
     raise "Condition not met.  Waited #{times} times with #{delay} sec delay"
   end
 
+  # Frequently used full path to "my_application_log" for test project
+  def my_application_log_name
+    "projects/#{@project_id}/logs/my_application_log"
+  end
+
   # Returns entries logged to "my_application_log" in the test project
   def my_application_log_entries
     @logging.entries(
-      filter: %{logName = "projects/#{@project_id}/logs/my_application_log"},
+      filter: %{logName = "#{my_application_log_name}"},
       order: "timestamp desc"
     )
   end
@@ -73,7 +78,8 @@ describe "Logging sample" do
 
   # Delete log sink used by code samples if the test created one
   def cleanup!
-    @logging.sink("my-sink")&.delete
+    test_sink = @logging.sink "my-sink"
+    test_sink.delete if test_sink
   end
 
   it "can create logging client" do
@@ -91,14 +97,14 @@ describe "Logging sample" do
 
   it "can create log sink" do
     expect(@logging.sink "my-sink").to be nil
-    
+
     create_log_sink
 
     expect(@logging.sink "my-sink").not_to be nil
   end
 
   it "can update log sink" do
-    original_destination = "storage.googleapis.com/#{@bucket.id}" 
+    original_destination = "storage.googleapis.com/#{@bucket.id}"
     updated_destination  = "storage.googleapis.com/#{@alt_bucket.id}"
 
     create_log_sink
@@ -130,17 +136,15 @@ describe "Logging sample" do
       with(filter: %{resource.type = "gae_app"}).
       and_wrap_original do |m, *args|
         m.call(
-          filter: %{logName = "projects/#{@project_id}/logs/my_application_log"},
+          filter: %{logName = "#{my_application_log_name}"},
           order: "timestamp desc"
         )
-    end
+      end
 
     timestamp = "\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2} [^\\\\]+"
-    log_name  = "projects/#{@project_id}/logs/my_application_log"
-    payload   = '"Log message"'
 
     expect { list_log_entries }.to output(
-      %r{\[#{timestamp}\] #{log_name} #{payload}}
+      %r{\[#{timestamp}\] #{my_application_log_name} "Log message"}
     ).to_stdout
   end
 
@@ -167,7 +171,7 @@ describe "Logging sample" do
     end
 
     entries = my_application_log_entries
-    entry = entries.detect {|e| e.payload.include? "time #{current_time}" }
+    entry = entries.detect { |e| e.payload.include? "time #{current_time}" }
     expect(entry).to be nil
 
     write_log_entry
@@ -180,7 +184,7 @@ describe "Logging sample" do
     end
 
     entries = my_application_log_entries
-    entry = entries.detect {|e| e.payload.include? "time #{current_time}" }
+    entry = entries.detect { |e| e.payload.include? "time #{current_time}" }
     expect(entry).not_to be nil
     expect(entry.payload).to eq "Log message - current time #{current_time}"
     expect(entry.severity).to eq :NOTICE
@@ -200,7 +204,7 @@ describe "Logging sample" do
       filter: %{logName = "projects/#{@project_id}/logs/my_application_log"},
       order: "timestamp desc"
     )
-    entry = entries.detect {|e| e.payload.include? "time #{current_time}" }
+    entry = entries.detect { |e| e.payload.include? "time #{current_time}" }
     expect(entry).to be nil
 
     # Hooked up to real test project
@@ -227,7 +231,7 @@ describe "Logging sample" do
       m.call message
     end
 
-    write_log_entry_using_ruby_logger  
+    write_log_entry_using_ruby_logger
 
     # Wait for entry to be queryable
     wait_until do
@@ -237,7 +241,7 @@ describe "Logging sample" do
     end
 
     entries = my_application_log_entries
-    entry = entries.detect {|e| e.payload.include? "time #{current_time}" }
+    entry = entries.detect { |e| e.payload.include? "time #{current_time}" }
     expect(entry).not_to be nil
     expect(entry.payload).to eq "Log message - current time #{current_time}"
     expect(entry.severity).to eq :INFO
