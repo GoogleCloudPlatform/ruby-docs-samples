@@ -36,6 +36,7 @@ env:
   - TEST_DIR=pubsub
   - TEST_DIR=bigquery
   - TEST_DIR=datastore
+  - TEST_DIR=logging
   - TEST_DIR=appengine/endpoints
 
 before_install:
