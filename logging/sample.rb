@@ -85,7 +85,7 @@ def list_log_entries
 
   gcloud  = Gcloud.new "my-gcp-project-id"
   logging = gcloud.logging
-  entries = logging.entries filter: %{resource.type = "gae_app"}
+  entries = logging.entries filter: 'resource.type = "gae_app"'
 
   entries.each do |entry|
     puts "[#{entry.timestamp}] #{entry.log_name} #{entry.payload.inspect}"
