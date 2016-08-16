@@ -12,7 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "rspec"
+require_relative "spec_helper"
+require_relative "../query_as_job"
 
-PROJECT_ID=ENV["GOOGLE_PROJECT_ID"]
-BUCKET_NAME=ENV["GOOGLE_BUCKET_NAME"]
+RSpec.describe "Show query as job sample" do
+  before do
+    @sample = Samples::BigQuery::QueryAsJob.new
+  end
+
+  it "lists number of unique words in shakespeare" do
+    sql = "SELECT TOP(corpus, 10) as title, COUNT(*) as unique_words " +
+          "FROM [publicdata:samples.shakespeare]"
+    expect { @sample.run_query_as_job PROJECT_ID, sql }.to(
+      output(/hamlet/).to_stdout)
+  end
+end

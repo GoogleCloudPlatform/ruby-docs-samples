@@ -17,37 +17,34 @@
 module Samples
   # BigQuery Samples module
   module BigQuery
-    # [START all]
-    # A short sample demonstrating making a BigQuery request
+    # A short sample demonstrating deleting a BigQuery table
     # This uses Application Default Credentials to authenticate.
     # @see https://cloud.google.com/bigquery/bigquery-api-quickstart
-    class Shakespeare
-      def unique_words project_id
-        # [START build_service]
+    class DeleteTable
+      def delete project_id, dataset_id, table_id
+        # [START delete_table]
         require "gcloud"
 
         gcloud = Gcloud.new project_id
         bigquery = gcloud.bigquery
-        # [END build_service]
 
-        # [START run_query]
-        sql = "SELECT TOP(corpus, 10) as title, COUNT(*) as unique_words " +
-              "FROM [publicdata:samples.shakespeare]"
-        results = bigquery.query sql
-        # [END run_query]
-
-        # [START print_results]
-        results.each do |row|
-          puts "#{row['title']}: #{row['unique_words']}"
-        end
-        # [END print_results]
+        dataset = bigquery.dataset dataset_id
+        table = dataset.table table_id
+        table.delete
+        # [END delete_table]
+        puts "Deleted table #{table_id}"
       end
     end
 
     if __FILE__ == $PROGRAM_NAME
-      project_id = ARGV.shift
-      Shakespeare.new.unique_words project_id
+      if ARGV.length != 3
+        puts "usage: delete_table.rb [project_id] [dataset_id] [table_id]"
+      else
+        project_id = ARGV.shift
+        dataset_id = ARGV.shift
+        table_id = ARGV.shift
+        DeleteTable.new.delete project_id, dataset_id, table_id
+      end
     end
-    # [END all]
   end
 end

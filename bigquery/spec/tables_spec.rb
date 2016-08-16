@@ -12,7 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "rspec"
+require_relative "spec_helper"
+require_relative "../tables"
 
-PROJECT_ID=ENV["GOOGLE_PROJECT_ID"]
-BUCKET_NAME=ENV["GOOGLE_BUCKET_NAME"]
+RSpec.describe "List tables sample" do
+  before do
+    @sample = Samples::BigQuery::Tables.new
+  end
+
+  it "lists the dataset's tables" do
+    expect { @sample.list_tables PROJECT_ID, "test_dataset"}.to(
+      output(/test_table/).to_stdout)
+  end
+end

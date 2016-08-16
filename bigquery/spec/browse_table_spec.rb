@@ -13,15 +13,16 @@
 # limitations under the License.
 
 require_relative "spec_helper"
-require_relative "../shakespeare"
+require_relative "../browse_table"
 
-RSpec.describe "Show Shakespeare words sample" do
+RSpec.describe "Browses the table data" do
   before do
-    @sample = Samples::BigQuery::Shakespeare.new
+    @sample = Samples::BigQuery::BrowseTable.new
   end
 
-  it "lists number of unique words in shakespeare" do
-    expect { @sample.unique_words PROJECT_ID }.to(
-      output(/hamlet/).to_stdout)
+  it "returns the expected data" do
+    allow($stdin).to receive(:gets).and_return("n")
+    expect { @sample.browse PROJECT_ID, "test_dataset", "test_table", 1 }.to(
+      output(/Brent Shaffer/).to_stdout)
   end
 end
