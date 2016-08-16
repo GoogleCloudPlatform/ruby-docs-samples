@@ -27,6 +27,16 @@ describe "Google Cloud Storage sample" do
     File.read temp_file.path
   end
 
+  # Capture and return STDOUT output by block
+  def capture &block
+    real_stdout = $stdout
+    $stdout = StringIO.new
+    block.call
+    $stdout.string
+  ensure
+    $stdout = real_stdout
+  end
+
   # Tests require environment variables:
   #
   #   GCLOUD_PROJECT   ID of your Google Cloud Platform project
@@ -187,12 +197,54 @@ describe "Google Cloud Storage sample" do
     uploaded_file.content_language    = "en"
     uploaded_file.metadata            = { foo: "bar" }
 
-    list_object_details
-
-    raise "TODO: list object details expectations"
+    output = capture { list_object_details }
+    
+    expect(output).to include("Name: my-file.txt")
+    expect(output).to include("Bucket: #{@bucket.name}")
+    expect(output).to include("Storage class: STANDARD")
+    expect(output).to include("ID: #{uploaded_file.id}")
+    expect(output).to include("Size: 23 bytes")
+    expect(output).to match(/Created: \d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/)
+    expect(output).to match(/Updated: \d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/)
+    expect(output).to include("Generation: #{uploaded_file.generation}")
+    expect(output).to include(
+      "Metageneration: #{uploaded_file.metageneration}"
+    )
+    expect(output).to include("Etag: #{uploaded_file.etag}")
+    expect(output).to include("Owners: #{uploaded_file.acl.owners.join ","}")
+    expect(output).to include("Crc32c: #{uploaded_file.crc32c}")
+    expect(output).to include("md5_hash: #{uploaded_file.md5}")
+    expect(output).to include(
+      "Cache-control: Cache-Control:public, max-age=3600"
+    )
+    expect(output).to include("Content-type: text/plain")
+    expect(output).to include(
+      "Content-disposition: attachment; filename=my-file.txt"
+    )
+    expect(output).to include("Content-encoding:")
+    expect(output).to include("Content-language: en")
+    expect(output).to include("Metadata:\n - foo = bar")
   end
 
-  it "delete bucket"
-  it "create signed url"
+  it "delete object" do
+    upload_object
 
+    expect(@bucket.file "my-file.txt").not_to be nil
+
+    expect { delete_object }.to output("Deleted my-file.txt\n").to_stdout
+
+    expect(@bucket.file "my-file.txt").to be nil
+  end
+
+  it "delete bucket" do
+    # Google Cloud Storage bucket IDs are unique
+    #
+    # To prevent deleting the bucket that is used for testing,
+    # this test simply verifies that the correct `#delete_bucket`
+    # method is called by the sample
+    expect(@bucket).to receive(:delete)
+
+    expect { delete_bucket }.to output("Deleted bucket: #{@bucket.name}\n").
+                                to_stdout
+  end
 end

@@ -151,11 +151,31 @@ def list_object_details
   # [END list_object_details]
 end
 
+def delete_object
+  # [START delete_object]
+  require "gcloud"
+
+  gcloud  = Gcloud.new "my-project-id"
+  storage = gcloud.storage
+  bucket  = storage.bucket "my-bucket-name"
+  file    = bucket.file "my-file.txt"
+
+  file.delete
+
+  puts "Deleted #{file.name}"
+  # [END delete_object]
+end
+
 def delete_bucket
   # [START delete_bucket]
   require "gcloud"
 
   gcloud  = Gcloud.new "my-project-id"
   storage = gcloud.storage
+  bucket  = storage.bucket "my-bucket-name"
+
+  bucket.delete
+
+  puts "Deleted bucket: #{bucket.name}"
   # [END delete_bucket]
 end
