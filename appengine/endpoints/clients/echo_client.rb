@@ -14,6 +14,7 @@
 
 # Example of calling a simple Google Cloud Endpoint API.
 
+require "json"
 require "optparse"
 require "rest-client"
 
@@ -49,7 +50,7 @@ end
 options[:message] = "Hello echo message" unless options[:message]
 
 url = "#{options[:host]}/echo?key=#{options[:api_key]}"
-body = { message: options[:message] }.to_json
+body = JSON.generate(message: options[:message])
 
 begin
   response = RestClient.post url, body

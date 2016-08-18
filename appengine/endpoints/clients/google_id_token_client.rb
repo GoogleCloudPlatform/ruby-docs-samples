@@ -73,7 +73,8 @@ oauth = Signet::OAuth2::Client.new(
   redirect_uri:         "urn:ietf:wg:oauth:2.0:oob"
 )
 
-`open "#{oauth.authorization_uri}"`
+puts "Open the following URI in your browser to get the authorization code:"
+puts oauth.authorization_uri
 
 print "Enter authorization code: "
 
