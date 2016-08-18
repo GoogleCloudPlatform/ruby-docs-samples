@@ -21,7 +21,7 @@ module Samples
     # This uses Application Default Credentials to authenticate.
     # @see https://cloud.google.com/bigquery/bigquery-api-quickstart
     class BrowseTable
-      def browse project_id, dataset_id, table_id, max=10
+      def browse project_id, dataset_id, table_id, max
         # [START browse_table]
         require "gcloud"
 
@@ -56,7 +56,7 @@ module Samples
         project_id = ARGV.shift
         dataset_id = ARGV.shift
         table_id = ARGV.shift
-        BrowseTable.new.browse project_id, dataset_id, table_id, ARGV.length ? ARGV.shift : nil
+        BrowseTable.new.browse project_id, dataset_id, table_id, ARGV.shift or 10
       end
     end
   end

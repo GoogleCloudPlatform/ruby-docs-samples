@@ -33,9 +33,9 @@ module Samples
         if job.failed?
           puts job.error
         else
-          job.query_results.each_with_index do |row, index|
-            puts "--- Row #{index+1} ---"
-            for column, value in row
+          job.query_results.each do |row|
+            puts "---"
+            row.each do |column, value|
               puts "#{column}: #{value}"
             end
           end

@@ -35,9 +35,9 @@ module Samples
         # [END run_query]
 
         # [START print_results]
-        results.each_with_index do |row, index|
-          puts "--- Row #{index+1} ---"
-          for column, value in row
+        results.each do |row|
+          puts "---"
+          row.each do |column, value|
             puts "#{column}: #{value}"
           end
         end
