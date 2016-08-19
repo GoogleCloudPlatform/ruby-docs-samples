@@ -16,14 +16,10 @@ require_relative "spec_helper"
 require_relative "../query"
 
 RSpec.describe "Show query sample" do
-  before do
-    @sample = Samples::BigQuery::Query.new
-  end
-
   it "lists number of unique words in shakespeare" do
     sql = "SELECT TOP(corpus, 10) as title, COUNT(*) as unique_words " +
           "FROM [publicdata:samples.shakespeare]"
-    expect { @sample.run_query PROJECT_ID, sql }.to(
+    expect { run_query PROJECT_ID, sql }.to(
       output(/hamlet/).to_stdout)
   end
 end

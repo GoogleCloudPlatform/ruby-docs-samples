@@ -14,46 +14,39 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-module Samples
-  # BigQuery Samples module
-  module BigQuery
-    # [START all]
-    # A short sample demonstrating making a BigQuery request
-    # This uses Application Default Credentials to authenticate.
-    # @see https://cloud.google.com/bigquery/bigquery-api-quickstart
-    class Query
-      def run_query project_id, sql
-        # [START build_service]
-        require "gcloud"
+# [START all]
+# A short sample demonstrating making a BigQuery request
+# This uses Application Default Credentials to authenticate.
+# @see https://cloud.google.com/bigquery/bigquery-api-quickstart
+require "gcloud"
 
-        gcloud = Gcloud.new project_id
-        bigquery = gcloud.bigquery
-        # [END build_service]
+def run_query project_id, sql
+  # [START build_service]
+  gcloud = Gcloud.new project_id
+  bigquery = gcloud.bigquery
+  # [END build_service]
 
-        # [START run_query]
-        results = bigquery.query sql
-        # [END run_query]
+  # [START run_query]
+  results = bigquery.query sql
+  # [END run_query]
 
-        # [START print_results]
-        results.each do |row|
-          puts "---"
-          row.each do |column, value|
-            puts "#{column}: #{value}"
-          end
-        end
-        # [END print_results]
-      end
+  # [START print_results]
+  results.each do |row|
+    puts "---"
+    row.each do |column, value|
+      puts "#{column}: #{value}"
     end
+  end
+  # [END print_results]
+end
+# [END all]
 
-    if __FILE__ == $PROGRAM_NAME
-      if ARGV.length != 2
-        puts "usage: tables.rb [project_id] [sql]"
-      else
-        project_id = ARGV.shift
-        sql = ARGV.shift
-        Query.new.run_query project_id, sql
-      end
-    end
-    # [END all]
+if __FILE__ == $PROGRAM_NAME
+  if ARGV.length != 2
+    puts "usage: query.rb [project_id] [sql]"
+  else
+    project_id = ARGV.shift
+    sql = ARGV.shift
+    run_query project_id, sql
   end
 end

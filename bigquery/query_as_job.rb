@@ -14,44 +14,38 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-module Samples
-  # BigQuery Samples module
-  module BigQuery
-    # A short sample demonstrating making a BigQuery request as a job
-    # This uses Application Default Credentials to authenticate.
-    # @see https://cloud.google.com/bigquery/bigquery-api-quickstart
-    class QueryAsJob
-      def run_query_as_job project_id, sql
-        require "gcloud"
+# [START all]
+require "gcloud"
+# A short sample demonstrating making a BigQuery request as a job
+# This uses Application Default Credentials to authenticate.
+# @see https://cloud.google.com/bigquery/bigquery-api-quickstart
+def run_query_as_job project_id, sql
+  gcloud = Gcloud.new project_id
+  bigquery = gcloud.bigquery
 
-        gcloud = Gcloud.new project_id
-        bigquery = gcloud.bigquery
+  # [START run_query]
+  job = bigquery.query_job sql
 
-        # [START run_query]
-        job = bigquery.query_job sql
-
-        if job.failed?
-          puts job.error
-        else
-          job.query_results.each do |row|
-            puts "---"
-            row.each do |column, value|
-              puts "#{column}: #{value}"
-            end
-          end
-        end
-        # [END run_query]
+  if job.failed?
+    puts job.error
+  else
+    job.query_results.each do |row|
+      puts "---"
+      row.each do |column, value|
+        puts "#{column}: #{value}"
       end
     end
+  end
+# [END run_query]
+end
+# [END all]
 
-    if __FILE__ == $PROGRAM_NAME
-      if ARGV.length != 2
-        puts "usage: tables.rb [project_id] [sql]"
-      else
-        project_id = ARGV.shift
-        sql = ARGV.shift
-        QueryAsJob.new.run_query_as_job project_id, sql
-      end
-    end
+if __FILE__ == $PROGRAM_NAME
+  if ARGV.length != 2
+    puts "usage: tables.rb [project_id] [sql]"
+  else
+    project_id = ARGV.shift
+    sql = ARGV.shift
+    run_query_as_job project_id, sql
   end
 end

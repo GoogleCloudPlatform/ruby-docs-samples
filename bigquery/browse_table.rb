@@ -14,50 +14,43 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-module Samples
-  # BigQuery Samples module
-  module BigQuery
-    # A short sample demonstrating browsing a BigQuery table
-    # This uses Application Default Credentials to authenticate.
-    # @see https://cloud.google.com/bigquery/bigquery-api-quickstart
-    class BrowseTable
-      def browse project_id, dataset_id, table_id, max
-        # [START browse_table]
-        require "gcloud"
+# [START all]
+require "gcloud"
+# A short sample demonstrating browsing a BigQuery table
+# This uses Application Default Credentials to authenticate.
+# @see https://cloud.google.com/bigquery/bigquery-api-quickstart
+def browse_table project_id, dataset_id, table_id, max
+  # [START browse_table]
+  gcloud = Gcloud.new project_id
+  bigquery = gcloud.bigquery
 
-        gcloud = Gcloud.new project_id
-        bigquery = gcloud.bigquery
-
-        dataset = bigquery.dataset dataset_id
-        table = dataset.table table_id
-        token = nil
-        row_num = 0
-        loop do
-          data = table.data :token => token, :max => max
-          data.each do |row|
-            puts "--- Row #{row_num+=1} ---"
-            for column, value in row
-              puts "#{column}: #{value}"
-            end
-          end
-          break if not data.token
-          puts "[Press enter for next page, any key to exit]"
-          break if $stdin.gets.chomp != ''
-          token = data.token
-        end
-        # [END browse_table]
+  dataset = bigquery.dataset dataset_id
+  table = dataset.table table_id
+  row_num = 0
+  loop do
+    page_token = data ? data.token : nil
+    data = table.data :token => page_token, :max => max
+    data.each do |row|
+      puts "--- Row #{row_num+=1} ---"
+      for column, value in row
+        puts "#{column}: #{value}"
       end
     end
+    break if not data.token
+    puts "[Press enter for next page, any key to exit]"
+    break if $stdin.gets.chomp != ''
+  end
+  # [END browse_table]
+end
+# [END all]
 
-    if __FILE__ == $PROGRAM_NAME
-      if not (3..4) === ARGV.length
-        puts "usage: browse_table.rb [project_id] [dataset_id] [table_id] [max_results=10]"
-      else
-        project_id = ARGV.shift
-        dataset_id = ARGV.shift
-        table_id = ARGV.shift
-        BrowseTable.new.browse project_id, dataset_id, table_id, ARGV.shift or 10
-      end
-    end
+if __FILE__ == $PROGRAM_NAME
+  if not (3..4) === ARGV.length
+    puts "usage: browse_table.rb [project_id] [dataset_id] [table_id] [max_results=10]"
+  else
+    project_id = ARGV.shift
+    dataset_id = ARGV.shift
+    table_id = ARGV.shift
+    browse_table project_id, dataset_id, table_id, ARGV.shift or 10
   end
 end
