@@ -1,0 +1,74 @@
+#! /usr/bin/env ruby
+
+require_relative "./sample"
+
+require "gli"
+require "highline"
+include GLI::App
+
+program_desc "Manage Google Cloud Storage buckets"
+
+desc     "Your Google Cloud project ID"
+arg_name "PROJECT_ID"
+flag     %w[ p project-id ]
+
+pre do |global_options, command, options, arguments|
+  # Store the current command so commands may reference it
+  @command = command
+end
+
+# Print help documentation
+def print_help
+  commands[:help].execute({},{}, @command.name_for_help)
+end
+
+# If the provided value is not present, prompt the user to enter a value.
+# If the user does not enter a value, display help output for this command.
+def get variable_description, value = nil
+  if value.to_s.empty?
+    cli   = HighLine.new
+    value = cli.ask "Enter #{variable_description}:"
+
+    if value.to_s.empty?
+      puts "Missing #{variable_description}"
+      puts
+      print_help
+      exit 1
+    end
+  end
+
+  value
+end
+
+desc     "List all buckets in the authenticated project"
+command  :list do |c|
+  c.action do |globals, options, args|
+    project_id = get "Google Cloud project ID", globals["project-id"]
+
+    list_buckets project_id
+  end
+end
+
+desc     "Create a new bucket with the given name"
+arg_name "BUCKET_NAME"
+command  :create do |c|
+  c.action do |globals, options, args|
+    project_id  = get "Google Cloud project ID",          globals["project-id"]
+    bucket_name = get "Google Cloud Storage bucket name", args.first
+
+    create_bucket project_id, bucket_name
+  end
+end
+
+desc     "Delete the specified bucket."
+arg_name "BUCKET_NAME"
+command  :delete do |c|
+  c.action do |globals, options, args|
+    project_id  = get "Google Cloud project ID",          globals["project-id"]
+    bucket_name = get "Google Cloud Storage bucket name", args.first
+
+    delete_bucket project_id, bucket_name
+  end
+end
+
+exit run(ARGV)

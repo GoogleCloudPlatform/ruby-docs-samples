@@ -12,14 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-def create_bucket
+def create_bucket project_id, bucket_name
   # [START create_bucket]
+  # project_id  = "Your Google Cloud project ID"
+  # bucket_name = "Name of Google Cloud Storage bucket to create"
+
   require "gcloud"
 
-  gcloud  = Gcloud.new "my-project-id"
+  gcloud  = Gcloud.new project_id
   storage = gcloud.storage
-
-  bucket = storage.create_bucket "my-bucket-name"
+  bucket  = storage.create_bucket bucket_name
 
   puts "Created bucket: #{bucket.name}"
   # [END create_bucket]
@@ -117,6 +119,22 @@ def list_bucket_contents
   # [END list_bucket_contents]
 end
 
+# TODO add tests
+def list_buckets project_id
+  # [START list_buckets]
+  # project_id = "Your Google Cloud project ID"
+
+  require "gcloud"
+
+  gcloud  = Gcloud.new project_id
+  storage = gcloud.storage
+
+  storage.buckets.each do |bucket|
+    puts bucket.name
+  end
+  # [END list_buckets]
+end
+
 def list_object_details
   # [START list_object_details]
   require "gcloud"
@@ -168,11 +186,14 @@ end
 
 def delete_bucket
   # [START delete_bucket]
+  # project_id  = "Your Google Cloud project ID"
+  # bucket_name = "Name of your Google Cloud Storage bucket to delete"
+
   require "gcloud"
 
-  gcloud  = Gcloud.new "my-project-id"
+  gcloud  = Gcloud.new project_id
   storage = gcloud.storage
-  bucket  = storage.bucket "my-bucket-name"
+  bucket  = storage.bucket bucket_name
 
   bucket.delete
 

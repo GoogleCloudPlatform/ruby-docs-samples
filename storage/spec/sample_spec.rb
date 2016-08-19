@@ -82,17 +82,20 @@ describe "Google Cloud Storage sample" do
     @alt_bucket.file("my-file.txt").delete  if @alt_bucket.file "my-file.txt"
   end
 
-  it "create bucket" do
-    # Google Cloud Storage bucket IDs are unique
-    #
-    # To prevent creating unique buckets, this test simply verifies
-    # that the correct `#create_bucket` method is called by the sample
-    expect(@storage).to receive(:create_bucket).with("my-bucket-name").
-                        and_return(@bucket)
+  it "list buckets"
 
-    expect { create_bucket }.to output("Created bucket: #{@bucket.name}\n").
-                                to_stdout
-  end
+  it "create bucket"
+  # it "create bucket" do
+  #   # Google Cloud Storage bucket IDs are unique
+  #   #
+  #   # To prevent creating unique buckets, this test simply verifies
+  #   # that the correct `#create_bucket` method is called by the sample
+  #   expect(@storage).to receive(:create_bucket).with("my-bucket-name").
+  #                       and_return(@bucket)
+
+  #   expect { create_bucket }.to output("Created bucket: #{@bucket.name}\n").
+  #                               to_stdout
+  # end
 
   it "upload object" do
     expect(@bucket.file "my-file.txt").to be nil
@@ -236,15 +239,16 @@ describe "Google Cloud Storage sample" do
     expect(@bucket.file "my-file.txt").to be nil
   end
 
-  it "delete bucket" do
-    # Google Cloud Storage bucket IDs are unique
-    #
-    # To prevent deleting the bucket that is used for testing,
-    # this test simply verifies that the correct `#delete_bucket`
-    # method is called by the sample
-    expect(@bucket).to receive(:delete)
+  it "delete bucket"
+  # it "delete bucket" do
+  #   # Google Cloud Storage bucket IDs are unique
+  #   #
+  #   # To prevent deleting the bucket that is used for testing,
+  #   # this test simply verifies that the correct `#delete_bucket`
+  #   # method is called by the sample
+  #   expect(@bucket).to receive(:delete)
 
-    expect { delete_bucket }.to output("Deleted bucket: #{@bucket.name}\n").
-                                to_stdout
-  end
+  #   expect { delete_bucket }.to output("Deleted bucket: #{@bucket.name}\n").
+  #                               to_stdout
+  # end
 end
