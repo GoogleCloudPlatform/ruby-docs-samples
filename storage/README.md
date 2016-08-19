@@ -4,7 +4,7 @@ To run, first install dependencies
 
     bundle install
 
-Then run the `bundle exec storage`
+Then run the `bundle exec buckets`
 
     NAME
         buckets - Manage Google Cloud Storage buckets
