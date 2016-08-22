@@ -58,11 +58,7 @@ if __FILE__ == $PROGRAM_NAME
   if ARGV.length != 4
     puts "usage: import.rb [project_id] [dataset_id] [table_id] [source]"
   else
-    project_id = ARGV.shift
-    dataset_id = ARGV.shift
-    table_id = ARGV.shift
-    source = ARGV.shift
-    import project_id, dataset_id, table_id, source
+    import *ARGV
   end
 end
 
