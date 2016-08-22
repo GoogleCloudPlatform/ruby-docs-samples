@@ -19,7 +19,7 @@ RSpec.describe "Show query sample" do
   it "lists number of unique words in shakespeare" do
     sql = "SELECT TOP(corpus, 10) as title, COUNT(*) as unique_words " +
           "FROM [publicdata:samples.shakespeare]"
-    expect { run_query PROJECT_ID, sql }.to(
+    expect { query PROJECT_ID, sql }.to(
       output(/hamlet/).to_stdout)
   end
 end

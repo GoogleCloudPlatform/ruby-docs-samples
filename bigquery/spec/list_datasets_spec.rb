@@ -13,17 +13,13 @@
 # limitations under the License.
 
 require_relative "spec_helper"
-require_relative "../datasets"
+require_relative "../list_datasets"
 
 RSpec.describe "List datasets sample" do
-  before do
-    @sample = Samples::BigQuery::Datasets.new
-  end
-
   it "lists the project's datasets" do
     sql = "SELECT TOP(corpus, 10) as title, COUNT(*) as unique_words " +
           "FROM [publicdata:samples.shakespeare]"
-    expect { @sample.list_datasets PROJECT_ID }.to(
+    expect { list_datasets PROJECT_ID }.to(
       output(/test_dataset/).to_stdout)
   end
 end

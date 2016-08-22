@@ -19,6 +19,6 @@ RSpec.describe "Browses the table data" do
   it "returns the expected data" do
     allow($stdin).to receive(:gets).and_return("n")
     expect { browse_table PROJECT_ID, "test_dataset", "test_table", 1 }.to(
-      output(/Brent Shaffer/).to_stdout)
+      output(/Alice/).to_stdout)
   end
 end

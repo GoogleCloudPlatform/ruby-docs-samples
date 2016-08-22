@@ -14,44 +14,34 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-module Samples
-  # BigQuery Samples module
-  module BigQuery
-    # [START all]
-    # A short sample demonstrating importing data into BigQuery
-    # This uses Application Default Credentials to authenticate.
-    # @see https://cloud.google.com/bigquery/bigquery-api-quickstart
-    class ImportStream
-      def import project_id, dataset_id, table_id
-        require "gcloud"
+# [START all]
+require "gcloud"
+# A short sample demonstrating importing data into BigQuery
+# This uses Application Default Credentials to authenticate.
+# @see https://cloud.google.com/bigquery/bigquery-api-quickstart
+def import_stream project_id, dataset_id, table_id
+  gcloud = Gcloud.new project_id
+  bigquery = gcloud.bigquery
 
-        gcloud = Gcloud.new project_id
-        bigquery = gcloud.bigquery
+  # [START import_stream]
+  dataset = bigquery.dataset dataset_id
+  table = dataset.table table_id
 
-        # [START import_stream]
-        dataset = bigquery.dataset dataset_id
-        table = dataset.table table_id
+  row = Hash[table.schema["fields"].map { |f|
+    puts "Provide a value for #{f["name"]}"
+    [f["name"], $stdin.gets.chomp]
+  }]
 
-        row = Hash[table.schema["fields"].map { |f|
-          puts "Provide a value for #{f["name"]}"
-          [f["name"], $stdin.gets.chomp]
-        }]
-        puts row
-        # job = table.insert [rows]
-        # [END import_stream]
-      end
-    end
+  job = table.insert [row]
+  puts "Row streamed into table successfully"
+  # [END import_stream]
+end
+# [END all]
 
-    if __FILE__ == $PROGRAM_NAME
-      if ARGV.length != 3
-        puts "usage: import_stream.rb [project_id] [dataset_id] [table_id]"
-      else
-        project_id = ARGV.shift
-        dataset_id = ARGV.shift
-        table_id = ARGV.shift
-        ImportStream.new.import project_id, dataset_id, table_id
-      end
-    end
-    # [END all]
+if __FILE__ == $PROGRAM_NAME
+  if ARGV.length != 3
+    puts "usage: import_stream.rb [project_id] [dataset_id] [table_id]"
+  else
+    import_stream *ARGV
   end
 end

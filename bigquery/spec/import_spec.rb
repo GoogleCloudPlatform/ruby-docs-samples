@@ -12,53 +12,110 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+require "gcloud"
 require_relative "spec_helper"
 require_relative "../import"
 
 RSpec.describe "Import table data" do
   before do
-    @sample = Samples::BigQuery::Import.new
-
-    # create a temporary dataset / table
-    require "gcloud"
+    # Create a temporary dataset.
     gcloud = Gcloud.new PROJECT_ID
     @bigquery = gcloud.bigquery
     @dataset = @bigquery.create_dataset "test_dataset_#{Time.now.to_i}"
   end
 
   after do
-    # delete the temporary dataset
+    # Delete the temporary dataset.
     @dataset.delete force: true
   end
 
-  [
-    [File.expand_path("spec/data/test_data.json"), "JSON"],
-    [File.expand_path("spec/data/test_data.csv"), "CSV"],
-    ["gs://#{BUCKET_NAME}/test_data.json", "Cloud Storage JSON"],
-    ["gs://#{BUCKET_NAME}/test_data.csv", "Cloud Storage CSV"]
-  ].each do |source, type|
-    it "Import #{type}" do
-      if type.start_with?("Cloud Storage") and not BUCKET_NAME
-        skip "Set GOOGLE_BUCKET_NAME to run this test"
-      end
-      table_name = "test_import_#{type.downcase.gsub(" ", "_")}"
+  it "Imports JSON" do
+    table_id = "test_import_json"
+    source = File.expand_path("spec/data/test_data.json")
 
-      # create temporary table
-      @dataset.create_table table_name do |schema|
-        schema.string "name", mode: :required
-        schema.string "title", mode: :required
-      end
-
-      # Run the sample with a test dataset
-      expect { @sample.import PROJECT_ID, @dataset.dataset_id, table_name, source }.to(
-        output(/Data imported successfully/).to_stdout)
-
-      # Query to ensure our results were imported as expected
-      result = @bigquery.query "SELECT * FROM #{@dataset.dataset_id}.#{table_name}"
-      expect(result.size).to eq(3)
-      expect(result[0]).to include("name" => "Brent Shaffer")
-      expect(result[1]).to include("name" => "Remi Taylor")
-      expect(result[2]).to include("name" => "Jeff Mendoza")
+    # Create a temporary table.
+    @dataset.create_table table_id do |schema|
+      schema.string "name", mode: :required
+      schema.string "title", mode: :required
     end
+
+    # Run the import function.
+    expect { import PROJECT_ID, @dataset.dataset_id, table_id, source }.to(
+      output(/Data imported successfully/).to_stdout)
+
+    # Query to ensure our results were imported as expected
+    result = @bigquery.query "SELECT * FROM #{@dataset.dataset_id}.#{table_id}"
+    expect(result.size).to eq(2)
+    expect(result[0]).to include("name" => "Alice")
+    expect(result[1]).to include("name" => "Caterpillar")
+  end
+
+  it "Imports CSV" do
+    table_id = "test_import_csv"
+    source = File.expand_path("spec/data/test_data.csv")
+
+    # create temporary table.
+    @dataset.create_table table_id do |schema|
+      schema.string "name", mode: :required
+      schema.string "title", mode: :required
+    end
+
+    # Run the import function.
+    expect { import PROJECT_ID, @dataset.dataset_id, table_id, source }.to(
+      output(/Data imported successfully/).to_stdout)
+
+    # Query to ensure our results were imported as expected.
+    result = @bigquery.query "SELECT * FROM #{@dataset.dataset_id}.#{table_id}"
+    expect(result.size).to eq(2)
+    expect(result[0]).to include("name" => "Alice")
+    expect(result[1]).to include("name" => "Caterpillar")
+  end
+
+  it "Imports JSON from Cloud Storage" do
+    if not BUCKET_NAME
+      skip "Set GOOGLE_BUCKET_NAME to run this test"
+    end
+    table_id = "test_import_json"
+    source = "gs://#{BUCKET_NAME}/test_data.json"
+
+    # Create temporary table.
+    @dataset.create_table table_id do |schema|
+      schema.string "name", mode: :required
+      schema.string "title", mode: :required
+    end
+
+    # Run the import function.
+    expect { import PROJECT_ID, @dataset.dataset_id, table_id, source }.to(
+      output(/Data imported successfully/).to_stdout)
+
+    # Query to ensure our results were imported as expected.
+    result = @bigquery.query "SELECT * FROM #{@dataset.dataset_id}.#{table_id}"
+    expect(result.size).to eq(2)
+    expect(result[0]).to include("name" => "Alice")
+    expect(result[1]).to include("name" => "Caterpillar")
+  end
+
+  it "Imports CSV from Cloud Storage" do
+    if not BUCKET_NAME
+      skip "Set GOOGLE_BUCKET_NAME to run this test"
+    end
+    table_id = "test_import_csv"
+    source = "gs://#{BUCKET_NAME}/test_data.csv"
+
+    # create temporary table.
+    @dataset.create_table table_id do |schema|
+      schema.string "name", mode: :required
+      schema.string "title", mode: :required
+    end
+
+    # Run the import function.
+    expect { import PROJECT_ID, @dataset.dataset_id, table_id, source }.to(
+      output(/Data imported successfully/).to_stdout)
+
+    # Query to ensure our results were imported as expected.
+    result = @bigquery.query "SELECT * FROM #{@dataset.dataset_id}.#{table_id}"
+    expect(result.size).to eq(2)
+    expect(result[0]).to include("name" => "Alice")
+    expect(result[1]).to include("name" => "Caterpillar")
   end
 end

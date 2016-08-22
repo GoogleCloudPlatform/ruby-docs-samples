@@ -15,36 +15,27 @@
 # limitations under the License.
 
 # [START all]
-# A short sample demonstrating making a BigQuery request
+require "gcloud"
+# A short sample demonstrating listing BigQuery tables
 # This uses Application Default Credentials to authenticate.
 # @see https://cloud.google.com/bigquery/bigquery-api-quickstart
-require "gcloud"
-
-def query project_id, sql
-  # [START build_service]
+def list_tables project_id, dataset_id
+  # [START list_tables]
   gcloud = Gcloud.new project_id
   bigquery = gcloud.bigquery
-  # [END build_service]
+  dataset = bigquery.dataset dataset_id
 
-  # [START run_query]
-  results = bigquery.query sql
-  # [END run_query]
-
-  # [START print_results]
-  results.each do |row|
-    puts "---"
-    row.each do |column, value|
-      puts "#{column}: #{value}"
-    end
+  dataset.tables.each do |table|
+    puts "#{table.table_id}"
   end
-  # [END print_results]
+  # [END list_tables]
 end
 # [END all]
 
 if __FILE__ == $PROGRAM_NAME
   if ARGV.length != 2
-    puts "usage: query.rb [project_id] [sql]"
+    puts "usage: list_tables.rb [project_id] [dataset_id]"
   else
-    query *ARGV
+    list_tables *ARGV
   end
 end

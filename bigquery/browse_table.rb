@@ -19,7 +19,7 @@ require "gcloud"
 # A short sample demonstrating browsing a BigQuery table
 # This uses Application Default Credentials to authenticate.
 # @see https://cloud.google.com/bigquery/bigquery-api-quickstart
-def browse_table project_id, dataset_id, table_id, max
+def browse_table project_id, dataset_id, table_id, max=10
   # [START browse_table]
   gcloud = Gcloud.new project_id
   bigquery = gcloud.bigquery
@@ -27,8 +27,8 @@ def browse_table project_id, dataset_id, table_id, max
   dataset = bigquery.dataset dataset_id
   table = dataset.table table_id
   row_num = 0
+  page_token = nil
   loop do
-    page_token = data ? data.token : nil
     data = table.data :token => page_token, :max => max
     data.each do |row|
       puts "--- Row #{row_num+=1} ---"
@@ -39,6 +39,7 @@ def browse_table project_id, dataset_id, table_id, max
     break if not data.token
     puts "[Press enter for next page, any key to exit]"
     break if $stdin.gets.chomp != ''
+    page_token = data.token
   end
   # [END browse_table]
 end
@@ -48,9 +49,6 @@ if __FILE__ == $PROGRAM_NAME
   if not (3..4) === ARGV.length
     puts "usage: browse_table.rb [project_id] [dataset_id] [table_id] [max_results=10]"
   else
-    project_id = ARGV.shift
-    dataset_id = ARGV.shift
-    table_id = ARGV.shift
-    browse_table project_id, dataset_id, table_id, ARGV.shift or 10
+    browse_table *ARGV
   end
 end

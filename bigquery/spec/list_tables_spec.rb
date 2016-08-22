@@ -13,15 +13,11 @@
 # limitations under the License.
 
 require_relative "spec_helper"
-require_relative "../tables"
+require_relative "../list_tables"
 
 RSpec.describe "List tables sample" do
-  before do
-    @sample = Samples::BigQuery::Tables.new
-  end
-
   it "lists the dataset's tables" do
-    expect { @sample.list_tables PROJECT_ID, "test_dataset"}.to(
+    expect { list_tables PROJECT_ID, "test_dataset"}.to(
       output(/test_table/).to_stdout)
   end
 end

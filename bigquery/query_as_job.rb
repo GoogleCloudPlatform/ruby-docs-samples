@@ -19,7 +19,7 @@ require "gcloud"
 # A short sample demonstrating making a BigQuery request as a job
 # This uses Application Default Credentials to authenticate.
 # @see https://cloud.google.com/bigquery/bigquery-api-quickstart
-def run_query_as_job project_id, sql
+def query_as_job project_id, sql
   gcloud = Gcloud.new project_id
   bigquery = gcloud.bigquery
 
@@ -44,8 +44,6 @@ if __FILE__ == $PROGRAM_NAME
   if ARGV.length != 2
     puts "usage: tables.rb [project_id] [sql]"
   else
-    project_id = ARGV.shift
-    sql = ARGV.shift
-    run_query_as_job project_id, sql
+    query_as_job *ARGV
   end
 end
