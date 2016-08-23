@@ -50,7 +50,7 @@ end
 options[:message] = "Hello echo message" unless options[:message]
 
 url = "#{options[:host]}/echo?key=#{options[:api_key]}"
-body = JSON.generate(message: options[:message])
+body = { message: options[:message] }.to_json
 
 begin
   response = RestClient.post url, body
