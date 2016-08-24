@@ -147,7 +147,7 @@ describe "Pub/Sub sample" do
   it "gets topic policy" do
     @pubsub.create_topic TOPIC_NAME
 
-    expect { print_topic_policy }.to output(/{}/).to_stdout
+    expect { get_topic_policy }.to output(/{}/).to_stdout
   end
 
   it "gets subscription policy" do
@@ -157,7 +157,7 @@ describe "Pub/Sub sample" do
       autocreate: true
     )
 
-    expect { print_subscription_policy }.to output(/{}/).to_stdout
+    expect { get_subscription_policy }.to output(/{}/).to_stdout
   end
 
   it "sets topic policy" do

@@ -20,6 +20,8 @@ Style/NumericLiterals:
   Enabled: false
 Style/SpaceAroundOperators:
   Enabled: false
+Style/AccessorMethodName:
+  Enabled: false
 Metrics/ClassLength:
   Enabled: false
 Style/EmptyElse:
