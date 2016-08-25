@@ -1,0 +1,9 @@
+source "https://rubygems.org"
+
+gem "gcloud", "~> 0.12.2"
+
+group :test do
+  gem "rake"
+  gem "rubocop"
+  gem "rspec"
+end

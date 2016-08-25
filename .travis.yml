@@ -38,6 +38,7 @@ env:
   - TEST_DIR=datastore
   - TEST_DIR=logging
   - TEST_DIR=appengine/endpoints
+  - TEST_DIR=vision/label
 
 before_install:
 #ENCRYPT YOUR PRIVATE KEY (If you need authentication)
