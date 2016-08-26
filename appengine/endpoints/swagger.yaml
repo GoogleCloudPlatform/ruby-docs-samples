@@ -64,11 +64,6 @@ paths:
           # Your OAuth2 client's Client ID must be added here. You can add
           # multiple client IDs to accept tokens from multiple clients.
           - "YOUR-CLIENT-ID"
-      - google_id_token_https:
-          audiences:
-          # Your OAuth2 client's Client ID must be added here. You can add
-          # multiple client IDs to accept tokens from multiple clients.
-          - "YOUR-CLIENT-ID"
 definitions:
   echoMessage:
     properties:
@@ -102,16 +97,9 @@ securityDefinitions:
     x-jwks_uri: "https://www.googleapis.com/service_accounts/v1/jwk/YOUR-SERVICE-ACCOUNT-EMAIL"
   # This section configures authentication using Google OAuth2 ID Tokens.
   # ID Tokens can be obtained using OAuth2 clients, and can be used to access
-  # your API on behalf of a particular user. Depending on the account used to
-  # sign in, the x-issuer can either be accounts.google.com or
-  # https://accounts.google.com.
+  # your API on behalf of a particular user.
   google_id_token:
     authorizationUrl: ""
     flow: "implicit"
     type: "oauth2"
     x-issuer: "accounts.google.com"
-  google_id_token_https:
-    authorizationUrl: ""
-    flow: "implicit"
-    type: "oauth2"
-    x-issuer: "https://accounts.google.com"
