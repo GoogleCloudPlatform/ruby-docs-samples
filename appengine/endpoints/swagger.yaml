@@ -102,4 +102,4 @@ securityDefinitions:
     authorizationUrl: ""
     flow: "implicit"
     type: "oauth2"
-    x-issuer: "accounts.google.com"
+    x-issuer: "https://accounts.google.com"
