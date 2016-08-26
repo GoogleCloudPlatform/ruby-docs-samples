@@ -17,9 +17,6 @@ source "https://rubygems.org"
 # Google Cloud Client Library for Ruby
 gem "gcloud"
 
-gem "gli"
-gem "highline"
-
 group :test do
   gem "rake"
   gem "rubocop"

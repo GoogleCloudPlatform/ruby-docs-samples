@@ -14,7 +14,6 @@ GEM
       grpc (= 1.0.0.pre1)
       mime-types (>= 2.4, < 4.0)
       zonefile (~> 1.04)
-    gli (2.14.0)
     google-api-client (0.9.11)
       addressable (~> 2.3)
       googleauth (~> 0.5)
@@ -37,7 +36,6 @@ GEM
     grpc (1.0.0.pre1)
       google-protobuf (~> 3.0.0.alpha.5.0.3)
       googleauth (~> 0.5.1)
-    highline (1.7.8)
     httpclient (2.8.2.2)
     hurley (0.2)
     jwt (1.5.4)
@@ -95,8 +93,6 @@ PLATFORMS
 
 DEPENDENCIES
   gcloud
-  gli
-  highline
   rake
   rspec
   rubocop
