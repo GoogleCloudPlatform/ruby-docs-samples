@@ -4,10 +4,13 @@ require "grpc"
 require "googleauth"
 require_relative "./lib/google/cloud/speech/v1/cloud_speech_services_pb"
 
-audio_file_uri = ARGV.shift
+audio_file = ARGV.shift
 
-unless audio_file_uri
-  puts "Usage: ruby grpc_recognize.rb gs://bucket/audio-file.raw"
+unless audio_file
+  puts "Usage: ruby grpc_recognize.rb [file or gs:// uri]"
+  puts
+  puts "       ruby grpc_recognize audio.raw"
+  puts "       ruby grpc_recognize gs://bucket/audio.raw"
   exit 1
 end
 
@@ -20,17 +23,26 @@ credentials = GRPC::Core::ChannelCredentials.new.compose(
 )
 
 speech = Google::Cloud::Speech::V1::Speech::Stub.new(
-  "speech.googleapis.com",
-  credentials
+  "speech.googleapis.com", credentials
 )
 
+# Recognize can accept audio file bytes or a URI to a file stored in GCS
+# This sample demonstrates both.  URI is used if argument starts with gs://
+if audio_file.start_with? "gs://"
+  audio_request = Google::Cloud::Speech::V1::AudioRequest.new(
+    uri: audio_file
+  )
+else
+  audio_request = Google::Cloud::Speech::V1::AudioRequest.new(
+    content: File.binread(audio_file)
+  )
+end
+
 request = Google::Cloud::Speech::V1::RecognizeRequest.new(
+  audio_request:   audio_request,
   initial_request: Google::Cloud::Speech::V1::InitialRecognizeRequest.new(
-    encoding:    Google::Cloud::Speech::V1::InitialRecognizeRequest::AudioEncoding::LINEAR16,
-    sample_rate: 16000
-  ),
-  audio_request: Google::Cloud::Speech::V1::AudioRequest.new(
-    uri: audio_file_uri
+    encoding:      Google::Cloud::Speech::V1::InitialRecognizeRequest::AudioEncoding::LINEAR16,
+    sample_rate:   16000
   )
 )
 

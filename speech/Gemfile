@@ -15,7 +15,7 @@
 source "https://rubygems.org"
 
 # recognize.rb
-# gem "google-api-client"
+gem "google-api-client"
 
 # grpc_recognize.rb
 gem "grpc", "~> 1.0"                                           
