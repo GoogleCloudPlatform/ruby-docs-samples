@@ -14,7 +14,17 @@
 
 source "https://rubygems.org"
 
-gem "google-api-client"
+# recognize.rb
+# gem "google-api-client"
+
+# grpc_recognize.rb
+gem "grpc", "~> 1.0"                                           
+gem "google-protobuf", "~> 3.0"                                
+gem "googleapis-common-protos", "~> 1.2"
+
+group :development do
+  gem "grpc-tools"
+end
 
 group :test do
   gem "rake"
