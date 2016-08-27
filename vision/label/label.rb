@@ -29,10 +29,10 @@ require "optparse"
 module Samples
   module Vision
     class Label
-      require "gcloud"
+      require "google/cloud"
       # Run a label request on a single image
       def label_image project_id, image_path
-        gcloud = Gcloud.new project_id
+        gcloud = Google::Cloud.new project_id
         vision = gcloud.vision
 
         image = vision.image image_path

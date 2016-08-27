@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-gem "gcloud", "~> 0.12.2"
+gem 'google-cloud', '~> 0.20.0'
 
 group :test do
   gem "rake"
