@@ -12,9 +12,35 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require_relative "../sample"
+require_relative "../files"
 require "rspec"
 require "gcloud"
+
+describe "Google Cloud Storage files sample" do
+
+  it "can list all files in a bucket"
+  it "can list all files with a prefix in a bucket"
+
+  it "can upload a local file to a bucket" do
+    # file doesn't exist
+
+    # run command
+
+    # file does exist
+  end
+
+  it "can download a file from a bucket"
+  it "can delete a file in a bucket"
+  it "can print metadata for a file in a bucket"
+  it "can make a file in a bucket public"
+  it "can generate a signed URL to access a file"
+  it "can rename a file in a bucket"
+  it "can copy a file to another bucket"
+
+end
+
+__END__
+
 require "net/http"
 require "tempfile"
 

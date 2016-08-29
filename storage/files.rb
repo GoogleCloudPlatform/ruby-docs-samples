@@ -197,47 +197,49 @@ def copy_object project_id:, source_bucket_name:, source_file_name:,
   # [END copy_object]
 end
 
-if __FILE__ == $0
-  case ARGV.shift
+def run_sample arguments
+  command = arguments.shift
+
+  case command
   when "list"
     list_bucket_contents project_id:  ENV["GCLOUD_PROJECT"],
-                         bucket_name: ARGV.shift
+                         bucket_name: arguments.shift
   when "list_prefix"
     raise NotImplementedError, "list_prefix"
   when "upload"
     upload_object project_id:  ENV["GCLOUD_PROJECT"],
-                  bucket_name: ARGV.shift,
-                  local_path:  ARGV.shift
+                  bucket_name: arguments.shift,
+                  local_path:  arguments.shift
   when "download"
     download_object project_id:  ENV["GCLOUD_PROJECT"],
-                    bucket_name: ARGV.shift,
-                    file_name:   ARGV.shift,
-                    local_path:  ARGV.shift
+                    bucket_name: arguments.shift,
+                    file_name:   arguments.shift,
+                    local_path:  arguments.shift
   when "delete"
     delete_object project_id:  ENV["GCLOUD_PROJECT"],
-                  bucket_name: ARGV.shift,
-                  file_name:   ARGV.shift
+                  bucket_name: arguments.shift,
+                  file_name:   arguments.shift
   when "metadata"
     list_object_details project_id:  ENV["GCLOUD_PROJECT"],
-                        bucket_name: ARGV.shift,
-                        file_name:   ARGV.shift
+                        bucket_name: arguments.shift,
+                        file_name:   arguments.shift
   when "make_public"
     make_object_public project_id:  ENV["GCLOUD_PROJECT"],
-                       bucket_name: ARGV.shift,
-                       file_name:   ARGV.shift
+                       bucket_name: arguments.shift,
+                       file_name:   arguments.shift
   when "signed_url"
     raise NotImplementedError, "signed_url"
   when "rename"
     rename_object project_id:  ENV["GCLOUD_PROJECT"],
-                  bucket_name: ARGV.shift,
-                  file_name:   ARGV.shift,
-                  new_name:    ARGV.shift
+                  bucket_name: arguments.shift,
+                  file_name:   arguments.shift,
+                  new_name:    arguments.shift
   when "copy"
     copy_object project_id:         ENV["GCLOUD_PROJECT"],
-                source_bucket_name: ARGV.shift,
-                source_file_name:   ARGV.shift,
-                dest_bucket_name:   ARGV.shift,
-                dest_file_name:     ARGV.shift
+                source_bucket_name: arguments.shift,
+                source_file_name:   arguments.shift,
+                dest_bucket_name:   arguments.shift,
+                dest_file_name:     arguments.shift
   else
     puts <<-usage
 Usage: bundle exec ruby files.rb [command] [arguments]
@@ -251,11 +253,15 @@ Commands:
   metadata    <bucket> <file>         Display metadata for a file in a bucket
   make_public <bucket> <file>         Make a file in a bucket public
   signed_url  <bucket> <file>         Generate a signed URL to access a file
-  rename      <bucket> <file> <new>   Rename a file
+  rename      <bucket> <file> <new>   Rename a file in a bucket
   copy <srcBucket> <srcFile> <destBucket> <destFile>  Copy file to other bucket
 
 Environment variables:
   GCLOUD_PROJECT must be set to your Google Cloud project ID
     usage
   end
+end
+
+if __FILE__ == $0
+  run_sample ARGV
 end
