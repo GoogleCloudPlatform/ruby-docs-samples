@@ -98,7 +98,6 @@ if __FILE__ == $PROGRAM_NAME
     begin_async_operation audio_file_path: ARGV.first
   when "async_recognize_results"
     get_async_operation_results operation_name: ARGV.first
-  when "grpc_recognize"
   else
     puts <<-usage
 Usage: ruby samples.rb <command> [arguments]
