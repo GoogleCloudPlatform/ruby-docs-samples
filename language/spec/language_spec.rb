@@ -1,4 +1,4 @@
-require_relative "../analyze"
+require_relative "../samples"
 require "rspec"
 require "tempfile"
 require "google/cloud"
