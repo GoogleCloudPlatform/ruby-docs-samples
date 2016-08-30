@@ -18,6 +18,9 @@ require "spec_helper"
 describe "Pub/Sub sample" do
   TOPIC_NAME = "my-topic"
   SUBSCRIPTION_NAME = "my-subscription"
+  SERVICE_ACCOUNT =
+    "serviceAccount:test-account@#{ENV['GOOGLE_PROJECT_ID']}"\
+    ".iam.gserviceaccount.com"
 
   before :all do
     @gcloud = Gcloud.new ENV["GOOGLE_PROJECT_ID"]
@@ -139,6 +142,74 @@ describe "Pub/Sub sample" do
     expect_with_retry do
       expect { list_subscriptions }.to output(/#{SUBSCRIPTION_NAME}/).to_stdout
     end
+  end
+
+  it "gets topic policy" do
+    @pubsub.create_topic TOPIC_NAME
+
+    expect { get_topic_policy }.to output(/{}/).to_stdout
+  end
+
+  it "gets subscription policy" do
+    @pubsub.create_subscription(
+      TOPIC_NAME,
+      SUBSCRIPTION_NAME,
+      autocreate: true
+    )
+
+    expect { get_subscription_policy }.to output(/{}/).to_stdout
+  end
+
+  it "sets topic policy" do
+    @pubsub.create_topic TOPIC_NAME
+
+    expect_any_instance_of(Gcloud::Pubsub::Policy).to \
+      receive(:add).with(
+        "roles/pubsub.publisher",
+        "serviceAccount:account-name@other-project.iam.gserviceaccount.com"
+      ).and_wrap_original do |m|
+        m.call "roles/pubsub.publisher", SERVICE_ACCOUNT
+      end
+
+    expect { set_topic_policy }.to output(/roles/).to_stdout
+
+    expect(@pubsub.topic(TOPIC_NAME).policy.roles).to \
+      include("roles/pubsub.publisher" => [SERVICE_ACCOUNT])
+  end
+
+  it "sets subscription policy" do
+    @pubsub.create_subscription(
+      TOPIC_NAME,
+      SUBSCRIPTION_NAME,
+      autocreate: true
+    )
+
+    expect_any_instance_of(Gcloud::Pubsub::Policy).to \
+      receive(:add).with(
+        "roles/pubsub.subscriber",
+        "serviceAccount:account-name@other-project.iam.gserviceaccount.com"
+      ).and_wrap_original do |m|
+        m.call "roles/pubsub.subscriber", SERVICE_ACCOUNT
+      end
+
+    expect { set_subscription_policy }.to output(/roles/).to_stdout
+
+    expect(@pubsub.subscription(SUBSCRIPTION_NAME).policy.roles).to \
+      include("roles/pubsub.subscriber" => [SERVICE_ACCOUNT])
+  end
+
+  it "tests topic permissions" do
+    @pubsub.create_topic TOPIC_NAME
+    expect { test_topic_permissions }.to output(/true\ntrue/).to_stdout
+  end
+
+  it "tests subscription permissions" do
+    @pubsub.create_subscription(
+      TOPIC_NAME,
+      SUBSCRIPTION_NAME,
+      autocreate: true
+    )
+    expect { test_subscription_permissions }.to output(/true\ntrue/).to_stdout
   end
 
   after :all do
