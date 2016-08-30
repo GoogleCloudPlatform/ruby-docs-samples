@@ -19,14 +19,14 @@ $LOAD_PATH.unshift File.expand_path("generated", __dir__)
 def initialize_speech_client
   # [START initialize_speech_client]
   require "google/apis/speech_v1beta1"
-  
+
   speech_service = Google::Apis::SpeechV1beta1::CloudSpeechAPIService.new
 
   speech_service.authorization = Google::Auth.get_application_default(
     %[ https://www.googleapis.com/auth/cloud-platform ]
   )
   # [END initialize_speech_client]
-  
+
   speech_service
 end
 
@@ -81,10 +81,10 @@ def get_async_operation_results operation_name:
   if operation.done?
     operation.response["results"].each do |recognize_result|
       recognize_result["alternatives"].each do |alternative_hypothesis|
-        puts "Text: #{alternative_hypothesis["transcript"]}"
+        puts "Text: #{alternative_hypothesis['transcript']}"
       end
     end
-  end 
+  end
   # [END get_async_operation_results]
 end
 
