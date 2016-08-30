@@ -16,9 +16,6 @@
 # TODO remove once Cloud Speech API client is released in google-api-client gem
 $LOAD_PATH.unshift File.expand_path("generated", __dir__)
 
-# TODO allow encoding and sample_rate to be passed on command-line
-
-# TODO test without explicit scope
 def initialize_speech_client
   # [START initialize_speech_client]
   require "google/apis/speech_v1beta1"
