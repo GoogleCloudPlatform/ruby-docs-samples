@@ -23,6 +23,9 @@
 # Lint cops
 # http://www.rubydoc.info/gems/rubocop/RuboCop/Cop/Lint
 
+AllCops:
+  TargetRubyVersion: 2.1
+
 # Prefer double quotes for consistency (regardless of interpolation)
 Style/StringLiterals:
   EnforcedStyle: double_quotes
