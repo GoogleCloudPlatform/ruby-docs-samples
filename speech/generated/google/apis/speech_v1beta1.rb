@@ -12,9 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require_relative 'speech_v1beta1/service.rb'
-require_relative 'speech_v1beta1/classes.rb'
-require_relative 'speech_v1beta1/representations.rb'
+$LOAD_PATH.unshift File.expand_path(".", __dir__)
+
+require 'speech_v1beta1/service.rb'
+require 'speech_v1beta1/classes.rb'
+require 'speech_v1beta1/representations.rb'
 
 module Google
   module Apis
