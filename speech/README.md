@@ -13,19 +13,8 @@ Before running the samples below, first install dependencies:
 
     bundle install
 
-### REST API
-
 To run a sample that uses the Cloud Speech REST API:
 
 ```sh
 bundle exec ruby recognize.rb audio_files/audio.raw
-```
-
-### gRPC API
-
-To run a sample that uses the Cloud Speech gRPC API:
-
-```sh
-bundle exec ruby grpc_recognize.rb audio_files/audio.raw
-bundle exec ruby grpc_recognize.rb "gs://bucket/audio.raw"
 ```
