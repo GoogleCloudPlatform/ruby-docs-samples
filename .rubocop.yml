@@ -23,6 +23,13 @@
 # Lint cops
 # http://www.rubydoc.info/gems/rubocop/RuboCop/Cop/Lint
 
+AllCops:
+  Exclude:
+    # ignore generated protobuf files
+    - "**/*_pb.rb"
+    # ignore any code in 'generated' directories
+    - "*/generated/**/*.rb"
+
 # Prefer double quotes for consistency (regardless of interpolation)
 Style/StringLiterals:
   EnforcedStyle: double_quotes

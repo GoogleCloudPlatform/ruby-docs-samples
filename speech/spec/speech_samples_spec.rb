@@ -55,7 +55,7 @@ RSpec.describe "Google Cloud Speech API samples" do
 
     name = captured_output.match(/Operation identifier: (\d+)/).captures.first
 
-    # TODO Remove use of `sleep` and Update to use wait_until with timeout
+    # TODO: Remove use of `sleep` and Update to use wait_until with timeout
     sleep 1
 
     capture { get_async_operation_results operation_name: name }

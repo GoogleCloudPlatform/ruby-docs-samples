@@ -45,7 +45,7 @@ module Google
         def initialize
           super('https://speech.googleapis.com/', '')
         end
-        
+
         # Perform synchronous speech-recognition: receive results after all audio
         # has been sent and processed.
         # @param [Google::Apis::SpeechV1beta1::SyncRecognizeRequest] sync_recognize_request_object
@@ -76,7 +76,7 @@ module Google
           command.query['fields'] = fields unless fields.nil?
           execute_or_queue_command(command, &block)
         end
-        
+
         # Perform asynchronous speech-recognition: receive results via the
         # google.longrunning.Operations interface. Returns either an
         # `Operation.error` or an `Operation.response` which contains
@@ -109,7 +109,7 @@ module Google
           command.query['fields'] = fields unless fields.nil?
           execute_or_queue_command(command, &block)
         end
-        
+
         # Gets the latest state of a long-running operation.  Clients can use this
         # method to poll the operation result at intervals as recommended by the API
         # service.
@@ -141,7 +141,7 @@ module Google
           command.query['fields'] = fields unless fields.nil?
           execute_or_queue_command(command, &block)
         end
-        
+
         # Lists operations that match the specified filter in the request. If the
         # server doesn't support this method, it returns `UNIMPLEMENTED`.
         # NOTE: the `name` binding below allows API services to override the binding
@@ -183,7 +183,7 @@ module Google
           command.query['fields'] = fields unless fields.nil?
           execute_or_queue_command(command, &block)
         end
-        
+
         # Starts asynchronous cancellation on a long-running operation.  The server
         # makes a best effort to cancel the operation, but success is not
         # guaranteed.  If the server doesn't support this method, it returns
@@ -222,7 +222,7 @@ module Google
           command.query['fields'] = fields unless fields.nil?
           execute_or_queue_command(command, &block)
         end
-        
+
         # Deletes a long-running operation. This method indicates that the client is
         # no longer interested in the operation result. It does not cancel the
         # operation. If the server doesn't support this method, it returns

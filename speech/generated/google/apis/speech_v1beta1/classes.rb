@@ -21,7 +21,7 @@ require 'google/apis/errors'
 module Google
   module Apis
     module SpeechV1beta1
-      
+
       # The `Status` type defines a logical error model that is suitable for different
       # programming environments, including REST APIs and RPC APIs. It is used by
       # [gRPC](https://github.com/grpc). The error model is designed to be:
@@ -63,29 +63,29 @@ module Google
       # be used directly after any stripping needed for security/privacy reasons.
       class Status
         include Google::Apis::Core::Hashable
-      
+
         # The status code, which should be an enum value of google.rpc.Code.
         # Corresponds to the JSON property `code`
         # @return [Fixnum]
         attr_accessor :code
-      
+
         # A list of messages that carry the error details.  There will be a
         # common set of message types for APIs to use.
         # Corresponds to the JSON property `details`
         # @return [Array<Hash<String,Object>>]
         attr_accessor :details
-      
+
         # A developer-facing error message, which should be in English. Any
         # user-facing error message should be localized and sent in the
         # google.rpc.Status.details field, or localized by the client.
         # Corresponds to the JSON property `message`
         # @return [String]
         attr_accessor :message
-      
+
         def initialize(**args)
            update!(**args)
         end
-      
+
         # Update properties of this object
         def update!(**args)
           @code = args[:code] if args.key?(:code)
@@ -93,21 +93,21 @@ module Google
           @message = args[:message] if args.key?(:message)
         end
       end
-      
+
       # Contains audio data in the encoding specified in the `RecognitionConfig`.
       # Either `content` or `uri` must be supplied. Supplying both or neither
       # returns google.rpc.Code.INVALID_ARGUMENT. See
       # [audio limits](https://cloud.google.com/speech/limits#content).
       class RecognitionAudio
         include Google::Apis::Core::Hashable
-      
+
         # The audio data bytes encoded as specified in
         # `RecognitionConfig`. Note: as with all bytes fields, protobuffers use a
         # pure binary representation, whereas JSON representations use base64.
         # Corresponds to the JSON property `content`
         # @return [String]
         attr_accessor :content
-      
+
         # URI that points to a file that contains audio data bytes as specified in
         # `RecognitionConfig`. Currently, only Google Cloud Storage URIs are
         # supported, which must be specified in the following format:
@@ -117,23 +117,23 @@ module Google
         # Corresponds to the JSON property `uri`
         # @return [String]
         attr_accessor :uri
-      
+
         def initialize(**args)
            update!(**args)
         end
-      
+
         # Update properties of this object
         def update!(**args)
           @content = args[:content] if args.key?(:content)
           @uri = args[:uri] if args.key?(:uri)
         end
       end
-      
+
       # This resource represents a long-running operation that is the result of a
       # network API call.
       class Operation
         include Google::Apis::Core::Hashable
-      
+
         # The `Status` type defines a logical error model that is suitable for different
         # programming environments, including REST APIs and RPC APIs. It is used by
         # [gRPC](https://github.com/grpc). The error model is designed to be:
@@ -176,7 +176,7 @@ module Google
         # Corresponds to the JSON property `error`
         # @return [Google::Apis::SpeechV1beta1::Status]
         attr_accessor :error
-      
+
         # If the value is `false`, it means the operation is still in progress.
         # If true, the operation is completed, and either `error` or `response` is
         # available.
@@ -184,7 +184,7 @@ module Google
         # @return [Boolean]
         attr_accessor :done
         alias_method :done?, :done
-      
+
         # Service-specific metadata associated with the operation.  It typically
         # contains progress information and common metadata such as create time.
         # Some services might not provide such metadata.  Any method that returns a
@@ -192,7 +192,7 @@ module Google
         # Corresponds to the JSON property `metadata`
         # @return [Hash<String,Object>]
         attr_accessor :metadata
-      
+
         # The normal response of the operation in case of success.  If the original
         # method returns no data on success, such as `Delete`, the response is
         # `google.protobuf.Empty`.  If the original method is standard
@@ -204,18 +204,18 @@ module Google
         # Corresponds to the JSON property `response`
         # @return [Hash<String,Object>]
         attr_accessor :response
-      
+
         # The server-assigned name, which is only unique within the same service that
         # originally returns it. If you use the default HTTP mapping, the
         # `name` should have the format of `operations/some/unique/name`.
         # Corresponds to the JSON property `name`
         # @return [String]
         attr_accessor :name
-      
+
         def initialize(**args)
            update!(**args)
         end
-      
+
         # Update properties of this object
         def update!(**args)
           @error = args[:error] if args.key?(:error)
@@ -225,16 +225,16 @@ module Google
           @name = args[:name] if args.key?(:name)
         end
       end
-      
+
       # Alternative hypotheses (a.k.a. n-best list).
       class SpeechRecognitionAlternative
         include Google::Apis::Core::Hashable
-      
+
         # [Output-only] Transcript text representing the words that the user spoke.
         # Corresponds to the JSON property `transcript`
         # @return [String]
         attr_accessor :transcript
-      
+
         # [Output-only] The confidence estimate between 0.0 and 1.0. A higher number
         # means the system is more confident that the recognition is correct.
         # This field is typically provided only for the top hypothesis, and only for
@@ -243,36 +243,36 @@ module Google
         # Corresponds to the JSON property `confidence`
         # @return [Float]
         attr_accessor :confidence
-      
+
         def initialize(**args)
            update!(**args)
         end
-      
+
         # Update properties of this object
         def update!(**args)
           @transcript = args[:transcript] if args.key?(:transcript)
           @confidence = args[:confidence] if args.key?(:confidence)
         end
       end
-      
+
       # The request message for Operations.CancelOperation.
       class CancelOperationRequest
         include Google::Apis::Core::Hashable
-      
+
         def initialize(**args)
            update!(**args)
         end
-      
+
         # Update properties of this object
         def update!(**args)
         end
       end
-      
+
       # The `RecognitionConfig` message provides information to the recognizer
       # that specifies how to process the request.
       class RecognitionConfig
         include Google::Apis::Core::Hashable
-      
+
         # [Optional] Maximum number of recognition hypotheses to be returned.
         # Specifically, the maximum number of `SpeechRecognitionAlternative` messages
         # within each `SpeechRecognitionResult`.
@@ -282,7 +282,7 @@ module Google
         # Corresponds to the JSON property `maxAlternatives`
         # @return [Fixnum]
         attr_accessor :max_alternatives
-      
+
         # [Optional] The language of the supplied audio as a BCP-47 language tag.
         # Example: "en-GB"  https://www.rfc-editor.org/rfc/bcp/bcp47.txt
         # If omitted, defaults to "en-US". See
@@ -292,18 +292,18 @@ module Google
         # Corresponds to the JSON property `languageCode`
         # @return [String]
         attr_accessor :language_code
-      
+
         # Provides "hints" to the speech recognizer to favor specific words and phrases
         # in the results.
         # Corresponds to the JSON property `speechContext`
         # @return [Google::Apis::SpeechV1beta1::SpeechContext]
         attr_accessor :speech_context
-      
+
         # [Required] Encoding of audio data sent in all `RecognitionAudio` messages.
         # Corresponds to the JSON property `encoding`
         # @return [String]
         attr_accessor :encoding
-      
+
         # [Optional] If set to `true`, the server will attempt to filter out
         # profanities, replacing all but the initial character in each filtered word
         # with asterisks, e.g. "f***". If set to `false` or omitted, profanities
@@ -312,7 +312,7 @@ module Google
         # @return [Boolean]
         attr_accessor :profanity_filter
         alias_method :profanity_filter?, :profanity_filter
-      
+
         # [Required] Sample rate in Hertz of the audio data sent in all
         # `RecognitionAudio` messages. Valid values are: 8000-48000.
         # 16000 is optimal. For best results, set the sampling rate of the audio
@@ -321,11 +321,11 @@ module Google
         # Corresponds to the JSON property `sampleRate`
         # @return [Fixnum]
         attr_accessor :sample_rate
-      
+
         def initialize(**args)
            update!(**args)
         end
-      
+
         # Update properties of this object
         def update!(**args)
           @max_alternatives = args[:max_alternatives] if args.key?(:max_alternatives)
@@ -336,12 +336,12 @@ module Google
           @sample_rate = args[:sample_rate] if args.key?(:sample_rate)
         end
       end
-      
+
       # `SyncRecognizeRequest` is the top-level message sent by the client for
       # the `SyncRecognize` method.
       class SyncRecognizeRequest
         include Google::Apis::Core::Hashable
-      
+
         # Contains audio data in the encoding specified in the `RecognitionConfig`.
         # Either `content` or `uri` must be supplied. Supplying both or neither
         # returns google.rpc.Code.INVALID_ARGUMENT. See
@@ -349,91 +349,91 @@ module Google
         # Corresponds to the JSON property `audio`
         # @return [Google::Apis::SpeechV1beta1::RecognitionAudio]
         attr_accessor :audio
-      
+
         # The `RecognitionConfig` message provides information to the recognizer
         # that specifies how to process the request.
         # Corresponds to the JSON property `config`
         # @return [Google::Apis::SpeechV1beta1::RecognitionConfig]
         attr_accessor :config
-      
+
         def initialize(**args)
            update!(**args)
         end
-      
+
         # Update properties of this object
         def update!(**args)
           @audio = args[:audio] if args.key?(:audio)
           @config = args[:config] if args.key?(:config)
         end
       end
-      
+
       # A speech recognition result corresponding to a portion of the audio.
       class SpeechRecognitionResult
         include Google::Apis::Core::Hashable
-      
+
         # [Output-only] May contain one or more recognition hypotheses (up to the
         # maximum specified in `max_alternatives`).
         # Corresponds to the JSON property `alternatives`
         # @return [Array<Google::Apis::SpeechV1beta1::SpeechRecognitionAlternative>]
         attr_accessor :alternatives
-      
+
         def initialize(**args)
            update!(**args)
         end
-      
+
         # Update properties of this object
         def update!(**args)
           @alternatives = args[:alternatives] if args.key?(:alternatives)
         end
       end
-      
+
       # The response message for Operations.ListOperations.
       class ListOperationsResponse
         include Google::Apis::Core::Hashable
-      
+
         # The standard List next-page token.
         # Corresponds to the JSON property `nextPageToken`
         # @return [String]
         attr_accessor :next_page_token
-      
+
         # A list of operations that matches the specified filter in the request.
         # Corresponds to the JSON property `operations`
         # @return [Array<Google::Apis::SpeechV1beta1::Operation>]
         attr_accessor :operations
-      
+
         def initialize(**args)
            update!(**args)
         end
-      
+
         # Update properties of this object
         def update!(**args)
           @next_page_token = args[:next_page_token] if args.key?(:next_page_token)
           @operations = args[:operations] if args.key?(:operations)
         end
       end
-      
+
       # `SyncRecognizeResponse` is the only message returned to the client by
       # `SyncRecognize`. It contains the result as zero or more sequential
       # `SpeechRecognitionResult` messages.
       class SyncRecognizeResponse
         include Google::Apis::Core::Hashable
-      
+
         # [Output-only] Sequential list of transcription results corresponding to
         # sequential portions of audio.
         # Corresponds to the JSON property `results`
         # @return [Array<Google::Apis::SpeechV1beta1::SpeechRecognitionResult>]
         attr_accessor :results
-      
+
         def initialize(**args)
            update!(**args)
         end
-      
+
         # Update properties of this object
         def update!(**args)
           @results = args[:results] if args.key?(:results)
         end
       end
-      
+
       # A generic empty message that you can re-use to avoid defining duplicated
       # empty messages in your APIs. A typical example is to use it as the request
       # or the response type of an API method. For instance:
@@ -443,21 +443,21 @@ module Google
       # The JSON representation for `Empty` is empty JSON object ````.
       class Empty
         include Google::Apis::Core::Hashable
-      
+
         def initialize(**args)
            update!(**args)
         end
-      
+
         # Update properties of this object
         def update!(**args)
         end
       end
-      
+
       # Provides "hints" to the speech recognizer to favor specific words and phrases
       # in the results.
       class SpeechContext
         include Google::Apis::Core::Hashable
-      
+
         # [Optional] A list of strings containing words and phrases "hints" so that
         # the speech recognition is more likely to recognize them. This can be used
         # to improve the accuracy for specific words and phrases, for example, if
@@ -467,22 +467,22 @@ module Google
         # Corresponds to the JSON property `phrases`
         # @return [Array<String>]
         attr_accessor :phrases
-      
+
         def initialize(**args)
            update!(**args)
         end
-      
+
         # Update properties of this object
         def update!(**args)
           @phrases = args[:phrases] if args.key?(:phrases)
         end
       end
-      
+
       # `AsyncRecognizeRequest` is the top-level message sent by the client for
       # the `AsyncRecognize` method.
       class AsyncRecognizeRequest
         include Google::Apis::Core::Hashable
-      
+
         # Contains audio data in the encoding specified in the `RecognitionConfig`.
         # Either `content` or `uri` must be supplied. Supplying both or neither
         # returns google.rpc.Code.INVALID_ARGUMENT. See
@@ -490,17 +490,17 @@ module Google
         # Corresponds to the JSON property `audio`
         # @return [Google::Apis::SpeechV1beta1::RecognitionAudio]
         attr_accessor :audio
-      
+
         # The `RecognitionConfig` message provides information to the recognizer
         # that specifies how to process the request.
         # Corresponds to the JSON property `config`
         # @return [Google::Apis::SpeechV1beta1::RecognitionConfig]
         attr_accessor :config
-      
+
         def initialize(**args)
            update!(**args)
         end
-      
+
         # Update properties of this object
         def update!(**args)
           @audio = args[:audio] if args.key?(:audio)
