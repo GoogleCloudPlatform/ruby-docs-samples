@@ -19,7 +19,7 @@ Run the sample:
 
 Usage:
 
-    Usage: ruby samples.rb <command> [arguments]
+    Usage: ruby speech_samples.rb <command> [arguments]
 
     Commands:
       recognize               <audio-file.raw>
