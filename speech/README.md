@@ -13,8 +13,20 @@ Before running the samples below, first install dependencies:
 
     bundle install
 
-To run a sample that uses the Cloud Speech REST API:
+Run the sample:
 
-```sh
-bundle exec ruby recognize.rb audio_files/audio.raw
-```
+    bundle exec ruby speech_samples.rb
+
+Usage:
+
+    Usage: ruby samples.rb <command> [arguments]
+
+    Commands:
+      recognize               <audio-file.raw>
+      async_recognize         <audio-file.raw>
+      async_recognize_results <operation name>
+
+Examples:
+
+    $ bundle exec ruby speech_samples.rb recognize audio_files/audio.raw
+    Text: how old is the Brooklyn Bridge

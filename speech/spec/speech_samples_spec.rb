@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require_relative "../samples"
+require_relative "../speech_samples"
 require "rspec"
 
 RSpec.describe "Google Cloud Speech API samples" do

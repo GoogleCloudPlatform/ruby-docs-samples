@@ -100,7 +100,7 @@ if __FILE__ == $PROGRAM_NAME
     get_async_operation_results operation_name: ARGV.first
   else
     puts <<-usage
-Usage: ruby samples.rb <command> [arguments]
+Usage: ruby speech_samples.rb <command> [arguments]
 
 Commands:
   recognize               <audio-file.raw>
