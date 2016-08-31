@@ -98,19 +98,19 @@ if __FILE__ == $PROGRAM_NAME
     list_supported_language_names api_key: api_key, language_code: ARGV.shift
   else
     puts <<-usage
-Usage: ruby samples.rb <command> [arguments]
+Usage: ruby translate_samples.rb <command> [arguments]
 
 Commands:
-  translate <desired-language-code> "<text>"
-  detect_language "<text>"
+  translate       <desired-language-code> <text>
+  detect_language <text>
+  list_names      <language-code-for-display>
   list_codes
-  list_names <language-code-for-display>
 
 Examples:
-  ruby samples.rb translate fr "Hello World"
-  ruby samples.rb detect_language "Hello World"
-  ruby samples.rb list_codes
-  ruby samples.rb list_names en
+  ruby translate_samples.rb translate fr "Hello World"
+  ruby translate_samples.rb detect_language "Hello World"
+  ruby translate_samples.rb list_codes
+  ruby translate_samples.rb list_names en
     usage
   end
 end
