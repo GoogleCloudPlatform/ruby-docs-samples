@@ -24,10 +24,13 @@ RSpec.describe "Google Cloud Natural Language API samples" do
   # Upload a file to Google Cloud Storage for testing
   # Uploaded files will be deleted after each test
   def upload file_name, text_content
-    local_file_path = Tempfile.new.path
-    File.write local_file_path, text_content
-    @bucket.create_file local_file_path, file_name
+    local_file = Tempfile.new "language-test-file"
+    File.write local_file.path, text_content
+    @bucket.create_file local_file.path, file_name
     @uploaded << file_name
+  ensure
+    local_file.close
+    local_file.unlink
   end
 
   # Capture and return STDOUT output by block
