@@ -559,6 +559,9 @@ describe "Datastore sample" do
   end
 
   def expect_basic_task task
+    puts "expect_basic_task"
+    puts task
+    puts task.inspect
     expect(task.key.kind).to eq("Task")
     expect(task["type"]).to eq("Personal")
     expect(task["done"]).to be(false)
