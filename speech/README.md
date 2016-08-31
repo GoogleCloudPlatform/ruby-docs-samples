@@ -7,9 +7,9 @@
 The [Cloud Speech API](https://cloud.google.com/speech/) enables easy
 integration of Google speech recognition technologies into developer applications.
 
-## Samples
+## Run sample
 
-Before running the samples below, first install dependencies:
+To run the sample, first install dependencies:
 
     bundle install
 
