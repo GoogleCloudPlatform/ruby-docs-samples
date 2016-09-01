@@ -84,8 +84,9 @@ def detect_faces path_to_image_file, path_to_output_file
   image = Magick::Image.read(path_to_image_file)[0]
 
   faces.each do |face|
+    puts "Face bounds:"
     face.bounds.face.each do |vector|
-      puts "#{vector.x}, #{vector.y}"
+      puts "(#{vector.x}, #{vector.y})"
     end
 
     draw        = Magick::Draw.new
@@ -116,7 +117,7 @@ if __FILE__ == $PROGRAM_NAME
   when "labels"
     detect_labels ARGV.shift
   when "landmarks"
-    detect_landmarks ARGV.shift
+    detect_landmark ARGV.shift
   when "faces"
     detect_faces ARGV.shift, ARGV.shift
   else
@@ -124,14 +125,14 @@ if __FILE__ == $PROGRAM_NAME
 Usage: ruby vision_samples.rb <command> [arguments]
 
 Commands:
-  labels    <image-path>
-  landmarks <image-path>
-  faces     <image-path> <output-image-path>
+  labels   <image-path>
+  landmark <image-path>
+  faces    <image-path> <output-image-path>
 
 Examples:
-  ruby vision_samples.rb labels    /path/to/cat.jpg
-  ruby vision_samples.rb landmarks /path/to/grand-canyon.jpg
-  ruby vision_samples.rb faces     /path/to/faces.jpg output-image.jpg
+  ruby vision_samples.rb labels   /path/to/cat.jpg
+  ruby vision_samples.rb landmark /path/to/grand-canyon.jpg
+  ruby vision_samples.rb faces    /path/to/faces.jpg output-image.jpg
     usage
   end
 end
