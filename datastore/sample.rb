@@ -141,17 +141,20 @@ def upsert
 end
 
 def insert
+  task = nil
   gcloud = Gcloud.new
   datastore = gcloud.datastore
 
   # [START insert]
-  task = datastore.entity "Task" do |t|
-    t["category"] = "Personal"
-    t["done"] = false
-    t["priority"] = 4
-    t["description"] = "Learn Cloud Datastore"
+  datastore.transaction do |tx|
+    task = datastore.entity "Task" do |t|
+      t["category"] = "Personal"
+      t["done"] = false
+      t["priority"] = 4
+      t["description"] = "Learn Cloud Datastore"
+    end
+    datastore.save task
   end
-  datastore.save task
   # [END insert]
 
   task
@@ -182,9 +185,11 @@ def update
   datastore.save task
 
   # [START update]
-  task = datastore.find "Task", "sampleTask"
-  task["priority"] = 5
-  datastore.save task
+  datastore.transaction do |tx|
+    task = datastore.find "Task", "sampleTask"
+    task["priority"] = 5
+    datastore.save task
+  end
   # [END update]
 
   task
