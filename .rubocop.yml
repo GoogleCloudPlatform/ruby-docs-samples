@@ -24,6 +24,8 @@
 # http://www.rubydoc.info/gems/rubocop/RuboCop/Cop/Lint
 
 AllCops:
+  # Allow Ruby 2 features, eg. named parameters
+  TargetRubyVersion: 2.1
   Exclude:
     # ignore generated protobuf files
     - "**/*_pb.rb"
