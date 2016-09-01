@@ -1,4 +1,4 @@
-# Copyright 2015 Google, Inc
+# Copyright 2016 Google, Inc
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,17 +12,62 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require_relative "spec_helper"
-require_relative "../label"
+require_relative "../vision_samples"
+require "rspec"
+require "tempfile"
 
-RSpec.describe "Label an image" do
-  before do
-    @sample = Samples::Vision::Label.new
+describe "Vision sample" do
+
+  # Returns full path to sample image included in repository for testing
+  def image_path filename
+    File.expand_path "../images/#{filename}", __dir__
   end
 
-  it "show a label for one image in provided project" do
-    expect { @sample.label_image PROJECT_ID, IMAGE_PATH }.to(
-      output(/Found label cat for/).to_stdout
-    )
+  # Capture and return STDOUT output by block
+  def capture &block
+    real_stdout = $stdout
+    $stdout = StringIO.new
+    block.call
+    @captured_output = $stdout.string
+  ensure
+    $stdout = real_stdout
+  end
+  attr_reader :captured_output
+
+# cat.jpg
+# eiffel_tower.jpg
+# face.png
+
+  example "detect labels" do
+    capture { detect_labels image_path("cat.jpg") }
+
+    expect(captured_output).to start_with "Image labels:"
+    expect(captured_output).to include "cat"
+    expect(captured_output).to include "mammal"
+  end
+
+  example "detect landmark" do
+    expect { detect_landmark image_path("eiffel_tower.jpg") }.to output(
+      "Found landmark: Eiffel Tower\n"
+    ).to_stdout
+  end
+
+  example "detect faces" do
+    output_image_file = Tempfile.new "cloud-vision-testing"
+    expect(File.size output_image_file.path).to eq 0
+
+    begin
+      capture { detect_faces image_path("face.png"), output_image_file.path }
+
+      expect(captured_output).to include "Face bounds:"
+      expect(captured_output).to include "(154, 33)"
+      expect(captured_output).to include "(301, 33)"
+      expect(captured_output).to include "(301, 180)"
+      expect(captured_output).to include "(154, 180)"
+      expect(File.size output_image_file.path).to be > 0
+    ensure
+      output_image_file.close
+      output_image_file.unlink
+    end
   end
 end

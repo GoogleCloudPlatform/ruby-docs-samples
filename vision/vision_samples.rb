@@ -1,5 +1,4 @@
-#!/usr/bin/env ruby
-# Copyright 2015 Google, Inc.
+# Copyright 2016 Google, Inc
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -7,56 +6,133 @@
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
-# Unless required by applicable law or agreed to in writing, software
+# Unless required by applicable law or agreed to in write, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# This script uses the Vision API's label detection capabilities to find a label
-# based on an image's content.
-#
-# To run the example, install the necessary libraries by running:
-#
-#     bundle install
-#
-# Run the script on an image to get a label, E.g.:
-#
-#     ./label.rb <path-to-image>
+def detect_labels path_to_image_file
+# [START detect_labels]
+  # [START importing_libraries]
+  require "google/cloud"
+  # [END importing_libraries]
 
-require "optparse"
+  # [START create_vision_client]
+  gcloud = Google::Cloud.new
+  vision = gcloud.vision
+  # [END create_vision_client]
 
-module Samples
-  module Vision
-    class Label
-      require "google/cloud"
-      # Run a label request on a single image
-      def label_image project_id, image_path
-        gcloud = Google::Cloud.new project_id
-        vision = gcloud.vision
+  # [START annotate_image]
+  image      = vision.image path_to_image_file
+  annotation = vision.annotate image, labels: true
+  labels     = annotation.labels
+  # [END annotate_image]
 
-        image = vision.image image_path
-        labels = image.labels
-        label = labels.first
-        puts "Found label #{label.description} for #{image_path}"
-      end
+  # [START print_labels]
+  puts "Image labels:"
+  labels.each do |label|
+    puts label.description
+  end
+  # [END print_labels]
+# [END detect_labels]
+end
 
-      def self.help
-        puts "Usage:"
-        puts "./label.rb <path-to-image>"
-        puts "or"
-        puts "./label.rb <path-to-image> <project_id>"
-      end
+def detect_landmark path_to_image_file
+# [START detect_landmark]
+  # [START importing_libraries]
+  require "google/cloud"
+  # [END importing_libraries]
+
+  # [START create_vision_client]
+  gcloud = Google::Cloud.new
+  vision = gcloud.vision
+  # [END create_vision_client]
+
+  # [START annotate_image]
+  image      = vision.image path_to_image_file
+  annotation = vision.annotate image, landmarks: true
+  landmark   = annotation.landmark
+  # [END annotate_image]
+
+  # [START print_landmark]
+  puts "Found landmark: #{landmark.description}" unless landmark.nil?
+  # [END print_landmarks]
+# [END detect_landmarks]
+end
+
+def detect_faces path_to_image_file, path_to_output_file
+# [START detect_faces]
+  # [START importing_libraries]
+  require "google/cloud"
+  # [END importing_libraries]
+
+  # [START create_vision_client]
+  gcloud = Google::Cloud.new
+  vision = gcloud.vision
+  # [END create_vision_client]
+
+  # [START annotate_image]
+  image      = vision.image path_to_image_file
+  annotation = vision.annotate image, faces: true
+  faces      = annotation.faces
+  # [END annotate_image]
+
+  # [START draw_rectangle]
+  require "rmagick"
+
+  image = Magick::Image.read(path_to_image_file)[0]
+
+  faces.each do |face|
+    puts "Face bounds:"
+    face.bounds.face.each do |vector|
+      puts "(#{vector.x}, #{vector.y})"
     end
 
-    if __FILE__ == $PROGRAM_NAME
-      image = ARGV[0]
-      project_id = ARGV[1]
-      if !image.nil?
-        Label.new.label_image project_id, image
-      else
-        Label.help
-      end
-    end
+    draw        = Magick::Draw.new
+    draw.stroke = "green"
+    draw.stroke_width 5
+    draw.fill_opacity 0
+
+    x1 = face.bounds.face[0].x.to_i
+    y1 = face.bounds.face[0].y.to_i
+    x2 = face.bounds.face[2].x.to_i
+    y2 = face.bounds.face[2].y.to_i
+
+    draw.rectangle x1, y1, x2, y2
+    draw.draw image
+  end
+
+  image.write path_to_output_file
+
+  puts "Output file: #{path_to_output_file}"
+  # [END draw_rectangle]
+# [END detect_faces]
+end
+
+if __FILE__ == $PROGRAM_NAME
+  command = ARGV.shift
+
+  case command
+  when "labels"
+    detect_labels ARGV.shift
+  when "landmarks"
+    detect_landmark ARGV.shift
+  when "faces"
+    detect_faces ARGV.shift, ARGV.shift
+  else
+    puts <<-usage
+Usage: ruby vision_samples.rb <command> [arguments]
+
+Commands:
+  labels   <image-path>
+  landmark <image-path>
+  faces    <image-path> <output-image-path>
+
+Examples:
+  ruby vision_samples.rb labels   /path/to/cat.jpg
+  ruby vision_samples.rb landmark /path/to/grand-canyon.jpg
+  ruby vision_samples.rb faces    /path/to/faces.jpg output-image.jpg
+    usage
   end
 end
