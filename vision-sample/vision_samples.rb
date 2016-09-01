@@ -108,3 +108,30 @@ def detect_faces path_to_image_file, path_to_output_file
   # [END draw_rectangle]
 # [END detect_faces]
 end
+
+if __FILE__ == $PROGRAM_NAME
+  command = ARGV.shift
+
+  case command
+  when "labels"
+    detect_labels ARGV.shift
+  when "landmarks"
+    detect_landmarks ARGV.shift
+  when "faces"
+    detect_faces ARGV.shift, ARGV.shift
+  else
+    puts <<-usage
+Usage: ruby vision_samples.rb <command> [arguments]
+
+Commands:
+  labels    <image-path>
+  landmarks <image-path>
+  faces     <image-path> <output-image-path>
+
+Examples:
+  ruby vision_samples.rb labels    /path/to/cat.jpg
+  ruby vision_samples.rb landmarks /path/to/grand-canyon.jpg
+  ruby vision_samples.rb faces     /path/to/faces.jpg output-image.jpg
+    usage
+  end
+end
