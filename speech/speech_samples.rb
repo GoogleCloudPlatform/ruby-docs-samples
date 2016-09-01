@@ -40,7 +40,7 @@ def transcript_from_audio_file audio_file_path:
   request.audio  = { content: File.read(audio_file_path) }
   request.config = { encoding: "LINEAR16", sample_rate: 16000 }
 
-  response = speech_service.syncrecognize_speech request
+  response = speech_service.sync_recognize_speech request
 
   if response.results
     response.results.each do |recognize_result|
@@ -62,7 +62,7 @@ def begin_async_operation audio_file_path:
   request.audio  = { content: File.read(audio_file_path) }
   request.config = { encoding: "LINEAR16", sample_rate: 16000 }
 
-  operation = speech_service.asyncrecognize_speech request
+  operation = speech_service.async_recognize_speech request
 
   puts "Operation identifier: #{operation.name}"
   # [END begin_async_operation]
@@ -72,7 +72,7 @@ def get_async_operation_results operation_name:
   speech_service = initialize_speech_client
 
   # [START get_async_operation_results]
-  # operation_name = "Name of operation returned from #asyncrecognize_speech"
+  # operation_name = "Name of operation returned from #async_recognize_speech"
 
   operation = speech_service.get_operation operation_name
 
