@@ -45,7 +45,7 @@ describe "Datastore sample" do
 
   def create_task task_key
     task = datastore.entity task_key do |t|
-      t["type"] = "Personal"
+      t["category"] = "Personal"
       t["created"] = Time.utc(1999, 12, 31)
       t["done"] = false
       t["priority"] = 4
@@ -175,7 +175,7 @@ describe "Datastore sample" do
 
     expect(task.persisted?).to be(true)
     expect(task.properties.to_h.size).to eq(4)
-    expect(task["type"]).to eq("Personal")
+    expect(task["category"]).to eq("Personal")
     expect(task["done"]).to be(false)
     expect(task["priority"]).to eq(5)
     expect(task["description"]).to eq("Learn Cloud Datastore")
@@ -307,7 +307,7 @@ describe "Datastore sample" do
 
     expect(tasks.empty?).to be(false)
     expect(tasks.first.key.kind).to eq("Task")
-    expect(tasks.first["type"]).to eq("Personal")
+    expect(tasks.first["category"]).to eq("Personal")
     expect(tasks.first["priority"]).to eq(4)
     expect(tasks.first.properties.to_h.size).to eq(2)
   end
@@ -318,7 +318,7 @@ describe "Datastore sample" do
 
     expect(tasks.empty?).to be(false)
     expect(tasks.first.key.kind).to eq("Task")
-    expect(tasks.first["type"]).to eq("Personal")
+    expect(tasks.first["category"]).to eq("Personal")
     expect(tasks.first["priority"]).to eq(4)
     expect(tasks.first.properties.to_h.size).to eq(2)
   end
@@ -506,16 +506,16 @@ describe "Datastore sample" do
     representations = property_by_kind_run_query
 
     expect(representations.empty?).to be(false)
-    expect(representations.first.first).to eq("created")
-    expect(representations.first.last).to eq(["INT64"])
+    expect(representations["created"]).to eq(["INT64"])
+    expect(representations["category"]).to eq(["STRING"])
   end
 
   it "supports property_filtering_run_query" do
     properties_by_kind = property_filtering_run_query
 
     expect(properties_by_kind.empty?).to be(false)
-    expect(properties_by_kind.first.first).to eq("Task")
-    expect(properties_by_kind.first.last).to eq(["priority", "tag", "type"])
+    expect(properties_by_kind["Task"]).to include "priority"
+    expect(properties_by_kind["Task"]).to include "tag"
   end
 
   it "supports gql_run_query" do
@@ -560,7 +560,7 @@ describe "Datastore sample" do
 
   def expect_basic_task task
     expect(task.key.kind).to eq("Task")
-    expect(task["type"]).to eq("Personal")
+    expect(task["category"]).to eq("Personal")
     expect(task["done"]).to be(false)
   end
 end

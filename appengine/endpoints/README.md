@@ -1,7 +1,9 @@
 # Google Cloud Endpoints & App Engine Flexible Environment & Ruby
 
 This sample demonstrates how to use Google Cloud Endpoints on
-Google App Engine flexible environment using Ruby.
+Google App Engine flexible environment using Ruby. This sample requires that you
+have [Ruby](https://www.ruby-lang.org/en/documentation/installation/) 2.0.0 or
+newer installed.
 
 This sample consists of two parts:
 
@@ -27,7 +29,7 @@ In your web browser, go to the following address: http://localhost:8080.
 With the app running locally, you can execute the simple echo client using:
 
     $ bundle exec ruby clients/echo_client.rb \
-        --host https://localhost:8080 \
+        --host http://localhost:8080 \
         --api_key APIKEY \
         --message "message to echo"
 
@@ -40,7 +42,7 @@ Open the `swagger.yaml` file and in the `host` property, replace
 
 Then, deploy the sample using `gcloud`:
 
-    gcloud app deploy app.yaml
+    gcloud beta app deploy
 
 Once deployed, you can access the application at https://YOUR-PROJECT-ID.appspot.com/.
 

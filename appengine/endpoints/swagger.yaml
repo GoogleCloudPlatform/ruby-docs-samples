@@ -102,5 +102,4 @@ securityDefinitions:
     authorizationUrl: ""
     flow: "implicit"
     type: "oauth2"
-    x-issuer: "accounts.google.com"
-    x-jwks_uri: "https://www.googleapis.com/oauth2/v1/certs"
+    x-issuer: "https://accounts.google.com"

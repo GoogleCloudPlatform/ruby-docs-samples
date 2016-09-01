@@ -12,14 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-source "https://rubygems.org"
+require_relative "../sample"
+require "rspec"
+require "gcloud"
 
-gem "sinatra"
-gem "gcloud", "~> 0.12.2"
+describe "Vision sample" do
 
-group :test do
-  gem "rake"
-  gem "rubocop"
-  gem "rspec"
-  gem "rack-test"
+  it "detect labels"
+  it "detect landmark"
+  it "detect faces"
+
 end
