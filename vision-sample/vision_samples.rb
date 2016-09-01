@@ -12,6 +12,55 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+def detect_labels path_to_image_file
+# [START detect_labels]
+  # [START importing_libraries]
+  require "gcloud"
+  # [END importing_libraries]
+
+  # [START create_vision_client]
+  gcloud = Gcloud.new
+  vision = gcloud.vision
+  # [END create_vision_client]
+
+  # [START annotate_image]
+  image      = vision.image path_to_image_file
+  annotation = vision.annotate image, labels: true
+  labels     = annotation.labels
+  # [END annotate_image]
+
+  # [START print_labels]
+  puts "Image labels:"
+  labels.each do |label|
+    puts label.description
+  end
+  # [END print_labels]
+# [END detect_labels]
+end
+
+def detect_landmark path_to_image_file
+# [START detect_landmark]
+  # [START importing_libraries]
+  require "gcloud"
+  # [END importing_libraries]
+
+  # [START create_vision_client]
+  gcloud = Gcloud.new
+  vision = gcloud.vision
+  # [END create_vision_client]
+
+  # [START annotate_image]
+  image      = vision.image path_to_image_file
+  annotation = vision.annotate image, landmarks: true
+  landmark   = annotation.landmark
+  # [END annotate_image]
+
+  # [START print_landmark]
+  puts "Found landmark: #{landmark.description}" unless landmark.nil?
+  # [END print_landmarks]
+# [END detect_landmarks]
+end
+
 def detect_faces path_to_image_file, path_to_output_file
 # [START detect_faces]
   # [START importing_libraries]
