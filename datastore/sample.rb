@@ -91,6 +91,8 @@ def properties
     t.exclude_from_indexes! "description", true
   end
   # [END properties]
+
+  task
 end
 
 def array_value
