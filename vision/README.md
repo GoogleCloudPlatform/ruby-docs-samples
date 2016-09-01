@@ -21,8 +21,15 @@ Run the sample:
 
 Usage:
 
-    Usage: ruby vision_samples.rb ...
+    Usage: ruby vision_samples.rb <command> [arguments]
+
+    Commands:
+      labels   <image-path>
+      landmark <image-path>
+      faces    <image-path> <output-image-path>
 
 Example:
 
-    ...
+    ruby vision_samples.rb labels   /path/to/cat.jpg
+    ruby vision_samples.rb landmark /path/to/grand-canyon.jpg
+    ruby vision_samples.rb faces    /path/to/faces.jpg output-image.jpg
