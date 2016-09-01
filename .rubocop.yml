@@ -23,6 +23,15 @@
 # Lint cops
 # http://www.rubydoc.info/gems/rubocop/RuboCop/Cop/Lint
 
+AllCops:
+  # Allow Ruby 2 features, eg. named parameters
+  TargetRubyVersion: 2.1
+  Exclude:
+    # ignore generated protobuf files
+    - "**/*_pb.rb"
+    # ignore any code in 'generated' directories
+    - "*/generated/**/*.rb"
+
 # Prefer double quotes for consistency (regardless of interpolation)
 Style/StringLiterals:
   EnforcedStyle: double_quotes
@@ -70,6 +79,8 @@ Style/EmptyLinesAroundBlockBody:
 Style/NumericLiterals:
   Enabled: false
 Style/SpaceAroundOperators:
+  Enabled: false
+Style/AccessorMethodName:
   Enabled: false
 Metrics/ClassLength:
   Enabled: false

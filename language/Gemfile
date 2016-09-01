@@ -14,12 +14,11 @@
 
 source "https://rubygems.org"
 
-gem "sinatra"
-gem "gcloud", "~> 0.12.2"
+gem "google-cloud-language"
 
 group :test do
   gem "rake"
   gem "rubocop"
   gem "rspec"
-  gem "rack-test"
+  gem "google-cloud-storage"
 end

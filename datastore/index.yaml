@@ -48,7 +48,7 @@ indexes:
 - kind: Task
   ancestor: no
   properties:
-  - name: type
+  - name: category
     direction: asc
   - name: priority
     direction: asc
@@ -58,5 +58,5 @@ indexes:
   properties:
   - name: percent_complete
     direction: asc
-  - name: type
+  - name: category
     direction: asc
