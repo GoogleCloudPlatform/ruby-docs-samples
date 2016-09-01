@@ -30,6 +30,7 @@ def translate_text api_key:, text:, language_code:
 end
 
 def detect_language api_key:, text:
+  # [START detect_language]
   # api_key = "Your API access key"
   # text    = "The text you would like to detect the language of"
 
@@ -41,6 +42,7 @@ def detect_language api_key:, text:
 
   puts "'#{text}' detected as language: #{detection.language}"
   puts "Confidence: #{detection.confidence}"
+  # [END detect_language]
 end
 
 def list_supported_language_codes api_key:
