@@ -1,15 +1,28 @@
-# Cloud Vision API Ruby samples
+<img src="https://avatars2.githubusercontent.com/u/2810941?v=3&s=96" alt="Google Cloud Platform logo" title="Google Cloud Platform" align="right" height="96" width="96"/>
 
-This directory contains [Cloud Vision API](https://cloud.google.com/vision/) Python samples and utilities.
+# Google Cloud Vision API Ruby Samples
 
-## Prerequisites
+The [Cloud Vision API][vision_docs] allows developers to easily integrate vision
+detection features within applications, including image labeling, face and
+landmark detection, optical character recognition (OCR), and tagging of explicit
+content.
 
-You must have Ruby and `bundle` installed.
+[vision_docs]: https://cloud.google.com/vision/docs/
 
-Some of the samples require additional setup, which their READMEs will specify.
+## Run sample
 
-### Label Detection
+To run the sample, first install dependencies:
 
-See the [label detection](https://cloud.google.com/vision/docs/label-tutorial) tutorial in the docs.
+    bundle install
 
-[Ruby Code](label)
+Run the sample:
+
+    bundle exec ruby vision_samples.rb
+
+Usage:
+
+    Usage: ruby vision_samples.rb ...
+
+Example:
+
+    ...
