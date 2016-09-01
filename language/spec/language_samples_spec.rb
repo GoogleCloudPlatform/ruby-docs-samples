@@ -1,4 +1,4 @@
-require_relative "../samples"
+require_relative "../language_samples"
 require "rspec"
 require "tempfile"
 require "google/cloud"

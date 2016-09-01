@@ -133,6 +133,6 @@ if __FILE__ == $PROGRAM_NAME
     puts "Syntax:"
     syntax_from_text project_id: project_id, text_content: ARGV.first
   else
-    puts "Usage: ruby samples.rb <test-to-analyze>"
+    puts "Usage: ruby language_samples.rb <text-to-analyze>"
   end
 end
