@@ -14,6 +14,7 @@
 
 # Example of calling a simple Google Cloud Endpoint API.
 
+require "json"
 require "optparse"
 require "rest-client"
 
