@@ -39,6 +39,7 @@ env:
   - TEST_DIR=translate
   - TEST_DIR=language
   - TEST_DIR=appengine/endpoints
+  - TEST_DIR=vision
 
 before_install:
 - openssl aes-256-cbc -K $encrypted_aeb4e2af7332_key -iv $encrypted_aeb4e2af7332_iv
