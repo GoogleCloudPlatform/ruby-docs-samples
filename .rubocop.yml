@@ -76,6 +76,15 @@ Performance/RedundantBlockCall:
 Style/EmptyLinesAroundBlockBody:
   Enabled: false
 
+# Allow any level of comment indentation for documentation region tag comments
+Style/CommentIndentation:
+  Enabled: false
+
+# Methods in this repository are often used to wrap code snippets
+# These snippets may be long, so the method length cop is disabled
+Style/MethodLength:
+  Enabled: false
+
 Style/NumericLiterals:
   Enabled: false
 Style/SpaceAroundOperators:
@@ -109,4 +118,4 @@ Style/DotPosition:
 Style/WordArray:
   MinSize: 4
 Metrics/AbcSize:
-  Max: 20
+  Enabled: false

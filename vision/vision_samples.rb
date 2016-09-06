@@ -12,7 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-def detect_labels path_to_image_file
+# TODO: update to use named parameters
+
+def detect_labels path_to_image_file:
 # [START detect_labels]
   # [START importing_libraries]
   require "google/cloud"
@@ -38,7 +40,7 @@ def detect_labels path_to_image_file
 # [END detect_labels]
 end
 
-def detect_landmark path_to_image_file
+def detect_landmark path_to_image_file:
 # [START detect_landmark]
   # [START importing_libraries]
   require "google/cloud"
@@ -61,7 +63,7 @@ def detect_landmark path_to_image_file
 # [END detect_landmarks]
 end
 
-def detect_faces path_to_image_file, path_to_output_file
+def detect_faces path_to_image_file:, path_to_output_file:
 # [START detect_faces]
   # [START importing_libraries]
   require "google/cloud"
@@ -115,11 +117,12 @@ if __FILE__ == $PROGRAM_NAME
 
   case command
   when "labels"
-    detect_labels ARGV.shift
+    detect_labels path_to_image_file: ARGV.shift
   when "landmarks"
-    detect_landmark ARGV.shift
+    detect_landmark path_to_image_file: ARGV.shift
   when "faces"
-    detect_faces ARGV.shift, ARGV.shift
+    detect_faces path_to_image_file:  ARGV.shift,
+                 path_to_output_file: ARGV.shift
   else
     puts <<-usage
 Usage: ruby vision_samples.rb <command> [arguments]
