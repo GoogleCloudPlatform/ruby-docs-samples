@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# TODO: update to use named parameters
+# TODO: add variable descriptions
 
 def detect_labels path_to_image_file:
 # [START detect_labels]

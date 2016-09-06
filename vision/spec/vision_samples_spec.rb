@@ -39,7 +39,7 @@ describe "Vision sample" do
 # face.png
 
   example "detect labels" do
-    capture { detect_labels image_path("cat.jpg") }
+    capture { detect_labels path_to_image_file: image_path("cat.jpg") }
 
     expect(captured_output).to start_with "Image labels:"
     expect(captured_output).to include "cat"
@@ -47,7 +47,9 @@ describe "Vision sample" do
   end
 
   example "detect landmark" do
-    expect { detect_landmark image_path("eiffel_tower.jpg") }.to output(
+    expect {
+      detect_landmark path_to_image_file: image_path("eiffel_tower.jpg")
+    }.to output(
       "Found landmark: Eiffel Tower\n"
     ).to_stdout
   end
@@ -57,7 +59,10 @@ describe "Vision sample" do
     expect(File.size output_image_file.path).to eq 0
 
     begin
-      capture { detect_faces image_path("face.png"), output_image_file.path }
+      capture do
+        detect_faces path_to_image_file: image_path("face.png"),
+                     path_to_output_file: output_image_file.path
+      end
 
       expect(captured_output).to include "Face bounds:"
       expect(captured_output).to include "(154, 33)"
