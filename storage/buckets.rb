@@ -16,9 +16,9 @@ def list_buckets project_id:
   # [START list_buckets]
   # project_id = "Your Google Cloud project ID"
 
-  require "gcloud"
+  require "google/cloud"
 
-  gcloud  = Gcloud.new project_id
+  gcloud  = Google::Cloud.new project_id
   storage = gcloud.storage
 
   storage.buckets.each do |bucket|
@@ -32,9 +32,9 @@ def create_bucket project_id:, bucket_name:
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Name of Google Cloud Storage bucket to create"
 
-  require "gcloud"
+  require "google/cloud"
 
-  gcloud  = Gcloud.new project_id
+  gcloud  = Google::Cloud.new project_id
   storage = gcloud.storage
   bucket  = storage.create_bucket bucket_name
 
@@ -47,9 +47,9 @@ def delete_bucket project_id:, bucket_name:
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Name of your Google Cloud Storage bucket to delete"
 
-  require "gcloud"
+  require "google/cloud"
 
-  gcloud  = Gcloud.new project_id
+  gcloud  = Google::Cloud.new project_id
   storage = gcloud.storage
   bucket  = storage.bucket bucket_name
 

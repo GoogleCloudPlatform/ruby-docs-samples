@@ -14,8 +14,7 @@
 
 source "https://rubygems.org"
 
-# Google Cloud Client Library for Ruby
-gem "gcloud"
+gem "google-cloud-storage"
 
 group :test do
   gem "rake"
