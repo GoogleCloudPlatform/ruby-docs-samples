@@ -14,22 +14,131 @@
 
 require_relative "../files"
 require "rspec"
-require "gcloud"
+require "google/cloud"
+require "tempfile"
 
 describe "Google Cloud Storage files sample" do
 
-  it "can list all files in a bucket"
-  it "can list all files with a prefix in a bucket"
+  before do
+    @project_id      = ENV["GOOGLE_PROJECT_ID"]
+    @bucket_name     = ENV["STORAGE_BUCKET"]
+    @gcloud          = Google::Cloud.new @project_id
+    @storage         = @gcloud.storage
+    @bucket          = @storage.bucket @bucket_name
+    @local_file_path = File.expand_path "resources/file.txt", __dir__
 
-  it "can upload a local file to a bucket" do
-    # file doesn't exist
-
-    # run command
-
-    # file does exist
+    # TODO: Delete all files in bucket before each test.
+    #       These tests work well when the default state
+    #       is an existing bucket with no files.
   end
 
-  it "can download a file from a bucket"
+  # Delete given file in Cloud Storage test bucket if it exists
+  def delete_file storage_file_path
+    @bucket.file(storage_file_path).delete if @bucket.file storage_file_path
+  end
+
+  # Upload a local file to the Cloud Storage test bucket
+  def upload local_file_path, storage_file_path
+    unless @bucket.file storage_file_path
+      @bucket.create_file local_file_path, storage_file_path
+    end
+  end
+
+  # Returns the content of an uploaded file in Cloud Storage test bucket
+  def storage_file_content storage_file_path
+    local_tempfile = Tempfile.new "cloud-storage-tests"
+    storage_file   = @bucket.file storage_file_path
+    storage_file.download local_tempfile.path
+    File.read local_tempfile.path
+  ensure
+    local_tempfile.close
+    local_tempfile.unlink
+  end
+
+  # Capture and return STDOUT output by block
+  def capture &block
+    real_stdout = $stdout
+    $stdout = StringIO.new
+    block.call
+    @captured_output = $stdout.string
+  ensure
+    $stdout = real_stdout
+  end
+  attr_reader :captured_output
+
+  it "can list files in a bucket" do
+    upload @local_file_path, "file.txt"
+    expect(@bucket.file "file.txt").not_to be nil
+
+    expect {
+      list_bucket_contents project_id:  @project_id,
+                           bucket_name: @bucket_name
+    }.to output(
+      /file\.txt/
+    ).to_stdout
+  end
+
+  it "can list files with a prefix in a bucket" do
+    upload @local_file_path, "foo/hello"
+    upload @local_file_path, "foo/hi/there"
+    upload @local_file_path, "bar/hello"
+    upload @local_file_path, "bar/hi/there"
+
+    capture do
+      list_bucket_contents_with_prefix project_id:  @project_id,
+                                       bucket_name: @bucket_name,
+                                       prefix:      "foo/"
+    end
+
+    expect(captured_output).to     include "foo/hello"
+    expect(captured_output).to     include "foo/hi/there"
+    expect(captured_output).not_to include "bar/hello"
+    expect(captured_output).not_to include "bar/hi/there"
+  end
+
+  it "can upload a local file to a bucket" do
+    delete_file "file.txt"
+    expect(@bucket.file "file.txt").to be nil
+
+    expect {
+      upload_file project_id:        @project_id,
+                  bucket_name:       @bucket_name,
+                  local_file_path:   @local_file_path,
+                  storage_file_path: "file.txt"
+    }.to output(
+      /Uploaded .*file.txt/
+    ).to_stdout
+
+    expect(@bucket.file "file.txt").not_to be nil
+    expect(storage_file_content "file.txt").to eq "Content of test file.txt\n"
+  end
+
+  it "can download a file from a bucket" do
+    begin
+      upload @local_file_path, "file.txt"
+
+      local_file = Tempfile.new "cloud-storage-tests"
+      expect(File.size local_file.path).to eq 0
+
+      expect {
+        download_file project_id:  @project_id,
+                      bucket_name: @bucket_name,
+                      local_path:  local_file.path,
+                      file_name:   "file.txt"
+      }.to output(
+        "Downloaded file.txt\n"
+      ).to_stdout
+
+      expect(File.size local_file.path).to be > 0
+      expect(File.read local_file.path).to eq(
+        "Content of test file.txt\n"
+      )
+    ensure
+      local_file.close
+      local_file.unlink
+    end
+  end
+
   it "can delete a file in a bucket"
   it "can print metadata for a file in a bucket"
   it "can make a file in a bucket public"
@@ -46,10 +155,10 @@ require "tempfile"
 
 describe "Google Cloud Storage sample" do
 
-  # Returns the text content of a given Gcloud storage object
-  def content_of storage_object
+  # Returns the text content of a given Gcloud storage file
+  def content_of storage_file
     temp_file = Tempfile.new
-    storage_object.download temp_file.path
+    storage_file.download temp_file.path
     File.read temp_file.path
   end
 
@@ -75,7 +184,7 @@ describe "Google Cloud Storage sample" do
     @storage        = @gcloud.storage
     @bucket         = @storage.bucket ENV["BUCKET"]
     @alt_bucket     = @storage.bucket ENV["ALT_BUCKET"]
-    @test_file_path = File.expand_path "test-object.txt", __dir__
+    @test_file_path = File.expand_path "test-file.txt", __dir__
   end
 
   # Sample code uses project ID "my-gcp-project-id" and bucket "my-bucket"
@@ -90,7 +199,7 @@ describe "Google Cloud Storage sample" do
                        and_return(@alt_bucket)
 
     # File uploads use the fake path "/path/to/my-file.txt"
-    # When samples upload files, upload the spec/test-object.txt
+    # When samples upload files, upload the spec/test-file.txt
     # file instead for testing
     allow(@bucket).to receive(:create_file).
                       with("/path/to/my-file.txt", "my-file.txt").
@@ -123,20 +232,20 @@ describe "Google Cloud Storage sample" do
   #                               to_stdout
   # end
 
-  it "upload object" do
+  it "upload file" do
     expect(@bucket.file "my-file.txt").to be nil
 
-    expect { upload_object }.to output("Uploaded my-file.txt\n").to_stdout
+    expect { upload_file }.to output("Uploaded my-file.txt\n").to_stdout
 
     expect(@bucket.file "my-file.txt").not_to be nil
 
     expect(content_of @bucket.file("my-file.txt")).to eq(
-      "Content of test object\n"
+      "Content of test file\n"
     )
   end
 
-  it "download object" do
-    upload_object
+  it "download file" do
+    upload_file
 
     # This sample downloads to the fake path "/path/to/my-file.txt"
     # When the file download method is called, download to a
@@ -154,36 +263,36 @@ describe "Google Cloud Storage sample" do
 
     expect(File.read temp_file).to eq ""
 
-    expect { download_object }.to output("Downloaded my-file.txt\n").to_stdout
+    expect { download_file }.to output("Downloaded my-file.txt\n").to_stdout
 
-    expect(File.read temp_file).to eq "Content of test object\n"
+    expect(File.read temp_file).to eq "Content of test file\n"
   end
 
-  it "make object public" do
-    upload_object
+  it "make file public" do
+    upload_file
     uploaded_file = @bucket.file "my-file.txt"
 
     response = Net::HTTP.get_response URI.parse(uploaded_file.public_url)
     expect(response).to be_a Net::HTTPForbidden
     expect(response.code.to_i).to eq 403
 
-    expect { make_object_public }.to output(
+    expect { make_file_public }.to output(
       "my-file.txt is publicly accessible at #{uploaded_file.public_url}\n"
     ).to_stdout
 
     response = Net::HTTP.get_response URI.parse(uploaded_file.public_url)
     expect(response).to be_a Net::HTTPOK
     expect(response.code.to_i).to eq 200
-    expect(response.body).to eq "Content of test object\n"
+    expect(response.body).to eq "Content of test file\n"
   end
 
-  it "rename object" do
-    upload_object
+  it "rename file" do
+    upload_file
 
     expect(@bucket.file "my-file.txt").not_to be nil
     expect(@bucket.file "renamed-file.txt").to be nil
 
-    expect { rename_object }.to output(
+    expect { rename_file }.to output(
       "my-file.txt has been renamed to renamed-file.txt\n"
     ).to_stdout
 
@@ -191,34 +300,34 @@ describe "Google Cloud Storage sample" do
     expect(@bucket.file "renamed-file.txt").not_to be nil
 
     expect(content_of @bucket.file("renamed-file.txt")).to eq(
-      "Content of test object\n"
+      "Content of test file\n"
     )
   end
 
-  it "copy object between buckets" do
-    upload_object
+  it "copy file between buckets" do
+    upload_file
 
     expect(@alt_bucket.file "my-file.txt").to be nil
 
-    expect { copy_object_between_buckets }.to output(
+    expect { copy_file_between_buckets }.to output(
       "my-file.txt in #{@bucket.name} copied to " +
       "my-file.txt in #{@alt_bucket.name}\n"
     ).to_stdout
 
     expect(@alt_bucket.file "my-file.txt").not_to be nil
     expect(content_of @alt_bucket.file("my-file.txt")).to eq(
-      "Content of test object\n"
+      "Content of test file\n"
     )
   end
 
   it "list bucket contents" do
-    upload_object
+    upload_file
 
     expect { list_bucket_contents }.to output(/my-file\.txt/).to_stdout
   end
 
-  it "list object details" do
-    upload_object
+  it "list file details" do
+    upload_file
     uploaded_file = @bucket.file "my-file.txt"
 
     uploaded_file.cache_control       = "Cache-Control:public, max-age=3600"
@@ -226,7 +335,7 @@ describe "Google Cloud Storage sample" do
     uploaded_file.content_language    = "en"
     uploaded_file.metadata            = { foo: "bar" }
 
-    output = capture { list_object_details }
+    output = capture { list_file_details }
     
     expect(output).to include("Name: my-file.txt")
     expect(output).to include("Bucket: #{@bucket.name}")
@@ -255,12 +364,12 @@ describe "Google Cloud Storage sample" do
     expect(output).to include("Metadata:\n - foo = bar")
   end
 
-  it "delete object" do
-    upload_object
+  it "delete file" do
+    upload_file
 
     expect(@bucket.file "my-file.txt").not_to be nil
 
-    expect { delete_object }.to output("Deleted my-file.txt\n").to_stdout
+    expect { delete_file }.to output("Deleted my-file.txt\n").to_stdout
 
     expect(@bucket.file "my-file.txt").to be nil
   end
