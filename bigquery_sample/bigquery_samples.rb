@@ -59,3 +59,70 @@ def delete_dataset project_id:, dataset_id:
   puts "Deleted dataset: #{dataset_id}"
   # [END delete_dataset]
 end
+
+def create_table project_id:, dataset_id:, table_id:
+  # [START create_table]
+  # project_id = "Your Google Cloud project ID"
+  # dataset_id = "ID of the dataset to create table in"
+  # table_id   = "ID of the table to create"
+
+  require "google/cloud"
+
+  gcloud   = Google::Cloud.new project_id
+  bigquery = gcloud.bigquery
+  dataset  = bigquery.dataset dataset_id
+
+  dataset.create_table table_id
+
+  puts "Created table: #{table_id}"
+  # [END create_table]
+end
+
+def list_tables project_id:, dataset_id:
+  # [START list_datasets]
+  # project_id = "Your Google Cloud project ID"
+  # dataset_id = "ID of the dataset to create table in"
+
+  require "google/cloud"
+
+  gcloud   = Google::Cloud.new project_id
+  bigquery = gcloud.bigquery
+  dataset  = bigquery.dataset dataset_id
+
+  dataset.tables.each do |table|
+    puts table.table_id
+  end
+  # [END list_tables]
+end
+
+def delete_table project_id:, dataset_id:, table_id:
+  # [START delete_table]
+  # project_id = "Your Google Cloud project ID"
+  # dataset_id = "ID of the dataset delete table from"
+  # table_id   = "ID of the table to delete"
+
+  require "google/cloud"
+
+  gcloud   = Google::Cloud.new project_id
+  bigquery = gcloud.bigquery
+  dataset  = bigquery.dataset dataset_id
+  table    = dataset.table table_id
+
+  table.delete
+
+  puts "Deleted table: #{table_id}"
+  # [END delete_]
+end
+
+# TODO: separate sample into separate executable files
+#
+if __FILE__ == $PROGRAM_NAME
+  project_id = ENV["GOOGLE_CLOUD_PROJECT"]
+  command    = ARGV.shift
+
+  case command
+  when "< command here >"
+  else
+    puts "Usage: "
+  end
+end

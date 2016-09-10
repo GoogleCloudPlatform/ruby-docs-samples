@@ -22,14 +22,14 @@ RSpec.describe "Google Cloud BigQuery samples" do
     @project_id = ENV["GOOGLE_PROJECT_ID"]
     @gcloud     = Google::Cloud.new @project_id
     @bigquery   = @gcloud.bigquery
-  end
 
-  def delete_dataset! dataset_id
-    @bigquery.dataset(dataset_id).delete if @bigquery.dataset dataset_id
-  end
+    # Examples assume that test_dataset does not exist
+    test_dataset = @bigquery.dataset "test_dataset"
 
-  def create_dataset! dataset_id
-    @bigquery.create_dataset dataset_id unless @bigquery.dataset dataset_id
+    if test_dataset
+      test_dataset.tables.each &:delete
+      test_dataset.delete
+    end
   end
 
   describe "Managing projects" do
@@ -38,7 +38,6 @@ RSpec.describe "Google Cloud BigQuery samples" do
 
   describe "Managing Datasets" do
     example "create dataset" do
-      delete_dataset! "test_dataset"
       expect(@bigquery.dataset "test_dataset").to be nil
 
       expect {
@@ -51,7 +50,7 @@ RSpec.describe "Google Cloud BigQuery samples" do
     end
 
     example "list datasets" do
-      create_dataset! "test_dataset"
+      @bigquery.create_dataset "test_dataset"
 
       expect {
         list_datasets project_id: @project_id
@@ -61,7 +60,7 @@ RSpec.describe "Google Cloud BigQuery samples" do
     end
 
     example "delete dataset" do
-      create_dataset! "test_dataset"
+      @bigquery.create_dataset "test_dataset"
       expect(@bigquery.dataset "test_dataset").not_to be nil
 
       expect {
@@ -75,9 +74,49 @@ RSpec.describe "Google Cloud BigQuery samples" do
   end
 
   describe "Managing Tables" do
-    example "create table"
-    example "list tables"
-    example "delete table"
+
+    example "create table" do
+      dataset = @bigquery.create_dataset "test_dataset"
+      expect(dataset.table "test_table").to be nil
+
+      expect {
+        create_table project_id: @project_id,
+                     dataset_id: "test_dataset",
+                     table_id:   "test_table"
+      }.to output(
+        "Created table: test_table\n"
+      ).to_stdout
+
+      expect(dataset.table "test_table").not_to be nil
+    end
+
+    example "list tables" do
+      dataset = @bigquery.create_dataset "test_dataset"
+      dataset.create_table "test_table"
+
+      expect {
+        list_tables project_id: @project_id, dataset_id: "test_dataset"
+      }.to output(
+        /test_table/
+      ).to_stdout
+    end
+
+    example "delete table" do
+      dataset = @bigquery.create_dataset "test_dataset"
+      dataset.create_table "test_table"
+      expect(dataset.table "test_table").not_to be nil
+
+      expect {
+        delete_table project_id: @project_id,
+                     dataset_id: "test_dataset",
+                     table_id:   "test_table"
+      }.to output(
+        "Deleted table: test_table\n"
+      ).to_stdout
+
+      expect(dataset.table "test_table").to be nil
+    end
+
     example "browse table"
     example "browse table with pagination"
   end
