@@ -66,7 +66,7 @@ def entity_with_parent
   task_key = datastore.key [["TaskList", "default"], ["Task", "sampleTask"]]
 
   task = datastore.entity task_key do |t|
-    t["type"] = "Personal"
+    t["category"] = "Personal"
     t["done"] = false
     t["priority"] = 4
     t["description"] = "Learn Cloud Datastore"
@@ -82,7 +82,7 @@ def properties
 
   # [START properties]
   task = datastore.entity "Task" do |t|
-    t["type"] = "Personal"
+    t["category"] = "Personal"
     t["created"] = Time.now
     t["done"] = false
     t["priority"] = 4
@@ -91,6 +91,8 @@ def properties
     t.exclude_from_indexes! "description", true
   end
   # [END properties]
+
+  task
 end
 
 def array_value
@@ -111,7 +113,7 @@ def basic_entity
 
   # [START basic_entity]
   task = datastore.entity "Task" do |t|
-    t["type"] = "Personal"
+    t["category"] = "Personal"
     t["done"] = false
     t["priority"] = 4
     t["description"] = "Learn Cloud Datastore"
@@ -127,7 +129,7 @@ def upsert
 
   # [START upsert]
   task = datastore.entity "Task", "sampleTask" do |t|
-    t["type"] = "Personal"
+    t["category"] = "Personal"
     t["done"] = false
     t["priority"] = 4
     t["description"] = "Learn Cloud Datastore"
@@ -144,7 +146,7 @@ def insert
 
   # [START insert]
   task = datastore.entity "Task" do |t|
-    t["type"] = "Personal"
+    t["category"] = "Personal"
     t["done"] = false
     t["priority"] = 4
     t["description"] = "Learn Cloud Datastore"
@@ -172,7 +174,7 @@ def update
   datastore = gcloud.datastore
 
   task = datastore.entity "Task", "sampleTask" do |t|
-    t["type"] = "Personal"
+    t["category"] = "Personal"
     t["done"] = false
     t["priority"] = 4
     t["description"] = "Learn Cloud Datastore"
@@ -206,14 +208,14 @@ def batch_upsert
 
   # [START batch_upsert]
   task1 = datastore.entity "Task" do |t|
-    t["type"] = "Personal"
+    t["category"] = "Personal"
     t["done"] = false
     t["priority"] = 4
     t["description"] = "Learn Cloud Datastore"
   end
 
   task2 = datastore.entity "Task" do |t|
-    t["type"] = "Personal"
+    t["category"] = "Personal"
     t["done"] = false
     t["priority"] = 5
     t["description"] = "Integrate Cloud Datastore"
@@ -395,9 +397,9 @@ def distinct_query
 
   # [START distinct_query]
   query = datastore.query("Task").
-          select("type", "priority").
-          distinct_on("type", "priority").
-          order("type").
+          select("category", "priority").
+          distinct_on("category", "priority").
+          order("category").
           order("priority")
   # [END distinct_query]
 end
@@ -408,9 +410,9 @@ def distinct_on_query
 
   # [START distinct_on_query]
   query = datastore.query("Task").
-          select("type", "priority").
-          distinct_on("type").
-          order("type").
+          select("category", "priority").
+          distinct_on("category").
+          order("category").
           order("priority")
   # [END distinct_on_query]
 end
@@ -602,7 +604,7 @@ def transactional_get_or_create task_key
     task = tx.find task_key
     if task.nil?
       task = datastore.entity task_key do |t|
-        t["type"] = "Personal"
+        t["category"] = "Personal"
         t["done"] = false
         t["priority"] = 4
         t["description"] = "Learn Cloud Datastore"
