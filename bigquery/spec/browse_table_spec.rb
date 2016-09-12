@@ -12,7 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "rspec"
+require_relative "spec_helper"
+require_relative "../browse_table"
 
-PROJECT_ID=ENV["GOOGLE_PROJECT_ID"]
-BUCKET_NAME=ENV["GOOGLE_BUCKET_NAME"]
+RSpec.describe "Browses the table data" do
+  it "returns the expected data" do
+    allow($stdin).to receive(:gets).and_return("n")
+    expect { browse_table PROJECT_ID, "test_dataset", "test_table", 1 }.to(
+      output(/Alice/).to_stdout)
+  end
+end

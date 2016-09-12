@@ -12,7 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "rspec"
+require_relative "spec_helper"
+require_relative "../list_tables"
 
-PROJECT_ID=ENV["GOOGLE_PROJECT_ID"]
-BUCKET_NAME=ENV["GOOGLE_BUCKET_NAME"]
+RSpec.describe "List tables sample" do
+  it "lists the dataset's tables" do
+    expect { list_tables PROJECT_ID, "test_dataset"}.to(
+      output(/test_table/).to_stdout)
+  end
+end

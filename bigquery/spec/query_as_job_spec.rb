@@ -13,15 +13,13 @@
 # limitations under the License.
 
 require_relative "spec_helper"
-require_relative "../shakespeare"
+require_relative "../query_as_job"
 
-RSpec.describe "Show Shakespeare words sample" do
-  before do
-    @sample = Samples::BigQuery::Shakespeare.new
-  end
-
+RSpec.describe "Show query as job sample" do
   it "lists number of unique words in shakespeare" do
-    expect { @sample.unique_words PROJECT_ID }.to(
+    sql = "SELECT TOP(corpus, 10) as title, COUNT(*) as unique_words " +
+          "FROM [publicdata:samples.shakespeare]"
+    expect { query_as_job PROJECT_ID, sql }.to(
       output(/hamlet/).to_stdout)
   end
 end
