@@ -15,6 +15,7 @@
 require_relative "../bigquery_samples"
 require "rspec"
 require "google/cloud"
+require "csv"
 
 RSpec.describe "Google Cloud BigQuery samples" do
 
@@ -31,6 +32,17 @@ RSpec.describe "Google Cloud BigQuery samples" do
       test_dataset.delete
     end
   end
+
+  # Capture and return STDOUT output by block
+  def capture &block
+    real_stdout = $stdout
+    $stdout = StringIO.new
+    block.call
+    @captured_output = $stdout.string
+  ensure
+    $stdout = real_stdout
+  end
+  attr_reader :captured_output
 
   describe "Managing projects" do
     example "list projects"
@@ -117,8 +129,41 @@ RSpec.describe "Google Cloud BigQuery samples" do
       expect(dataset.table "test_table").to be nil
     end
 
-    example "browse table"
-    example "browse table with pagination"
+    example "list table data" do
+      begin
+        dataset = @bigquery.create_dataset "test_dataset"
+
+        table = dataset.create_table "test_table" do |schema|
+          schema.string "name"
+          schema.string "value"
+        end
+
+        csv_file = Tempfile.new "bigquery-test-csv"
+
+        CSV.open csv_file.path, "w" do |csv|
+          csv << [ "Alice", 5 ]
+          csv << [ "Bob",   10 ]
+        end
+
+        load_job = table.load csv_file.path, format: "csv"
+
+        load_job.wait_until_done!
+
+        expect {
+          list_table_data project_id: @project_id,
+                          dataset_id: "test_dataset",
+                          table_id:   "test_table"
+        }.to output(
+          "name = Alive\nvalue=5\nname=Bob\nvalue=10\n"
+        ).to_stdout
+      ensure
+        csv_file.flush
+        csv_file.close
+      end
+    end
+
+    # .data.all
+    example "list table data with pagination"
   end
 
   describe "Importing data" do

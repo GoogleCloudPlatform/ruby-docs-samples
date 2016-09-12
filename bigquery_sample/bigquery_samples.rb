@@ -111,7 +111,28 @@ def delete_table project_id:, dataset_id:, table_id:
   table.delete
 
   puts "Deleted table: #{table_id}"
-  # [END delete_]
+  # [END delete_table]
+end
+
+def list_table_data project_id:, dataset_id:, table_id:
+  # [START list_table_data]
+  # project_id = "Your Google Cloud project ID"
+  # dataset_id = "ID of the dataset delete table from"
+  # table_id   = "ID of the table to display data for"
+
+  require "google/cloud"
+
+  gcloud   = Google::Cloud.new project_id
+  bigquery = gcloud.bigquery
+  dataset  = bigquery.dataset dataset_id
+  table    = dataset.table table_id
+
+  table.data.each do |row|
+    row.each      do |column_name, value|
+      puts "#{column_name} = #{value}"
+    end
+  end
+  # [END list_table_data]
 end
 
 # TODO: separate sample into separate executable files
