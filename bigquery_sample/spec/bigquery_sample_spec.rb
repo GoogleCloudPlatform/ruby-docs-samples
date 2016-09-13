@@ -17,12 +17,16 @@ require "rspec"
 require "google/cloud"
 require "csv"
 
+# TODO: refactor CSV creation to simplify & slightly DRY specs
+
 RSpec.describe "Google Cloud BigQuery samples" do
 
   before do
     @project_id = ENV["GOOGLE_PROJECT_ID"]
     @gcloud     = Google::Cloud.new @project_id
     @bigquery   = @gcloud.bigquery
+    @storage    = @gcloud.storage
+    @bucket     = @storage.bucket ENV["STORAGE_BUCKET"]
 
     # Examples assume that test_dataset does not exist
     test_dataset = @bigquery.dataset "test_dataset"
@@ -214,11 +218,64 @@ RSpec.describe "Google Cloud BigQuery samples" do
       end
     end
 
-    example "import data from Cloud Storage"
+    example "import data from Cloud Storage" do
+      begin
+        dataset = @bigquery.create_dataset "test_dataset"
+
+        table = dataset.create_table "test_table" do |schema|
+          schema.string  "name"
+          schema.integer "value"
+        end
+
+        csv_file = Tempfile.new %w[ bigquery-test csv ]
+
+        CSV.open csv_file.path, "w" do |csv|
+          csv << [ "Alice", 5 ]
+          csv << [ "Bob",   10 ]
+        end
+
+        file = @bucket.create_file csv_file.path, "bigquery-test.csv"
+
+        expect(table.data).to be_empty
+
+        capture do
+          import_table_data_from_cloud_storage(
+            project_id:   @project_id,
+            dataset_id:   "test_dataset",
+            table_id:     "test_table",
+            storage_path: "gs://#{@bucket.name}/bigquery-test.csv"
+          )
+        end
+
+        expect(captured_output).to include(
+          "Importing data from Cloud Storage file: " +
+          "gs://#{@bucket.name}/bigquery-test.csv"
+        )
+        expect(captured_output).to match(
+          /Waiting for load job to complete: job_\w+/
+        )
+        expect(captured_output).to include "Data imported"
+
+        loaded_data = table.data
+
+        expect(loaded_data).not_to be_empty
+        expect(loaded_data.count).to eq 2
+        expect(loaded_data.first["name"]).to eq "Alice"
+        expect(loaded_data.first["value"]).to eq 5
+        expect(loaded_data.last["name"]).to eq "Bob"
+        expect(loaded_data.last["value"]).to eq 10
+      ensure
+        csv_file.flush
+        csv_file.close
+      end
+    end
+
     example "stream data import"
   end
 
   describe "Exporting data" do
+    # Needs a CSV file to import into the table before running
+    # the export command, so refactor CSV code before writing this
     example "export data to Cloud Storage"
   end
 

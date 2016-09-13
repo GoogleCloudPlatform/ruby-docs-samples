@@ -138,9 +138,10 @@ end
 def import_table_data_from_file project_id:, dataset_id:, table_id:,
                                 local_file_path:
   # [START import_table_data_from_file]
-  # project_id = "Your Google Cloud project ID"
-  # dataset_id = "ID of the dataset delete table from"
-  # table_id   = "ID of the table to import file data into"
+  # project_id      = "Your Google Cloud project ID"
+  # dataset_id      = "ID of the dataset delete table from"
+  # table_id        = "ID of the table to import file data into"
+  # local_file_path = "Path to local file to import into BigQuery table"
 
   require "google/cloud"
 
@@ -151,6 +152,31 @@ def import_table_data_from_file project_id:, dataset_id:, table_id:,
 
   puts "Importing data from file: #{local_file_path}"
   load_job = table.load local_file_path
+
+  puts "Waiting for load job to complete: #{load_job.job_id}"
+  load_job.wait_until_done!
+
+  puts "Data imported"
+  # [END import_table_data_from_file]
+end
+
+def import_table_data_from_cloud_storage project_id:, dataset_id:, table_id:,
+                                         storage_path:
+  # [START import_table_data_from_file]
+  # project_id   = "Your Google Cloud project ID"
+  # dataset_id   = "ID of the dataset delete table from"
+  # table_id     = "ID of the table to import file data into"
+  # storage_path = "Storage path to file to import, eg. gs://bucket/file.csv"
+
+  require "google/cloud"
+
+  gcloud   = Google::Cloud.new project_id
+  bigquery = gcloud.bigquery
+  dataset  = bigquery.dataset dataset_id
+  table    = dataset.table table_id
+
+  puts "Importing data from Cloud Storage file: #{storage_path}"
+  load_job = table.load storage_path
 
   puts "Waiting for load job to complete: #{load_job.job_id}"
   load_job.wait_until_done!
