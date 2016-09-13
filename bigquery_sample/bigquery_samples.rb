@@ -135,6 +135,30 @@ def list_table_data project_id:, dataset_id:, table_id:
   # [END list_table_data]
 end
 
+def import_table_data_from_file project_id:, dataset_id:, table_id:,
+                                local_file_path:
+  # [START import_table_data_from_file]
+  # project_id = "Your Google Cloud project ID"
+  # dataset_id = "ID of the dataset delete table from"
+  # table_id   = "ID of the table to import file data into"
+
+  require "google/cloud"
+
+  gcloud   = Google::Cloud.new project_id
+  bigquery = gcloud.bigquery
+  dataset  = bigquery.dataset dataset_id
+  table    = dataset.table table_id
+
+  puts "Importing data from file: #{local_file_path}"
+  load_job = table.load local_file_path
+
+  puts "Waiting for load job to complete: #{load_job.job_id}"
+  load_job.wait_until_done!
+
+  puts "Data imported"
+  # [END import_table_data_from_file]
+end
+
 # TODO: separate sample into separate executable files
 #
 if __FILE__ == $PROGRAM_NAME

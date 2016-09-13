@@ -134,18 +134,18 @@ RSpec.describe "Google Cloud BigQuery samples" do
         dataset = @bigquery.create_dataset "test_dataset"
 
         table = dataset.create_table "test_table" do |schema|
-          schema.string "name"
-          schema.string "value"
+          schema.string  "name"
+          schema.integer "value"
         end
 
-        csv_file = Tempfile.new "bigquery-test-csv"
+        csv_file = Tempfile.new %w[ bigquery-test csv ]
 
         CSV.open csv_file.path, "w" do |csv|
           csv << [ "Alice", 5 ]
           csv << [ "Bob",   10 ]
         end
 
-        load_job = table.load csv_file.path, format: "csv"
+        load_job = table.load csv_file.path
 
         load_job.wait_until_done!
 
@@ -154,7 +154,7 @@ RSpec.describe "Google Cloud BigQuery samples" do
                           dataset_id: "test_dataset",
                           table_id:   "test_table"
         }.to output(
-          "name = Alive\nvalue=5\nname=Bob\nvalue=10\n"
+          "name = Alice\nvalue = 5\nname = Bob\nvalue = 10\n"
         ).to_stdout
       ensure
         csv_file.flush
@@ -162,13 +162,59 @@ RSpec.describe "Google Cloud BigQuery samples" do
       end
     end
 
-    # .data.all
     example "list table data with pagination"
   end
 
   describe "Importing data" do
+
+    example "import data from file" do
+      begin
+        dataset = @bigquery.create_dataset "test_dataset"
+
+        table = dataset.create_table "test_table" do |schema|
+          schema.string  "name"
+          schema.integer "value"
+        end
+
+        csv_file = Tempfile.new %w[ bigquery-test csv ]
+
+        CSV.open csv_file.path, "w" do |csv|
+          csv << [ "Alice", 5 ]
+          csv << [ "Bob",   10 ]
+        end
+
+        expect(table.data).to be_empty
+
+        capture do
+          import_table_data_from_file project_id:     @project_id,
+                                      dataset_id:     "test_dataset",
+                                      table_id:       "test_table",
+                                      local_file_path: csv_file.path
+        end
+
+        expect(captured_output).to include(
+          "Importing data from file: #{csv_file.path}\n"
+        )
+        expect(captured_output).to match(
+          /Waiting for load job to complete: job_\w+/
+        )
+        expect(captured_output).to include "Data imported"
+
+        loaded_data = table.data
+
+        expect(loaded_data).not_to be_empty
+        expect(loaded_data.count).to eq 2
+        expect(loaded_data.first["name"]).to eq "Alice"
+        expect(loaded_data.first["value"]).to eq 5
+        expect(loaded_data.last["name"]).to eq "Bob"
+        expect(loaded_data.last["value"]).to eq 10
+      ensure
+        csv_file.flush
+        csv_file.close
+      end
+    end
+
     example "import data from Cloud Storage"
-    example "import data from file"
     example "stream data import"
   end
 
