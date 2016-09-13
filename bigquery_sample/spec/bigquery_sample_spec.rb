@@ -17,7 +17,19 @@ require "rspec"
 require "google/cloud"
 require "csv"
 
-# TODO: refactor CSV creation to simplify & slightly DRY specs
+# TODO: move some helpers to a shared directory and update other specs
+# require_relative "../../shared/spec_helpers"
+# require "spec_helper"
+#
+# ...
+#
+# require_relative "../../shared/spec_helpers"
+# 
+# require "spec_helper/tempfile_helper"
+# require "spec_helper/csv_file_helper"
+# require "spec_helper/cloud_storage_helper"
+# require "spec_helper/capture_output"
+# require "spec_helper/bigquery_helper"
 
 RSpec.describe "Google Cloud BigQuery samples" do
 
@@ -27,14 +39,45 @@ RSpec.describe "Google Cloud BigQuery samples" do
     @bigquery   = @gcloud.bigquery
     @storage    = @gcloud.storage
     @bucket     = @storage.bucket ENV["STORAGE_BUCKET"]
+    @tempfiles  = []
 
-    # Examples assume that test_dataset does not exist
-    test_dataset = @bigquery.dataset "test_dataset"
+    # Examples assume that newly created test_dataset and test_table exist
+    delete_test_dataset!
 
-    if test_dataset
-      test_dataset.tables.each &:delete
-      test_dataset.delete
+    @dataset = @bigquery.create_dataset "test_dataset"
+    @table   = @dataset.create_table    "test_table" do |schema|
+      schema.string  "name"
+      schema.integer "value"
     end
+  end
+
+  after do
+    # Cleanup any tempfiles that were used by the example spec
+    @tempfiles.each &:flush
+    @tempfiles.each &:close
+  end
+
+  def delete_test_dataset!
+    dataset = @bigquery.dataset "test_dataset"
+    dataset.tables.each &:delete if dataset
+    dataset.delete               if dataset
+  end
+
+  # Helper to create and return CSV file.
+  # The block will be passed a CSV object.
+  #
+  # @example
+  #   file = create_csv do |csv|
+  #     csv << [ "Alice", 123 ]
+  #     csv << [ "Bob",   456 ]
+  #   end
+  #
+  #   puts file.path
+  def create_csv &block
+    file = Tempfile.new %w[ bigquery-test csv ]
+    CSV.open file.path, "w", &block
+    @tempfiles << file
+    file
   end
 
   # Capture and return STDOUT output by block
@@ -54,6 +97,7 @@ RSpec.describe "Google Cloud BigQuery samples" do
 
   describe "Managing Datasets" do
     example "create dataset" do
+      delete_test_dataset!
       expect(@bigquery.dataset "test_dataset").to be nil
 
       expect {
@@ -66,8 +110,6 @@ RSpec.describe "Google Cloud BigQuery samples" do
     end
 
     example "list datasets" do
-      @bigquery.create_dataset "test_dataset"
-
       expect {
         list_datasets project_id: @project_id
       }.to output(
@@ -76,7 +118,7 @@ RSpec.describe "Google Cloud BigQuery samples" do
     end
 
     example "delete dataset" do
-      @bigquery.create_dataset "test_dataset"
+      @dataset.tables.each &:delete
       expect(@bigquery.dataset "test_dataset").not_to be nil
 
       expect {
@@ -92,8 +134,8 @@ RSpec.describe "Google Cloud BigQuery samples" do
   describe "Managing Tables" do
 
     example "create table" do
-      dataset = @bigquery.create_dataset "test_dataset"
-      expect(dataset.table "test_table").to be nil
+      @table.delete 
+      expect(@dataset.table "test_table").to be nil
 
       expect {
         create_table project_id: @project_id,
@@ -103,13 +145,10 @@ RSpec.describe "Google Cloud BigQuery samples" do
         "Created table: test_table\n"
       ).to_stdout
 
-      expect(dataset.table "test_table").not_to be nil
+      expect(@dataset.table "test_table").not_to be nil
     end
 
     example "list tables" do
-      dataset = @bigquery.create_dataset "test_dataset"
-      dataset.create_table "test_table"
-
       expect {
         list_tables project_id: @project_id, dataset_id: "test_dataset"
       }.to output(
@@ -118,9 +157,7 @@ RSpec.describe "Google Cloud BigQuery samples" do
     end
 
     example "delete table" do
-      dataset = @bigquery.create_dataset "test_dataset"
-      dataset.create_table "test_table"
-      expect(dataset.table "test_table").not_to be nil
+      expect(@dataset.table "test_table").not_to be nil
 
       expect {
         delete_table project_id: @project_id,
@@ -130,40 +167,26 @@ RSpec.describe "Google Cloud BigQuery samples" do
         "Deleted table: test_table\n"
       ).to_stdout
 
-      expect(dataset.table "test_table").to be nil
+      expect(@dataset.table "test_table").to be nil
     end
 
     example "list table data" do
-      begin
-        dataset = @bigquery.create_dataset "test_dataset"
-
-        table = dataset.create_table "test_table" do |schema|
-          schema.string  "name"
-          schema.integer "value"
-        end
-
-        csv_file = Tempfile.new %w[ bigquery-test csv ]
-
-        CSV.open csv_file.path, "w" do |csv|
-          csv << [ "Alice", 5 ]
-          csv << [ "Bob",   10 ]
-        end
-
-        load_job = table.load csv_file.path
-
-        load_job.wait_until_done!
-
-        expect {
-          list_table_data project_id: @project_id,
-                          dataset_id: "test_dataset",
-                          table_id:   "test_table"
-        }.to output(
-          "name = Alice\nvalue = 5\nname = Bob\nvalue = 10\n"
-        ).to_stdout
-      ensure
-        csv_file.flush
-        csv_file.close
+      csv_file = create_csv do |csv|
+        csv << [ "Alice", 5 ]
+        csv << [ "Bob",   10 ]
       end
+
+      load_job = @table.load csv_file.path
+
+      load_job.wait_until_done!
+
+      expect {
+        list_table_data project_id: @project_id,
+                        dataset_id: "test_dataset",
+                        table_id:   "test_table"
+      }.to output(
+        "name = Alice\nvalue = 5\nname = Bob\nvalue = 10\n"
+      ).to_stdout
     end
 
     example "list table data with pagination"
@@ -172,110 +195,80 @@ RSpec.describe "Google Cloud BigQuery samples" do
   describe "Importing data" do
 
     example "import data from file" do
-      begin
-        dataset = @bigquery.create_dataset "test_dataset"
-
-        table = dataset.create_table "test_table" do |schema|
-          schema.string  "name"
-          schema.integer "value"
-        end
-
-        csv_file = Tempfile.new %w[ bigquery-test csv ]
-
-        CSV.open csv_file.path, "w" do |csv|
-          csv << [ "Alice", 5 ]
-          csv << [ "Bob",   10 ]
-        end
-
-        expect(table.data).to be_empty
-
-        capture do
-          import_table_data_from_file project_id:     @project_id,
-                                      dataset_id:     "test_dataset",
-                                      table_id:       "test_table",
-                                      local_file_path: csv_file.path
-        end
-
-        expect(captured_output).to include(
-          "Importing data from file: #{csv_file.path}\n"
-        )
-        expect(captured_output).to match(
-          /Waiting for load job to complete: job_\w+/
-        )
-        expect(captured_output).to include "Data imported"
-
-        loaded_data = table.data
-
-        expect(loaded_data).not_to be_empty
-        expect(loaded_data.count).to eq 2
-        expect(loaded_data.first["name"]).to eq "Alice"
-        expect(loaded_data.first["value"]).to eq 5
-        expect(loaded_data.last["name"]).to eq "Bob"
-        expect(loaded_data.last["value"]).to eq 10
-      ensure
-        csv_file.flush
-        csv_file.close
+      csv_file = create_csv do |csv|
+        csv << [ "Alice", 5 ]
+        csv << [ "Bob",   10 ]
       end
+
+      expect(@table.data).to be_empty
+
+      capture do
+        import_table_data_from_file project_id:     @project_id,
+                                    dataset_id:     "test_dataset",
+                                    table_id:       "test_table",
+                                    local_file_path: csv_file.path
+      end
+
+      expect(captured_output).to include(
+        "Importing data from file: #{csv_file.path}\n"
+      )
+      expect(captured_output).to match(
+        /Waiting for load job to complete: job_\w+/
+      )
+      expect(captured_output).to include "Data imported"
+
+      loaded_data = @table.data
+
+      expect(loaded_data).not_to be_empty
+      expect(loaded_data.count).to eq 2
+      expect(loaded_data.first["name"]).to eq "Alice"
+      expect(loaded_data.first["value"]).to eq 5
+      expect(loaded_data.last["name"]).to eq "Bob"
+      expect(loaded_data.last["value"]).to eq 10
     end
 
     example "import data from Cloud Storage" do
-      begin
-        dataset = @bigquery.create_dataset "test_dataset"
-
-        table = dataset.create_table "test_table" do |schema|
-          schema.string  "name"
-          schema.integer "value"
-        end
-
-        csv_file = Tempfile.new %w[ bigquery-test csv ]
-
-        CSV.open csv_file.path, "w" do |csv|
-          csv << [ "Alice", 5 ]
-          csv << [ "Bob",   10 ]
-        end
-
-        file = @bucket.create_file csv_file.path, "bigquery-test.csv"
-
-        expect(table.data).to be_empty
-
-        capture do
-          import_table_data_from_cloud_storage(
-            project_id:   @project_id,
-            dataset_id:   "test_dataset",
-            table_id:     "test_table",
-            storage_path: "gs://#{@bucket.name}/bigquery-test.csv"
-          )
-        end
-
-        expect(captured_output).to include(
-          "Importing data from Cloud Storage file: " +
-          "gs://#{@bucket.name}/bigquery-test.csv"
-        )
-        expect(captured_output).to match(
-          /Waiting for load job to complete: job_\w+/
-        )
-        expect(captured_output).to include "Data imported"
-
-        loaded_data = table.data
-
-        expect(loaded_data).not_to be_empty
-        expect(loaded_data.count).to eq 2
-        expect(loaded_data.first["name"]).to eq "Alice"
-        expect(loaded_data.first["value"]).to eq 5
-        expect(loaded_data.last["name"]).to eq "Bob"
-        expect(loaded_data.last["value"]).to eq 10
-      ensure
-        csv_file.flush
-        csv_file.close
+      csv_file = create_csv do |csv|
+        csv << [ "Alice", 5 ]
+        csv << [ "Bob",   10 ]
       end
+
+      file = @bucket.create_file csv_file.path, "bigquery-test.csv"
+
+      expect(@table.data).to be_empty
+
+      capture do
+        import_table_data_from_cloud_storage(
+          project_id:   @project_id,
+          dataset_id:   @dataset.dataset_id,
+          table_id:     @table.table_id,
+          storage_path: "gs://#{@bucket.name}/bigquery-test.csv"
+        )
+      end
+
+      expect(captured_output).to include(
+        "Importing data from Cloud Storage file: " +
+        "gs://#{@bucket.name}/bigquery-test.csv"
+      )
+      expect(captured_output).to match(
+        /Waiting for load job to complete: job_\w+/
+      )
+      expect(captured_output).to include "Data imported"
+
+      loaded_data = @table.data
+
+      expect(loaded_data).not_to be_empty
+      expect(loaded_data.count).to eq 2
+      expect(loaded_data.first["name"]).to eq "Alice"
+      expect(loaded_data.first["value"]).to eq 5
+      expect(loaded_data.last["name"]).to eq "Bob"
+      expect(loaded_data.last["value"]).to eq 10
     end
 
     example "stream data import"
   end
 
   describe "Exporting data" do
-    # Needs a CSV file to import into the table before running
-    # the export command, so refactor CSV code before writing this
     example "export data to Cloud Storage"
   end
 
