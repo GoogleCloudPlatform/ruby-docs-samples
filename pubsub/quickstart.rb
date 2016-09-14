@@ -12,11 +12,28 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-source "https://rubygems.org"
+def run_quickstart
+  # [START pubsub_quickstart]
+  # Imports the Google Cloud client library
+  require "google/cloud"
 
-gem "google-api-client"
-gem "google-cloud-speech"
+  # Your Google Cloud Platform project ID
+  project_id = "YOUR_PROJECT_ID"
 
-group :test do
-  gem "rspec"
+  # Instantiates a client
+  gcloud = Google::Cloud.new project_id
+  pubsub_client = gcloud.pubsub
+
+  # The name for the new topic
+  topic_name = "my-new-topic"
+
+  # Creates the new topic
+  topic = pubsub_client.create_topic topic_name
+
+  puts "Topic #{topic.name} created."
+  # [END pubsub_quickstart]
+end
+
+if __FILE__ == $PROGRAM_NAME
+  run_quickstart
 end

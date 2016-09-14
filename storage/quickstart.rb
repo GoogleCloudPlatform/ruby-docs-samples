@@ -12,11 +12,28 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-source "https://rubygems.org"
+def run_quickstart
+  # [START storage_quickstart]
+  # Imports the Google Cloud client library
+  require "google/cloud"
 
-gem "google-api-client"
-gem "google-cloud-speech"
+  # Your Google Cloud Platform project ID
+  project_id = "YOUR_PROJECT_ID"
 
-group :test do
-  gem "rspec"
+  # Instantiates a client
+  gcloud = Google::Cloud.new project_id
+  storage_client = gcloud.storage
+
+  # The name for the new bucket
+  bucket_name = "my-new-bucket"
+
+  # Creates the new bucket
+  bucket = storage_client.create_bucket bucket_name
+
+  puts "Bucket #{bucket.name} created."
+  # [END storage_quickstart]
+end
+
+if __FILE__ == $PROGRAM_NAME
+  run_quickstart
 end
