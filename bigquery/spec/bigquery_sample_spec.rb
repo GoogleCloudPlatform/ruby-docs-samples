@@ -12,7 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require_relative "../bigquery_samples"
+require_relative "../datasets"
+require_relative "../tables"
 require "rspec"
 require "google/cloud"
 require "csv"
@@ -307,7 +308,7 @@ RSpec.describe "Google Cloud BigQuery samples" do
   describe "Querying" do
     example "run query" do
       capture do
-        run_query_sync(
+        run_query(
           project_id:   @project_id,
           query_string: "SELECT TOP(word, 50) as word, COUNT(*) as count " +
                         "FROM publicdata:samples.shakespeare"
@@ -319,7 +320,7 @@ RSpec.describe "Google Cloud BigQuery samples" do
 
     example "run query as job" do
       capture do
-        run_query_async(
+        run_query_as_job(
           project_id:   @project_id,
           query_string: "SELECT TOP(word, 50) as word, COUNT(*) as count " +
                         "FROM publicdata:samples.shakespeare"

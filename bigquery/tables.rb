@@ -12,54 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-def create_dataset project_id:, dataset_id:
-  # [START create_dataset]
-  # project_id = "Your Google Cloud project ID"
-  # dataset_id = "ID of the dataset to create"
-
-  require "google/cloud"
-
-  gcloud   = Google::Cloud.new project_id
-  bigquery = gcloud.bigquery
-
-  bigquery.create_dataset dataset_id
-
-  puts "Created dataset: #{dataset_id}"
-  # [END create_dataset]
-end
-
-def list_datasets project_id:
-  # [START list_datasets]
-  # project_id = "Your Google Cloud project ID"
-
-  require "google/cloud"
-
-  gcloud   = Google::Cloud.new project_id
-  bigquery = gcloud.bigquery
-
-  bigquery.datasets.each do |dataset|
-    puts dataset.dataset_id
-  end
-  # [END list_datasets]
-end
-
-def delete_dataset project_id:, dataset_id:
-  # [START delete_dataset]
-  # project_id = "Your Google Cloud project ID"
-  # dataset_id = "ID of the dataset to delete"
-
-  require "google/cloud"
-
-  gcloud   = Google::Cloud.new project_id
-  bigquery = gcloud.bigquery
-  dataset  = bigquery.dataset dataset_id
-
-  dataset.delete
-
-  puts "Deleted dataset: #{dataset_id}"
-  # [END delete_dataset]
-end
-
 def create_table project_id:, dataset_id:, table_id:
   # [START create_table]
   # project_id = "Your Google Cloud project ID"
@@ -210,8 +162,8 @@ def export_table_data_to_cloud_storage project_id:, dataset_id:, table_id:,
   # [END export_table_data_to_cloud_storage]
 end
 
-def run_query_sync project_id:, query_string:
-  # [start run_query_sync]
+def run_query project_id:, query_string:
+  # [start run_query]
   # project_id   = "your google cloud project id"
   # query_string = "query string to execute (using bigquery query syntax)"
 
@@ -225,11 +177,11 @@ def run_query_sync project_id:, query_string:
   data.each do |row|
     puts row.inspect
   end
-  # [end run_query_sync]
+  # [end run_query]
 end
 
-def run_query_async project_id:, query_string:
-  # [start run_query_async]
+def run_query_as_job project_id:, query_string:
+  # [start run_query_as_job]
   # project_id   = "your google cloud project id"
   # query_string = "query string to execute (using bigquery query syntax)"
 
@@ -248,18 +200,62 @@ def run_query_async project_id:, query_string:
   query_job.query_results.each do |row|
     puts row.inspect
   end
-  # [end run_query_async]
+  # [end run_query_as_job]
 end
 
-# TODO: separate sample into separate executable files
-#
 if __FILE__ == $PROGRAM_NAME
   project_id = ENV["GOOGLE_CLOUD_PROJECT"]
   command    = ARGV.shift
 
   case command
-  when "< command here >"
+  when "create"
+    create_table project_id: project_id,
+                 dataset_id: ARGV.shift,
+                 table_id:   ARGV.shift
+  when "list"
+    list_tables project_id: project_id, dataset_id: ARGV.shift
+  when "delete"
+    delete_table project_id: project_id,
+                 dataset_id: ARGV.shift,
+                 table_id:   ARGV.shift
+  when "list_data"
+    list_table_data project_id: project_id,
+                    dataset_id: ARGV.shift,
+                    table_id:   ARGV.shift
+
+  when "import_file"
+    import_table_data_from_file project_id:      project_id,
+                                dataset_id:      ARGV.shift,
+                                table_id:        ARGV.shift,
+                                local_file_path: ARGV.shift
+  when "import_gcs"
+    import_table_data_from_cloud_storage project_id:   project_id,
+                                         dataset_id:   ARGV.shift,
+                                         table_id:     ARGV.shift,
+                                         storage_path: ARGV.shift
+  when "export"
+    export_table_data_to_cloud_storage project_id:   project_id,
+                                       dataset_id:   ARGV.shift,
+                                       table_id:     ARGV.shift,
+                                       storage_path: ARGV.shift
+  when "query"
+    run_query project_id: project_id, query_string: ARGV.shift
+  when "query_job"
+    run_query_as_job project_id: project_id, query_string: ARGV.shift
   else
-    puts "Usage: "
+    puts <<-usage
+Usage: ruby tables.rb <command> [arguments]
+
+Commands:
+  create      <dataset_id> <table_id>  Create a new table with the specified ID
+  list        <dataset_id>             List all tables in the specified dataset
+  delete      <dataset_id> <table_id>  Delete table with the specified ID
+  list_data   <dataset_id> <table_id>  List data in table with the specified ID
+  import_file <dataset_id> <table_id> <file_path>
+  import_gcs  <dataset_id> <table_id> <cloud_storage_path>
+  export      <dataset_id> <table_id> <cloud_storage_path>
+  query       <query>
+  query_job   <query>
+    usage
   end
 end
