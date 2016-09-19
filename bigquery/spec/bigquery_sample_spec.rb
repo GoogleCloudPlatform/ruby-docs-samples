@@ -88,10 +88,6 @@ RSpec.describe "Google Cloud BigQuery samples" do
   end
   attr_reader :captured_output
 
-  describe "Managing projects" do
-    example "list projects"
-  end
-
   describe "Managing Datasets" do
     example "create dataset" do
       delete_test_dataset!
