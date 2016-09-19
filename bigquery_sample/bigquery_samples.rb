@@ -117,7 +117,7 @@ end
 def list_table_data project_id:, dataset_id:, table_id:
   # [START list_table_data]
   # project_id = "Your Google Cloud project ID"
-  # dataset_id = "ID of the dataset delete table from"
+  # dataset_id = "ID of the dataset containing table"
   # table_id   = "ID of the table to display data for"
 
   require "google/cloud"
@@ -139,7 +139,7 @@ def import_table_data_from_file project_id:, dataset_id:, table_id:,
                                 local_file_path:
   # [START import_table_data_from_file]
   # project_id      = "Your Google Cloud project ID"
-  # dataset_id      = "ID of the dataset delete table from"
+  # dataset_id      = "ID of the dataset containing table"
   # table_id        = "ID of the table to import file data into"
   # local_file_path = "Path to local file to import into BigQuery table"
 
@@ -162,9 +162,9 @@ end
 
 def import_table_data_from_cloud_storage project_id:, dataset_id:, table_id:,
                                          storage_path:
-  # [START import_table_data_from_file]
+  # [START import_table_data_from_cloud_storage]
   # project_id   = "Your Google Cloud project ID"
-  # dataset_id   = "ID of the dataset delete table from"
+  # dataset_id   = "ID of the dataset containing table"
   # table_id     = "ID of the table to import file data into"
   # storage_path = "Storage path to file to import, eg. gs://bucket/file.csv"
 
@@ -182,7 +182,73 @@ def import_table_data_from_cloud_storage project_id:, dataset_id:, table_id:,
   load_job.wait_until_done!
 
   puts "Data imported"
-  # [END import_table_data_from_file]
+  # [END import_table_data_from_cloud_storage]
+end
+
+def export_table_data_to_cloud_storage project_id:, dataset_id:, table_id:,
+                                       storage_path:
+  # [START export_table_data_to_cloud_storage]
+  # project_id   = "Your Google Cloud project ID"
+  # dataset_id   = "ID of the dataset containing table"
+  # table_id     = "ID of the table to export file data from"
+  # storage_path = "Storage path to export to, eg. gs://bucket/file.csv"
+
+  require "google/cloud"
+
+  gcloud   = Google::Cloud.new project_id
+  bigquery = gcloud.bigquery
+  dataset  = bigquery.dataset dataset_id
+  table    = dataset.table table_id
+
+  puts "Exporting data to Cloud Storage file: #{storage_path}"
+  extract_job = table.extract storage_path
+
+  puts "Waiting for extract job to complete: #{extract_job.job_id}"
+  extract_job.wait_until_done!
+
+  puts "Data exported"
+  # [END export_table_data_to_cloud_storage]
+end
+
+def run_query_sync project_id:, query_string:
+  # [start run_query_sync]
+  # project_id   = "your google cloud project id"
+  # query_string = "query string to execute (using bigquery query syntax)"
+
+  require "google/cloud"
+
+  gcloud   = Google::Cloud.new project_id
+  bigquery = gcloud.bigquery
+
+  data = bigquery.query query_string
+
+  data.each do |row|
+    puts row.inspect
+  end
+  # [end run_query_sync]
+end
+
+def run_query_async project_id:, query_string:
+  # [start run_query_async]
+  # project_id   = "your google cloud project id"
+  # query_string = "query string to execute (using bigquery query syntax)"
+
+  require "google/cloud"
+
+  gcloud   = Google::Cloud.new project_id
+  bigquery = gcloud.bigquery
+
+  puts "Running query"
+  query_job = bigquery.query_job query_string
+
+  puts "Waiting for query to complete"
+  query_job.wait_until_done!
+
+  puts "Query results:"
+  query_job.query_results.each do |row|
+    puts row.inspect
+  end
+  # [end run_query_async]
 end
 
 # TODO: separate sample into separate executable files
