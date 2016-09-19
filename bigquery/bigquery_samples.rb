@@ -1,6 +1,4 @@
-#!/usr/bin/env ruby
-
-# Copyright 2016 Google, Inc.
+# Copyright 2016 Google, Inc
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,180 +12,254 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "gcloud"
+def create_dataset project_id:, dataset_id:
+  # [START create_dataset]
+  # project_id = "Your Google Cloud project ID"
+  # dataset_id = "ID of the dataset to create"
 
-# A short sample demonstrating browsing a BigQuery table
-# This uses Application Default Credentials to authenticate.
-# @see https://cloud.google.com/bigquery/bigquery-api-quickstart
-def browse_table project_id, dataset_id, table_id, max=10
-  # [START browse_table]
-  gcloud = Gcloud.new project_id
+  require "google/cloud"
+
+  gcloud   = Google::Cloud.new project_id
   bigquery = gcloud.bigquery
 
-  dataset = bigquery.dataset dataset_id
-  table = dataset.table table_id
-  row_num = 0
-  page_token = nil
-  loop do
-    data = table.data :token => page_token, :max => max
-    data.each do |row|
-      puts "--- Row #{row_num+=1} ---"
-      for column, value in row
-        puts "#{column}: #{value}"
-      end
-    end
-    break if not data.token
-    puts "[Press enter for next page, any key to exit]"
-    break if $stdin.gets.chomp != ''
-    page_token = data.token
-  end
-  # [END browse_table]
+  bigquery.create_dataset dataset_id
+
+  puts "Created dataset: #{dataset_id}"
+  # [END create_dataset]
 end
 
-# A short sample demonstrating deleting a BigQuery table
-# This uses Application Default Credentials to authenticate.
-# @see https://cloud.google.com/bigquery/bigquery-api-quickstart
-def delete_table project_id, dataset_id, table_id
-  # [START delete_table]
-  gcloud = Gcloud.new project_id
-  bigquery = gcloud.bigquery
-
-  dataset = bigquery.dataset dataset_id
-  table = dataset.table table_id
-  table.delete
-  # [END delete_table]
-  puts "Deleted table #{table_id}"
-end
-
-# A short sample demonstrating importing data into BigQuery
-# This uses Application Default Credentials to authenticate.
-# @see https://cloud.google.com/bigquery/bigquery-api-quickstart
-def import project_id, dataset_id, table_id, source
-  gcloud = Gcloud.new project_id
-  bigquery = gcloud.bigquery
-
-  accepted_formats = [".csv", ".json", ".backup_info"]
-  source_format = File.extname(source)
-  if not accepted_formats.include? source_format
-    raise "source format not accepted, must be csv or json"
-  end
-
-  case source_format
-  when ".csv"
-    format = "CSV"
-  when ".json"
-    format = "NEWLINE_DELIMITED_JSON"
-  when ".backup_info"
-    format = "DATASTORE_BACKUP"
-  end
-
-  # [START import]
-  dataset = bigquery.dataset dataset_id
-  table = dataset.table table_id
-
-  job = table.load source, format: format
-  job.wait_until_done!
-
-  if job.failed?
-    puts job.error
-  else
-    puts "Data imported successfully"
-  end
-  # [END import]
-end
-
-# A short sample demonstrating importing data into BigQuery
-# This uses Application Default Credentials to authenticate.
-# @see https://cloud.google.com/bigquery/bigquery-api-quickstart
-def import_stream project_id, dataset_id, table_id
-  gcloud = Gcloud.new project_id
-  bigquery = gcloud.bigquery
-
-  # [START import_stream]
-  dataset = bigquery.dataset dataset_id
-  table = dataset.table table_id
-
-  row = Hash[table.schema["fields"].map { |f|
-    puts "Provide a value for #{f["name"]}"
-    [f["name"], $stdin.gets.chomp]
-  }]
-
-  job = table.insert [row]
-  puts "Row streamed into table successfully"
-  # [END import_stream]
-end
-
-# A short sample demonstrating listing BigQuery datasets
-# This uses Application Default Credentials to authenticate.
-# @see https://cloud.google.com/bigquery/bigquery-api-quickstart
-def list_datasets project_id
+def list_datasets project_id:
   # [START list_datasets]
-  gcloud = Gcloud.new project_id
+  # project_id = "Your Google Cloud project ID"
+
+  require "google/cloud"
+
+  gcloud   = Google::Cloud.new project_id
   bigquery = gcloud.bigquery
 
   bigquery.datasets.each do |dataset|
-    puts "#{dataset.dataset_id}"
+    puts dataset.dataset_id
   end
   # [END list_datasets]
 end
 
-# A short sample demonstrating listing BigQuery tables
-# This uses Application Default Credentials to authenticate.
-# @see https://cloud.google.com/bigquery/bigquery-api-quickstart
-def list_tables project_id, dataset_id
-  # [START list_tables]
-  gcloud = Gcloud.new project_id
+def delete_dataset project_id:, dataset_id:
+  # [START delete_dataset]
+  # project_id = "Your Google Cloud project ID"
+  # dataset_id = "ID of the dataset to delete"
+
+  require "google/cloud"
+
+  gcloud   = Google::Cloud.new project_id
   bigquery = gcloud.bigquery
-  dataset = bigquery.dataset dataset_id
+  dataset  = bigquery.dataset dataset_id
+
+  dataset.delete
+
+  puts "Deleted dataset: #{dataset_id}"
+  # [END delete_dataset]
+end
+
+def create_table project_id:, dataset_id:, table_id:
+  # [START create_table]
+  # project_id = "Your Google Cloud project ID"
+  # dataset_id = "ID of the dataset to create table in"
+  # table_id   = "ID of the table to create"
+
+  require "google/cloud"
+
+  gcloud   = Google::Cloud.new project_id
+  bigquery = gcloud.bigquery
+  dataset  = bigquery.dataset dataset_id
+
+  dataset.create_table table_id
+
+  puts "Created table: #{table_id}"
+  # [END create_table]
+end
+
+def list_tables project_id:, dataset_id:
+  # [START list_datasets]
+  # project_id = "Your Google Cloud project ID"
+  # dataset_id = "ID of the dataset to create table in"
+
+  require "google/cloud"
+
+  gcloud   = Google::Cloud.new project_id
+  bigquery = gcloud.bigquery
+  dataset  = bigquery.dataset dataset_id
 
   dataset.tables.each do |table|
-    puts "#{table.table_id}"
+    puts table.table_id
   end
   # [END list_tables]
 end
 
-# A short sample demonstrating making a BigQuery request
-# This uses Application Default Credentials to authenticate.
-# @see https://cloud.google.com/bigquery/bigquery-api-quickstart
-def query project_id, sql
-  # [START build_service]
-  gcloud = Gcloud.new project_id
+def delete_table project_id:, dataset_id:, table_id:
+  # [START delete_table]
+  # project_id = "Your Google Cloud project ID"
+  # dataset_id = "ID of the dataset delete table from"
+  # table_id   = "ID of the table to delete"
+
+  require "google/cloud"
+
+  gcloud   = Google::Cloud.new project_id
   bigquery = gcloud.bigquery
-  # [END build_service]
+  dataset  = bigquery.dataset dataset_id
+  table    = dataset.table table_id
 
-  # [START run_query]
-  results = bigquery.query sql
-  # [END run_query]
+  table.delete
 
-  # [START print_results]
-  results.each do |row|
-    puts "---"
-    row.each do |column, value|
-      puts "#{column}: #{value}"
-    end
-  end
-  # [END print_results]
+  puts "Deleted table: #{table_id}"
+  # [END delete_table]
 end
 
-# A short sample demonstrating making a BigQuery request as a job
-# This uses Application Default Credentials to authenticate.
-# @see https://cloud.google.com/bigquery/bigquery-api-quickstart
-def query_as_job project_id, sql
-  gcloud = Gcloud.new project_id
+def list_table_data project_id:, dataset_id:, table_id:
+  # [START list_table_data]
+  # project_id = "Your Google Cloud project ID"
+  # dataset_id = "ID of the dataset containing table"
+  # table_id   = "ID of the table to display data for"
+
+  require "google/cloud"
+
+  gcloud   = Google::Cloud.new project_id
   bigquery = gcloud.bigquery
+  dataset  = bigquery.dataset dataset_id
+  table    = dataset.table table_id
 
-  # [START run_query]
-  job = bigquery.query_job sql
-
-  if job.failed?
-    puts job.error
-  else
-    job.query_results.each do |row|
-      puts "---"
-      row.each do |column, value|
-        puts "#{column}: #{value}"
-      end
+  table.data.each do |row|
+    row.each      do |column_name, value|
+      puts "#{column_name} = #{value}"
     end
   end
-# [END run_query]
+  # [END list_table_data]
+end
+
+def import_table_data_from_file project_id:, dataset_id:, table_id:,
+                                local_file_path:
+  # [START import_table_data_from_file]
+  # project_id      = "Your Google Cloud project ID"
+  # dataset_id      = "ID of the dataset containing table"
+  # table_id        = "ID of the table to import file data into"
+  # local_file_path = "Path to local file to import into BigQuery table"
+
+  require "google/cloud"
+
+  gcloud   = Google::Cloud.new project_id
+  bigquery = gcloud.bigquery
+  dataset  = bigquery.dataset dataset_id
+  table    = dataset.table table_id
+
+  puts "Importing data from file: #{local_file_path}"
+  load_job = table.load local_file_path
+
+  puts "Waiting for load job to complete: #{load_job.job_id}"
+  load_job.wait_until_done!
+
+  puts "Data imported"
+  # [END import_table_data_from_file]
+end
+
+def import_table_data_from_cloud_storage project_id:, dataset_id:, table_id:,
+                                         storage_path:
+  # [START import_table_data_from_cloud_storage]
+  # project_id   = "Your Google Cloud project ID"
+  # dataset_id   = "ID of the dataset containing table"
+  # table_id     = "ID of the table to import file data into"
+  # storage_path = "Storage path to file to import, eg. gs://bucket/file.csv"
+
+  require "google/cloud"
+
+  gcloud   = Google::Cloud.new project_id
+  bigquery = gcloud.bigquery
+  dataset  = bigquery.dataset dataset_id
+  table    = dataset.table table_id
+
+  puts "Importing data from Cloud Storage file: #{storage_path}"
+  load_job = table.load storage_path
+
+  puts "Waiting for load job to complete: #{load_job.job_id}"
+  load_job.wait_until_done!
+
+  puts "Data imported"
+  # [END import_table_data_from_cloud_storage]
+end
+
+def export_table_data_to_cloud_storage project_id:, dataset_id:, table_id:,
+                                       storage_path:
+  # [START export_table_data_to_cloud_storage]
+  # project_id   = "Your Google Cloud project ID"
+  # dataset_id   = "ID of the dataset containing table"
+  # table_id     = "ID of the table to export file data from"
+  # storage_path = "Storage path to export to, eg. gs://bucket/file.csv"
+
+  require "google/cloud"
+
+  gcloud   = Google::Cloud.new project_id
+  bigquery = gcloud.bigquery
+  dataset  = bigquery.dataset dataset_id
+  table    = dataset.table table_id
+
+  puts "Exporting data to Cloud Storage file: #{storage_path}"
+  extract_job = table.extract storage_path
+
+  puts "Waiting for extract job to complete: #{extract_job.job_id}"
+  extract_job.wait_until_done!
+
+  puts "Data exported"
+  # [END export_table_data_to_cloud_storage]
+end
+
+def run_query_sync project_id:, query_string:
+  # [start run_query_sync]
+  # project_id   = "your google cloud project id"
+  # query_string = "query string to execute (using bigquery query syntax)"
+
+  require "google/cloud"
+
+  gcloud   = Google::Cloud.new project_id
+  bigquery = gcloud.bigquery
+
+  data = bigquery.query query_string
+
+  data.each do |row|
+    puts row.inspect
+  end
+  # [end run_query_sync]
+end
+
+def run_query_async project_id:, query_string:
+  # [start run_query_async]
+  # project_id   = "your google cloud project id"
+  # query_string = "query string to execute (using bigquery query syntax)"
+
+  require "google/cloud"
+
+  gcloud   = Google::Cloud.new project_id
+  bigquery = gcloud.bigquery
+
+  puts "Running query"
+  query_job = bigquery.query_job query_string
+
+  puts "Waiting for query to complete"
+  query_job.wait_until_done!
+
+  puts "Query results:"
+  query_job.query_results.each do |row|
+    puts row.inspect
+  end
+  # [end run_query_async]
+end
+
+# TODO: separate sample into separate executable files
+#
+if __FILE__ == $PROGRAM_NAME
+  project_id = ENV["GOOGLE_CLOUD_PROJECT"]
+  command    = ARGV.shift
+
+  case command
+  when "< command here >"
+  else
+    puts "Usage: "
+  end
 end
