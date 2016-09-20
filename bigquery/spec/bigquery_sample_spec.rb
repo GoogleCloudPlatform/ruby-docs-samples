@@ -212,10 +212,8 @@ RSpec.describe "Google Cloud BigQuery samples" do
 
       expect(loaded_data).not_to be_empty
       expect(loaded_data.count).to eq 2
-      expect(loaded_data.first["name"]).to eq "Alice"
-      expect(loaded_data.first["value"]).to eq 5
-      expect(loaded_data.last["name"]).to eq "Bob"
-      expect(loaded_data.last["value"]).to eq 10
+      expect(loaded_data).to include({ "name" => "Alice", "value" => 5  })
+      expect(loaded_data).to include({ "name" => "Bob",   "value" => 10 })
     end
 
     example "import data from Cloud Storage" do
@@ -250,13 +248,34 @@ RSpec.describe "Google Cloud BigQuery samples" do
 
       expect(loaded_data).not_to be_empty
       expect(loaded_data.count).to eq 2
-      expect(loaded_data.first["name"]).to eq "Alice"
-      expect(loaded_data.first["value"]).to eq 5
-      expect(loaded_data.last["name"]).to eq "Bob"
-      expect(loaded_data.last["value"]).to eq 10
+      expect(loaded_data).to include({ "name" => "Alice", "value" => 5  })
+      expect(loaded_data).to include({ "name" => "Bob",   "value" => 10 })
     end
 
-    example "stream data import"
+    example "stream data import" do
+      expect(@table.data).to be_empty
+
+      row_data_to_insert = [
+        { name: "Alice", value: 5  },
+        { name: "Bob",   value: 10 }
+      ]
+
+      expect {
+        import_table_data project_id: @project_id,
+                          dataset_id: @dataset.dataset_id,
+                          table_id:   @table.table_id,
+                          row_data:   row_data_to_insert
+      }.to output(
+
+      ).to_stdout
+
+      loaded_data = @table.data
+
+      expect(loaded_data).not_to be_empty
+      expect(loaded_data.count).to eq 2
+      expect(loaded_data).to include({ "name" => "Alice", "value" => 5  })
+      expect(loaded_data).to include({ "name" => "Bob",   "value" => 10 })
+    end
   end
 
   describe "Exporting data" do

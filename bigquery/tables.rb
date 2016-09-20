@@ -87,6 +87,30 @@ def list_table_data project_id:, dataset_id:, table_id:
   # [END list_table_data]
 end
 
+def import_table_data project_id:, dataset_id:, table_id:, row_data:
+  # [START import_table_data]
+  # project_id = "Your Google Cloud project ID"
+  # dataset_id = "ID of the dataset containing table"
+  # table_id   = "ID of the table to import data into"
+  # row_data   = [{ column1: value, column2: value }, ...]
+
+  require "google/cloud"
+
+  gcloud   = Google::Cloud.new project_id
+  bigquery = gcloud.bigquery
+  dataset  = bigquery.dataset dataset_id
+  table    = dataset.table table_id
+
+  response = table.insert row_data
+
+  if response.success?
+    puts "Inserted rows successfully"
+  else
+    puts "Failed to insert #{response.error_rows.count} rows"
+  end
+  # [END import_table_data]
+end
+
 def import_table_data_from_file project_id:, dataset_id:, table_id:,
                                 local_file_path:
   # [START import_table_data_from_file]
@@ -117,7 +141,7 @@ def import_table_data_from_cloud_storage project_id:, dataset_id:, table_id:,
   # [START import_table_data_from_cloud_storage]
   # project_id   = "Your Google Cloud project ID"
   # dataset_id   = "ID of the dataset containing table"
-  # table_id     = "ID of the table to import file data into"
+  # table_id     = "ID of the table to import data into"
   # storage_path = "Storage path to file to import, eg. gs://bucket/file.csv"
 
   require "google/cloud"
@@ -204,6 +228,8 @@ def run_query_as_job project_id:, query_string:
 end
 
 if __FILE__ == $PROGRAM_NAME
+  require "json"
+
   project_id = ENV["GOOGLE_CLOUD_PROJECT"]
   command    = ARGV.shift
 
@@ -233,6 +259,11 @@ if __FILE__ == $PROGRAM_NAME
                                          dataset_id:   ARGV.shift,
                                          table_id:     ARGV.shift,
                                          storage_path: ARGV.shift
+  when "import_data"
+    import_table_data project_id: project_id,
+                      dataset_id: ARGV.shift,
+                      table_id:   ARGV.shift,
+                      row_data:   JSON.parse(ARGV.shift)
   when "export"
     export_table_data_to_cloud_storage project_id:   project_id,
                                        dataset_id:   ARGV.shift,
@@ -253,6 +284,7 @@ Commands:
   list_data   <dataset_id> <table_id>  List data in table with the specified ID
   import_file <dataset_id> <table_id> <file_path>
   import_gcs  <dataset_id> <table_id> <cloud_storage_path>
+  import_data <dataset_id> <table_id> "[{ <json row data> }]"
   export      <dataset_id> <table_id> <cloud_storage_path>
   query       <query>
   query_job   <query>
