@@ -88,6 +88,12 @@ RSpec.describe "Google Cloud BigQuery samples" do
   end
   attr_reader :captured_output
 
+  example "create BigQuery client" do
+    client = create_bigquery_client project_id: @project_id
+
+    expect(client).to be_a Google::Cloud::Bigquery::Project
+  end
+
   describe "Managing Datasets" do
     example "create dataset" do
       delete_test_dataset!

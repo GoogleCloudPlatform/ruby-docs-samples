@@ -12,6 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+def create_bigquery_client project_id:
+  # [START create_bigquery_client]
+  require "google/cloud"
+
+  gcloud   = Google::Cloud.new project_id
+  bigquery = gcloud.bigquery
+  # [END create_bigquery_client]
+end
+
 def create_dataset project_id:, dataset_id:
   # [START create_dataset]
   # project_id = "Your Google Cloud project ID"
