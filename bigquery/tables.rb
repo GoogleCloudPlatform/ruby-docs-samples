@@ -187,7 +187,8 @@ def export_table_data_to_cloud_storage project_id:, dataset_id:, table_id:,
 end
 
 def run_query project_id:, query_string:
-  # [start run_query]
+# [START run_query]
+  # [START get_query_results]
   # project_id   = "your google cloud project id"
   # query_string = "query string to execute (using bigquery query syntax)"
 
@@ -196,16 +197,19 @@ def run_query project_id:, query_string:
   gcloud   = Google::Cloud.new project_id
   bigquery = gcloud.bigquery
 
-  data = bigquery.query query_string
+  query_results = bigquery.query query_string
+  # [END get_query_results]
 
-  data.each do |row|
+  # [START display_query_results]
+  query_results.each do |row|
     puts row.inspect
   end
-  # [end run_query]
+  # [END display_query_results]
+# [END run_query]
 end
 
 def run_query_as_job project_id:, query_string:
-  # [start run_query_as_job]
+  # [START run_query_as_job]
   # project_id   = "your google cloud project id"
   # query_string = "query string to execute (using bigquery query syntax)"
 
@@ -224,7 +228,7 @@ def run_query_as_job project_id:, query_string:
   query_job.query_results.each do |row|
     puts row.inspect
   end
-  # [end run_query_as_job]
+  # [END run_query_as_job]
 end
 
 if __FILE__ == $PROGRAM_NAME
