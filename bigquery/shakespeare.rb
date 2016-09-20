@@ -14,6 +14,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# NOTE: this file is here for historical reasons for cloud.google.com docs
+# TODO: deprecate documentation using this sample and remove file
+
 module Samples
   # BigQuery Samples module
   module BigQuery
