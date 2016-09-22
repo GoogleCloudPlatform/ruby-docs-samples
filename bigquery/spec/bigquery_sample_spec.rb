@@ -133,7 +133,7 @@ RSpec.describe "Google Cloud BigQuery samples" do
   describe "Managing Tables" do
 
     example "create table" do
-      @table.delete 
+      @table.delete
       expect(@dataset.table "test_table").to be nil
 
       expect {
@@ -272,7 +272,7 @@ RSpec.describe "Google Cloud BigQuery samples" do
                           table_id:   @table.table_id,
                           row_data:   row_data_to_insert
       }.to output(
-
+        "Inserted rows successfully\n"
       ).to_stdout
 
       loaded_data = @table.data
@@ -347,7 +347,7 @@ RSpec.describe "Google Cloud BigQuery samples" do
                         "FROM publicdata:samples.shakespeare"
         )
       end
-      
+
       expect(captured_output).to include "Running query"
       expect(captured_output).to include "Waiting for query to complete"
       expect(captured_output).to include "Query results:"
