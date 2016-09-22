@@ -8,7 +8,6 @@ GEM
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
     addressable (2.4.0)
-    ast (2.3.0)
     autoparse (0.3.3)
       addressable (>= 2.3.1)
       extlib (>= 0.9.15)
@@ -63,13 +62,9 @@ GEM
     multi_json (1.12.1)
     multipart-post (2.0.0)
     os (0.9.6)
-    parser (2.3.1.2)
-      ast (~> 2.2)
-    powerpack (0.1.1)
     rack (1.6.4)
     rack-test (0.6.3)
       rack (>= 1.0)
-    rainbow (2.1.0)
     rake (11.1.2)
     retriable (1.4.1)
     rspec (3.4.0)
@@ -85,13 +80,6 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.4.0)
     rspec-support (3.4.1)
-    rubocop (0.42.0)
-      parser (>= 2.3.1.1, < 3.0)
-      powerpack (~> 0.1)
-      rainbow (>= 1.99.1, < 3.0)
-      ruby-progressbar (~> 1.7)
-      unicode-display_width (~> 1.0, >= 1.0.1)
-    ruby-progressbar (1.8.1)
     signet (0.7.2)
       addressable (~> 2.3)
       faraday (~> 0.9)
@@ -100,7 +88,6 @@ GEM
     thread_safe (0.3.5)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
-    unicode-display_width (1.1.0)
     zonefile (1.04)
 
 PLATFORMS
@@ -111,7 +98,6 @@ DEPENDENCIES
   rack-test
   rake
   rspec
-  rubocop
 
 BUNDLED WITH
    1.12.5

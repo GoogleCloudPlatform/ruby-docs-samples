@@ -18,6 +18,5 @@ gem "google-api-client"
 
 group :test do
   gem "rake"
-  gem "rubocop"
   gem "rspec"
 end
