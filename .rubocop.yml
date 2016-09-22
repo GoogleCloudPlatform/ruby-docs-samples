@@ -85,6 +85,14 @@ Style/CommentIndentation:
 Style/MethodLength:
   Enabled: false
 
+# Allow spaces inside %w[ String Arrays like this ]
+Style/SpaceInsidePercentLiteralDelimiters:
+  Enabled: false
+
+# Allos spaces inside arrays, eg. [ "this", "for", "clarity", "sometimes"` ]
+Style/SpaceInsideBrackets:
+  Enabled: false
+
 Style/NumericLiterals:
   Enabled: false
 Style/SpaceAroundOperators:
