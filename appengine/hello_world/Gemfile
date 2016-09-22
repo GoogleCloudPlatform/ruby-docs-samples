@@ -20,6 +20,5 @@ gem "sinatra"
 
 group :test do
   gem "rake"
-  gem "rubocop"
   gem "rspec"
 end

@@ -21,7 +21,6 @@ gem "twilio-ruby"
 
 group :test do
   gem "rake"
-  gem "rubocop"
   gem "rspec"
   gem "rest-client"
 end
