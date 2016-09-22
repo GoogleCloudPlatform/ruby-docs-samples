@@ -78,15 +78,15 @@ RSpec.describe "Google Cloud Natural Language API samples" do
   example "entries from text" do
     output = capture {
       entries_from_text project_id:   @project_id,
-                        text_content: "_why authored a poignant guide to Ruby"
+                        text_content: "Alice wrote a book. Bob likes the book."
     }
 
-    expect(output).to include "_why PERSON"
-    expect(output).to include "Ruby OTHER"
+    expect(output).to include "Alice PERSON"
+    expect(output).to include "Bob PERSON"
   end
 
   example "entries from a file stored in Google Cloud Storage" do
-    upload "entries.txt", "_why authored a poignant guide to Ruby"
+    upload "entries.txt", "Alice wrote a book. Bob likes the book."
 
     output = capture {
       entries_from_cloud_storage_file(
@@ -95,8 +95,8 @@ RSpec.describe "Google Cloud Natural Language API samples" do
       )
     }
 
-    expect(output).to include "_why PERSON"
-    expect(output).to include "Ruby OTHER"
+    expect(output).to include "Alice PERSON"
+    expect(output).to include "Bob PERSON"
   end
 
   example "syntax from text" do
