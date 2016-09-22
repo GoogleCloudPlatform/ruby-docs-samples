@@ -17,7 +17,6 @@ source "https://rubygems.org"
 gem "google-cloud-language"
 
 group :test do
-  gem "rake"
   gem "rspec"
   gem "google-cloud-storage"
 end

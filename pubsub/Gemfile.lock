@@ -54,7 +54,6 @@ GEM
       rack
     rack-test (0.6.3)
       rack (>= 1.0)
-    rake (10.5.0)
     representable (2.3.0)
       uber (~> 0.0.7)
     retriable (2.1.0)
@@ -91,7 +90,6 @@ PLATFORMS
 DEPENDENCIES
   gcloud
   rack-test
-  rake
   rspec
   sinatra
 

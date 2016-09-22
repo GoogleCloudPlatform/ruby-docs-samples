@@ -17,7 +17,6 @@ source "https://rubygems.org"
 gem "gcloud"
 
 group :test do
-  gem "rake"
   gem "rspec"
   gem "rack-test"
 end

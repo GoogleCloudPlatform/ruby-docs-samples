@@ -43,7 +43,6 @@ GEM
     rack (1.6.4)
     rack-test (0.6.3)
       rack (>= 1.0)
-    rake (11.1.2)
     representable (2.3.0)
       uber (~> 0.0.7)
     retriable (2.1.0)
@@ -74,7 +73,6 @@ PLATFORMS
 DEPENDENCIES
   google-cloud-vision
   rack-test
-  rake
   rmagick
   rspec
 

@@ -36,5 +36,5 @@ your repo.
 ```
 gcloud auth activate-service-account --key-file ../../client_secrets.json
 export TEST_DIR=appengine/datastore/
-bundle exec rake spec
+bundle exec rspec
 ```

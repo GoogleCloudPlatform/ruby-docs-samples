@@ -59,7 +59,6 @@ GEM
     multi_json (1.12.1)
     multipart-post (2.0.0)
     os (0.9.6)
-    rake (11.1.2)
     representable (2.3.0)
       uber (~> 0.0.7)
     retriable (2.1.0)
@@ -91,7 +90,6 @@ PLATFORMS
 DEPENDENCIES
   google-cloud-language
   google-cloud-storage
-  rake
   rspec
 
 BUNDLED WITH

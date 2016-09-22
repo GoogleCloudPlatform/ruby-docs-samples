@@ -26,6 +26,6 @@ For more information, see
 ### Running the tests
 
 ```bash
-$ bundle exec rake spec
+$ bundle exec rspec
 ```
 
