@@ -21,6 +21,5 @@ gem "gcloud"
 
 group :test do
   gem "rake"
-  gem "rubocop"
   gem "rspec"
 end

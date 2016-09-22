@@ -19,7 +19,6 @@ gem "gcloud", "~> 0.12.2"
 
 group :test do
   gem "rake"
-  gem "rubocop"
   gem "rspec"
   gem "rack-test"
 end
