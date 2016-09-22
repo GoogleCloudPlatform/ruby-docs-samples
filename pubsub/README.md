@@ -6,7 +6,7 @@ Platform project ID.
 Test:
 
 ```bash
-$ bundle exec rake spec
+$ bundle exec rspec
 ```
 
 Deploy the push listener:

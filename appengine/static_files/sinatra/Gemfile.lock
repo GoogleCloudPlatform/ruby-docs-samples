@@ -28,7 +28,6 @@ GEM
       rack
     rack-test (0.6.3)
       rack (>= 1.0)
-    rake (11.1.2)
     rspec (3.4.0)
       rspec-core (~> 3.4.0)
       rspec-expectations (~> 3.4.0)
@@ -63,7 +62,6 @@ PLATFORMS
 DEPENDENCIES
   capybara
   poltergeist
-  rake
   rspec
   sinatra
   slim

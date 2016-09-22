@@ -84,7 +84,6 @@ GEM
       rack
     rack-test (0.6.3)
       rack (>= 1.0)
-    rake (10.5.0)
     retriable (1.4.1)
     rspec (3.4.0)
       rspec-core (~> 3.4.0)
@@ -126,7 +125,6 @@ DEPENDENCIES
   capybara
   gcloud
   poltergeist
-  rake
   rspec
   sinatra
 

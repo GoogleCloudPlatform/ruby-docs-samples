@@ -23,7 +23,7 @@ scaffolding for other frameworks and use cases.
 1. Run the tests from the command line.
    ```
    bundle install
-   bundle exec rake spec
+   bundle exec rspec
    ```
 
 ## Contributing changes

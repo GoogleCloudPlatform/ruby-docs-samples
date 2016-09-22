@@ -66,7 +66,6 @@ GEM
     rack (1.6.4)
     rack-protection (1.5.3)
       rack
-    rake (10.5.0)
     retriable (1.4.1)
     rspec (3.4.0)
       rspec-core (~> 3.4.0)
@@ -101,7 +100,6 @@ PLATFORMS
 
 DEPENDENCIES
   gcloud
-  rake
   rspec
   sinatra
 

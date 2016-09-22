@@ -20,7 +20,6 @@ gem "sendgrid-ruby"
 # [END dependencies]
 
 group :test do
-  gem "rake"
   gem "rspec"
   gem "capybara"
   gem "poltergeist"

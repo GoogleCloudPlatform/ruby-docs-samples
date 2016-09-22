@@ -19,6 +19,5 @@ gem "sinatra"
 # [END dependencies]
 
 group :test do
-  gem "rake"
   gem "rspec"
 end
