@@ -16,9 +16,9 @@ require "sinatra"
 require "slim"
 require "json"
 require "base64"
-require "gcloud"
+require "google/cloud"
 
-gcloud = Gcloud.new
+gcloud = Google::Cloud.new
 pubsub = gcloud.pubsub
 
 # [START envvars]
