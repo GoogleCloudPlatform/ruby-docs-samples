@@ -88,6 +88,15 @@ RSpec.describe "Google Cloud BigQuery samples" do
   end
   attr_reader :captured_output
 
+  # Simple wait method. Test for condition 5 times, delaying 1 second each time
+  def wait_until times: 5, delay: 1, &condition
+    times.times do
+      return if condition.call
+      sleep delay
+    end
+    raise "Condition not met.  Waited #{times} times with #{delay} sec delay"
+  end
+
   example "create BigQuery client" do
     client = create_bigquery_client project_id: @project_id
 
@@ -275,7 +284,12 @@ RSpec.describe "Google Cloud BigQuery samples" do
         "Inserted rows successfully\n"
       ).to_stdout
 
-      loaded_data = @table.data
+      loaded_data = nil
+
+      wait_until do
+        loaded_data = @table.data
+        loaded_data.any?
+      end
 
       expect(loaded_data).not_to be_empty
       expect(loaded_data.count).to eq 2
