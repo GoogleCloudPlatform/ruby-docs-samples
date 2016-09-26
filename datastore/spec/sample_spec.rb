@@ -19,7 +19,7 @@ describe "Datastore sample" do
   attr_reader :datastore
 
   before :all do
-    @gcloud = Gcloud.new
+    @gcloud = Google::Cloud.new
     @datastore = @gcloud.datastore
 
     task_list = datastore.entity "TaskList", "default"
@@ -34,7 +34,7 @@ describe "Datastore sample" do
   end
 
   before :each do
-    allow(Gcloud).to receive(:new).and_return(@gcloud)
+    allow(Google::Cloud).to receive(:new).and_return(@gcloud)
   end
 
   after :all do
@@ -350,7 +350,7 @@ describe "Datastore sample" do
   it "throws when inequality_invalid" do
     query = inequality_invalid
 
-    expect { datastore.run(query) }.to raise_error(Gcloud::InvalidArgumentError)
+    expect { datastore.run(query) }.to raise_error(Google::Cloud::InvalidArgumentError)
   end
 
   it "supports equal_and_inequality_range" do
@@ -375,13 +375,13 @@ describe "Datastore sample" do
   it "supports inequality_sort_invalid_not_same" do
     query = inequality_sort_invalid_not_same
 
-    expect { datastore.run(query) }.to raise_error(Gcloud::InvalidArgumentError)
+    expect { datastore.run(query) }.to raise_error(Google::Cloud::InvalidArgumentError)
   end
 
   it "supports inequality_sort_invalid_not_first" do
     query = inequality_sort_invalid_not_first
 
-    expect { datastore.run(query) }.to raise_error(Gcloud::InvalidArgumentError)
+    expect { datastore.run(query) }.to raise_error(Google::Cloud::InvalidArgumentError)
   end
 
   it "supports limit" do

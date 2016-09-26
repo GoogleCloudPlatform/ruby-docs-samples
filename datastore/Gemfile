@@ -15,7 +15,7 @@
 source "https://rubygems.org"
 
 gem "sinatra"
-gem "gcloud", "~> 0.12.2"
+gem "google-cloud-datastore"
 
 group :test do
   gem "rspec"

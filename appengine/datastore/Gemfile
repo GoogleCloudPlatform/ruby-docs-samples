@@ -16,7 +16,7 @@
 source "https://rubygems.org"
 
 gem "sinatra"
-gem "gcloud"
+gem "google-cloud-datastore"
 # [END dependencies]
 
 group :test do

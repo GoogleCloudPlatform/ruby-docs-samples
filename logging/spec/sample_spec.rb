@@ -14,7 +14,7 @@
 
 require_relative "../sample"
 require "rspec"
-require "gcloud"
+require "google/cloud"
 
 describe "Logging sample" do
 
@@ -48,7 +48,7 @@ describe "Logging sample" do
   #
   before :all do
     @project_id = ENV["GCLOUD_PROJECT"]
-    @gcloud     = Gcloud.new @project_id
+    @gcloud     = Google::Cloud.new @project_id
     @logging    = @gcloud.logging
     @storage    = @gcloud.storage
     @bucket     = @storage.bucket ENV["BUCKET"]
@@ -62,11 +62,11 @@ describe "Logging sample" do
   # Sample code uses project ID "my-gcp-project-id" and bucket
   # names "my-logs-bucket" and "new-destination-bucket"
   #
-  # Stub calls to Gcloud library to use our test project and storage buckets
+  # Stub calls to Google::Cloud library to use our test project and storage buckets
   before :each do
     cleanup!
-    allow(Gcloud).to receive(:new).and_call_original
-    allow(Gcloud).to receive(:new).with("my-gcp-project-id").and_return(@gcloud)
+    allow(Google::Cloud).to receive(:new).and_call_original
+    allow(Google::Cloud).to receive(:new).with("my-gcp-project-id").and_return(@gcloud)
     allow(@gcloud).to receive(:logging).and_return(@logging)
     allow(@gcloud).to receive(:storage).and_return(@storage)
     allow(@storage).to receive(:create_bucket).and_return(@bucket)
@@ -83,7 +83,7 @@ describe "Logging sample" do
   end
 
   it "can create logging client" do
-    expect(create_logging_client).to be_a Gcloud::Logging::Project
+    expect(create_logging_client).to be_a Google::Cloud::Logging::Project
     expect(create_logging_client.project).to eq @project_id
   end
 

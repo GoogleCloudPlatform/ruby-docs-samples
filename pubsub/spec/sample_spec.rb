@@ -23,7 +23,7 @@ describe "Pub/Sub sample" do
     ".iam.gserviceaccount.com"
 
   before :all do
-    @gcloud = Gcloud.new ENV["GOOGLE_PROJECT_ID"]
+    @gcloud = Google::Cloud.new ENV["GOOGLE_PROJECT_ID"]
     @pubsub = @gcloud.pubsub
   end
 
@@ -47,7 +47,7 @@ describe "Pub/Sub sample" do
 
   before :each do
     cleanup!
-    allow(Gcloud).to receive(:new).with("my-gcp-project-id").and_return(@gcloud)
+    allow(Google::Cloud).to receive(:new).with("my-gcp-project-id").and_return(@gcloud)
   end
 
   it "creates topic" do
@@ -82,7 +82,7 @@ describe "Pub/Sub sample" do
 
     @pubsub.create_topic TOPIC_NAME
 
-    expect_any_instance_of(Gcloud::Pubsub::Topic).to \
+    expect_any_instance_of(Google::Cloud::Pubsub::Topic).to \
       receive(:subscribe).with(
         subscription_name,
         endpoint: "https://my-gcp-project-id.appspot.com/push"
@@ -163,7 +163,7 @@ describe "Pub/Sub sample" do
   it "sets topic policy" do
     @pubsub.create_topic TOPIC_NAME
 
-    expect_any_instance_of(Gcloud::Pubsub::Policy).to \
+    expect_any_instance_of(Google::Cloud::Pubsub::Policy).to \
       receive(:add).with(
         "roles/pubsub.publisher",
         "serviceAccount:account-name@other-project.iam.gserviceaccount.com"
@@ -184,7 +184,7 @@ describe "Pub/Sub sample" do
       autocreate: true
     )
 
-    expect_any_instance_of(Gcloud::Pubsub::Policy).to \
+    expect_any_instance_of(Google::Cloud::Pubsub::Policy).to \
       receive(:add).with(
         "roles/pubsub.subscriber",
         "serviceAccount:account-name@other-project.iam.gserviceaccount.com"

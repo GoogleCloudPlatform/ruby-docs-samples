@@ -14,9 +14,9 @@
 
 # [START all]
 require "sinatra"
-require "gcloud"
+require "google/cloud"
 
-gcloud  = Gcloud.new
+gcloud  = Google::Cloud.new
 storage = gcloud.storage
 bucket  = storage.bucket ENV["GCLOUD_STORAGE_BUCKET"]
 

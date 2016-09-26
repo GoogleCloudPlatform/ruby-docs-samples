@@ -15,13 +15,13 @@
 require File.expand_path("../../../../spec/e2e", __FILE__)
 require "rspec"
 require "net/http"
-require "gcloud"
+require "google/cloud"
 
 RSpec.describe "PubSub E2E test" do
   before :all do
     @topic_name = "flexible-topic"
 
-    gcloud = Gcloud.new
+    gcloud  = Google::Cloud.new
     @pubsub = gcloud.pubsub
     topic = @pubsub.topic @topic_name
     @pubsub.create_topic @topic_name unless topic

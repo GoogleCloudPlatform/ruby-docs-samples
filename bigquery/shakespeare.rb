@@ -27,9 +27,9 @@ module Samples
     class Shakespeare
       def unique_words project_id
         # [START build_service]
-        require "gcloud"
+        require "google/cloud"
 
-        gcloud = Gcloud.new project_id
+        gcloud   = Google::Cloud.new project_id
         bigquery = gcloud.bigquery
         # [END build_service]
 
