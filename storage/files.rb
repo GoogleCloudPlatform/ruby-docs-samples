@@ -164,9 +164,6 @@ def make_file_public project_id:, bucket_name:, file_name:
   # [END make_file_public]
 end
 
-# TODO
-# def generate_signed_url
-
 def rename_file project_id:, bucket_name:, file_name:, new_name:
   # [START rename_file]
   # project_id  = "Your Google Cloud project ID"
@@ -220,8 +217,6 @@ def run_sample arguments
   when "list"
     list_bucket_contents project_id:  ENV["GCLOUD_PROJECT"],
                          bucket_name: arguments.shift
-  when "list_prefix"
-    raise NotImplementedError, "list_prefix"
   when "upload"
     upload_file project_id:      ENV["GCLOUD_PROJECT"],
                   bucket_name:     arguments.shift,
@@ -243,8 +238,6 @@ def run_sample arguments
     make_file_public project_id:  ENV["GCLOUD_PROJECT"],
                        bucket_name: arguments.shift,
                        file_name:   arguments.shift
-  when "signed_url"
-    raise NotImplementedError, "signed_url"
   when "rename"
     rename_file project_id:  ENV["GCLOUD_PROJECT"],
                   bucket_name: arguments.shift,
@@ -262,13 +255,11 @@ Usage: bundle exec ruby files.rb [command] [arguments]
 
 Commands:
   list        <bucket>                List all files in the bucket
-  list_prefix <bucket> <prefix>       List all files with prefix in bucket
   upload      <bucket> <file>         Upload local file to a bucket
   download    <bucket> <file> <path>  Download a file from a bucket
   delete      <bucket> <file>         Delete a file from a bucket
   metadata    <bucket> <file>         Display metadata for a file in a bucket
   make_public <bucket> <file>         Make a file in a bucket public
-  signed_url  <bucket> <file>         Generate a signed URL to access a file
   rename      <bucket> <file> <new>   Rename a file in a bucket
   copy <srcBucket> <srcFile> <destBucket> <destFile>  Copy file to other bucket
 
