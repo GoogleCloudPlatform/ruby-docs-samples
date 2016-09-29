@@ -30,6 +30,18 @@ def create_topic
   # [END create_topic]
 end
 
+def delete_topic
+  # [START delete_topic]
+  gcloud = Google::Cloud.new "my-gcp-project-id"
+  pubsub = gcloud.pubsub
+  topic  = pubsub.topic "my-topic"
+
+  topic.delete
+
+  puts "Deleted topic my-topic"
+  # [END delete_topic]
+end
+
 def create_subscription
   # [START create_subscription]
   gcloud = Google::Cloud.new "my-gcp-project-id"
@@ -40,6 +52,19 @@ def create_subscription
 
   puts "Subscription created #{subscription.name}"
   # [END create_subscription]
+end
+
+def delete_subscription
+  # [START delete_subscription]
+  gcloud       = Google::Cloud.new "my-gcp-project-id"
+  pubsub       = gcloud.pubsub
+  topic        = pubsub.topic "my-topic"
+  subscription = topic.subscription "my-subscription"
+
+  subscription.delete
+
+  puts "Deleted subscription my-subscription"
+  # [END delete_subscription]
 end
 
 def create_push_subscription
