@@ -20,7 +20,7 @@ def initialize_speech_client
   # [START initialize_speech_client]
   require "google/apis/speech_v1beta1"
 
-  speech_service = Google::Apis::SpeechV1beta1::CloudSpeechAPIService.new
+  speech_service = Google::Apis::SpeechV1beta1::SpeechService.new
 
   speech_service.authorization = Google::Auth.get_application_default(
     %[ https://www.googleapis.com/auth/cloud-platform ]
