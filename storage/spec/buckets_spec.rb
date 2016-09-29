@@ -26,7 +26,8 @@ RSpec.describe "Google Cloud Storage buckets sample" do
   end
 
   before do
-    @storage.create_bucket @bucket_name unless @storage.bucket @bucket_name
+    delete_bucket!
+    @storage.create_bucket @bucket_name
   end
 
   after :all do
