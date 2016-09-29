@@ -22,8 +22,6 @@ gem "sinatra"
 gem "sequel"
 
 group :test do
-  gem "rake"
-  gem "rubocop"
   gem "rspec"
   gem "capybara"
   gem "poltergeist"

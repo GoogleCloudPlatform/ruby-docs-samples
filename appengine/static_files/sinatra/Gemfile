@@ -17,9 +17,7 @@ gem "sinatra"
 gem "slim"
 
 group :test do
-  gem "rake"
   gem "rspec"
   gem "capybara"
   gem "poltergeist"
-  gem "rubocop"
 end

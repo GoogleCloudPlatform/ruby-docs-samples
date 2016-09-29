@@ -20,8 +20,6 @@ gem "twilio-ruby"
 # [END dependencies]
 
 group :test do
-  gem "rake"
-  gem "rubocop"
   gem "rspec"
   gem "rest-client"
 end

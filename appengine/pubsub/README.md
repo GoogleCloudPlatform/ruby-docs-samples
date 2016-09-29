@@ -67,5 +67,5 @@ your repo.
 gcloud auth activate-service-account --key-file ../../client_secrets.json
 export GCLOUD_PROJECT=<your-project-id>
 export TEST_DIR=appengine/pubsub/
-bundle exec rake spec
+bundle exec rspec
 ```

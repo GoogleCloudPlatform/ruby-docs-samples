@@ -20,8 +20,6 @@ gem "memcache-client"
 # [END dependencies]
 
 group :test do
-  gem "rake"
-  gem "rubocop"
   gem "rspec"
   gem "capybara"
   gem "poltergeist"

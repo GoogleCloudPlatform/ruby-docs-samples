@@ -15,9 +15,9 @@
 #[START all]
 require "digest/sha2"
 require "sinatra"
-require "gcloud"
+require "google/cloud"
 
-gcloud  = Gcloud.new
+gcloud  = Google::Cloud.new
 dataset = gcloud.datastore
 
 get "/" do

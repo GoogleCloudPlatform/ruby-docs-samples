@@ -12,10 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "gcloud"
+require "google/cloud"
 
 def incomplete_key
-  gcloud = Gcloud.new
+  gcloud = Google::Cloud.new
   datastore = gcloud.datastore
 
   # [START incomplete_key]
@@ -24,7 +24,7 @@ def incomplete_key
 end
 
 def named_key
-  gcloud = Gcloud.new
+  gcloud = Google::Cloud.new
   datastore = gcloud.datastore
 
   # [START named_key]
@@ -33,7 +33,7 @@ def named_key
 end
 
 def key_with_parent
-  gcloud = Gcloud.new
+  gcloud = Google::Cloud.new
   datastore = gcloud.datastore
 
   # [START key_with_parent]
@@ -44,7 +44,7 @@ def key_with_parent
 end
 
 def key_with_multilevel_parent
-  gcloud = Gcloud.new
+  gcloud = Google::Cloud.new
   datastore = gcloud.datastore
 
   # [START key_with_multilevel_parent]
@@ -59,7 +59,7 @@ def key_with_multilevel_parent
 end
 
 def entity_with_parent
-  gcloud = Gcloud.new
+  gcloud = Google::Cloud.new
   datastore = gcloud.datastore
 
   # [START entity_with_parent]
@@ -77,7 +77,7 @@ def entity_with_parent
 end
 
 def properties
-  gcloud = Gcloud.new
+  gcloud = Google::Cloud.new
   datastore = gcloud.datastore
 
   # [START properties]
@@ -96,7 +96,7 @@ def properties
 end
 
 def array_value
-  gcloud = Gcloud.new
+  gcloud = Google::Cloud.new
   datastore = gcloud.datastore
 
   # [START array_value]
@@ -108,7 +108,7 @@ def array_value
 end
 
 def basic_entity
-  gcloud = Gcloud.new
+  gcloud = Google::Cloud.new
   datastore = gcloud.datastore
 
   # [START basic_entity]
@@ -124,7 +124,7 @@ def basic_entity
 end
 
 def upsert
-  gcloud = Gcloud.new
+  gcloud = Google::Cloud.new
   datastore = gcloud.datastore
 
   # [START upsert]
@@ -141,24 +141,27 @@ def upsert
 end
 
 def insert
-  gcloud = Gcloud.new
+  task = nil
+  gcloud = Google::Cloud.new
   datastore = gcloud.datastore
 
   # [START insert]
-  task = datastore.entity "Task" do |t|
-    t["category"] = "Personal"
-    t["done"] = false
-    t["priority"] = 4
-    t["description"] = "Learn Cloud Datastore"
+  datastore.transaction do |tx|
+    task = datastore.entity "Task" do |t|
+      t["category"] = "Personal"
+      t["done"] = false
+      t["priority"] = 4
+      t["description"] = "Learn Cloud Datastore"
+    end
+    datastore.save task
   end
-  datastore.save task
   # [END insert]
 
   task
 end
 
 def lookup
-  gcloud = Gcloud.new
+  gcloud = Google::Cloud.new
   datastore = gcloud.datastore
 
   # [START lookup]
@@ -170,7 +173,7 @@ def lookup
 end
 
 def update
-  gcloud = Gcloud.new
+  gcloud = Google::Cloud.new
   datastore = gcloud.datastore
 
   task = datastore.entity "Task", "sampleTask" do |t|
@@ -182,16 +185,18 @@ def update
   datastore.save task
 
   # [START update]
-  task = datastore.find "Task", "sampleTask"
-  task["priority"] = 5
-  datastore.save task
+  datastore.transaction do |tx|
+    task = datastore.find "Task", "sampleTask"
+    task["priority"] = 5
+    datastore.save task
+  end
   # [END update]
 
   task
 end
 
 def delete
-  gcloud = Gcloud.new
+  gcloud = Google::Cloud.new
   datastore = gcloud.datastore
 
   # [START delete]
@@ -203,7 +208,7 @@ def delete
 end
 
 def batch_upsert
-  gcloud = Gcloud.new
+  gcloud = Google::Cloud.new
   datastore = gcloud.datastore
 
   # [START batch_upsert]
@@ -230,7 +235,7 @@ def batch_upsert
 end
 
 def batch_lookup
-  gcloud = Gcloud.new
+  gcloud = Google::Cloud.new
   datastore = gcloud.datastore
 
   # [START batch_lookup]
@@ -241,7 +246,7 @@ def batch_lookup
 end
 
 def batch_delete
-  gcloud = Gcloud.new
+  gcloud = Google::Cloud.new
   datastore = gcloud.datastore
 
   # [START batch_delete]
@@ -254,7 +259,7 @@ def batch_delete
 end
 
 def basic_query
-  gcloud = Gcloud.new
+  gcloud = Google::Cloud.new
   datastore = gcloud.datastore
 
   # [START basic_query]
@@ -270,7 +275,7 @@ def basic_query
 end
 
 def property_filter
-  gcloud = Gcloud.new
+  gcloud = Google::Cloud.new
   datastore = gcloud.datastore
 
   # [START property_filter]
@@ -280,7 +285,7 @@ def property_filter
 end
 
 def composite_filter
-  gcloud = Gcloud.new
+  gcloud = Google::Cloud.new
   datastore = gcloud.datastore
 
   # [START composite_filter]
@@ -291,7 +296,7 @@ def composite_filter
 end
 
 def key_filter
-  gcloud = Gcloud.new
+  gcloud = Google::Cloud.new
   datastore = gcloud.datastore
 
   # [START key_filter]
@@ -301,7 +306,7 @@ def key_filter
 end
 
 def ascending_sort
-  gcloud = Gcloud.new
+  gcloud = Google::Cloud.new
   datastore = gcloud.datastore
 
   # [START ascending_sort]
@@ -311,7 +316,7 @@ def ascending_sort
 end
 
 def descending_sort
-  gcloud = Gcloud.new
+  gcloud = Google::Cloud.new
   datastore = gcloud.datastore
 
   # [START descending_sort]
@@ -321,7 +326,7 @@ def descending_sort
 end
 
 def multi_sort
-  gcloud = Gcloud.new
+  gcloud = Google::Cloud.new
   datastore = gcloud.datastore
 
   # [START multi_sort]
@@ -332,12 +337,12 @@ def multi_sort
 end
 
 def kindless_query
-  gcloud = Gcloud.new
+  gcloud = Google::Cloud.new
   datastore = gcloud.datastore
 
   last_seen_key = datastore.key "Task", "a"
   # [START kindless_query]
-  query = Gcloud::Datastore::Query.new
+  query = Google::Cloud::Datastore::Query.new
   query.where("__key__", ">", last_seen_key)
   # [END kindless_query]
 
@@ -345,7 +350,7 @@ def kindless_query
 end
 
 def ancestor_query
-  gcloud = Gcloud.new
+  gcloud = Google::Cloud.new
   datastore = gcloud.datastore
 
   # [START ancestor_query]
@@ -357,7 +362,7 @@ def ancestor_query
 end
 
 def projection_query
-  gcloud = Gcloud.new
+  gcloud = Google::Cloud.new
   datastore = gcloud.datastore
 
   # [START projection_query]
@@ -378,7 +383,7 @@ def projection_query
 end
 
 def keys_only_query
-  gcloud = Gcloud.new
+  gcloud = Google::Cloud.new
   datastore = gcloud.datastore
 
   # [START keys_only_query]
@@ -392,7 +397,7 @@ def keys_only_query
 end
 
 def distinct_query
-  gcloud = Gcloud.new
+  gcloud = Google::Cloud.new
   datastore = gcloud.datastore
 
   # [START distinct_query]
@@ -405,7 +410,7 @@ def distinct_query
 end
 
 def distinct_on_query
-  gcloud = Gcloud.new
+  gcloud = Google::Cloud.new
   datastore = gcloud.datastore
 
   # [START distinct_on_query]
@@ -418,7 +423,7 @@ def distinct_on_query
 end
 
 def array_value_inequality_range
-  gcloud = Gcloud.new
+  gcloud = Google::Cloud.new
   datastore = gcloud.datastore
 
   # [START array_value_inequality_range]
@@ -429,7 +434,7 @@ def array_value_inequality_range
 end
 
 def array_value_equality
-  gcloud = Gcloud.new
+  gcloud = Google::Cloud.new
   datastore = gcloud.datastore
 
   # [START array_value_equality]
@@ -440,7 +445,7 @@ def array_value_equality
 end
 
 def inequality_range
-  gcloud = Gcloud.new
+  gcloud = Google::Cloud.new
   datastore = gcloud.datastore
 
   # [START inequality_range]
@@ -451,7 +456,7 @@ def inequality_range
 end
 
 def inequality_invalid
-  gcloud = Gcloud.new
+  gcloud = Google::Cloud.new
   datastore = gcloud.datastore
 
   # [START inequality_invalid]
@@ -462,7 +467,7 @@ def inequality_invalid
 end
 
 def equal_and_inequality_range
-  gcloud = Gcloud.new
+  gcloud = Google::Cloud.new
   datastore = gcloud.datastore
 
   # [START equal_and_inequality_range]
@@ -475,7 +480,7 @@ def equal_and_inequality_range
 end
 
 def inequality_sort
-  gcloud = Gcloud.new
+  gcloud = Google::Cloud.new
   datastore = gcloud.datastore
 
   # [START inequality_sort]
@@ -487,7 +492,7 @@ def inequality_sort
 end
 
 def inequality_sort_invalid_not_same
-  gcloud = Gcloud.new
+  gcloud = Google::Cloud.new
   datastore = gcloud.datastore
 
   # [START inequality_sort_invalid_not_same]
@@ -498,7 +503,7 @@ def inequality_sort_invalid_not_same
 end
 
 def inequality_sort_invalid_not_first
-  gcloud = Gcloud.new
+  gcloud = Google::Cloud.new
   datastore = gcloud.datastore
 
   # [START inequality_sort_invalid_not_first]
@@ -510,7 +515,7 @@ def inequality_sort_invalid_not_first
 end
 
 def limit
-  gcloud = Gcloud.new
+  gcloud = Google::Cloud.new
   datastore = gcloud.datastore
 
   # [START limit]
@@ -520,7 +525,7 @@ def limit
 end
 
 def cursor_paging
-  gcloud = Gcloud.new
+  gcloud = Google::Cloud.new
   datastore = gcloud.datastore
 
   page_size = 2
@@ -551,7 +556,7 @@ def eventual_consistent_query
 end
 
 def unindexed_property_query
-  gcloud = Gcloud.new
+  gcloud = Google::Cloud.new
   datastore = gcloud.datastore
 
   # [START unindexed_property_query]
@@ -561,7 +566,7 @@ def unindexed_property_query
 end
 
 def exploding_properties
-  gcloud = Gcloud.new
+  gcloud = Google::Cloud.new
   datastore = gcloud.datastore
 
   # [START exploding_properties]
@@ -590,7 +595,7 @@ def transactional_retry from_key, to_key, amount
   (1..5).each do |i|
     begin
       return transfer_funds from_key, to_key, amount
-    rescue Gcloud::Error => e
+    rescue Google::Cloud::Error => e
       raise e if i == 5
     end
   end
@@ -630,7 +635,7 @@ def transactional_single_entity_group_read_only
 end
 
 def namespace_run_query
-  gcloud = Gcloud.new
+  gcloud = Google::Cloud.new
   datastore = gcloud.datastore
 
   # [START namespace_run_query]
@@ -646,7 +651,7 @@ def namespace_run_query
 end
 
 def kind_run_query
-  gcloud = Gcloud.new
+  gcloud = Google::Cloud.new
   datastore = gcloud.datastore
 
   # [START kind_run_query]
@@ -660,7 +665,7 @@ def kind_run_query
 end
 
 def property_run_query
-  gcloud = Gcloud.new
+  gcloud = Google::Cloud.new
   datastore = gcloud.datastore
 
   # [START property_run_query]
@@ -678,7 +683,7 @@ def property_run_query
 end
 
 def property_by_kind_run_query
-  gcloud = Gcloud.new
+  gcloud = Google::Cloud.new
   datastore = gcloud.datastore
 
   # [START property_by_kind_run_query]
@@ -696,7 +701,7 @@ def property_by_kind_run_query
 end
 
 def property_filtering_run_query
-  gcloud = Gcloud.new
+  gcloud = Google::Cloud.new
   datastore = gcloud.datastore
 
   # [START property_filtering_run_query]
@@ -717,7 +722,7 @@ end
 
 def gql_run_query
   # [START gql_run_query]
-  gql_query = Gcloud::Datastore::GqlQuery.new
+  gql_query = Google::Cloud::Datastore::GqlQuery.new
   gql_query.query_string = "SELECT * FROM Task ORDER BY created ASC"
   tasks = datastore.run gql_query
   # [END gql_run_query]
@@ -725,7 +730,7 @@ end
 
 def gql_named_binding_query
   # [START gql_named_binding_query]
-  gql_query = Gcloud::Datastore::GqlQuery.new
+  gql_query = Google::Cloud::Datastore::GqlQuery.new
   gql_query.query_string = "SELECT * FROM Task " \
                            "WHERE done = @done AND priority = @priority"
   gql_query.named_bindings = { done: false, priority: 4 }
@@ -736,7 +741,7 @@ end
 
 def gql_positional_binding_query
   # [START gql_positional_binding_query]
-  gql_query = Gcloud::Datastore::GqlQuery.new
+  gql_query = Google::Cloud::Datastore::GqlQuery.new
   gql_query.query_string = "SELECT * FROM Task " \
                            "WHERE done = @1 AND priority = @2"
   gql_query.positional_bindings = [false, 4]
@@ -747,7 +752,7 @@ end
 
 def gql_literal_query
   # [START gql_literal_query]
-  gql_query = Gcloud::Datastore::GqlQuery.new
+  gql_query = Google::Cloud::Datastore::GqlQuery.new
   gql_query.query_string = "SELECT * FROM Task " \
                            "WHERE done = false AND priority = 4"
   gql_query.allow_literals = true

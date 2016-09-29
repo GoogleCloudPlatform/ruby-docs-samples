@@ -12,10 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "rspec/core/rake_task"
-RSpec::Core::RakeTask.new(:spec)
+source "https://rubygems.org"
 
-require "rubocop/rake_task"
-RuboCop::RakeTask.new
+gem "google-cloud-vision"
+gem "rmagick"
 
-task default: :spec
+group :test do
+  gem "rspec"
+  gem "rack-test"
+end

@@ -42,9 +42,6 @@ tool](https://developers.google.com/cloud/sdk/gcloud/) and use it to create the
 indexes used in the tests. From the Datastore samples directory:
 
 ``` sh
-# Install the app component
-$ gcloud components update app
-
 # Set the default project in your env
 $ gcloud config set project PROJECT_ID
 
@@ -58,6 +55,6 @@ $ gcloud preview datastore create-indexes index.yaml
 ### Running the tests
 
 ```bash
-$ bundle exec rake spec
+$ bundle exec rspec
 ```
 

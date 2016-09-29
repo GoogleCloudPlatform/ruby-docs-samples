@@ -17,10 +17,8 @@ source "https://rubygems.org"
 gem "sinatra"
 gem "slim"
 gem "json"
-gem "gcloud"
+gem "google-cloud-pubsub"
 
 group :test do
-  gem "rake"
-  gem "rubocop"
   gem "rspec"
 end
