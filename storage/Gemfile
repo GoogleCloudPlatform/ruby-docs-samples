@@ -1,4 +1,4 @@
-# Copyright 2015 Google, Inc
+# Copyright 2016 Google, Inc
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
 
 source "https://rubygems.org"
 
-gem "google-api-client", "~>0.9.pre3"
+gem "google-cloud-storage"
 
 group :test do
   gem "rspec"
