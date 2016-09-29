@@ -49,7 +49,7 @@ def list_bucket_contents_with_prefix project_id:, bucket_name:, prefix:
 end
 
 def upload_file project_id:, bucket_name:, local_file_path:,
-                                             storage_file_path:
+                                           storage_file_path:
   # [START upload_file]
   # project_id        = "Your Google Cloud project ID"
   # bucket_name       = "Your Google Cloud Storage bucket name"
