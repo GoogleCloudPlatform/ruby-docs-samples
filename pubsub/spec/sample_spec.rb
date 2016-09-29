@@ -61,6 +61,15 @@ describe "Pub/Sub sample" do
     expect(topic.name).to include(TOPIC_NAME)
   end
 
+  it "deletes topic" do
+    @pubsub.create_topic TOPIC_NAME
+    expect(@pubsub.topic TOPIC_NAME).not_to be nil
+
+    expect { delete_topic }.to output("Deleted topic #{TOPIC_NAME}\n").to_stdout
+
+    expect(@pubsub.topic TOPIC_NAME).to be nil
+  end
+
   it "creates subscription" do
     expect(@pubsub.subscription(SUBSCRIPTION_NAME)).to be nil
     @pubsub.create_topic TOPIC_NAME
@@ -72,6 +81,22 @@ describe "Pub/Sub sample" do
     expect(subscription.exists?).to eq(true)
     expect(subscription.name).to include(SUBSCRIPTION_NAME)
     expect(subscription.topic.name).to include(TOPIC_NAME)
+  end
+
+  it "deletes subscription" do
+    topic = @pubsub.create_topic TOPIC_NAME
+    @pubsub.create_subscription(
+      TOPIC_NAME,
+      SUBSCRIPTION_NAME,
+      autocreate: true
+    )
+    expect(topic.subscription SUBSCRIPTION_NAME).not_to be nil
+
+    expect { delete_subscription }.to output(
+      "Deleted subscription #{SUBSCRIPTION_NAME}\n"
+    ).to_stdout
+
+    expect(topic.subscription SUBSCRIPTION_NAME).to be nil
   end
 
   it "creates push subscription" do
