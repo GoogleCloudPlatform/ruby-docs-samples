@@ -25,16 +25,16 @@ def run_quickstart
   datastore_client = gcloud.datastore
 
   # The kind of the entity to retrieve
-  kind = "Task"
-  # The id of the entity to retrieve
-  id = 1234567890
+  kind = "Person"
+  # The name/ID of the entity to retrieve
+  name = "Bob"
   # The Datastore key for the entity
-  task_key = datastore_client.key kind, id
+  task_key = datastore_client.key kind, name
 
   # Retrieves the entity
   entity = datastore_client.find task_key
 
-  puts "Got entity: #{entity.key.id}"
+  puts "Fetched entity: #{entity.key.name}"
   # [END datastore_quickstart]
 end
 
