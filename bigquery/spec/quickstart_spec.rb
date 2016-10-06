@@ -39,7 +39,6 @@ describe "Quickstart" do
     @dataset.delete
   end
 
-
   # Test Quickstart sample
   it 'creates a new dataset in BigQuery' do
     # Setup expectations for Google::Cloud
