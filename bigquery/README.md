@@ -9,6 +9,13 @@ analytics data warehouse.
 
 ## Samples
 
+### Quickstart
+
+'''
+  quickstart.rb provides a literal quick start using BigQuery
+'''
+
+
 ### Datasets
 
 ```
@@ -35,4 +42,9 @@ Commands:
   export      <dataset_id> <table_id> <cloud_storage_path>
   query       <query>
   query_job   <query>
+```
+
+### Run all tests
+```
+$ bundle exec rspec
 ```
