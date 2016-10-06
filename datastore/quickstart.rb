@@ -24,21 +24,25 @@ def run_quickstart
   gcloud = Google::Cloud.new project_id
   datastore_client = gcloud.datastore
 
-  # The kind of the entity to retrieve
+  # The kind for the new entity
   kind = "Task"
-  # The name/ID of the entity to retrieve
+  # The name/ID for the new entity
   name = "sampletask1"
-  # The Datastore key for the entity
+  # The Cloud Datastore key for the new entity
   task_key = datastore_client.key kind, name
 
-  # Retrieves the entity
-  task = datastore_client.find task_key
+  # Prepares the new entity
+  task = datastore_client.entity task_key do |t|
+    t["description"] = "Buy milk"
+  end
 
-  puts "Fetched task: #{task.key.name}"
+  # Saves the entity
+  datastore_client.save task
+
+  puts "Saved #{task.key.name}: #{task['description']}"
   # [END datastore_quickstart]
 end
 
 if __FILE__ == $PROGRAM_NAME
   run_quickstart
 end
-
