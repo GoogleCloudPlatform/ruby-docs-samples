@@ -17,9 +17,9 @@ require "google/cloud"
 
 describe "BigQuery Quickstart" do
 
-  it 'creates a new dataset' do
+  it "creates a new dataset" do
     # Initialize test objects
-    gcloud_test_client = Google::Cloud.new ENV['GOOGLE_CLOUD_PROJECT']
+    gcloud_test_client = Google::Cloud.new ENV["GOOGLE_CLOUD_PROJECT"]
     bigquery_test_client = gcloud_test_client.bigquery
 
     # Prime BigQuery for test
