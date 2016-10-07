@@ -12,46 +12,39 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require_relative "../quickstart"
+require "rspec"
 require "google/cloud"
 
-describe "Quickstart" do
-  # Initialize dataset_name
-  DATASET_NAME = 'dataset_name'
+describe "BigQuery Quickstart" do
 
-  # Setup 'before' RSpec hook
-  before :all do
-    @gcloud = Google::Cloud.new ENV['GOOGLE_PROJECT_ID']
-    @bigquery = @gcloud.bigquery
-    @dataset = @bigquery.create_dataset DATASET_NAME
-  end
+  it 'creates a new dataset' do
+    # Initialize test objects
+    gcloud_test_client = Google::Cloud.new ENV['GOOGLE_CLOUD_PROJECT']
+    bigquery_test_client = gcloud_test_client.bigquery
 
-  # Setup 'after' RSpec hook
-  RSpec.configure do |config|
-    config.after do
-      cleanup!
+    # Prime BigQuery for test
+    if bigquery_test_client.dataset "my_new_dataset"
+      bigquery_test_client.dataset("my_new_dataset").delete
     end
+
+    expect(bigquery_test_client.dataset "my_new_dataset").to be nil
+    expect(Google::Cloud).to receive(:new).
+                             with("YOUR_PROJECT_ID").
+                             and_return(gcloud_test_client)
+
+    # Run quickstart
+    expect {
+      load File::expand_path("quickstart.rb")
+    }.to output(
+      "Dataset my_new_dataset created\.\n"
+    ).to_stdout
+
+    expect(bigquery_test_client.dataset "my_new_dataset").not_to be nil
+
+    # Clean up
+    dataset = bigquery_test_client.dataset "my_new_dataset"
+    dataset.delete
   end
 
-  # Cleanup!
-  def cleanup!
-    # Delete dataset
-    @dataset.delete
-  end
-
-  # Test Quickstart sample
-  it 'creates a new dataset in BigQuery' do
-    # Setup expectations for Google::Cloud
-    expect(Google::Cloud).to receive(:new).with("YOUR_PROJECT_ID").and_return(@gcloud)
-
-    # Setup expectations for @gcloud
-    expect(@gcloud).to receive(:bigquery).and_return(@bigquery)
-
-    # Setup expectations for @bigquery
-    expect(@bigquery).to receive(:create_dataset).with("my_new_dataset").and_return(@dataset)
-
-    # Check output
-    expect{ run_quickstart }.to output(/#{DATASET_NAME}/).to_stdout
-  end
 end
 

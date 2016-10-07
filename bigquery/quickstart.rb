@@ -12,28 +12,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-def run_quickstart
-  # [START bigquery_quickstart]
-  # Imports the Google Cloud client library
-  require "google/cloud"
+# [START bigquery_quickstart]
+# Imports the Google Cloud client library
+require "google/cloud"
 
-  # Your Google Cloud Platform project ID
-  project_id = "YOUR_PROJECT_ID"
+# Your Google Cloud Platform project ID
+project_id = "YOUR_PROJECT_ID"
 
-  # Instantiates a client
-  gcloud = Google::Cloud.new project_id
-  bigquery_client = gcloud.bigquery
+# Instantiates a client
+gcloud = Google::Cloud.new project_id
+bigquery_client = gcloud.bigquery
 
-  # The name for the new dataset
-  dataset_name = "my_new_dataset"
+# The name for the new dataset
+dataset_name = "my_new_dataset"
 
-  # Creates the new dataset
-  dataset = bigquery_client.create_dataset dataset_name
+# Creates the new dataset
+dataset = bigquery_client.create_dataset dataset_name
 
-  puts "Dataset #{dataset.dataset_id} created."
-  # [END bigquery_quickstart]
-end
+puts "Dataset #{dataset.dataset_id} created."
+# [END bigquery_quickstart]
 
-if __FILE__ == $PROGRAM_NAME
-  run_quickstart
-end
