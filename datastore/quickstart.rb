@@ -12,37 +12,32 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-def run_quickstart
-  # [START datastore_quickstart]
-  # Imports the Google Cloud client library
-  require "google/cloud"
+# [START datastore_quickstart]
+# Imports the Google Cloud client library
+require "google/cloud"
 
-  # Your Google Cloud Platform project ID
-  project_id = "YOUR_PROJECT_ID"
+# Your Google Cloud Platform project ID
+project_id = "YOUR_PROJECT_ID"
 
-  # Instantiates a client
-  gcloud = Google::Cloud.new project_id
-  datastore_client = gcloud.datastore
+# Instantiates a client
+gcloud = Google::Cloud.new project_id
+datastore_client = gcloud.datastore
 
-  # The kind for the new entity
-  kind = "Task"
-  # The name/ID for the new entity
-  name = "sampletask1"
-  # The Cloud Datastore key for the new entity
-  task_key = datastore_client.key kind, name
+# The kind for the new entity
+kind = "Task"
+# The name/ID for the new entity
+name = "sampletask1"
+# The Cloud Datastore key for the new entity
+task_key = datastore_client.key kind, name
 
-  # Prepares the new entity
-  task = datastore_client.entity task_key do |t|
-    t["description"] = "Buy milk"
-  end
-
-  # Saves the entity
-  datastore_client.save task
-
-  puts "Saved #{task.key.name}: #{task['description']}"
-  # [END datastore_quickstart]
+# Prepares the new entity
+task = datastore_client.entity task_key do |t|
+  t["description"] = "Buy milk"
 end
 
-if __FILE__ == $PROGRAM_NAME
-  run_quickstart
-end
+# Saves the entity
+datastore_client.save task
+
+puts "Saved #{task.key.name}: #{task['description']}"
+# [END datastore_quickstart]
+
