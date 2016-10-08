@@ -1,3 +1,4 @@
+#!/usr/bin/ruby
 # Copyright 2016 Google, Inc
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,25 +13,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START language_quickstart]
-# Imports the Google Cloud client library
+require "rspec"
 require "google/cloud"
 
-# Your Google Cloud Platform project ID
-project_id = "YOUR_PROJECT_ID"
+describe "Language Quickstart" do
 
-# Instantiates a client
-gcloud = Google::Cloud.new project_id
-language_client = gcloud.language
+  it "detect sentimentt" do
+    # Initialize test objects
+    gcloud_test_client = Google::Cloud.new ENV["GOOGLE_CLOUD_PROJECT"]
+    expect(Google::Cloud).to receive(:new).with("YOUR_PROJECT_ID").
+                                           and_return(gcloud_test_client)
 
-# The text to analyze
-text = "Hello, world!"
-document = language_client.document text
+    # Run quickstart
+    expect {
+      load File::expand_path("quickstart.rb")
+    }.to output(
+      "Text: Hello, world!\n"+
+      "Sentiment: 1.0, 0.6000000238418579\n"
+    ).to_stdout
 
-# Detects the sentiment of the text
-sentiment = document.sentiment
+  end
 
-puts "Text: #{text}"
-puts "Sentiment: #{sentiment.polarity}, #{sentiment.magnitude}"
-# [END language_quickstart]
+end
 
