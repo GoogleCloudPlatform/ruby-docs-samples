@@ -18,7 +18,7 @@ require "google/cloud"
 
 describe "Language Quickstart" do
 
-  it "detect sentimentt" do
+  it "detect sentiment" do
     # Initialize test objects
     gcloud_test_client = Google::Cloud.new ENV["GOOGLE_CLOUD_PROJECT"]
     expect(Google::Cloud).to receive(:new).with("YOUR_PROJECT_ID").
