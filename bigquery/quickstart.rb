@@ -20,14 +20,14 @@ require "google/cloud"
 project_id = "YOUR_PROJECT_ID"
 
 # Instantiates a client
-gcloud = Google::Cloud.new project_id
-bigquery_client = gcloud.bigquery
+gcloud   = Google::Cloud.new project_id
+bigquery = gcloud.bigquery
 
 # The name for the new dataset
 dataset_name = "my_new_dataset"
 
 # Creates the new dataset
-dataset = bigquery_client.create_dataset dataset_name
+dataset = bigquery.create_dataset dataset_name
 
 puts "Dataset #{dataset.dataset_id} created."
 # [END bigquery_quickstart]

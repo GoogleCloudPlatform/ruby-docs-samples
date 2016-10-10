@@ -19,32 +19,28 @@ describe "BigQuery Quickstart" do
 
   it "creates a new dataset" do
     # Initialize test objects
-    gcloud_test_client = Google::Cloud.new ENV["GOOGLE_CLOUD_PROJECT"]
-    bigquery_test_client = gcloud_test_client.bigquery
+    gcloud   = Google::Cloud.new ENV["GOOGLE_CLOUD_PROJECT"]
+    bigquery = gcloud.bigquery
 
     # Prime BigQuery for test
-    if bigquery_test_client.dataset "my_new_dataset"
-      bigquery_test_client.dataset("my_new_dataset").delete
+    if bigquery.dataset "my_new_dataset"
+      bigquery.dataset("my_new_dataset").delete
     end
 
-    expect(bigquery_test_client.dataset "my_new_dataset").to be nil
+    expect(bigquery.dataset "my_new_dataset").to be nil
     expect(Google::Cloud).to receive(:new).
                              with("YOUR_PROJECT_ID").
-                             and_return(gcloud_test_client)
+                             and_return(gcloud)
 
     # Run quickstart
     expect {
-      load File::expand_path("quickstart.rb")
+      load File.expand_path("../quickstart.rb", __dir__)
     }.to output(
       "Dataset my_new_dataset created\.\n"
     ).to_stdout
 
-    expect(bigquery_test_client.dataset "my_new_dataset").not_to be nil
-
-    # Clean up
-    dataset = bigquery_test_client.dataset "my_new_dataset"
-    dataset.delete
-  end
+    expect(bigquery.dataset "my_new_dataset").not_to be nil
+   end
 
 end
 
