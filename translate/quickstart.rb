@@ -12,31 +12,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-def run_quickstart
-  # [START translate_quickstart]
-  # Imports the Google Cloud client library
-  require "google/cloud"
+# [START translate_quickstart]
+# Imports the Google Cloud client library
+require "google/cloud"
 
-  # Your Translate API key
-  api_key = "YOUR_API_KEY"
+# Your Translate API key
+api_key = "YOUR_API_KEY"
 
-  # Instantiates a client
-  gcloud = Google::Cloud.new
-  translate_client = gcloud.translate api_key
+# Instantiates a client
+gcloud    = Google::Cloud.new
+translate = gcloud.translate api_key
 
-  # The text to translate
-  text = "Hello, world!"
-  # The target language
-  target = "ru"
+# The text to translate
+text = "Hello, world!"
+# The target language
+target = "ru"
 
-  # Translates some text into Russian
-  translation = translate_client.translate text, to: target
+# Translates some text into Russian
+translation = translate.translate text, to: target
 
-  puts "Text: #{text}"
-  puts "Translation: #{translation}"
-  # [END translate_quickstart]
-end
+puts "Text: #{text}"
+puts "Translation: #{translation}"
+# [END translate_quickstart]
 
-if __FILE__ == $PROGRAM_NAME
-  run_quickstart
-end
