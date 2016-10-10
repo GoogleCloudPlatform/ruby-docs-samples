@@ -20,13 +20,13 @@ require "google/cloud"
 project_id = "YOUR_PROJECT_ID"
 
 # Instantiates a client
-gcloud = Google::Cloud.new project_id
+gcloud           = Google::Cloud.new project_id
 datastore_client = gcloud.datastore
 
 # The kind for the new entity
-kind = "Task"
+kind     = "Task"
 # The name/ID for the new entity
-name = "sampletask1"
+name     = "sampletask1"
 # The Cloud Datastore key for the new entity
 task_key = datastore_client.key kind, name
 

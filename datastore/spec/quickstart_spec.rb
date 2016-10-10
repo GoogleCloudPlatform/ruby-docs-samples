@@ -19,32 +19,31 @@ describe "Datastore Quickstart" do
 
   it "creates a new entity" do
     # Initalize test objects
-    gcloud_test_client = Google::Cloud.new ENV["GOOGLE_CLOUD_PROJECT"]
-    datastore_test_client = gcloud_test_client.datastore
-    task_key_test_client = datastore_test_client.key "Task", "sampletask1"
+    gcloud    = Google::Cloud.new ENV["GOOGLE_CLOUD_PROJECT"]
+    datastore = gcloud.datastore
+    task_key  = datastore.key "Task", "sampletask1"
 
     # Prime DataStore for test
-    if datastore_test_client.find task_key_test_client
-      task = datastore_test_client.find task_key_test_client
-      datastore_test_client.delete task
+    if datastore.find task_key
+      task = datastore.find task_key
+      datastore.delete task
     end
 
-    expect(datastore_test_client.find(task_key_test_client)).to be nil
+    expect(datastore.find task_key).to be nil
     expect(Google::Cloud).to receive(:new).with("YOUR_PROJECT_ID").
-                                           and_return(gcloud_test_client)
+                                           and_return(gcloud)
 
     # Run quickstart
     expect {
-      load File::expand_path("quickstart.rb")
+      load File.expand_path("../quickstart.rb", __dir__)
     }.to output {
       "Saved Task: Buy milk\n"
     }.to_stdout
 
-    expect(datastore_test_client.find(task_key_test_client)).not_to be nil
-
-    # Clean up
-    task = datastore_test_client.find task_key_test_client
-    datastore_test_client.delete task
+    # Check entity was saved
+    task_key = datastore.find(task_key)
+    expect(task_key).not_to be nil
+    expect(task_key["description"]).to eq "Buy milk"
   end
 
 end
