@@ -20,14 +20,14 @@ require "google/cloud"
 project_id = "YOUR_PROJECT_ID"
 
 # Instantiates a client
-gcloud        = Google::Cloud.new project_id
-pubsub_client = gcloud.pubsub
+gcloud = Google::Cloud.new project_id
+pubsub = gcloud.pubsub
 
 # The name for the new topic
 topic_name = "my-new-topic"
 
 # Creates the new topic
-topic = pubsub_client.create_topic topic_name
+topic = pubsub.create_topic topic_name
 
 puts "Topic #{topic.name} created."
 # [END pubsub_quickstart]
