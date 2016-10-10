@@ -12,28 +12,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-def run_quickstart
-  # [START pubsub_quickstart]
-  # Imports the Google Cloud client library
-  require "google/cloud"
+# [START pubsub_quickstart]
+# Imports the Google Cloud client library
+require "google/cloud"
 
-  # Your Google Cloud Platform project ID
-  project_id = "YOUR_PROJECT_ID"
+# Your Google Cloud Platform project ID
+project_id = "YOUR_PROJECT_ID"
 
-  # Instantiates a client
-  gcloud = Google::Cloud.new project_id
-  pubsub_client = gcloud.pubsub
+# Instantiates a client
+gcloud        = Google::Cloud.new project_id
+pubsub_client = gcloud.pubsub
 
-  # The name for the new topic
-  topic_name = "my-new-topic"
+# The name for the new topic
+topic_name = "my-new-topic"
 
-  # Creates the new topic
-  topic = pubsub_client.create_topic topic_name
+# Creates the new topic
+topic = pubsub_client.create_topic topic_name
 
-  puts "Topic #{topic.name} created."
-  # [END pubsub_quickstart]
-end
+puts "Topic #{topic.name} created."
+# [END pubsub_quickstart]
 
-if __FILE__ == $PROGRAM_NAME
-  run_quickstart
-end
