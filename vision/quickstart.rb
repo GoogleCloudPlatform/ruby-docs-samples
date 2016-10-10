@@ -12,31 +12,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-def run_quickstart
-  # [START vision_quickstart]
-  # Imports the Google Cloud client library
-  require "google/cloud"
+# [START vision_quickstart]
+# Imports the Google Cloud client library
+require "google/cloud"
 
-  # Your Google Cloud Platform project ID
-  project_id = "YOUR_PROJECT_ID"
+# Your Google Cloud Platform project ID
+project_id = "YOUR_PROJECT_ID"
 
-  # Instantiates a client
-  gcloud = Google::Cloud.new project_id
-  vision_client = gcloud.vision
+# Instantiates a client
+gcloud = Google::Cloud.new project_id
+vision = gcloud.vision
 
-  # The name of the image file to annotate
-  fileName = "./images/cat.jpg"
+# The name of the image file to annotate
+fileName = "./images/cat.jpg"
 
-  # Performs label detection on the image file
-  labels = vision_client.image(fileName).labels
+# Performs label detection on the image file
+labels = vision.image(fileName).labels
 
-  puts "Labels:"
-  labels.each do |label|
-    puts label.description
-  end
-  # [END vision_quickstart]
+puts "Labels:"
+labels.each do |label|
+  puts label.description
 end
+# [END vision_quickstart]
 
-if __FILE__ == $PROGRAM_NAME
-  run_quickstart
-end
