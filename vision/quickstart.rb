@@ -32,7 +32,7 @@ def run_quickstart
 
   puts "Labels:"
   labels.each do |label|
-    puts label
+    puts label.description
   end
   # [END vision_quickstart]
 end
