@@ -12,27 +12,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START speech_quickstart]
-# Imports the Google Cloud client library
+require "rspec"
 require "google/cloud"
 
-# Your Google Cloud Platform project ID
-project_id = "YOUR_PROJECT_ID"
+describe "Speech Quickstart" do
 
-# Instantiates a client
-gcloud = Google::Cloud.new project_id
-speech = gcloud.speech
+  it "transcribes a sample audio.raw file" do
+    # Initiliaze and setup necessary objects
+    gcloud = Google::Cloud.new ENV["GOOGLE_CLOUD_PROJECT"]
 
-# The name of the audio file to transcribe
-fileName = "./audio_files/audio.raw"
+    expect(Google::Cloud).to receive(:new).with("YOUR_PROJECT_ID").
+                                           and_return(gcloud)
 
-# The audio file's encoding and sample rate
-audio = speech.audio fileName, encoding: :raw, sample_rate: 16000
+    # Transcribe
+    expect {
+      load File.expand_path("../quickstart.rb", __dir__)
+    }.to output(
+      "Transcription: how old is the Brooklyn Bridge\n"
+    ).to_stdout
+  end
 
-# Detects speech in the audio file
-results = audio.recognize
-result  = results.first
-
-puts "Transcription: #{result.transcript}"
-# [END speech_quickstart]
-
+end
