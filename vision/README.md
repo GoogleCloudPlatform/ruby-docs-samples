@@ -41,4 +41,4 @@ project by setting the *GOOGLE_CLOUD_PROJECT* environment variable:
 
     export GOOGLE_CLOUD_PROJECT="YOUR-PROJECT-ID"
 
-For more information, see, [Authentication with Google Cloud Ruby](http://googlecloudplatform.github.io/google-cloud-ruby/#/docs/google-cloud/v0.20.1/guides/authentication#withgooglecloudruby)
+For more information, see, [Authentication with Google Cloud Ruby](http://googlecloudplatform.github.io/google-cloud-ruby/#/docs/google-cloud/v0.20.1/guides/authentication#withgooglecloudruby).
