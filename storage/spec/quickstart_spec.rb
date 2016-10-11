@@ -21,7 +21,7 @@ describe "Storage Quickstart" do
     # Initialize test objects
     gcloud      = Google::Cloud.new ENV["GOOGLE_CLOUD_PROJECT"]
     storage     = gcloud.storage
-    bucket_name = ENV["GOOGLE_CLOUD_BUCKET"]
+    bucket_name = ENV["STORAGE_BUCKET"]
 
     # Check that bucket_name doesn't already exist
     if storage.bucket bucket_name
