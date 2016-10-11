@@ -12,28 +12,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-def run_quickstart
-  # [START storage_quickstart]
-  # Imports the Google Cloud client library
-  require "google/cloud"
+# [START storage_quickstart]
+# Imports the Google Cloud client library
+require "google/cloud"
 
-  # Your Google Cloud Platform project ID
-  project_id = "YOUR_PROJECT_ID"
+# Your Google Cloud Platform project ID
+project_id = "YOUR_PROJECT_ID"
 
-  # Instantiates a client
-  gcloud = Google::Cloud.new project_id
-  storage_client = gcloud.storage
+# Instantiates a client
+gcloud  = Google::Cloud.new project_id
+storage = gcloud.storage
 
-  # The name for the new bucket
-  bucket_name = "my-new-bucket"
+# The name for the new bucket
+bucket_name = "my-new-bucket"
 
-  # Creates the new bucket
-  bucket = storage_client.create_bucket bucket_name
+# Creates the new bucket
+bucket = storage.create_bucket bucket_name
 
-  puts "Bucket #{bucket.name} created."
-  # [END storage_quickstart]
-end
+puts "Bucket #{bucket.name} was created."
+# [END storage_quickstart]
 
-if __FILE__ == $PROGRAM_NAME
-  run_quickstart
-end
