@@ -15,6 +15,12 @@ To run the sample, first install dependencies:
 
     bundle install
 
+Next, set the configured project by setting the *GOOGLE_CLOUD_PROJECT*
+environment variable to the project name set in the
+[Google Cloud Platform Developer Console](https://console.cloud.google.com):
+
+    export GOOGLE_CLOUD_PROJECT="YOUR-PROJECT-ID"
+
 Run the sample:
 
     bundle exec ruby vision_samples.rb
@@ -34,11 +40,3 @@ Example:
     ruby vision_samples.rb landmark /path/to/grand-canyon.jpg
     ruby vision_samples.rb faces    /path/to/faces.jpg output-image.jpg
 
-Troubleshooting:
-
-If you encounter the message, "project is missing", set the configured
-project by setting the *GOOGLE_CLOUD_PROJECT* environment variable:
-
-    export GOOGLE_CLOUD_PROJECT="YOUR-PROJECT-ID"
-
-For more information, see, [Authentication with Google Cloud Ruby](http://googlecloudplatform.github.io/google-cloud-ruby/#/docs/google-cloud/v0.20.1/guides/authentication#withgooglecloudruby).
