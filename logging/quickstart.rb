@@ -20,15 +20,15 @@ require "google/cloud"
 project_id = "YOUR_PROJECT_ID"
 
 # Instantiates a client
-gcloud         = Google::Cloud.new project_id
-logging        = gcloud.logging
+gcloud  = Google::Cloud.new project_id
+logging = gcloud.logging
 
 # Prepares a log entry
-entry               = logging.entry
+entry = logging.entry
 # The data to log
-entry.payload       = "Hello, world!"
+entry.payload = "Hello, world!"
 # The name of the log to write to
-entry.log_name      = "my-log"
+entry.log_name = "my-log"
 # The resource associated with the data
 entry.resource.type = "global"
 
