@@ -24,7 +24,7 @@ gcloud    = Google::Cloud.new
 translate = gcloud.translate api_key
 
 # The text to translate
-text   = "Hello, world!"
+text = "Hello, world!"
 # The target language
 target = "ru"
 
