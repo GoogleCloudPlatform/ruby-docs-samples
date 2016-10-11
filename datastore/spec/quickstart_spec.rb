@@ -18,12 +18,10 @@ require "google/cloud"
 describe "Datastore Quickstart" do
 
   it "creates a new entity" do
-    # Initalize test objects
     gcloud    = Google::Cloud.new ENV["GOOGLE_CLOUD_PROJECT"]
     datastore = gcloud.datastore
     task_key  = datastore.key "Task", "sampletask1"
 
-    # Prime DataStore for test
     if datastore.find task_key
       task = datastore.find task_key
       datastore.delete task
@@ -33,14 +31,12 @@ describe "Datastore Quickstart" do
     expect(Google::Cloud).to receive(:new).with("YOUR_PROJECT_ID").
                                            and_return(gcloud)
 
-    # Run quickstart
     expect {
       load File.expand_path("../quickstart.rb", __dir__)
     }.to output {
       "Saved Task: Buy milk\n"
     }.to_stdout
 
-    # Check entity was saved
     task_key = datastore.find(task_key)
     expect(task_key).not_to be nil
     expect(task_key["description"]).to eq "Buy milk"

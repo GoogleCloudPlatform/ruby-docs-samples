@@ -18,13 +18,11 @@ require "google/cloud"
 describe "Vision Quickstart" do
 
   it "label a cat image" do
-    # Initialize and setup test objects
     gcloud = Google::Cloud.new ENV["GOOGLE_CLOUD_PROJECT"]
 
     expect(Google::Cloud).to receive(:new).with("YOUR_PROJECT_ID").
                                            and_return(gcloud)
 
-    # Label a cat image
     expect {
       load File.expand_path("../quickstart.rb", __dir__)
     }.to output(

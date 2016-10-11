@@ -18,11 +18,9 @@ require "google/cloud"
 describe "BigQuery Quickstart" do
 
   it "creates a new dataset" do
-    # Initialize test objects
     gcloud   = Google::Cloud.new ENV["GOOGLE_CLOUD_PROJECT"]
     bigquery = gcloud.bigquery
 
-    # Prime BigQuery for test
     if bigquery.dataset "my_new_dataset"
       bigquery.dataset("my_new_dataset").delete
     end
@@ -32,7 +30,6 @@ describe "BigQuery Quickstart" do
                              with("YOUR_PROJECT_ID").
                              and_return(gcloud)
 
-    # Run quickstart
     expect {
       load File.expand_path("../quickstart.rb", __dir__)
     }.to output(

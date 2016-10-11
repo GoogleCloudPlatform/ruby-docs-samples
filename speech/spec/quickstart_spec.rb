@@ -18,13 +18,11 @@ require "google/cloud"
 describe "Speech Quickstart" do
 
   it "transcribes a sample audio.raw file" do
-    # Initiliaze and setup necessary objects
     gcloud = Google::Cloud.new ENV["GOOGLE_CLOUD_PROJECT"]
 
     expect(Google::Cloud).to receive(:new).with("YOUR_PROJECT_ID").
                                            and_return(gcloud)
 
-    # Transcribe
     expect {
       load File.expand_path("../quickstart.rb", __dir__)
     }.to output(

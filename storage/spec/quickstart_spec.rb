@@ -18,27 +18,25 @@ require "google/cloud"
 describe "Storage Quickstart" do
 
   it "creates a new bucket" do
-    # Initialize test objects
     gcloud      = Google::Cloud.new ENV["GOOGLE_CLOUD_PROJECT"]
     storage     = gcloud.storage
     bucket_name = ENV["STORAGE_BUCKET"]
 
-    # Check that bucket_name doesn't already exist
     if storage.bucket bucket_name
-      storage.bucket(bucket_name).delete
+      bucket = storage.bucket bucket_name
+      bucket.files.each &:delete until bucket.files.empty?
+      bucket.delete
     end
 
     expect(storage.bucket bucket_name).to be nil
     expect(Google::Cloud).to receive(:new).with("YOUR_PROJECT_ID").
                                            and_return(gcloud)
 
-    # Create storage bucket with bucket_name and swap with quickstart bucket
     bucket = storage.create_bucket bucket_name
     expect(gcloud).to receive(:storage).and_return(storage)
     expect(storage).to receive(:create_bucket).with("my-new-bucket").
                                                and_return(bucket)
 
-    # Run Storage Quickstart
     expect {
       load File.expand_path("../quickstart.rb", __dir__)
     }.to output(

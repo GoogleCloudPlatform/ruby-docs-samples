@@ -18,14 +18,12 @@ require "google/cloud"
 describe "Translate Quickstart" do
 
   it "translates Hello, world! to Russian" do
-    # Initialize and setup test objects
     gcloud    = Google::Cloud.new
     translate = gcloud.translate ENV["TRANSLATE_KEY"]
     expect(Google::Cloud).to receive(:new).and_return(gcloud)
     expect(gcloud).to receive(:translate).with("YOUR_API_KEY").
                                            and_return(translate)
 
-    # Translate
     expect {
       load File.expand_path("../quickstart.rb", __dir__)
     }.to output(

@@ -18,11 +18,9 @@ require "google/cloud"
 describe "PubSub Quickstart" do
 
   it "creates a new topic" do
-    # Initialize test objects
     gcloud = Google::Cloud.new ENV["GOOGLE_CLOUD_PROJECT"]
     pubsub = gcloud.pubsub
 
-    # Prime PubSub for test
     if pubsub.topic "my-new-topic"
       pubsub.topic("my-new-topic").delete
     end
@@ -32,7 +30,6 @@ describe "PubSub Quickstart" do
                              with("YOUR_PROJECT_ID").
                              and_return(gcloud)
 
-    # Run quickstart
     expect {
       load File.expand_path("../quickstart.rb", __dir__)
     }.to output(

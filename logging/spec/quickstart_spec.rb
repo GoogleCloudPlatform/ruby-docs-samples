@@ -18,7 +18,6 @@ require "google/cloud"
 describe "Logging Quickstart" do
 
   it "logs a new entry" do
-    # Initialize test objects
     entry_filter = %Q{logName:"my-log" textPayload:"Hello, world!"}
     gcloud       = Google::Cloud.new ENV["GOOGLE_CLOUD_PROJECT"]
     logging      = gcloud.logging
@@ -26,7 +25,6 @@ describe "Logging Quickstart" do
     expect(Google::Cloud).to receive(:new).with("YOUR_PROJECT_ID").
                                            and_return(gcloud)
 
-    # Prepare for tests
     entries = logging.entries filter: entry_filter
     unless entries.empty?
       logging.delete_log "my-log"
@@ -34,17 +32,14 @@ describe "Logging Quickstart" do
 
     expect(logging.entries(filter: entry_filter)).to be_empty
 
-    # Log a new entry
     expect {
       load File.expand_path("../quickstart.rb", __dir__)
     }.to output(
       "Logged Hello, world!\n"
     ).to_stdout
 
-    # Allow the entry some time to propagate
     sleep(5)
 
-    # Did we actually write a new entry?
     entries = logging.entries filter: entry_filter
     expect(entries).to_not be_empty
   end
