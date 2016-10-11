@@ -12,34 +12,29 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-def run_quickstart
-  # [START logging_quickstart]
-  # Imports the Google Cloud client library
-  require "google/cloud"
+# [START logging_quickstart]
+# Imports the Google Cloud client library
+require "google/cloud"
 
-  # Your Google Cloud Platform project ID
-  project_id = "YOUR_PROJECT_ID"
+# Your Google Cloud Platform project ID
+project_id = "YOUR_PROJECT_ID"
 
-  # Instantiates a client
-  gcloud = Google::Cloud.new project_id
-  logging_client = gcloud.logging
+# Instantiates a client
+gcloud         = Google::Cloud.new project_id
+logging        = gcloud.logging
 
-  # Prepares a log entry
-  entry = logging.entry
-  # The data to log
-  entry.payload = "Hello, world!"
-  # The name of the log to write to
-  entry.log_name = "my-log"
-  # The resource associated with the data
-  entry.resource.type = "global"
+# Prepares a log entry
+entry               = logging.entry
+# The data to log
+entry.payload       = "Hello, world!"
+# The name of the log to write to
+entry.log_name      = "my-log"
+# The resource associated with the data
+entry.resource.type = "global"
 
-  # Writes the log entry
-  logging_client.write_entries entry
+# Writes the log entry
+logging.write_entries entry
 
-  puts "Logged #{entry.payload}"
-  # [END logging_quickstart]
-end
+puts "Logged #{entry.payload}"
+# [END logging_quickstart]
 
-if __FILE__ == $PROGRAM_NAME
-  run_quickstart
-end
