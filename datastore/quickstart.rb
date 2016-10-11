@@ -20,23 +20,23 @@ require "google/cloud"
 project_id = "YOUR_PROJECT_ID"
 
 # Instantiates a client
-gcloud           = Google::Cloud.new project_id
-datastore_client = gcloud.datastore
+gcloud    = Google::Cloud.new project_id
+datastore = gcloud.datastore
 
 # The kind for the new entity
-kind     = "Task"
+kind = "Task"
 # The name/ID for the new entity
-name     = "sampletask1"
+name = "sampletask1"
 # The Cloud Datastore key for the new entity
-task_key = datastore_client.key kind, name
+task_key = datastore.key kind, name
 
 # Prepares the new entity
-task = datastore_client.entity task_key do |t|
+task = datastore.entity task_key do |t|
   t["description"] = "Buy milk"
 end
 
 # Saves the entity
-datastore_client.save task
+datastore.save task
 
 puts "Saved #{task.key.name}: #{task['description']}"
 # [END datastore_quickstart]
