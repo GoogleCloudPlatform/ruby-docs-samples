@@ -18,7 +18,7 @@ require "google/cloud"
 describe "Logging Quickstart" do
 
   it "logs a new entry" do
-    entry_filter = %Q{logName:"my-log" textPayload:"Hello, world!"}
+    entry_filter = 'logName:"my-log" textPayload:"Hello, world!"'
     gcloud       = Google::Cloud.new ENV["GOOGLE_CLOUD_PROJECT"]
     logging      = gcloud.logging
 
