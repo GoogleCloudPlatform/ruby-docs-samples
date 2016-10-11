@@ -33,3 +33,12 @@ Example:
     ruby vision_samples.rb labels   /path/to/cat.jpg
     ruby vision_samples.rb landmark /path/to/grand-canyon.jpg
     ruby vision_samples.rb faces    /path/to/faces.jpg output-image.jpg
+
+Troubleshooting:
+
+If you encounter the message, "project is missing", set the configured
+project by setting the *GOOGLE_CLOUD_PROJECT* environment variable:
+
+    export GOOGLE_CLOUD_PROJECT="YOUR-PROJECT-ID"
+
+For more information, see, [Authentication with Google Cloud Ruby](http://googlecloudplatform.github.io/google-cloud-ruby/#/docs/google-cloud/v0.20.1/guides/authentication#withgooglecloudruby)
