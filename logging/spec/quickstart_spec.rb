@@ -57,7 +57,7 @@ describe "Logging Quickstart" do
       "Logged Hello, world!\n"
     ).to_stdout
 
-    wait_until do
+    wait_until(delay: 5) do
       @logging.entries(filter: entry_filter).any?
     end
 
