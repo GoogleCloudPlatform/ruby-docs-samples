@@ -26,22 +26,7 @@ describe "Vision Quickstart" do
     expect {
       load File.expand_path("../quickstart.rb", __dir__)
     }.to output(
-      "Labels:\n" +
-      "cat\n" +
-      "mammal\n" +
-      "vertebrate\n" +
-      "whiskers\n" +
-      "fauna\n" +
-      "cat like mammal\n" +
-      "small to medium sized cats\n" +
-      "grass\n" +
-      "tabby cat\n" +
-      "european shorthair\n" +
-      "wild cat\n" +
-      "domestic short haired cat\n" +
-      "rusty spotted cat\n" +
-      "abyssinian\n" +
-      "carnivoran\n"
+      /Labels:.*cat.*/m
     ).to_stdout
   end
 
