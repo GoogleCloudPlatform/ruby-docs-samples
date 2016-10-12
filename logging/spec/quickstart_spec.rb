@@ -17,6 +17,15 @@ require "google/cloud"
 
 describe "Logging Quickstart" do
 
+  # Simple wait method. Test for condition 5 times, delaying 1 second each time
+  def wait_until times: 5, delay: 1, &condition
+    times.times do
+      return if condition.call
+      sleep delay
+    end
+    raise "Condition not met. Waited #{times} times with #{delay} sec delay"
+  end
+
   it "logs a new entry" do
     entry_filter = 'logName:"my-log" textPayload:"Hello, world!"'
     gcloud       = Google::Cloud.new ENV["GOOGLE_CLOUD_PROJECT"]
@@ -38,7 +47,9 @@ describe "Logging Quickstart" do
       "Logged Hello, world!\n"
     ).to_stdout
 
-    sleep(5)
+    wait_until(delay: 2) do
+      logging.entries(filter: entry_filter).any?
+    end
 
     entries = logging.entries filter: entry_filter
     expect(entries).to_not be_empty
