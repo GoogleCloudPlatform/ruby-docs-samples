@@ -26,20 +26,30 @@ describe "Logging Quickstart" do
     raise "Condition not met. Waited #{times} times with #{delay} sec delay"
   end
 
+  before(:all) do
+    @gcloud       = Google::Cloud.new ENV["GOOGLE_CLOUD_PROJECT"]
+    @logging      = @gcloud.logging
+    @entry        = @logging.entry
+
+    time_now = Time.now.to_f.to_s.split('.').first
+    @log_name = "sub-name-#{time_now}"
+  end
+
+  after(:all) do
+    if @logging.entries(filter: "logName:\"#{@log_name}\"").any?
+      @logging.delete_log @log_name
+    end
+  end
+
   it "logs a new entry" do
-    entry_filter = 'logName:"my-log" textPayload:"Hello, world!"'
-    gcloud       = Google::Cloud.new ENV["GOOGLE_CLOUD_PROJECT"]
-    logging      = gcloud.logging
+    entry_filter = "logName:\"#{@log_name}\" textPayload:\"Hello, world!\""
 
     expect(Google::Cloud).to receive(:new).with("YOUR_PROJECT_ID").
-                                           and_return(gcloud)
-
-    entries = logging.entries filter: entry_filter
-    unless entries.empty?
-      logging.delete_log "my-log"
-    end
-
-    expect(logging.entries(filter: entry_filter)).to be_empty
+                                           and_return(@gcloud)
+    expect(@gcloud).to receive(:logging).and_return(@logging)
+    expect(@logging).to receive(:entry).and_return(@entry)
+    expect(@entry).to receive(:log_name) { @log_name }
+    expect(@logging.entries(filter: entry_filter)).to be_empty
 
     expect {
       load File.expand_path("../quickstart.rb", __dir__)
@@ -47,11 +57,11 @@ describe "Logging Quickstart" do
       "Logged Hello, world!\n"
     ).to_stdout
 
-    wait_until(delay: 2) do
-      logging.entries(filter: entry_filter).any?
+    wait_until do
+      @logging.entries(filter: entry_filter).any?
     end
 
-    entries = logging.entries filter: entry_filter
+    entries = @logging.entries filter: entry_filter
     expect(entries).to_not be_empty
   end
 
