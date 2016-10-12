@@ -219,7 +219,7 @@ RSpec.describe "Google Cloud BigQuery samples" do
         "Importing data from file: #{csv_file.path}\n"
       )
       expect(captured_output).to match(
-        /Waiting for load job to complete: job_\w+/
+        /Waiting for load job to complete: job/
       )
       expect(captured_output).to include "Data imported"
 
@@ -255,7 +255,7 @@ RSpec.describe "Google Cloud BigQuery samples" do
         "gs://#{@bucket.name}/bigquery-test.csv"
       )
       expect(captured_output).to match(
-        /Waiting for load job to complete: job_\w+/
+        /Waiting for load job to complete: job/
       )
       expect(captured_output).to include "Data imported"
 
@@ -323,7 +323,7 @@ RSpec.describe "Google Cloud BigQuery samples" do
         "gs://#{@bucket.name}/bigquery-test.csv"
       )
       expect(captured_output).to match(
-        /Waiting for extract job to complete: job_\w+/
+        /Waiting for extract job to complete: job/
       )
       expect(captured_output).to include "Data exported"
 
