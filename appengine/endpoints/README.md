@@ -22,8 +22,6 @@ Run the application:
 
     $ bundle exec ruby app.rb -p 8080
 
-In your web browser, go to the following address: http://localhost:8080.
-
 ### Using the echo client
 
 With the app running locally, you can execute the simple echo client using:
