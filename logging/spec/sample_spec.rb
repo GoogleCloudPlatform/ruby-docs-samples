@@ -144,7 +144,7 @@ describe "Logging sample" do
     timestamp = "\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2} [^\\\\]+"
 
     expect { list_log_entries }.to output(
-      %r{\[#{timestamp}\] #{my_application_log_name} "Log message"}
+      %r{\[#{timestamp}\] #{my_application_log_name} \"Log message}
     ).to_stdout
   end
 

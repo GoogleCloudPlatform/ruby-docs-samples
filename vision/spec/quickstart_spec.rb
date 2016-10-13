@@ -12,11 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-source "https://rubygems.org"
+require "rspec"
+require "google/cloud"
 
-gem "google-api-client"
-gem "google-cloud-speech"
+describe "Vision Quickstart" do
 
-group :test do
-  gem "rspec"
+  it "label a cat image" do
+    gcloud = Google::Cloud.new ENV["GOOGLE_CLOUD_PROJECT"]
+
+    expect(Google::Cloud).to receive(:new).with("YOUR_PROJECT_ID").
+                                           and_return(gcloud)
+
+    expect {
+      load File.expand_path("../quickstart.rb", __dir__)
+    }.to output(
+      /Labels:.*cat.*/m
+    ).to_stdout
+  end
+
 end

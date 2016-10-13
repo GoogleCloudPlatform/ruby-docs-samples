@@ -1,3 +1,4 @@
+#!/usr/bin/ruby
 # Copyright 2016 Google, Inc
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,11 +13,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-source "https://rubygems.org"
+require "rspec"
+require "google/cloud"
 
-gem "google-api-client"
-gem "google-cloud-speech"
+describe "Language Quickstart" do
 
-group :test do
-  gem "rspec"
+  it "detect sentiment" do
+    gcloud_test_client = Google::Cloud.new ENV["GOOGLE_CLOUD_PROJECT"]
+    expect(Google::Cloud).to receive(:new).with("YOUR_PROJECT_ID").
+                                           and_return(gcloud_test_client)
+
+    expect {
+      load File.expand_path("../quickstart.rb", __dir__)
+    }.to output(
+      "Text: Hello, world!\n" +
+      "Sentiment: 1.0, 0.6000000238418579\n"
+    ).to_stdout
+  end
+
 end
+
