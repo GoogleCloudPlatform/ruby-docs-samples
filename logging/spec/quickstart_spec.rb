@@ -54,7 +54,7 @@ describe "Logging Quickstart" do
     allow(@entry).to receive(:log_name=).with("my-log")
 
     expect(test_log_entries).to be_empty
-    
+
     expect {
       load File.expand_path("../quickstart.rb", __dir__)
     }.to output(
