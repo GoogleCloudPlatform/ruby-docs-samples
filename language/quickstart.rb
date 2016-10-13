@@ -12,11 +12,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-source "https://rubygems.org"
+# [START language_quickstart]
+# Imports the Google Cloud client library
+require "google/cloud"
 
-gem "google-api-client"
-gem "google-cloud-speech"
+# Your Google Cloud Platform project ID
+project_id = "YOUR_PROJECT_ID"
 
-group :test do
-  gem "rspec"
-end
+# Instantiates a client
+gcloud          = Google::Cloud.new project_id
+language_client = gcloud.language
+
+# The text to analyze
+text     = "Hello, world!"
+document = language_client.document text
+
+# Detects the sentiment of the text
+sentiment = document.sentiment
+
+puts "Text: #{text}"
+puts "Sentiment: #{sentiment.polarity}, #{sentiment.magnitude}"
+# [END language_quickstart]
+
