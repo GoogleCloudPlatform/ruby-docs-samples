@@ -31,8 +31,8 @@ describe "Logging Quickstart" do
     @logging      = @gcloud.logging
     @entry        = @logging.entry
 
-    time_now = Time.now.to_f.to_s.split('.').first
-    @log_name = "sub-name-#{time_now}"
+    timestamp = Time.now.to_f.to_s.sub(".", "_")
+    @log_name = "quickstart_log_#{time_now}"
   end
 
   after(:all) do
@@ -48,8 +48,9 @@ describe "Logging Quickstart" do
                                            and_return(@gcloud)
     expect(@gcloud).to receive(:logging).and_return(@logging)
     expect(@logging).to receive(:entry).and_return(@entry)
-    allow(@entry).to receive(:log_name).and_wrap_original do |entry|
-      @log_name
+    # Set log_name to a unique log to this spec run
+    allow(@entry).to receive(:log_name=).with("my-log").and_wrap_original do |m, *args|
+      m.call @log_name
     end
     expect(@logging.entries(filter: entry_filter)).to be_empty
 
@@ -60,12 +61,32 @@ describe "Logging Quickstart" do
     ).to_stdout
 
     expect(@entry.log_name).to eq @log_name
+
+    puts "OK, entry should have been written to log: #{@log_name}"
+
+    puts "Waiting for log to appear..."
+    entries = @logging.entries filter: entry_filter
+
     wait_until(delay: 5) do
-      @logging.entries(filter: entry_filter).any?
+      if entries.any?
+        puts "Found matching entry for filter #{entry_filter}"
+        true
+      else
+        puts "Getting entries again..."
+        entries = @logging.entries filter: entry_filter
+        false
+      end
     end
 
-    entries = @logging.entries filter: entry_filter
+    puts "OK!  We should have matching entries!"
+    puts "#{entries.length}"
+
     expect(entries).to_not be_empty
+
+    puts "Payloads of entries:"
+    entries.each { |e| puts e.payload }
+
+    expect(entries.first.payload).to eq "Hello, world!"
   end
 
 end
