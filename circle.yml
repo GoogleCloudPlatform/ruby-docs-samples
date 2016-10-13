@@ -1,0 +1,27 @@
+# CircleCI Build yaml
+# General information
+general:
+  branches:
+    only:
+      - circleci
+
+# Define VM
+machine:
+  # Timezone
+  timezone: America/Los_Angeles
+
+  # Version of Ruby to use for tests
+  ruby:
+    version: 2.3.1p112
+
+# Customize checkout
+# checkout:
+
+dependencies:
+  override:
+    - BUNDLE_GEMFILE=logging/Gemfile bundle
+
+# Test
+test:
+  overide:
+    - BUNDLE_GEMFILE=logging/Gemfile bundle exec rspec logging
