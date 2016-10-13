@@ -48,7 +48,9 @@ describe "Logging Quickstart" do
                                            and_return(@gcloud)
     expect(@gcloud).to receive(:logging).and_return(@logging)
     expect(@logging).to receive(:entry).and_return(@entry)
-    expect(@entry).to receive(:log_name) { @log_name }
+    allow(@entry).to receive(:log_name).and_wrap_original do |entry|
+      @log_name
+    end
     expect(@logging.entries(filter: entry_filter)).to be_empty
 
     expect {
@@ -57,6 +59,7 @@ describe "Logging Quickstart" do
       "Logged Hello, world!\n"
     ).to_stdout
 
+    expect(@entry.log_name).to eq @log_name
     wait_until(delay: 5) do
       @logging.entries(filter: entry_filter).any?
     end
