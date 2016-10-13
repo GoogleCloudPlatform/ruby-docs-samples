@@ -12,11 +12,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-source "https://rubygems.org"
+# [START translate_quickstart]
+# Imports the Google Cloud client library
+require "google/cloud"
 
-gem "google-api-client"
-gem "google-cloud-speech"
+# Your Translate API key
+api_key = "YOUR_API_KEY"
 
-group :test do
-  gem "rspec"
-end
+# Instantiates a client
+gcloud    = Google::Cloud.new
+translate = gcloud.translate api_key
+
+# The text to translate
+text = "Hello, world!"
+# The target language
+target = "ru"
+
+# Translates some text into Russian
+translation = translate.translate text, to: target
+
+puts "Text: #{text}"
+puts "Translation: #{translation}"
+# [END translate_quickstart]
+

@@ -12,11 +12,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-source "https://rubygems.org"
+# [START vision_quickstart]
+# Imports the Google Cloud client library
+require "google/cloud"
 
-gem "google-api-client"
-gem "google-cloud-speech"
+# Your Google Cloud Platform project ID
+project_id = "YOUR_PROJECT_ID"
 
-group :test do
-  gem "rspec"
+# Instantiates a client
+gcloud = Google::Cloud.new project_id
+vision = gcloud.vision
+
+# The name of the image file to annotate
+fileName = "./images/cat.jpg"
+
+# Performs label detection on the image file
+labels = vision.image(fileName).labels
+
+puts "Labels:"
+labels.each do |label|
+  puts label.description
 end
+# [END vision_quickstart]
+
