@@ -12,7 +12,7 @@ machine:
 
   # Version of Ruby to use for tests
   ruby:
-    version: 2.3.1p112
+    version: 2.3.1
 
 dependencies:
   override:
