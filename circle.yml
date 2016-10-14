@@ -20,5 +20,5 @@ dependencies:
 
 # Test
 test:
-  overide:
+  override:
     - BUNDLE_GEMFILE=logging/Gemfile bundle exec rspec logging
