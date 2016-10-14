@@ -43,7 +43,7 @@ describe "Logging Quickstart" do
   end
 
   def test_log_entries
-    @logging.entries filter: %{logName:"#{@log_name}"}, order: "timestamp desc"
+    @logging.entries filter: %Q{logName:"#{@log_name}"}, order: "timestamp desc"
   end
 
   it "logs a new entry" do
