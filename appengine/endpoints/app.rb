@@ -19,22 +19,10 @@
 
 require "base64"
 require "json"
-require "yaml"
 require "sinatra"
 
 before do
   content_type :json
-end
-
-# Shows the index page.
-get "/" do
-  content_type :html
-  send_file "index.html"
-end
-
-# Serves up the Swagger spec for the API.
-get "/api-docs" do
-  YAML.load_file("swagger.yaml").to_json
 end
 
 # Simple echo service.

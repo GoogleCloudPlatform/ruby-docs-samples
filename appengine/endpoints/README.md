@@ -22,8 +22,6 @@ Run the application:
 
     $ bundle exec ruby app.rb -p 8080
 
-In your web browser, go to the following address: http://localhost:8080.
-
 ### Using the echo client
 
 With the app running locally, you can execute the simple echo client using:
@@ -104,3 +102,16 @@ Now you can use the client ID to make requests to the API:
         --host https://YOUR-PROJECT-ID.appspot.com \
         --api_key YOUR-API-KEY \
         --client_secrets_file /path/to/client_secrets.json
+
+## Viewing the Endpoints graphs
+
+By using Endpoints, you get access to several metrics that are displayed graphically in the Cloud Console.
+
+To view the Endpoints graphs:
+
+1. Go to the [Endpoints section in Cloud Console](https://console.cloud.google.com/endpoints) of the project you deployed your API to.
+2. Click on your API to view more detailed information about the metrics collected.
+
+## Swagger UI
+
+The Swagger UI is an open source Swagger project that allows you to explore your API through a UI. Find out more about it on the [Swagger site](http://swagger.io/swagger-ui/).
