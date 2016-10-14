@@ -14,9 +14,6 @@ machine:
   ruby:
     version: 2.3.1p112
 
-# Customize checkout
-# checkout:
-
 dependencies:
   override:
     - BUNDLE_GEMFILE=logging/Gemfile bundle
