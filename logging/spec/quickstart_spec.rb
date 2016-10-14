@@ -26,32 +26,34 @@ describe "Logging Quickstart" do
     raise "Condition not met. Waited #{times} times with #{delay} sec delay"
   end
 
-  before(:all) do
-    @gcloud       = Google::Cloud.new ENV["GOOGLE_CLOUD_PROJECT"]
-    @logging      = @gcloud.logging
-    @entry        = @logging.entry
+  before do
+    @gcloud   = Google::Cloud.new ENV["GOOGLE_CLOUD_PROJECT"]
+    @logging  = @gcloud.logging
+    @entry    = @logging.entry
+    @log_name = "quickstart_log_#{Time.now.to_i}"
 
-    time_now = Time.now.to_f.to_s.split('.').first
-    @log_name = "sub-name-#{time_now}"
+    @entry.log_name = @log_name
   end
 
-  after(:all) do
-    if @logging.entries(filter: "logName:\"#{@log_name}\"").any?
+  after do
+    begin
       @logging.delete_log @log_name
+    rescue Google::Cloud::NotFoundError
     end
   end
 
-  it "logs a new entry" do
-    entry_filter = "logName:\"#{@log_name}\" textPayload:\"Hello, world!\""
+  def test_log_entries
+    @logging.entries filter: %Q{logName:"#{@log_name}"}, order: "timestamp desc"
+  end
 
+  it "logs a new entry" do
     expect(Google::Cloud).to receive(:new).with("YOUR_PROJECT_ID").
                                            and_return(@gcloud)
     expect(@gcloud).to receive(:logging).and_return(@logging)
     expect(@logging).to receive(:entry).and_return(@entry)
-    allow(@entry).to receive(:log_name).and_wrap_original do |entry|
-      @log_name
-    end
-    expect(@logging.entries(filter: entry_filter)).to be_empty
+    allow(@entry).to receive(:log_name=).with("my-log")
+
+    expect(test_log_entries).to be_empty
 
     expect {
       load File.expand_path("../quickstart.rb", __dir__)
@@ -59,14 +61,15 @@ describe "Logging Quickstart" do
       "Logged Hello, world!\n"
     ).to_stdout
 
-    expect(@entry.log_name).to eq @log_name
-    wait_until(delay: 5) do
-      @logging.entries(filter: entry_filter).any?
-    end
+    entries = []
 
-    entries = @logging.entries filter: entry_filter
-    expect(entries).to_not be_empty
+    wait_until { entries = test_log_entries; entries.any? }
+
+    expect(entries).not_to be_empty
+    expect(entries.length).to eq 1
+
+    entry = entries.first
+    expect(entry.payload).to eq "Hello, world!"
   end
-
 end
 
