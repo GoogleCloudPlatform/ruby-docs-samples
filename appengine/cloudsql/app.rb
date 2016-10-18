@@ -25,15 +25,18 @@ DB = Sequel.mysql2 user:     ENV["MYSQL_USER"],
 # [END connect]
 
 get "/" do
+  # Store a hash of the visitor's ip address
+  visitor_ip = Digest::SHA256.hexdigest request.ip
+
   # Save visit in database
-  DB[:visits].insert(
-    user_ip:   Digest::SHA256.hexdigest(request.ip),
-    timestamp: Time.now
-  )
+  DB[:visits].insert user_ip: visitor_ip, timestamp: Time.now
+
+  # Retrieve the latest 10 visit records from the database
+  visits = DB[:visits].order(Sequel.desc(:timestamp)).limit(10)
 
   response.write "Last 10 visits:\n"
 
-  DB[:visits].order(Sequel.desc(:timestamp)).limit(10).each do |visit|
+  visits.each do |visit|
     response.write "Time: #{visit[:timestamp]} Addr: #{visit[:user_ip]}\n"
   end
 
