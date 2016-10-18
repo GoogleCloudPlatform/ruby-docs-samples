@@ -30,7 +30,7 @@ get "/" do
   DB[:visits].insert user_ip: visitor_ip, timestamp: Time.now
 
   # Retrieve the latest 10 visit records from the database
-  visits = DB[:visits].order(Sequel.desc(:timestamp)).limit(10)
+  visits = DB[:visits].limit(10).order Sequel.desc(:timestamp)
 
   response.write "Last 10 visits:\n"
 
