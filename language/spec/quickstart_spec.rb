@@ -26,8 +26,7 @@ describe "Language Quickstart" do
     expect {
       load File.expand_path("../quickstart.rb", __dir__)
     }.to output(
-      "Text: Hello, world!\n" +
-      "Sentiment: 1.0, 0.6000000238418579\n"
+      /Text: Hello, world!\nSentiment: 1.0/
     ).to_stdout
   end
 
