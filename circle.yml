@@ -16,7 +16,7 @@ machine:
 
 # Dependencies
 dependencies:
-  overide:
+  override:
     - sudo apt-get install realpath
 
 # Test
