@@ -14,11 +14,7 @@ machine:
   ruby:
     version: 2.3.1
 
-dependencies:
-  override:
-    - BUNDLE_GEMFILE=logging/Gemfile bundle
-
 # Test
 test:
   override:
-    - BUNDLE_GEMFILE=logging/Gemfile bundle exec rspec logging
+    - ./spec/run-all.sh

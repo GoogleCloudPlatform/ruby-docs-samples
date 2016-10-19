@@ -40,5 +40,6 @@ for product in      \
 	echo "[$product]"
 	cd "$repo_directory/$product/"
 	bundle install
-	bundle exec rspec --format documentation --fail-fast
+        # Continue to run if a failure occurs
+	bundle exec rspec --format documentation || true
 done
