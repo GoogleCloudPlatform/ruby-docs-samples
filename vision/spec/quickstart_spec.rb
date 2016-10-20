@@ -17,7 +17,7 @@ require "google/cloud"
 
 describe "Vision Quickstart" do
 
-  it "label a cat image" do
+  it "performs label detection on a sample image file" do
     gcloud = Google::Cloud.new ENV["GOOGLE_CLOUD_PROJECT"]
 
     expect(Google::Cloud).to receive(:new).with("YOUR_PROJECT_ID").
