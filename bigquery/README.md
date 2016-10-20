@@ -36,3 +36,4 @@ Commands:
   query       <query>
   query_job   <query>
 ```
+
