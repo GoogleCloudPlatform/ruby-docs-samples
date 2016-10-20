@@ -20,7 +20,7 @@ require "google/cloud"
 project_id = "YOUR_PROJECT_ID"
 
 # Instantiates a client
-gcloud          = Google::Cloud.new project_id
+gcloud   = Google::Cloud.new project_id
 language = gcloud.language
 
 # The text to analyze
