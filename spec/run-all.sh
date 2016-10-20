@@ -1,6 +1,4 @@
-#! /bin/bash
-
-set -e
+#!/bin/bash
 
 for required_variable in                       \
 	GOOGLE_CLOUD_PROJECT                   \
@@ -25,12 +23,13 @@ export TRANSLATE_KEY="$TRANSLATE_API_KEY"
 
 script_directory="$(dirname "`realpath $0`")"
 repo_directory="$(dirname $script_directory)"
+return_status=0 # no failures
 
 for product in      \
+	logging     \
 	bigquery    \
 	datastore   \
 	language    \
-	logging     \
 	pubsub      \
 	speech      \
 	storage     \
@@ -40,6 +39,12 @@ for product in      \
 	echo "[$product]"
 	cd "$repo_directory/$product/"
 	bundle install
-        # Continue to run if a failure occurs
-	bundle exec rspec --format documentation || true
+	bundle exec rspec --format documentation
+	
+	# Check for a spec failure
+	if [ $? != 0 ]; then
+		return_status=1
+	fi
 done
+
+exit $return_status
