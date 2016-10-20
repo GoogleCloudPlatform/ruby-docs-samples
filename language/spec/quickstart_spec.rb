@@ -1,4 +1,3 @@
-#!/usr/bin/ruby
 # Copyright 2016 Google, Inc
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,9 +18,9 @@ require "google/cloud"
 describe "Language Quickstart" do
 
   it "detect sentiment" do
-    gcloud_test_client = Google::Cloud.new ENV["GOOGLE_CLOUD_PROJECT"]
+    gcloud = Google::Cloud.new ENV["GOOGLE_CLOUD_PROJECT"]
     expect(Google::Cloud).to receive(:new).with("YOUR_PROJECT_ID").
-                                           and_return(gcloud_test_client)
+                                           and_return(gcloud)
 
     expect {
       load File.expand_path("../quickstart.rb", __dir__)
