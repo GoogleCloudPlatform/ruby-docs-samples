@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 for required_variable in                       \
 	GOOGLE_CLOUD_PROJECT                   \
 	GOOGLE_APPLICATION_CREDENTIALS         \
@@ -23,13 +25,12 @@ export TRANSLATE_KEY="$TRANSLATE_API_KEY"
 
 script_directory="$(dirname "`realpath $0`")"
 repo_directory="$(dirname $script_directory)"
-return_status=0 # no failures
 
 for product in      \
-	logging     \
 	bigquery    \
 	datastore   \
 	language    \
+	logging     \
 	pubsub      \
 	speech      \
 	storage     \
@@ -39,12 +40,5 @@ for product in      \
 	echo "[$product]"
 	cd "$repo_directory/$product/"
 	bundle install
-	bundle exec rspec --format documentation
-	
-	# Check for a spec failure
-	if [ $? != 0 ]; then
-		return_status=1
-	fi
+	bundle exec rspec --format documentation --fail-fast
 done
-
-exit $return_status
