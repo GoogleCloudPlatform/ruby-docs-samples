@@ -15,6 +15,18 @@ To run the sample, first install dependencies:
 
     bundle install
 
+If you haven't already, configure default credentials for using the
+[Cloud SDK](https://cloud.google.com/sdk/):
+
+    gcloud auth login
+    gcloud init
+
+Next, set the configured project by setting the *GOOGLE_CLOUD_PROJECT*
+environment variable to the project name set in the
+[Google Cloud Platform Developer Console](https://console.cloud.google.com):
+
+    export GOOGLE_CLOUD_PROJECT="YOUR-PROJECT-ID"
+
 Run the sample:
 
     bundle exec ruby vision_samples.rb
@@ -33,3 +45,4 @@ Example:
     ruby vision_samples.rb labels   /path/to/cat.jpg
     ruby vision_samples.rb landmark /path/to/grand-canyon.jpg
     ruby vision_samples.rb faces    /path/to/faces.jpg output-image.jpg
+
