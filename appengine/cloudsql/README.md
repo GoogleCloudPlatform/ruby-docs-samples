@@ -59,6 +59,10 @@ Cloud SQL instance through the proxy.
 
 1. Update the values in in `app.yaml` with your instance configuration.
 
+1. Install dependencies
+
+    bundle install
+
 1. Finally, run `create_tables.rb` to ensure that the database is properly
 configured and to create the tables needed for the sample.
 
