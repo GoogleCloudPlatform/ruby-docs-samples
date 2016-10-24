@@ -57,7 +57,7 @@ create a [new user][user] and [database][database] for your application:
 `MYSQL_DATABASE` environment variables. This allows the app to connect to your
 Cloud SQL instance through the proxy.
 
-1. Update the values in in `app.yaml` with your instance configuration.
+1. Update the values in `app.yaml` with your instance configuration.
 
 1. Install dependencies
 
