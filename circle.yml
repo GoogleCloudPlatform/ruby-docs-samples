@@ -1,0 +1,25 @@
+# CircleCI Build yaml
+# General information
+general:
+  branches:
+    only:
+      - master
+
+# Define VM
+machine:
+  # Timezone
+  timezone: America/Los_Angeles
+
+# Dependencies needed by run-all.sh
+dependencies:
+  override:
+    - sudo apt-get update; sudo apt-get install realpath
+
+# Test
+test:
+  override:
+    # Ruby 2.2.5
+    - rvm-exec 2.2.5 ./spec/run-all.sh
+    # Ruby 2.3.1
+    - rvm-exec 2.3.1 ./spec/run-all.sh
+
