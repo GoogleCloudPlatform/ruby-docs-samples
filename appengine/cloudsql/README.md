@@ -15,7 +15,7 @@ SDK use the following command:
             --activation-policy=ALWAYS \
             --tier=db-n1-standard-1
 
-    where `[YOUR_INSTANCE_NAME]` is a name of your choice.
+    where `[YOUR_INSTANCE_NAME]` is a name of your choice, composed of lowercase letters, numbers, and hyphens; must start with a letter.
 
 1. Set the root password on your Cloud SQL instance:
 
