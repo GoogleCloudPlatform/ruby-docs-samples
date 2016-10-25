@@ -25,6 +25,10 @@ script_directory="$(dirname "`realpath $0`")"
 repo_directory="$(dirname $script_directory)"
 status_return=0 # everything passed
 
+# Print out Ruby version
+bundle exec ruby --version
+
+# Run Tets
 for product in      \
 	bigquery    \
 	datastore   \
