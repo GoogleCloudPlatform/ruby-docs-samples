@@ -16,7 +16,7 @@ require File.expand_path("../../../../spec/e2e", __FILE__)
 require "rspec"
 require "net/http"
 
-RSpec.describe "Datastore E2E test" do
+describe "Datastore E2E test" do
   before do
     @url = E2E.url
   end

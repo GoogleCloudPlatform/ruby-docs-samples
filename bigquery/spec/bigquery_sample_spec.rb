@@ -18,7 +18,7 @@ require "rspec"
 require "google/cloud"
 require "csv"
 
-RSpec.describe "Google Cloud BigQuery samples" do
+describe "Google Cloud BigQuery samples" do
 
   before do
     @project_id = ENV["GOOGLE_PROJECT_ID"]

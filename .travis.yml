@@ -39,6 +39,7 @@ env:
   - TEST_DIR=translate
   - TEST_DIR=language
   - TEST_DIR=appengine/endpoints
+  - TEST_DIR=appengine/cloudsql
   - TEST_DIR=vision
 
 before_install:
