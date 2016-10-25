@@ -3,7 +3,7 @@
 general:
   branches:
     only:
-      - circleci
+      - master
 
 # Define VM
 machine:
