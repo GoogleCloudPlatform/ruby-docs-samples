@@ -3,7 +3,7 @@ require_relative "../app"
 require "rspec"
 require "rack/test"
 
-RSpec.describe "Ruby Endpoints Sample" do
+describe "Ruby Endpoints Sample" do
   include Rack::Test::Methods
 
   attr_reader :app

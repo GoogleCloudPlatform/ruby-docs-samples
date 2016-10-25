@@ -15,7 +15,7 @@
 require_relative "../speech_samples"
 require "rspec"
 
-RSpec.describe "Google Cloud Speech API samples" do
+describe "Google Cloud Speech API samples" do
 
   before do
     # Path to RAW audio file with sample rate of 16000 using LINEAR16 encoding

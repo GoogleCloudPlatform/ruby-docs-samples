@@ -16,7 +16,7 @@ require_relative "../buckets"
 require "rspec"
 require "google/cloud"
 
-RSpec.describe "Google Cloud Storage buckets sample" do
+describe "Google Cloud Storage buckets sample" do
 
   before :all do
     @project_id  = ENV["GOOGLE_PROJECT_ID"]

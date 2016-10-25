@@ -3,7 +3,7 @@ require "rspec"
 require "tempfile"
 require "google/cloud"
 
-RSpec.describe "Google Cloud Natural Language API samples" do
+describe "Google Cloud Natural Language API samples" do
 
   before do
     @project_id  = ENV["GOOGLE_CLOUD_PROJECT"]

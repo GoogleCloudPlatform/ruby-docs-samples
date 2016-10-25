@@ -19,7 +19,7 @@ require "capybara/poltergeist"
 
 Capybara.current_driver = :poltergeist
 
-RSpec.describe "Cloud Storage on Google App Engine", type: :feature do
+describe "Cloud Storage on Google App Engine", type: :feature do
   before :all do
     app_yaml = File.expand_path("../../app.yaml", __FILE__)
     configuration = File.read(app_yaml)

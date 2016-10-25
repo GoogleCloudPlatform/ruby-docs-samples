@@ -19,7 +19,7 @@ require "capybara/poltergeist"
 
 Capybara.current_driver = :poltergeist
 
-RSpec.describe "Cloud SQL on Google App Engine", type: :feature do
+describe "Cloud SQL on Google App Engine", type: :feature do
   before :all do
     skip "End-to-end tests skipped" unless E2E.run?
 
