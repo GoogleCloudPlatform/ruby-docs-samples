@@ -13,22 +13,6 @@ RSpec.describe "Ruby Endpoints Sample" do
     @app.set :environment, :production
   end
 
-  it "GET / renders home page" do
-    get "/"
-
-    expect(last_response.status).to eq 200
-    expect(last_response.content_type).to eq "text/html;charset=utf-8"
-    expect(last_response.body).to include "Endpoints Sample"
-  end
-
-  it "GET /api-docs renders Swagger specification" do
-    get "/api-docs"
-
-    expect(last_response.status).to eq 200
-    expect(last_response.content_type).to eq "application/json"
-    expect(last_response.body).to include '"title":"Endpoints Example"'
-  end
-
   it "POST /echo renders message from request body" do
     post "/echo", '{"message":"hello from test"}'
 
