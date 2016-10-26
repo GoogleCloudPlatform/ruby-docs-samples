@@ -16,7 +16,7 @@ To run the sample, first install dependencies:
 
 Run the sample:
 
-    export TRANSLATE_KEY="Your Translate API key"
+    export TRANSLATE_API_KEY="Your Translate API key"
 
     bundle exec ruby translate_samples.rb
 

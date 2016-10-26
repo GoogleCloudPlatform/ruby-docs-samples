@@ -1,6 +1,6 @@
 # Cloud Pub/Sub Sample
 
-Set the environment variable `GOOGLE_PROJECT_ID` to your Google Cloud
+Set the environment variable `GOOGLE_CLOUD_PROJECT` to your Google Cloud
 Platform project ID.
 
 Test:

@@ -34,7 +34,7 @@ string.
 ```
 export PUBSUB_VERIFICATION_TOKEN=<your-token>
 export PUBSUB_TOPIC=<your-topic-name>
-export GCLOUD_PROJECT=<your-project-id>
+export GOOGLE_CLOUD_PROJECT=<your-project-id>
 bundle
 bundle exec ruby ./app.rb
 ```
@@ -65,7 +65,7 @@ your repo.
 
 ```
 gcloud auth activate-service-account --key-file ../../client_secrets.json
-export GCLOUD_PROJECT=<your-project-id>
+export GOOGLE_CLOUD_PROJECT=<your-project-id>
 export TEST_DIR=appengine/pubsub/
 bundle exec rspec
 ```

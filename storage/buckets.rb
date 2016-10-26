@@ -62,12 +62,12 @@ end
 if __FILE__ == $0
   case ARGV.shift
   when "list"
-    list_buckets project_id: ENV["GCLOUD_PROJECT"]
+    list_buckets project_id: ENV["GOOGLE_CLOUD_PROJECT"]
   when "create"
-    create_bucket project_id:  ENV["GCLOUD_PROJECT"],
+    create_bucket project_id:  ENV["GOOGLE_CLOUD_PROJECT"],
                   bucket_name: ARGV.shift
   when "delete"
-    delete_bucket project_id:  ENV["GCLOUD_PROJECT"],
+    delete_bucket project_id:  ENV["GOOGLE_CLOUD_PROJECT"],
                   bucket_name: ARGV.shift
   else
     puts <<-usage
@@ -79,7 +79,7 @@ Commands:
   delete <bucket>    Delete bucket with the provided name
 
 Environment variables:
-  GCLOUD_PROJECT must be set to your Google Cloud project ID
+  GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
     usage
   end
 end

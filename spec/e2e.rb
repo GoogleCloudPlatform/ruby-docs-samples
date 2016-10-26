@@ -52,7 +52,7 @@ class E2E
       key_json = JSON.parse(key_file)
 
       account_name = key_json['client_email'];
-      project_id = key_json['project_id'] || ENV["GOOGLE_PROJECT_ID"];
+      project_id = key_json['project_id'] || ENV["GOOGLE_CLOUD_PROJECT"];
 
       # authenticate with gcloud using our credentials file
       self.exec "gcloud config set project #{project_id}"

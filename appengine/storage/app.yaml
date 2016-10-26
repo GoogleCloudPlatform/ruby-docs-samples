@@ -18,5 +18,5 @@ vm: true
 entrypoint: bundle exec ruby app.rb -p 8080
 
 env_variables:
-  GCLOUD_STORAGE_BUCKET: <your-bucket-name>
+  GOOGLE_CLOUD_STORAGE_BUCKET: <your-bucket-name>
 # [END app_yaml]

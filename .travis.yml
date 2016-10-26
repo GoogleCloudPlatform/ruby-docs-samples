@@ -27,8 +27,6 @@ cache:
     - vendor/bundle
 
 env:
-  global:
-  - GOOGLE_APPLICATION_CREDENTIALS=$TRAVIS_BUILD_DIR/client_secrets.json
   matrix:
   - TEST_DIR=storage
   - TEST_DIR=pubsub
@@ -43,8 +41,7 @@ env:
   - TEST_DIR=vision
 
 before_install:
-- openssl aes-256-cbc -K $encrypted_aeb4e2af7332_key -iv $encrypted_aeb4e2af7332_iv
-  -in client_secrets.json.enc -out client_secrets.json -d
+- echo $GOOGLE_APPLICATION_CREDENTIALS_JSON | base64 --decode > $HOME/service-account.json
 
 install:
 - cd $TEST_DIR

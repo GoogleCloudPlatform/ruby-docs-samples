@@ -13,14 +13,6 @@ for required_variable in                       \
 	fi
 done
 
-# TODO: make all environment variables consistent
-export GOOGLE_PROJECT_ID="$GOOGLE_CLOUD_PROJECT"
-export GCLOUD_PROJECT="$GOOGLE_CLOUD_PROJECT"
-export STORAGE_BUCKET="$GOOGLE_CLOUD_STORAGE_BUCKET"
-export BUCKET="$GOOGLE_CLOUD_STORAGE_BUCKET"
-export ALT_BUCKET="$ALTERNATE_GOOGLE_CLOUD_STORAGE_BUCKET"
-export TRANSLATE_KEY="$TRANSLATE_API_KEY"
-
 script_directory="$(dirname "`realpath $0`")"
 repo_directory="$(dirname $script_directory)"
 status_return=0 # everything passed

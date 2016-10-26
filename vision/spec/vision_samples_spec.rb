@@ -34,10 +34,6 @@ describe "Vision sample" do
   end
   attr_reader :captured_output
 
-# cat.jpg
-# eiffel_tower.jpg
-# face.png
-
   example "detect labels" do
     capture { detect_labels path_to_image_file: image_path("cat.jpg") }
 

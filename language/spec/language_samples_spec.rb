@@ -7,7 +7,7 @@ describe "Google Cloud Natural Language API samples" do
 
   before do
     @project_id  = ENV["GOOGLE_CLOUD_PROJECT"]
-    @bucket_name = ENV["STORAGE_BUCKET"]
+    @bucket_name = ENV["GOOGLE_CLOUD_STORAGE_BUCKET"]
     @gcloud      = Google::Cloud.new @project_id
     @storage     = @gcloud.storage
     @bucket      = @storage.bucket @bucket_name

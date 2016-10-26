@@ -20,8 +20,8 @@ require "tempfile"
 describe "Google Cloud Storage files sample" do
 
   before do
-    @project_id      = ENV["GOOGLE_PROJECT_ID"]
-    @bucket_name     = ENV["STORAGE_BUCKET"]
+    @project_id      = ENV["GOOGLE_CLOUD_PROJECT"]
+    @bucket_name     = ENV["GOOGLE_CLOUD_STORAGE_BUCKET"]
     @gcloud          = Google::Cloud.new @project_id
     @storage         = @gcloud.storage
     @bucket          = @storage.bucket @bucket_name

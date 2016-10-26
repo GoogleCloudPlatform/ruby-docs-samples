@@ -33,7 +33,7 @@ Commands:
   delete <bucket>    Delete bucket with the provided name
 
 Environment variables:
-  GCLOUD_PROJECT must be set to your Google Cloud project ID
+  GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
 ```
 
 ### Files
@@ -54,5 +54,5 @@ Commands:
   copy <srcBucket> <srcFile> <destBucket> <destFile>  Copy file to other bucket
 
 Environment variables:
-  GCLOUD_PROJECT must be set to your Google Cloud project ID
+  GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
 ```

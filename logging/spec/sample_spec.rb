@@ -42,17 +42,19 @@ describe "Logging sample" do
 
   # Tests require environment variables:
   #
-  #   GCLOUD_PROJECT   ID of your Google Cloud Platform project
-  #   BUCKET           Name of Google Cloud Storage bucket to use for log sink
-  #   ALT_BUCKET       Name of an alternative bucket to also use for log sink
+  # GOOGLE_CLOUD_PROJECT - ID of your Google Cloud Platform project
+  # GOOGLE_CLOUD_STORAGE_BUCKET - Name of Google Cloud Storage bucket to use
+  #                                 for log sink
+  # ALTERNATE_GOOGLE_CLOUD_STORAGE_BUCKET - Name of an alternative bucket to
+  #                                           also use for log sink
   #
   before :all do
-    @project_id = ENV["GCLOUD_PROJECT"]
+    @project_id = ENV["GOOGLE_CLOUD_PROJECT"]
     @gcloud     = Google::Cloud.new @project_id
     @logging    = @gcloud.logging
     @storage    = @gcloud.storage
-    @bucket     = @storage.bucket ENV["BUCKET"]
-    @alt_bucket = @storage.bucket ENV["ALT_BUCKET"]
+    @bucket     = @storage.bucket ENV["GOOGLE_CLOUD_STORAGE_BUCKET"]
+    @alt_bucket = @storage.bucket ENV["ALTERNATE_GOOGLE_CLOUD_STORAGE_BUCKET"]
 
     # Cloud Logging needs owner permissions on the buckets used
     @bucket.acl.add_owner "group-cloud-logs@google.com"
