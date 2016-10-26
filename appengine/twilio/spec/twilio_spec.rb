@@ -16,7 +16,7 @@ require File.expand_path("../../../../spec/e2e", __FILE__)
 require "rspec"
 require "rest-client"
 
-RSpec.describe "Twilio on Google App Engine", type: :feature do
+describe "Twilio on Google App Engine", type: :feature do
   before :all do
     @url = E2E.url
   end

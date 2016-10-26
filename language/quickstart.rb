@@ -20,12 +20,12 @@ require "google/cloud"
 project_id = "YOUR_PROJECT_ID"
 
 # Instantiates a client
-gcloud          = Google::Cloud.new project_id
-language_client = gcloud.language
+gcloud   = Google::Cloud.new project_id
+language = gcloud.language
 
 # The text to analyze
 text     = "Hello, world!"
-document = language_client.document text
+document = language.document text
 
 # Detects the sentiment of the text
 sentiment = document.sentiment

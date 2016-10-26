@@ -30,7 +30,8 @@ describe "Logging Quickstart" do
     @gcloud   = Google::Cloud.new ENV["GOOGLE_CLOUD_PROJECT"]
     @logging  = @gcloud.logging
     @entry    = @logging.entry
-    @log_name = "quickstart_log_#{Time.now.to_i}"
+    @log_name = "projects/#{ENV["GOOGLE_CLOUD_PROJECT"]}/logs/" +
+                "quickstart_log_#{Time.now.to_i}"
 
     @entry.log_name = @log_name
   end
@@ -43,7 +44,7 @@ describe "Logging Quickstart" do
   end
 
   def test_log_entries
-    @logging.entries filter: %Q{logName:"#{@log_name}"}, order: "timestamp desc"
+    @logging.entries filter: %Q{logName="#{@log_name}"}
   end
 
   it "logs a new entry" do

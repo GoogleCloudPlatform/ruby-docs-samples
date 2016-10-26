@@ -17,7 +17,7 @@ require "rspec"
 require "net/http"
 require "google/cloud"
 
-RSpec.describe "PubSub E2E test" do
+describe "PubSub E2E test" do
   before :all do
     @topic_name = "flexible-topic"
 

@@ -3,58 +3,23 @@
 general:
   branches:
     only:
-      - circleci
+      - master
 
 # Define VM
 machine:
   # Timezone
   timezone: America/Los_Angeles
 
-# Dependencies
+# Dependencies needed by run-all.sh
 dependencies:
   override:
-    # Ruby 2.3.1
-    - cd logging   && rvm-exec 2.3.1 bundle install && cd ..
-    - cd bigquery  && rvm-exec 2.3.1 bundle install && cd ..
-    - cd datastore && rvm-exec 2.3.1 bundle install && cd ..
-    - cd language  && rvm-exec 2.3.1 bundle install && cd ..
-    - cd pubsub    && rvm-exec 2.3.1 bundle install && cd ..
-    - cd speech    && rvm-exec 2.3.1 bundle install && cd ..
-    - cd storage   && rvm-exec 2.3.1 bundle install && cd ..
-    - cd translate && rvm-exec 2.3.1 bundle install && cd ..
-    - cd vision    && rvm-exec 2.3.1 bundle install && cd ..
-    # Ruby 2.2.5
-    - cd logging   && rvm-exec 2.2.5 bundle install && cd ..
-    - cd bigquery  && rvm-exec 2.2.5 bundle install && cd ..
-    - cd datastore && rvm-exec 2.2.5 bundle install && cd ..
-    - cd language  && rvm-exec 2.2.5 bundle install && cd ..
-    - cd pubsub    && rvm-exec 2.2.5 bundle install && cd ..
-    - cd speech    && rvm-exec 2.2.5 bundle install && cd ..
-    - cd storage   && rvm-exec 2.2.5 bundle install && cd ..
-    - cd translate && rvm-exec 2.2.5 bundle install && cd ..
-    - cd vision    && rvm-exec 2.2.5 bundle install && cd ..
+    - sudo apt-get update; sudo apt-get install realpath
 
 # Test
 test:
   override:
-    # Ruby 2.3.1
-    - cd logging   && rvm-exec 2.3.1 bundle exec rspec && cd ..
-    - cd bigquery  && rvm-exec 2.3.1 bundle exec rspec && cd ..
-    - cd datastore && rvm-exec 2.3.1 bundle exec rspec && cd ..
-    - cd language  && rvm-exec 2.3.1 bundle exec rspec && cd ..
-    - cd pubsub    && rvm-exec 2.3.1 bundle exec rspec && cd ..
-    - cd speech    && rvm-exec 2.3.1 bundle exec rspec && cd ..
-    - cd storage   && rvm-exec 2.3.1 bundle exec rspec && cd ..
-    - cd translate && rvm-exec 2.3.1 bundle exec rspec && cd ..
-    - cd vision    && rvm-exec 2.3.1 bundle exec rspec && cd ..
     # Ruby 2.2.5
-    - cd logging   && rvm-exec 2.2.5 bundle exec rspec && cd ..
-    - cd bigquery  && rvm-exec 2.2.5 bundle exec rspec && cd ..
-    - cd datastore && rvm-exec 2.2.5 bundle exec rspec && cd ..
-    - cd language  && rvm-exec 2.2.5 bundle exec rspec && cd ..
-    - cd pubsub    && rvm-exec 2.2.5 bundle exec rspec && cd ..
-    - cd speech    && rvm-exec 2.2.5 bundle exec rspec && cd ..
-    - cd storage   && rvm-exec 2.2.5 bundle exec rspec && cd ..
-    - cd translate && rvm-exec 2.2.5 bundle exec rspec && cd ..
-    - cd vision    && rvm-exec 2.2.5 bundle exec rspec && cd ..
+    - rvm-exec 2.2.5 ./spec/run-all.sh
+    # Ruby 2.3.1
+    - rvm-exec 2.3.1 ./spec/run-all.sh
 

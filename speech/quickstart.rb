@@ -24,10 +24,10 @@ gcloud = Google::Cloud.new project_id
 speech = gcloud.speech
 
 # The name of the audio file to transcribe
-fileName = "./audio_files/audio.raw"
+file_name = "./audio_files/audio.raw"
 
 # The audio file's encoding and sample rate
-audio = speech.audio fileName, encoding: :raw, sample_rate: 16000
+audio = speech.audio file_name, encoding: :raw, sample_rate: 16000
 
 # Detects speech in the audio file
 results = audio.recognize

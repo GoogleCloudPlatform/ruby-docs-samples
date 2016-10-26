@@ -12,33 +12,43 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require File.expand_path("../../../../spec/e2e", __FILE__)
+require_relative "../app.rb"
 require "rspec"
-require "capybara/rspec"
-require "capybara/poltergeist"
+require "rack/test"
 
-Capybara.current_driver = :poltergeist
+describe "Cloud SQL sample", type: :feature do
+  include Rack::Test::Methods
 
-RSpec.describe "Cloud SQL on Google App Engine", type: :feature do
-  before :all do
-    app_yaml = File.expand_path("../../app.yaml", __FILE__)
-
-    configuration = File.read(app_yaml)
-    configuration.sub! "[YOUR_USER]",        ENV["MYSQL_USER"]
-    configuration.sub! "[YOUR_PASSWORD]",    ENV["MYSQL_PASSWORD"]
-    configuration.sub! "[YOUR_DATABASE]",    ENV["MYSQL_DATABASE"]
-    configuration.sub! "[YOUR_SOCKET_PATH]", ENV["MYSQL_SOCKET_PATH"]
-
-    File.write(app_yaml, configuration)
-
-    @url = E2E.url
+  def app
+    Sinatra::Application
   end
 
-  it "displays recent visits" do
-    2.times { visit @url }
+  before do
+    @database = Sequel.sqlite database: ":memory:"
 
-    expect(page).to have_content "Last 10 visits:"
-    expect(page).to have_content "Time:"
-    expect(page).to have_content "Addr:"
+    expect(Sequel).to receive(:mysql2).and_return @database
+  end
+
+  it "can create database schema by running create_tables.rb" do
+    expect(@database.tables).not_to include :visits
+
+    load File.expand_path("../create_tables.rb", __dir__)
+
+    expect(@database.tables).to include :visits
+  end
+
+  it "displays hashes of the IP addresses of the top 10 most recent visits" do
+    load File.expand_path("../create_tables.rb", __dir__)
+    expect(@database[:visits].count).to eq 0
+
+    localhost_user_ip = Digest::SHA256.hexdigest "127.0.0.1"
+
+    15.times { get "/" }
+
+    expect(@database[:visits].count).to eq 15
+    expect(@database[:visits].first[:user_ip]).to eq localhost_user_ip
+    expect(last_response.body).to include "Last 10 visits"
+    expect(last_response.body).to include "Addr: #{localhost_user_ip}"
+    expect(last_response.body.scan("Addr:").count).to eq 10
   end
 end

@@ -31,7 +31,7 @@ def create_table project_id:, dataset_id:, table_id:
 end
 
 def list_tables project_id:, dataset_id:
-  # [START list_datasets]
+  # [START list_tables]
   # project_id = "Your Google Cloud project ID"
   # dataset_id = "ID of the dataset to create table in"
 

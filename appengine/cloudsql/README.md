@@ -15,7 +15,7 @@ SDK use the following command:
             --activation-policy=ALWAYS \
             --tier=db-n1-standard-1
 
-    where `[YOUR_INSTANCE_NAME]` is a name of your choice.
+    where `[YOUR_INSTANCE_NAME]` is a name of your choice, composed of lowercase letters, numbers, and hyphens; must start with a letter.
 
 1. Set the root password on your Cloud SQL instance:
 
@@ -57,7 +57,11 @@ create a [new user][user] and [database][database] for your application:
 `MYSQL_DATABASE` environment variables. This allows the app to connect to your
 Cloud SQL instance through the proxy.
 
-1. Update the values in in `app.yaml` with your instance configuration.
+1. Update the values in `app.yaml` with your instance configuration.
+
+1. Install dependencies
+
+    bundle install
 
 1. Finally, run `create_tables.rb` to ensure that the database is properly
 configured and to create the tables needed for the sample.

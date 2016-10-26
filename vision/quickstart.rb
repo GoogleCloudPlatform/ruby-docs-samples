@@ -24,10 +24,10 @@ gcloud = Google::Cloud.new project_id
 vision = gcloud.vision
 
 # The name of the image file to annotate
-fileName = "./images/cat.jpg"
+file_name = "./images/cat.jpg"
 
 # Performs label detection on the image file
-labels = vision.image(fileName).labels
+labels = vision.image(file_name).labels
 
 puts "Labels:"
 labels.each do |label|

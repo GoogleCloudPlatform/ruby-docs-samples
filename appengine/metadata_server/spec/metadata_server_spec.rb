@@ -19,7 +19,7 @@ require "capybara/poltergeist"
 
 Capybara.current_driver = :poltergeist
 
-RSpec.describe "Metadata server on Google App Engine", type: :feature do
+describe "Metadata server on Google App Engine", type: :feature do
   before :all do
     @url = E2E.url
   end

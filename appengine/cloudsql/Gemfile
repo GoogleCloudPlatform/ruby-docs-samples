@@ -12,17 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START dependencies]
 source "https://rubygems.org"
 
-# [START dependencies]
 gem "mysql2"
+gem "sequel"
 # [END dependencies]
 
 gem "sinatra"
-gem "sequel"
 
 group :test do
   gem "rspec"
   gem "capybara"
   gem "poltergeist"
+  gem "rack-test"
+  gem "sqlite3"
 end

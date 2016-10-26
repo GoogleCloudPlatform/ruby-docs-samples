@@ -15,6 +15,11 @@ require 'json'
 
 class E2E
   class << self
+    def run?
+      # Only run end-to-end tests when E2E environment variable is set to TRUE
+      ENV["E2E"] == "true"
+    end
+
     def check()
       if @url.nil?
         test_dir = ENV["TEST_DIR"]

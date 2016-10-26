@@ -19,14 +19,28 @@ require "capybara/poltergeist"
 
 Capybara.current_driver = :poltergeist
 
-describe "Google Analytics on Google App Engine", type: :feature do
+describe "Cloud SQL on Google App Engine", type: :feature do
   before :all do
+    skip "End-to-end tests skipped" unless E2E.run?
+
+    app_yaml = File.expand_path("../../app.yaml", __FILE__)
+
+    configuration = File.read(app_yaml)
+    configuration.sub! "[YOUR_USER]",        ENV["MYSQL_USER"]
+    configuration.sub! "[YOUR_PASSWORD]",    ENV["MYSQL_PASSWORD"]
+    configuration.sub! "[YOUR_DATABASE]",    ENV["MYSQL_DATABASE"]
+    configuration.sub! "[YOUR_SOCKET_PATH]", ENV["MYSQL_SOCKET_PATH"]
+
+    File.write(app_yaml, configuration)
+
     @url = E2E.url
   end
 
-  it "can track visit event" do
-    visit @url
+  it "displays recent visits" do
+    2.times { visit @url }
 
-    expect(page).to have_content "Event tracked"
+    expect(page).to have_content "Last 10 visits:"
+    expect(page).to have_content "Time:"
+    expect(page).to have_content "Addr:"
   end
 end
