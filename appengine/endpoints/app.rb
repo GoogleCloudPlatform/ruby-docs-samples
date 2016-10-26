@@ -20,9 +20,19 @@
 require "base64"
 require "json"
 require "sinatra"
+require "rack/cors"
 
 before do
   content_type :json
+end
+
+use Rack::Cors do
+  allow do
+    origins "*"
+    resource "/auth/info/firebase",
+             :headers => :any,
+             :methods => [:get, :post, :options]
+  end
 end
 
 # Simple echo service.
@@ -53,6 +63,20 @@ end
 
 # Auth info with Google ID token.
 get "/auth/info/googleidtoken" do
+  auth_info
+end
+
+# Auth info with Firebase Auth.
+get "/auth/info/firebase" do
+  auth_info
+end
+
+options "/auth/info/firebase" do
+  200
+end
+
+# Auth info with Auth0.
+get "/auth/info/auth0" do
   auth_info
 end
 
