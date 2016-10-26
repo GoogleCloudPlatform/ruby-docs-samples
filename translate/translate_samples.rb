@@ -84,7 +84,7 @@ def list_supported_language_names api_key:, language_code: "en"
 end
 
 if __FILE__ == $PROGRAM_NAME
-  api_key = ENV["TRANSLATE_KEY"]
+  api_key = ENV["TRANSLATE_API_KEY"]
   command = ARGV.shift
 
   case command

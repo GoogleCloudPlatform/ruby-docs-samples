@@ -15,10 +15,10 @@
 require_relative "../translate_samples"
 require "rspec"
 
-RSpec.describe "Google Translate API samples" do
+describe "Google Translate API samples" do
 
   before do
-    @api_key = ENV["TRANSLATE_KEY"]
+    @api_key = ENV["TRANSLATE_API_KEY"]
   end
 
   # Capture and return STDOUT output by block

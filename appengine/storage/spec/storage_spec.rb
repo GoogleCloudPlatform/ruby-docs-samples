@@ -23,7 +23,7 @@ RSpec.describe "Cloud Storage on Google App Engine", type: :feature do
   before :all do
     app_yaml = File.expand_path("../../app.yaml", __FILE__)
     configuration = File.read(app_yaml)
-                        .sub("<your-bucket-name>", ENV["GCLOUD_STORAGE_BUCKET"])
+                        .sub("<your-bucket-name>", ENV["GOOGLE_CLOUD_STORAGE_BUCKET"])
     File.write(app_yaml, configuration)
 
     @url = E2E.url

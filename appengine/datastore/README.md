@@ -15,7 +15,7 @@ project id with `gcloud config list`.
 
 
 ```
-export GCLOUD_PROJECT=<your-project-id>
+export GOOGLE_CLOUD_PROJECT=<your-project-id>
 bundle
 bundle exec ruby ./app.rb
 ```

@@ -18,14 +18,14 @@ require "rspec"
 require "google/cloud"
 require "csv"
 
-RSpec.describe "Google Cloud BigQuery samples" do
+describe "Google Cloud BigQuery samples" do
 
   before do
-    @project_id = ENV["GOOGLE_PROJECT_ID"]
+    @project_id = ENV["GOOGLE_CLOUD_PROJECT"]
     @gcloud     = Google::Cloud.new @project_id
     @bigquery   = @gcloud.bigquery
     @storage    = @gcloud.storage
-    @bucket     = @storage.bucket ENV["STORAGE_BUCKET"]
+    @bucket     = @storage.bucket ENV["GOOGLE_CLOUD_STORAGE_BUCKET"]
     @tempfiles  = []
 
     # Examples assume that newly created test_dataset and test_table exist

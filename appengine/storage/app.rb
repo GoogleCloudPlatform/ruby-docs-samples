@@ -18,7 +18,7 @@ require "google/cloud"
 
 gcloud  = Google::Cloud.new
 storage = gcloud.storage
-bucket  = storage.bucket ENV["GCLOUD_STORAGE_BUCKET"]
+bucket  = storage.bucket ENV["GOOGLE_CLOUD_STORAGE_BUCKET"]
 
 get "/" do
   # Present the user with an upload form

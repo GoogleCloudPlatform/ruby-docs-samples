@@ -20,7 +20,7 @@ describe "Storage Quickstart" do
   it "creates a new bucket" do
     gcloud      = Google::Cloud.new ENV["GOOGLE_CLOUD_PROJECT"]
     storage     = gcloud.storage
-    bucket_name = ENV["STORAGE_BUCKET"]
+    bucket_name = ENV["GOOGLE_CLOUD_STORAGE_BUCKET"]
 
     if storage.bucket bucket_name
       bucket = storage.bucket bucket_name

@@ -23,8 +23,8 @@ $ gsutil mb gs://<your-project-id>
 ## Run
 
 ```
-export GCLOUD_PROJECT=<your-project-id>
-export GCLOUD_STORAGE_BUCKET=<your-project-id>
+export GOOGLE_CLOUD_PROJECT=<your-project-id>
+export GOOGLE_CLOUD_STORAGE_BUCKET=<your-project-id>
 bundle
 bundle exec ruby app.rb
 ```
@@ -52,7 +52,7 @@ your repo.
 
 ```
 gcloud auth activate-service-account --key-file ../../client_secrets.json
-export GCLOUD_PROJECT=<your-project-id>
+export GOOGLE_CLOUD_PROJECT=<your-project-id>
 export TEST_DIR=appengine/storage/
 bundle exec rspec
 ```

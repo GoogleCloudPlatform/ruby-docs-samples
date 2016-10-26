@@ -215,40 +215,40 @@ def run_sample arguments
 
   case command
   when "list"
-    list_bucket_contents project_id:  ENV["GCLOUD_PROJECT"],
+    list_bucket_contents project_id:  ENV["GOOGLE_CLOUD_PROJECT"],
                          bucket_name: arguments.shift
   when "upload"
-    upload_file project_id:      ENV["GCLOUD_PROJECT"],
-                  bucket_name:     arguments.shift,
-                  local_file_path: arguments.shift
+    upload_file project_id:      ENV["GOOGLE_CLOUD_PROJECT"],
+                bucket_name:     arguments.shift,
+                local_file_path: arguments.shift
   when "download"
-    download_file project_id:  ENV["GCLOUD_PROJECT"],
-                    bucket_name: arguments.shift,
-                    file_name:   arguments.shift,
-                    local_path:  arguments.shift
-  when "delete"
-    delete_file project_id:  ENV["GCLOUD_PROJECT"],
-                  bucket_name: arguments.shift,
-                  file_name:   arguments.shift
-  when "metadata"
-    list_file_details project_id:  ENV["GCLOUD_PROJECT"],
-                        bucket_name: arguments.shift,
-                        file_name:   arguments.shift
-  when "make_public"
-    make_file_public project_id:  ENV["GCLOUD_PROJECT"],
-                       bucket_name: arguments.shift,
-                       file_name:   arguments.shift
-  when "rename"
-    rename_file project_id:  ENV["GCLOUD_PROJECT"],
+    download_file project_id:  ENV["GOOGLE_CLOUD_PROJECT"],
                   bucket_name: arguments.shift,
                   file_name:   arguments.shift,
-                  new_name:    arguments.shift
+                  local_path:  arguments.shift
+  when "delete"
+    delete_file project_id:  ENV["GOOGLE_CLOUD_PROJECT"],
+                bucket_name: arguments.shift,
+                file_name:   arguments.shift
+  when "metadata"
+    list_file_details project_id:  ENV["GOOGLE_CLOUD_PROJECT"],
+                      bucket_name: arguments.shift,
+                      file_name:   arguments.shift
+  when "make_public"
+    make_file_public project_id:  ENV["GOOGLE_CLOUD_PROJECT"],
+                     bucket_name: arguments.shift,
+                     file_name:   arguments.shift
+  when "rename"
+    rename_file project_id:  ENV["GOOGLE_CLOUD_PROJECT"],
+                bucket_name: arguments.shift,
+                file_name:   arguments.shift,
+                new_name:    arguments.shift
   when "copy"
-    copy_file project_id:         ENV["GCLOUD_PROJECT"],
-                source_bucket_name: arguments.shift,
-                source_file_name:   arguments.shift,
-                dest_bucket_name:   arguments.shift,
-                dest_file_name:     arguments.shift
+    copy_file project_id:         ENV["GOOGLE_CLOUD_PROJECT"],
+              source_bucket_name: arguments.shift,
+              source_file_name:   arguments.shift,
+              dest_bucket_name:   arguments.shift,
+              dest_file_name:     arguments.shift
   else
     puts <<-usage
 Usage: bundle exec ruby files.rb [command] [arguments]
@@ -264,7 +264,7 @@ Commands:
   copy <srcBucket> <srcFile> <destBucket> <destFile>  Copy file to other bucket
 
 Environment variables:
-  GCLOUD_PROJECT must be set to your Google Cloud project ID
+  GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
     usage
   end
 end
