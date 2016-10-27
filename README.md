@@ -1,6 +1,7 @@
 ## Ruby docs samples
 
 [![Build Status](https://travis-ci.org/GoogleCloudPlatform/ruby-docs-samples.svg?branch=master)](https://travis-ci.org/GoogleCloudPlatform/ruby-docs-samples)
+[![CircleCI](https://circleci.com/gh/GoogleCloudPlatform/ruby-docs-samples/tree/master.svg?style=svg)](https://circleci.com/gh/GoogleCloudPlatform/ruby-docs-samples/tree/master) 
 
 This repository holds samples used in the ruby documentation on
 cloud.google.com.
