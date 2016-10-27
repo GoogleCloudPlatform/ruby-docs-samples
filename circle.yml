@@ -1,10 +1,4 @@
 # CircleCI Build yaml
-# General information
-general:
-  branches:
-    only:
-      - master
-
 # Define VM
 machine:
   # Timezone
