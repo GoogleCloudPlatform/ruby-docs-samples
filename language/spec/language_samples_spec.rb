@@ -53,7 +53,7 @@ describe "Google Cloud Natural Language API samples" do
 
     expect {
       sentiment_from_text project_id: @project_id, text_content: negative_text
-    }.to output(/^-1.0 /).to_stdout
+    }.to output(/^0.1/).to_stdout
   end
 
   example "sentiment from a file stored in Google Cloud Storage" do
@@ -72,7 +72,7 @@ describe "Google Cloud Natural Language API samples" do
         project_id:   @project_id,
         storage_path: "gs://#{@bucket_name}/negative_text.txt"
       )
-    }.to output(/^-1.0 /).to_stdout
+    }.to output(/^0.1/).to_stdout
   end
 
   example "entries from text" do
