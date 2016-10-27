@@ -28,17 +28,15 @@ describe "Google Cloud BigQuery samples" do
     @bucket     = @storage.bucket ENV["GOOGLE_CLOUD_STORAGE_BUCKET"]
     @tempfiles  = []
 
-    # Examples assume that newly created test_dataset and test_table exist
-    delete_test_dataset!
+    current_time  = Time.now.to_i
+    @file_name    = "bigquery-test_#{current_time}"
+    @dataset_name = "test_dataset_#{current_time}"
+    @table_name   = "test_table_#{current_time}"
 
-    @dataset = @bigquery.create_dataset "test_dataset"
-    @table   = @dataset.create_table    "test_table" do |schema|
+    @dataset = @bigquery.create_dataset @dataset_name
+    @table   = @dataset.create_table    @table_name do |schema|
       schema.string  "name"
       schema.integer "value"
-    end
-
-    if @bucket.file "bigquery-test.csv"
-      @bucket.file("bigquery-test.csv").delete
     end
   end
 
@@ -46,17 +44,24 @@ describe "Google Cloud BigQuery samples" do
     # Cleanup any tempfiles that were used by the example spec
     @tempfiles.each &:flush
     @tempfiles.each &:close
+
+    # delete csv file and dataset
+    delete_test_dataset!
+
+    if @bucket.file "#{@file_name}.csv"
+      @bucket.file("#{@file_name}.csv").delete
+    end
   end
 
   def delete_test_dataset!
-    dataset = @bigquery.dataset "test_dataset"
+    dataset = @bigquery.dataset @dataset_name
     dataset.tables.each &:delete if dataset
     dataset.delete               if dataset
   end
 
   # Helper to create Tempfile that will be cleaned up after test run
   def create_tempfile extension = "txt"
-    file = Tempfile.new [ "bigquery-test", ".#{extension}" ]
+    file = Tempfile.new [ @file_name, ".#{extension}" ]
     @tempfiles << file
     file
   end
@@ -106,36 +111,38 @@ describe "Google Cloud BigQuery samples" do
   describe "Managing Datasets" do
     example "create dataset" do
       delete_test_dataset!
-      expect(@bigquery.dataset "test_dataset").to be nil
+      expect(@bigquery.dataset @dataset_name).to be nil
 
       expect {
-        create_dataset project_id: @project_id, dataset_id: "test_dataset"
+        create_dataset project_id: @project_id,
+                       dataset_id: @dataset_name
       }.to output(
-        "Created dataset: test_dataset\n"
+        "Created dataset: #{@dataset_name}\n"
       ).to_stdout
 
-      expect(@bigquery.dataset "test_dataset").not_to be nil
+      expect(@bigquery.dataset @dataset_name).not_to be nil
     end
 
     example "list datasets" do
       expect {
         list_datasets project_id: @project_id
       }.to output(
-        /test_dataset/
+        /#{@dataset_name}/
       ).to_stdout
     end
 
     example "delete dataset" do
       @dataset.tables.each &:delete
-      expect(@bigquery.dataset "test_dataset").not_to be nil
+      expect(@bigquery.dataset @dataset_name).not_to be nil
 
       expect {
-        delete_dataset project_id: @project_id, dataset_id: "test_dataset"
+        delete_dataset project_id: @project_id,
+                       dataset_id: @dataset_name
       }.to output(
-        "Deleted dataset: test_dataset\n"
+        "Deleted dataset: #{@dataset_name}\n"
       ).to_stdout
 
-      expect(@bigquery.dataset "test_dataset").to be nil
+      expect(@bigquery.dataset @dataset_name).to be nil
     end
   end
 
@@ -143,39 +150,40 @@ describe "Google Cloud BigQuery samples" do
 
     example "create table" do
       @table.delete
-      expect(@dataset.table "test_table").to be nil
+      expect(@dataset.table @table_name).to be nil
 
       expect {
         create_table project_id: @project_id,
-                     dataset_id: "test_dataset",
-                     table_id:   "test_table"
+                     dataset_id: @dataset_name,
+                     table_id:   @table_name
       }.to output(
-        "Created table: test_table\n"
+        "Created table: #{@table_name}\n"
       ).to_stdout
 
-      expect(@dataset.table "test_table").not_to be nil
+      expect(@dataset.table @table_name).not_to be nil
     end
 
     example "list tables" do
       expect {
-        list_tables project_id: @project_id, dataset_id: "test_dataset"
+        list_tables project_id: @project_id,
+                    dataset_id: @dataset_name
       }.to output(
-        /test_table/
+        /#{@table_name}/
       ).to_stdout
     end
 
     example "delete table" do
-      expect(@dataset.table "test_table").not_to be nil
+      expect(@dataset.table @table_name).not_to be nil
 
       expect {
         delete_table project_id: @project_id,
-                     dataset_id: "test_dataset",
-                     table_id:   "test_table"
+                     dataset_id: @dataset_name,
+                     table_id:   @table_name
       }.to output(
-        "Deleted table: test_table\n"
+        "Deleted table: #{@table_name}\n"
       ).to_stdout
 
-      expect(@dataset.table "test_table").to be nil
+      expect(@dataset.table @table_name).to be nil
     end
 
     example "list table data" do
@@ -188,8 +196,8 @@ describe "Google Cloud BigQuery samples" do
 
       expect {
         list_table_data project_id: @project_id,
-                        dataset_id: "test_dataset",
-                        table_id:   "test_table"
+                        dataset_id: @dataset_name,
+                        table_id:   @table_name
       }.to output(
         "name = Alice\nvalue = 5\nname = Bob\nvalue = 10\n"
       ).to_stdout
@@ -209,9 +217,9 @@ describe "Google Cloud BigQuery samples" do
       expect(@table.data).to be_empty
 
       capture do
-        import_table_data_from_file project_id:     @project_id,
-                                    dataset_id:     "test_dataset",
-                                    table_id:       "test_table",
+        import_table_data_from_file project_id:      @project_id,
+                                    dataset_id:      @dataset_name,
+                                    table_id:        @table_name,
                                     local_file_path: csv_file.path
       end
 
@@ -237,7 +245,7 @@ describe "Google Cloud BigQuery samples" do
         csv << [ "Bob",   10 ]
       end
 
-      file = @bucket.create_file csv_file.path, "bigquery-test.csv"
+      file = @bucket.create_file csv_file.path, "#{@file_name}.csv"
 
       expect(@table.data).to be_empty
 
@@ -246,13 +254,13 @@ describe "Google Cloud BigQuery samples" do
           project_id:   @project_id,
           dataset_id:   @dataset.dataset_id,
           table_id:     @table.table_id,
-          storage_path: "gs://#{@bucket.name}/bigquery-test.csv"
+          storage_path: "gs://#{@bucket.name}/#{@file_name}.csv"
         )
       end
 
       expect(captured_output).to include(
         "Importing data from Cloud Storage file: " +
-        "gs://#{@bucket.name}/bigquery-test.csv"
+        "gs://#{@bucket.name}/#{@file_name}.csv"
       )
       expect(captured_output).to match(
         /Waiting for load job to complete: job/
@@ -307,30 +315,30 @@ describe "Google Cloud BigQuery samples" do
 
       @table.load(csv_file.path).wait_until_done!
 
-      expect(@bucket.file "bigquery-test.csv").to be nil
+      expect(@bucket.file "#{@file_name}.csv").to be nil
 
       capture do
         export_table_data_to_cloud_storage(
           project_id:   @project_id,
           dataset_id:   @dataset.dataset_id,
           table_id:     @table.table_id,
-          storage_path: "gs://#{@bucket.name}/bigquery-test.csv"
+          storage_path: "gs://#{@bucket.name}/#{@file_name}.csv"
         )
       end
 
       expect(captured_output).to include(
         "Exporting data to Cloud Storage file: " +
-        "gs://#{@bucket.name}/bigquery-test.csv"
+        "gs://#{@bucket.name}/#{@file_name}.csv"
       )
       expect(captured_output).to match(
         /Waiting for extract job to complete: job/
       )
       expect(captured_output).to include "Data exported"
 
-      expect(@bucket.file "bigquery-test.csv").not_to be nil
+      expect(@bucket.file "#{@file_name}.csv").not_to be nil
 
       local_file = create_tempfile "csv"
-      @bucket.file("bigquery-test.csv").download local_file.path
+      @bucket.file("#{@file_name}.csv").download local_file.path
 
       csv = CSV.read local_file.path
 
