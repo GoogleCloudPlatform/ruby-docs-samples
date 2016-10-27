@@ -19,6 +19,10 @@ require "google/cloud"
 require "csv"
 
 describe "Google Cloud BigQuery samples" do
+  current_time  = Time.now.to_i
+  @file_name    = "bigquery-test_#{current_time}"
+  @dataset_name = "test_dataset_#{current_time}"
+  @table_name   = "test_table_#{current_time}"
 
   before do
     @project_id = ENV["GOOGLE_CLOUD_PROJECT"]
@@ -27,11 +31,6 @@ describe "Google Cloud BigQuery samples" do
     @storage    = @gcloud.storage
     @bucket     = @storage.bucket ENV["GOOGLE_CLOUD_STORAGE_BUCKET"]
     @tempfiles  = []
-
-    current_time  = Time.now.to_i
-    @file_name    = "bigquery-test_#{current_time}"
-    @dataset_name = "test_dataset_#{current_time}"
-    @table_name   = "test_table_#{current_time}"
 
     @dataset = @bigquery.create_dataset @dataset_name
     @table   = @dataset.create_table    @table_name do |schema|
