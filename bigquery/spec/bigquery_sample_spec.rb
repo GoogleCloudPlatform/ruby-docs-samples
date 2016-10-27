@@ -28,10 +28,10 @@ describe "Google Cloud BigQuery samples" do
     @bucket     = @storage.bucket ENV["GOOGLE_CLOUD_STORAGE_BUCKET"]
     @tempfiles  = []
 
-    file_time     = Time.now.to_i
-    @file_name    = "bigquery-test_#{file_time}"
-    @dataset_name = "test_dataset_#{file_time}"
-    @table_name   = "test_table_#{file_time}"
+    current_time  = Time.now.to_i
+    @file_name    = "bigquery-test_#{current_time}"
+    @dataset_name = "test_dataset_#{current_time}"
+    @table_name   = "test_table_#{current_time}"
 
     @dataset = @bigquery.create_dataset @dataset_name
     @table   = @dataset.create_table    @table_name do |schema|
