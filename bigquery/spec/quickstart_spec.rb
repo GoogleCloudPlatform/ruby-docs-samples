@@ -18,25 +18,31 @@ require "google/cloud"
 describe "BigQuery Quickstart" do
 
   it "creates a new dataset" do
-    gcloud   = Google::Cloud.new ENV["GOOGLE_CLOUD_PROJECT"]
-    bigquery = gcloud.bigquery
+    gcloud       = Google::Cloud.new ENV["GOOGLE_CLOUD_PROJECT"]
+    bigquery     = gcloud.bigquery
+    dataset_name = "my_new_dataset_#{Time.now.to_i}"
 
-    if bigquery.dataset "my_new_dataset"
-      bigquery.dataset("my_new_dataset").delete
-    end
-
-    expect(bigquery.dataset "my_new_dataset").to be nil
+    expect(bigquery.dataset dataset_name).to be nil
     expect(Google::Cloud).to receive(:new).
                              with("YOUR_PROJECT_ID").
                              and_return(gcloud)
+    expect(gcloud).to receive(:bigquery).and_return(bigquery)
+
+    expect(bigquery).to receive(:create_dataset).
+                        with("my_new_dataset").
+                        and_wrap_original do |m, *args|
+      m.call(dataset_name)
+    end
 
     expect {
       load File.expand_path("../quickstart.rb", __dir__)
     }.to output(
-      "Dataset my_new_dataset created\.\n"
+      "Dataset #{dataset_name} created\.\n"
     ).to_stdout
 
-    expect(bigquery.dataset "my_new_dataset").not_to be nil
+    expect(bigquery.dataset dataset_name).not_to be nil
+
+    bigquery.dataset(dataset_name).delete
    end
 
 end
