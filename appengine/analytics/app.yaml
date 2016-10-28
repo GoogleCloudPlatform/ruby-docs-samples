@@ -14,7 +14,7 @@
 
 # [START app_yaml]
 runtime: ruby
-vm: true
+env: flex
 entrypoint: bundle exec ruby app.rb -p $PORT
 
 env_variables:
