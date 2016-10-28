@@ -137,10 +137,14 @@ describe "Logging sample" do
     allow(@logging).to receive(:entries).
       with(filter: %{resource.type = "gae_app"}).
       and_wrap_original do |m, *args|
-        m.call(
-          filter: %{logName = "#{my_application_log_name}"},
-          order: "timestamp desc"
-        )
+        entries = []
+
+        wait_until {
+          entries = m.call(filter: %Q{logName="#{my_application_log_name}"})
+          entries.any?
+        }
+
+        entries
       end
 
     timestamp = "\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2} [^\\\\]+"
