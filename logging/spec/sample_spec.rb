@@ -35,8 +35,7 @@ describe "Logging sample" do
   # Returns entries logged to "my_application_log" in the test project
   def my_application_log_entries
     @logging.entries(
-      filter: %{logName = "#{my_application_log_name}"},
-      order: "timestamp desc"
+      filter: %Q{logName="#{my_application_log_name}"}
     )
   end
 
@@ -196,9 +195,7 @@ describe "Logging sample" do
     expect(entry).not_to be nil
     expect(entry.payload).to eq "Log message - current time #{current_time}"
     expect(entry.severity).to eq :NOTICE
-    expect(entry.log_name).to eq(
-      "projects/#{@project_id}/logs/my_application_log"
-    )
+    expect(entry.log_name).to eq my_application_log_name
   end
 
   it "can delete log" do
@@ -209,7 +206,7 @@ describe "Logging sample" do
     current_time = Time.now.to_f
 
     entries = @logging.entries(
-      filter: %Q{logName="projects/#{@project_id}/logs/my_application_log"}
+      filter: %Q{logName="#{my_application_log_name}"}
     )
     entry = entries.detect { |e| e.payload.include? "time #{current_time}" }
     expect(entry).to be nil
@@ -253,8 +250,6 @@ describe "Logging sample" do
     expect(entry).not_to be nil
     expect(entry.payload).to eq "Log message - current time #{current_time}"
     expect(entry.severity).to eq :INFO
-    expect(entry.log_name).to eq(
-      "projects/#{@project_id}/logs/my_application_log"
-    )
+    expect(entry.log_name).to eq my_application_log_name
   end
 end
