@@ -35,8 +35,7 @@ describe "Logging sample" do
   # Returns entries logged to "my_application_log" in the test project
   def my_application_log_entries
     @logging.entries(
-      filter: %{logName = "#{my_application_log_name}"},
-      order: "timestamp desc"
+      filter: %Q{logName="#{my_application_log_name}"}
     )
   end
 
@@ -135,12 +134,16 @@ describe "Logging sample" do
     # The test project may not have App Engine resources.
     # Instead, add a project log entry and change the filter string called.
     allow(@logging).to receive(:entries).
-      with(filter: %{resource.type = "gae_app"}).
+      with(filter: %Q{resource.type = "gae_app"}).
       and_wrap_original do |m, *args|
-        m.call(
-          filter: %{logName = "#{my_application_log_name}"},
-          order: "timestamp desc"
-        )
+        entries = []
+
+        wait_until {
+          entries = m.call filter: %Q{logName="#{my_application_log_name}"}
+          entries.any?
+        }
+
+        entries
       end
 
     timestamp = "\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2} [^\\\\]+"
@@ -150,9 +153,7 @@ describe "Logging sample" do
     ).to_stdout
   end
 
-  # XXX This test is flaky so it is currently disabled
-  #     Will send future pull request to re-enable when fixed
-  skip "can write log entry" do
+  it "can write log entry" do
     current_time = Time.now.to_f
 
     # Log entries refer to a particular resource
@@ -181,20 +182,20 @@ describe "Logging sample" do
     write_log_entry
 
     # Wait for entry to be queryable
+    entries = []
+
     wait_until do
-      my_application_log_entries.any? do |e|
+      entries = my_application_log_entries
+      entries.any? do |e|
         e.payload == "Log message - current time #{current_time}"
       end
     end
 
-    entries = my_application_log_entries
     entry = entries.detect { |e| e.payload.include? "time #{current_time}" }
     expect(entry).not_to be nil
     expect(entry.payload).to eq "Log message - current time #{current_time}"
     expect(entry.severity).to eq :NOTICE
-    expect(entry.log_name).to eq(
-      "projects/#{@project_id}/logs/my_application_log"
-    )
+    expect(entry.log_name).to eq my_application_log_name
   end
 
   it "can delete log" do
@@ -205,8 +206,7 @@ describe "Logging sample" do
     current_time = Time.now.to_f
 
     entries = @logging.entries(
-      filter: %{logName = "projects/#{@project_id}/logs/my_application_log"},
-      order: "timestamp desc"
+      filter: %Q{logName="#{my_application_log_name}"}
     )
     entry = entries.detect { |e| e.payload.include? "time #{current_time}" }
     expect(entry).to be nil
@@ -236,21 +236,20 @@ describe "Logging sample" do
     end
 
     write_log_entry_using_ruby_logger
+    entries = []
 
     # Wait for entry to be queryable
     wait_until do
-      my_application_log_entries.any? do |e|
+      entries = my_application_log_entries
+      entries.any? do |e|
         e.payload == "Log message - current time #{current_time}"
       end
     end
 
-    entries = my_application_log_entries
     entry = entries.detect { |e| e.payload.include? "time #{current_time}" }
     expect(entry).not_to be nil
     expect(entry.payload).to eq "Log message - current time #{current_time}"
     expect(entry.severity).to eq :INFO
-    expect(entry.log_name).to eq(
-      "projects/#{@project_id}/logs/my_application_log"
-    )
+    expect(entry.log_name).to eq my_application_log_name
   end
 end
