@@ -209,8 +209,7 @@ describe "Logging sample" do
     current_time = Time.now.to_f
 
     entries = @logging.entries(
-      filter: %{logName = "projects/#{@project_id}/logs/my_application_log"},
-      order: "timestamp desc"
+      filter: %Q{logName="projects/#{@project_id}/logs/my_application_log"},
     )
     entry = entries.detect { |e| e.payload.include? "time #{current_time}" }
     expect(entry).to be nil
@@ -240,15 +239,16 @@ describe "Logging sample" do
     end
 
     write_log_entry_using_ruby_logger
+    entries = []
 
     # Wait for entry to be queryable
     wait_until do
-      my_application_log_entries.any? do |e|
+      entries = my_application_log_entries
+      entries.any? do |e|
         e.payload == "Log message - current time #{current_time}"
       end
     end
 
-    entries = my_application_log_entries
     entry = entries.detect { |e| e.payload.include? "time #{current_time}" }
     expect(entry).not_to be nil
     expect(entry.payload).to eq "Log message - current time #{current_time}"
