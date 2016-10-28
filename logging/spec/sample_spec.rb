@@ -134,7 +134,7 @@ describe "Logging sample" do
     # The test project may not have App Engine resources.
     # Instead, add a project log entry and change the filter string called.
     allow(@logging).to receive(:entries).
-      with(filter: %{resource.type = "gae_app"}).
+      with(filter: %Q{resource.type = "gae_app"}).
       and_wrap_original do |m, *args|
         entries = []
 
