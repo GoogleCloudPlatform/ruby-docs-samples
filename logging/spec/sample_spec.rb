@@ -140,7 +140,7 @@ describe "Logging sample" do
         entries = []
 
         wait_until {
-          entries = m.call(filter: %Q{logName="#{my_application_log_name}"})
+          entries = m.call filter: %Q{logName="#{my_application_log_name}"}
           entries.any?
         }
 
@@ -209,7 +209,7 @@ describe "Logging sample" do
     current_time = Time.now.to_f
 
     entries = @logging.entries(
-      filter: %Q{logName="projects/#{@project_id}/logs/my_application_log"},
+      filter: %Q{logName="projects/#{@project_id}/logs/my_application_log"}
     )
     entry = entries.detect { |e| e.payload.include? "time #{current_time}" }
     expect(entry).to be nil
