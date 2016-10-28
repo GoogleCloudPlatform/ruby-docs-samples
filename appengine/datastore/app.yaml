@@ -14,6 +14,6 @@
 
 #[START all]
 runtime: ruby
-vm: true
+env: flex
 entrypoint: bundle exec ruby app.rb -p 8080
 #[END all]
