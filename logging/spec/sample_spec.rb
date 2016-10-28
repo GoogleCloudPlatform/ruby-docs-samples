@@ -153,9 +153,7 @@ describe "Logging sample" do
     ).to_stdout
   end
 
-  # XXX This test is flaky so it is currently disabled
-  #     Will send future pull request to re-enable when fixed
-  skip "can write log entry" do
+  it "can write log entry" do
     current_time = Time.now.to_f
 
     # Log entries refer to a particular resource
@@ -184,13 +182,15 @@ describe "Logging sample" do
     write_log_entry
 
     # Wait for entry to be queryable
+    entries = []
+
     wait_until do
-      my_application_log_entries.any? do |e|
+      entries = my_application_log_entries
+      entries.any? do |e|
         e.payload == "Log message - current time #{current_time}"
       end
     end
 
-    entries = my_application_log_entries
     entry = entries.detect { |e| e.payload.include? "time #{current_time}" }
     expect(entry).not_to be nil
     expect(entry.payload).to eq "Log message - current time #{current_time}"
