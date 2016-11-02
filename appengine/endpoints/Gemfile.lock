@@ -18,6 +18,7 @@ GEM
     multipart-post (2.0.0)
     netrc (0.11.0)
     rack (1.6.4)
+    rack-cors (0.4.0)
     rack-protection (1.5.3)
       rack
     rack-test (0.6.3)
@@ -58,6 +59,7 @@ PLATFORMS
 
 DEPENDENCIES
   json
+  rack-cors
   rack-test
   rest-client
   rspec
