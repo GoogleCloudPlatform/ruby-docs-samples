@@ -13,8 +13,8 @@
 # limitations under the License.
 
 runtime: ruby
-vm: true
-entrypoint: bundle exec ruby app.rb -p 8080
+env: flex
+entrypoint: bundle exec ruby app.rb -p $PORT
 
 # [START env_variables]
 env_variables:

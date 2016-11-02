@@ -31,19 +31,25 @@ get "/" do
 end
 
 post "/send/email" do
-  email = SendGrid::Mail.new do |e|
-    e.to      = params[:recipient]
-    e.from    = SENDGRID_SENDER
-    e.subject = "Hello world!"
-    e.text    = "Sendgrid on Google App Engine with Ruby"
-  end
+  # Define necessary information for a new email
+  from    = SendGrid::Email.new email: SENDGRID_SENDER
+  to      = SendGrid::Email.new email: params[:recipient]
+  subject = "Hello from Google Cloud Ruby SendGrid Sample"
+  content = SendGrid::Content.new type:  "text/plain",
+                                  value: "Congratulations it works!"
 
-  sendgrid = SendGrid::Client.new api_key: SENDGRID_API_KEY
+  # Define the new email with provided information
+  mail = SendGrid::Mail.new(from, subject, to, content)
+
+  # Create a new API Client to send the new email
+  sg = SendGrid::API.new api_key: SENDGRID_API_KEY
 
   begin
-    response = sendgrid.send email
-    "Email sent. #{response.code} #{response.body}"
-  rescue SendGrid::Exception => ex
+    # Send request to "mail/send"
+    response = sg.client.mail._('send').post request_body: mail.to_json
+
+    "Email sent. #{response.status_code} #{response.body}"
+  rescue Exception => ex
     "An error occurred: #{ex.message}"
   end
 end
