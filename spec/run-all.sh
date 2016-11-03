@@ -24,7 +24,7 @@ ruby --version
 for product in      \
 	bigquery    \
 	datastore   \
-	endpoints   \
+	endpoints/getting-started   \
 	language    \
 	logging     \
 	pubsub      \
