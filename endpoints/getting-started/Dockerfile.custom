@@ -1,0 +1,13 @@
+FROM debian:jessie
+
+RUN apt-get update && \
+    apt-get install -y build-essential ruby ruby-dev && \
+    apt-get clean && \
+    rm /var/lib/apt/lists/*_*
+
+ADD . /app
+WORKDIR /app
+
+RUN gem install bundler && \
+    bundle install
+ENTRYPOINT ["bundle", "exec", "ruby", "app.rb", "-p", "8081"]
