@@ -42,11 +42,11 @@ post "/send/email" do
   mail = SendGrid::Mail.new(from, subject, to, content)
 
   # Create a new API Client to send the new email
-  sg = SendGrid::API.new api_key: SENDGRID_API_KEY
+  sendgrid = SendGrid::API.new api_key: SENDGRID_API_KEY
 
   begin
     # Send request to "mail/send"
-    response = sg.client.mail._('send').post request_body: mail.to_json
+    response = sendgrid.client.mail._('send').post request_body: mail.to_json
 
     "Email sent. #{response.status_code} #{response.body}"
   rescue Exception => ex
