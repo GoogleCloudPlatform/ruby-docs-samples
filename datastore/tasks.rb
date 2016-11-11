@@ -27,8 +27,8 @@ def new_task project_id:, description:
 
   task = datastore.entity "Task" do |t|
     t["description"] = description
-    t["created"] = Time.now
-    t["done"] = false
+    t["created"]     = Time.now
+    t["done"]        = false
     t.exclude_from_indexes! "description", true
   end
   datastore.save task
@@ -42,7 +42,7 @@ end
 def mark_done project_id:, task_id:
   datastore = create_client project_id: project_id
 
-  task = datastore.find "Task", task_id.to_i
+  task         = datastore.find "Task", task_id.to_i
   task["done"] = true
   datastore.save task
 end
@@ -53,7 +53,7 @@ def list_tasks project_id:
   datastore = create_client project_id: project_id
 
   query = datastore.query("Task").
-            order("created")
+          order("created")
   tasks = datastore.run query
 
   tasks.each do |t|
@@ -77,16 +77,16 @@ if __FILE__ == $0
   project_id = ENV["GOOGLE_CLOUD_PROJECT"]
   case ARGV.shift
   when "new"
-    new_task project_id: project_id,
+    new_task project_id:  project_id,
              description: ARGV.shift
   when "done"
-    mark_done project_id:  project_id,
-              task_id: ARGV.shift
+    mark_done project_id: project_id,
+              task_id:    ARGV.shift
   when "list"
-    list_tasks project_id:  project_id
+    list_tasks project_id: project_id
   when "delete"
-    delete_task project_id:  project_id,
-                task_id: ARGV.shift
+    delete_task project_id: project_id,
+                task_id:    ARGV.shift
   else
     puts <<-usage
 Usage: bundle exec ruby tasks.rb [command] [arguments]

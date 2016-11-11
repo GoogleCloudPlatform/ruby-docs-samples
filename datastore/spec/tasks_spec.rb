@@ -19,7 +19,7 @@ describe "Datastore task list" do
 
   before :all do
     @project_id = ENV["GOOGLE_CLOUD_PROJECT"]
-    @datastore = Google::Cloud::Datastore.new project: @project_id
+    @datastore  = Google::Cloud::Datastore.new project: @project_id
     delete_tasks
   end
 
@@ -39,8 +39,8 @@ describe "Datastore task list" do
   it "creates a task" do
     desc = "Test description."
     allow($stdout).to receive(:puts)
-    id = new_task project_id: @project_id,
-                    description: desc
+    id = new_task project_id:  @project_id,
+                  description: desc
     task = @datastore.find "Task", id
     expect(task.nil?).to be(false)
     expect(task["description"]).to eq(desc)
@@ -53,7 +53,7 @@ describe "Datastore task list" do
     @datastore.save task
     id = task.key.id
     mark_done project_id: @project_id,
-              task_id: id
+              task_id:    id
     task = @datastore.find "Task", id
     expect(task["done"]).to be(true)
   end
@@ -61,14 +61,14 @@ describe "Datastore task list" do
   it "list_tasks" do
     task1 = @datastore.entity "Task" do |t|
       t["description"] = "Test 1."
-      t["created"] = Time.now
-      t["done"] = false
+      t["created"]     = Time.now
+      t["done"]        = false
       t.exclude_from_indexes! "description", true
     end
     task2 = @datastore.entity "Task" do |t|
       t["description"] = "Test 2."
-      t["created"] = Time.now
-      t["done"] = false
+      t["created"]     = Time.now
+      t["done"]        = false
       t.exclude_from_indexes! "description", true
     end
     @datastore.save task1, task2
@@ -79,14 +79,14 @@ describe "Datastore task list" do
   it "deletes tasks" do
     task = @datastore.entity "Task" do |t|
       t["description"] = "Test 1."
-      t["created"] = Time.now
-      t["done"] = false
+      t["created"]     = Time.now
+      t["done"]        = false
       t.exclude_from_indexes! "description", true
     end
     @datastore.save task
     id = task.key.id
     delete_task project_id: @project_id,
-                task_id: id
+                task_id:    id
     task = @datastore.find "Task", id
     expect(task.nil?).to be(true)
   end
