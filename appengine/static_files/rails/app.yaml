@@ -12,5 +12,5 @@
 # limitations under the License.
 
 runtime: ruby
-vm: true
-entrypoint: rails server -p $PORT
+env: flex
+entrypoint: bundle exec rails server -p $PORT

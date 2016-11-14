@@ -3,9 +3,9 @@ GEM
   specs:
     builder (3.2.2)
     diff-lcs (1.2.5)
-    domain_name (0.5.20160826)
+    domain_name (0.5.20161021)
       unf (>= 0.0.5, < 1.0.0)
-    http-cookie (1.0.2)
+    http-cookie (1.0.3)
       domain_name (~> 0.5)
     jwt (1.5.6)
     mime-types (3.1)
@@ -24,7 +24,7 @@ GEM
       rspec-core (~> 3.5.0)
       rspec-expectations (~> 3.5.0)
       rspec-mocks (~> 3.5.0)
-    rspec-core (3.5.3)
+    rspec-core (3.5.4)
       rspec-support (~> 3.5.0)
     rspec-expectations (3.5.0)
       diff-lcs (>= 1.2.0, < 2.0)
@@ -56,4 +56,4 @@ DEPENDENCIES
   twilio-ruby
 
 BUNDLED WITH
-   1.12.5
+   1.13.4

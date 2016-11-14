@@ -14,6 +14,6 @@
 
 #[START all]
 runtime: ruby
-vm: true
-entrypoint: bundle exec ruby app.rb -p 8080
+env: flex
+entrypoint: bundle exec ruby app.rb -p $PORT
 #[END all]

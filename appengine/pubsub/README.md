@@ -15,8 +15,8 @@ Create a topic and subscription, which includes specifying the
 endpoint to which the Pub/Sub server should send requests:
 
 ```
-gcloud alpha pubsub topics create <your-topic-name>
-gcloud alpha pubsub subscriptions create <your-subscription-name> \
+gcloud beta pubsub topics create <your-topic-name>
+gcloud beta pubsub subscriptions create <your-subscription-name> \
   --topic <your-topic-name> \
   --push-endpoint \
   https://<your-project-id>.appspot.com/pubsub/push?token=<your-token> \
@@ -36,7 +36,7 @@ export PUBSUB_VERIFICATION_TOKEN=<your-token>
 export PUBSUB_TOPIC=<your-topic-name>
 export GOOGLE_CLOUD_PROJECT=<your-project-id>
 bundle
-bundle exec ruby ./app.rb
+bundle exec ruby app.rb
 ```
 
 visit on `http://localhost:4567/`
