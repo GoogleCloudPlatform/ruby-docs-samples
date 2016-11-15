@@ -46,6 +46,8 @@ def create_bucket project_id:, bucket_name:
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
   
+  require "google/cloud/storage"
+  
   storage = Google::Cloud::Storage.new project_id
   
   bucket = storage.create_bucket bucket_name
