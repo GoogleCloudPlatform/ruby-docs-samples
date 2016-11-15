@@ -13,25 +13,23 @@
 # limitations under the License.
 
 # [START build_service]
-require "google/cloud"
+require "google/cloud/datastore"
 
-def create_client project_id:
-  gcloud = Google::Cloud.new project_id
-  gcloud.datastore
+def create_client project_id
+  @datastore = Google::Cloud::Datastore.new project: project_id
 end
 # [END build_service]
 
 # [START add_entity]
-def new_task project_id:, description:
-  datastore = create_client project_id: project_id
-
-  task = datastore.entity "Task" do |t|
+def new_task description
+  task = @datastore.entity "Task" do |t|
     t["description"] = description
     t["created"]     = Time.now
     t["done"]        = false
     t.exclude_from_indexes! "description", true
   end
-  datastore.save task
+
+  @datastore.save task
 
   puts task.key.id
   task.key.id
@@ -39,22 +37,21 @@ end
 # [END add_entity]
 
 # [START update_entity]
-def mark_done project_id:, task_id:
-  datastore = create_client project_id: project_id
+def mark_done task_id
+  task = @datastore.find "Task", task_id
 
-  task         = datastore.find "Task", task_id.to_i
   task["done"] = true
-  datastore.save task
+
+  @datastore.save task
 end
 # [END update_entity]
 
 # [START retrieve_entities]
-def list_tasks project_id:
-  datastore = create_client project_id: project_id
-
-  query = datastore.query("Task").
+def list_tasks
+  query = @datastore.query("Task").
           order("created")
-  tasks = datastore.run query
+
+  tasks = @datastore.run query
 
   tasks.each do |t|
     puts t['description']
@@ -65,28 +62,24 @@ end
 # [END retrieve_entities]
 
 # [START delete_entity]
-def delete_task project_id:, task_id:
-  datastore = create_client project_id: project_id
+def delete_task task_id
+  task = @datastore.find "Task", task_id
 
-  task = datastore.find "Task", task_id.to_i
-  datastore.delete task
+  @datastore.delete task
 end
 # [END delete_entity]
 
 if __FILE__ == $0
-  project_id = ENV["GOOGLE_CLOUD_PROJECT"]
+  create_client ENV["GOOGLE_CLOUD_PROJECT"]
   case ARGV.shift
   when "new"
-    new_task project_id:  project_id,
-             description: ARGV.shift
+    new_task ARGV.shift
   when "done"
-    mark_done project_id: project_id,
-              task_id:    ARGV.shift
+    mark_done ARGV.shift.to_i
   when "list"
-    list_tasks project_id: project_id
+    list_tasks
   when "delete"
-    delete_task project_id: project_id,
-                task_id:    ARGV.shift
+    delete_task ARGV.shift.to_i
   else
     puts <<-usage
 Usage: bundle exec ruby tasks.rb [command] [arguments]

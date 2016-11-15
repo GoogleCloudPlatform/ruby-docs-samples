@@ -20,6 +20,7 @@ describe "Datastore task list" do
   before :all do
     @project_id = ENV["GOOGLE_CLOUD_PROJECT"]
     @datastore  = Google::Cloud::Datastore.new project: @project_id
+    create_client @project_id
     delete_tasks
   end
 
@@ -32,15 +33,10 @@ describe "Datastore task list" do
     @datastore.delete(*tasks.map(&:key)) unless tasks.empty?
   end
 
-  it "creates client" do
-    datastore = create_client project_id: @project_id
-  end
-
   it "creates a task" do
     desc = "Test description."
     allow($stdout).to receive(:puts)
-    id = new_task project_id:  @project_id,
-                  description: desc
+    id = new_task desc
     task = @datastore.find "Task", id
     expect(task.nil?).to be(false)
     expect(task["description"]).to eq(desc)
@@ -52,8 +48,7 @@ describe "Datastore task list" do
     end
     @datastore.save task
     id = task.key.id
-    mark_done project_id: @project_id,
-              task_id:    id
+    mark_done id
     task = @datastore.find "Task", id
     expect(task["done"]).to be(true)
   end
@@ -73,7 +68,7 @@ describe "Datastore task list" do
     end
     @datastore.save task1, task2
 
-    expect { list_tasks project_id: @project_id }.to output(/Test 1/).to_stdout
+    expect { list_tasks }.to output(/Test 1/).to_stdout
   end
 
   it "deletes tasks" do
@@ -85,8 +80,7 @@ describe "Datastore task list" do
     end
     @datastore.save task
     id = task.key.id
-    delete_task project_id: @project_id,
-                task_id:    id
+    delete_task id
     task = @datastore.find "Task", id
     expect(task.nil?).to be(true)
   end
