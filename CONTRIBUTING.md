@@ -87,17 +87,19 @@ without having to research how to create the client.
 
 A notable exception to this is for Tutorial applications.
 
-#### Tutorial application snippets
+### Tutorial application snippets
 
 Tutorials document the steps to create a fully working application.
 In a tutorial, the first code snippet on the page typically demonstrates
 how to instantiate a client library, including requiring the necessary
 dependency.  Other snippets that show code blocks from the working application
-do not need to demonstrate how to instantiate a client.  For example:
+do not need to demonstrate how to instantiate a client.
 
-##### Pub/Sub sample application
+#### Pub/Sub sample application
 
-Create client:
+An abridged version of what snippets for a tutorial application should look like.
+
+##### Create client
 
 ```ruby
 require "google/cloud/pubsub"
@@ -105,7 +107,7 @@ require "google/cloud/pubsub"
 @pubsub = Google::Cloud::Pubsub.new
 ```
 
-Send notification by publishing to topic:
+##### Send notification by publishing to topic
 
 ```ruby
 def send_notification message
@@ -115,7 +117,7 @@ def send_notification message
 end
 ```
 
-The client can pull notifications by pulling from subscription:
+##### The client can pull notifications by pulling from subscription
 
 ```ruby
 def get_latest_notifications
