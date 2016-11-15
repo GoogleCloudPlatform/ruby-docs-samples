@@ -31,8 +31,65 @@ accept your pull requests.
 1. Ensure that your code has an appropriate set of unit tests which all pass.
 1. Submit a pull request.
 
+## Code snippets
+
+This repository contains various code snippets that are embedded into
+product documentation web pages.
+
+The preferred template for a snippet:
+
+```ruby
+# storage/buckets.rb
+
+def create_bucket project_id:, bucket_name:
+  # [START create_bucket]
+  # project_id  = "Your Google Cloud project ID"
+  # bucket_name = "Your Google Cloud Storage bucket name"
+  
+  storage = Google::Cloud::Storage.new project_id
+  
+  bucket = storage.create_bucket bucket_name
+  
+  puts "Created bucket #{bucket.name}"
+  # [END create_bucket]
+end
+```
+
+#### Region tags
+
+The `[START create_bucket]` and `[END create_bucket]` annotations are
+examples of documentation "region tags."  These are used throughout
+this repository for defining blocks of code to be embedded into
+documentation web pages.
+
+#### Placeholder variables
+
+When a code snippet makes use of variables that are defined outside
+of the snippet, add commented-out variable declarations to the top
+of the snippet.
+
+This allows developers to copy/paste the snippet in its entirety
+into their own file and run it by simply setting these variables
+with their own values.
+
 ## Style
 
 Samples in this repository follow the
 [GitHub Ruby Styleguide](https://github.com/styleguide/ruby)
 except where noted otherwise.
+
+#### Variable alignment
+
+Align variables to improve the readability of embedded code snippets.
+
+```ruby
+# good
+storage_client = Google::Cloud::Storage.new
+bucket         = storage.create_bucket "my-bucket"
+uploaded_file  = bucket.file "my-file.txt"
+
+# bad
+storage_client = Google::Cloud::Storage.new
+bucket = storage.create_bucket "my-bucket"
+uploaded_file = bucket.file "my-file.txt"
+```
