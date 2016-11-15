@@ -74,6 +74,62 @@ This allows developers to copy/paste the snippet in its entirety
 into their own file and run it by simply setting these variables
 with their own values.
 
+#### require statements
+
+Reference code snippets that demonstrate how to perform a
+task in isolation should include:
+
+ - all necessary `require` statements that are useful to document
+ - instantiation of a client library
+
+By including this in every snippet, readers can copy/paste this snippet
+without having to research how to create the client.
+
+A notable exception to this is for Tutorial applications.
+
+#### Tutorial application snippets
+
+Tutorials document the steps to create a fully working application.
+In a tutorial, the first code snippet on the page typically demonstrates
+how to instantiate a client library, including requiring the necessary
+dependency.  Other snippets that show code blocks from the working application
+do not need to demonstrate how to instantiate a client.  For example:
+
+##### Pub/Sub sample application
+
+Create client:
+
+```ruby
+require "google/cloud/pubsub"
+
+@pubsub = Google::Cloud::Pubsub.new
+```
+
+Send notification by publishing to topic:
+
+```ruby
+def send_notification message
+  topic = @pubsub.topic "notifications"
+
+  topic.publish message
+end
+```
+
+The client can pull notifications by pulling from subscription:
+
+```ruby
+def get_latest_notifications
+  subscription  = @pubsub.subscription "mobile-notifications"
+  messages      = subscription.pull
+  notifications = messages.map { |msg| Notifiction.new msg.data }
+  
+  notifications
+end
+```
+
+By using an instance variable for the `@pubsub` client, additional
+snippets can access the client in a self-explanatory way.
+
 ## Style
 
 Samples in this repository follow the
