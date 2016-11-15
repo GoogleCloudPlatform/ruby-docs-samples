@@ -7,8 +7,8 @@
    - [Region tags](#region-tags)
    - [Placeholder values](#placeholder-values)
    - [require statements](#require-statements)
- - [Tutorial application snippets](#tutorial-application-snippets)
  - [Command line application samples](#command-line-application-samples)
+ - [Tutorial applications](#tutorial-applications)
  - [Style Guide](#style-guide)
 
 ## How to become a contributor and submit your own code
@@ -49,11 +49,9 @@ accept your pull requests.
 This repository contains various code snippets that are embedded into
 product documentation web pages.
 
-The preferred template for a snippet:
+The preferred template for a snippet demonstrating how to perform a common task:
 
 ```ruby
-# storage/buckets.rb
-
 def create_bucket project_id:, bucket_name:
   # [START create_bucket]
   # project_id  = "Your Google Cloud project ID"
@@ -77,6 +75,15 @@ examples of documentation "region tags."  These are used throughout
 this repository for defining blocks of code to be embedded into
 documentation web pages.
 
+Region tags should only contain the code that is relevant to the
+sample and supporting documentation.
+
+Usually, method definitions should not be included in these regions.
+
+Only include method definitions if the method, itself, is something
+you want to demonstrate, eg. when showing snippets from a fully functional
+[sample application](#tutorial-applications)
+
 ### Placeholder variables
 
 When a code snippet makes use of variables that are defined outside
@@ -99,51 +106,6 @@ By including this in every snippet, readers can copy/paste this snippet
 without having to research how to create the client.
 
 A notable exception to this is for Tutorial applications.
-
-## Tutorial application snippets
-
-Tutorials document the steps to create a fully working application.
-In a tutorial, the first code snippet on the page typically demonstrates
-how to instantiate a client library, including requiring the necessary
-dependency.  Other snippets that show code blocks from the working application
-do not need to demonstrate how to instantiate a client.
-
-#### Pub/Sub sample application
-
-An abridged version of what snippets for a tutorial application should look like.
-
-##### Create client
-
-```ruby
-require "google/cloud/pubsub"
-
-@pubsub = Google::Cloud::Pubsub.new
-```
-
-##### Send notification by publishing to topic
-
-```ruby
-def send_notification message
-  topic = @pubsub.topic "notifications"
-
-  topic.publish message
-end
-```
-
-##### The client can pull notifications by pulling from subscription
-
-```ruby
-def get_latest_notifications
-  subscription  = @pubsub.subscription "mobile-notifications"
-  messages      = subscription.pull
-  notifications = messages.map { |msg| Notifiction.new msg.data }
-  
-  notifications
-end
-```
-
-By using an instance variable for the `@pubsub` client, additional
-snippets can access the client in a self-explanatory way.
 
 ## Command line application samples
 
@@ -189,9 +151,53 @@ Environment variables:
 end
 ```
 
-If the command-line application is used to document a
-[tutorial app](tutorial-application-snippets),
-the sample would look like this:
+## Tutorial applications
+
+Tutorials document the steps to create a fully working application.
+
+In a tutorial, the first code snippet on the page typically demonstrates
+how to instantiate a client library, including requiring the necessary
+dependency.  Other snippets that show code blocks from the working application
+do not need to demonstrate how to instantiate a client.
+
+#### Pub/Sub sample application
+
+An abridged version of what snippets for a tutorial application should look like.
+
+##### Create client
+
+```ruby
+require "google/cloud/pubsub"
+
+@pubsub = Google::Cloud::Pubsub.new
+```
+
+##### Send notification by publishing to topic
+
+```ruby
+def send_notification message
+  topic = @pubsub.topic "notifications"
+
+  topic.publish message
+end
+```
+
+##### The client can pull notifications by pulling from subscription
+
+```ruby
+def get_latest_notifications
+  subscription  = @pubsub.subscription "mobile-notifications"
+  messages      = subscription.pull
+  notifications = messages.map { |msg| Notifiction.new msg.data }
+  
+  notifications
+end
+```
+
+By using an instance variable for the `@pubsub` client, additional
+snippets can access the client in a self-explanatory way.
+
+If the sample is a command-line application, it should look like this:
 
 ```ruby
 def create_client
@@ -236,9 +242,6 @@ Environment variables:
   end
 end
 ```
-
-See [Tutorial application snippets](#tutorial-application-snippets)
-and [Code snippets](#code-snippets) for more information and rationale.
 
 ## Style Guide
 
