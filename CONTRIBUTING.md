@@ -1,6 +1,19 @@
-# How to become a contributor and submit your own code
+## Table of contents
 
-## Contributor License Agreements
+ - [How to become a contributor and submit your own code](#how-to-become-a-contributor-and-submit-your-own-code)
+   - [Contributor License Agreements](#contributor-license-agreements)
+   - [Contributing A Patch](#contributing-a-patch)
+ - [Code snippets](#code-snippets)
+   - [Region tags](#region-tags)
+   - [Placeholder values](#placeholder-values)
+   - [require statements](#require-statements)
+ - [Tutorial application snippets](#tutorial-application-snippets)
+ - [Command line application samples](#command-line-application-samples)
+ - [Style Guide](#style-guide)
+
+## How to become a contributor and submit your own code
+
+### Contributor License Agreements
 
 We'd love to accept your sample apps and patches! Before we can take them, we
 have to jump a couple of legal hurdles.
@@ -19,7 +32,7 @@ Follow either of the two links above to access the appropriate CLA and
 instructions for how to sign and return it. Once we receive it, we'll be able to
 accept your pull requests.
 
-## Contributing A Patch
+### Contributing A Patch
 
 1. Submit an issue describing your proposed change to the repo in question.
 1. The repo owner will respond to your issue promptly.
@@ -57,14 +70,14 @@ def create_bucket project_id:, bucket_name:
 end
 ```
 
-#### Region tags
+### Region tags
 
 The `[START create_bucket]` and `[END create_bucket]` annotations are
 examples of documentation "region tags."  These are used throughout
 this repository for defining blocks of code to be embedded into
 documentation web pages.
 
-#### Placeholder variables
+### Placeholder variables
 
 When a code snippet makes use of variables that are defined outside
 of the snippet, add commented-out variable declarations to the top
@@ -74,7 +87,7 @@ This allows developers to copy/paste the snippet in its entirety
 into their own file and run it by simply setting these variables
 with their own values.
 
-#### require statements
+### require statements
 
 Reference code snippets that demonstrate how to perform a
 task in isolation should include:
@@ -227,13 +240,13 @@ end
 See [Tutorial application snippets](#tutorial-application-snippets)
 and [Code snippets](#code-snippets) for more information and rationale.
 
-## Style
+## Style Guide
 
 Samples in this repository follow the
 [GitHub Ruby Styleguide](https://github.com/styleguide/ruby)
 except where noted otherwise.
 
-#### Variable alignment
+### Variable alignment
 
 Align variables to improve the readability of embedded code snippets.
 
