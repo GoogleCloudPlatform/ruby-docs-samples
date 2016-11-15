@@ -87,7 +87,7 @@ without having to research how to create the client.
 
 A notable exception to this is for Tutorial applications.
 
-### Tutorial application snippets
+## Tutorial application snippets
 
 Tutorials document the steps to create a fully working application.
 In a tutorial, the first code snippet on the page typically demonstrates
@@ -131,6 +131,101 @@ end
 
 By using an instance variable for the `@pubsub` client, additional
 snippets can access the client in a self-explanatory way.
+
+## Command line application samples
+
+Many samples are runnable so that the embedded snippets can actually be
+run via a command-line interfact.
+
+The outline of a command-line application should look like so:
+
+```ruby
+def create_bucket project_id, bucket_name
+  # [START create_bucket]
+  # project_id  = "Your Google Cloud project ID"
+  # bucket_name = "Your Google Cloud Storage bucket name"
+  
+  require "google/cloud/storage"
+  
+  storage = Google::Cloud::Storage.new project_id
+  
+  bucket = storage.create_bucket bucket_name
+  
+  puts "Created bucket #{bucket.name}"
+  # [END create_bucket]
+end
+
+if __FILE__ == $PROGRAM_NAME
+  project_id = ENV["GOOGLE_CLOUD_PROJECT"]
+  command    = ARGV.shift
+  
+  case command
+  when "create_bucket"
+    create_bucket project_id, *ARGV
+  else
+    puts <<-usage
+Usage: bundle exec ruby buckets.rb [command] [arguments]
+
+Commands:
+  create <name>    Create a bucket with the provided <name>
+
+Environment variables:
+  GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
+    usage
+  end
+end
+```
+
+If the command-line application is used to document a
+[tutorial app](tutorial-application-snippets),
+the sample would look like this:
+
+```ruby
+def create_client
+  # [START create_client]
+  require "google/cloud/datastore"
+  
+  @datastore = Google::Cloud::Datastore.new
+  # [END create_client]
+end
+
+# [START create_bucket]
+def add_todo description
+  todo = @datastore.entity "Todo" do |t|
+    t["description"] = description
+  end
+  
+  @datastore.save todo
+end
+# [END create_bucket]
+
+if __FILE__ == $PROGRAM_NAME
+  project_id = ENV["GOOGLE_CLOUD_PROJECT"]
+  command    = ARGV.shift
+  
+  create_client
+  
+  case command
+  when "add_todo"
+    add_todo *ARGV
+  else
+    puts <<-usage
+Usage: bundle exec ruby todo-list.rb [command] [arguments]
+
+This application allows you to manage a TODO list.
+
+Commands:
+  add_todo <description>   Add a new todo to your list
+
+Environment variables:
+  GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
+    usage
+  end
+end
+```
+
+See [Tutorial application snippets](#tutorial-application-snippets)
+and [Code snippets](#code-snippets) for more information and rationale.
 
 ## Style
 
