@@ -33,12 +33,6 @@ accept your pull requests.
 
 ## Style
 
-Style conventions for this repository are enforced using [RuboCop][rubocop].
-
-Before sending a pull request, run RuboCop and fix any style violations:
-
-```shell
-bundle exec rake rubocop
-```
-
-[rubocop]: https://github.com/bbatsov/rubocop
+Samples in this repository follow the
+[GitHub Ruby Styleguide](https://github.com/styleguide/ruby)
+except where noted otherwise.
