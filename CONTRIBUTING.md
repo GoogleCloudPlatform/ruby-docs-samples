@@ -162,7 +162,7 @@ do not need to demonstrate how to instantiate a client.
 
 #### Pub/Sub sample application
 
-An abridged version of what snippets for a tutorial application should look like.
+An abridged version of what snippets for a tutorial application:
 
 ##### Create client
 
@@ -196,6 +196,8 @@ end
 
 By using an instance variable for the `@pubsub` client, additional
 snippets can access the client in a self-explanatory way.
+
+### Command-line tutorial
 
 If the sample is a command-line application, it should look like this:
 
