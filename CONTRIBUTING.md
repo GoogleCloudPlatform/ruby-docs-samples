@@ -154,9 +154,9 @@ require "google/cloud/storage"
 storage = Google::Cloud::Storage.new project: project_id
 ```
 
-**Note:** common libraries such as `"date"` and `"time"` do not need to be
-required within the snippet.  These are command and little value is
-added by documenting these explicitly.
+**Note:** common libraries such as "date" and "time" do not need to be
+required within the snippet.  Explicitly require dependencies that
+add value and should be documentated.
 
 ### Executing snippets
 
