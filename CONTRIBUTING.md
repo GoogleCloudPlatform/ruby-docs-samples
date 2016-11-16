@@ -134,7 +134,6 @@ require "google/cloud/storage"
   
 storage = Google::Cloud::Storage.new project: project_id
 # ...
-end
 ```
 
 #### require statements
