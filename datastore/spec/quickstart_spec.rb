@@ -27,8 +27,9 @@ describe "Datastore Quickstart" do
     end
 
     expect(datastore.find task_key).to be nil
-    expect(Google::Cloud::Datastore).to receive(:new).with("YOUR_PROJECT_ID").
-                                           and_return(datastore)
+    expect(Google::Cloud::Datastore).to receive(:new).
+                                        with(project: "YOUR_PROJECT_ID").
+                                        and_return(datastore)
 
     expect {
       load File.expand_path("../quickstart.rb", __dir__)
