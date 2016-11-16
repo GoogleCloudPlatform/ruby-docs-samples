@@ -162,13 +162,6 @@ add value and should be documentated.
 
 When possible, reference code snippets should be executable.
 
-Users should be able to interact with a Google Cloud product by:
-
- 1. Setting up their Google Cloud project and installing required tools
- 2. git clone https://github.com/GoogleCloudPlatform/ruby-docs-samples.git
- 3. cd storage/
- 4. Follow instructions in README to run sample, eg. command-line or web application
-
 Each reference code snippet should be executable via a
 corresponding command-line application.
 
