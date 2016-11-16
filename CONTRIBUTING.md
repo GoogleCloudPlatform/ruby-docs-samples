@@ -3,14 +3,18 @@
  - [How to become a contributor and submit your own code](#how-to-become-a-contributor-and-submit-your-own-code)
    - [Contributor License Agreements](#contributor-license-agreements)
    - [Contributing A Patch](#contributing-a-patch)
- - [Code snippets](#code-snippets)
-   - [Region tags](#region-tags)
-   - [Placeholder values](#placeholder-values)
-   - [require statements](#require-statements)
- - [Command line application samples](#command-line-application-samples)
- - [Tutorial applications](#tutorial-applications)
  - [Style Guide](#style-guide)
-
+   - [Variable alignment](#variable-alignment)
+ - [Code samples](#code-samples)
+   - [Snippets](#snippets)
+     - [Region tags](#region-tags)
+   - [Reference snippets](#reference-snippets)
+     - [Placeholder values](#placeholder-values)
+     - [require statements](#require-statements)
+   - [Executing snippets](#executing-snippets)
+     - [Argument parsing](#argument-parsing)
+   - [Tutorial applications](#tutorial-applications)
+     
 ## How to become a contributor and submit your own code
 
 ### Contributor License Agreements
@@ -44,12 +48,51 @@ accept your pull requests.
 1. Ensure that your code has an appropriate set of unit tests which all pass.
 1. Submit a pull request.
 
-## Code snippets
+## Style Guide
 
-This repository contains various code snippets that are embedded into
-product documentation web pages.
+Samples in this repository follow the
+[GitHub Ruby Styleguide](https://github.com/styleguide/ruby)
+except where noted otherwise.
 
-The preferred template for a snippet demonstrating how to perform a common task:
+### Variable alignment
+
+Align variables to improve the readability of embedded code snippets.
+
+```ruby
+# good
+storage_client = Google::Cloud::Storage.new
+bucket         = storage.create_bucket "my-bucket"
+uploaded_file  = bucket.file "my-file.txt"
+
+# bad
+storage_client = Google::Cloud::Storage.new
+bucket = storage.create_bucket "my-bucket"
+uploaded_file = bucket.file "my-file.txt"
+```
+
+## Code samples
+
+This repository holds the samples used in the Ruby documentation on
+[cloud.google.com](https://cloud.google.com).
+
+There are two distinctly different types of samples:
+
+ 1. [Reference snippets](#reference-snippets)
+ 2. [Tutorial applications](#tutorial-applications)
+
+Reference snippets are isolated snippets that demonstrate how to
+perform a specific task such as creating a Google Cloud Storage bucket.
+
+Tutorial applications are sample applications that demonstrate how to
+use one or more Google APIs and products to create a fully-functioning
+application.
+
+### Snippets
+
+Code snippets from the samples in this repository are embedded into
+the documentation on [cloud.google.com](https://cloud.google.com).
+
+Example:
 
 ```ruby
 def create_bucket project_id:, bucket_name:
@@ -59,7 +102,7 @@ def create_bucket project_id:, bucket_name:
   
   require "google/cloud/storage"
   
-  storage = Google::Cloud::Storage.new project_id
+  storage = Google::Cloud::Storage.new project: project_id
   
   bucket = storage.create_bucket bucket_name
   
@@ -68,101 +111,141 @@ def create_bucket project_id:, bucket_name:
 end
 ```
 
-### Region tags
+#### Region tags
 
-The `[START create_bucket]` and `[END create_bucket]` annotations are
-examples of documentation "region tags."  These are used throughout
-this repository for defining blocks of code to be embedded into
-documentation web pages.
+Code snippets are defined using
+`[START snippet_name]` and `[END snippet_name]`
+comments.
 
-Region tags should only contain the code that is relevant to the
-sample and supporting documentation.
+These are used to define blocks of code to be embedded into documentation.
 
-Usually, method definitions should not be included in these regions.
+### Reference snippets
 
-Only include method definitions if the method, itself, is something
-you want to demonstrate, eg. when showing snippets from a fully functional
-[sample application](#tutorial-applications)
+Reference snippets are isolated snippets that demonstrate how to
+perform a specific task such as creating a Google Cloud Storage bucket.
 
-### Placeholder variables
+Ideally, developers should be able to copy/paste the code in a reference
+snippet and run it after having replaced the placeholder values with their own.
+
+#### Placeholder values
 
 When a code snippet makes use of variables that are defined outside
 of the snippet, add commented-out variable declarations to the top
 of the snippet.
 
-This allows developers to copy/paste the snippet in its entirety
-into their own file and run it by simply setting these variables
-with their own values.
-
-### require statements
-
-Reference code snippets that demonstrate how to perform a
-task in isolation should include:
-
- - all necessary `require` statements that are useful to document
- - instantiation of a client library
-
-By including this in every snippet, readers can copy/paste this snippet
-without having to research how to create the client.
-
-A notable exception to this is for Tutorial applications.
-
-## Command line application samples
-
-Many samples are runnable so that the embedded snippets can actually be
-run via a command-line interfact.
-
-The outline of a command-line application should look like so:
+Example:
 
 ```ruby
-def create_bucket project_id, bucket_name
-  # [START create_bucket]
-  # project_id  = "Your Google Cloud project ID"
-  # bucket_name = "Your Google Cloud Storage bucket name"
+# project_id  = "Your Google Cloud project ID"
+# bucket_name = "Your Google Cloud Storage bucket name"
   
-  require "google/cloud/storage"
+require "google/cloud/storage"
   
-  storage = Google::Cloud::Storage.new project_id
-  
-  bucket = storage.create_bucket bucket_name
-  
-  puts "Created bucket #{bucket.name}"
-  # [END create_bucket]
+storage = Google::Cloud::Storage.new project: project_id
+# ...
+end
+```
+
+#### require statements
+
+Reference snippets should include the `require` statement(s) necessary
+to import relevant dependencies for the code sample.
+
+If a snippet uses a Google Cloud client library, it should be required
+in the snippet.  This documents how to require the client library.
+
+Example:
+
+```ruby
+# project_id  = "Your Google Cloud project ID"
+# bucket_name = "Your Google Cloud Storage bucket name"
+
+require "google/cloud/storage"
+
+storage = Google::Cloud::Storage.new project: project_id
+
+# ...
+```
+
+**Note:** common libraries such as `"date"` and `"time"` do not need to be
+required within the snippet.  These are command and little value is
+added by documenting these explicitly.
+
+### Executing snippets
+
+When possible, reference code snippets should be executable.
+
+Users should be able to interact with a Google Cloud product by:
+
+ 1. Setting up their Google Cloud project and installing required tools
+ 2. git clone https://github.com/GoogleCloudPlatform/ruby-docs-samples.git
+ 3. cd storage/
+ 4. Follow instructions in README to run sample, eg. command-line or web application
+
+Each reference code snippet should be executable via a
+corresponding command-line application.
+
+For example, the "create_bucket" snippet in "buckets.rb" should be
+executable by running `bundle exec ruby buckets.rb create`
+
+#### Argument parsing
+
+To enable execution of reference snippets, each file should contain
+a simple postable that will execute the file, when run.
+
+For example:
+
+```ruby
+def create_bucket project_id:, bucket_name:
+  # ...
 end
 
 if __FILE__ == $PROGRAM_NAME
-  project_id = ENV["GOOGLE_CLOUD_PROJECT"]
-  command    = ARGV.shift
+  command = ARGV.shift
   
   case command
-  when "create_bucket"
-    create_bucket project_id, *ARGV
+  when "create"
+    create_bucket project_id:  ENV["GOOGLE_CLOUD_PROJECT"],
+                  bucket_name: ARGV.first
   else
-    puts <<-usage
+   puts <<-usage
 Usage: bundle exec ruby buckets.rb [command] [arguments]
 
 Commands:
-  create <name>    Create a bucket with the provided <name>
-
+  create <bucket>    Create a new bucket with the provided name
+  
 Environment variables:
   GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
-    usage
+   usage
   end
 end
 ```
 
-## Tutorial applications
+Argument parsing is intentionally simple.
 
-Tutorials document the steps to create a fully working application.
+### Tutorial applications
 
-In a tutorial, the first code snippet on the page typically demonstrates
-how to instantiate a client library, including requiring the necessary
-dependency.  Other snippets that show code blocks from the working application
-do not need to demonstrate how to instantiate a client.
+Tutorial applications are sample applications that demonstrate how to
+use one or more Google APIs and products to create a fully-functioning
+application.
+
+A tutorial sample may include command-line application(s) or
+web application(s).
+
+The purpose of tutorial applications is very different from reference snippets.
+
+A tutorial application should be an idiomatic Ruby application.
+Code snippets from tutorial applications demonstrate just a *part* of the
+*whole* application are are **not isolated**.
+
+ 1. Tutorial snippet may not include `require` statements
+ 1. Tutorial snippet may not include client library instantiation
+ 1. Tutorial snippet may not include placeholder variables
+
+Here is an small example of the snippets that might be extracted from
+a fully implemented tutorial application:
 
 #### Pub/Sub sample application
-
-An abridged version of what snippets for a tutorial application:
 
 ##### Create client
 
@@ -192,77 +275,4 @@ def get_latest_notifications
   
   notifications
 end
-```
-
-By using an instance variable for the `@pubsub` client, additional
-snippets can access the client in a self-explanatory way.
-
-### Command-line tutorial
-
-If the sample is a command-line application, it should look like this:
-
-```ruby
-def create_client
-  # [START create_client]
-  require "google/cloud/datastore"
-  
-  @datastore = Google::Cloud::Datastore.new
-  # [END create_client]
-end
-
-# [START create_bucket]
-def add_todo description
-  todo = @datastore.entity "Todo" do |t|
-    t["description"] = description
-  end
-  
-  @datastore.save todo
-end
-# [END create_bucket]
-
-if __FILE__ == $PROGRAM_NAME
-  project_id = ENV["GOOGLE_CLOUD_PROJECT"]
-  command    = ARGV.shift
-  
-  create_client
-  
-  case command
-  when "add_todo"
-    add_todo *ARGV
-  else
-    puts <<-usage
-Usage: bundle exec ruby todo-list.rb [command] [arguments]
-
-This application allows you to manage a TODO list.
-
-Commands:
-  add_todo <description>   Add a new todo to your list
-
-Environment variables:
-  GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
-    usage
-  end
-end
-```
-
-## Style Guide
-
-Samples in this repository follow the
-[GitHub Ruby Styleguide](https://github.com/styleguide/ruby)
-except where noted otherwise.
-
-### Variable alignment
-
-Align variables to improve the readability of embedded code snippets.
-
-```ruby
-# good
-storage_client = Google::Cloud::Storage.new
-bucket         = storage.create_bucket "my-bucket"
-uploaded_file  = bucket.file "my-file.txt"
-
-# bad
-storage_client = Google::Cloud::Storage.new
-bucket = storage.create_bucket "my-bucket"
-uploaded_file = bucket.file "my-file.txt"
 ```
