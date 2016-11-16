@@ -20,8 +20,8 @@ describe "Language Quickstart" do
   it "detect sentiment" do
     language = Google::Cloud::Language.new
     expect(Google::Cloud::Language).to receive(:new).
-                                         with(project: "YOUR_PROJECT_ID").
-                                         and_return(language)
+                                       with(project: "YOUR_PROJECT_ID").
+                                       and_return(language)
 
     expect {
       load File.expand_path("../quickstart.rb", __dir__)
