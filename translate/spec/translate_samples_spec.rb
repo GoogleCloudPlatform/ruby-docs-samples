@@ -18,13 +18,13 @@ require "rspec"
 describe "Google Translate API samples" do
 
   before do
-    @project_id  = ENV["GOOGLE_CLOUD_PROJECT"]
+    @project_id = ENV["GOOGLE_CLOUD_PROJECT"]
   end
 
   # Capture and return STDOUT output by block
   def capture &block
     real_stdout = $stdout
-    $stdout = StringIO.new
+    $stdout     = StringIO.new
     block.call
     @captured_output = $stdout.string
   ensure
@@ -34,7 +34,7 @@ describe "Google Translate API samples" do
 
   example "translate text" do
     capture do
-      translate_text project_id:       @project_id,
+      translate_text project_id:    @project_id,
                      language_code: "fr",
                      text:          "Alice and Bob are kind"
     end

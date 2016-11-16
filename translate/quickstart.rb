@@ -14,14 +14,13 @@
 
 # [START translate_quickstart]
 # Imports the Google Cloud client library
-require "google/cloud"
+require "google/cloud/translate"
 
 # Your Google Cloud Platform project ID
 project_id = "YOUR_PROJECT_ID"
 
 # Instantiates a client
-gcloud    = Google::Cloud.new project_id
-translate = gcloud.translate
+translate = Google::Cloud::Translate.new project: project_id
 
 # The text to translate
 text = "Hello, world!"
