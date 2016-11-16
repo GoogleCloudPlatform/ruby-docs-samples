@@ -13,21 +13,18 @@
 # limitations under the License.
 
 require "rspec"
-require "google/cloud"
+require "google/cloud/bigquery"
 
 describe "BigQuery Quickstart" do
 
   it "creates a new dataset" do
-    gcloud       = Google::Cloud.new ENV["GOOGLE_CLOUD_PROJECT"]
-    bigquery     = gcloud.bigquery
+    bigquery     = Google::Cloud::Bigquery.new
     dataset_name = "my_new_dataset_#{Time.now.to_i}"
 
     expect(bigquery.dataset dataset_name).to be nil
-    expect(Google::Cloud).to receive(:new).
+    expect(Google::Cloud::Bigquery).to receive(:new).
                              with("YOUR_PROJECT_ID").
-                             and_return(gcloud)
-    expect(gcloud).to receive(:bigquery).and_return(bigquery)
-
+                             and_return(bigquery)
     expect(bigquery).to receive(:create_dataset).
                         with("my_new_dataset").
                         and_wrap_original do |m, *args|

@@ -14,7 +14,7 @@
 
 require_relative "../files"
 require "rspec"
-require "google/cloud"
+require "google/cloud/storage"
 require "tempfile"
 
 describe "Google Cloud Storage files sample" do
@@ -22,8 +22,7 @@ describe "Google Cloud Storage files sample" do
   before do
     @project_id      = ENV["GOOGLE_CLOUD_PROJECT"]
     @bucket_name     = ENV["GOOGLE_CLOUD_STORAGE_BUCKET"]
-    @gcloud          = Google::Cloud.new @project_id
-    @storage         = @gcloud.storage
+    @storage         = Google::Cloud::Storage.new
     @bucket          = @storage.bucket @bucket_name
     @local_file_path = File.expand_path "resources/file.txt", __dir__
   end

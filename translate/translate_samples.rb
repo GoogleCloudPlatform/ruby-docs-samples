@@ -18,10 +18,9 @@ def translate_text api_key:, text:, language_code:
   # text          = "The text you would like to translate"
   # language_code = "The ISO 639-1 code of language to translate to, eg. 'en'"
 
-  require "google/cloud"
+  require "google/cloud/translate"
 
-  gcloud      = Google::Cloud.new
-  translate   = gcloud.translate api_key
+  translate   = Google::Cloud::Translate.new api_key
   translation = translate.translate text, to: language_code
 
   puts "Translated '#{text}' to '#{translation.text.inspect}'"
@@ -34,10 +33,9 @@ def detect_language api_key:, text:
   # api_key = "Your API access key"
   # text    = "The text you would like to detect the language of"
 
-  require "google/cloud"
+  require "google/cloud/translate"
 
-  gcloud    = Google::Cloud.new
-  translate = gcloud.translate api_key
+  translate = Google::Cloud::Translate.new api_key
   detection = translate.detect text
 
   puts "'#{text}' detected as language: #{detection.language}"
@@ -49,10 +47,9 @@ def list_supported_language_codes api_key:
   # [START list_supported_language_codes]
   # api_key = "Your API access key"
 
-  require "google/cloud"
+  require "google/cloud/translate"
 
-  gcloud    = Google::Cloud.new
-  translate = gcloud.translate api_key
+  translate = Google::Cloud::Translate.new api_key
   languages = translate.languages
 
   puts "Supported language codes:"
@@ -70,10 +67,9 @@ def list_supported_language_names api_key:, language_code: "en"
   # for the language in which you wish to receive the names
   # language_code = "en"
 
-  require "google/cloud"
+  require "google/cloud/translate"
 
-  gcloud    = Google::Cloud.new
-  translate = gcloud.translate api_key
+  translate = Google::Cloud::Translate.new api_key
   languages = translate.languages language_code
 
   puts "Supported languages:"

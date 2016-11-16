@@ -23,8 +23,7 @@ describe "Pub/Sub sample" do
     ".iam.gserviceaccount.com"
 
   before :all do
-    @gcloud = Google::Cloud.new ENV["GOOGLE_CLOUD_PROJECT"]
-    @pubsub = @gcloud.pubsub
+    @pubsub = Google::Cloud::Pubsub.new
   end
 
   def cleanup!

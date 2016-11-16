@@ -16,10 +16,9 @@ require "sinatra"
 require "slim"
 require "json"
 require "base64"
-require "google/cloud"
+require "google/cloud/pubsub"
 
-gcloud = Google::Cloud.new
-pubsub = gcloud.pubsub
+pubsub = Google::Cloud::Pubsub.new
 
 # [START envvars]
 topic  = pubsub.topic ENV["PUBSUB_TOPIC"]

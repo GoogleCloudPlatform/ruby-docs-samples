@@ -13,15 +13,15 @@
 # limitations under the License.
 
 require "rspec"
-require "google/cloud"
+require "google/cloud/speech"
 
 describe "Speech Quickstart" do
 
   it "transcribes a sample audio.raw file" do
-    gcloud = Google::Cloud.new ENV["GOOGLE_CLOUD_PROJECT"]
+    speech = Google::Cloud::Speech.new
 
-    expect(Google::Cloud).to receive(:new).with("YOUR_PROJECT_ID").
-                                           and_return(gcloud)
+    expect(Google::Cloud::Speech).to receive(:new).with("YOUR_PROJECT_ID").
+                                           and_return(speech)
 
     expect {
       load File.expand_path("../quickstart.rb", __dir__)

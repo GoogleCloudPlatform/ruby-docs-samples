@@ -14,10 +14,9 @@
 
 # [START all]
 require "sinatra"
-require "google/cloud"
+require "google/cloud/storage"
 
-gcloud  = Google::Cloud.new
-storage = gcloud.storage
+storage = Google::Cloud::Storage.new
 bucket  = storage.bucket ENV["GOOGLE_CLOUD_STORAGE_BUCKET"]
 
 get "/" do

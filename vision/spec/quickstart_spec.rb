@@ -13,15 +13,15 @@
 # limitations under the License.
 
 require "rspec"
-require "google/cloud"
+require "google/cloud/vision"
 
 describe "Vision Quickstart" do
 
   it "performs label detection on a sample image file" do
-    gcloud = Google::Cloud.new ENV["GOOGLE_CLOUD_PROJECT"]
+    vision = Google::Cloud::Vision.new ENV["GOOGLE_CLOUD_PROJECT"]
 
-    expect(Google::Cloud).to receive(:new).with("YOUR_PROJECT_ID").
-                                           and_return(gcloud)
+    expect(Google::Cloud::Vision).to receive(:new).with("YOUR_PROJECT_ID").
+                                           and_return(vision)
 
     expect {
       load File.expand_path("../quickstart.rb", __dir__)

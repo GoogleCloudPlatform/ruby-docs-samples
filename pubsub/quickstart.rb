@@ -14,14 +14,13 @@
 
 # [START pubsub_quickstart]
 # Imports the Google Cloud client library
-require "google/cloud"
+require "google/cloud/pubsub"
 
 # Your Google Cloud Platform project ID
 project_id = "YOUR_PROJECT_ID"
 
 # Instantiates a client
-gcloud = Google::Cloud.new project_id
-pubsub = gcloud.pubsub
+pubsub = Google::Cloud::Pubsub.new project_id
 
 # The name for the new topic
 topic_name = "my-new-topic"

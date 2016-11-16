@@ -13,13 +13,12 @@
 # limitations under the License.
 
 require "rspec"
-require "google/cloud"
+require "google/cloud/datastore"
 
 describe "Datastore Quickstart" do
 
   it "creates a new entity" do
-    gcloud    = Google::Cloud.new ENV["GOOGLE_CLOUD_PROJECT"]
-    datastore = gcloud.datastore
+    datastore = Google::Cloud::Datastore.new
     task_key  = datastore.key "Task", "sampletask1"
 
     if datastore.find task_key
@@ -28,8 +27,8 @@ describe "Datastore Quickstart" do
     end
 
     expect(datastore.find task_key).to be nil
-    expect(Google::Cloud).to receive(:new).with("YOUR_PROJECT_ID").
-                                           and_return(gcloud)
+    expect(Google::Cloud::Datastore).to receive(:new).with("YOUR_PROJECT_ID").
+                                           and_return(datastore)
 
     expect {
       load File.expand_path("../quickstart.rb", __dir__)

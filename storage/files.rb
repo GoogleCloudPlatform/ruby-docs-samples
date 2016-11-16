@@ -17,10 +17,9 @@ def list_bucket_contents project_id:, bucket_name:
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
 
-  require "google/cloud"
+  require "google/cloud/storage"
 
-  gcloud  = Google::Cloud.new project_id
-  storage = gcloud.storage
+  storage = Google::Cloud::Storage.new
   bucket  = storage.bucket bucket_name
 
   bucket.files.each do |file|
@@ -35,10 +34,9 @@ def list_bucket_contents_with_prefix project_id:, bucket_name:, prefix:
   # bucket_name = "Your Google Cloud Storage bucket name"
   # prefix      = "Filter results to files whose names begin with this prefix"
 
-  require "google/cloud"
+  require "google/cloud/storage"
 
-  gcloud  = Google::Cloud.new project_id
-  storage = gcloud.storage
+  storage = Google::Cloud::Storage.new
   bucket  = storage.bucket bucket_name
   files   = bucket.files prefix: prefix
 
@@ -56,10 +54,9 @@ def upload_file project_id:, bucket_name:, local_file_path:,
   # local_file_path   = "Path to local file to upload"
   # storage_file_path = "Path to store the file in Google Cloud Storage"
 
-  require "google/cloud"
+  require "google/cloud/storage"
 
-  gcloud  = Google::Cloud.new project_id
-  storage = gcloud.storage
+  storage = Google::Cloud::Storage.new
   bucket  = storage.bucket bucket_name
 
   file = bucket.create_file local_file_path, storage_file_path
@@ -75,10 +72,9 @@ def download_file project_id:, bucket_name:, file_name:, local_path:
   # file_name   = "Name of file in Google Cloud Storage to download locally"
   # local_path  = "Path to local file to save"
 
-  require "google/cloud"
+  require "google/cloud/storage"
 
-  gcloud  = Google::Cloud.new project_id
-  storage = gcloud.storage
+  storage = Google::Cloud::Storage.new
   bucket  = storage.bucket bucket_name
   file    = bucket.file file_name
 
@@ -94,10 +90,9 @@ def delete_file project_id:, bucket_name:, file_name:
   # bucket_name = "Your Google Cloud Storage bucket name"
   # file_name   = "Name of file in Google Cloud Storage to delete"
 
-  require "google/cloud"
+  require "google/cloud/storage"
 
-  gcloud  = Google::Cloud.new project_id
-  storage = gcloud.storage
+  storage = Google::Cloud::Storage.new
   bucket  = storage.bucket bucket_name
   file    = bucket.file file_name
 
@@ -113,10 +108,9 @@ def list_file_details project_id:, bucket_name:, file_name:
   # bucket_name = "Your Google Cloud Storage bucket name"
   # file_name   = "Name of file in Google Cloud Storage"
 
-  require "google/cloud"
+  require "google/cloud/storage"
 
-  gcloud  = Google::Cloud.new project_id
-  storage = gcloud.storage
+  storage = Google::Cloud::Storage.new
   bucket  = storage.bucket bucket_name
   file    = bucket.file file_name
 
@@ -151,10 +145,9 @@ def make_file_public project_id:, bucket_name:, file_name:
   # bucket_name = "Your Google Cloud Storage bucket name"
   # file_name   = "Name of file in Google Cloud Storage to make public"
 
-  require "google/cloud"
+  require "google/cloud/storage"
 
-  gcloud  = Google::Cloud.new project_id
-  storage = gcloud.storage
+  storage = Google::Cloud::Storage.new
   bucket  = storage.bucket bucket_name
   file    = bucket.file file_name
 
@@ -171,10 +164,9 @@ def rename_file project_id:, bucket_name:, file_name:, new_name:
   # file_name   = "Name of file in Google Cloud Storage to rename"
   # new_name    = "File will be renamed to this new name"
 
-  require "google/cloud"
+  require "google/cloud/storage"
 
-  gcloud  = Google::Cloud.new project_id
-  storage = gcloud.storage
+  storage = Google::Cloud::Storage.new
   bucket  = storage.bucket bucket_name
   file    = bucket.file file_name
 
@@ -195,10 +187,9 @@ def copy_file project_id:, source_bucket_name:, source_file_name:,
   # dest_bucket_name   = "Destination bucket to copy file to"
   # dest_file_name     = "Destination file name"
 
-  require "google/cloud"
+  require "google/cloud/storage"
 
-  gcloud  = Google::Cloud.new project_id
-  storage = gcloud.storage
+  storage = Google::Cloud::Storage.new
   bucket  = storage.bucket source_bucket_name
   file    = bucket.file source_file_name
 
