@@ -20,7 +20,7 @@ require "google/cloud/speech"
 project_id = "YOUR_PROJECT_ID"
 
 # Instantiates a client
-speech = Google::Cloud::Speech project_id
+speech = Google::Cloud::Speech.new project: project_id
 
 # The name of the audio file to transcribe
 file_name = "./audio_files/audio.raw"

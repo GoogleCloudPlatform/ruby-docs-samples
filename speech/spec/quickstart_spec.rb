@@ -20,8 +20,9 @@ describe "Speech Quickstart" do
   it "transcribes a sample audio.raw file" do
     speech = Google::Cloud::Speech.new
 
-    expect(Google::Cloud::Speech).to receive(:new).with("YOUR_PROJECT_ID").
-                                           and_return(speech)
+    expect(Google::Cloud::Speech).to receive(:new).
+                                     with(project: "YOUR_PROJECT_ID").
+                                     and_return(speech)
 
     expect {
       load File.expand_path("../quickstart.rb", __dir__)
