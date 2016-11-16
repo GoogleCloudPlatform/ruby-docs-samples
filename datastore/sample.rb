@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "google/cloud"
+require "google/cloud/datastore"
 
 def incomplete_key
   datastore = Google::Cloud::Datastore.new
