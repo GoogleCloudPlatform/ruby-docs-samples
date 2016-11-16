@@ -24,7 +24,7 @@ describe "Google Translate API samples" do
   # Capture and return STDOUT output by block
   def capture &block
     real_stdout = $stdout
-    $stdout = StringIO.new
+    $stdout     = StringIO.new
     block.call
     @captured_output = $stdout.string
   ensure
