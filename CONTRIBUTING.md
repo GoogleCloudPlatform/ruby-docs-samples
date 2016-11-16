@@ -170,8 +170,8 @@ executable by running `bundle exec ruby buckets.rb create`
 
 #### Argument parsing
 
-To enable execution of reference snippets, each file should contain
-a simple postable that will execute the file, when run.
+To make snippets executable, add a postable to the end of the file
+that calls the snippet's method.
 
 For example:
 
