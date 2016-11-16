@@ -18,7 +18,7 @@ require "rspec"
 describe "Google Translate API samples" do
 
   before do
-    @project_id  = ENV["GOOGLE_CLOUD_PROJECT"]
+    @project_id = ENV["GOOGLE_CLOUD_PROJECT"]
   end
 
   # Capture and return STDOUT output by block
