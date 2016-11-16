@@ -14,7 +14,8 @@
 
 require_relative "../sample"
 require "rspec"
-require "google/cloud"
+require "google/cloud/logging"
+require "google/cloud/storage"
 
 describe "Logging sample" do
 
@@ -49,9 +50,8 @@ describe "Logging sample" do
   #
   before :all do
     @project_id = ENV["GOOGLE_CLOUD_PROJECT"]
-    @gcloud     = Google::Cloud.new @project_id
-    @logging    = @gcloud.logging
-    @storage    = @gcloud.storage
+    @logging    = Google::Cloud::Logging.new
+    @storage    = Google::Cloud::Storage.new
     @bucket     = @storage.bucket ENV["GOOGLE_CLOUD_STORAGE_BUCKET"]
     @alt_bucket = @storage.bucket ENV["ALTERNATE_GOOGLE_CLOUD_STORAGE_BUCKET"]
 
@@ -66,10 +66,12 @@ describe "Logging sample" do
   # Stub calls to Google::Cloud library to use our test project and storage buckets
   before :each do
     cleanup!
-    allow(Google::Cloud).to receive(:new).and_call_original
-    allow(Google::Cloud).to receive(:new).with("my-gcp-project-id").and_return(@gcloud)
-    allow(@gcloud).to receive(:logging).and_return(@logging)
-    allow(@gcloud).to receive(:storage).and_return(@storage)
+    allow(Google::Cloud::Logging).to receive(:new).
+                                     with(project: "my-gcp-project-id").
+                                     and_return(@logging)
+    allow(Google::Cloud::Storage).to receive(:new).
+                                     with(project: "my-gcp-project-id").
+                                     and_return(@storage)
     allow(@storage).to receive(:create_bucket).and_return(@bucket)
     allow(@storage).to receive(:bucket).with("my-logs-bucket").
                        and_return(@bucket)
