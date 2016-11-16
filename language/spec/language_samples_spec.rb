@@ -1,15 +1,15 @@
 require_relative "../language_samples"
 require "rspec"
 require "tempfile"
-require "google/cloud"
+require "google/cloud/language"
+require "google/cloud/storage"
 
 describe "Google Cloud Natural Language API samples" do
 
   before do
     @project_id  = ENV["GOOGLE_CLOUD_PROJECT"]
     @bucket_name = ENV["GOOGLE_CLOUD_STORAGE_BUCKET"]
-    @gcloud      = Google::Cloud.new @project_id
-    @storage     = @gcloud.storage
+    @storage     = Google::Cloud::Storage.new
     @bucket      = @storage.bucket @bucket_name
     @uploaded    = []
   end
@@ -44,35 +44,35 @@ describe "Google Cloud Natural Language API samples" do
   end
 
   example "sentiment from text" do
-    positive_text = "Matz is nice so we are nice"
-    negative_text = "I don't like you. I hate things."
+    positive_text = "Happy love it.  I am glad, pleased, and delighted."
+    negative_text = "I hate it.  I am mad, annoyed, and irritated."
 
     expect {
       sentiment_from_text project_id: @project_id, text_content: positive_text
-    }.to output(/^1.0 /).to_stdout
+    }.to output(/^\d\.\d+ \(\d\.\d+\)/).to_stdout
 
     expect {
       sentiment_from_text project_id: @project_id, text_content: negative_text
-    }.to output(/^-1.0 /).to_stdout
+    }.to output(/^-\d\.\d+ \(\d\.\d+\)/).to_stdout
   end
 
   example "sentiment from a file stored in Google Cloud Storage" do
-    upload "positive_text.txt", "Matz is nice so we are nice"
-    upload "negative_text.txt", "I don't like you. I hate things."
+    upload "positive.txt", "Happy love it.  I am glad, pleased, and delighted."
+    upload "negative.txt", "I hate it.  I am mad, annoyed, and irritated."
 
     expect {
       sentiment_from_cloud_storage_file(
         project_id:   @project_id,
-        storage_path: "gs://#{@bucket_name}/positive_text.txt"
+        storage_path: "gs://#{@bucket_name}/positive.txt"
       )
-    }.to output(/^1.0 /).to_stdout
+    }.to output(/^\d\.\d+ \(\d\.\d+\)/).to_stdout
 
     expect {
       sentiment_from_cloud_storage_file(
         project_id:   @project_id,
-        storage_path: "gs://#{@bucket_name}/negative_text.txt"
+        storage_path: "gs://#{@bucket_name}/negative.txt"
       )
-    }.to output(/^-1.0 /).to_stdout
+    }.to output(/^-\d\.\d+ \(\d\.\d+\)/).to_stdout
   end
 
   example "entries from text" do

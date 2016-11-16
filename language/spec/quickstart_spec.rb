@@ -13,19 +13,20 @@
 # limitations under the License.
 
 require "rspec"
-require "google/cloud"
+require "google/cloud/language"
 
 describe "Language Quickstart" do
 
   it "detect sentiment" do
-    gcloud = Google::Cloud.new ENV["GOOGLE_CLOUD_PROJECT"]
-    expect(Google::Cloud).to receive(:new).with("YOUR_PROJECT_ID").
-                                           and_return(gcloud)
+    language = Google::Cloud::Language.new
+    expect(Google::Cloud::Language).to receive(:new).
+                                         with(project: "YOUR_PROJECT_ID").
+                                         and_return(language)
 
     expect {
       load File.expand_path("../quickstart.rb", __dir__)
     }.to output(
-      /Text: Hello, world!\nSentiment: 1.0/
+      /Text: Hello, world!\nScore: \d\.\d+, \d\.\d+/
     ).to_stdout
   end
 

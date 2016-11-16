@@ -14,14 +14,13 @@
 
 # [START language_quickstart]
 # Imports the Google Cloud client library
-require "google/cloud"
+require "google/cloud/language"
 
 # Your Google Cloud Platform project ID
 project_id = "YOUR_PROJECT_ID"
 
 # Instantiates a client
-gcloud   = Google::Cloud.new project_id
-language = gcloud.language
+language = Google::Cloud::Language.new project: project_id
 
 # The text to analyze
 text     = "Hello, world!"
@@ -31,6 +30,6 @@ document = language.document text
 sentiment = document.sentiment
 
 puts "Text: #{text}"
-puts "Sentiment: #{sentiment.polarity}, #{sentiment.magnitude}"
+puts "Score: #{sentiment.score}, #{sentiment.magnitude}"
 # [END language_quickstart]
 
