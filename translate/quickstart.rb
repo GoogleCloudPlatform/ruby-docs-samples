@@ -17,7 +17,7 @@
 require "google/cloud"
 
 # Your Google Cloud Platform project ID
-project_id = "nodejs-docs-samples"
+project_id = "YOUR_PROJECT_ID"
 
 # Instantiates a client
 gcloud    = Google::Cloud.new project_id
