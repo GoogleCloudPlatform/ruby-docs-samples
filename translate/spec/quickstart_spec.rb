@@ -13,7 +13,7 @@
 # limitations under the License.
 
 require "rspec"
-require "google/cloud"
+require "google/cloud/translate"
 
 describe "Translate Quickstart" do
 
