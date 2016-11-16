@@ -5,7 +5,6 @@ for required_variable in                       \
 	GOOGLE_APPLICATION_CREDENTIALS         \
 	GOOGLE_CLOUD_STORAGE_BUCKET            \
 	ALTERNATE_GOOGLE_CLOUD_STORAGE_BUCKET  \
-	TRANSLATE_API_KEY                      \
 ; do
 	if [[ -z "${!required_variable}" ]]; then
 		echo "Must set $required_variable"
