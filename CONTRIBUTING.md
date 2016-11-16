@@ -87,10 +87,10 @@ perform a specific task such as creating a Google Cloud Storage bucket.
 use one or more Google APIs and products to create a fully-functioning
 application.
 
-### Snippets
-
-Code snippets from the samples in this repository are embedded into
-the documentation on [cloud.google.com](https://cloud.google.com).
+Specific blocks of code that are embedded in the
+[cloud.google.com](https://cloud.google.com) documentation
+are defined using `[START snippet_name]` and `[END snippet_name]`
+**region tags**.
 
 Example:
 
@@ -110,14 +110,6 @@ def create_bucket project_id:, bucket_name:
   # [END create_bucket]
 end
 ```
-
-#### Region tags
-
-Code snippets are defined using
-`[START snippet_name]` and `[END snippet_name]`
-comments.
-
-These are used to define blocks of code to be embedded into documentation.
 
 ### Reference snippets
 
