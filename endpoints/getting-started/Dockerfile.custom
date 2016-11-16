@@ -14,4 +14,4 @@ RUN gem install bundler && \
 
 COPY * /app/
 
-ENTRYPOINT ["bundle", "exec", "ruby", "app.rb", "-p", "8081"]
+ENTRYPOINT ["bundle", "exec", "ruby", "app.rb", "-p", "8080"]
