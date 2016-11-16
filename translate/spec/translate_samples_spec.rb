@@ -18,13 +18,13 @@ require "rspec"
 describe "Google Translate API samples" do
 
   before do
-    @api_key = ENV["TRANSLATE_API_KEY"]
+    @project_id = ENV["GOOGLE_CLOUD_PROJECT"]
   end
 
   # Capture and return STDOUT output by block
   def capture &block
     real_stdout = $stdout
-    $stdout = StringIO.new
+    $stdout     = StringIO.new
     block.call
     @captured_output = $stdout.string
   ensure
@@ -34,7 +34,7 @@ describe "Google Translate API samples" do
 
   example "translate text" do
     capture do
-      translate_text api_key:       @api_key,
+      translate_text project_id:    @project_id,
                      language_code: "fr",
                      text:          "Alice and Bob are kind"
     end
@@ -47,14 +47,14 @@ describe "Google Translate API samples" do
 
   example "detect language" do
     expect {
-      detect_language api_key: @api_key, text: "Sample text written in English"
+      detect_language project_id: @project_id, text: "Sample text written in English"
     }.to output(
       /'Sample text written in English' detected as language: en/
     ).to_stdout
   end
 
   example "list supported language codes" do
-    capture { list_supported_language_codes api_key: @api_key }
+    capture { list_supported_language_codes project_id: @project_id }
 
     # Check for a few supported language codes (first sorted alphabetically)
     expect(captured_output).to include "af"
@@ -66,7 +66,7 @@ describe "Google Translate API samples" do
 
   example "list supported language names" do
     capture do
-      list_supported_language_names api_key: @api_key, language_code: "en"
+      list_supported_language_names project_id: @project_id, language_code: "en"
     end
 
     # Check for a few supported language codes (first sorted alphabetically)

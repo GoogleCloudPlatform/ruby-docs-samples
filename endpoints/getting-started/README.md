@@ -2,6 +2,8 @@
 
 This sample demonstrates how to use Google Cloud Endpoints with a Ruby backend. This sample requires that you have [Ruby](https://www.ruby-lang.org/en/documentation/installation/) 2.0.0 or newer installed.
 
+For a complete walkthrough showing how to run this sample in different environments, see the [Google Cloud Endpoints Quickstarts](https://cloud.google.com/endpoints/docs/quickstarts).
+
 This sample consists of two parts:
 
 1. The backend
@@ -30,23 +32,9 @@ With the app running locally, you can execute the simple echo client using:
 
 The `APIKEY` doesn't matter as the endpoint proxy is not running to do authentication.
 
-## Deploying to Google Cloud Platform
+## Deploying to Production
 
-### Deploying to Google App Engine Flexible
-
-Follow the [Endpoints for App Engine Flexible Environment](https://cloud.google.com/endpoints/docs/quickstart-app-engine) quickstart.
-
-### Deploying to Google Container Engine
-
-Follow the [Endpoints for Container Engine](https://cloud.google.com/endpoints/docs/quickstart-container-engine) quickstart.
-
-### Deploying to Google Compute Engine
-
-Follow the [Endpoints for Compute Engine](https://cloud.google.com/endpoints/docs/quickstart-compute-engine) quickstart.
-
-### Deploying to Google Compute Engine with Docker
-
-Follow the [Endpoints for Compute Engine with Docker](https://cloud.google.com/endpoints/docs/quickstart-compute-engine-docker) quickstart.
+See the [Google Cloud Endpoints Quickstarts](https://cloud.google.com/endpoints/docs/quickstarts).
 
 ### Using the echo client
 

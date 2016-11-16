@@ -12,15 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-def translate_text api_key:, text:, language_code:
+def translate_text project_id:, text:, language_code:
   # [START translate_text]
-  # api_key       = "Your API access key"
+  # project_id   = "Your Google Cloud project ID"
   # text          = "The text you would like to translate"
   # language_code = "The ISO 639-1 code of language to translate to, eg. 'en'"
 
   require "google/cloud/translate"
 
-  translate   = Google::Cloud::Translate.new api_key
+  translate   = Google::Cloud::Translate.new project: project_id
   translation = translate.translate text, to: language_code
 
   puts "Translated '#{text}' to '#{translation.text.inspect}'"
@@ -28,14 +28,14 @@ def translate_text api_key:, text:, language_code:
   # [END translate_text]
 end
 
-def detect_language api_key:, text:
+def detect_language project_id:, text:
   # [START detect_language]
-  # api_key = "Your API access key"
+  # project_id   = "Your Google Cloud project ID"
   # text    = "The text you would like to detect the language of"
 
   require "google/cloud/translate"
 
-  translate = Google::Cloud::Translate.new api_key
+  translate = Google::Cloud::Translate.new project: project_id
   detection = translate.detect text
 
   puts "'#{text}' detected as language: #{detection.language}"
@@ -43,13 +43,13 @@ def detect_language api_key:, text:
   # [END detect_language]
 end
 
-def list_supported_language_codes api_key:
+def list_supported_language_codes project_id:
   # [START list_supported_language_codes]
-  # api_key = "Your API access key"
+  # project_id   = "Your Google Cloud project ID"
 
   require "google/cloud/translate"
 
-  translate = Google::Cloud::Translate.new api_key
+  translate = Google::Cloud::Translate.new project: project_id
   languages = translate.languages
 
   puts "Supported language codes:"
@@ -59,9 +59,9 @@ def list_supported_language_codes api_key:
   # [END list_supported_language_codes]
 end
 
-def list_supported_language_names api_key:, language_code: "en"
+def list_supported_language_names project_id:, language_code: "en"
   # [START list_supported_language_names]
-  # api_key = "Your API access key"
+  # project_id   = "Your Google Cloud project ID"
 
   # To receive the names of the supported languages, provide the code
   # for the language in which you wish to receive the names
@@ -69,7 +69,7 @@ def list_supported_language_names api_key:, language_code: "en"
 
   require "google/cloud/translate"
 
-  translate = Google::Cloud::Translate.new api_key
+  translate = Google::Cloud::Translate.new project: project_id
   languages = translate.languages language_code
 
   puts "Supported languages:"
@@ -80,20 +80,22 @@ def list_supported_language_names api_key:, language_code: "en"
 end
 
 if __FILE__ == $PROGRAM_NAME
-  api_key = ENV["TRANSLATE_API_KEY"]
+  project_id = ENV["GOOGLE_CLOUD_PROJECT"]
   command = ARGV.shift
 
   case command
   when "translate"
-    translate_text api_key:       api_key,
+    translate_text project_id: project_id,
                    language_code: ARGV.shift,
                    text:          ARGV.shift
   when "detect_language"
-    detect_language api_key: api_key, text: ARGV.shift
+    detect_language project_id: project_id,
+                    text: ARGV.shift
   when "list_codes"
-    list_supported_language_codes api_key: api_key
+    list_supported_language_codes project_id: project_id
   when "list_names"
-    list_supported_language_names api_key: api_key, language_code: ARGV.shift
+    list_supported_language_names project_id: project_id,
+                                  language_code: ARGV.shift
   else
     puts <<-usage
 Usage: ruby translate_samples.rb <command> [arguments]

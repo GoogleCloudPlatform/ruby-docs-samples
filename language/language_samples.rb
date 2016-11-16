@@ -17,14 +17,13 @@ def sentiment_from_text project_id:, text_content:
   # project_id   = "Your Google Cloud project ID"
   # text_content = "Text to run sentiment analysis on"
 
-  require "google/cloud"
+  require "google/cloud/language"
 
-  gcloud    = Google::Cloud.new project_id
-  language  = gcloud.language
+  language  = Google::Cloud::Language.new project: project_id
   document  = language.document text_content
   sentiment = document.sentiment
 
-  puts "#{sentiment.polarity} (#{sentiment.magnitude})"
+  puts "#{sentiment.score} (#{sentiment.magnitude})"
   # [END sentiment_from_text]
 end
 
@@ -33,14 +32,13 @@ def sentiment_from_cloud_storage_file project_id:, storage_path:
   # project_id   = "Your Google Cloud project ID"
   # storage_path = "Path to file in Google Cloud Storage, eg. gs://bucket/file"
 
-  require "google/cloud"
+  require "google/cloud/language"
 
-  gcloud    = Google::Cloud.new project_id
-  language  = gcloud.language
+  language  = Google::Cloud::Language.new project: project_id
   document  = language.document storage_path
   sentiment = document.sentiment
 
-  puts "#{sentiment.polarity} (#{sentiment.magnitude})"
+  puts "#{sentiment.score} (#{sentiment.magnitude})"
   # [END sentiment_from_cloud_storage_file]
 end
 
@@ -49,10 +47,9 @@ def entries_from_text project_id:, text_content:
   # project_id   = "Your Google Cloud project ID"
   # text_content = "Text to extract entities from"
 
-  require "google/cloud"
+  require "google/cloud/language"
 
-  gcloud   = Google::Cloud.new project_id
-  language = gcloud.language
+  language = Google::Cloud::Language.new project: project_id
   document = language.document text_content
   entities = document.entities
 
@@ -67,10 +64,9 @@ def entries_from_cloud_storage_file project_id:, storage_path:
   # project_id   = "Your Google Cloud project ID"
   # storage_path = "Path to file in Google Cloud Storage, eg. gs://bucket/file"
 
-  require "google/cloud"
+  require "google/cloud/language"
 
-  gcloud   = Google::Cloud.new project_id
-  language = gcloud.language
+  language = Google::Cloud::Language.new project: project_id
   document = language.document storage_path
   entities = document.entities
 
@@ -85,10 +81,9 @@ def syntax_from_text project_id:, text_content:
   # project_id   = "Your Google Cloud project ID"
   # text_content = "Text to analyze syntax of"
 
-  require "google/cloud"
+  require "google/cloud/language"
 
-  gcloud   = Google::Cloud.new project_id
-  language = gcloud.language
+  language = Google::Cloud::Language.new project: project_id
   document = language.document text_content
   syntax   = document.syntax
 
@@ -96,7 +91,7 @@ def syntax_from_text project_id:, text_content:
   puts "Tokens: #{syntax.tokens.count}"
 
   syntax.tokens.each do |token|
-    puts "#{token.part_of_speech} #{token.text_span.text}"
+    puts "#{token.part_of_speech.tag} #{token.text_span.text}"
   end
   # [END syntax_from_text]
 end
@@ -106,10 +101,9 @@ def syntax_from_cloud_storage_file project_id:, storage_path:
   # project_id   = "Your Google Cloud project ID"
   # storage_path = "Path to file in Google Cloud Storage, eg. gs://bucket/file"
 
-  require "google/cloud"
+  require "google/cloud/language"
 
-  gcloud   = Google::Cloud.new project_id
-  language = gcloud.language
+  language = Google::Cloud::Language.new project: project_id
   document = language.document storage_path
   syntax   = document.syntax
 
@@ -117,7 +111,7 @@ def syntax_from_cloud_storage_file project_id:, storage_path:
   puts "Tokens: #{syntax.tokens.count}"
 
   syntax.tokens.each do |token|
-    puts "#{token.part_of_speech} #{token.text_span.text}"
+    puts "#{token.part_of_speech.tag} #{token.text_span.text}"
   end
   # [END syntax_from_cloud_storage_file]
 end
