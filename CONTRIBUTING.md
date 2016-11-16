@@ -87,8 +87,7 @@ perform a specific task such as creating a Google Cloud Storage bucket.
 use one or more Google APIs and products to create a fully-functioning
 application.
 
-Specific blocks of code that are embedded in the
-[cloud.google.com](https://cloud.google.com) documentation
+Specific blocks of code that are embedded in documentation
 are defined using `[START snippet_name]` and `[END snippet_name]`
 **region tags**.
 
