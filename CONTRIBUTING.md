@@ -133,7 +133,6 @@ Example:
 require "google/cloud/storage"
   
 storage = Google::Cloud::Storage.new project: project_id
-# ...
 ```
 
 #### require statements
@@ -153,8 +152,6 @@ Example:
 require "google/cloud/storage"
 
 storage = Google::Cloud::Storage.new project: project_id
-
-# ...
 ```
 
 **Note:** common libraries such as `"date"` and `"time"` do not need to be
