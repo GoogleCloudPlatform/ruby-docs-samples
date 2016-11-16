@@ -116,7 +116,7 @@ Reference snippets are isolated snippets that demonstrate how to
 perform a specific task such as creating a Google Cloud Storage bucket.
 
 Ideally, developers should be able to **copy/paste** the code in a reference
-snippet and run it after having replaced the placeholder values with their own.
+snippet and run it after replacing placeholder values.
 
 #### Placeholder values
 
