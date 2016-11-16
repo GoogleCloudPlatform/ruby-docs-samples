@@ -34,7 +34,7 @@ describe "Google Translate API samples" do
 
   example "translate text" do
     capture do
-      translate_text project_id:       @project_id,
+      translate_text project_id:    @project_id,
                      language_code: "fr",
                      text:          "Alice and Bob are kind"
     end

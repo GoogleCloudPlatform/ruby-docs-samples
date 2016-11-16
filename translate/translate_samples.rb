@@ -18,10 +18,9 @@ def translate_text project_id:, text:, language_code:
   # text          = "The text you would like to translate"
   # language_code = "The ISO 639-1 code of language to translate to, eg. 'en'"
 
-  require "google/cloud"
+  require "google/cloud/translate"
 
-  gcloud      = Google::Cloud.new project_id
-  translate   = gcloud.translate
+  translate   = Google::Cloud::Translate.new project: project_id
   translation = translate.translate text, to: language_code
 
   puts "Translated '#{text}' to '#{translation.text.inspect}'"
@@ -34,10 +33,9 @@ def detect_language project_id:, text:
   # project_id   = "Your Google Cloud project ID"
   # text    = "The text you would like to detect the language of"
 
-  require "google/cloud"
+  require "google/cloud/translate"
 
-  gcloud    = Google::Cloud.new project_id
-  translate = gcloud.translate
+  translate = Google::Cloud::Translate.new project: project_id
   detection = translate.detect text
 
   puts "'#{text}' detected as language: #{detection.language}"
@@ -49,10 +47,9 @@ def list_supported_language_codes project_id:
   # [START list_supported_language_codes]
   # project_id   = "Your Google Cloud project ID"
 
-  require "google/cloud"
+  require "google/cloud/translate"
 
-  gcloud    = Google::Cloud.new project_id
-  translate = gcloud.translate
+  translate = Google::Cloud::Translate.new project: project_id
   languages = translate.languages
 
   puts "Supported language codes:"
@@ -70,10 +67,9 @@ def list_supported_language_names project_id:, language_code: "en"
   # for the language in which you wish to receive the names
   # language_code = "en"
 
-  require "google/cloud"
+  require "google/cloud/translate"
 
-  gcloud    = Google::Cloud.new project_id
-  translate = gcloud.translate
+  translate = Google::Cloud::Translate.new project: project_id
   languages = translate.languages language_code
 
   puts "Supported languages:"
