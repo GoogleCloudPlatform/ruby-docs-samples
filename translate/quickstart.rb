@@ -16,12 +16,12 @@
 # Imports the Google Cloud client library
 require "google/cloud"
 
-# Your Translate API key
-api_key = "YOUR_API_KEY"
+# Your Google Cloud Platform project ID
+project_id = "YOUR_PROJECT_ID"
 
 # Instantiates a client
-gcloud    = Google::Cloud.new
-translate = gcloud.translate api_key
+gcloud    = Google::Cloud.new project_id
+translate = gcloud.translate
 
 # The text to translate
 text = "Hello, world!"
