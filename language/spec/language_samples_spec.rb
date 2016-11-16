@@ -44,8 +44,8 @@ describe "Google Cloud Natural Language API samples" do
   end
 
   example "sentiment from text" do
-    positive_text = "Happy love it.  I am glad, pleased, and delighted."
-    negative_text = "I hate it.  I am mad, annoyed, and irritated."
+    positive_text = "Happy love it. I am glad, pleased, and delighted."
+    negative_text = "I hate it. I am mad, annoyed, and irritated."
 
     expect {
       sentiment_from_text project_id: @project_id, text_content: positive_text
@@ -57,8 +57,8 @@ describe "Google Cloud Natural Language API samples" do
   end
 
   example "sentiment from a file stored in Google Cloud Storage" do
-    upload "positive.txt", "Happy love it.  I am glad, pleased, and delighted."
-    upload "negative.txt", "I hate it.  I am mad, annoyed, and irritated."
+    upload "positive.txt", "Happy love it. I am glad, pleased, and delighted."
+    upload "negative.txt", "I hate it. I am mad, annoyed, and irritated."
 
     expect {
       sentiment_from_cloud_storage_file(
