@@ -20,7 +20,7 @@ require "google/cloud/storage"
 project_id = "YOUR_PROJECT_ID"
 
 # Instantiates a client
-storage = Google::Cloud::Storage.new project_id
+storage = Google::Cloud::Storage.new project: project_id
 
 # The name for the new bucket
 bucket_name = "my-new-bucket"
