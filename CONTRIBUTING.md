@@ -80,10 +80,10 @@ There are two distinctly different types of samples:
  1. [Reference snippets](#reference-snippets)
  2. [Tutorial applications](#tutorial-applications)
 
-Reference snippets are isolated snippets that demonstrate how to
+**Reference snippets** are isolated snippets that demonstrate how to
 perform a specific task such as creating a Google Cloud Storage bucket.
 
-Tutorial applications are sample applications that demonstrate how to
+**Tutorial applications** are sample applications that demonstrate how to
 use one or more Google APIs and products to create a fully-functioning
 application.
 
