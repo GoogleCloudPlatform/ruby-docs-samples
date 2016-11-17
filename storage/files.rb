@@ -19,7 +19,7 @@ def list_bucket_contents project_id:, bucket_name:
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new
+  storage = Google::Cloud::Storage.new project: project_id
   bucket  = storage.bucket bucket_name
 
   bucket.files.each do |file|
@@ -36,7 +36,7 @@ def list_bucket_contents_with_prefix project_id:, bucket_name:, prefix:
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new
+  storage = Google::Cloud::Storage.new project: project_id
   bucket  = storage.bucket bucket_name
   files   = bucket.files prefix: prefix
 
@@ -56,7 +56,7 @@ def upload_file project_id:, bucket_name:, local_file_path:,
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new
+  storage = Google::Cloud::Storage.new project: project_id
   bucket  = storage.bucket bucket_name
 
   file = bucket.create_file local_file_path, storage_file_path
@@ -74,7 +74,7 @@ def download_file project_id:, bucket_name:, file_name:, local_path:
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new
+  storage = Google::Cloud::Storage.new project: project_id
   bucket  = storage.bucket bucket_name
   file    = bucket.file file_name
 
@@ -92,7 +92,7 @@ def delete_file project_id:, bucket_name:, file_name:
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new
+  storage = Google::Cloud::Storage.new project: project_id
   bucket  = storage.bucket bucket_name
   file    = bucket.file file_name
 
@@ -110,7 +110,7 @@ def list_file_details project_id:, bucket_name:, file_name:
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new
+  storage = Google::Cloud::Storage.new project: project_id
   bucket  = storage.bucket bucket_name
   file    = bucket.file file_name
 
@@ -147,7 +147,7 @@ def make_file_public project_id:, bucket_name:, file_name:
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new
+  storage = Google::Cloud::Storage.new project: project_id
   bucket  = storage.bucket bucket_name
   file    = bucket.file file_name
 
@@ -166,7 +166,7 @@ def rename_file project_id:, bucket_name:, file_name:, new_name:
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new
+  storage = Google::Cloud::Storage.new project: project_id
   bucket  = storage.bucket bucket_name
   file    = bucket.file file_name
 
@@ -189,7 +189,7 @@ def copy_file project_id:, source_bucket_name:, source_file_name:,
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new
+  storage = Google::Cloud::Storage.new project: project_id
   bucket  = storage.bucket source_bucket_name
   file    = bucket.file source_file_name
 
