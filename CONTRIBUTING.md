@@ -219,7 +219,7 @@ The purpose of tutorial applications is very different from reference snippets.
 
 A tutorial application should be an idiomatic Ruby application.
 Code snippets from tutorial applications demonstrate just a *part* of the
-*whole* application are are **not isolated**.
+*whole* application and are **not isolated**.
 
  1. Tutorial snippet may not include `require` statements
  1. Tutorial snippet may not include client library instantiation
