@@ -20,7 +20,7 @@ require "google/cloud/bigquery"
 project_id = "YOUR_PROJECT_ID"
 
 # Instantiates a client
-bigquery = Google::Cloud::Bigquery.new project_id
+bigquery = Google::Cloud::Bigquery.new project: project_id
 
 # The name for the new dataset
 dataset_name = "my_new_dataset"

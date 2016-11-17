@@ -20,7 +20,7 @@ def create_table project_id:, dataset_id:, table_id:
 
   require "google/cloud/bigquery"
 
-  bigquery = Google::Cloud::Bigquery.new
+  bigquery = Google::Cloud::Bigquery.new project: project_id
   dataset  = bigquery.dataset dataset_id
 
   dataset.create_table table_id
@@ -36,7 +36,7 @@ def list_tables project_id:, dataset_id:
 
   require "google/cloud/bigquery"
 
-  bigquery = Google::Cloud::Bigquery.new
+  bigquery = Google::Cloud::Bigquery.new project: project_id
   dataset  = bigquery.dataset dataset_id
 
   dataset.tables.each do |table|
@@ -53,7 +53,7 @@ def delete_table project_id:, dataset_id:, table_id:
 
   require "google/cloud/bigquery"
 
-  bigquery = Google::Cloud::Bigquery.new
+  bigquery = Google::Cloud::Bigquery.new project: project_id
   dataset  = bigquery.dataset dataset_id
   table    = dataset.table table_id
 
@@ -71,7 +71,7 @@ def list_table_data project_id:, dataset_id:, table_id:
 
   require "google/cloud/bigquery"
 
-  bigquery = Google::Cloud::Bigquery.new
+  bigquery = Google::Cloud::Bigquery.new project: project_id
   dataset  = bigquery.dataset dataset_id
   table    = dataset.table table_id
 
@@ -92,7 +92,7 @@ def import_table_data project_id:, dataset_id:, table_id:, row_data:
 
   require "google/cloud/bigquery"
 
-  bigquery = Google::Cloud::Bigquery.new
+  bigquery = Google::Cloud::Bigquery.new project: project_id
   dataset  = bigquery.dataset dataset_id
   table    = dataset.table table_id
 
@@ -116,7 +116,7 @@ def import_table_data_from_file project_id:, dataset_id:, table_id:,
 
   require "google/cloud/bigquery"
 
-  bigquery = Google::Cloud::Bigquery.new
+  bigquery = Google::Cloud::Bigquery.new project: project_id
   dataset  = bigquery.dataset dataset_id
   table    = dataset.table table_id
 
@@ -140,7 +140,7 @@ def import_table_data_from_cloud_storage project_id:, dataset_id:, table_id:,
 
   require "google/cloud/bigquery"
 
-  bigquery = Google::Cloud::Bigquery.new
+  bigquery = Google::Cloud::Bigquery.new project: project_id
   dataset  = bigquery.dataset dataset_id
   table    = dataset.table table_id
 
@@ -164,7 +164,7 @@ def export_table_data_to_cloud_storage project_id:, dataset_id:, table_id:,
 
   require "google/cloud/bigquery"
 
-  bigquery = Google::Cloud::Bigquery.new
+  bigquery = Google::Cloud::Bigquery.new project: project_id
   dataset  = bigquery.dataset dataset_id
   table    = dataset.table table_id
 
@@ -186,7 +186,7 @@ def run_query project_id:, query_string:
 
   require "google/cloud/bigquery"
 
-  bigquery = Google::Cloud::Bigquery.new
+  bigquery = Google::Cloud::Bigquery.new project: project_id
 
   query_results = bigquery.query query_string
   # [END get_query_results]
@@ -206,7 +206,7 @@ def run_query_as_job project_id:, query_string:
 
   require "google/cloud/bigquery"
 
-  bigquery = Google::Cloud::Bigquery.new
+  bigquery = Google::Cloud::Bigquery.new project: project_id
 
   puts "Running query"
   query_job = bigquery.query_job query_string

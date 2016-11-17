@@ -16,7 +16,7 @@ def create_bigquery_client project_id:
   # [START create_bigquery_client]
   require "google/cloud/bigquery"
 
-  bigquery = Google::Cloud::Bigquery.new
+  bigquery = Google::Cloud::Bigquery.new project: project_id
   # [END create_bigquery_client]
 end
 
@@ -27,7 +27,7 @@ def create_dataset project_id:, dataset_id:
 
   require "google/cloud/bigquery"
 
-  bigquery = Google::Cloud::Bigquery.new
+  bigquery = Google::Cloud::Bigquery.new project: project_id
 
   bigquery.create_dataset dataset_id
 
@@ -41,7 +41,7 @@ def list_datasets project_id:
 
   require "google/cloud/bigquery"
 
-  bigquery = Google::Cloud::Bigquery.new
+  bigquery = Google::Cloud::Bigquery.new project: project_id
 
   bigquery.datasets.each do |dataset|
     puts dataset.dataset_id
@@ -56,7 +56,7 @@ def delete_dataset project_id:, dataset_id:
 
   require "google/cloud/bigquery"
 
-  bigquery = Google::Cloud::Bigquery.new
+  bigquery = Google::Cloud::Bigquery.new project: project_id
   dataset  = bigquery.dataset dataset_id
 
   dataset.delete
