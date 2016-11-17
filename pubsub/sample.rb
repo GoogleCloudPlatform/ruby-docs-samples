@@ -15,7 +15,7 @@
 # [START create_pubsub_client]
 require "google/cloud/pubsub"
 
-pubsub = gcloud.pubsub
+pubsub = Google::Cloud::Pubsub.new
 # [END create_pubsub_client]
 
 def create_topic
