@@ -23,8 +23,8 @@ describe "BigQuery Quickstart" do
 
     expect(bigquery.dataset dataset_name).to be nil
     expect(Google::Cloud::Bigquery).to receive(:new).
-                             with("YOUR_PROJECT_ID").
-                             and_return(bigquery)
+                                       with(project: "YOUR_PROJECT_ID").
+                                       and_return(bigquery)
     expect(bigquery).to receive(:create_dataset).
                         with("my_new_dataset").
                         and_wrap_original do |m, *args|
