@@ -29,7 +29,7 @@ module Samples
         # [START build_service]
         require "google/cloud/bigquery"
 
-        bigquery = Google::Cloud::Bigquery.new project_id
+        bigquery = Google::Cloud::Bigquery.new project: project_id
         # [END build_service]
 
         # [START run_query]
