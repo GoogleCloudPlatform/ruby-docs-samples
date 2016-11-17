@@ -18,10 +18,10 @@ require "google/cloud/vision"
 describe "Vision Quickstart" do
 
   it "performs label detection on a sample image file" do
-    vision = Google::Cloud::Vision.new ENV["GOOGLE_CLOUD_PROJECT"]
-
-    expect(Google::Cloud::Vision).to receive(:new).with("YOUR_PROJECT_ID").
-                                           and_return(vision)
+    vision = Google::Cloud::Vision.new
+    expect(Google::Cloud::Vision).to receive(:new).
+                                     with(project: "YOUR_PROJECT_ID").
+                                     and_return(vision)
 
     expect {
       load File.expand_path("../quickstart.rb", __dir__)

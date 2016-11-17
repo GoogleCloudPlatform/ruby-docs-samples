@@ -20,7 +20,7 @@ require "google/cloud/vision"
 project_id = "YOUR_PROJECT_ID"
 
 # Instantiates a client
-vision = Google::Cloud::Vision.new project_id
+vision = Google::Cloud::Vision.new project: project_id
 
 # The name of the image file to annotate
 file_name = "./images/cat.jpg"
