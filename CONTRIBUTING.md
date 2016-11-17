@@ -212,6 +212,9 @@ application.
 A tutorial sample may include command-line application(s) or
 web application(s).
 
+For example, the web applications in the [`appengine`](appengine/)
+directory are used by short [tutorials](https://cloud.google.com/appengine/docs/flexible/ruby/how-to).
+
 The purpose of tutorial applications is very different from reference snippets.
 
 A tutorial application should be an idiomatic Ruby application.
