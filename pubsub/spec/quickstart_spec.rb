@@ -26,8 +26,8 @@ describe "PubSub Quickstart" do
 
     expect(pubsub.topic "my-new-topic").to be nil
     expect(Google::Cloud::Pubsub).to receive(:new).
-                             with("YOUR_PROJECT_ID").
-                             and_return(pubsub)
+                                     with(project: "YOUR_PROJECT_ID").
+                                     and_return(pubsub)
 
     expect {
       load File.expand_path("../quickstart.rb", __dir__)
