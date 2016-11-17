@@ -42,8 +42,8 @@ def sentiment_from_cloud_storage_file project_id:, storage_path:
   # [END sentiment_from_cloud_storage_file]
 end
 
-def entries_from_text project_id:, text_content:
-  # [START entries_from_text]
+def entities_from_text project_id:, text_content:
+  # [START entities_from_text]
   # project_id   = "Your Google Cloud project ID"
   # text_content = "Text to extract entities from"
 
@@ -56,11 +56,11 @@ def entries_from_text project_id:, text_content:
   entities.each do |entity|
     puts "Entity #{entity.name} #{entity.type}"
   end
-  # [END entries_from_text]
+  # [END entities_from_text]
 end
 
-def entries_from_cloud_storage_file project_id:, storage_path:
-  # [START entries_from_cloud_storage_file]
+def entities_from_cloud_storage_file project_id:, storage_path:
+  # [START entities_from_cloud_storage_file]
   # project_id   = "Your Google Cloud project ID"
   # storage_path = "Path to file in Google Cloud Storage, eg. gs://bucket/file"
 
@@ -73,7 +73,7 @@ def entries_from_cloud_storage_file project_id:, storage_path:
   entities.each do |entity|
     puts "Entity #{entity.name} #{entity.type}"
   end
-  # [END entries_from_cloud_storage_file]
+  # [END entities_from_cloud_storage_file]
 end
 
 def syntax_from_text project_id:, text_content:
@@ -122,8 +122,8 @@ if __FILE__ == $PROGRAM_NAME
   if ARGV.length == 1
     puts "Sentiment:"
     sentiment_from_text project_id: project_id, text_content: ARGV.first
-    puts "Entries:"
-    entries_from_text project_id: project_id, text_content: ARGV.first
+    puts "Entities:"
+    entities_from_text project_id: project_id, text_content: ARGV.first
     puts "Syntax:"
     syntax_from_text project_id: project_id, text_content: ARGV.first
   else
