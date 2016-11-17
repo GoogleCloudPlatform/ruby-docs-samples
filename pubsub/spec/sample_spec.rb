@@ -19,7 +19,7 @@ describe "Pub/Sub sample" do
   TOPIC_NAME = "my-topic"
   SUBSCRIPTION_NAME = "my-subscription"
   SERVICE_ACCOUNT =
-    "serviceAccount:test-account@#{ENV["GOOGLE_CLOUD_PROJECT"]}"\
+    "serviceAccount:test-account@#{ENV["GOOGLE_CLOUD_PROJECT"]}" \
     ".iam.gserviceaccount.com"
 
   before :all do
@@ -46,7 +46,9 @@ describe "Pub/Sub sample" do
 
   before :each do
     cleanup!
-    allow(Google::Cloud).to receive(:new).with("my-gcp-project-id").and_return(@gcloud)
+    allow(Google::Cloud::Pubsub).to receive(:new).
+                                    with(project: "my-gcp-project-id").
+                                    and_return(@pubsub)
   end
 
   it "creates topic" do
