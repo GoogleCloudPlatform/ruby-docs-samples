@@ -22,8 +22,8 @@ require "csv"
 describe "Google Cloud BigQuery samples" do
 
   before do
-    @project_id = ENV["GOOGLE_CLOUD_PROJECT"]
     @bigquery   = Google::Cloud::Bigquery.new
+    @project_id = @bigquery.project
     @storage    = Google::Cloud::Storage.new
     @bucket     = @storage.bucket ENV["GOOGLE_CLOUD_STORAGE_BUCKET"]
     @tempfiles  = []

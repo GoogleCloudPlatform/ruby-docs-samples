@@ -19,9 +19,9 @@ require "google/cloud/storage"
 describe "Google Cloud Storage buckets sample" do
 
   before :all do
-    @project_id  = ENV["GOOGLE_CLOUD_PROJECT"]
     @bucket_name = ENV["GOOGLE_CLOUD_STORAGE_BUCKET"]
     @storage     = Google::Cloud::Storage.new
+    @project_id  = @storage.project
   end
 
   before do

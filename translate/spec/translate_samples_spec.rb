@@ -14,11 +14,12 @@
 
 require_relative "../translate_samples"
 require "rspec"
+require "google/cloud/translate"
 
 describe "Google Translate API samples" do
 
   before do
-    @project_id = ENV["GOOGLE_CLOUD_PROJECT"]
+    @project_id = Google::Cloud::Translate.new.project
   end
 
   # Capture and return STDOUT output by block
