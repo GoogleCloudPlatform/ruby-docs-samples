@@ -77,9 +77,9 @@ describe "Google Cloud Natural Language API samples" do
     }.to output(/^-\d\.\d+ \(\d\.\d+\)/).to_stdout
   end
 
-  example "entries from text" do
+  example "entities from text" do
     output = capture {
-      entries_from_text project_id:   @project_id,
+      entities_from_text project_id:   @project_id,
                         text_content: "Alice wrote a book. Bob likes the book."
     }
 
@@ -87,13 +87,13 @@ describe "Google Cloud Natural Language API samples" do
     expect(output).to include "Bob PERSON"
   end
 
-  example "entries from a file stored in Google Cloud Storage" do
-    upload "entries.txt", "Alice wrote a book. Bob likes the book."
+  example "entities from a file stored in Google Cloud Storage" do
+    upload "entities.txt", "Alice wrote a book. Bob likes the book."
 
     output = capture {
-      entries_from_cloud_storage_file(
+      entities_from_cloud_storage_file(
         project_id:   @project_id,
-        storage_path: "gs://#{@bucket_name}/entries.txt"
+        storage_path: "gs://#{@bucket_name}/entities.txt"
       )
     }
 
