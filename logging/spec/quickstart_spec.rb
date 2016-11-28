@@ -29,7 +29,7 @@ describe "Logging Quickstart" do
   before do
     @logging  = Google::Cloud::Logging.new
     @entry    = @logging.entry
-    @log_name = "projects/#{ENV["GOOGLE_CLOUD_PROJECT"]}/logs/" +
+    @log_name = "projects/#{@logging.project}/logs/" +
                 "quickstart_log_#{Time.now.to_i}"
 
     @entry.log_name = @log_name

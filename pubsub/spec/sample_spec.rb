@@ -114,7 +114,7 @@ describe "Pub/Sub sample" do
       ).and_return(
         @pubsub.topic(@topic_name).subscribe(
           subscription_name,
-          endpoint: "https://#{ENV['GOOGLE_CLOUD_PROJECT']}.appspot.com/push"
+          endpoint: "https://#{@pubsub.project}.appspot.com/push"
         ))
 
     expect { create_push_subscription }.to \
