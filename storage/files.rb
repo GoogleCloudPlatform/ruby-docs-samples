@@ -29,7 +29,7 @@ def list_bucket_contents project_id:, bucket_name:
 end
 
 def list_bucket_contents_with_prefix project_id:, bucket_name:, prefix:
-  # [START list_bucket_contents]
+  # [START list_bucket_contents_with_prefix]
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
   # prefix      = "Filter results to files whose names begin with this prefix"
@@ -43,7 +43,7 @@ def list_bucket_contents_with_prefix project_id:, bucket_name:, prefix:
   files.each do |file|
     puts file.name
   end
-  # [END list_bucket_contents]
+  # [END list_bucket_contents_with_prefix]
 end
 
 def upload_file project_id:, bucket_name:, local_file_path:,
