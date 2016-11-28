@@ -49,8 +49,8 @@ describe "Logging sample" do
   #                                           also use for log sink
   #
   before :all do
-    @project_id = ENV["GOOGLE_CLOUD_PROJECT"]
     @logging    = Google::Cloud::Logging.new
+    @project_id = @logging.project
     @storage    = Google::Cloud::Storage.new
     @bucket     = @storage.bucket ENV["GOOGLE_CLOUD_STORAGE_BUCKET"]
     @alt_bucket = @storage.bucket ENV["ALTERNATE_GOOGLE_CLOUD_STORAGE_BUCKET"]
