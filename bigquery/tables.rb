@@ -18,10 +18,9 @@ def create_table project_id:, dataset_id:, table_id:
   # dataset_id = "ID of the dataset to create table in"
   # table_id   = "ID of the table to create"
 
-  require "google/cloud"
+  require "google/cloud/bigquery"
 
-  gcloud   = Google::Cloud.new project_id
-  bigquery = gcloud.bigquery
+  bigquery = Google::Cloud::Bigquery.new project: project_id
   dataset  = bigquery.dataset dataset_id
 
   dataset.create_table table_id
@@ -35,10 +34,9 @@ def list_tables project_id:, dataset_id:
   # project_id = "Your Google Cloud project ID"
   # dataset_id = "ID of the dataset to create table in"
 
-  require "google/cloud"
+  require "google/cloud/bigquery"
 
-  gcloud   = Google::Cloud.new project_id
-  bigquery = gcloud.bigquery
+  bigquery = Google::Cloud::Bigquery.new project: project_id
   dataset  = bigquery.dataset dataset_id
 
   dataset.tables.each do |table|
@@ -53,10 +51,9 @@ def delete_table project_id:, dataset_id:, table_id:
   # dataset_id = "ID of the dataset delete table from"
   # table_id   = "ID of the table to delete"
 
-  require "google/cloud"
+  require "google/cloud/bigquery"
 
-  gcloud   = Google::Cloud.new project_id
-  bigquery = gcloud.bigquery
+  bigquery = Google::Cloud::Bigquery.new project: project_id
   dataset  = bigquery.dataset dataset_id
   table    = dataset.table table_id
 
@@ -72,10 +69,9 @@ def list_table_data project_id:, dataset_id:, table_id:
   # dataset_id = "ID of the dataset containing table"
   # table_id   = "ID of the table to display data for"
 
-  require "google/cloud"
+  require "google/cloud/bigquery"
 
-  gcloud   = Google::Cloud.new project_id
-  bigquery = gcloud.bigquery
+  bigquery = Google::Cloud::Bigquery.new project: project_id
   dataset  = bigquery.dataset dataset_id
   table    = dataset.table table_id
 
@@ -94,10 +90,9 @@ def import_table_data project_id:, dataset_id:, table_id:, row_data:
   # table_id   = "ID of the table to import data into"
   # row_data   = [{ column1: value, column2: value }, ...]
 
-  require "google/cloud"
+  require "google/cloud/bigquery"
 
-  gcloud   = Google::Cloud.new project_id
-  bigquery = gcloud.bigquery
+  bigquery = Google::Cloud::Bigquery.new project: project_id
   dataset  = bigquery.dataset dataset_id
   table    = dataset.table table_id
 
@@ -119,10 +114,9 @@ def import_table_data_from_file project_id:, dataset_id:, table_id:,
   # table_id        = "ID of the table to import file data into"
   # local_file_path = "Path to local file to import into BigQuery table"
 
-  require "google/cloud"
+  require "google/cloud/bigquery"
 
-  gcloud   = Google::Cloud.new project_id
-  bigquery = gcloud.bigquery
+  bigquery = Google::Cloud::Bigquery.new project: project_id
   dataset  = bigquery.dataset dataset_id
   table    = dataset.table table_id
 
@@ -144,10 +138,9 @@ def import_table_data_from_cloud_storage project_id:, dataset_id:, table_id:,
   # table_id     = "ID of the table to import data into"
   # storage_path = "Storage path to file to import, eg. gs://bucket/file.csv"
 
-  require "google/cloud"
+  require "google/cloud/bigquery"
 
-  gcloud   = Google::Cloud.new project_id
-  bigquery = gcloud.bigquery
+  bigquery = Google::Cloud::Bigquery.new project: project_id
   dataset  = bigquery.dataset dataset_id
   table    = dataset.table table_id
 
@@ -169,10 +162,9 @@ def export_table_data_to_cloud_storage project_id:, dataset_id:, table_id:,
   # table_id     = "ID of the table to export file data from"
   # storage_path = "Storage path to export to, eg. gs://bucket/file.csv"
 
-  require "google/cloud"
+  require "google/cloud/bigquery"
 
-  gcloud   = Google::Cloud.new project_id
-  bigquery = gcloud.bigquery
+  bigquery = Google::Cloud::Bigquery.new project: project_id
   dataset  = bigquery.dataset dataset_id
   table    = dataset.table table_id
 
@@ -192,10 +184,9 @@ def run_query project_id:, query_string:
   # project_id   = "your google cloud project id"
   # query_string = "query string to execute (using bigquery query syntax)"
 
-  require "google/cloud"
+  require "google/cloud/bigquery"
 
-  gcloud   = Google::Cloud.new project_id
-  bigquery = gcloud.bigquery
+  bigquery = Google::Cloud::Bigquery.new project: project_id
 
   query_results = bigquery.query query_string
   # [END get_query_results]
@@ -213,10 +204,9 @@ def run_query_as_job project_id:, query_string:
   # project_id   = "your google cloud project id"
   # query_string = "query string to execute (using bigquery query syntax)"
 
-  require "google/cloud"
+  require "google/cloud/bigquery"
 
-  gcloud   = Google::Cloud.new project_id
-  bigquery = gcloud.bigquery
+  bigquery = Google::Cloud::Bigquery.new project: project_id
 
   puts "Running query"
   query_job = bigquery.query_job query_string

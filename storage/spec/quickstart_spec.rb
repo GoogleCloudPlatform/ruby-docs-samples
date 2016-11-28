@@ -13,13 +13,12 @@
 # limitations under the License.
 
 require "rspec"
-require "google/cloud"
+require "google/cloud/storage"
 
 describe "Storage Quickstart" do
 
   it "creates a new bucket" do
-    gcloud      = Google::Cloud.new ENV["GOOGLE_CLOUD_PROJECT"]
-    storage     = gcloud.storage
+    storage     = Google::Cloud::Storage.new
     bucket_name = ENV["GOOGLE_CLOUD_STORAGE_BUCKET"]
 
     if storage.bucket bucket_name
@@ -29,11 +28,11 @@ describe "Storage Quickstart" do
     end
 
     expect(storage.bucket bucket_name).to be nil
-    expect(Google::Cloud).to receive(:new).with("YOUR_PROJECT_ID").
-                                           and_return(gcloud)
+    expect(Google::Cloud::Storage).to receive(:new).
+                                      with(project: "YOUR_PROJECT_ID").
+                                      and_return(storage)
 
     bucket = storage.create_bucket bucket_name
-    expect(gcloud).to receive(:storage).and_return(storage)
     expect(storage).to receive(:create_bucket).with("my-new-bucket").
                                                and_return(bucket)
 

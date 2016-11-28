@@ -14,14 +14,13 @@
 
 # [START speech_quickstart]
 # Imports the Google Cloud client library
-require "google/cloud"
+require "google/cloud/speech"
 
 # Your Google Cloud Platform project ID
 project_id = "YOUR_PROJECT_ID"
 
 # Instantiates a client
-gcloud = Google::Cloud.new project_id
-speech = gcloud.speech
+speech = Google::Cloud::Speech.new project: project_id
 
 # The name of the audio file to transcribe
 file_name = "./audio_files/audio.raw"

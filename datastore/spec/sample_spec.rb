@@ -19,8 +19,7 @@ describe "Datastore sample" do
   attr_reader :datastore
 
   before :all do
-    @gcloud = Google::Cloud.new ENV["GOOGLE_CLOUD_PROJECT"]
-    @datastore = @gcloud.datastore
+    @datastore = Google::Cloud::Datastore.new
 
     task_list = datastore.entity "TaskList", "default"
     datastore.save task_list
@@ -34,7 +33,7 @@ describe "Datastore sample" do
   end
 
   before :each do
-    allow(Google::Cloud).to receive(:new).and_return(@gcloud)
+    allow(Google::Cloud::Datastore).to receive(:new).and_return(@datastore)
   end
 
   after :all do

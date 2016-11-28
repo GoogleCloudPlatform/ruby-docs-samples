@@ -13,7 +13,7 @@
 # limitations under the License.
 
 require "rspec"
-require "google/cloud"
+require "google/cloud/logging"
 
 describe "Logging Quickstart" do
 
@@ -27,10 +27,9 @@ describe "Logging Quickstart" do
   end
 
   before do
-    @gcloud   = Google::Cloud.new ENV["GOOGLE_CLOUD_PROJECT"]
-    @logging  = @gcloud.logging
+    @logging  = Google::Cloud::Logging.new
     @entry    = @logging.entry
-    @log_name = "projects/#{ENV["GOOGLE_CLOUD_PROJECT"]}/logs/" +
+    @log_name = "projects/#{@logging.project}/logs/" +
                 "quickstart_log_#{Time.now.to_i}"
 
     @entry.log_name = @log_name
@@ -48,9 +47,9 @@ describe "Logging Quickstart" do
   end
 
   it "logs a new entry" do
-    expect(Google::Cloud).to receive(:new).with("YOUR_PROJECT_ID").
-                                           and_return(@gcloud)
-    expect(@gcloud).to receive(:logging).and_return(@logging)
+    expect(Google::Cloud::Logging).to receive(:new).
+                                      with(project: "YOUR_PROJECT_ID").
+                                      and_return(@logging)
     expect(@logging).to receive(:entry).and_return(@entry)
     allow(@entry).to receive(:log_name=).with("my-log")
 

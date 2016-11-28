@@ -14,14 +14,13 @@
 
 # [START datastore_quickstart]
 # Imports the Google Cloud client library
-require "google/cloud"
+require "google/cloud/datastore"
 
 # Your Google Cloud Platform project ID
 project_id = "YOUR_PROJECT_ID"
 
 # Instantiates a client
-gcloud    = Google::Cloud.new project_id
-datastore = gcloud.datastore
+datastore = Google::Cloud::Datastore.new project: project_id
 
 # The kind for the new entity
 kind = "Task"

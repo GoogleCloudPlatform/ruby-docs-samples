@@ -15,10 +15,7 @@
 #[START all]
 require "digest/sha2"
 require "sinatra"
-require "google/cloud"
-
-gcloud  = Google::Cloud.new
-dataset = gcloud.datastore
+require "google/cloud/datastore"
 
 get "/" do
   # Save visit in Datastore
@@ -28,8 +25,9 @@ get "/" do
   dataset.save visit
 
   # Query the last 10 visits from the Datastore
-  query  = dataset.query("Visit").order("timestamp", :desc).limit(10)
-  visits = dataset.run query
+  datastore = Google::Cloud::Datastore.new
+  query     = datastore.query("Visit").order("timestamp", :desc).limit(10)
+  visits    = datastore.run query
 
   response.write "Last 10 visits:\n"
 
