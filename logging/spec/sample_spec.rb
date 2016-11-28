@@ -40,14 +40,6 @@ describe "Logging sample" do
     )
   end
 
-  # Tests require environment variables:
-  #
-  # GOOGLE_CLOUD_PROJECT - ID of your Google Cloud Platform project
-  # GOOGLE_CLOUD_STORAGE_BUCKET - Name of Google Cloud Storage bucket to use
-  #                                 for log sink
-  # ALTERNATE_GOOGLE_CLOUD_STORAGE_BUCKET - Name of an alternative bucket to
-  #                                           also use for log sink
-  #
   before :all do
     @logging    = Google::Cloud::Logging.new
     @project_id = @logging.project
