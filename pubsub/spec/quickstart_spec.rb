@@ -32,7 +32,7 @@ describe "PubSub Quickstart" do
     expect {
       load File.expand_path("../quickstart.rb", __dir__)
     }.to output(
-      "Topic projects/#{ENV["GOOGLE_CLOUD_PROJECT"]}/" +
+      "Topic projects/#{pubsub.project}/" +
       "topics/my-new-topic created.\n"
     ).to_stdout
 
