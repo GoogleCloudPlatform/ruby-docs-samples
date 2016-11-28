@@ -12,6 +12,8 @@ describe "Google Cloud Natural Language API samples" do
     @storage     = Google::Cloud::Storage.new
     @bucket      = @storage.bucket @bucket_name
     @uploaded    = []
+
+    @storage.create_bucket @bucket_name unless @storage.bucket @bucket_name
   end
 
   after do
