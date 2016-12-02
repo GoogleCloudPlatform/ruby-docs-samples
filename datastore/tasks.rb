@@ -21,7 +21,7 @@ def create_client project_id
 end
 
 # [START add_entity]
-def new_task description
+def add_task description
   task = @datastore.entity "Task" do |t|
     t["description"] = description
     t["created"]     = Time.now
@@ -71,7 +71,7 @@ if __FILE__ == $0
   create_client ENV["GOOGLE_CLOUD_PROJECT"]
   case ARGV.shift
   when "new"
-    new_task ARGV.shift
+    add_task ARGV.shift
   when "done"
     mark_done ARGV.shift.to_i
   when "list"
