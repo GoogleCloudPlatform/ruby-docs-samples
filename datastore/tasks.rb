@@ -12,13 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START build_service]
-require "google/cloud/datastore"
-
 def create_client project_id
+  # [START build_service]
+  require "google/cloud/datastore"
+
   @datastore = Google::Cloud::Datastore.new project: project_id
+  # [END build_service]
 end
-# [END build_service]
 
 # [START add_entity]
 def new_task description
@@ -48,14 +48,12 @@ end
 
 # [START retrieve_entities]
 def list_tasks
-  query = @datastore.query("Task").
-          order("created")
-
+  query = @datastore.query("Task").order("created")
   tasks = @datastore.run query
 
   tasks.each do |t|
-    puts t['description']
-    puts t['done'] ? "  Done" : "  Not Done"
+    puts t["description"]
+    puts t["done"] ? "  Done" : "  Not Done"
     puts "  ID: #{t.key.id}"
   end
 end
