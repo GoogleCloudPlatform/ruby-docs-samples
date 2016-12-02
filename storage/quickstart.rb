@@ -13,10 +13,8 @@
 # limitations under the License.
 
 # [START storage_quickstart]
-# [START require_library]
 # Imports the Google Cloud client library
 require "google/cloud/storage"
-# [END require_library]
 
 # Your Google Cloud Platform project ID
 project_id = "YOUR_PROJECT_ID"
