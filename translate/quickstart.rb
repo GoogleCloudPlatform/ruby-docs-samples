@@ -14,14 +14,13 @@
 
 # [START translate_quickstart]
 # Imports the Google Cloud client library
-require "google/cloud"
+require "google/cloud/translate"
 
-# Your Translate API key
-api_key = "YOUR_API_KEY"
+# Your Google Cloud Platform project ID
+project_id = "YOUR_PROJECT_ID"
 
 # Instantiates a client
-gcloud    = Google::Cloud.new
-translate = gcloud.translate api_key
+translate = Google::Cloud::Translate.new project: project_id
 
 # The text to translate
 text = "Hello, world!"

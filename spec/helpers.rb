@@ -11,6 +11,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-runtime: ruby
-env: flex
-entrypoint: bundle exec rails server -p $PORT
+# Spec Helpers
+#
+# spec/helpers/ contains numerous helpers for the specs used in this repository
+#
+# To activate these helpers in your spec file:
+#
+#   require_relative "../../spec/helpers"
+#
+#   require "storage_helper"
+
+require "rspec"
+
+$LOAD_PATH.unshift File.expand_path("helpers", __dir__)

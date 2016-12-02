@@ -1,13 +1,14 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    addressable (2.4.0)
+    addressable (2.5.0)
+      public_suffix (~> 2.0, >= 2.0.2)
     diff-lcs (1.2.5)
-    domain_name (0.5.20160826)
+    domain_name (0.5.20161021)
       unf (>= 0.0.5, < 1.0.0)
     faraday (0.9.2)
       multipart-post (>= 1.2, < 3)
-    http-cookie (1.0.2)
+    http-cookie (1.0.3)
       domain_name (~> 0.5)
     json (2.0.2)
     jwt (1.5.6)
@@ -17,6 +18,7 @@ GEM
     multi_json (1.12.1)
     multipart-post (2.0.0)
     netrc (0.11.0)
+    public_suffix (2.0.4)
     rack (1.6.4)
     rack-cors (0.4.0)
     rack-protection (1.5.3)
@@ -31,7 +33,7 @@ GEM
       rspec-core (~> 3.5.0)
       rspec-expectations (~> 3.5.0)
       rspec-mocks (~> 3.5.0)
-    rspec-core (3.5.3)
+    rspec-core (3.5.4)
       rspec-support (~> 3.5.0)
     rspec-expectations (3.5.0)
       diff-lcs (>= 1.2.0, < 2.0)
@@ -67,4 +69,4 @@ DEPENDENCIES
   sinatra
 
 BUNDLED WITH
-   1.12.5
+   1.13.4

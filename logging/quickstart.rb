@@ -13,15 +13,16 @@
 # limitations under the License.
 
 # [START logging_quickstart]
+# [START require_library]
 # Imports the Google Cloud client library
-require "google/cloud"
+require "google/cloud/logging"
+# [END require_library]
 
 # Your Google Cloud Platform project ID
 project_id = "YOUR_PROJECT_ID"
 
 # Instantiates a client
-gcloud  = Google::Cloud.new project_id
-logging = gcloud.logging
+logging = Google::Cloud::Logging.new project: project_id
 
 # Prepares a log entry
 entry = logging.entry

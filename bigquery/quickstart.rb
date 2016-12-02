@@ -14,14 +14,13 @@
 
 # [START bigquery_quickstart]
 # Imports the Google Cloud client library
-require "google/cloud"
+require "google/cloud/bigquery"
 
 # Your Google Cloud Platform project ID
 project_id = "YOUR_PROJECT_ID"
 
 # Instantiates a client
-gcloud   = Google::Cloud.new project_id
-bigquery = gcloud.bigquery
+bigquery = Google::Cloud::Bigquery.new project: project_id
 
 # The name for the new dataset
 dataset_name = "my_new_dataset"

@@ -13,27 +13,26 @@
 # limitations under the License.
 
 require "rspec"
-require "google/cloud"
+require "google/cloud/pubsub"
 
 describe "PubSub Quickstart" do
 
   it "creates a new topic" do
-    gcloud = Google::Cloud.new ENV["GOOGLE_CLOUD_PROJECT"]
-    pubsub = gcloud.pubsub
+    pubsub = Google::Cloud::Pubsub.new
 
     if pubsub.topic "my-new-topic"
       pubsub.topic("my-new-topic").delete
     end
 
     expect(pubsub.topic "my-new-topic").to be nil
-    expect(Google::Cloud).to receive(:new).
-                             with("YOUR_PROJECT_ID").
-                             and_return(gcloud)
+    expect(Google::Cloud::Pubsub).to receive(:new).
+                                     with(project: "YOUR_PROJECT_ID").
+                                     and_return(pubsub)
 
     expect {
       load File.expand_path("../quickstart.rb", __dir__)
     }.to output(
-      "Topic projects/#{ENV["GOOGLE_CLOUD_PROJECT"]}/" +
+      "Topic projects/#{pubsub.project}/" +
       "topics/my-new-topic created.\n"
     ).to_stdout
 

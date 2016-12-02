@@ -15,16 +15,16 @@
 require_relative "../datasets"
 require_relative "../tables"
 require "rspec"
-require "google/cloud"
+require "google/cloud/bigquery"
+require "google/cloud/storage"
 require "csv"
 
 describe "Google Cloud BigQuery samples" do
 
   before do
-    @project_id = ENV["GOOGLE_CLOUD_PROJECT"]
-    @gcloud     = Google::Cloud.new @project_id
-    @bigquery   = @gcloud.bigquery
-    @storage    = @gcloud.storage
+    @bigquery   = Google::Cloud::Bigquery.new
+    @project_id = @bigquery.project
+    @storage    = Google::Cloud::Storage.new
     @bucket     = @storage.bucket ENV["GOOGLE_CLOUD_STORAGE_BUCKET"]
     @tempfiles  = []
 

@@ -14,8 +14,8 @@
 
 # [START app_yaml]
 runtime: ruby
-vm: true
-entrypoint: bundle exec ruby app.rb -p 8080
+env: flex
+entrypoint: bundle exec ruby app.rb -p $PORT
 
 env_variables:
   GOOGLE_CLOUD_STORAGE_BUCKET: <your-bucket-name>

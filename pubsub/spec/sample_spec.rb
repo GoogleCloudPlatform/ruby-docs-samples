@@ -16,21 +16,26 @@ require_relative "../sample"
 require "spec_helper"
 
 describe "Pub/Sub sample" do
-  TOPIC_NAME = "my-topic"
-  SUBSCRIPTION_NAME = "my-subscription"
-  SERVICE_ACCOUNT =
-    "serviceAccount:test-account@#{ENV["GOOGLE_CLOUD_PROJECT"]}"\
-    ".iam.gserviceaccount.com"
 
-  before :all do
-    @gcloud = Google::Cloud.new ENV["GOOGLE_CLOUD_PROJECT"]
-    @pubsub = @gcloud.pubsub
+  before do
+    @pubsub            = Google::Cloud::Pubsub.new
+    @topic_name        = "my-topic"
+    @subscription_name = "my-subscription"
+    @service_account   =
+      "serviceAccount:test-account@#{@pubsub.project}" +
+      ".iam.gserviceaccount.com"
+
+    cleanup!
+
+    allow(Google::Cloud::Pubsub).to receive(:new).
+                                    with(project: "my-gcp-project-id").
+                                    and_return(@pubsub)
   end
 
   def cleanup!
-    topic = @pubsub.topic TOPIC_NAME
+    topic = @pubsub.topic @topic_name
     topic.delete if topic
-    subscription = @pubsub.subscription SUBSCRIPTION_NAME
+    subscription = @pubsub.subscription @subscription_name
     subscription.delete if subscription
   end
 
@@ -45,58 +50,53 @@ describe "Pub/Sub sample" do
     raise
   end
 
-  before :each do
-    cleanup!
-    allow(Google::Cloud).to receive(:new).with("my-gcp-project-id").and_return(@gcloud)
-  end
-
   it "creates topic" do
-    expect(@pubsub.topic(TOPIC_NAME)).to be nil
+    expect(@pubsub.topic(@topic_name)).to be nil
 
-    expect { create_topic }.to output(/#{TOPIC_NAME}/).to_stdout
+    expect { create_topic }.to output(/#{@topic_name}/).to_stdout
 
-    topic = @pubsub.topic TOPIC_NAME
+    topic = @pubsub.topic @topic_name
     expect(topic.nil?).to eq(false)
     expect(topic.exists?).to eq(true)
-    expect(topic.name).to include(TOPIC_NAME)
+    expect(topic.name).to include(@topic_name)
   end
 
   it "deletes topic" do
-    @pubsub.create_topic TOPIC_NAME
-    expect(@pubsub.topic TOPIC_NAME).not_to be nil
+    @pubsub.create_topic @topic_name
+    expect(@pubsub.topic @topic_name).not_to be nil
 
-    expect { delete_topic }.to output("Deleted topic #{TOPIC_NAME}\n").to_stdout
+    expect { delete_topic }.to output("Deleted topic #{@topic_name}\n").to_stdout
 
-    expect(@pubsub.topic TOPIC_NAME).to be nil
+    expect(@pubsub.topic @topic_name).to be nil
   end
 
   it "creates subscription" do
-    expect(@pubsub.subscription(SUBSCRIPTION_NAME)).to be nil
-    @pubsub.create_topic TOPIC_NAME
+    expect(@pubsub.subscription(@subscription_name)).to be nil
+    @pubsub.create_topic @topic_name
 
-    expect { create_subscription }.to output(/#{SUBSCRIPTION_NAME}/).to_stdout
+    expect { create_subscription }.to output(/#{@subscription_name}/).to_stdout
 
-    subscription = @pubsub.subscription SUBSCRIPTION_NAME
+    subscription = @pubsub.subscription @subscription_name
     expect(subscription.nil?).to eq(false)
     expect(subscription.exists?).to eq(true)
-    expect(subscription.name).to include(SUBSCRIPTION_NAME)
-    expect(subscription.topic.name).to include(TOPIC_NAME)
+    expect(subscription.name).to include(@subscription_name)
+    expect(subscription.topic.name).to include(@topic_name)
   end
 
   it "deletes subscription" do
-    topic = @pubsub.create_topic TOPIC_NAME
+    topic = @pubsub.create_topic @topic_name
     @pubsub.create_subscription(
-      TOPIC_NAME,
-      SUBSCRIPTION_NAME,
+      @topic_name,
+      @subscription_name,
       autocreate: true
     )
-    expect(topic.subscription SUBSCRIPTION_NAME).not_to be nil
+    expect(topic.subscription @subscription_name).not_to be nil
 
     expect { delete_subscription }.to output(
-      "Deleted subscription #{SUBSCRIPTION_NAME}\n"
+      "Deleted subscription #{@subscription_name}\n"
     ).to_stdout
 
-    expect(topic.subscription SUBSCRIPTION_NAME).to be nil
+    expect(topic.subscription @subscription_name).to be nil
   end
 
   it "creates push subscription" do
@@ -105,16 +105,16 @@ describe "Pub/Sub sample" do
     subscription = @pubsub.subscription subscription_name
     subscription.delete if subscription
 
-    @pubsub.create_topic TOPIC_NAME
+    @pubsub.create_topic @topic_name
 
     expect_any_instance_of(Google::Cloud::Pubsub::Topic).to \
       receive(:subscribe).with(
         subscription_name,
         endpoint: "https://my-gcp-project-id.appspot.com/push"
       ).and_return(
-        @pubsub.topic(TOPIC_NAME).subscribe(
+        @pubsub.topic(@topic_name).subscribe(
           subscription_name,
-          endpoint: "https://#{ENV['GOOGLE_CLOUD_PROJECT']}.appspot.com/push"
+          endpoint: "https://#{@pubsub.project}.appspot.com/push"
         ))
 
     expect { create_push_subscription }.to \
@@ -124,12 +124,12 @@ describe "Pub/Sub sample" do
     expect(subscription.nil?).to eq(false)
     expect(subscription.exists?).to eq(true)
     expect(subscription.name).to include(subscription_name)
-    expect(subscription.topic.name).to include(TOPIC_NAME)
+    expect(subscription.topic.name).to include(@topic_name)
     subscription.delete
   end
 
   it "publishes a message" do
-    @pubsub.create_topic TOPIC_NAME
+    @pubsub.create_topic @topic_name
 
     expect { publish_message }.not_to raise_error
   end
@@ -138,11 +138,11 @@ describe "Pub/Sub sample" do
     message = "Test Message"
 
     @pubsub.create_subscription(
-      TOPIC_NAME,
-      SUBSCRIPTION_NAME,
+      @topic_name,
+      @subscription_name,
       autocreate: true
     )
-    @pubsub.topic(TOPIC_NAME).publish message
+    @pubsub.topic(@topic_name).publish message
 
     expect_with_retry do
       expect { pull_messages }.to output(/#{message}/).to_stdout
@@ -150,35 +150,35 @@ describe "Pub/Sub sample" do
   end
 
   it "lists topics" do
-    @pubsub.topic TOPIC_NAME, autocreate: true
+    @pubsub.topic @topic_name, autocreate: true
 
     expect_with_retry do
-      expect { list_topics }.to output(/#{TOPIC_NAME}/).to_stdout
+      expect { list_topics }.to output(/#{@topic_name}/).to_stdout
     end
   end
 
   it "lists subscriptions" do
     @pubsub.create_subscription(
-      TOPIC_NAME,
-      SUBSCRIPTION_NAME,
+      @topic_name,
+      @subscription_name,
       autocreate: true
     )
 
     expect_with_retry do
-      expect { list_subscriptions }.to output(/#{SUBSCRIPTION_NAME}/).to_stdout
+      expect { list_subscriptions }.to output(/#{@subscription_name}/).to_stdout
     end
   end
 
   it "gets topic policy" do
-    @pubsub.create_topic TOPIC_NAME
+    @pubsub.create_topic @topic_name
 
     expect { get_topic_policy }.to output(/{}/).to_stdout
   end
 
   it "gets subscription policy" do
     @pubsub.create_subscription(
-      TOPIC_NAME,
-      SUBSCRIPTION_NAME,
+      @topic_name,
+      @subscription_name,
       autocreate: true
     )
 
@@ -186,26 +186,26 @@ describe "Pub/Sub sample" do
   end
 
   it "sets topic policy" do
-    @pubsub.create_topic TOPIC_NAME
+    @pubsub.create_topic @topic_name
 
     expect_any_instance_of(Google::Cloud::Pubsub::Policy).to \
       receive(:add).with(
         "roles/pubsub.publisher",
         "serviceAccount:account-name@other-project.iam.gserviceaccount.com"
       ).and_wrap_original do |m|
-        m.call "roles/pubsub.publisher", SERVICE_ACCOUNT
+        m.call "roles/pubsub.publisher", @service_account
       end
 
     expect { set_topic_policy }.to output(/roles/).to_stdout
 
-    expect(@pubsub.topic(TOPIC_NAME).policy.roles).to \
-      include("roles/pubsub.publisher" => [SERVICE_ACCOUNT])
+    expect(@pubsub.topic(@topic_name).policy.roles).to \
+      include("roles/pubsub.publisher" => [@service_account])
   end
 
   it "sets subscription policy" do
     @pubsub.create_subscription(
-      TOPIC_NAME,
-      SUBSCRIPTION_NAME,
+      @topic_name,
+      @subscription_name,
       autocreate: true
     )
 
@@ -214,30 +214,26 @@ describe "Pub/Sub sample" do
         "roles/pubsub.subscriber",
         "serviceAccount:account-name@other-project.iam.gserviceaccount.com"
       ).and_wrap_original do |m|
-        m.call "roles/pubsub.subscriber", SERVICE_ACCOUNT
+        m.call "roles/pubsub.subscriber", @service_account
       end
 
     expect { set_subscription_policy }.to output(/roles/).to_stdout
 
-    expect(@pubsub.subscription(SUBSCRIPTION_NAME).policy.roles).to \
-      include("roles/pubsub.subscriber" => [SERVICE_ACCOUNT])
+    expect(@pubsub.subscription(@subscription_name).policy.roles).to \
+      include("roles/pubsub.subscriber" => [@service_account])
   end
 
   it "tests topic permissions" do
-    @pubsub.create_topic TOPIC_NAME
+    @pubsub.create_topic @topic_name
     expect { test_topic_permissions }.to output(/true\ntrue/).to_stdout
   end
 
   it "tests subscription permissions" do
     @pubsub.create_subscription(
-      TOPIC_NAME,
-      SUBSCRIPTION_NAME,
+      @topic_name,
+      @subscription_name,
       autocreate: true
     )
     expect { test_subscription_permissions }.to output(/true\ntrue/).to_stdout
-  end
-
-  after :all do
-    cleanup!
   end
 end

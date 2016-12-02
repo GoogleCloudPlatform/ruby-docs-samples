@@ -2,6 +2,8 @@
 
 This sample demonstrates how to use Google Cloud Endpoints with a Ruby backend. This sample requires that you have [Ruby](https://www.ruby-lang.org/en/documentation/installation/) 2.0.0 or newer installed.
 
+For a complete walkthrough showing how to run this sample in different environments, see the [Google Cloud Endpoints Quickstarts](https://cloud.google.com/endpoints/docs/quickstarts).
+
 This sample consists of two parts:
 
 1. The backend
@@ -30,23 +32,9 @@ With the app running locally, you can execute the simple echo client using:
 
 The `APIKEY` doesn't matter as the endpoint proxy is not running to do authentication.
 
-## Deploying to Google Cloud Platform
+## Deploying to Production
 
-### Deploying to Google App Engine Flexible
-
-Follow the [Endpoints for App Engine Flexible Environment](https://cloud.google.com/endpoints/docs/quickstart-app-engine) quickstart.
-
-### Deploying to Google Container Engine
-
-Follow the [Endpoints for Container Engine](https://cloud.google.com/endpoints/docs/quickstart-container-engine) quickstart.
-
-### Deploying to Google Compute Engine
-
-Follow the [Endpoints for Compute Engine](https://cloud.google.com/endpoints/docs/quickstart-compute-engine) quickstart.
-
-### Deploying to Google Compute Engine with Docker
-
-Follow the [Endpoints for Compute Engine with Docker](https://cloud.google.com/endpoints/docs/quickstart-compute-engine-docker) quickstart.
+See the [Google Cloud Endpoints Quickstarts](https://cloud.google.com/endpoints/docs/quickstarts).
 
 ### Using the echo client
 
@@ -76,7 +64,7 @@ The JWT client demonstrates how to use service accounts to authenticate to endpo
 
 To use the service account for authentication:
 
-1. Update the `google_jwt`'s `x-jwks_uri` in `swagger.yaml` with your service account's email address.
+1. Update the `google_jwt`'s `x-jwks_uri` in `openapi.yaml` with your service account's email address.
 2. Redeploy your application.
 
 Now you can use the JWT client to make requests to the API:
@@ -97,7 +85,7 @@ The ID Token client demonstrates how to use user credentials to authenticate to 
 
 To use the client ID for authentication:
 
-1. Update the `/auth/info/googleidtoken`'s `audiences` in `swagger.yaml` with your client ID.
+1. Update the `/auth/info/googleidtoken`'s `audiences` in `openapi.yaml` with your client ID.
 2. Redeploy your application.
 
 Now you can use the client ID to make requests to the API:

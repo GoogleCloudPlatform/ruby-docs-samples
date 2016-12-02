@@ -35,7 +35,7 @@ The `APIKEY` doesn't matter as the endpoint proxy is not running to do authentic
 
 ## Deploying to Google App Engine
 
-Open the `swagger.yaml` file and in the `host` property, replace
+Open the `openapi.yaml` file and in the `host` property, replace
 `YOUR-PROJECT-ID` with your project's ID.
 
 Then, deploy the sample using `gcloud`:
@@ -72,7 +72,7 @@ The JWT client demonstrates how to use service accounts to authenticate to endpo
 
 To use the service account for authentication:
 
-1. Update the `google_jwt`'s `x-jwks_uri` in `swagger.yaml` with your service account's email address.
+1. Update the `google_jwt`'s `x-jwks_uri` in `openapi.yaml` with your service account's email address.
 2. Redeploy your application.
 
 Now you can use the JWT client to make requests to the API:
@@ -93,7 +93,7 @@ The ID Token client demonstrates how to use user credentials to authenticate to 
 
 To use the client ID for authentication:
 
-1. Update the `/auth/info/googleidtoken`'s `audiences` in `swagger.yaml` with your client ID.
+1. Update the `/auth/info/googleidtoken`'s `audiences` in `openapi.yaml` with your client ID.
 2. Redeploy your application.
 
 Now you can use the client ID to make requests to the API:

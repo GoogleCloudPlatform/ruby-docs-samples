@@ -17,12 +17,11 @@
 def detect_labels path_to_image_file:
 # [START detect_labels]
   # [START importing_libraries]
-  require "google/cloud"
+  require "google/cloud/vision"
   # [END importing_libraries]
 
   # [START create_vision_client]
-  gcloud = Google::Cloud.new
-  vision = gcloud.vision
+  vision = Google::Cloud::Vision.new
   # [END create_vision_client]
 
   # [START annotate_image]
@@ -43,12 +42,11 @@ end
 def detect_landmark path_to_image_file:
 # [START detect_landmark]
   # [START importing_libraries]
-  require "google/cloud"
+  require "google/cloud/vision"
   # [END importing_libraries]
 
   # [START create_vision_client]
-  gcloud = Google::Cloud.new
-  vision = gcloud.vision
+  vision = Google::Cloud::Vision.new
   # [END create_vision_client]
 
   # [START annotate_image]
@@ -66,12 +64,11 @@ end
 def detect_faces path_to_image_file:, path_to_output_file:
 # [START detect_faces]
   # [START importing_libraries]
-  require "google/cloud"
+  require "google/cloud/vision"
   # [END importing_libraries]
 
   # [START create_vision_client]
-  gcloud = Google::Cloud.new
-  vision = gcloud.vision
+  vision = Google::Cloud::Vision.new
   # [END create_vision_client]
 
   # [START annotate_image]
