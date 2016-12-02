@@ -6,7 +6,8 @@ GEM
     diff-lcs (1.2.5)
     faraday (0.10.0)
       multipart-post (>= 1.2, < 3)
-    google-cloud-core (0.21.0)
+    google-cloud-core (0.21.1)
+      googleauth (~> 0.5.1)
     google-cloud-datastore (0.21.0)
       google-cloud-core (~> 0.21.0)
       google-gax (~> 0.6.0)
@@ -43,7 +44,7 @@ GEM
     multipart-post (2.0.0)
     os (0.9.6)
     public_suffix (2.0.4)
-    rack (1.6.4)
+    rack (1.6.5)
     rack-protection (1.5.3)
       rack
     rack-test (0.6.3)
@@ -53,7 +54,7 @@ GEM
       rspec-core (~> 3.5.0)
       rspec-expectations (~> 3.5.0)
       rspec-mocks (~> 3.5.0)
-    rspec-core (3.5.3)
+    rspec-core (3.5.4)
       rspec-support (~> 3.5.0)
     rspec-expectations (3.5.0)
       diff-lcs (>= 1.2.0, < 2.0)
@@ -83,4 +84,4 @@ DEPENDENCIES
   sinatra
 
 BUNDLED WITH
-   1.12.5
+   1.13.6
