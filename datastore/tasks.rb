@@ -32,6 +32,7 @@ def add_task description
   @datastore.save task
 
   puts task.key.id
+
   task.key.id
 end
 # [END add_entity]
