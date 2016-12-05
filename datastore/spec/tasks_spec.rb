@@ -14,6 +14,7 @@
 
 require_relative "../tasks"
 require "rspec"
+require "google/cloud/datastore"
 
 describe "Datastore task list" do
 
@@ -36,7 +37,7 @@ describe "Datastore task list" do
   it "creates a task" do
     desc = "Test description."
     allow($stdout).to receive(:puts)
-    id = new_task desc
+    id = add_task desc
     task = @datastore.find "Task", id
     expect(task.nil?).to be(false)
     expect(task["description"]).to eq(desc)

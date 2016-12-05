@@ -12,16 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START build_service]
-require "google/cloud/datastore"
-
 def create_client project_id
+  # [START build_service]
+  require "google/cloud/datastore"
+
   @datastore = Google::Cloud::Datastore.new project: project_id
+  # [END build_service]
 end
-# [END build_service]
 
 # [START add_entity]
-def new_task description
+def add_task description
   task = @datastore.entity "Task" do |t|
     t["description"] = description
     t["created"]     = Time.now
@@ -32,6 +32,7 @@ def new_task description
   @datastore.save task
 
   puts task.key.id
+
   task.key.id
 end
 # [END add_entity]
@@ -48,14 +49,12 @@ end
 
 # [START retrieve_entities]
 def list_tasks
-  query = @datastore.query("Task").
-          order("created")
-
+  query = @datastore.query("Task").order("created")
   tasks = @datastore.run query
 
   tasks.each do |t|
-    puts t['description']
-    puts t['done'] ? "  Done" : "  Not Done"
+    puts t["description"]
+    puts t["done"] ? "  Done" : "  Not Done"
     puts "  ID: #{t.key.id}"
   end
 end
@@ -73,7 +72,7 @@ if __FILE__ == $0
   create_client ENV["GOOGLE_CLOUD_PROJECT"]
   case ARGV.shift
   when "new"
-    new_task ARGV.shift
+    add_task ARGV.shift
   when "done"
     mark_done ARGV.shift.to_i
   when "list"
