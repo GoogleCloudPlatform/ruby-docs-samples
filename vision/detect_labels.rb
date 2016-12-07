@@ -22,18 +22,18 @@ def detect_labels path_to_image_file:
   vision = Google::Cloud::Vision.new
   # [END authenticate]
 
-  # [START annotate_image]
+  # [START construct_request]
   image      = vision.image path_to_image_file
   annotation = vision.annotate image, labels: true
   labels     = annotation.labels
-  # [END annotate_image]
+  # [END construct_request]
 
-  # [START print_labels]
+  # [START parse_response]
   puts "Image labels:"
   labels.each do |label|
     puts label.description
   end
-  # [END print_labels]
+  # [END parse_response]
 end
 
 # [START run_application]
