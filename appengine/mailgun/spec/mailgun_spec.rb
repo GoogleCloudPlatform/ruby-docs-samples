@@ -21,6 +21,8 @@ Capybara.current_driver = :poltergeist
 
 describe "MailGun on Google App Engine", type: :feature do
   before :all do
+    skip "End-to-end tests skipped" unless E2E.run?
+
     @url = E2E.url
   end
 

@@ -19,6 +19,8 @@ require "google/cloud/pubsub"
 
 describe "PubSub E2E test" do
   before :all do
+    skip "End-to-end tests skipped" unless E2E.run?
+
     @topic_name = "flexible-topic"
 
     @pubsub = Google::Cloud::Pubsub.new

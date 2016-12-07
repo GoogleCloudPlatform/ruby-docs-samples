@@ -21,6 +21,8 @@ Capybara.current_driver = :poltergeist
 
 describe "Cloud Storage on Google App Engine", type: :feature do
   before :all do
+    skip "End-to-end tests skipped" unless E2E.run?
+
     app_yaml = File.expand_path("../../app.yaml", __FILE__)
     configuration = File.read(app_yaml)
                         .sub("<your-bucket-name>", ENV["GOOGLE_CLOUD_STORAGE_BUCKET"])

@@ -20,6 +20,8 @@ Capybara.default_driver = :poltergeist
 
 feature "Serving static files" do
   before :all do
+    skip "End-to-end tests skipped" unless E2E.run?
+
     @url = E2E.url
   end
 
