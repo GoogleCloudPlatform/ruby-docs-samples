@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START all]
 # [START detect_labels]
 def detect_labels path_to_image_file:
   # [START import_libraries]
@@ -53,3 +54,4 @@ Example:
 end
 # [END run_application]
 # [END detect_labels]
+# [END all]
