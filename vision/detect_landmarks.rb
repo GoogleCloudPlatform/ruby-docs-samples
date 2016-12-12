@@ -18,15 +18,15 @@ def detect_landmarks path_to_image_file:
   require "google/cloud/vision"
   # [END import_libraries]
 
-  # [START create_vision_client]
+  # [START get_vision_service]
   vision = Google::Cloud::Vision.new
-  # [END create_vision_client]
+  # [END get_vision_service]
 
-  # [START annotate_image]
+  # [START construct_request]
   image      = vision.image path_to_image_file
   annotation = vision.annotate image, landmarks: true
   landmark   = annotation.landmark
-  # [END annotate_image]
+  # [END construct_request]
 
   # [START print_landmark]
   puts "Found landmark: #{landmark.description}" unless landmark.nil?
