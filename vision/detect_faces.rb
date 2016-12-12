@@ -18,17 +18,17 @@ def detect_faces path_to_image_file:, path_to_output_file:
   require "google/cloud/vision"
   # [END import_libraries]
 
-  # [START create_vision_client]
+  # [START get_vision_service]
   vision = Google::Cloud::Vision.new
-  # [END create_vision_client]
+  # [END get_vision_service]
 
-  # [START annotate_image]
+  # [START detect_face]
   image      = vision.image path_to_image_file
   annotation = vision.annotate image, faces: true
   faces      = annotation.faces
-  # [END annotate_image]
+  # [END detect_face]
 
-  # [START draw_rectangle]
+  # [START highlight_faces]
   require "rmagick"
 
   image = Magick::Image.read(path_to_image_file)[0]
@@ -56,10 +56,10 @@ def detect_faces path_to_image_file:, path_to_output_file:
   image.write path_to_output_file
 
   puts "Output file: #{path_to_output_file}"
-  # [END draw_rectangle]
+  # [END highlight_faces]
 end
 
-# [START run_application]
+# [START main]
 if __FILE__ == $PROGRAM_NAME
   if ARGV.size == 2
     detect_faces path_to_image_file:  ARGV.shift,
@@ -73,5 +73,5 @@ Example:
     usage
   end
 end
-# [END run_application]
+# [END main]
 # [END detect_faces]
