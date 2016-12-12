@@ -30,37 +30,12 @@ environment variable to the project name set in the
 
 ### Run the labels detection sample:
 
-    bundle exec ruby detect_labels.rb <image-path>
-
-Usage:
-
-    ruby detect_lables.rb [arguments]
-
-Example:
-
-    ruby detect_labels.rb images/cat.jpg
+    bundle exec ruby detect_labels.rb images/cat.jpg
 
 ### Run the landmark detection sample:
 
-    bundle exec ruby detect_landmarks.rb <image-path>
-
-Usage:
-
-    ruby detect_landmarks.rb [arguments]
-
-Examples:
-
-    ruby detect_landmarks.rb images/eiffel_tower.jpg
-
+    bundle exec ruby detect_landmarks.rb images/eiffel_tower.jpg 
 
 ### Run the face detection sample:
 
-    bundle exec detect_faces.rb <image-path> <output-path>
-
-Usage:
-
-    ruby detect_faces.rb [arguments]
-
-Examples:
-
-    ruby detect_faces.rb images/face.png output-image.jpg
+    bundle exec ruby detect_faces.rb images/face.png output-image.jpg    
