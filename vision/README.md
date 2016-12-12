@@ -34,8 +34,8 @@ environment variable to the project name set in the
 
 ### Run the landmark detection sample:
 
-    bundle exec ruby detect_landmarks.rb images/eiffel_tower.jpg 
+    bundle exec ruby detect_landmarks.rb images/eiffel_tower.jpg
 
 ### Run the face detection sample:
 
-    bundle exec ruby detect_faces.rb images/face.png output-image.jpg    
+    bundle exec ruby detect_faces.rb images/face.png output-image.png
