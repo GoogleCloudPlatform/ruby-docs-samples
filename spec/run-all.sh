@@ -19,7 +19,6 @@ status_return=0 # everything passed
 # Print out Ruby version
 ruby --version
 
-find * -type d -name 'spec' -path "*/*" -not -path "*vendor/*" -exec dirname {} \; | \
 while read product
 do
 	# Run Tets
@@ -33,6 +32,6 @@ do
 		status_return=1
 	fi
 	popd
-done
+done < <(find * -type d -name 'spec' -path "*/*" -not -path "*vendor/*" -exec dirname {} \;)
 
 exit $status_return
