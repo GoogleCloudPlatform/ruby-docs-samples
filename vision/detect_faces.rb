@@ -12,12 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START all]
+# [START import_libraries]
+require "google/cloud/vision"
+require "rmagick"
+# [END import_libraries]
 # [START detect_faces]
 def detect_faces path_to_image_file:, path_to_output_file:
-  # [START import_libraries]
-  require "google/cloud/vision"
-  # [END import_libraries]
-
   # [START get_vision_service]
   vision = Google::Cloud::Vision.new
   # [END get_vision_service]
@@ -29,8 +30,6 @@ def detect_faces path_to_image_file:, path_to_output_file:
   # [END detect_face]
 
   # [START highlight_faces]
-  require "rmagick"
-
   image = Magick::Image.read(path_to_image_file)[0]
 
   faces.each do |face|
@@ -75,3 +74,4 @@ Example:
 end
 # [END main]
 # [END detect_faces]
+# [END all]

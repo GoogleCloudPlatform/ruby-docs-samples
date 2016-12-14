@@ -13,12 +13,11 @@
 # limitations under the License.
 
 # [START all]
+# [START import_libraries]
+require "google/cloud/vision"
+# [END import_libraries]
 # [START detect_labels]
 def detect_labels path_to_image_file:
-  # [START import_libraries]
-  require "google/cloud/vision"
-  # [END import_libraries]
-
   # [START authenticate]
   vision = Google::Cloud::Vision.new
   # [END authenticate]
