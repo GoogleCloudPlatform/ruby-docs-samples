@@ -16,6 +16,7 @@
 # [START import_libraries]
 require "google/cloud/vision"
 # [END import_libraries]
+
 # [START detect_labels]
 def detect_labels path_to_image_file:
   # [START authenticate]

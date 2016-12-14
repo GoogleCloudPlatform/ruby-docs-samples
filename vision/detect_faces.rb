@@ -17,6 +17,7 @@
 require "google/cloud/vision"
 require "rmagick"
 # [END import_libraries]
+
 # [START detect_faces]
 def detect_faces path_to_image_file:, path_to_output_file:
   # [START get_vision_service]

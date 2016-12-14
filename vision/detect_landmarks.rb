@@ -16,6 +16,7 @@
 # [START import_libraries]
 require "google/cloud/vision"
 # [END import_libraries]
+
 # [START detect_landmark]
 def detect_landmarks path_to_image_file:
   # [START get_vision_service]
