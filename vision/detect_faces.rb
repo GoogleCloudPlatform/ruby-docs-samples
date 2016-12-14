@@ -13,10 +13,12 @@
 # limitations under the License.
 
 # [START all]
-# [START import_libraries]
+# [START import_client_library]
 require "google/cloud/vision"
+# [END import_client_library]
+# [START import_rmagick]
 require "rmagick"
-# [END import_libraries]
+# [END import_rmagick]
 
 # [START detect_faces]
 def detect_faces path_to_image_file:, path_to_output_file:
