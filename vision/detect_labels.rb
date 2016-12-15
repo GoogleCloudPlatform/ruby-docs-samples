@@ -24,9 +24,8 @@ def detect_labels path_to_image_file:
   # [END authenticate]
 
   # [START construct_request]
-  image      = vision.image path_to_image_file
-  annotation = vision.annotate image, labels: true
-  labels     = annotation.labels
+  image  = vision.image path_to_image_file
+  labels = image.labels
   # [END construct_request]
 
   # [START parse_response]

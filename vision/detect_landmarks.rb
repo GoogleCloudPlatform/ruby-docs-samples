@@ -24,9 +24,8 @@ def detect_landmarks path_to_image_file:
   # [END get_vision_service]
 
   # [START construct_request]
-  image      = vision.image path_to_image_file
-  annotation = vision.annotate image, landmarks: true
-  landmark   = annotation.landmark
+  image    = vision.image path_to_image_file
+  landmark = image.landmark
   # [END construct_request]
 
   # [START print_landmark]

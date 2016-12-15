@@ -27,9 +27,8 @@ def detect_faces path_to_image_file:, path_to_output_file:
   # [END get_vision_service]
 
   # [START detect_face]
-  image      = vision.image path_to_image_file
-  annotation = vision.annotate image, faces: true
-  faces      = annotation.faces
+  image = vision.image path_to_image_file
+  faces = image.faces
   # [END detect_face]
 
   # [START highlight_faces]
