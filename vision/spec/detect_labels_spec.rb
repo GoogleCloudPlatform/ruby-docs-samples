@@ -12,11 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require_relative "../vision_samples"
+require_relative "../detect_labels"
 require "rspec"
 require "tempfile"
 
-describe "Vision sample" do
+describe "Detect Labels Sample" do
 
   # Returns full path to sample image included in repository for testing
   def image_path filename
@@ -34,41 +34,11 @@ describe "Vision sample" do
   end
   attr_reader :captured_output
 
-  example "detect labels" do
+  example "detect Cat labels" do
     capture { detect_labels path_to_image_file: image_path("cat.jpg") }
 
     expect(captured_output).to start_with "Image labels:"
     expect(captured_output).to include "cat"
     expect(captured_output).to include "mammal"
-  end
-
-  example "detect landmark" do
-    expect {
-      detect_landmark path_to_image_file: image_path("eiffel_tower.jpg")
-    }.to output(
-      "Found landmark: Eiffel Tower\n"
-    ).to_stdout
-  end
-
-  example "detect faces" do
-    output_image_file = Tempfile.new "cloud-vision-testing"
-    expect(File.size output_image_file.path).to eq 0
-
-    begin
-      capture do
-        detect_faces path_to_image_file: image_path("face.png"),
-                     path_to_output_file: output_image_file.path
-      end
-
-      expect(captured_output).to include "Face bounds:"
-      expect(captured_output).to include "(154, 33)"
-      expect(captured_output).to include "(301, 33)"
-      expect(captured_output).to include "(301, 180)"
-      expect(captured_output).to include "(154, 180)"
-      expect(File.size output_image_file.path).to be > 0
-    ensure
-      output_image_file.close
-      output_image_file.unlink
-    end
   end
 end

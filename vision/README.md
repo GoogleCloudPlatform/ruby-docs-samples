@@ -27,22 +27,15 @@ environment variable to the project name set in the
 
     export GOOGLE_CLOUD_PROJECT="YOUR-PROJECT-ID"
 
-Run the sample:
 
-    bundle exec ruby vision_samples.rb
+### Run the labels detection sample:
 
-Usage:
+    bundle exec ruby detect_labels.rb images/cat.jpg
 
-    Usage: ruby vision_samples.rb <command> [arguments]
+### Run the landmark detection sample:
 
-    Commands:
-      labels   <image-path>
-      landmark <image-path>
-      faces    <image-path> <output-image-path>
+    bundle exec ruby detect_landmarks.rb images/eiffel_tower.jpg
 
-Example:
+### Run the face detection sample:
 
-    ruby vision_samples.rb labels   /path/to/cat.jpg
-    ruby vision_samples.rb landmark /path/to/grand-canyon.jpg
-    ruby vision_samples.rb faces    /path/to/faces.jpg output-image.jpg
-
+    bundle exec ruby detect_faces.rb images/face.png output-image.png
