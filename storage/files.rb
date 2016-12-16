@@ -46,6 +46,18 @@ def list_bucket_contents_with_prefix project_id:, bucket_name:, prefix:
   # [END list_bucket_contents_with_prefix]
 end
 
+def generate_encryption_key_base64
+  # This is a sample key generator
+  # [START generate_encryption_key_base64]
+  require "base64"
+
+  encryption_key = OpenSSL::Cipher.new("aes-256-cfb").encrypt.random_key
+  encoded_enc_key = Base64.encode64 encryption_key
+  puts "Sample encryption key: #{encoded_enc_key}"
+  # [END generate_encryption_key_base64]
+end
+
+
 def upload_file project_id:, bucket_name:, local_file_path:,
                                            storage_file_path:
   # [START upload_file]
@@ -65,6 +77,29 @@ def upload_file project_id:, bucket_name:, local_file_path:,
   # [END upload_file]
 end
 
+def upload_encrypted_file project_id:, bucket_name:, local_file_path:,
+                          storage_file_path: nil, base64_encryption_key:
+  # [START upload_encryption_file]
+  # project_id            = "Your Google Cloud project ID"
+  # bucket_name           = "Your Google Cloud Storage bucket name"
+  # local_file_path       = "Path to local file to upload"
+  # storage_file_path     = "Path to store the file in Google Cloud Storage"
+  # base64_encryption_key = "Base64 encoded AES-256 encryption key"
+
+  require "google/cloud/storage"
+
+  storage = Google::Cloud::Storage.new project: project_id
+
+  bucket = storage.bucket bucket_name
+
+  encryption_key = Base64.decode64 base64_encryption_key
+  file = bucket.create_file local_file_path, storage_file_path,
+                            encryption_key: encryption_key
+
+  puts "Uploaded #{file.name} with encryption key"
+end
+
+
 def download_file project_id:, bucket_name:, file_name:, local_path:
   # [START download_file]
   # project_id  = "Your Google Cloud project ID"
@@ -82,6 +117,28 @@ def download_file project_id:, bucket_name:, file_name:, local_path:
 
   puts "Downloaded #{file.name}"
   # [END download_file]
+end
+
+def download_encrypted_file project_id:, bucket_name:, storage_file_path:,
+                            local_file_path:, base64_encryption_key:
+  # [START download_file]
+  # project_id  = "Your Google Cloud project ID"
+  # bucket_name = "Your Google Cloud Storage bucket name"
+  # file_name   = "Name of file in Google Cloud Storage to download locally"
+  # local_path  = "Path to local file to save"
+
+  require "google/cloud/storage"
+
+  storage = Google::Cloud::Storage.new project: project_id
+
+  bucket = storage.bucket bucket_name
+
+  encryption_key = Base64.decode64 base64_encryption_key
+
+  file = bucket.file storage_file_path, encryption_key: encryption_key
+  file.download local_file_path, encryption_key: encryption_key
+
+  puts "Downloaded encrypted #{file.name}"
 end
 
 def delete_file project_id:, bucket_name:, file_name:
@@ -212,11 +269,24 @@ def run_sample arguments
     upload_file project_id:      ENV["GOOGLE_CLOUD_PROJECT"],
                 bucket_name:     arguments.shift,
                 local_file_path: arguments.shift
+  when "enc_upload"
+    upload_encrypted_file project_id: ENV["GOOGLE_CLOUD_PROJECT"],
+                          bucket_name: arguments.shift,
+                          local_file_path: arguments.shift,
+                          base64_encryption_key: arguments.shift
   when "download"
     download_file project_id:  ENV["GOOGLE_CLOUD_PROJECT"],
                   bucket_name: arguments.shift,
                   file_name:   arguments.shift,
                   local_path:  arguments.shift
+  when "enc_download"
+    download_file project_id:  ENV["GOOGLE_CLOUD_PROJECT"],
+                  bucket_name: arguments.shift,
+                  file_name:   arguments.shift,
+                  local_path:  arguments.shift,
+                  base64_encrypted_key: arguments.shift
+  when "gen_key"
+    generate_encryption_key_base64
   when "delete"
     delete_file project_id:  ENV["GOOGLE_CLOUD_PROJECT"],
                 bucket_name: arguments.shift,
@@ -245,13 +315,18 @@ def run_sample arguments
 Usage: bundle exec ruby files.rb [command] [arguments]
 
 Commands:
-  list        <bucket>                List all files in the bucket
-  upload      <bucket> <file>         Upload local file to a bucket
-  download    <bucket> <file> <path>  Download a file from a bucket
-  delete      <bucket> <file>         Delete a file from a bucket
-  metadata    <bucket> <file>         Display metadata for a file in a bucket
-  make_public <bucket> <file>         Make a file in a bucket public
-  rename      <bucket> <file> <new>   Rename a file in a bucket
+  list         <bucket>                List all files in the bucket
+  upload       <bucket> <file>         Upload local file to a bucket
+  enc_upload   <bucket> <file> <base64_enc_key> Upload local file as an
+                                         encrypted file to a bucket
+  download     <bucket> <file> <path>  Download a file from a bucket
+  enc_download <bucket> <file> <path> <base64_enc_key> Download an encrypted
+                                         file from a bucket
+  gen_key                              Genereate a sample encryption key
+  delete       <bucket> <file>         Delete a file from a bucket
+  metadata     <bucket> <file>         Display metadata for a file in a bucket
+  make_public  <bucket> <file>         Make a file in a bucket public
+  rename       <bucket> <file> <new>   Rename a file in a bucket
   copy <srcBucket> <srcFile> <destBucket> <destFile>  Copy file to other bucket
 
 Environment variables:
