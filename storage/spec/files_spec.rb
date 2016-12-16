@@ -31,7 +31,7 @@ describe "Google Cloud Storage files sample" do
   end
 
   after do
-    delete_file "encrypted_file.txt"
+    delete_file "enc_file.txt"
   end
 
   def generate_encryption_key
@@ -122,23 +122,23 @@ describe "Google Cloud Storage files sample" do
   end
 
   it "can upload a local file to a bucket with encryption key" do
-    delete_file "encrypted_file.txt"
-    expect(@bucket.file "encrypted_file.txt").to be nil
+    delete_file "enc_file.txt"
+    expect(@bucket.file "enc_file.txt").to be nil
 
     expect {
       upload_encrypted_file(project_id:            @project_id,
                             bucket_name:           @bucket_name,
                             local_file_path:       @local_enc_file_path,
-                            storage_file_path:     "encrypted_file.txt",
+                            storage_file_path:     "enc_file.txt",
                             base64_encryption_key: @encoded_enc_key)
     }.to output(
-      "Uploaded encrypted_file.txt with encryption key\n"
+      "Uploaded enc_file.txt with encryption key\n"
     ).to_stdout
 
-    expect(@bucket.file "encrypted_file.txt").not_to be nil
-    expect(storage_file_content("encrypted_file.txt",
+    expect(@bucket.file "enc_file.txt").not_to be nil
+    expect(storage_file_content("enc_file.txt",
                                 encryption_key: @encryption_key)).
-        to eq "Content of test encrypted_file.txt\n"
+        to eq "Content of test enc_file.txt\n"
   end
 
   it "can download a file from a bucket" do
@@ -169,7 +169,7 @@ describe "Google Cloud Storage files sample" do
 
   it "can download an encrypted file from a bucket" do
     begin
-      upload(@local_enc_file_path, "encrypted_file.txt",
+      upload(@local_enc_file_path, "enc_file.txt",
              encryption_key: @encryption_key)
 
       local_file = Tempfile.new "cloud-storage-encryption-tests"
@@ -178,16 +178,16 @@ describe "Google Cloud Storage files sample" do
       expect {
         download_encrypted_file(project_id:            @project_id,
                                 bucket_name:           @bucket_name,
-                                storage_file_path:     "encrypted_file.txt",
+                                storage_file_path:     "enc_file.txt",
                                 local_file_path:       local_file.path,
                                 base64_encryption_key: @encoded_enc_key)
       }.to output(
-        "Downloaded encrypted encrypted_file.txt\n"
+        "Downloaded encrypted enc_file.txt\n"
       ).to_stdout
 
       expect(File.size local_file.path).to be > 0
       expect(File.read local_file.path).to eq(
-        "Content of test encrypted_file.txt\n"
+        "Content of test enc_file.txt\n"
       )
     ensure
       local_file.close
