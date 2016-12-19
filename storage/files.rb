@@ -77,7 +77,7 @@ end
 
 def upload_encrypted_file project_id:, bucket_name:, local_file_path:,
                           storage_file_path: nil, encryption_key:
-  # [START upload_encryption_file]
+  # [START upload_encrypted_file]
   # project_id        = "Your Google Cloud project ID"
   # bucket_name       = "Your Google Cloud Storage bucket name"
   # local_file_path   = "Path to local file to upload"
@@ -94,6 +94,7 @@ def upload_encrypted_file project_id:, bucket_name:, local_file_path:,
                             encryption_key: encryption_key
 
   puts "Uploaded #{file.name} with encryption key"
+  # [END upload_encrypted_file]
 end
 
 def download_file project_id:, bucket_name:, file_name:, local_path:
@@ -117,7 +118,7 @@ end
 
 def download_encrypted_file project_id:, bucket_name:, storage_file_path:,
                             local_file_path:, encryption_key:
-  # [START download_file]
+  # [START download_encrypted_file]
   # project_id     = "Your Google Cloud project ID"
   # bucket_name    = "Your Google Cloud Storage bucket name"
   # file_name      = "Name of file in Google Cloud Storage to download locally"
@@ -134,6 +135,7 @@ def download_encrypted_file project_id:, bucket_name:, storage_file_path:,
   file.download local_file_path, encryption_key: encryption_key
 
   puts "Downloaded encrypted #{file.name}"
+  # [END download_encrypted_file]
 end
 
 def delete_file project_id:, bucket_name:, file_name:
