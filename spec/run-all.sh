@@ -19,27 +19,19 @@ status_return=0 # everything passed
 # Print out Ruby version
 ruby --version
 
-# Run Tets
-for product in      \
-	bigquery    \
-	datastore   \
-	endpoints/getting-started   \
-	language    \
-	logging     \
-	pubsub      \
-	speech      \
-	storage     \
-	translate   \
-	vision      \
-; do
+while read product
+do
+	# Run Tets
+	export TEST_DIR=$product
 	echo "[$product]"
-	cd "$repo_directory/$product/"
+	pushd "$repo_directory/$product/"
 	bundle install && bundle exec rspec --format documentation
-        
+
 	 # Check status of bundle exec rspec
 	if [ $? != 0 ]; then
 		status_return=1
 	fi
-done
+	popd
+done < <(find * -type d -name 'spec' -path "*/*" -not -path "*vendor/*" -exec dirname {} \;)
 
 exit $status_return

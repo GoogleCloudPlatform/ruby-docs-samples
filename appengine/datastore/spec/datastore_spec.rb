@@ -18,6 +18,8 @@ require "net/http"
 
 describe "Datastore E2E test" do
   before do
+    skip "End-to-end tests skipped" unless E2E.run?
+
     @url = E2E.url
   end
 
