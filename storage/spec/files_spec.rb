@@ -20,18 +20,12 @@ require "tempfile"
 describe "Google Cloud Storage files sample" do
 
   before do
-    @bucket_name          = ENV["GOOGLE_CLOUD_STORAGE_BUCKET"]
-    @storage              = Google::Cloud::Storage.new
-    @project_id           = @storage.project
-    @bucket               = @storage.bucket @bucket_name
-    @local_file_path      = File.expand_path "resources/file.txt", __dir__
-    @local_enc_file_path  = File.expand_path "resources/enc_file.txt", __dir__
-    @encryption_key        = generate_encryption_key
-    @encoded_enc_key      = Base64.encode64 @encryption_key
-  end
-
-  after do
-    delete_file "enc_file.txt"
+    @bucket_name     = ENV["GOOGLE_CLOUD_STORAGE_BUCKET"]
+    @storage         = Google::Cloud::Storage.new
+    @project_id      = @storage.project
+    @bucket          = @storage.bucket @bucket_name
+    @local_file_path = File.expand_path "resources/file.txt", __dir__
+    @encryption_key  = generate_encryption_key
   end
 
   def generate_encryption_key
@@ -122,27 +116,28 @@ describe "Google Cloud Storage files sample" do
   end
 
   it "can upload a local file to a bucket with encryption key" do
-    delete_file "enc_file.txt"
-    expect(@bucket.file "enc_file.txt").to be nil
+    delete_file "file.txt"
+    expect(@bucket.file "file.txt").to be nil
 
     expect {
-      upload_encrypted_file(project_id:            @project_id,
-                            bucket_name:           @bucket_name,
-                            local_file_path:       @local_enc_file_path,
-                            storage_file_path:     "enc_file.txt",
-                            base64_encryption_key: @encoded_enc_key)
+      upload_encrypted_file(project_id:        @project_id,
+                            bucket_name:       @bucket_name,
+                            local_file_path:   @local_file_path,
+                            storage_file_path: "file.txt",
+                            encryption_key:    @encryption_key)
     }.to output(
-      "Uploaded enc_file.txt with encryption key\n"
+      "Uploaded file.txt with encryption key\n"
     ).to_stdout
 
-    expect(@bucket.file "enc_file.txt").not_to be nil
-    expect(storage_file_content("enc_file.txt",
+    expect(@bucket.file "file.txt").not_to be nil
+    expect(storage_file_content("file.txt",
                                 encryption_key: @encryption_key)).
-        to eq "Content of test enc_file.txt\n"
+        to eq "Content of test file.txt\n"
   end
 
   it "can download a file from a bucket" do
     begin
+      delete_file "file.txt"
       upload @local_file_path, "file.txt"
 
       local_file = Tempfile.new "cloud-storage-tests"
@@ -169,26 +164,51 @@ describe "Google Cloud Storage files sample" do
 
   it "can download an encrypted file from a bucket" do
     begin
-      upload(@local_enc_file_path, "enc_file.txt",
+      delete_file "file.txt"
+      upload(@local_file_path, "file.txt",
              encryption_key: @encryption_key)
 
       local_file = Tempfile.new "cloud-storage-encryption-tests"
       expect(File.size local_file.path).to eq 0
 
       expect {
-        download_encrypted_file(project_id:            @project_id,
-                                bucket_name:           @bucket_name,
-                                storage_file_path:     "enc_file.txt",
-                                local_file_path:       local_file.path,
-                                base64_encryption_key: @encoded_enc_key)
+        download_encrypted_file(project_id:        @project_id,
+                                bucket_name:       @bucket_name,
+                                storage_file_path: "file.txt",
+                                local_file_path:   local_file.path,
+                                encryption_key:    @encryption_key)
       }.to output(
-        "Downloaded encrypted enc_file.txt\n"
+        "Downloaded encrypted file.txt\n"
       ).to_stdout
 
       expect(File.size local_file.path).to be > 0
       expect(File.read local_file.path).to eq(
-        "Content of test enc_file.txt\n"
+        "Content of test file.txt\n"
       )
+    ensure
+      local_file.close
+      local_file.unlink
+    end
+  end
+
+  it "can't download an encrypted file from a bucket with wrong key" do
+    begin
+      delete_file "file.txt"
+      upload(@local_file_path, "file.txt",
+             encryption_key: @encryption_key)
+
+      local_file = Tempfile.new "cloud-storage-encryption-tests"
+      expect(File.size local_file.path).to eq 0
+
+      expect {
+        download_encrypted_file(project_id:        @project_id,
+                                bucket_name:       @bucket_name,
+                                storage_file_path: "file.txt",
+                                local_file_path:   local_file.path,
+                                encryption_key:    generate_encryption_key)
+      }.to raise_error(Google::Cloud::InvalidArgumentError)
+
+      expect(File.size local_file.path).to eq 0
     ensure
       local_file.close
       local_file.unlink
