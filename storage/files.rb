@@ -12,6 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+require "base64"
+require "openssl"
+
 def list_bucket_contents project_id:, bucket_name:
   # [START list_bucket_contents]
   # project_id  = "Your Google Cloud project ID"
@@ -47,9 +50,6 @@ def list_bucket_contents_with_prefix project_id:, bucket_name:, prefix:
 end
 
 def generate_encryption_key_base64
-  require "base64"
-  require "openssl"
-
   encryption_key  = OpenSSL::Cipher.new("aes-256-cfb").encrypt.random_key
   encoded_enc_key = Base64.encode64 encryption_key
 
@@ -98,11 +98,10 @@ end
 
 def download_file project_id:, bucket_name:, file_name:, local_path:
   # [START download_file]
-  # project_id     = "Your Google Cloud project ID"
-  # bucket_name    = "Your Google Cloud Storage bucket name"
-  # file_name      = "Name of file in Google Cloud Storage to download locally"
-  # local_path     = "Path to local file to save"
-  # encryption_key = "Base64 encoded AES-256 encryption key"
+  # project_id  = "Your Google Cloud project ID"
+  # bucket_name = "Your Google Cloud Storage bucket name"
+  # file_name   = "Name of file in Google Cloud Storage to download locally"
+  # local_path  = "Path to local file to save"
 
   require "google/cloud/storage"
 
@@ -119,10 +118,11 @@ end
 def download_encrypted_file project_id:, bucket_name:, storage_file_path:,
                             local_file_path:, encryption_key:
   # [START download_file]
-  # project_id  = "Your Google Cloud project ID"
-  # bucket_name = "Your Google Cloud Storage bucket name"
-  # file_name   = "Name of file in Google Cloud Storage to download locally"
-  # local_path  = "Path to local file to save"
+  # project_id     = "Your Google Cloud project ID"
+  # bucket_name    = "Your Google Cloud Storage bucket name"
+  # file_name      = "Name of file in Google Cloud Storage to download locally"
+  # local_path     = "Path to local file to save"
+  # encryption_key = "AES-256 encryption key"
 
   require "google/cloud/storage"
 
