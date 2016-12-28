@@ -31,6 +31,7 @@ Usage:
     list_codes
 
   Examples:
+  
     ruby translate_samples.rb translate fr "Hello World"
     ruby translate_samples.rb detect_language "Hello World"
     ruby translate_samples.rb list_codes
