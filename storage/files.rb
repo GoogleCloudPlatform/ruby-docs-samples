@@ -12,9 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "base64"
-require "openssl"
-
 def list_bucket_contents project_id:, bucket_name:
   # [START list_bucket_contents]
   # project_id  = "Your Google Cloud project ID"
@@ -50,10 +47,15 @@ def list_bucket_contents_with_prefix project_id:, bucket_name:, prefix:
 end
 
 def generate_encryption_key_base64
+  # [START generate_encryption_key_base64]
+  require "base64"
+  require "openssl"
+
   encryption_key  = OpenSSL::Cipher.new("aes-256-cfb").encrypt.random_key
-  encoded_enc_key = Base64.encode64 encryption_key
+  encoded_enc_key = Base64.strict_encode64 encryption_key
 
   puts "Sample encryption key: #{encoded_enc_key}"
+  # [END generate_encryption_key_base64]
 end
 
 def upload_file project_id:, bucket_name:, local_file_path:,
