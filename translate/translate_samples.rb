@@ -28,6 +28,22 @@ def translate_text project_id:, text:, language_code:
   # [END translate_text]
 end
 
+def translate_text_with_model project_id:, text:, language_code:
+  # [START translate_text_with_model]
+  # project_id   = "Your Google Cloud project ID"
+  # text          = "The text you would like to translate"
+  # language_code = "The ISO 639-1 code of language to translate to, eg. 'en'"
+
+  require "google/cloud/translate"
+
+  translate   = Google::Cloud::Translate.new project: project_id
+  translation = translate.translate text, to: language_code, model: "nmt"
+
+  puts "Translated '#{text}' to '#{translation.text.inspect}'"
+  puts "Original language: #{translation.from} translated to: #{translation.to}"
+  # [END translate_text_with_model]
+end
+
 def detect_language project_id:, text:
   # [START detect_language]
   # project_id   = "Your Google Cloud project ID"
@@ -88,6 +104,10 @@ if __FILE__ == $PROGRAM_NAME
     translate_text project_id: project_id,
                    language_code: ARGV.shift,
                    text:          ARGV.shift
+  when "translate_premium"
+    translate_text_with_model project_id: project_id,
+                              language_code: ARGV.shift,
+                              text:          ARGV.shift
   when "detect_language"
     detect_language project_id: project_id,
                     text: ARGV.shift
@@ -101,13 +121,15 @@ if __FILE__ == $PROGRAM_NAME
 Usage: ruby translate_samples.rb <command> [arguments]
 
 Commands:
-  translate       <desired-language-code> <text>
-  detect_language <text>
-  list_names      <language-code-for-display>
+  translate           <desired-language-code> <text>
+  translate_premium   <desired-language-code> <text>
+  detect_language     <text>
+  list_names          <language-code-for-display>
   list_codes
 
 Examples:
   ruby translate_samples.rb translate fr "Hello World"
+  ruby translate_samples.rb translate_premium fr "Hello World"
   ruby translate_samples.rb detect_language "Hello World"
   ruby translate_samples.rb list_codes
   ruby translate_samples.rb list_names en
