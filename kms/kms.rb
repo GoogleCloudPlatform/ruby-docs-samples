@@ -381,6 +381,9 @@ Commands:
   destroy_cryptokey_version <key_ring> <crypto_key> <version> <location> Destroy a cryptokey version
   add_member                <key_ring> <crypto_key> <member> <role> <location> Add member to cryptokey IAM policy
   get_keyring_policy        <key_ring> <location> Get a keyring IAM policy
+
+Environment variables:
+  GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
     usage
   end
 end
