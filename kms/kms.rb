@@ -326,14 +326,14 @@ def run_sample arguments
                      key_ring_id: arguments.shift,
                      crypto_key: arguments.shift,
                      location: arguments.shift)
-  when "encrypt"
+  when "encrypt_file"
     encrypt(project_id: ENV["GOOGLE_CLOUD_PROJECT"],
             key_ring_id: arguments.shift,
             crypto_key: arguments.shift,
             location: arguments.shift,
             input_file: arguments.shift,
             output_file: arguments.shift)
-  when "decrypt"
+  when "decrypt_file"
     decrypt(project_id: ENV["GOOGLE_CLOUD_PROJECT"],
             key_ring_id: arguments.shift,
             crypto_key: arguments.shift,
@@ -373,15 +373,15 @@ def run_sample arguments
 Usage: bundle exec ruby kms.rb [command] [arguments]
 
 Commands:
-  create_keyring <key_ring> <location>  Create a new keyring
-  create_cryptokey <key_ring> <crypto_key> <location> Create a new cryptokey
-  encrypt <key_ring> <crypto_key> <location> <input_file> <output_file> Encrypt a file
-  decrypt <key_ring> <crypto_key> <location> <input_file> <output_file Decrypt a file
-  create_cryptokey_version <key_ring> <crypto_key> <location> Create a new cryptokey version
+  create_keyring            <key_ring> <location> Create a new keyring
+  create_cryptokey          <key_ring> <crypto_key> <location> Create a new cryptokey
+  encrypt_file              <key_ring> <crypto_key> <location> <input_file> <output_file> Encrypt a file
+  decrypt_file              <key_ring> <crypto_key> <location> <input_file> <output_file Decrypt a file
+  create_cryptokey_version  <key_ring> <crypto_key> <location> Create a new cryptokey version
   disable_cryptokey_version <key_ring> <crypto_key> <version> <location> Disable a cryptokey version
   destroy_cryptokey_version <key_ring> <crypto_key> <version> <location> Destroy a cryptokey version
-  add_member <key_ring> <crypto_key> <member> <role> <location> Add member to cryptokey IAM policy
-  get_keyring_policy <key_ring> <location> Get a keyring IAM policy
+  add_member                <key_ring> <crypto_key> <member> <role> <location> Add member to cryptokey IAM policy
+  get_keyring_policy        <key_ring> <location> Get a keyring IAM policy
     usage
   end
 end
