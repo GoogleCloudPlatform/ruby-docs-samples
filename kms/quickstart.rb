@@ -18,7 +18,7 @@
 require "google/apis/cloudkms_v1beta1"
 
 # Your Google Cloud Platform project ID
-project_id = "spec-test-ruby-samples"
+project_id = "YOUR_PROJECT_ID"
 
 # Lists keys in the "global" location.
 location = "global"
