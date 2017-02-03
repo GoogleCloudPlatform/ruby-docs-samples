@@ -89,16 +89,16 @@ def encrypt(project_id:, key_ring_id:, crypto_key:, location:, input_file:,
          "keyRings/#{key_ring_id}/cryptoKeys/#{crypto_key}"
 
   # Use the KMS API to encrypt the text
-  encoded_file = Base64.encode64 File.read(input_file)
+  file_data = File.read(input_file).chomp
 
-  request = Google::Apis::CloudkmsV1beta1::EncryptRequest.new(
-    plaintext: encoded_file)
+  request = Google::Apis::CloudkmsV1beta1::EncryptRequest.new
+  request.plaintext = file_data
 
   response = kms_client.encrypt_crypto_key name, request
 
-  # Write the encrypted text to a file
+  # Write the encrypted text to afile
   File.open(output_file, "w") do |file|
-    file.write(response.ciphertext)
+    file.write response.ciphertext
   end
 
   puts "Saved encrypted #{input_file} as #{output_file}"
@@ -129,17 +129,16 @@ def decrypt(project_id:, key_ring_id:, crypto_key:, location:, input_file:,
          "keyRings/#{key_ring_id}/cryptoKeys/#{crypto_key}"
 
   # Use the KMS API to decrypt the text
-  encoded_file = File.read(input_file)
+  encrypted_file = File.read(input_file).chomp
 
   request = Google::Apis::CloudkmsV1beta1::DecryptRequest.new
-  request.ciphertext = encoded_file
+  request.ciphertext = encrypted_file
 
   response = kms_client.decrypt_crypto_key name, request
 
   # Write the decrypted text to a file
   File.open(output_file, "w") do |file|
-    decoded_file = Base64.decode64 response.plaintext
-    file.write decoded_file
+    file.write response.plaintext
   end
 
   puts "Saved decrypted #{input_file} as #{output_file}"

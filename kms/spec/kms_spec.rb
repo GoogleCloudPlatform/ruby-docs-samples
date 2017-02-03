@@ -106,7 +106,7 @@ describe "Key Management Service" do
     name = "projects/#{project_id}/locations/#{location}/" +
       "keyRings/#{key_ring_id}/cryptoKeys/#{crypto_key}"
 
-    encoded_file = Base64.encode64 File.read(input_file)
+    encoded_file = File.read(input_file).chomp
 
     request = Google::Apis::CloudkmsV1beta1::EncryptRequest.new
     request.plaintext = encoded_file
@@ -125,16 +125,15 @@ describe "Key Management Service" do
     name = "projects/#{project_id}/locations/#{location}/" +
       "keyRings/#{key_ring_id}/cryptoKeys/#{crypto_key}"
 
-    encoded_file = File.read(input_file)
+    encoded_file = File.read(input_file).chomp
 
-    request = Google::Apis::CloudkmsV1beta1::DecryptRequest.new(
-      ciphertext: encoded_file)
+    request = Google::Apis::CloudkmsV1beta1::DecryptRequest.new
+    request.ciphertext = encoded_file
 
     response = kms_client.decrypt_crypto_key name, request
 
     File.open(output_file, "w") do |file|
-      decoded_file = Base64.decode64 response.plaintext
-      file.write decoded_file
+      file.write response.plaintext
     end
   end
 
@@ -188,7 +187,7 @@ describe "Key Management Service" do
     expect {
       encrypt(project_id: @project_id, key_ring_id: @key_ring_id,
           crypto_key: @cryptokey_id, location: @location,
-          input_file: @input_file, output_file: temp_output)
+          input_file: @input_file, output_file: temp_output.path)
     }.to output(/#{@input_file}/).to_stdout
 
     test_decrypt_file(project_id: @project_id, key_ring_id: @key_ring_id,
@@ -249,7 +248,7 @@ describe "Key Management Service" do
         key_ring_id: @key_ring_id, crypto_key: test_cryptokey_id,
         location: @location)
 
-    version = "1"
+    version = "1" # first version is labeled 1
 
     expect {
       disable_cryptokey_version(project_id: @project_id,
