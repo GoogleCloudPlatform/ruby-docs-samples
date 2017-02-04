@@ -52,5 +52,5 @@ describe "Key Management Service Quickstart" do
       /#{test_key_ring.name}/
     ).to_stdout
   end
-
 end
+
