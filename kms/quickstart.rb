@@ -26,8 +26,8 @@ location = "global"
 Cloudkms   = Google::Apis::CloudkmsV1beta1 # Alias the module
 kms_client = Cloudkms::CloudKMSService.new
 
-# https://developers.google.com/identity/protocols/application-default-credentials#callingruby
 # Set the required scopes to access the Key Management Service API
+# @see https://developers.google.com/identity/protocols/application-default-credentials#callingruby
 kms_client.authorization = Google::Auth.get_application_default(
   "https://www.googleapis.com/auth/cloud-platform"
 )
@@ -40,7 +40,7 @@ response = kms_client.list_project_location_key_rings parent
 
 # list all key rings for your project
 puts "Key Rings: "
-response.key_rings.each do |ring|
+response.key_rings.each do |key_ring|
   puts ring.name
 end
 # [END kms_quickstart]
