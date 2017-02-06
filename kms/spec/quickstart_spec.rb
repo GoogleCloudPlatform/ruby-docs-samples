@@ -16,29 +16,33 @@ require "rspec"
 require "google/apis/cloudkms_v1beta1"
 
 describe "Key Management Service Quickstart" do
-  TestCloudkms = Google::Apis::CloudkmsV1beta1
+  Cloudkms = Google::Apis::CloudkmsV1beta1
 
   def create_test_key_ring parent, key_ring_id
-    client = TestCloudkms::CloudKMSService.new
+    client = Cloudkms::CloudKMSService.new
     client.authorization = Google::Auth.get_application_default(
       %[https://www.googleapis.com/auth/cloud-platform]
     )
 
-    client.create_project_location_key_ring parent, TestCloudkms::KeyRing.new,
+    client.create_project_location_key_ring parent, Cloudkms::KeyRing.new,
                                             key_ring_id: key_ring_id
+  end
+
+  before :all do
+    $VERBOSE = nil
   end
 
   it "can list global keyrings by name" do
     test_project_id = ENV["GOOGLE_CLOUD_PROJECT"]
-    test_key_ring_id = "#{test_project_id}-#{Time.now.to_i}"
+    test_key_ring_id = "alist-#{test_project_id}-#{Time.now.to_i}"
     test_parent = "projects/#{test_project_id}/locations/global"
 
     test_key_ring = create_test_key_ring test_parent, test_key_ring_id
     expect(test_key_ring).not_to eq nil
     expect(test_key_ring.name).to match /#{test_key_ring_id}/
 
-    test_kms_client = TestCloudkms::CloudKMSService.new
-    expect(TestCloudkms::CloudKMSService).to receive(:new).
+    test_kms_client = Cloudkms::CloudKMSService.new
+    expect(Cloudkms::CloudKMSService).to receive(:new).
                                          and_return(test_kms_client)
 
     expect(test_kms_client).to receive(:list_project_location_key_rings).
