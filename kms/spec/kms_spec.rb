@@ -215,23 +215,23 @@ describe "Key Management Service" do
   end
 
   it "can create keyring" do
-    test_create_key_ring_id = "#{@project_id}-create-#{Time.now.to_i}"
+    key_ring_id = "#{@project_id}-create-#{Time.now.to_i}"
 
     expect {
       $create_keyring.call(
         project_id: @project_id,
-        key_ring_id: test_create_key_ring_id,
+        key_ring_id: key_ring_id,
         location: @location
       )
-    }.to output(/#{test_create_key_ring_id}/).to_stdout
+    }.to output(/#{key_ring_id}/).to_stdout
 
     test_key_ring = get_test_keyring(
       project_id: @project_id,
-      key_ring_id: test_create_key_ring_id,
+      key_ring_id: key_ring_id,
       location: @location
     )
 
-    expect(test_key_ring.name).to match /#{test_create_key_ring_id}/
+    expect(test_key_ring.name).to match /#{key_ring_id}/
   end
 
   it "can create a cryptoKey" do
