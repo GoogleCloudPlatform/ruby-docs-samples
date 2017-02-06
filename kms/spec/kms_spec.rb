@@ -442,7 +442,7 @@ describe "Key Management Service" do
     add_test_member_to_keyring_policy(
       project_id: @project_id,
       key_ring_id: @key_ring_id,
-      member: "serviceAccount:test-account@cloud-samples-tests-ruby.iam.gserviceaccount.com",
+      member: "serviceAccount:test-account@#{@project_id}.iam.gserviceaccount.com",
       role: "roles/owner",
       location: @location
     )
@@ -453,7 +453,7 @@ describe "Key Management Service" do
         key_ring_id: @key_ring_id,
         location: @location
       )
-    }.to output(/serviceAccount:test-account@cloud-samples-tests-ruby.iam.gserviceaccount.com/).to_stdout
+    }.to output(/serviceAccount:test-account@#{@project_id}.iam.gserviceaccount.com/).to_stdout
   end
 end
 
