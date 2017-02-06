@@ -41,7 +41,7 @@ response = kms_client.list_project_location_key_rings parent
 # list all key rings for your project
 puts "Key Rings: "
 response.key_rings.each do |key_ring|
-  puts ring.name
+  puts key_ring.name
 end
 # [END kms_quickstart]
 
