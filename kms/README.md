@@ -2,7 +2,13 @@
 Cloud Platform logo" title="Google Cloud Platform" align="right" height="96"
 width="96"/>
 
-# Google Cloud KMS API Samples
+# Google Cloud Key Management Service API Samples
+
+Cloud KMS allows you to keep encryption keys in one central cloud service, for
+direct use by other cloud resources and applications. With Cloud KMS you are the
+ultimate custodian of your data, you can manage encryption in the cloud the same
+way you do on-premises, and you have a provable and monitorable root of trust
+over your data.
 
 ## Description
 
