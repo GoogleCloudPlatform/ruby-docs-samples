@@ -12,15 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Lambdas were used for module Alias `Cloudkms`
+# Note: Code samples in this file set constants, and
+#       constants cannot be set inside method definitions in Ruby,
+#       code snippets in this sample are wrapped in global lambdas.
 
 $create_keyring = -> (project_id:, key_ring_id:, location:) do
   # [START kms_create_keyring]
-  require "google/apis/cloudkms_v1beta1"
-
-  # project_id = "Your Google Cloud project ID"
+  # project_id  = "Your Google Cloud project ID"
   # key_ring_id = "The id of the new KeyRing"
-  # location = "The location of the new KeyRing"
+  # location    = "The location of the new KeyRing"
+
+  require "google/apis/cloudkms_v1beta1"
 
   # Instantiate the client, authenticate with specified scope
   Cloudkms = Google::Apis::CloudkmsV1beta1
@@ -42,12 +44,12 @@ end
 
 $create_cryptokey = -> (project_id:, key_ring_id:, crypto_key:, location:) do
   # [START kms_create_cryptokey]
-  require "google/apis/cloudkms_v1beta1"
-
-  # project_id = "Your Google Cloud project ID"
+  # project_id  = "Your Google Cloud project ID"
   # key_ring_id = "The id of the new KeyRing"
-  # crypto_key = "Name of cryptoKey"
-  # location = "The location of the new KeyRing"
+  # crypto_key  = "Name of cryptoKey"
+  # location    = "The location of the new KeyRing"
+
+  require "google/apis/cloudkms_v1beta1"
 
   # Instantiate the client, authenticate with specified scope
   Cloudkms = Google::Apis::CloudkmsV1beta1
@@ -62,14 +64,14 @@ $create_cryptokey = -> (project_id:, key_ring_id:, crypto_key:, location:) do
 
   # Create a CryptoKey for your project keyring
   new_crypto_key = kms_client.create_project_location_key_ring_crypto_key(resource,
-    Cloudkms::CryptoKey.new(purpose: "ENCRYPT_DECRYPT"), crypto_key_id: crypto_key)
+      Cloudkms::CryptoKey.new(purpose: "ENCRYPT_DECRYPT"), crypto_key_id: crypto_key)
 
   puts "Create CryptoKey #{crypto_key}"
   # [END kms_create_cryptokey]
 end
 
 $encrypt = -> (project_id:, key_ring_id:, crypto_key:, location:, input_file:,
-            output_file:) do
+               output_file:) do
   # [START kms_encrypt]
   # project_id  = "Your Google Cloud project ID"
   # key_ring_id = "The id of the new KeyRing"
@@ -103,7 +105,7 @@ $encrypt = -> (project_id:, key_ring_id:, crypto_key:, location:, input_file:,
 end
 
 $decrypt = -> (project_id:, key_ring_id:, crypto_key:, location:, input_file:,
-            output_file:) do
+               output_file:) do
   # [START kms_decrypt]
   # project_id  = "Your Google Cloud project ID"
   # key_ring_id = "The id of the new KeyRing"
@@ -160,19 +162,16 @@ $create_cryptokey_version = -> (project_id:, key_ring_id:, crypto_key:, location
              "keyRings/#{key_ring_id}/cryptoKeys/#{crypto_key}"
 
   # Create the CryptoKey version for your project
-  crypto_key_version_skeleton = Cloudkms::CryptoKey.new(
-    purpose: "ENCRYPT_DECRYPT")
   crypto_key_version = kms_client.create_project_location_key_ring_crypto_key_crypto_key_version(
-    resource, crypto_key_version_skeleton)
+      resource, Cloudkms::CryptoKey.new purpose: "ENCRYPT_DECRYPT")
 
   puts "Created version #{crypto_key_version.name} for key " +
        "#{crypto_key} in keyring #{key_ring_id}"
-
   # [END kms_create_cryptokey_version]
 end
 
 $disable_cryptokey_version = -> (project_id:, key_ring_id:, crypto_key:, version:,
-      location:) do
+                                 location:) do
   # [START kms_disable_cryptokey_version]
   # project_id  = "Your Google Cloud project ID"
   # key_ring_id = "The id of the new KeyRing"
@@ -209,7 +208,7 @@ $disable_cryptokey_version = -> (project_id:, key_ring_id:, crypto_key:, version
 end
 
 $destroy_cryptokey_version = -> (project_id:, key_ring_id:, crypto_key:, version:,
-                              location:) do
+                                 location:) do
   # [START kms_destroy_cryptokey_version]
   # project_id  = "Your Google Cloud project ID"
   # key_ring_id = "The id of the new KeyRing"
@@ -233,14 +232,14 @@ $destroy_cryptokey_version = -> (project_id:, key_ring_id:, crypto_key:, version
 
   # Destroy specific version of the crypto key
   kms_client.destroy_crypto_key_version(resource,
-    Cloudkms::DestroyCryptoKeyVersionRequest.new)
+      Cloudkms::DestroyCryptoKeyVersionRequest.new)
 
   puts "Destroyed version #{version} of #{crypto_key}"
   # [END kms_destroy_cryptokey_version]
 end
 
 $add_member_to_cryptokey_policy = -> (project_id:, key_ring_id:, crypto_key:,
-                                   member:, role:, location:) do
+                                      member:, role:, location:) do
   # [START kms_add_member_to_cryptokey_policy]
   # project_id  = "Your Google Cloud project ID"
   # key_ring_id = "The id of the new KeyRing"
@@ -267,8 +266,7 @@ $add_member_to_cryptokey_policy = -> (project_id:, key_ring_id:, crypto_key:,
 
   # Add new member to current bindings
   policy.bindings ||= []
-  policy.bindings << Cloudkms::Binding.new(members: [member],
-                                                                role: role)
+  policy.bindings << Cloudkms::Binding.new(members: [member], role: role)
 
   # Update IAM policy
   policy_request = Cloudkms::SetIamPolicyRequest.new(policy: policy)
@@ -309,7 +307,6 @@ $get_keyring_policy = -> (project_id:, key_ring_id:, location:) do
   else
     puts "No members"
   end
-
   # [END kms_get_keyring_policy]
 end
 
