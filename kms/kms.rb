@@ -66,7 +66,7 @@ $create_cryptokey = -> (project_id:, key_ring_id:, crypto_key:, location:) do
   new_crypto_key = kms_client.create_project_location_key_ring_crypto_key(resource,
       Cloudkms::CryptoKey.new(purpose: "ENCRYPT_DECRYPT"), crypto_key_id: crypto_key)
 
-  puts "Create CryptoKey #{crypto_key}"
+  puts "Created CryptoKey #{crypto_key}"
   # [END kms_create_cryptokey]
 end
 
@@ -373,7 +373,7 @@ Commands:
   create_keyring            <key_ring> <location> Create a new keyring
   create_cryptokey          <key_ring> <crypto_key> <location> Create a new cryptokey
   encrypt_file              <key_ring> <crypto_key> <location> <input_file> <output_file> Encrypt a file
-  decrypt_file              <key_ring> <crypto_key> <location> <input_file> <output_file Decrypt a file
+  decrypt_file              <key_ring> <crypto_key> <location> <input_file> <output_file> Decrypt a file
   create_cryptokey_version  <key_ring> <crypto_key> <location> Create a new cryptokey version
   disable_cryptokey_version <key_ring> <crypto_key> <version> <location> Disable a cryptokey version
   destroy_cryptokey_version <key_ring> <crypto_key> <version> <location> Destroy a cryptokey version
