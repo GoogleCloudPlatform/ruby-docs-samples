@@ -27,7 +27,7 @@ describe "Key Management Service" do
     kms_client
   end
 
-  def test_create_keyring project_id:, key_ring_id:, location:
+  def create_test_keyring project_id:, key_ring_id:, location:
     kms_client = create_service_client
 
     resource = "projects/#{project_id}/locations/#{location}"
@@ -36,7 +36,7 @@ describe "Key Management Service" do
       Google::Apis::CloudkmsV1beta1::KeyRing.new, key_ring_id: key_ring_id)
   end
 
-  def test_get_keyring project_id:, key_ring_id:, location:
+  def get_test_keyring project_id:, key_ring_id:, location:
     kms_client = create_service_client
 
     resource = "projects/#{project_id}/locations/#{location}/" +
@@ -45,7 +45,7 @@ describe "Key Management Service" do
     kms_client.get_project_location_key_ring resource
   end
 
-  def test_create_cryptokey project_id:, key_ring_id:, crypto_key:, location:
+  def create_test_cryptokey project_id:, key_ring_id:, crypto_key:, location:
     kms_client = create_service_client
 
     resource = "projects/#{project_id}/locations/#{location}/" +
@@ -57,7 +57,7 @@ describe "Key Management Service" do
         crypto_key_skeleton, crypto_key_id: crypto_key)
   end
 
-  def test_get_cryptokey project_id:, key_ring_id:, crypto_key:, location:
+  def get_test_cryptokey project_id:, key_ring_id:, crypto_key:, location:
     kms_client = create_service_client
 
     resource = "projects/#{project_id}/locations/#{location}/" +
@@ -66,7 +66,7 @@ describe "Key Management Service" do
     kms_client.get_project_location_key_ring_crypto_key resource
   end
 
-  def test_get_cryptokey_version(project_id:, key_ring_id:, crypto_key:,
+  def get_test_cryptokey_version(project_id:, key_ring_id:, crypto_key:,
       version:, location:)
 
     kms_client = create_service_client
@@ -97,7 +97,7 @@ describe "Key Management Service" do
     kms_client.list_project_location_key_rings resource
   end
 
-  def test_get_cryptokey_policy(project_id:, key_ring_id:, crypto_key:,
+  def get_test_cryptokey_policy(project_id:, key_ring_id:, crypto_key:,
       location:)
     kms_client = create_service_client
 
@@ -107,7 +107,7 @@ describe "Key Management Service" do
     kms_client.get_project_location_key_ring_crypto_key_iam_policy resource
   end
 
-  def test_get_keyring_policy(project_id:, key_ring_id:, location:)
+  def get_test_keyring_policy(project_id:, key_ring_id:, location:)
     kms_client = create_service_client
 
     resource = "projects/#{project_id}/locations/#{location}/" +
@@ -116,7 +116,7 @@ describe "Key Management Service" do
     kms_client.get_project_location_key_ring_iam_policy resource
   end
 
-  def test_add_member_to_cryptokey_policy(project_id:, key_ring_id:, crypto_key:,
+  def add_test_member_to_cryptokey_policy(project_id:, key_ring_id:, crypto_key:,
           member:, role:, location:)
     kms_client = create_service_client
 
@@ -131,11 +131,11 @@ describe "Key Management Service" do
     kms_client.set_crypto_key_iam_policy resource, policy_request
   end
 
-  def test_add_member_to_keyring_policy(project_id:, key_ring_id:, member:,
+  def add_test_member_to_keyring_policy(project_id:, key_ring_id:, member:,
         role:, location:)
     kms_client = create_service_client
 
-    policy = test_get_keyring_policy(project_id: project_id, key_ring_id: key_ring_id,
+    policy = get_test_keyring_policy(project_id: project_id, key_ring_id: key_ring_id,
          location: location)
 
     resource = "projects/#{project_id}/locations/#{location}/" +
@@ -151,34 +151,34 @@ describe "Key Management Service" do
     kms_client.set_key_ring_iam_policy resource, policy_request
   end
 
-  def test_encrypt_file(project_id:, key_ring_id:, crypto_key:, location:,
+  def encrypt_test_file(project_id:, key_ring_id:, crypto_key:, location:,
       input_file:, output_file:)
     kms_client = create_service_client
 
     name = "projects/#{project_id}/locations/#{location}/" +
       "keyRings/#{key_ring_id}/cryptoKeys/#{crypto_key}"
 
-    encoded_file = File.read(input_file).chomp
+    plain_file = File.read(input_file)
 
     request = Google::Apis::CloudkmsV1beta1::EncryptRequest.new
-    request.plaintext = encoded_file
+    request.plaintext = plain_file
 
     response = kms_client.encrypt_crypto_key name, request
 
     File.write(output_file, response.ciphertext)
   end
 
-  def test_decrypt_file(project_id:, key_ring_id:, crypto_key:, location:,
+  def decrypt_test_file(project_id:, key_ring_id:, crypto_key:, location:,
       input_file:, output_file:)
     kms_client = create_service_client
 
     name = "projects/#{project_id}/locations/#{location}/" +
       "keyRings/#{key_ring_id}/cryptoKeys/#{crypto_key}"
 
-    encoded_file = File.read(input_file).chomp
+    encrypted_file = File.read(input_file)
 
     request = Google::Apis::CloudkmsV1beta1::DecryptRequest.new
-    request.ciphertext = encoded_file
+    request.ciphertext = encrypted_file
 
     response = kms_client.decrypt_crypto_key name, request
 
@@ -186,19 +186,20 @@ describe "Key Management Service" do
   end
 
   before :all do
-    @project_id = ENV["GOOGLE_CLOUD_PROJECT"]
-    @key_ring_id = "#{@project_id}_key_ring_#{Time.now.to_i}"
+    @project_id   = ENV["GOOGLE_CLOUD_PROJECT"]
+    @key_ring_id  = "#{@project_id}_key_ring_#{Time.now.to_i}"
     @cryptokey_id = "#{@project_id}_cryptokey_#{Time.now.to_i}"
-    @location = "global"
+    @location     = "global"
 
-    @test_key_ring = test_create_keyring project_id: @project_id,
+    @test_key_ring = create_test_keyring project_id: @project_id,
         key_ring_id: @key_ring_id, location: @location
 
-    @test_cryptokey = test_create_cryptokey project_id: @project_id,
+    @test_cryptokey = create_test_cryptokey project_id: @project_id,
         key_ring_id: @key_ring_id, crypto_key: @cryptokey_id, location: @location
 
     @input_file = File.expand_path "resources/file.txt", __dir__
 
+    # Verbose is being silenced because 
     $VERBOSE = nil
   end
 
@@ -211,7 +212,7 @@ describe "Key Management Service" do
           location: @location)
     }.to output(/#{test_create_key_ring_id}/).to_stdout
 
-    test_key_ring = test_get_keyring(project_id: @project_id,
+    test_key_ring = get_test_keyring(project_id: @project_id,
         key_ring_id: test_create_key_ring_id, location: @location)
 
     expect(test_key_ring.name).to match /#{test_create_key_ring_id}/
@@ -225,7 +226,7 @@ describe "Key Management Service" do
           crypto_key: test_cryptokey_id, location: @location)
     }.to output(/#{test_cryptokey_id}/).to_stdout
 
-    test_crypto_key = test_get_cryptokey(project_id: @project_id,
+    test_crypto_key = get_test_cryptokey(project_id: @project_id,
         key_ring_id: @key_ring_id, crypto_key: test_cryptokey_id,
         location: @location)
 
@@ -241,7 +242,7 @@ describe "Key Management Service" do
           input_file: @input_file, output_file: temp_output.path)
     }.to output(/#{@input_file}/).to_stdout
 
-    test_decrypt_file(project_id: @project_id, key_ring_id: @key_ring_id,
+    decrypt_test_file(project_id: @project_id, key_ring_id: @key_ring_id,
           crypto_key: @cryptokey_id, location: @location,
           input_file: temp_output.path, output_file: temp_output.path)
 
@@ -253,7 +254,7 @@ describe "Key Management Service" do
   it "can decrypt an encrypted file" do
     temp_output = Tempfile.new "kms_encrypted_file"
 
-    test_encrypt_file(project_id: @project_id, key_ring_id: @key_ring_id,
+    encrypt_test_file(project_id: @project_id, key_ring_id: @key_ring_id,
         crypto_key: @cryptokey_id, location: @location,
         input_file: @input_file, output_file: temp_output.path)
 
@@ -271,7 +272,7 @@ describe "Key Management Service" do
   it "can create a cryptoKey version" do
     test_cryptokey_id = "#{@project_id}-version-#{Time.now.to_i}"
 
-    test_create_cryptokey(project_id: @project_id,
+    create_test_cryptokey(project_id: @project_id,
         key_ring_id: @key_ring_id, crypto_key: test_cryptokey_id,
         location: @location)
 
@@ -295,7 +296,7 @@ describe "Key Management Service" do
   it "can disable a cryptoKey version" do
     test_cryptokey_id = "#{@project_id}-disable-#{Time.now.to_i}"
 
-    cryptokey = test_create_cryptokey(project_id: @project_id,
+    cryptokey = create_test_cryptokey(project_id: @project_id,
         key_ring_id: @key_ring_id, crypto_key: test_cryptokey_id,
         location: @location)
 
@@ -307,7 +308,7 @@ describe "Key Management Service" do
          version: version, location: @location)
     }.to output(/Disabled version #{version} of #{test_cryptokey_id}/).to_stdout
 
-    cryptokey = test_get_cryptokey_version(project_id: @project_id,
+    cryptokey = get_test_cryptokey_version(project_id: @project_id,
         key_ring_id: @key_ring_id, crypto_key: test_cryptokey_id,
         version: version, location: @location)
 
@@ -317,7 +318,7 @@ describe "Key Management Service" do
   it "can destroy a cryptoKey version" do
     test_cryptokey_id = "#{@project_id}-destroy-#{Time.now.to_i}"
 
-    cryptokey = test_create_cryptokey(project_id: @project_id,
+    cryptokey = create_test_cryptokey(project_id: @project_id,
         key_ring_id: @key_ring_id, crypto_key: test_cryptokey_id,
         location: @location)
 
@@ -329,7 +330,7 @@ describe "Key Management Service" do
          version: version, location: @location)
     }.to output(/Destroyed version #{version} of #{test_cryptokey_id}/).to_stdout
 
-    cryptokey = test_get_cryptokey_version(project_id: @project_id,
+    cryptokey = get_test_cryptokey_version(project_id: @project_id,
         key_ring_id: @key_ring_id, crypto_key: test_cryptokey_id,
         version: version, location: @location)
 
@@ -344,7 +345,7 @@ describe "Key Management Service" do
           location: @location)
     }.to output(/test@test.com/).to_stdout
 
-    policy = test_get_cryptokey_policy(project_id: @project_id,
+    policy = get_test_cryptokey_policy(project_id: @project_id,
           key_ring_id: @key_ring_id, crypto_key: @cryptokey_id,
           location: @location)
 
@@ -354,7 +355,7 @@ describe "Key Management Service" do
   end
 
   it "can get a keyring policy" do
-    test_add_member_to_keyring_policy(project_id: @project_id,
+    add_test_member_to_keyring_policy(project_id: @project_id,
           key_ring_id: @key_ring_id, member: "serviceAccount:test-account@cloud-samples-tests-ruby.iam.gserviceaccount.com",
           role: "roles/owner", location: @location)
 
