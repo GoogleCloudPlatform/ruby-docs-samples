@@ -163,7 +163,7 @@ $create_cryptokey_version = -> (project_id:, key_ring_id:, crypto_key:, location
 
   # Create the CryptoKey version for your project
   crypto_key_version = kms_client.create_project_location_key_ring_crypto_key_crypto_key_version(
-      resource, Cloudkms::CryptoKey.new purpose: "ENCRYPT_DECRYPT")
+      resource, Cloudkms::CryptoKey.new(purpose: "ENCRYPT_DECRYPT"))
 
   puts "Created version #{crypto_key_version.name} for key " +
        "#{crypto_key} in keyring #{key_ring_id}"
