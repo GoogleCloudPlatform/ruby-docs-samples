@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Lambdas were used for module Alias `Cloudkms`
+
 $create_keyring = -> (project_id:, key_ring_id:, location:) do
   # [START kms_create_keyring]
   require "google/apis/cloudkms_v1beta1"
