@@ -19,8 +19,8 @@
 $create_keyring = -> (project_id:, key_ring_id:, location:) do
   # [START kms_create_keyring]
   # project_id  = "Your Google Cloud project ID"
-  # key_ring_id = "The id of the new KeyRing"
-  # location    = "The location of the new KeyRing"
+  # key_ring_id = "The ID of the new key ring"
+  # location    = "The location of the new key ring"
 
   require "google/apis/cloudkms_v1beta1"
 
@@ -31,23 +31,23 @@ $create_keyring = -> (project_id:, key_ring_id:, location:) do
     "https://www.googleapis.com/auth/cloud-platform"
   )
 
-  # The resource name of the location associated with the KeyRing
+  # The resource name of the location associated with the key ring
   resource = "projects/#{project_id}/locations/#{location}"
 
-  # Create a KeyRing for your project
+  # Create a key ring for your project
   key_ring = kms_client.create_project_location_key_ring(resource,
-      Cloudkms::KeyRing.new, key_ring_id: key_ring_id)
+      Cloudkms::key ring.new, key_ring_id: key_ring_id)
 
-  puts "Created KeyRing #{key_ring_id}"
+  puts "Created key ring #{key_ring_id}"
   # [END kms_create_keyring]
 end
 
 $create_cryptokey = -> (project_id:, key_ring_id:, crypto_key:, location:) do
   # [START kms_create_cryptokey]
   # project_id  = "Your Google Cloud project ID"
-  # key_ring_id = "The id of the new KeyRing"
-  # crypto_key  = "Name of cryptoKey"
-  # location    = "The location of the new KeyRing"
+  # key_ring_id = "The ID of the new key ring"
+  # crypto_key  = "Name of the crypto key"
+  # location    = "The location of the new key ring"
 
   require "google/apis/cloudkms_v1beta1"
 
@@ -58,7 +58,7 @@ $create_cryptokey = -> (project_id:, key_ring_id:, crypto_key:, location:) do
     "https://www.googleapis.com/auth/cloud-platform"
   )
 
-  # The resource name of the location associated with the KeyRing
+  # The resource name of the location associated with the key ring
   resource = "projects/#{project_id}/locations/#{location}/" +
              "keyRings/#{key_ring_id}"
 
@@ -74,9 +74,9 @@ $encrypt = -> (project_id:, key_ring_id:, crypto_key:, location:, input_file:,
                output_file:) do
   # [START kms_encrypt]
   # project_id  = "Your Google Cloud project ID"
-  # key_ring_id = "The id of the new KeyRing"
-  # crypto_key  = "Name of the cryptoKey"
-  # location    = "The location of the new KeyRing"
+  # key_ring_id = "The ID of the new key ring"
+  # crypto_key  = "Name of the crypto key"
+  # location    = "The location of the new key ring"
   # input_file  = "File to encrypt"
   # output_file = "File name to use for encrypted input file"
 
@@ -89,7 +89,7 @@ $encrypt = -> (project_id:, key_ring_id:, crypto_key:, location:, input_file:,
     "https://www.googleapis.com/auth/cloud-platform"
   )
 
-  # The resource name of the location associated with the KeyRing
+  # The resource name of the location associated with the key ring
   resource = "projects/#{project_id}/locations/#{location}/" +
              "keyRings/#{key_ring_id}/cryptoKeys/#{crypto_key}"
 
@@ -108,9 +108,9 @@ $decrypt = -> (project_id:, key_ring_id:, crypto_key:, location:, input_file:,
                output_file:) do
   # [START kms_decrypt]
   # project_id  = "Your Google Cloud project ID"
-  # key_ring_id = "The id of the new KeyRing"
-  # crypto_key  = "Name of the cryptoKey"
-  # location    = "The location of the new KeyRing"
+  # key_ring_id = "The ID of the new key ring"
+  # crypto_key  = "Name of the crypto key"
+  # location    = "The location of the new key ring"
   # input_file  = "The path to an encrypted file"
   # output_file = "The path to write the decrypted file"
 
@@ -123,7 +123,7 @@ $decrypt = -> (project_id:, key_ring_id:, crypto_key:, location:, input_file:,
     "https://www.googleapis.com/auth/cloud-platform"
   )
 
-  # The resource name of the location associated with the KeyRing
+  # The resource name of the location associated with the key ring
   resource = "projects/#{project_id}/locations/#{location}/" +
              "keyRings/#{key_ring_id}/cryptoKeys/#{crypto_key}"
 
@@ -144,9 +144,9 @@ end
 $create_cryptokey_version = -> (project_id:, key_ring_id:, crypto_key:, location:) do
   # [START kms_create_cryptokey_version]
   # project_id  = "Your Google Cloud project ID"
-  # key_ring_id = "The id of the new KeyRing"
-  # crypto_key  = "Name of the cryptoKey"
-  # location    = "The location of the new KeyRing"
+  # key_ring_id = "The ID of the new key ring"
+  # crypto_key  = "Name of the crypto key"
+  # location    = "The location of the new key ring"
 
   require "google/apis/cloudkms_v1beta1"
 
@@ -157,7 +157,7 @@ $create_cryptokey_version = -> (project_id:, key_ring_id:, crypto_key:, location
     "https://www.googleapis.com/auth/cloud-platform"
   )
 
-  # The resource name of the location associated with the KeyRing
+  # The resource name of the location associated with the key ring
   resource = "projects/#{project_id}/locations/#{location}/" +
              "keyRings/#{key_ring_id}/cryptoKeys/#{crypto_key}"
 
@@ -174,10 +174,10 @@ $disable_cryptokey_version = -> (project_id:, key_ring_id:, crypto_key:, version
                                  location:) do
   # [START kms_disable_cryptokey_version]
   # project_id  = "Your Google Cloud project ID"
-  # key_ring_id = "The id of the new KeyRing"
-  # crypto_key  = "Name of the cryptoKey"
+  # key_ring_id = "The ID of the new key ring"
+  # crypto_key  = "Name of the crypto key"
   # version     = "Version of the cryptoKey"
-  # location    = "The location of the new KeyRing"
+  # location    = "The location of the new key ring"
 
   require "google/apis/cloudkms_v1beta1"
 
@@ -188,7 +188,7 @@ $disable_cryptokey_version = -> (project_id:, key_ring_id:, crypto_key:, version
     "https://www.googleapis.com/auth/cloud-platform"
   )
 
-  # The resource name of the location associated with the KeyRing
+  # The resource name of the location associated with the key ring
   resource = "projects/#{project_id}/locations/#{location}/" +
              "keyRings/#{key_ring_id}/cryptoKeys/#{crypto_key}/" +
              "cryptoKeyVersions/#{version}"
@@ -211,10 +211,10 @@ $destroy_cryptokey_version = -> (project_id:, key_ring_id:, crypto_key:, version
                                  location:) do
   # [START kms_destroy_cryptokey_version]
   # project_id  = "Your Google Cloud project ID"
-  # key_ring_id = "The id of the new KeyRing"
-  # crypto_key  = "Name of the cryptoKey"
+  # key_ring_id = "The ID of the new key ring"
+  # crypto_key  = "Name of the crypto key"
   # version     = "Version of the cryptoKey"
-  # location    = "The location of the new KeyRing"
+  # location    = "The location of the new key ring"
 
   require "google/apis/cloudkms_v1beta1"
 
@@ -225,7 +225,7 @@ $destroy_cryptokey_version = -> (project_id:, key_ring_id:, crypto_key:, version
     "https://www.googleapis.com/auth/cloud-platform"
   )
 
-  # The resource name of the location associated with the KeyRing
+  # The resource name of the location associated with the key ring
   resource = "projects/#{project_id}/locations/#{location}/" +
            "keyRings/#{key_ring_id}/cryptoKeys/#{crypto_key}/" +
            "cryptoKeyVersions/#{version}"
@@ -242,11 +242,11 @@ $add_member_to_cryptokey_policy = -> (project_id:, key_ring_id:, crypto_key:,
                                       member:, role:, location:) do
   # [START kms_add_member_to_cryptokey_policy]
   # project_id  = "Your Google Cloud project ID"
-  # key_ring_id = "The id of the new KeyRing"
-  # crypto_key  = "Name of the cryptoKey"
-  # member      = "Member to add to cryptoKey policy"
+  # key_ring_id = "The ID of the new key ring"
+  # crypto_key  = "Name of the crypto key"
+  # member      = "Member to add to the crypto key policy"
   # role        = "Role assignment for new member"
-  # location    = "The location of the new KeyRing"
+  # location    = "The location of the new key ring"
 
   require "google/apis/cloudkms_v1beta1"
 
@@ -257,7 +257,7 @@ $add_member_to_cryptokey_policy = -> (project_id:, key_ring_id:, crypto_key:,
     "https://www.googleapis.com/auth/cloud-platform"
   )
 
-  # The resource name of the location associated with the KeyRing
+  # The resource name of the location associated with the key ring
   resource = "projects/#{project_id}/locations/#{location}/" +
              "keyRings/#{key_ring_id}/cryptoKeys/#{crypto_key}"
 
@@ -280,8 +280,8 @@ end
 $get_keyring_policy = -> (project_id:, key_ring_id:, location:) do
   # [START kms_get_keyring_policy]
   # project_id  = "Your Google Cloud project ID"
-  # key_ring_id = "The id of the new KeyRing"
-  # location    = "The location of the new KeyRing"
+  # key_ring_id = "The ID of the new key ring"
+  # location    = "The location of the new key ring"
 
   require "google/apis/cloudkms_v1beta1"
 
@@ -292,7 +292,7 @@ $get_keyring_policy = -> (project_id:, key_ring_id:, location:) do
     "https://www.googleapis.com/auth/cloud-platform"
   )
 
-  # The resource name of the location associated with the KeyRing
+  # The resource name of the location associated with the key ring
   resource = "projects/#{project_id}/locations/#{location}/" +
              "keyRings/#{key_ring_id}"
 
