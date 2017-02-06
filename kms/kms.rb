@@ -310,7 +310,7 @@ $get_keyring_policy = -> (project_id:, key_ring_id:, location:) do
   policy = kms_client.get_project_location_key_ring_iam_policy resource
 
   # Print role and associated members
-  unless policy.bindings.nil?
+  if policy.bindings
     policy.bindings.each do |binding|
       puts "Role: #{binding.role} Members: #{binding.members}"
     end
