@@ -198,13 +198,15 @@ describe "Key Management Service" do
         key_ring_id: @key_ring_id, crypto_key: @cryptokey_id, location: @location
 
     @input_file = File.expand_path "resources/file.txt", __dir__
+
+    $VERBOSE = nil
   end
 
   it "can create keyring" do
     test_create_key_ring_id = "#{@project_id}-create-#{Time.now.to_i}"
 
     expect {
-      create_keyring(project_id: @project_id,
+      $create_keyring.call(project_id: @project_id,
           key_ring_id: test_create_key_ring_id,
           location: @location)
     }.to output(/#{test_create_key_ring_id}/).to_stdout
@@ -219,7 +221,7 @@ describe "Key Management Service" do
     test_cryptokey_id = "#{@project_id}-crypto-#{Time.now.to_i}"
 
     expect {
-      create_cryptokey(project_id: @project_id, key_ring_id: @key_ring_id,
+      $create_cryptokey.call(project_id: @project_id, key_ring_id: @key_ring_id,
           crypto_key: test_cryptokey_id, location: @location)
     }.to output(/#{test_cryptokey_id}/).to_stdout
 
@@ -234,7 +236,7 @@ describe "Key Management Service" do
     temp_output = Tempfile.new "kms_encrypted_file"
 
     expect {
-      encrypt(project_id: @project_id, key_ring_id: @key_ring_id,
+      $encrypt.call(project_id: @project_id, key_ring_id: @key_ring_id,
           crypto_key: @cryptokey_id, location: @location,
           input_file: @input_file, output_file: temp_output.path)
     }.to output(/#{@input_file}/).to_stdout
@@ -256,7 +258,7 @@ describe "Key Management Service" do
         input_file: @input_file, output_file: temp_output.path)
 
     expect {
-      decrypt(project_id: @project_id, key_ring_id: @key_ring_id,
+      $decrypt.call(project_id: @project_id, key_ring_id: @key_ring_id,
           crypto_key: @cryptokey_id, location: @location,
           input_file: temp_output.path, output_file: temp_output.path)
     }.to output(/#{temp_output.path}/).to_stdout
@@ -278,7 +280,7 @@ describe "Key Management Service" do
         location: @location)
 
     expect {
-      create_cryptokey_version(project_id: @project_id,
+      $create_cryptokey_version.call(project_id: @project_id,
          key_ring_id: @key_ring_id, crypto_key: test_cryptokey_id,
          location: @location)
     }.to output(/Created version/).to_stdout
@@ -300,7 +302,7 @@ describe "Key Management Service" do
     version = "1" # first version is labeled 1
 
     expect {
-      disable_cryptokey_version(project_id: @project_id,
+      $disable_cryptokey_version.call(project_id: @project_id,
          key_ring_id: @key_ring_id, crypto_key: test_cryptokey_id,
          version: version, location: @location)
     }.to output(/Disabled version #{version} of #{test_cryptokey_id}/).to_stdout
@@ -322,7 +324,7 @@ describe "Key Management Service" do
     version = "1" # first version is labeled 1
 
     expect {
-      destroy_cryptokey_version(project_id: @project_id,
+      $destroy_cryptokey_version.call(project_id: @project_id,
          key_ring_id: @key_ring_id, crypto_key: test_cryptokey_id,
          version: version, location: @location)
     }.to output(/Destroyed version #{version} of #{test_cryptokey_id}/).to_stdout
@@ -336,7 +338,7 @@ describe "Key Management Service" do
 
   it "can add a member to a cryptokey policy" do
     expect {
-      add_member_to_cryptokey_policy(project_id: @project_id,
+      $add_member_to_cryptokey_policy.call(project_id: @project_id,
           key_ring_id: @key_ring_id, crypto_key: @cryptokey_id,
           member: "user:test@test.com", role: "roles/owner",
           location: @location)
@@ -357,7 +359,7 @@ describe "Key Management Service" do
           role: "roles/owner", location: @location)
 
     expect {
-      get_keyring_policy(project_id: @project_id, key_ring_id: @key_ring_id,
+      $get_keyring_policy.call(project_id: @project_id, key_ring_id: @key_ring_id,
           location: @location)
     }.to output(/serviceAccount:test-account@cloud-samples-tests-ruby.iam.gserviceaccount.com/).to_stdout
   end
