@@ -13,7 +13,6 @@
 # limitations under the License.
 
 # [START kms_quickstart]
-
 # Imports the Google Cloud KMS api client
 require "google/apis/cloudkms_v1beta1"
 
@@ -24,7 +23,7 @@ project_id = "YOUR_PROJECT_ID"
 location = "global"
 
 # Instantiate the client
-Cloudkms = Google::Apis::CloudkmsV1beta1 # Alias the module
+Cloudkms   = Google::Apis::CloudkmsV1beta1 # Alias the module
 kms_client = Cloudkms::CloudKMSService.new
 
 # https://developers.google.com/identity/protocols/application-default-credentials#callingruby
@@ -44,6 +43,5 @@ puts "Key Rings: "
 response.key_rings.each do |ring|
   puts ring.name
 end
-
 # [END kms_quickstart]
 
