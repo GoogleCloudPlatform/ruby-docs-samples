@@ -13,7 +13,7 @@
 # limitations under the License.
 
 # [START kms_quickstart]
-# Imports the Google Cloud KMS api client
+# Imports the Google Cloud KMS API client
 require "google/apis/cloudkms_v1beta1"
 
 # Your Google Cloud Platform project ID
