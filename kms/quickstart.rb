@@ -40,8 +40,12 @@ response = kms_client.list_project_location_key_rings parent
 
 # list all key rings for your project
 puts "Key Rings: "
-response.key_rings.each do |key_ring|
-  puts key_ring.name
+if response.key_rings
+  response.key_rings.each do |key_ring|
+    puts key_ring.name
+  end
+else
+  puts "No key rings found"
 end
 # [END kms_quickstart]
 
