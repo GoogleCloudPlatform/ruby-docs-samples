@@ -211,6 +211,9 @@ describe "Key Management Service" do
 
     @input_file = File.expand_path "resources/file.txt", __dir__
 
+    # Note: Code samples set constants, and constants cannot be set inside
+    #       method definitions in Ruby. Code snippets in these samples are
+    #       wrapped in global lambdas. Code ignores warnings only for this purpose.
     $VERBOSE = nil
   end
 

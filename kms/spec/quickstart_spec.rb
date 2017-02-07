@@ -29,6 +29,9 @@ describe "Key Management Service Quickstart" do
   end
 
   before :all do
+    # Note: Code samples set constants, and constants cannot be set inside
+    #       method definitions in Ruby. This spec reassigns Cloudkms as an alias
+    #       for the module and this code ignores warnings only for this purpose.
     $VERBOSE = nil
   end
 
