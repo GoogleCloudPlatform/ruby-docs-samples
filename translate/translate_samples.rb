@@ -14,7 +14,7 @@
 
 def translate_text project_id:, text:, language_code:
   # [START translate_text]
-  # project_id   = "Your Google Cloud project ID"
+  # project_id    = "Your Google Cloud project ID"
   # text          = "The text you would like to translate"
   # language_code = "The ISO 639-1 code of language to translate to, eg. 'en'"
 
@@ -30,7 +30,7 @@ end
 
 def translate_text_with_model project_id:, text:, language_code:
   # [START translate_text_with_model]
-  # project_id   = "Your Google Cloud project ID"
+  # project_id    = "Your Google Cloud project ID"
   # text          = "The text you would like to translate"
   # language_code = "The ISO 639-1 code of language to translate to, eg. 'en'"
 
@@ -46,8 +46,8 @@ end
 
 def detect_language project_id:, text:
   # [START detect_language]
-  # project_id   = "Your Google Cloud project ID"
-  # text    = "The text you would like to detect the language of"
+  # project_id = "Your Google Cloud project ID"
+  # text       = "The text you would like to detect the language of"
 
   require "google/cloud/translate"
 
@@ -61,7 +61,7 @@ end
 
 def list_supported_language_codes project_id:
   # [START list_supported_language_codes]
-  # project_id   = "Your Google Cloud project ID"
+  # project_id = "Your Google Cloud project ID"
 
   require "google/cloud/translate"
 
@@ -77,7 +77,7 @@ end
 
 def list_supported_language_names project_id:, language_code: "en"
   # [START list_supported_language_names]
-  # project_id   = "Your Google Cloud project ID"
+  # project_id = "Your Google Cloud project ID"
 
   # To receive the names of the supported languages, provide the code
   # for the language in which you wish to receive the names
