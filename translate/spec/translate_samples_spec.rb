@@ -46,6 +46,19 @@ describe "Google Translate API samples" do
     )
   end
 
+  example "translate text with model" do
+    capture do
+      translate_text_with_model project_id:    @project_id,
+                                language_code: "fr",
+                                text:          "Alice and Bob are kind"
+    end
+
+    expect(captured_output).to include "Original language: en translated to: fr"
+    expect(captured_output).to include(
+      %{Translated 'Alice and Bob are kind' to '"Alice et Bob sont gentils"'}
+    )
+  end
+
   example "detect language" do
     expect {
       detect_language project_id: @project_id, text: "Sample text written in English"
