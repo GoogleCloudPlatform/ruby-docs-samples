@@ -35,7 +35,7 @@ describe "Key Management Service Quickstart" do
     $VERBOSE = nil
   end
 
-  it "can list global keyrings by name" do
+  it "can list global key rings by name" do
     test_project_id = ENV["GOOGLE_CLOUD_PROJECT"]
     test_key_ring_id = "alist-#{test_project_id}-#{Time.now.to_i}"
     test_parent = "projects/#{test_project_id}/locations/global"

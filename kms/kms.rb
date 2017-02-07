@@ -65,14 +65,14 @@ $create_cryptokey = -> (project_id:, key_ring_id:, crypto_key:, location:) do
   resource = "projects/#{project_id}/locations/#{location}/" +
              "keyRings/#{key_ring_id}"
 
-  # Create a CryptoKey for your project keyring
+  # Create a crypto key for your project key ring
   new_crypto_key = kms_client.create_project_location_key_ring_crypto_key(
     resource,
     Cloudkms::CryptoKey.new(purpose: "ENCRYPT_DECRYPT"),
     crypto_key_id: crypto_key
   )
 
-  puts "Created CryptoKey #{crypto_key}"
+  puts "Created crypto key #{crypto_key}"
   # [END kms_create_cryptokey]
 end
 
@@ -168,14 +168,14 @@ $create_cryptokey_version = -> (project_id:, key_ring_id:, crypto_key:, location
   resource = "projects/#{project_id}/locations/#{location}/" +
              "keyRings/#{key_ring_id}/cryptoKeys/#{crypto_key}"
 
-  # Create the CryptoKey version for your project
+  # Create the crypto key version for your project
   crypto_key_version = kms_client.create_project_location_key_ring_crypto_key_crypto_key_version(
       resource,
       Cloudkms::CryptoKey.new(purpose: "ENCRYPT_DECRYPT")
   )
 
   puts "Created version #{crypto_key_version.name} for key " +
-       "#{crypto_key} in keyring #{key_ring_id}"
+       "#{crypto_key} in key ring #{key_ring_id}"
   # [END kms_create_cryptokey_version]
 end
 
@@ -184,7 +184,7 @@ $disable_cryptokey_version = -> (project_id:, key_ring_id:, crypto_key:, version
   # project_id  = "Your Google Cloud project ID"
   # key_ring_id = "The ID of the new key ring"
   # crypto_key  = "Name of the crypto key"
-  # version     = "Version of the cryptoKey"
+  # version     = "Version of the crypto key"
   # location    = "The location of the new key ring"
 
   require "google/apis/cloudkms_v1beta1"
@@ -201,13 +201,13 @@ $disable_cryptokey_version = -> (project_id:, key_ring_id:, crypto_key:, version
              "keyRings/#{key_ring_id}/cryptoKeys/#{crypto_key}/" +
              "cryptoKeyVersions/#{version}"
 
-  # Get a version of the cryptoKey
+  # Get a version of the crypto key
   crypto_key_version = kms_client.get_project_location_key_ring_crypto_key_crypto_key_version resource
 
   # Set the primary version state as disabled for update
   crypto_key_version.state = "DISABLED"
 
-  # Disable the CryptoKey version
+  # Disable the crypto key version
   kms_client.patch_project_location_key_ring_crypto_key_crypto_key_version(
     resource,
     crypto_key_version, update_mask: "state"
@@ -222,7 +222,7 @@ $destroy_cryptokey_version = -> (project_id:, key_ring_id:, crypto_key:, version
   # project_id  = "Your Google Cloud project ID"
   # key_ring_id = "The ID of the new key ring"
   # crypto_key  = "Name of the crypto key"
-  # version     = "Version of the cryptoKey"
+  # version     = "Version of the crypto key"
   # location    = "The location of the new key ring"
 
   require "google/apis/cloudkms_v1beta1"
@@ -283,7 +283,7 @@ $add_member_to_cryptokey_policy = -> (project_id:, key_ring_id:, crypto_key:, me
   kms_client.set_crypto_key_iam_policy resource, policy_request
 
   puts "Member #{member} added to policy for " +
-       "key #{crypto_key} in keyring #{key_ring_id}"
+       "key #{crypto_key} in key ring #{key_ring_id}"
   # [END kms_add_member_to_cryptokey_policy]
 end
 

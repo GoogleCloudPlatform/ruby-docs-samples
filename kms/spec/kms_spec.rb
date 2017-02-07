@@ -217,7 +217,7 @@ describe "Key Management Service" do
     $VERBOSE = nil
   end
 
-  it "can create keyring" do
+  it "can create key ring" do
     key_ring_id = "#{@project_id}-create-#{Time.now.to_i}"
 
     expect {
@@ -237,7 +237,7 @@ describe "Key Management Service" do
     expect(test_key_ring.name).to match /#{key_ring_id}/
   end
 
-  it "can create a cryptoKey" do
+  it "can create a crypto key" do
     test_cryptokey_id = "#{@project_id}-crypto-#{Time.now.to_i}"
 
     expect {
@@ -315,7 +315,7 @@ describe "Key Management Service" do
     expect(decrypted_file).to match /Some information/
   end
 
-  it "can create a cryptoKey version" do
+  it "can create a crypto key version" do
     test_cryptokey_id = "#{@project_id}-version-#{Time.now.to_i}"
 
     create_test_cryptokey(
@@ -351,7 +351,7 @@ describe "Key Management Service" do
     expect(after_version_list.total_size).to be > before_version_list.total_size
   end
 
-  it "can disable a cryptoKey version" do
+  it "can disable a crypto key version" do
     test_cryptokey_id = "#{@project_id}-disable-#{Time.now.to_i}"
 
     cryptokey = create_test_cryptokey(
@@ -384,7 +384,7 @@ describe "Key Management Service" do
     expect(cryptokey.state).to eq "DISABLED"
   end
 
-  it "can destroy a cryptoKey version" do
+  it "can destroy a crypto key version" do
     test_cryptokey_id = "#{@project_id}-destroy-#{Time.now.to_i}"
 
     cryptokey = create_test_cryptokey(
@@ -417,7 +417,7 @@ describe "Key Management Service" do
     expect(cryptokey.state).to eq "DESTROY_SCHEDULED"
   end
 
-  it "can add a member to a cryptokey policy" do
+  it "can add a member to a crypto key policy" do
     expect {
       $add_member_to_cryptokey_policy.call(
         project_id: @project_id,
@@ -441,7 +441,7 @@ describe "Key Management Service" do
     expect(members).to include("user:test@test.com")
   end
 
-  it "can get a keyring policy" do
+  it "can get a key ring policy" do
     add_test_member_to_keyring_policy(
       project_id: @project_id,
       key_ring_id: @key_ring_id,
