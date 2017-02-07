@@ -236,8 +236,8 @@ $destroy_cryptokey_version = -> (project_id:, key_ring_id:, crypto_key:, version
 
   # The resource name of the location associated with the key ring
   resource = "projects/#{project_id}/locations/#{location}/" +
-           "keyRings/#{key_ring_id}/cryptoKeys/#{crypto_key}/" +
-           "cryptoKeyVersions/#{version}"
+             "keyRings/#{key_ring_id}/cryptoKeys/#{crypto_key}/" +
+             "cryptoKeyVersions/#{version}"
 
   # Destroy specific version of the crypto key
   kms_client.destroy_crypto_key_version(
