@@ -24,7 +24,7 @@ $create_keyring = -> (project_id:, key_ring_id:, location:) do
 
   require "google/apis/cloudkms_v1beta1"
 
-  # Instantiate the client, authenticate with specified scope
+  # Initialize the client and authenticate with the specified scope
   Cloudkms = Google::Apis::CloudkmsV1beta1
   kms_client = Cloudkms::CloudKMSService.new
   kms_client.authorization = Google::Auth.get_application_default(
@@ -54,7 +54,7 @@ $create_cryptokey = -> (project_id:, key_ring_id:, crypto_key:, location:) do
 
   require "google/apis/cloudkms_v1beta1"
 
-  # Instantiate the client, authenticate with specified scope
+  # Initialize the client and authenticate with the specified scope
   Cloudkms = Google::Apis::CloudkmsV1beta1
   kms_client = Cloudkms::CloudKMSService.new
   kms_client.authorization = Google::Auth.get_application_default(
@@ -87,7 +87,7 @@ $encrypt = -> (project_id:, key_ring_id:, crypto_key:, location:, input_file:, o
 
   require "google/apis/cloudkms_v1beta1"
 
-  # Instantiate the client, authenticate with specified scope
+  # Initialize the client and authenticate with the specified scope
   Cloudkms = Google::Apis::CloudkmsV1beta1
   kms_client = Cloudkms::CloudKMSService.new
   kms_client.authorization = Google::Auth.get_application_default(
@@ -123,7 +123,7 @@ $decrypt = -> (project_id:, key_ring_id:, crypto_key:, location:, input_file:, o
 
   require "google/apis/cloudkms_v1beta1"
 
-  # Instantiate the client, authenticate with specified scope
+  # Initialize the client and authenticate with the specified scope
   Cloudkms = Google::Apis::CloudkmsV1beta1
   kms_client = Cloudkms::CloudKMSService.new
   kms_client.authorization = Google::Auth.get_application_default(
@@ -157,7 +157,7 @@ $create_cryptokey_version = -> (project_id:, key_ring_id:, crypto_key:, location
 
   require "google/apis/cloudkms_v1beta1"
 
-  # Instantiate the client, authenticate with specified scope
+  # Initialize the client and authenticate with the specified scope
   Cloudkms = Google::Apis::CloudkmsV1beta1
   kms_client = Cloudkms::CloudKMSService.new
   kms_client.authorization = Google::Auth.get_application_default(
@@ -189,7 +189,7 @@ $disable_cryptokey_version = -> (project_id:, key_ring_id:, crypto_key:, version
 
   require "google/apis/cloudkms_v1beta1"
 
-  # Instantiate the client, authenticate with specified scope
+  # Initialize the client and authenticate with the specified scope
   Cloudkms = Google::Apis::CloudkmsV1beta1
   kms_client = Cloudkms::CloudKMSService.new
   kms_client.authorization = Google::Auth.get_application_default(
@@ -227,7 +227,7 @@ $destroy_cryptokey_version = -> (project_id:, key_ring_id:, crypto_key:, version
 
   require "google/apis/cloudkms_v1beta1"
 
-  # Instantiate the client, authenticate with specified scope
+  # Initialize the client and authenticate with the specified scope
   Cloudkms = Google::Apis::CloudkmsV1beta1
   kms_client = Cloudkms::CloudKMSService.new
   kms_client.authorization = Google::Auth.get_application_default(
@@ -260,7 +260,7 @@ $add_member_to_cryptokey_policy = -> (project_id:, key_ring_id:, crypto_key:, me
 
   require "google/apis/cloudkms_v1beta1"
 
-  # Instantiate the client, authenticate with specified scope
+  # Initialize the client and authenticate with the specified scope
   Cloudkms = Google::Apis::CloudkmsV1beta1
   kms_client = Cloudkms::CloudKMSService.new
   kms_client.authorization = Google::Auth.get_application_default(
@@ -295,7 +295,7 @@ $get_keyring_policy = -> (project_id:, key_ring_id:, location:) do
 
   require "google/apis/cloudkms_v1beta1"
 
-  # Instantiate the client, authenticate with specified scope
+  # Initialize the client and authenticate with the specified scope
   Cloudkms = Google::Apis::CloudkmsV1beta1
   kms_client = Cloudkms::CloudKMSService.new
   kms_client.authorization = Google::Auth.get_application_default(
