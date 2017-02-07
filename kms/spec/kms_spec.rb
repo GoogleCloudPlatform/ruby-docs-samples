@@ -211,9 +211,9 @@ describe "Key Management Service" do
 
     @input_file = File.expand_path "resources/file.txt", __dir__
 
-    # Note: Code samples set constants, and constants cannot be set inside
-    #       method definitions in Ruby. Code snippets in these samples are
-    #       wrapped in global lambdas. Code ignores warnings only for this purpose.
+    # Note: All samples define a `Cloudkms` constant and cause
+    #       "already initialized constant" warnings. $VERBOSE is disabled to
+    #       silence these warnings.
     $VERBOSE = nil
   end
 

@@ -12,9 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Note: Code samples in this file set constants, and
-#       constants cannot be set inside method definitions in Ruby,
-#       code snippets in this sample are wrapped in global lambdas.
+# Note: Code samples in this file set constants which cannot be set inside
+#       method definitions in Ruby. To allow for this, code snippets in this
+#       sample are wrapped in global lambdas.
 
 $create_keyring = -> (project_id:, key_ring_id:, location:) do
   # [START kms_create_keyring]
