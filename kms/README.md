@@ -48,7 +48,7 @@ Commands:
   create_keyring            <key_ring> <location> Create a new keyring
   create_cryptokey          <key_ring> <crypto_key> <location> Create a new cryptokey
   encrypt_file              <key_ring> <crypto_key> <location> <input_file> <output_file> Encrypt a file
-  decrypt_file              <key_ring> <crypto_key> <location> <input_file> <output_file Decrypt a file
+  decrypt_file              <key_ring> <crypto_key> <location> <input_file> <output_file> Decrypt a file
   create_cryptokey_version  <key_ring> <crypto_key> <location> Create a new cryptokey version
   disable_cryptokey_version <key_ring> <crypto_key> <version> <location> Disable a cryptokey version
   destroy_cryptokey_version <key_ring> <crypto_key> <version> <location> Destroy a cryptokey version
