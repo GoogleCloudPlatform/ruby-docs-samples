@@ -97,7 +97,7 @@ end
 
 if __FILE__ == $PROGRAM_NAME
   project_id = ENV["GOOGLE_CLOUD_PROJECT"]
-  command = ARGV.shift
+  command    = ARGV.shift
 
   case command
   when "translate"
