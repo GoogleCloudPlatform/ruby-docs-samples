@@ -38,7 +38,7 @@ parent = "projects/#{project_id}/locations/#{location}"
 # Request list of key rings
 response = kms_client.list_project_location_key_rings parent
 
-# list all key rings for your project
+# List all key rings for your project
 puts "Key Rings: "
 if response.key_rings
   response.key_rings.each do |key_ring|
