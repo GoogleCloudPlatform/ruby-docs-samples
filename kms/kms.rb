@@ -207,7 +207,7 @@ $enable_cryptokey_version = -> (project_id:, key_ring_id:, crypto_key:, version:
   # Set the primary version state as disabled for update
   crypto_key_version.state = "ENABLED"
 
-  # Disable the crypto key version
+  # Enable the crypto key version
   kms_client.patch_project_location_key_ring_crypto_key_crypto_key_version(
     resource,
     crypto_key_version, update_mask: "state"
@@ -277,7 +277,7 @@ $restore_cryptokey_version = -> (project_id:, key_ring_id:, crypto_key:, version
              "keyRings/#{key_ring_id}/cryptoKeys/#{crypto_key}/" +
              "cryptoKeyVersions/#{version}"
 
-  # Destroy specific version of the crypto key
+  # Restore specific version of the crypto key
   kms_client.restore_crypto_key_version(
     resource,
     Cloudkms::RestoreCryptoKeyVersionRequest.new
