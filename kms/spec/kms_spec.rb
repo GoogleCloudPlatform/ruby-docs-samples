@@ -63,6 +63,21 @@ describe "Key Management Service" do
     )
   end
 
+  def destroy_test_cryptokey_version project_id:, key_ring_id:, crypto_key:, version:, location:
+    kms_client = create_service_client
+
+    # The resource name of the location associated with the key ring
+    resource = "projects/#{project_id}/locations/#{location}/" +
+               "keyRings/#{key_ring_id}/cryptoKeys/#{crypto_key}/" +
+               "cryptoKeyVersions/#{version}"
+
+    # Destroy specific version of the crypto key
+    kms_client.destroy_crypto_key_version(
+      resource,
+      Cloudkms::DestroyCryptoKeyVersionRequest.new
+    )
+  end
+
   def disable_test_cryptokey_version project_id:, key_ring_id:, crypto_key:, version:, location:
     kms_client = create_service_client
 
@@ -435,6 +450,49 @@ describe "Key Management Service" do
         location: @location
       )
     }.to output(/Disabled version #{version} of #{test_cryptokey_id}/).to_stdout
+
+    cryptokey = get_test_cryptokey_version(
+      project_id: @project_id,
+      key_ring_id: @key_ring_id,
+      crypto_key: test_cryptokey_id,
+      version: version,
+      location: @location
+    )
+
+    expect(cryptokey.state).to eq "DISABLED"
+  end
+
+  it "can restore a crypto key version" do
+    test_cryptokey_id = "#{@project_id}-restore-#{Time.now.to_i}"
+
+    cryptokey = create_test_cryptokey(
+      project_id: @project_id,
+      key_ring_id: @key_ring_id,
+      crypto_key: test_cryptokey_id,
+      location: @location
+    )
+
+    version = "1" # first version is labeled 1
+
+    scheduled_cryptokey_version = destroy_test_cryptokey_version(
+      project_id: @project_id,
+      key_ring_id: @key_ring_id,
+      crypto_key: test_cryptokey_id,
+      version: version,
+      location: @location
+    )
+
+    expect(scheduled_cryptokey_version.state).to eq "DESTROY_SCHEDULED"
+
+    expect {
+      $restore_cryptokey_version.call(
+        project_id: @project_id,
+        key_ring_id: @key_ring_id,
+        crypto_key: test_cryptokey_id,
+        version: version,
+        location: @location
+      )
+    }.to output(/Restored version #{version} of #{test_cryptokey_id}/).to_stdout
 
     cryptokey = get_test_cryptokey_version(
       project_id: @project_id,

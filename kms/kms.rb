@@ -255,6 +255,39 @@ $disable_cryptokey_version = -> (project_id:, key_ring_id:, crypto_key:, version
   # [END kms_disable_cryptokey_version]
 end
 
+$restore_cryptokey_version = -> (project_id:, key_ring_id:, crypto_key:, version:, location:) do
+  # [START kms_restore_cryptokey_version]
+  # project_id  = "Your Google Cloud project ID"
+  # key_ring_id = "The ID of the new key ring"
+  # crypto_key  = "Name of the crypto key"
+  # version     = "Version of the crypto key"
+  # location    = "The location of the new key ring"
+
+  require "google/apis/cloudkms_v1beta1"
+
+  # Initialize the client and authenticate with the specified scope
+  Cloudkms = Google::Apis::CloudkmsV1beta1
+  kms_client = Cloudkms::CloudKMSService.new
+  kms_client.authorization = Google::Auth.get_application_default(
+    "https://www.googleapis.com/auth/cloud-platform"
+  )
+
+  # The resource name of the location associated with the key ring
+  resource = "projects/#{project_id}/locations/#{location}/" +
+             "keyRings/#{key_ring_id}/cryptoKeys/#{crypto_key}/" +
+             "cryptoKeyVersions/#{version}"
+
+  # Destroy specific version of the crypto key
+  kms_client.restore_crypto_key_version(
+    resource,
+    Cloudkms::RestoreCryptoKeyVersionRequest.new
+  )
+
+  puts "Restored version #{version} of #{crypto_key}"
+  # [END kms_restore_cryptokey_version]
+end
+
+
 $destroy_cryptokey_version = -> (project_id:, key_ring_id:, crypto_key:, version:, location:) do
   # [START kms_destroy_cryptokey_version]
   # project_id  = "Your Google Cloud project ID"
@@ -417,6 +450,14 @@ def run_sample arguments
       version: arguments.shift,
       location: arguments.shift
     )
+  when "restore_cryptokey_version"
+    $restore_cryptokey_version.call(
+      project_id: project_id,
+      key_ring_id: arguments.shift,
+      crypto_key: arguments.shift,
+      version: arguments.shift,
+      location: arguments.shift
+    )
   when "destroy_cryptokey_version"
     $destroy_cryptokey_version.call(
       project_id: project_id,
@@ -452,6 +493,7 @@ Commands:
   create_cryptokey_version  <key_ring> <crypto_key> <location> Create a new cryptokey version
   enable_cryptokey_version  <key_ring> <crypto_key> <version> <location> Enable a cryptokey version
   disable_cryptokey_version <key_ring> <crypto_key> <version> <location> Disable a cryptokey version
+  restore_cryptokey_version <key_ring> <crypto_key> <version> <location> Restore a cryptokey version
   destroy_cryptokey_version <key_ring> <crypto_key> <version> <location> Destroy a cryptokey version
   add_member_to_policy      <key_ring> <crypto_key> <member> <role> <location> Add member to cryptokey IAM policy
   get_keyring_policy        <key_ring> <location> Get a keyring IAM policy
