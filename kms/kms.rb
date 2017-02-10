@@ -179,6 +179,44 @@ $create_cryptokey_version = -> (project_id:, key_ring_id:, crypto_key:, location
   # [END kms_create_cryptokey_version]
 end
 
+$enable_cryptokey_version = -> (project_id:, key_ring_id:, crypto_key:, version:, location:) do
+  # [START kms_enable_cryptokey_version]
+  # project_id  = "Your Google Cloud project ID"
+  # key_ring_id = "The ID of the new key ring"
+  # crypto_key  = "Name of the crypto key"
+  # version     = "Version of the crypto key"
+  # location    = "The location of the new key ring"
+
+  require "google/apis/cloudkms_v1beta1"
+
+  # Initialize the client and authenticate with the specified scope
+  Cloudkms = Google::Apis::CloudkmsV1beta1
+  kms_client = Cloudkms::CloudKMSService.new
+  kms_client.authorization = Google::Auth.get_application_default(
+    "https://www.googleapis.com/auth/cloud-platform"
+  )
+
+  # The resource name of the location associated with the key ring
+  resource = "projects/#{project_id}/locations/#{location}/" +
+             "keyRings/#{key_ring_id}/cryptoKeys/#{crypto_key}/" +
+             "cryptoKeyVersions/#{version}"
+
+  # Get a version of the crypto key
+  crypto_key_version = kms_client.get_project_location_key_ring_crypto_key_crypto_key_version resource
+
+  # Set the primary version state as disabled for update
+  crypto_key_version.state = "ENABLED"
+
+  # Disable the crypto key version
+  kms_client.patch_project_location_key_ring_crypto_key_crypto_key_version(
+    resource,
+    crypto_key_version, update_mask: "state"
+  )
+
+  puts "Enabled version #{version} of #{crypto_key}"
+  # [END kms_enable_cryptokey_version]
+end
+
 $disable_cryptokey_version = -> (project_id:, key_ring_id:, crypto_key:, version:, location:) do
   # [START kms_disable_cryptokey_version]
   # project_id  = "Your Google Cloud project ID"
@@ -363,6 +401,14 @@ def run_sample arguments
       crypto_key: arguments.shift,
       location: arguments.shift
     )
+  when "enable_cryptokey_version"
+    $enable_cryptokey_version.call(
+      project_id: project_id,
+      key_ring_id: arguments.shift,
+      crypto_key: arguments.shift,
+      version: arguments.shift,
+      location: arguments.shift
+    )
   when "disable_cryptokey_version"
     $disable_cryptokey_version.call(
       project_id: project_id,
@@ -404,6 +450,7 @@ Commands:
   encrypt_file              <key_ring> <crypto_key> <location> <input_file> <output_file> Encrypt a file
   decrypt_file              <key_ring> <crypto_key> <location> <input_file> <output_file> Decrypt a file
   create_cryptokey_version  <key_ring> <crypto_key> <location> Create a new cryptokey version
+  enable_cryptokey_version  <key_ring> <crypto_key> <version> <location> Enable a cryptokey version
   disable_cryptokey_version <key_ring> <crypto_key> <version> <location> Disable a cryptokey version
   destroy_cryptokey_version <key_ring> <crypto_key> <version> <location> Destroy a cryptokey version
   add_member_to_policy      <key_ring> <crypto_key> <member> <role> <location> Add member to cryptokey IAM policy

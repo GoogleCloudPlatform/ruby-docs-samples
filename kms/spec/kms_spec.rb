@@ -63,6 +63,26 @@ describe "Key Management Service" do
     )
   end
 
+  def disable_test_cryptokey_version project_id:, key_ring_id:, crypto_key:, version:, location:
+    kms_client = create_service_client
+
+    resource = "projects/#{project_id}/locations/#{location}/" +
+             "keyRings/#{key_ring_id}/cryptoKeys/#{crypto_key}/" +
+             "cryptoKeyVersions/#{version}"
+
+    # Get a version of the crypto key
+    crypto_key_version = kms_client.get_project_location_key_ring_crypto_key_crypto_key_version resource
+
+    # Set the primary version state as disabled for update
+    crypto_key_version.state = "DISABLED"
+
+    # Disable the crypto key version
+    kms_client.patch_project_location_key_ring_crypto_key_crypto_key_version(
+      resource,
+      crypto_key_version, update_mask: "state"
+    )
+  end
+
   def get_test_cryptokey project_id:, key_ring_id:, crypto_key:, location:
     kms_client = create_service_client
 
@@ -83,7 +103,7 @@ describe "Key Management Service" do
     kms_client.get_project_location_key_ring_crypto_key_crypto_key_version name
   end
 
-  def test_list_cryptokey_version project_id:, key_ring_id:, crypto_key:, location:
+  def list_test_cryptokey_version project_id:, key_ring_id:, crypto_key:, location:
     kms_client = create_service_client
 
     resource = "projects/#{project_id}/locations/#{location}/" +
@@ -94,7 +114,7 @@ describe "Key Management Service" do
     )
   end
 
-  def test_list_key_rings project_id:, location:
+  def list_test_key_rings project_id:, location:
     kms_client = create_service_client
 
     resource = "projects/#{project_id}/locations/#{location}"
@@ -325,7 +345,7 @@ describe "Key Management Service" do
       location: @location
     )
 
-    before_version_list = test_list_cryptokey_version(
+    before_version_list = list_test_cryptokey_version(
       project_id: @project_id,
       key_ring_id: @key_ring_id,
       crypto_key: test_cryptokey_id,
@@ -341,7 +361,7 @@ describe "Key Management Service" do
       )
     }.to output(/Created version/).to_stdout
 
-    after_version_list = test_list_cryptokey_version(
+    after_version_list = list_test_cryptokey_version(
       project_id: @project_id,
       key_ring_id: @key_ring_id,
       crypto_key: test_cryptokey_id,
@@ -349,6 +369,49 @@ describe "Key Management Service" do
     )
 
     expect(after_version_list.total_size).to be > before_version_list.total_size
+  end
+
+  it "can enable a crypto key version" do
+    test_cryptokey_id = "#{@project_id}-enable-#{Time.now.to_i}"
+
+    cryptokey = create_test_cryptokey(
+      project_id: @project_id,
+      key_ring_id: @key_ring_id,
+      crypto_key: test_cryptokey_id,
+      location: @location
+    )
+
+    version = "1" # first version is labeled 1
+
+    disabled_cryptokey_version = disable_test_cryptokey_version(
+      project_id: @project_id,
+      key_ring_id: @key_ring_id,
+      crypto_key: test_cryptokey_id,
+      version: version,
+      location: @location
+    )
+
+    expect(disabled_cryptokey_version.state).to eq "DISABLED"
+
+    expect {
+      $enable_cryptokey_version.call(
+        project_id: @project_id,
+        key_ring_id: @key_ring_id,
+        crypto_key: test_cryptokey_id,
+        version: version,
+        location: @location
+      )
+    }.to output(/Enabled version #{version} of #{test_cryptokey_id}/).to_stdout
+
+    cryptokey = get_test_cryptokey_version(
+      project_id: @project_id,
+      key_ring_id: @key_ring_id,
+      crypto_key: test_cryptokey_id,
+      version: version,
+      location: @location
+    )
+
+    expect(cryptokey.state).to eq "ENABLED"
   end
 
   it "can disable a crypto key version" do

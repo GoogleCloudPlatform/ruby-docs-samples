@@ -50,9 +50,10 @@ Commands:
   encrypt_file              <key_ring> <crypto_key> <location> <input_file> <output_file> Encrypt a file
   decrypt_file              <key_ring> <crypto_key> <location> <input_file> <output_file> Decrypt a file
   create_cryptokey_version  <key_ring> <crypto_key> <location> Create a new cryptokey version
+  enable_cryptokey_version  <key_ring> <crypto_key> <version> <location> Enable a cryptokey version
   disable_cryptokey_version <key_ring> <crypto_key> <version> <location> Disable a cryptokey version
   destroy_cryptokey_version <key_ring> <crypto_key> <version> <location> Destroy a cryptokey version
-  add_member                <key_ring> <crypto_key> <member> <role> <location> Add member to cryptokey IAM policy
+  add_member_to_policy      <key_ring> <crypto_key> <member> <role> <location> Add member to cryptokey IAM policy
   get_keyring_policy        <key_ring> <location> Get a keyring IAM policy
 
 Environment variables:
