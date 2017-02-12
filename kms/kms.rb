@@ -320,6 +320,43 @@ $destroy_cryptokey_version = -> (project_id:, key_ring_id:, crypto_key:, version
   # [END kms_destroy_cryptokey_version]
 end
 
+$add_member_to_keyring_policy = -> (project_id:, key_ring_id:, member:, role:, location:) do
+  # [START kms_add_member_to_keyring_policy]
+  # project_id  = "Your Google Cloud project ID"
+  # key_ring_id = "The ID of the new key ring"
+  # member      = "Member to add to the crypto key policy"
+  # role        = "Role assignment for new member"
+  # location    = "The location of the new key ring"
+
+  require "google/apis/cloudkms_v1beta1"
+
+  # Initialize the client and authenticate with the specified scope
+  Cloudkms = Google::Apis::CloudkmsV1beta1
+  kms_client = Cloudkms::CloudKMSService.new
+  kms_client.authorization = Google::Auth.get_application_default(
+    "https://www.googleapis.com/auth/cloud-platform"
+  )
+
+  # The resource name of the location associated with the key ring
+  resource = "projects/#{project_id}/locations/#{location}/" +
+             "keyRings/#{key_ring_id}"
+
+  # Get the current IAM policy
+  policy = kms_client.get_project_location_key_ring_iam_policy resource
+
+  # Add new member to current bindings
+  policy.bindings ||= []
+  policy.bindings << Cloudkms::Binding.new(members: [member], role: role)
+
+  # Update IAM policy
+  policy_request = Cloudkms::SetIamPolicyRequest.new policy: policy
+  kms_client.set_key_ring_iam_policy resource, policy_request
+
+  puts "Member #{member} added to policy for " +
+       "key ring #{key_ring_id}"
+  # [END kms_add_member_to_keyring_policy]
+end
+
 $add_member_to_cryptokey_policy = -> (project_id:, key_ring_id:, crypto_key:, member:, role:, location:) do
   # [START kms_add_member_to_cryptokey_policy]
   # project_id  = "Your Google Cloud project ID"
@@ -507,6 +544,14 @@ def run_sample arguments
       version: arguments.shift,
       location: arguments.shift
     )
+  when "add_member_to_keyring_policy"
+    $add_member_to_keyring_policy.call(
+      project_id: project_id,
+      key_ring_id: arguments.shift,
+      member: arguments.shift,
+      role: arguments.shift,
+      location: arguments.shift
+    )
   when "add_member_to_cryptokey_policy"
     $add_member_to_cryptokey_policy.call(
       project_id: project_id,
@@ -545,6 +590,7 @@ Commands:
   disable_cryptokey_version           <key_ring> <crypto_key> <version> <location> Disable a cryptokey version
   restore_cryptokey_version           <key_ring> <crypto_key> <version> <location> Restore a cryptokey version
   destroy_cryptokey_version           <key_ring> <crypto_key> <version> <location> Destroy a cryptokey version
+  add_member_to_keyring_policy        <key_ring> <member> <role> <location> Add member to keyring IAM policy
   add_member_to_cryptokey_policy      <key_ring> <crypto_key> <member> <role> <location> Add member to cryptokey IAM policy
   remove_member_from_cryptokey_policy <key_ring> <crypto_key> <member> <role> <location> Remove member from cryptokey IAM policy
   get_keyring_policy                  <key_ring> <location> Get a keyring IAM policy

@@ -202,6 +202,31 @@ describe "Key Management Service" do
     kms_client.set_key_ring_iam_policy resource, policy_request
   end
 
+  def remove_test_member_to_keyring_policy project_id:, key_ring_id:, member:, role:, location:
+    kms_client = create_service_client
+
+    policy = get_test_keyring_policy(
+      project_id: project_id,
+      key_ring_id: key_ring_id,
+      location: location
+    )
+
+    resource = "projects/#{project_id}/locations/#{location}/" +
+               "keyRings/#{key_ring_id}"
+
+    if policy.bindings
+      policy.bindings.delete_if do |binding|
+        binding.role.include? role and binding.members.include? member
+      end
+    end
+
+    policy_request = Google::Apis::CloudkmsV1beta1::SetIamPolicyRequest.new(
+      policy: policy
+    )
+
+    kms_client.set_key_ring_iam_policy resource, policy_request
+  end
+
   def encrypt_test_file project_id:, key_ring_id:, crypto_key:, location:, input_file:, output_file:
     kms_client = create_service_client
 
@@ -612,7 +637,53 @@ describe "Key Management Service" do
       location: @location
     )
 
-    expect(policy.bindings).to be nil
+    if policy.bindings
+      members = policy.bindings.map(&:members).flatten
+
+      expect(members).to_not include("test@test.com")
+    end
+  end
+
+  it "can add a member to a key ring policy" do
+    remove_test_member_to_keyring_policy(
+      project_id: @project_id,
+      key_ring_id: @key_ring_id,
+      member: "serviceAccount:test-account@#{@project_id}.iam.gserviceaccount.com",
+      role: "roles/owner",
+      location: @location
+    )
+
+    policy = get_test_keyring_policy(
+      project_id: @project_id,
+      key_ring_id: @key_ring_id,
+      location: @location
+    )
+
+    if policy.bindings
+      members = policy.bindings.map(&:members).flatten
+
+      expect(members).to_not include("serviceAccount:test-account@#{@project_id}.iam.gserviceaccount.com")
+    end
+
+    expect {
+      $add_member_to_keyring_policy.call(
+        project_id: @project_id,
+        key_ring_id: @key_ring_id,
+        member: "serviceAccount:test-account@#{@project_id}.iam.gserviceaccount.com",
+        role: "roles/owner",
+        location: @location
+      )
+    }.to output(/serviceAccount:test-account@#{@project_id}.iam.gserviceaccount.com/).to_stdout
+
+    policy = get_test_keyring_policy(
+      project_id: @project_id,
+      key_ring_id: @key_ring_id,
+      location: @location
+    )
+
+    members = policy.bindings.map(&:members).flatten
+
+    expect(members).to include("serviceAccount:test-account@#{@project_id}.iam.gserviceaccount.com")
   end
 
   it "can get a key ring policy" do
