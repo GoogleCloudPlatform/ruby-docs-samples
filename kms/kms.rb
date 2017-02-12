@@ -94,7 +94,7 @@ $encrypt = -> (project_id:, key_ring_id:, crypto_key:, location:, input_file:, o
     "https://www.googleapis.com/auth/cloud-platform"
   )
 
-  # The resource name of the location associated with the key ring
+  # The resource name of the location associated with the key ring crypto key
   resource = "projects/#{project_id}/locations/#{location}/" +
              "keyRings/#{key_ring_id}/cryptoKeys/#{crypto_key}"
 
@@ -130,7 +130,7 @@ $decrypt = -> (project_id:, key_ring_id:, crypto_key:, location:, input_file:, o
     "https://www.googleapis.com/auth/cloud-platform"
   )
 
-  # The resource name of the location associated with the key ring
+  # The resource name of the location associated with the key ring crypto key
   resource = "projects/#{project_id}/locations/#{location}/" +
              "keyRings/#{key_ring_id}/cryptoKeys/#{crypto_key}"
 
@@ -164,7 +164,7 @@ $create_cryptokey_version = -> (project_id:, key_ring_id:, crypto_key:, location
     "https://www.googleapis.com/auth/cloud-platform"
   )
 
-  # The resource name of the location associated with the key ring
+  # The resource name of the location associated with the key ring crypto key
   resource = "projects/#{project_id}/locations/#{location}/" +
              "keyRings/#{key_ring_id}/cryptoKeys/#{crypto_key}"
 
@@ -196,7 +196,7 @@ $enable_cryptokey_version = -> (project_id:, key_ring_id:, crypto_key:, version:
     "https://www.googleapis.com/auth/cloud-platform"
   )
 
-  # The resource name of the location associated with the key ring
+  # The resource name of the location associated with the key ring crypto key version
   resource = "projects/#{project_id}/locations/#{location}/" +
              "keyRings/#{key_ring_id}/cryptoKeys/#{crypto_key}/" +
              "cryptoKeyVersions/#{version}"
@@ -234,7 +234,7 @@ $disable_cryptokey_version = -> (project_id:, key_ring_id:, crypto_key:, version
     "https://www.googleapis.com/auth/cloud-platform"
   )
 
-  # The resource name of the location associated with the key ring
+  # The resource name of the location associated with the key ring crypto key version
   resource = "projects/#{project_id}/locations/#{location}/" +
              "keyRings/#{key_ring_id}/cryptoKeys/#{crypto_key}/" +
              "cryptoKeyVersions/#{version}"
@@ -272,7 +272,7 @@ $restore_cryptokey_version = -> (project_id:, key_ring_id:, crypto_key:, version
     "https://www.googleapis.com/auth/cloud-platform"
   )
 
-  # The resource name of the location associated with the key ring
+  # The resource name of the location associated with the key ring crypto key version
   resource = "projects/#{project_id}/locations/#{location}/" +
              "keyRings/#{key_ring_id}/cryptoKeys/#{crypto_key}/" +
              "cryptoKeyVersions/#{version}"
@@ -305,7 +305,7 @@ $destroy_cryptokey_version = -> (project_id:, key_ring_id:, crypto_key:, version
     "https://www.googleapis.com/auth/cloud-platform"
   )
 
-  # The resource name of the location associated with the key ring
+  # The resource name of the location associated with the key ring crypto key version
   resource = "projects/#{project_id}/locations/#{location}/" +
              "keyRings/#{key_ring_id}/cryptoKeys/#{crypto_key}/" +
              "cryptoKeyVersions/#{version}"
@@ -338,7 +338,7 @@ $add_member_to_cryptokey_policy = -> (project_id:, key_ring_id:, crypto_key:, me
     "https://www.googleapis.com/auth/cloud-platform"
   )
 
-  # The resource name of the location associated with the key ring
+  # The resource name of the location associated with the key ring crypto key
   resource = "projects/#{project_id}/locations/#{location}/" +
              "keyRings/#{key_ring_id}/cryptoKeys/#{crypto_key}"
 
@@ -376,7 +376,7 @@ $remove_member_from_cryptokey_policy = -> (project_id:, key_ring_id:, crypto_key
     "https://www.googleapis.com/auth/cloud-platform"
   )
 
-  # The resource name of the location associated with the key ring
+  # The resource name of the location associated with the key ring crypto key
   resource = "projects/#{project_id}/locations/#{location}/" +
              "keyRings/#{key_ring_id}/cryptoKeys/#{crypto_key}"
 
