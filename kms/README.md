@@ -45,17 +45,18 @@ These samples show how to use the [Google Cloud KMS API]
 Usage: bundle exec ruby kms.rb [command] [arguments]
 
 Commands:
-  create_keyring            <key_ring> <location> Create a new keyring
-  create_cryptokey          <key_ring> <crypto_key> <location> Create a new cryptokey
-  encrypt_file              <key_ring> <crypto_key> <location> <input_file> <output_file> Encrypt a file
-  decrypt_file              <key_ring> <crypto_key> <location> <input_file> <output_file> Decrypt a file
-  create_cryptokey_version  <key_ring> <crypto_key> <location> Create a new cryptokey version
-  enable_cryptokey_version  <key_ring> <crypto_key> <version> <location> Enable a cryptokey version
-  disable_cryptokey_version <key_ring> <crypto_key> <version> <location> Disable a cryptokey version
-  restore_cryptokey_version <key_ring> <crypto_key> <version> <location> Restore a cryptokey version
-  destroy_cryptokey_version <key_ring> <crypto_key> <version> <location> Destroy a cryptokey version
-  add_member_to_policy      <key_ring> <crypto_key> <member> <role> <location> Add member to cryptokey IAM policy
-  get_keyring_policy        <key_ring> <location> Get a keyring IAM policy
+  create_keyring                      <key_ring> <location> Create a new keyring
+  create_cryptokey                    <key_ring> <crypto_key> <location> Create a new cryptokey
+  encrypt_file                        <key_ring> <crypto_key> <location> <input_file> <output_file> Encrypt a file
+  decrypt_file                        <key_ring> <crypto_key> <location> <input_file> <output_file> Decrypt a file
+  create_cryptokey_version            <key_ring> <crypto_key> <location> Create a new cryptokey version
+  enable_cryptokey_version            <key_ring> <crypto_key> <version> <location> Enable a cryptokey version
+  disable_cryptokey_version           <key_ring> <crypto_key> <version> <location> Disable a cryptokey version
+  restore_cryptokey_version           <key_ring> <crypto_key> <version> <location> Restore a cryptokey version
+  destroy_cryptokey_version           <key_ring> <crypto_key> <version> <location> Destroy a cryptokey version
+  add_member_to_cryptokey_policy      <key_ring> <crypto_key> <member> <role> <location> Add member to cryptokey IAM policy
+  remove_member_from_cryptokey_policy <key_ring> <crypto_key> <member> <role> <location> Remove member from cryptokey IAM policy
+  get_keyring_policy                  <key_ring> <location> Get a keyring IAM policy
 
 Environment variables:
   GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID

@@ -169,6 +169,10 @@ describe "Key Management Service" do
       role: role
     )
 
+    policy_request = Google::Apis::CloudkmsV1beta1::SetIamPolicyRequest.new(
+      policy: policy
+    )
+
     kms_client.set_crypto_key_iam_policy resource, policy_request
   end
 
@@ -560,6 +564,55 @@ describe "Key Management Service" do
     members = policy.bindings.map(&:members).flatten
 
     expect(members).to include("user:test@test.com")
+  end
+
+  it "can remove a member to a crypto key policy" do
+    test_cryptokey_id = "#{@project_id}-remove-member-#{Time.now.to_i}"
+
+    create_test_cryptokey(
+      project_id: @project_id,
+      key_ring_id: @key_ring_id,
+      crypto_key: test_cryptokey_id,
+      location: @location
+    )
+
+    add_test_member_to_cryptokey_policy(
+      project_id: @project_id,
+      key_ring_id: @key_ring_id,
+      crypto_key: test_cryptokey_id,
+      member: "user:test@test.com",
+      role: "roles/owner",
+      location: @location
+    )
+
+    policy = get_test_cryptokey_policy(
+      project_id: @project_id,
+      key_ring_id: @key_ring_id,
+      crypto_key: test_cryptokey_id,
+      location: @location
+    )
+
+    expect(policy.bindings).to_not be nil
+
+    expect {
+      $remove_member_from_cryptokey_policy.call(
+        project_id: @project_id,
+        key_ring_id: @key_ring_id,
+        crypto_key: test_cryptokey_id,
+        member: "user:test@test.com",
+        role: "roles/owner",
+        location: @location
+      )
+    }.to output(/test@test.com/).to_stdout
+
+    policy = get_test_cryptokey_policy(
+      project_id: @project_id,
+      key_ring_id: @key_ring_id,
+      crypto_key: test_cryptokey_id,
+      location: @location
+    )
+
+    expect(policy.bindings).to be nil
   end
 
   it "can get a key ring policy" do

@@ -354,8 +354,49 @@ $add_member_to_cryptokey_policy = -> (project_id:, key_ring_id:, crypto_key:, me
   kms_client.set_crypto_key_iam_policy resource, policy_request
 
   puts "Member #{member} added to policy for " +
-       "key #{crypto_key} in key ring #{key_ring_id}"
+       "crypto key #{crypto_key} in key ring #{key_ring_id}"
   # [END kms_add_member_to_cryptokey_policy]
+end
+
+$remove_member_from_cryptokey_policy = -> (project_id:, key_ring_id:, crypto_key:, member:, role:, location:) do
+  # [START kms_remove_member_from_cryptokey_policy]
+  # project_id  = "Your Google Cloud project ID"
+  # key_ring_id = "The ID of the new key ring"
+  # crypto_key  = "Name of the crypto key"
+  # member      = "Member to add to the crypto key policy"
+  # role        = "Role assignment for new member"
+  # location    = "The location of the new key ring"
+
+  require "google/apis/cloudkms_v1beta1"
+
+  # Initialize the client and authenticate with the specified scope
+  Cloudkms = Google::Apis::CloudkmsV1beta1
+  kms_client = Cloudkms::CloudKMSService.new
+  kms_client.authorization = Google::Auth.get_application_default(
+    "https://www.googleapis.com/auth/cloud-platform"
+  )
+
+  # The resource name of the location associated with the key ring
+  resource = "projects/#{project_id}/locations/#{location}/" +
+             "keyRings/#{key_ring_id}/cryptoKeys/#{crypto_key}"
+
+  # Get the current IAM policy
+  policy = kms_client.get_project_location_key_ring_crypto_key_iam_policy resource
+
+  # Remove a member to current bindings
+  if policy.bindings
+    policy.bindings.delete_if do |binding|
+      binding.role.include? role and binding.members.include? member
+    end
+  end
+
+  # Update IAM policy
+  policy_request = Cloudkms::SetIamPolicyRequest.new policy: policy
+  kms_client.set_crypto_key_iam_policy resource, policy_request
+
+  puts "Member #{member} removed from policy for " +
+       "crypto key #{crypto_key} in key ring #{key_ring_id}"
+  # [END kms_remove_member_from_cryptokey_policy]
 end
 
 $get_keyring_policy = -> (project_id:, key_ring_id:, location:) do
@@ -466,8 +507,17 @@ def run_sample arguments
       version: arguments.shift,
       location: arguments.shift
     )
-  when "add_member_to_policy"
+  when "add_member_to_cryptokey_policy"
     $add_member_to_cryptokey_policy.call(
+      project_id: project_id,
+      key_ring_id: arguments.shift,
+      crypto_key: arguments.shift,
+      member: arguments.shift,
+      role: arguments.shift,
+      location: arguments.shift
+    )
+  when "remove_member_from_cryptokey_policy"
+    $remove_member_from_cryptokey_policy.call(
       project_id: project_id,
       key_ring_id: arguments.shift,
       crypto_key: arguments.shift,
@@ -486,17 +536,18 @@ def run_sample arguments
 Usage: bundle exec ruby kms.rb [command] [arguments]
 
 Commands:
-  create_keyring            <key_ring> <location> Create a new keyring
-  create_cryptokey          <key_ring> <crypto_key> <location> Create a new cryptokey
-  encrypt_file              <key_ring> <crypto_key> <location> <input_file> <output_file> Encrypt a file
-  decrypt_file              <key_ring> <crypto_key> <location> <input_file> <output_file> Decrypt a file
-  create_cryptokey_version  <key_ring> <crypto_key> <location> Create a new cryptokey version
-  enable_cryptokey_version  <key_ring> <crypto_key> <version> <location> Enable a cryptokey version
-  disable_cryptokey_version <key_ring> <crypto_key> <version> <location> Disable a cryptokey version
-  restore_cryptokey_version <key_ring> <crypto_key> <version> <location> Restore a cryptokey version
-  destroy_cryptokey_version <key_ring> <crypto_key> <version> <location> Destroy a cryptokey version
-  add_member_to_policy      <key_ring> <crypto_key> <member> <role> <location> Add member to cryptokey IAM policy
-  get_keyring_policy        <key_ring> <location> Get a keyring IAM policy
+  create_keyring                      <key_ring> <location> Create a new keyring
+  create_cryptokey                    <key_ring> <crypto_key> <location> Create a new cryptokey
+  encrypt_file                        <key_ring> <crypto_key> <location> <input_file> <output_file> Encrypt a file
+  decrypt_file                        <key_ring> <crypto_key> <location> <input_file> <output_file> Decrypt a file
+  create_cryptokey_version            <key_ring> <crypto_key> <location> Create a new cryptokey version
+  enable_cryptokey_version            <key_ring> <crypto_key> <version> <location> Enable a cryptokey version
+  disable_cryptokey_version           <key_ring> <crypto_key> <version> <location> Disable a cryptokey version
+  restore_cryptokey_version           <key_ring> <crypto_key> <version> <location> Restore a cryptokey version
+  destroy_cryptokey_version           <key_ring> <crypto_key> <version> <location> Destroy a cryptokey version
+  add_member_to_cryptokey_policy      <key_ring> <crypto_key> <member> <role> <location> Add member to cryptokey IAM policy
+  remove_member_from_cryptokey_policy <key_ring> <crypto_key> <member> <role> <location> Remove member from cryptokey IAM policy
+  get_keyring_policy                  <key_ring> <location> Get a keyring IAM policy
 
 Environment variables:
   GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
