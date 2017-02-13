@@ -63,6 +63,18 @@ describe "Key Management Service" do
     )
   end
 
+  def create_test_cryptokey_version project_id:, key_ring_id:, crypto_key:, location:
+    kms_client = create_service_client
+
+    resource = "projects/#{project_id}/locations/#{location}/" +
+               "keyRings/#{key_ring_id}/cryptoKeys/#{crypto_key}"
+
+    crypto_key_version = kms_client.create_project_location_key_ring_crypto_key_crypto_key_version(
+        resource,
+        Cloudkms::CryptoKey.new(purpose: "ENCRYPT_DECRYPT")
+    )
+  end
+
   def destroy_test_cryptokey_version project_id:, key_ring_id:, crypto_key:, version:, location:
     kms_client = create_service_client
 
@@ -413,6 +425,45 @@ describe "Key Management Service" do
     )
 
     expect(after_version_list.total_size).to be > before_version_list.total_size
+  end
+
+  it "can set a crypto key version as the primary version" do
+    test_cryptokey_id = "#{@project_id}-primary-#{Time.now.to_i}"
+
+    create_test_cryptokey(
+      project_id: @project_id,
+      key_ring_id: @key_ring_id,
+      crypto_key: test_cryptokey_id,
+      location: @location
+    )
+
+    cryptokey_version = create_test_cryptokey_version(
+      project_id: @project_id,
+      key_ring_id: @key_ring_id,
+      crypto_key: test_cryptokey_id,
+      location: @location
+    )
+
+    version = cryptokey_version.name.split("/").last
+
+    expect {
+      $set_cryptokey_primary_version.call(
+        project_id: @project_id,
+        key_ring_id: @key_ring_id,
+        crypto_key: test_cryptokey_id,
+        version: version,
+        location: @location
+      )
+    }.to output(/Set #{version} as primary version/).to_stdout
+
+    cryptokey = get_test_cryptokey(
+      project_id: @project_id,
+      key_ring_id: @key_ring_id,
+      crypto_key: test_cryptokey_id,
+      location: @location
+    )
+
+    expect(cryptokey.primary.name).to eq cryptokey_version.name
   end
 
   it "can enable a crypto key version" do

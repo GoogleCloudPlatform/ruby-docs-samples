@@ -50,6 +50,7 @@ Commands:
   encrypt_file                        <key_ring> <crypto_key> <location> <input_file> <output_file> Encrypt a file
   decrypt_file                        <key_ring> <crypto_key> <location> <input_file> <output_file> Decrypt a file
   create_cryptokey_version            <key_ring> <crypto_key> <location> Create a new cryptokey version
+  set_cryptokey_primary_version       <key_ring> <crypto_key> <verison> <location> Set a primary cryptokey version
   enable_cryptokey_version            <key_ring> <crypto_key> <version> <location> Enable a cryptokey version
   disable_cryptokey_version           <key_ring> <crypto_key> <version> <location> Disable a cryptokey version
   restore_cryptokey_version           <key_ring> <crypto_key> <version> <location> Restore a cryptokey version

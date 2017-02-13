@@ -179,6 +179,38 @@ $create_cryptokey_version = -> (project_id:, key_ring_id:, crypto_key:, location
   # [END kms_create_cryptokey_version]
 end
 
+$set_cryptokey_primary_version = -> (project_id:, key_ring_id:, crypto_key:, version:, location:) do
+  # [START kms_set_cryptokey_primary_version]
+  # project_id  = "Your Google Cloud project ID"
+  # key_ring_id = "The ID of the new key ring"
+  # crypto_key  = "Name of the crypto key"
+  # version     = "Version of the crypto key"
+  # location    = "The location of the new key ring"
+
+  require "google/apis/cloudkms_v1beta1"
+
+  # Initialize the client and authenticate with the specified scope
+  Cloudkms = Google::Apis::CloudkmsV1beta1
+  kms_client = Cloudkms::CloudKMSService.new
+  kms_client.authorization = Google::Auth.get_application_default(
+    "https://www.googleapis.com/auth/cloud-platform"
+  )
+
+  # The resource name of the location associated with the key ring crypto key
+  resource = "projects/#{project_id}/locations/#{location}/" +
+             "keyRings/#{key_ring_id}/cryptoKeys/#{crypto_key}"
+
+  # Update the CryptoKey primary version
+  crypto_key_version = kms_client.update_project_location_key_ring_crypto_key_primary_version(
+      resource,
+      Cloudkms::UpdateCryptoKeyPrimaryVersionRequest.new(crypto_key_version_id: version)
+  )
+
+  puts "Set #{version} as primary version for crypto key " +
+       "#{crypto_key} in key ring #{key_ring_id}"
+  # [END kms_set_cryptokey_primary_version]
+end
+
 $enable_cryptokey_version = -> (project_id:, key_ring_id:, crypto_key:, version:, location:) do
   # [START kms_enable_cryptokey_version]
   # project_id  = "Your Google Cloud project ID"
@@ -512,6 +544,14 @@ def run_sample arguments
       crypto_key: arguments.shift,
       location: arguments.shift
     )
+  when "set_cryptokey_primary_version"
+    $set_cryptokey_primary_version.call(
+      project_id: project_id,
+      key_ring_id: arguments.shift,
+      crypto_key: arguments.shift,
+      version: arguments.shift,
+      location: arguments.shift
+    )
   when "enable_cryptokey_version"
     $enable_cryptokey_version.call(
       project_id: project_id,
@@ -586,6 +626,7 @@ Commands:
   encrypt_file                        <key_ring> <crypto_key> <location> <input_file> <output_file> Encrypt a file
   decrypt_file                        <key_ring> <crypto_key> <location> <input_file> <output_file> Decrypt a file
   create_cryptokey_version            <key_ring> <crypto_key> <location> Create a new cryptokey version
+  set_cryptokey_primary_version       <key_ring> <crypto_key> <verison> <location> Set a primary cryptokey version
   enable_cryptokey_version            <key_ring> <crypto_key> <version> <location> Enable a cryptokey version
   disable_cryptokey_version           <key_ring> <crypto_key> <version> <location> Disable a cryptokey version
   restore_cryptokey_version           <key_ring> <crypto_key> <version> <location> Restore a cryptokey version
