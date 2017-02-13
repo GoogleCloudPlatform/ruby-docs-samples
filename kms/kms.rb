@@ -50,7 +50,7 @@ $create_cryptokey = -> (project_id:, key_ring_id:, crypto_key:, location:) do
   # project_id  = "Your Google Cloud project ID"
   # key_ring_id = "The ID of the new key ring"
   # crypto_key  = "Name of the crypto key"
-  # location    = "The location of the new key ring"
+  # location    = "The location of the key ring"
 
   require "google/apis/cloudkms_v1beta1"
 
@@ -79,9 +79,9 @@ end
 $encrypt = -> (project_id:, key_ring_id:, crypto_key:, location:, input_file:, output_file:) do
   # [START kms_encrypt]
   # project_id  = "Your Google Cloud project ID"
-  # key_ring_id = "The ID of the new key ring"
+  # key_ring_id = "The ID of the key ring"
   # crypto_key  = "Name of the crypto key"
-  # location    = "The location of the new key ring"
+  # location    = "The location of the key ring"
   # input_file  = "File to encrypt"
   # output_file = "File name to use for encrypted input file"
 
@@ -115,9 +115,9 @@ end
 $decrypt = -> (project_id:, key_ring_id:, crypto_key:, location:, input_file:, output_file:) do
   # [START kms_decrypt]
   # project_id  = "Your Google Cloud project ID"
-  # key_ring_id = "The ID of the new key ring"
+  # key_ring_id = "The ID of the key ring"
   # crypto_key  = "Name of the crypto key"
-  # location    = "The location of the new key ring"
+  # location    = "The location of the key ring"
   # input_file  = "The path to an encrypted file"
   # output_file = "The path to write the decrypted file"
 
@@ -151,9 +151,9 @@ end
 $create_cryptokey_version = -> (project_id:, key_ring_id:, crypto_key:, location:) do
   # [START kms_create_cryptokey_version]
   # project_id  = "Your Google Cloud project ID"
-  # key_ring_id = "The ID of the new key ring"
-  # crypto_key  = "Name of the crypto key"
-  # location    = "The location of the new key ring"
+  # key_ring_id = "The ID of the key ring"
+  # crypto_key  = "Name of the new crypto key"
+  # location    = "The location of the key ring"
 
   require "google/apis/cloudkms_v1beta1"
 
@@ -182,10 +182,10 @@ end
 $set_cryptokey_primary_version = -> (project_id:, key_ring_id:, crypto_key:, version:, location:) do
   # [START kms_set_cryptokey_primary_version]
   # project_id  = "Your Google Cloud project ID"
-  # key_ring_id = "The ID of the new key ring"
+  # key_ring_id = "The ID of the key ring"
   # crypto_key  = "Name of the crypto key"
   # version     = "Version of the crypto key"
-  # location    = "The location of the new key ring"
+  # location    = "The location of the key ring"
 
   require "google/apis/cloudkms_v1beta1"
 
@@ -214,10 +214,10 @@ end
 $enable_cryptokey_version = -> (project_id:, key_ring_id:, crypto_key:, version:, location:) do
   # [START kms_enable_cryptokey_version]
   # project_id  = "Your Google Cloud project ID"
-  # key_ring_id = "The ID of the new key ring"
+  # key_ring_id = "The ID of the key ring"
   # crypto_key  = "Name of the crypto key"
   # version     = "Version of the crypto key"
-  # location    = "The location of the new key ring"
+  # location    = "The location of the key ring"
 
   require "google/apis/cloudkms_v1beta1"
 
@@ -252,10 +252,10 @@ end
 $disable_cryptokey_version = -> (project_id:, key_ring_id:, crypto_key:, version:, location:) do
   # [START kms_disable_cryptokey_version]
   # project_id  = "Your Google Cloud project ID"
-  # key_ring_id = "The ID of the new key ring"
+  # key_ring_id = "The ID of the key ring"
   # crypto_key  = "Name of the crypto key"
   # version     = "Version of the crypto key"
-  # location    = "The location of the new key ring"
+  # location    = "The location of the key ring"
 
   require "google/apis/cloudkms_v1beta1"
 
@@ -290,10 +290,10 @@ end
 $restore_cryptokey_version = -> (project_id:, key_ring_id:, crypto_key:, version:, location:) do
   # [START kms_restore_cryptokey_version]
   # project_id  = "Your Google Cloud project ID"
-  # key_ring_id = "The ID of the new key ring"
+  # key_ring_id = "The ID of the key ring"
   # crypto_key  = "Name of the crypto key"
   # version     = "Version of the crypto key"
-  # location    = "The location of the new key ring"
+  # location    = "The location of the key ring"
 
   require "google/apis/cloudkms_v1beta1"
 
@@ -323,10 +323,10 @@ end
 $destroy_cryptokey_version = -> (project_id:, key_ring_id:, crypto_key:, version:, location:) do
   # [START kms_destroy_cryptokey_version]
   # project_id  = "Your Google Cloud project ID"
-  # key_ring_id = "The ID of the new key ring"
+  # key_ring_id = "The ID of the key ring"
   # crypto_key  = "Name of the crypto key"
   # version     = "Version of the crypto key"
-  # location    = "The location of the new key ring"
+  # location    = "The location of the key ring"
 
   require "google/apis/cloudkms_v1beta1"
 
@@ -355,10 +355,10 @@ end
 $add_member_to_keyring_policy = -> (project_id:, key_ring_id:, member:, role:, location:) do
   # [START kms_add_member_to_keyring_policy]
   # project_id  = "Your Google Cloud project ID"
-  # key_ring_id = "The ID of the new key ring"
-  # member      = "Member to add to the crypto key policy"
+  # key_ring_id = "The ID of the key ring"
+  # member      = "Member to add to the key ring policy"
   # role        = "Role assignment for new member"
-  # location    = "The location of the new key ring"
+  # location    = "The location of the key ring"
 
   require "google/apis/cloudkms_v1beta1"
 
@@ -392,11 +392,11 @@ end
 $add_member_to_cryptokey_policy = -> (project_id:, key_ring_id:, crypto_key:, member:, role:, location:) do
   # [START kms_add_member_to_cryptokey_policy]
   # project_id  = "Your Google Cloud project ID"
-  # key_ring_id = "The ID of the new key ring"
+  # key_ring_id = "The ID of the key ring"
   # crypto_key  = "Name of the crypto key"
   # member      = "Member to add to the crypto key policy"
   # role        = "Role assignment for new member"
-  # location    = "The location of the new key ring"
+  # location    = "The location of the key ring"
 
   require "google/apis/cloudkms_v1beta1"
 
@@ -430,11 +430,11 @@ end
 $remove_member_from_cryptokey_policy = -> (project_id:, key_ring_id:, crypto_key:, member:, role:, location:) do
   # [START kms_remove_member_from_cryptokey_policy]
   # project_id  = "Your Google Cloud project ID"
-  # key_ring_id = "The ID of the new key ring"
+  # key_ring_id = "The ID of the key ring"
   # crypto_key  = "Name of the crypto key"
-  # member      = "Member to add to the crypto key policy"
-  # role        = "Role assignment for new member"
-  # location    = "The location of the new key ring"
+  # member      = "Member to remove to the crypto key policy"
+  # role        = "Role assignment for the member"
+  # location    = "The location of the key ring"
 
   require "google/apis/cloudkms_v1beta1"
 
@@ -471,8 +471,8 @@ end
 $get_keyring_policy = -> (project_id:, key_ring_id:, location:) do
   # [START kms_get_keyring_policy]
   # project_id  = "Your Google Cloud project ID"
-  # key_ring_id = "The ID of the new key ring"
-  # location    = "The location of the new key ring"
+  # key_ring_id = "The ID of the key ring"
+  # location    = "The location of the key ring"
 
   require "google/apis/cloudkms_v1beta1"
 
