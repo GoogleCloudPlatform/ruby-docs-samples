@@ -455,7 +455,7 @@ $remove_member_from_cryptokey_policy = -> (project_id:, key_ring_id:, crypto_key
   # Remove a member to current bindings
   if policy.bindings
     policy.bindings.delete_if do |binding|
-      binding.role.include? role and binding.members.include? member
+      binding.role.include? role && binding.members.include? member
     end
   end
 
