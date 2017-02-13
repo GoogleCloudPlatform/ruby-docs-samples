@@ -63,6 +63,53 @@ describe "Key Management Service" do
     )
   end
 
+  def create_test_cryptokey_version project_id:, key_ring_id:, crypto_key:, location:
+    kms_client = create_service_client
+
+    resource = "projects/#{project_id}/locations/#{location}/" +
+               "keyRings/#{key_ring_id}/cryptoKeys/#{crypto_key}"
+
+    crypto_key_version = kms_client.create_project_location_key_ring_crypto_key_crypto_key_version(
+        resource,
+        Cloudkms::CryptoKey.new(purpose: "ENCRYPT_DECRYPT")
+    )
+  end
+
+  def destroy_test_cryptokey_version project_id:, key_ring_id:, crypto_key:, version:, location:
+    kms_client = create_service_client
+
+    # The resource name of the location associated with the key ring
+    resource = "projects/#{project_id}/locations/#{location}/" +
+               "keyRings/#{key_ring_id}/cryptoKeys/#{crypto_key}/" +
+               "cryptoKeyVersions/#{version}"
+
+    # Destroy specific version of the crypto key
+    kms_client.destroy_crypto_key_version(
+      resource,
+      Cloudkms::DestroyCryptoKeyVersionRequest.new
+    )
+  end
+
+  def disable_test_cryptokey_version project_id:, key_ring_id:, crypto_key:, version:, location:
+    kms_client = create_service_client
+
+    resource = "projects/#{project_id}/locations/#{location}/" +
+             "keyRings/#{key_ring_id}/cryptoKeys/#{crypto_key}/" +
+             "cryptoKeyVersions/#{version}"
+
+    # Get a version of the crypto key
+    crypto_key_version = kms_client.get_project_location_key_ring_crypto_key_crypto_key_version resource
+
+    # Set the primary version state as disabled for update
+    crypto_key_version.state = "DISABLED"
+
+    # Disable the crypto key version
+    kms_client.patch_project_location_key_ring_crypto_key_crypto_key_version(
+      resource,
+      crypto_key_version, update_mask: "state"
+    )
+  end
+
   def get_test_cryptokey project_id:, key_ring_id:, crypto_key:, location:
     kms_client = create_service_client
 
@@ -83,7 +130,7 @@ describe "Key Management Service" do
     kms_client.get_project_location_key_ring_crypto_key_crypto_key_version name
   end
 
-  def test_list_cryptokey_version project_id:, key_ring_id:, crypto_key:, location:
+  def list_test_cryptokey_version project_id:, key_ring_id:, crypto_key:, location:
     kms_client = create_service_client
 
     resource = "projects/#{project_id}/locations/#{location}/" +
@@ -94,7 +141,7 @@ describe "Key Management Service" do
     )
   end
 
-  def test_list_key_rings project_id:, location:
+  def list_test_key_rings project_id:, location:
     kms_client = create_service_client
 
     resource = "projects/#{project_id}/locations/#{location}"
@@ -134,6 +181,10 @@ describe "Key Management Service" do
       role: role
     )
 
+    policy_request = Google::Apis::CloudkmsV1beta1::SetIamPolicyRequest.new(
+      policy: policy
+    )
+
     kms_client.set_crypto_key_iam_policy resource, policy_request
   end
 
@@ -155,6 +206,31 @@ describe "Key Management Service" do
       members: [member],
       role: role
     )
+
+    policy_request = Google::Apis::CloudkmsV1beta1::SetIamPolicyRequest.new(
+      policy: policy
+    )
+
+    kms_client.set_key_ring_iam_policy resource, policy_request
+  end
+
+  def remove_test_member_to_keyring_policy project_id:, key_ring_id:, member:, role:, location:
+    kms_client = create_service_client
+
+    policy = get_test_keyring_policy(
+      project_id: project_id,
+      key_ring_id: key_ring_id,
+      location: location
+    )
+
+    resource = "projects/#{project_id}/locations/#{location}/" +
+               "keyRings/#{key_ring_id}"
+
+    if policy.bindings
+      policy.bindings.delete_if do |binding|
+        binding.role.include?(role) && binding.members.include?(member)
+      end
+    end
 
     policy_request = Google::Apis::CloudkmsV1beta1::SetIamPolicyRequest.new(
       policy: policy
@@ -325,7 +401,7 @@ describe "Key Management Service" do
       location: @location
     )
 
-    before_version_list = test_list_cryptokey_version(
+    before_version_list = list_test_cryptokey_version(
       project_id: @project_id,
       key_ring_id: @key_ring_id,
       crypto_key: test_cryptokey_id,
@@ -341,7 +417,7 @@ describe "Key Management Service" do
       )
     }.to output(/Created version/).to_stdout
 
-    after_version_list = test_list_cryptokey_version(
+    after_version_list = list_test_cryptokey_version(
       project_id: @project_id,
       key_ring_id: @key_ring_id,
       crypto_key: test_cryptokey_id,
@@ -349,6 +425,88 @@ describe "Key Management Service" do
     )
 
     expect(after_version_list.total_size).to be > before_version_list.total_size
+  end
+
+  it "can set a crypto key version as the primary version" do
+    test_cryptokey_id = "#{@project_id}-primary-#{Time.now.to_i}"
+
+    create_test_cryptokey(
+      project_id: @project_id,
+      key_ring_id: @key_ring_id,
+      crypto_key: test_cryptokey_id,
+      location: @location
+    )
+
+    cryptokey_version = create_test_cryptokey_version(
+      project_id: @project_id,
+      key_ring_id: @key_ring_id,
+      crypto_key: test_cryptokey_id,
+      location: @location
+    )
+
+    version = cryptokey_version.name.split("/").last
+
+    expect {
+      $set_cryptokey_primary_version.call(
+        project_id: @project_id,
+        key_ring_id: @key_ring_id,
+        crypto_key: test_cryptokey_id,
+        version: version,
+        location: @location
+      )
+    }.to output(/Set #{version} as primary version/).to_stdout
+
+    cryptokey = get_test_cryptokey(
+      project_id: @project_id,
+      key_ring_id: @key_ring_id,
+      crypto_key: test_cryptokey_id,
+      location: @location
+    )
+
+    expect(cryptokey.primary.name).to eq cryptokey_version.name
+  end
+
+  it "can enable a crypto key version" do
+    test_cryptokey_id = "#{@project_id}-enable-#{Time.now.to_i}"
+
+    cryptokey = create_test_cryptokey(
+      project_id: @project_id,
+      key_ring_id: @key_ring_id,
+      crypto_key: test_cryptokey_id,
+      location: @location
+    )
+
+    version = "1" # first version is labeled 1
+
+    disabled_cryptokey_version = disable_test_cryptokey_version(
+      project_id: @project_id,
+      key_ring_id: @key_ring_id,
+      crypto_key: test_cryptokey_id,
+      version: version,
+      location: @location
+    )
+
+    expect(disabled_cryptokey_version.state).to eq "DISABLED"
+
+    expect {
+      $enable_cryptokey_version.call(
+        project_id: @project_id,
+        key_ring_id: @key_ring_id,
+        crypto_key: test_cryptokey_id,
+        version: version,
+        location: @location
+      )
+    }.to output(/Enabled version #{version} of #{test_cryptokey_id}/).to_stdout
+
+    cryptokey = get_test_cryptokey_version(
+      project_id: @project_id,
+      key_ring_id: @key_ring_id,
+      crypto_key: test_cryptokey_id,
+      version: version,
+      location: @location
+    )
+
+    expect(cryptokey.state).to eq "ENABLED"
   end
 
   it "can disable a crypto key version" do
@@ -372,6 +530,49 @@ describe "Key Management Service" do
         location: @location
       )
     }.to output(/Disabled version #{version} of #{test_cryptokey_id}/).to_stdout
+
+    cryptokey = get_test_cryptokey_version(
+      project_id: @project_id,
+      key_ring_id: @key_ring_id,
+      crypto_key: test_cryptokey_id,
+      version: version,
+      location: @location
+    )
+
+    expect(cryptokey.state).to eq "DISABLED"
+  end
+
+  it "can restore a crypto key version" do
+    test_cryptokey_id = "#{@project_id}-restore-#{Time.now.to_i}"
+
+    cryptokey = create_test_cryptokey(
+      project_id: @project_id,
+      key_ring_id: @key_ring_id,
+      crypto_key: test_cryptokey_id,
+      location: @location
+    )
+
+    version = "1" # first version is labeled 1
+
+    scheduled_cryptokey_version = destroy_test_cryptokey_version(
+      project_id: @project_id,
+      key_ring_id: @key_ring_id,
+      crypto_key: test_cryptokey_id,
+      version: version,
+      location: @location
+    )
+
+    expect(scheduled_cryptokey_version.state).to eq "DESTROY_SCHEDULED"
+
+    expect {
+      $restore_cryptokey_version.call(
+        project_id: @project_id,
+        key_ring_id: @key_ring_id,
+        crypto_key: test_cryptokey_id,
+        version: version,
+        location: @location
+      )
+    }.to output(/Restored version #{version} of #{test_cryptokey_id}/).to_stdout
 
     cryptokey = get_test_cryptokey_version(
       project_id: @project_id,
@@ -439,6 +640,101 @@ describe "Key Management Service" do
     members = policy.bindings.map(&:members).flatten
 
     expect(members).to include("user:test@test.com")
+  end
+
+  it "can remove a member to a crypto key policy" do
+    test_cryptokey_id = "#{@project_id}-remove-member-#{Time.now.to_i}"
+
+    create_test_cryptokey(
+      project_id: @project_id,
+      key_ring_id: @key_ring_id,
+      crypto_key: test_cryptokey_id,
+      location: @location
+    )
+
+    add_test_member_to_cryptokey_policy(
+      project_id: @project_id,
+      key_ring_id: @key_ring_id,
+      crypto_key: test_cryptokey_id,
+      member: "user:test@test.com",
+      role: "roles/owner",
+      location: @location
+    )
+
+    policy = get_test_cryptokey_policy(
+      project_id: @project_id,
+      key_ring_id: @key_ring_id,
+      crypto_key: test_cryptokey_id,
+      location: @location
+    )
+
+    expect(policy.bindings).to_not be nil
+
+    expect {
+      $remove_member_from_cryptokey_policy.call(
+        project_id: @project_id,
+        key_ring_id: @key_ring_id,
+        crypto_key: test_cryptokey_id,
+        member: "user:test@test.com",
+        role: "roles/owner",
+        location: @location
+      )
+    }.to output(/test@test.com/).to_stdout
+
+    policy = get_test_cryptokey_policy(
+      project_id: @project_id,
+      key_ring_id: @key_ring_id,
+      crypto_key: test_cryptokey_id,
+      location: @location
+    )
+
+    if policy.bindings
+      members = policy.bindings.map(&:members).flatten
+
+      expect(members).to_not include("test@test.com")
+    end
+  end
+
+  it "can add a member to a key ring policy" do
+    remove_test_member_to_keyring_policy(
+      project_id: @project_id,
+      key_ring_id: @key_ring_id,
+      member: "serviceAccount:test-account@#{@project_id}.iam.gserviceaccount.com",
+      role: "roles/owner",
+      location: @location
+    )
+
+    policy = get_test_keyring_policy(
+      project_id: @project_id,
+      key_ring_id: @key_ring_id,
+      location: @location
+    )
+
+    if policy.bindings
+      members = policy.bindings.map(&:members).flatten
+
+      expect(members).to_not include("serviceAccount:test-account@#{@project_id}.iam.gserviceaccount.com")
+    end
+
+    expect {
+      $add_member_to_keyring_policy.call(
+        project_id: @project_id,
+        key_ring_id: @key_ring_id,
+        member: "serviceAccount:test-account@#{@project_id}.iam.gserviceaccount.com",
+        role: "roles/owner",
+        location: @location
+      )
+    }.to output(/serviceAccount:test-account@#{@project_id}.iam.gserviceaccount.com/).to_stdout
+
+    policy = get_test_keyring_policy(
+      project_id: @project_id,
+      key_ring_id: @key_ring_id,
+      location: @location
+    )
+
+    members = policy.bindings.map(&:members).flatten
+
+    expect(members).to include("serviceAccount:test-account@#{@project_id}.iam.gserviceaccount.com")
   end
 
   it "can get a key ring policy" do
