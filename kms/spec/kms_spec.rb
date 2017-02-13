@@ -228,7 +228,7 @@ describe "Key Management Service" do
 
     if policy.bindings
       policy.bindings.delete_if do |binding|
-        binding.role.include? role && binding.members.include? member
+        binding.role.include?(role) && binding.members.include?(member)
       end
     end
 
