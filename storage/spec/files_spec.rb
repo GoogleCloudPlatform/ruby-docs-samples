@@ -68,6 +68,23 @@ describe "Google Cloud Storage files sample" do
   end
   attr_reader :captured_output
 
+  it "can generate a base64 encoded encryption key" do
+    mock_cipher = double()
+    mock_encrypt = double()
+    encryption_key_base64 = Base64.encode64 @encryption_key
+
+    # Mock OpenSSL::Cipher
+    expect(OpenSSL::Cipher).to receive(:new).with("aes-256-cfb").and_return(mock_cipher)
+    expect(mock_cipher).to     receive(:encrypt).and_return(mock_encrypt)
+    expect(mock_encrypt).to    receive(:random_key).and_return(@encryption_key)
+
+    expect {
+      generate_encryption_key_base64
+    }.to output{
+      /Sample encryption key: #{encryption_key_base64}/
+    }.to_stdout
+  end
+
   it "can list files in a bucket" do
     upload @local_file_path, "file.txt"
     expect(@bucket.file "file.txt").not_to be nil
