@@ -71,12 +71,12 @@ describe "Google Cloud Storage files sample" do
   it "can generate a base64 encoded encryption key" do
     mock_cipher = double()
     mock_encrypt = double()
-    encryption_key_base64 = Base64.strict_encode64 @encryption_key
+    encryption_key_base64 = Base64.encode64 @encryption_key
 
     # Mock OpenSSL::Cipher
     expect(OpenSSL::Cipher).to receive(:new).with("aes-256-cfb").and_return(mock_cipher)
-    expect(mock_cipher).to receive(:encrypt).and_return(mock_encrypt)
-    expect(mock_encrypt).to receive(:random_key).and_return(@encryption_key)
+    expect(mock_cipher).to     receive(:encrypt).and_return(mock_encrypt)
+    expect(mock_encrypt).to    receive(:random_key).and_return(@encryption_key)
 
     expect {
       generate_encryption_key_base64
