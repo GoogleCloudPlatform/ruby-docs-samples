@@ -27,22 +27,32 @@ Usage:
 
 Example:
 
-    bundle exec ruby language_samples.rb "Alice and Bob are happy people."
+    bundle exec ruby language_samples.rb "Alice and Bob are frustrated. William Shakespeare is extremely amazingly great."
 
     Sentiment:
-    1.0 (0.699999988079071)
+    Overall document sentiment: 0.20000000298023224
+    Sentence level sentiment:
+    Alice and Bob are frustrated. (-0.30000001192092896)
+    William Shakespeare is extremely amazingly great. (0.800000011920929)
 
-    Entries:
+    Entities:
     Entity Alice PERSON
     Entity Bob PERSON
+    Entity William Shakespeare PERSON http://en.wikipedia.org/wiki/William_Shakespeare
 
     Syntax:
-    Sentences: 1
-    Tokens: 7
+    Sentences: 2
+    Tokens: 13
     NOUN Alice
     CONJ and
     NOUN Bob
     VERB are
-    ADJ happy
-    NOUN people
+    ADJ frustrated
+    PUNCT .
+    NOUN William
+    NOUN Shakespeare
+    VERB is
+    ADV extremely
+    ADV amazingly
+    ADJ great
     PUNCT .

@@ -21,9 +21,11 @@ def sentiment_from_text project_id:, text_content:
 
   language  = Google::Cloud::Language.new project: project_id
   document  = language.document text_content
-  sentiment = document.sentiment
-
-  puts "#{sentiment.score} (#{sentiment.magnitude})"
+  puts "Overall document sentiment: (#{document.sentiment.score})"
+  puts "Sentence level sentiment:"
+  document.sentiment.sentences.each do |sentence|
+    puts "#{sentence.text}: (#{sentence.sentiment.score})"
+  end
   # [END sentiment_from_text]
 end
 
@@ -36,9 +38,11 @@ def sentiment_from_cloud_storage_file project_id:, storage_path:
 
   language  = Google::Cloud::Language.new project: project_id
   document  = language.document storage_path
-  sentiment = document.sentiment
-
-  puts "#{sentiment.score} (#{sentiment.magnitude})"
+  puts "Overall document sentiment: (#{document.sentiment.score})"
+  puts "Sentence level sentiment:"
+  document.sentiment.sentences.each do |sentence|
+    puts "#{sentence.text}: (#{sentence.sentiment.score})"
+  end
   # [END sentiment_from_cloud_storage_file]
 end
 
@@ -54,7 +58,7 @@ def entities_from_text project_id:, text_content:
   entities = document.entities
 
   entities.each do |entity|
-    puts "Entity #{entity.name} #{entity.type}"
+    puts "Entity #{entity.name} #{entity.type} #{entity.metadata['wikipedia_url']}"
   end
   # [END entities_from_text]
 end
@@ -71,7 +75,7 @@ def entities_from_cloud_storage_file project_id:, storage_path:
   entities = document.entities
 
   entities.each do |entity|
-    puts "Entity #{entity.name} #{entity.type}"
+    puts "Entity #{entity.name} #{entity.type} #{entity.metadata['wikipedia_url']}"
   end
   # [END entities_from_cloud_storage_file]
 end
