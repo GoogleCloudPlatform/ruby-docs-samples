@@ -14,7 +14,7 @@
 
 # [START kms_quickstart]
 # Imports the Google Cloud KMS API client
-require "google/apis/cloudkms_v1beta1"
+require "google/apis/cloudkms_v1"
 
 # Your Google Cloud Platform project ID
 project_id = "YOUR_PROJECT_ID"
@@ -23,7 +23,7 @@ project_id = "YOUR_PROJECT_ID"
 location = "global"
 
 # Instantiate the client
-Cloudkms   = Google::Apis::CloudkmsV1beta1 # Alias the module
+Cloudkms   = Google::Apis::CloudkmsV1 # Alias the module
 kms_client = Cloudkms::CloudKMSService.new
 
 # Set the required scopes to access the Key Management Service API
