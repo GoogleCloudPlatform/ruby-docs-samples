@@ -69,7 +69,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  google-api-client (~> 0.9)
+  google-api-client (~> 0.10)
   rspec
 
 BUNDLED WITH
