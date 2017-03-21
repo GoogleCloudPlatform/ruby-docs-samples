@@ -12,8 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START speech_sync_recognize]
 def speech_sync_recognize project_id:, audio_file_path:
+# [START speech_sync_recognize]
   # project_id      = "Your Google Cloud project ID"
   # audio_file_path = "Path to file on which to perform speech recognition"
 
@@ -26,11 +26,11 @@ def speech_sync_recognize project_id:, audio_file_path:
   result  = results.first
 
   puts "Transcription: #{result.transcript}"
-end
 # [END speech_sync_recognize]
+end
 
-# [START speech_sync_recognize_gcs]
 def speech_sync_recognize_gcs project_id:, storage_path:
+# [START speech_sync_recognize_gcs]
   # project_id   = "Your Google Cloud project ID"
   # storage_path = "Path to file in Cloud Storage, eg. gs://bucket/audio.raw"
 
@@ -43,11 +43,11 @@ def speech_sync_recognize_gcs project_id:, storage_path:
   result  = results.first
 
   puts "Transcription: #{result.transcript}"
-end
 # [END speech_sync_recognize_gcs]
+end
 
-# [START speech_async_recognize]
 def speech_async_recognize project_id:, audio_file_path:
+# [START speech_async_recognize]
   # project_id      = "Your Google Cloud project ID"
   # audio_file_path = "Path to file on which to perform speech recognition"
 
@@ -66,11 +66,11 @@ def speech_async_recognize project_id:, audio_file_path:
   result  = results.first
 
   puts "Transcription: #{result.transcript}"
-end
 # [END speech_async_recognize]
+end
 
-# [START speech_async_recognize_gcs]
 def speech_async_recognize_gcs project_id:, storage_path:
+# [START speech_async_recognize_gcs]
   # project_id      = "Your Google Cloud project ID"
   # storage_path = "Path to file in Cloud Storage, eg. gs://bucket/audio.raw"
 
@@ -89,8 +89,8 @@ def speech_async_recognize_gcs project_id:, storage_path:
   result  = results.first
 
   puts "Transcription: #{result.transcript}"
-end
 # [END speech_async_recognize_gcs]
+end
 
 # Deprecated sample below
 # XXX remove after above samples are published
