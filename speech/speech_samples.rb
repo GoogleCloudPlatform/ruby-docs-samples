@@ -71,7 +71,7 @@ end
 
 def speech_async_recognize_gcs project_id:, storage_path:
 # [START speech_async_recognize_gcs]
-  # project_id      = "Your Google Cloud project ID"
+  # project_id   = "Your Google Cloud project ID"
   # storage_path = "Path to file in Cloud Storage, eg. gs://bucket/audio.raw"
 
   require "google/cloud/speech"
