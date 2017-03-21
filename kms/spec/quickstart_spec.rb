@@ -13,10 +13,10 @@
 # limitations under the License.
 
 require "rspec"
-require "google/apis/cloudkms_v1beta1"
+require "google/apis/cloudkms_v1"
 
 describe "Key Management Service Quickstart" do
-  Cloudkms = Google::Apis::CloudkmsV1beta1
+  Cloudkms = Google::Apis::CloudkmsV1
 
   def create_test_key_ring parent, key_ring_id
     client = Cloudkms::CloudKMSService.new

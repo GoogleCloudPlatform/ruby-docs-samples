@@ -14,13 +14,13 @@
 
 require "rspec"
 require "tempfile"
-require "google/apis/cloudkms_v1beta1"
+require "google/apis/cloudkms_v1"
 require_relative "../kms"
 
 describe "Key Management Service" do
 
   def create_service_client
-    kms_client = Google::Apis::CloudkmsV1beta1::CloudKMSService.new
+    kms_client = Google::Apis::CloudkmsV1::CloudKMSService.new
     kms_client.authorization = Google::Auth.get_application_default(
       "https://www.googleapis.com/auth/cloud-platform"
     )
@@ -34,7 +34,7 @@ describe "Key Management Service" do
 
     kms_client.create_project_location_key_ring(
       resource,
-      Google::Apis::CloudkmsV1beta1::KeyRing.new,
+      Google::Apis::CloudkmsV1::KeyRing.new,
       key_ring_id: key_ring_id
     )
   end
@@ -56,7 +56,7 @@ describe "Key Management Service" do
 
     kms_client.create_project_location_key_ring_crypto_key(
       resource,
-      Google::Apis::CloudkmsV1beta1::CryptoKey.new(
+      Google::Apis::CloudkmsV1::CryptoKey.new(
         purpose: "ENCRYPT_DECRYPT"
       ),
       crypto_key_id: crypto_key
@@ -176,12 +176,12 @@ describe "Key Management Service" do
     policy = kms_client.get_project_location_key_ring_crypto_key_iam_policy resource
 
     policy.bindings ||= []
-    policy.bindings << Google::Apis::CloudkmsV1beta1::Binding.new(
+    policy.bindings << Google::Apis::CloudkmsV1::Binding.new(
       members: [member],
       role: role
     )
 
-    policy_request = Google::Apis::CloudkmsV1beta1::SetIamPolicyRequest.new(
+    policy_request = Google::Apis::CloudkmsV1::SetIamPolicyRequest.new(
       policy: policy
     )
 
@@ -202,12 +202,12 @@ describe "Key Management Service" do
 
 
     policy.bindings ||= []
-    policy.bindings << Google::Apis::CloudkmsV1beta1::Binding.new(
+    policy.bindings << Google::Apis::CloudkmsV1::Binding.new(
       members: [member],
       role: role
     )
 
-    policy_request = Google::Apis::CloudkmsV1beta1::SetIamPolicyRequest.new(
+    policy_request = Google::Apis::CloudkmsV1::SetIamPolicyRequest.new(
       policy: policy
     )
 
@@ -232,7 +232,7 @@ describe "Key Management Service" do
       end
     end
 
-    policy_request = Google::Apis::CloudkmsV1beta1::SetIamPolicyRequest.new(
+    policy_request = Google::Apis::CloudkmsV1::SetIamPolicyRequest.new(
       policy: policy
     )
 
@@ -247,7 +247,7 @@ describe "Key Management Service" do
 
     plain_text = File.read input_file
 
-    request = Google::Apis::CloudkmsV1beta1::EncryptRequest.new(
+    request = Google::Apis::CloudkmsV1::EncryptRequest.new(
       plaintext: plain_text
     )
 
@@ -264,7 +264,7 @@ describe "Key Management Service" do
 
     encrypted_text = File.read input_file
 
-    request = Google::Apis::CloudkmsV1beta1::DecryptRequest.new(
+    request = Google::Apis::CloudkmsV1::DecryptRequest.new(
       ciphertext: encrypted_text
     )
 
