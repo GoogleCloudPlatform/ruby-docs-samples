@@ -267,7 +267,8 @@ def run_sample arguments
   when "upload"
     upload_file project_id:      ENV["GOOGLE_CLOUD_PROJECT"],
                 bucket_name:     arguments.shift,
-                local_file_path: arguments.shift
+                local_file_path: arguments.shift,
+                storage_file_path: arguments.shift
   when "enc_upload"
     upload_encrypted_file project_id:      ENV["GOOGLE_CLOUD_PROJECT"],
                           bucket_name:     arguments.shift,
