@@ -22,9 +22,10 @@ Usage:
     Usage: ruby speech_samples.rb <command> [arguments]
 
     Commands:
-      recognize               <audio-file.raw>
-      async_recognize         <audio-file.raw>
-      async_recognize_results <operation name>
+      recognize           audio-file.raw
+      recognize_gcs       gs://bucket/audio-file.raw
+      async_recognize     audio-file.raw
+      async_recognize_gcs gs://bucket/audio-file.raw
 
 Examples:
 
