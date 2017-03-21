@@ -19,7 +19,7 @@ def speech_sync_recognize project_id:, audio_file_path:
 
   require "google/cloud/speech"
 
-  speech = Google::Cloud::Speech.new project_id: project_id
+  speech = Google::Cloud::Speech.new project: project_id
   audio  = speech.audio audio_file_path, encoding: :raw, sample_rate: 16000
 
   results = audio.recognize
@@ -36,7 +36,7 @@ def speech_sync_recognize_gcs project_id:, storage_path:
 
   require "google/cloud/speech"
 
-  speech = Google::Cloud::Speech.new project_id: project_id
+  speech = Google::Cloud::Speech.new project: project_id
   audio  = speech.audio storage_path, encoding: :raw, sample_rate: 16000
 
   results = audio.recognize
@@ -53,7 +53,7 @@ def speech_async_recognize project_id:, audio_file_path:
 
   require "google/cloud/speech"
 
-  speech = Google::Cloud::Speech.new project_id: project_id
+  speech = Google::Cloud::Speech.new project: project_id
   audio  = speech.audio audio_file_path, encoding: :raw, sample_rate: 16000
 
   job = audio.recognize_job
@@ -76,7 +76,7 @@ def speech_async_recognize_gcs project_id:, storage_path:
 
   require "google/cloud/speech"
 
-  speech = Google::Cloud::Speech.new project_id: project_id
+  speech = Google::Cloud::Speech.new project: project_id
   audio  = speech.audio storage_path, encoding: :raw, sample_rate: 16000
 
   job = audio.recognize_job
