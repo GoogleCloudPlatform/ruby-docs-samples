@@ -12,45 +12,88 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Required to load locally generated Cloud Speech API client
-# TODO remove once Cloud Speech API client is released in google-api-client gem
-$LOAD_PATH.unshift File.expand_path("generated", __dir__)
+# [START speech_sync_recognize]
+def speech_sync_recognize project_id:, audio_file_path:
+  # project_id      = "Your Google Cloud project ID"
+  # audio_file_path = "Path to file on which to perform speech recognition"
 
-def initialize_speech_client
-  # [START initialize_speech_client]
-  require "google/apis/speech_v1beta1"
+  require "google/cloud/speech"
 
-  speech_service = Google::Apis::SpeechV1beta1::SpeechService.new
+  speech = Google::Cloud::Speech.new
+  audio  = speech.audio audio_file_path, encoding: :raw, sample_rate: 16000
 
-  speech_service.authorization = Google::Auth.get_application_default(
-    %[ https://www.googleapis.com/auth/cloud-platform ]
-  )
-  # [END initialize_speech_client]
+  results = audio.recognize
+  result  = results.first
 
-  speech_service
+  puts "Transcription: #{result.transcript}"
 end
+# [END speech_sync_recognize]
 
-def transcript_from_audio_file audio_file_path:
-  speech_service = initialize_speech_client
+# [START speech_sync_recognize_gcs]
+def speech_sync_recognize_gcs project_id:, storage_path:
+  # project_id   = "Your Google Cloud project ID"
+  # storage_path = "Path to file in Cloud Storage, eg. gs://bucket/audio.raw"
 
-  # [START transcript_from_audio_file]
-  # audio_file_path = "Path to local audio file"
+  require "google/cloud/speech"
 
-  request        = Google::Apis::SpeechV1beta1::SyncRecognizeRequest.new
-  request.audio  = { content: File.read(audio_file_path) }
-  request.config = { encoding: "LINEAR16", sample_rate: 16000 }
+  speech = Google::Cloud::Speech.new
+  audio  = speech.audio storage_path, encoding: :raw, sample_rate: 16000
 
-  response = speech_service.sync_recognize_speech request
+  results = audio.recognize
+  result  = results.first
 
-  if response.results
-    response.results.each do |recognize_result|
-      recognize_result.alternatives.each do |alternative_hypothesis|
-        puts "Text: #{alternative_hypothesis.transcript}"
-      end
-    end
-  end
-  # [END transcript_from_audio_file]
+  puts "Transcription: #{result.transcript}"
 end
+# [END speech_sync_recognize_gcs]
+
+# [START speech_async_recognize]
+def speech_async_recognize project_id:, audio_file_path:
+  # project_id      = "Your Google Cloud project ID"
+  # audio_file_path = "Path to file on which to perform speech recognition"
+
+  require "google/cloud/speech"
+
+  speech = Google::Cloud::Speech.new
+  audio  = speech.audio audio_file_path, encoding: :raw, sample_rate: 16000
+
+  job = audio.recognize_job
+
+  puts "Job started"
+
+  job.wait_until_done!
+
+  results = job.results
+  result  = results.first
+
+  puts "Transcription: #{result.transcript}"
+end
+# [END speech_async_recognize]
+
+# [START speech_async_recognize_gcs]
+def speech_async_recognize_gcs project_id:, storage_path:
+  # project_id      = "Your Google Cloud project ID"
+  # storage_path = "Path to file in Cloud Storage, eg. gs://bucket/audio.raw"
+
+  require "google/cloud/speech"
+
+  speech = Google::Cloud::Speech.new
+  audio  = speech.audio storage_path, encoding: :raw, sample_rate: 16000
+
+  job = audio.recognize_job
+
+  puts "Job started"
+
+  job.wait_until_done!
+
+  results = job.results
+  result  = results.first
+
+  puts "Transcription: #{result.transcript}"
+end
+# [END speech_async_recognize_gcs]
+
+# Deprecated sample below
+# XXX remove after above samples are published
 
 def begin_async_operation audio_file_path:
   speech_service = initialize_speech_client
@@ -88,24 +131,36 @@ def get_async_operation_results operation_name:
   # [END get_async_operation_results]
 end
 
+require "google/cloud/speech"
+
 if __FILE__ == $PROGRAM_NAME
-  command = ARGV.shift
+  project_id = Google::Cloud::Speech.new.project_id
+  command    = ARGV.shift
 
   case command
   when "recognize"
-    transcript_from_audio_file audio_file_path: ARGV.first
+     speech_sync_recognize projec_id: project_id, audio_file_path: ARGV.first
+  when "recognize_gcs"
+     speech_sync_recognize_gcs(
+       project_id: project_id,
+       storage_path: ARGV.first
+     )
   when "async_recognize"
-    begin_async_operation audio_file_path: ARGV.first
-  when "async_recognize_results"
-    get_async_operation_results operation_name: ARGV.first
+     speech_async_recognize projec_id: project_id, audio_file_path: ARGV.first
+  when "async_recognize_gcs"
+     speech_async_recognize_gcs(
+       project_id: project_id,
+       storage_path: ARGV.first
+     )
   else
     puts <<-usage
 Usage: ruby speech_samples.rb <command> [arguments]
 
 Commands:
-  recognize               <audio-file.raw>
-  async_recognize         <audio-file.raw>
-  async_recognize_results <operation name>
+  recognize           audio-file.raw
+  recognize_gcs       gs://bucket/audio-file.raw
+  async_recognize     audio-file.raw
+  async_recognize_gcs gs://bucket/audio-file.raw
     usage
   end
 end
