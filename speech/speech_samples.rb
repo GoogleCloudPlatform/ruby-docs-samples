@@ -141,17 +141,11 @@ if __FILE__ == $PROGRAM_NAME
   when "recognize"
      speech_sync_recognize projec_id: project_id, audio_file_path: ARGV.first
   when "recognize_gcs"
-     speech_sync_recognize_gcs(
-       project_id: project_id,
-       storage_path: ARGV.first
-     )
+    speech_sync_recognize_gcs project_id: project_id, storage_path: ARGV.first
   when "async_recognize"
      speech_async_recognize projec_id: project_id, audio_file_path: ARGV.first
   when "async_recognize_gcs"
-     speech_async_recognize_gcs(
-       project_id: project_id,
-       storage_path: ARGV.first
-     )
+    speech_async_recognize_gcs project_id: project_id, storage_path: ARGV.first
   else
     puts <<-usage
 Usage: ruby speech_samples.rb <command> [arguments]
