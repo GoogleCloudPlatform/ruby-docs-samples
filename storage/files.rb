@@ -265,7 +265,7 @@ def run_sample arguments
     list_bucket_contents project_id:  ENV["GOOGLE_CLOUD_PROJECT"],
                          bucket_name: arguments.shift
   when "upload"
-    upload_file project_id:      ENV["GOOGLE_CLOUD_PROJECT"],
+    upload_file project_id:        ENV["GOOGLE_CLOUD_PROJECT"],
                 bucket_name:       arguments.shift,
                 local_file_path:   arguments.shift,
                 storage_file_path: arguments.shift
