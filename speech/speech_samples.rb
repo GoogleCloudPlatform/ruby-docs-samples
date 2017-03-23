@@ -151,10 +151,11 @@ if __FILE__ == $PROGRAM_NAME
 Usage: ruby speech_samples.rb <command> [arguments]
 
 Commands:
-  recognize           audio-file.raw
-  recognize_gcs       gs://bucket/audio-file.raw
-  async_recognize     audio-file.raw
-  async_recognize_gcs gs://bucket/audio-file.raw
+  recognize           <filename> Detects speech in a local audio file.
+  recognize_gcs       <gcsUri>   Detects speech in an audio file located in a Google Cloud Storage bucket.
+  async_recognize     <filename> Creates a job to detect speech in a local audio file, and waits for the job to complete.
+  async_recognize_gcs <gcsUri>   Creates a job to detect speech in an audio file located in a Google Cloud Storage bucket, and
+                                 waits for the job to complete.
     usage
   end
 end
