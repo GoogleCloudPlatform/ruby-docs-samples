@@ -2,8 +2,6 @@
 
 # Google Cloud Speech API Ruby Samples
 
-[Sign up for the Alpha](https://services.google.com/fb/forms/speech-api-alpha/).
-
 The [Cloud Speech API](https://cloud.google.com/speech/) enables easy
 integration of Google speech recognition technologies into developer applications.
 
