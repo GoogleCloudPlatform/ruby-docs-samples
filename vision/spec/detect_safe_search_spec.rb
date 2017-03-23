@@ -31,15 +31,15 @@ describe "Detect Safe Search Properties" do
 
   example "detect safe search properties from local image file" do
     expect {
-      detect_safe_search image_path: image_path("otter-crossing.jpg")
+      detect_safe_search image_path: image_path("otter_crossing.jpg")
     }.to output(
       /Violence: false/
     ).to_stdout
   end
 
   example "detect safe search properties from image file in Google Cloud Storage" do
-    storage_file = @bucket.upload_file image_path("otter-crossing.jpg"),
-                                       "otter-crossing.jpg"
+    storage_file = @bucket.upload_file image_path("otter_crossing.jpg"),
+                                       "otter_crossing.jpg"
 
     expect {
       detect_safe_search_gcs image_path: storage_file.to_gs_url

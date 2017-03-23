@@ -31,15 +31,15 @@ describe "Detect Labels" do
 
   example "detect labels from local image file" do
     expect {
-      detect_labels image_path: image_path("otter-crossing.jpg")
+      detect_labels image_path: image_path("otter_crossing.jpg")
     }.to output(
       /traffic sign/
     ).to_stdout
   end
 
   example "detect labels from image file in Google Cloud Storage" do
-    storage_file = @bucket.upload_file image_path("otter-crossing.jpg"),
-                                       "otter-crossing.jpg"
+    storage_file = @bucket.upload_file image_path("otter_crossing.jpg"),
+                                       "otter_crossing.jpg"
 
     expect {
       detect_labels_gcs image_path: storage_file.to_gs_url
