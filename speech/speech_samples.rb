@@ -151,10 +151,10 @@ if __FILE__ == $PROGRAM_NAME
 Usage: ruby speech_samples.rb <command> [arguments]
 
 Commands:
-  recognize           audio-file.raw                Transcribe file
-  recognize_gcs       gs://bucket/audio-file.raw    Transcribe file
-  async_recognize     audio-file.raw                Transcribe file
-  async_recognize_gcs gs://bucket/audio-file.raw    Transcribe file
+  recognize           audio-file.raw
+  recognize_gcs       gs://bucket/audio-file.raw
+  async_recognize     audio-file.raw
+  async_recognize_gcs gs://bucket/audio-file.raw
     usage
   end
 end
