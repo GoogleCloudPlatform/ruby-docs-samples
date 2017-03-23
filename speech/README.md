@@ -2,8 +2,6 @@
 
 # Google Cloud Speech API Ruby Samples
 
-[Sign up for the Alpha](https://services.google.com/fb/forms/speech-api-alpha/).
-
 The [Cloud Speech API](https://cloud.google.com/speech/) enables easy
 integration of Google speech recognition technologies into developer applications.
 
@@ -22,9 +20,11 @@ Usage:
     Usage: ruby speech_samples.rb <command> [arguments]
 
     Commands:
-      recognize               <audio-file.raw>
-      async_recognize         <audio-file.raw>
-      async_recognize_results <operation name>
+    recognize           <filename> Detects speech in a local audio file.
+    recognize_gcs       <gcsUri>   Detects speech in an audio file located in a Google Cloud Storage bucket.
+    async_recognize     <filename> Creates a job to detect speech in a local audio file, and waits for the job to complete.
+    async_recognize_gcs <gcsUri>   Creates a job to detect speech in an audio file located in a Google Cloud Storage bucket, and
+                                   waits for the job to complete.
 
 Examples:
 
