@@ -29,7 +29,7 @@ describe "Detect Document Text" do
     File.expand_path "../images/#{filename}", __dir__
   end
 
-  it "can detect document text from local image file" do
+  example "detect document text from local image file" do
     expect {
       detect_document_text image_path: image_path("otter-crossing.jpg")
     }.to output(
@@ -37,7 +37,7 @@ describe "Detect Document Text" do
     ).to_stdout
   end
 
-  it "can detect document text from image file in Google Cloud Storage" do
+  example "detect document text from image file in Google Cloud Storage" do
     storage_file = @bucket.upload_file image_path("otter-crossing.jpg"),
                                        "otter-crossing.jpg"
 
