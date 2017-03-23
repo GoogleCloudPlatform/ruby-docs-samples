@@ -12,8 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-def detect_document_text image_path:
-  # [START vision_fulltext_annotation]
+def detect_text image_path:
+  # [START vision_text_detection]
   # image_path = "Path to local image file, eg. './image.png'"
   
   require "google/cloud/vision"
@@ -21,17 +21,15 @@ def detect_document_text image_path:
   vision = Google::Cloud::Vision.new
   image  = vision.image image_path
 
-  document = image.document
-
-  puts document.text
-  # [END vision_fulltext_annotation]
+  puts image.text
+  # [END vision_text_detection]
 end
 
 # This method is a duplicate of the above method, but with a different
 # description of the 'image_path' variable, demonstrating the gs://bucket/file
 # GCS storage URI format.
-def detect_document_text_gcs image_path:
-  # [START vision_fulltext_annotation_gcs]
+def detect_text_gcs image_path:
+  # [START vision_text_detection_gcs]
   # image_path = "Google Cloud Storage URI, eg. 'gs://my-bucket/image.png'"
   
   require "google/cloud/vision"
@@ -39,25 +37,23 @@ def detect_document_text_gcs image_path:
   vision = Google::Cloud::Vision.new
   image  = vision.image image_path
 
-  document = image.document
-
-  puts document.text
-  # [END vision_fulltext_annotation_gcs]
+  puts image.text
+  # [END vision_text_detection_gcs]
 end
 
 if __FILE__ == $PROGRAM_NAME
   image_path = ARGV.shift
 
   if image_path
-    detect_document_text image_path: image_path
+    detect_text image_path: image_path
   else
     puts <<-usage
-Usage: ruby detect_document_text.rb [image file path]
+Usage: ruby detect_text.rb [image file path]
 
 Example:
-  ruby detect_document_text.rb image.png
-  ruby detect_document_text.rb https://public-url/image.png
-  ruby detect_document_text.rb gs://my-bucket/image.ong
+  ruby detect_text.rb image.png
+  ruby detect_text.rb https://public-url/image.png
+  ruby detect_text.rb gs://my-bucket/image.ong
     usage
   end
 end
