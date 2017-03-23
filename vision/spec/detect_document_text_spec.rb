@@ -20,8 +20,8 @@ require_relative "../detect_document_text"
 describe "Detect Document Text" do
 
   before do
-    @storage    = Google::Cloud::Storage.new
-    @bucket     = @storage.bucket ENV["GOOGLE_CLOUD_STORAGE_BUCKET"]
+    @storage = Google::Cloud::Storage.new
+    @bucket  = @storage.bucket ENV["GOOGLE_CLOUD_STORAGE_BUCKET"]
   end
 
   # Returns full path to sample image included in repository for testing
