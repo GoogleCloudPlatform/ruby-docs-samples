@@ -41,7 +41,7 @@ describe "Draw box around faces sample" do
 
     begin
       capture do
-        detect_faces path_to_image_file: image_path("face.png"),
+        draw_box_around_faces path_to_image_file: image_path("face.png"),
                      path_to_output_file: output_image_file.path
       end
 

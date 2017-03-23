@@ -21,9 +21,9 @@ require "rmagick"
 # [END import_rmagick]
 
 # [START detect_faces]
-def detect_faces path_to_image_file:, path_to_output_file:
+def draw_box_around_faces path_to_image_file:, path_to_output_file:
   # [START get_vision_service]
-  vision = Google::Cloud::Vision.new project: project_id
+  vision = Google::Cloud::Vision.new
   # [END get_vision_service]
 
   # [START detect_face]
