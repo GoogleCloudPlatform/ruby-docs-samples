@@ -12,9 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# XXX sample below extracted to `draw_box_around_faces.rb`
-#     remove below once documentation is updated.
-
 # [START all]
 # [START import_client_library]
 require "google/cloud/vision"

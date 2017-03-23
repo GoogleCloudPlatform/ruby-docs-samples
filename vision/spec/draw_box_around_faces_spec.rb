@@ -12,11 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require_relative "../detect_faces"
 require "rspec"
 require "tempfile"
 
-describe "Detect Faces Sample" do
+require_relative "../draw_box_around_faces"
+
+describe "Draw box around faces sample" do
 
   # Returns full path to sample image included in repository for testing
   def image_path filename
