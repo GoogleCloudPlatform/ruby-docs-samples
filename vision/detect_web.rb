@@ -13,7 +13,7 @@
 # limitations under the License.
 
 def detect_web project_id:, image_path:
-  # [START vision_web_annotation_detection]
+  # [START vision_web_detection]
   # project_id = "Your Google Cloud project ID"
   # image_path = "Path to local image file, eg. './image.png'"
   
@@ -31,14 +31,14 @@ def detect_web project_id:, image_path:
   web.full_matching_images.each do |image|
     puts image.url
   end
-  # [END vision_web_annotation_detection]
+  # [END vision_web_detection]
 end
 
 # This method is a duplicate of the above method, but with a different
 # description of the 'image_path' variable, demonstrating the gs://bucket/file
 # GCS storage URI format.
 def detect_web_gcs project_id:, image_path:
-  # [START vision_web_annotation_detection_gcs]
+  # [START vision_web_detection_gcs]
   # project_id = "Your Google Cloud project ID"
   # image_path = "Google Cloud Storage URI, eg. 'gs://my-bucket/image.png'"
   
@@ -56,7 +56,7 @@ def detect_web_gcs project_id:, image_path:
   web.full_matching_images.each do |image|
     puts image.url
   end
-  # [END vision_web_annotation_detection_gcs]
+  # [END vision_web_detection_gcs]
 end
 
 if __FILE__ == $PROGRAM_NAME
