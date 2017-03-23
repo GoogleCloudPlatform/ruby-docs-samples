@@ -71,7 +71,7 @@ Usage: ruby detect_web.rb [image file path]
 Example:
   ruby detect_web.rb image.png
   ruby detect_web.rb https://public-url/image.png
-  ruby detect_web.rb gs://my-bucket/image.ong
+  ruby detect_web.rb gs://my-bucket/image.png
     usage
   end
 end

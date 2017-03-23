@@ -65,7 +65,7 @@ Usage: ruby detect_safe_search.rb [image file path]
 Example:
   ruby detect_safe_search.rb image.png
   ruby detect_safe_search.rb https://public-url/image.png
-  ruby detect_safe_search.rb gs://my-bucket/image.ong
+  ruby detect_safe_search.rb gs://my-bucket/image.png
     usage
   end
 end

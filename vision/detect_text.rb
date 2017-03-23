@@ -55,7 +55,7 @@ Usage: ruby detect_text.rb [image file path]
 Example:
   ruby detect_text.rb image.png
   ruby detect_text.rb https://public-url/image.png
-  ruby detect_text.rb gs://my-bucket/image.ong
+  ruby detect_text.rb gs://my-bucket/image.png
     usage
   end
 end

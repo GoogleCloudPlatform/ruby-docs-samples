@@ -59,7 +59,7 @@ Usage: ruby detect_image_properties.rb [image file path]
 Example:
   ruby detect_image_properties.rb image.png
   ruby detect_image_properties.rb https://public-url/image.png
-  ruby detect_image_properties.rb gs://my-bucket/image.ong
+  ruby detect_image_properties.rb gs://my-bucket/image.png
     usage
   end
 end

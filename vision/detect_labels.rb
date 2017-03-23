@@ -59,7 +59,7 @@ Usage: ruby detect_labels.rb [image file path]
 Example:
   ruby detect_labels.rb image.png
   ruby detect_labels.rb https://public-url/image.png
-  ruby detect_labels.rb gs://my-bucket/image.ong
+  ruby detect_labels.rb gs://my-bucket/image.png
     usage
   end
 end

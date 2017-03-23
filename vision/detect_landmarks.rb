@@ -67,7 +67,7 @@ Usage: ruby detect_landmarks.rb [image file path]
 Example:
   ruby detect_landmarks.rb image.png
   ruby detect_landmarks.rb https://public-url/image.png
-  ruby detect_landmarks.rb gs://my-bucket/image.ong
+  ruby detect_landmarks.rb gs://my-bucket/image.png
     usage
   end
 end

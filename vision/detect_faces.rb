@@ -65,7 +65,7 @@ Usage: ruby detect_faces.rb [image file path]
 Example:
   ruby detect_faces.rb image.png
   ruby detect_faces.rb https://public-url/image.png
-  ruby detect_faces.rb gs://my-bucket/image.ong
+  ruby detect_faces.rb gs://my-bucket/image.png
     usage
   end
 end

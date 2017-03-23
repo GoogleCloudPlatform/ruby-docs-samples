@@ -59,7 +59,7 @@ Usage: ruby detect_logos.rb [image file path]
 Example:
   ruby detect_logos.rb image.png
   ruby detect_logos.rb https://public-url/image.png
-  ruby detect_logos.rb gs://my-bucket/image.ong
+  ruby detect_logos.rb gs://my-bucket/image.png
     usage
   end
 end
