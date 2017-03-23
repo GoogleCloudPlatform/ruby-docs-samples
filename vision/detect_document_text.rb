@@ -13,7 +13,7 @@
 # limitations under the License.
 
 def detect_document_text project_id:, image_path:
-  # [START vision_fulltext_annotation]
+  # [START vision_fulltext_detection]
   # project_id = "Your Google Cloud project ID"
   # image_path = "Path to local image file, eg. './image.png'"
   
@@ -25,14 +25,14 @@ def detect_document_text project_id:, image_path:
   document = image.document
 
   puts document.text
-  # [END vision_fulltext_annotation]
+  # [END vision_fulltext_detection]
 end
 
 # This method is a duplicate of the above method, but with a different
 # description of the 'image_path' variable, demonstrating the gs://bucket/file
 # GCS storage URI format.
 def detect_document_text_gcs project_id:, image_path:
-  # [START vision_fulltext_annotation_gcs]
+  # [START vision_fulltext_detection_gcs]
   # project_id = "Your Google Cloud project ID"
   # image_path = "Google Cloud Storage URI, eg. 'gs://my-bucket/image.png'"
   
@@ -44,7 +44,7 @@ def detect_document_text_gcs project_id:, image_path:
   document = image.document
 
   puts document.text
-  # [END vision_fulltext_annotation_gcs]
+  # [END vision_fulltext_detection_gcs]
 end
 
 if __FILE__ == $PROGRAM_NAME
