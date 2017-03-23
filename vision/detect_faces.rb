@@ -12,6 +12,63 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+def detect_faces image_path:
+  # [START vision_face_detection]
+  # image_path = "Path to local image file, eg. './image.png'"
+  
+  require "google/cloud/vision"
+
+  vision = Google::Cloud::Vision.new
+  image  = vision.image image_path
+
+  image.faces.each do |face|
+    puts "Joy:      #{face.likelihood.joy?}"
+    puts "Anger:    #{face.likelihood.anger?}"
+    puts "Sorrow:   #{face.likelihood.sorrow?}"
+    puts "Surprise: #{face.likelihood.surprise?}"
+  end
+  # [END vision_face_detection]
+end
+
+# This method is a duplicate of the above method, but with a different
+# description of the 'image_path' variable, demonstrating the gs://bucket/file
+# GCS storage URI format.
+def detect_faces_gcs image_path:
+  # [START vision_face_detection_gcs]
+  # image_path = "Google Cloud Storage URI, eg. 'gs://my-bucket/image.png'"
+  
+  require "google/cloud/vision"
+
+  vision = Google::Cloud::Vision.new
+  image  = vision.image image_path
+
+  image.faces.each do |face|
+    puts "Joy:      #{face.likelihood.joy?}"
+    puts "Anger:    #{face.likelihood.anger?}"
+    puts "Sorrow:   #{face.likelihood.sorrow?}"
+    puts "Surprise: #{face.likelihood.surprise?}"
+  end
+  # [END vision_face_detection_gcs]
+end
+
+if __FILE__ == $PROGRAM_NAME
+  image_path = ARGV.shift
+
+  if image_path
+    detect_faces image_path: image_path
+  else
+    puts <<-usage
+Usage: ruby detect_faces.rb [image file path]
+
+Example:
+  ruby detect_faces.rb image.png
+  ruby detect_faces.rb https://public-url/image.png
+  ruby detect_faces.rb gs://my-bucket/image.ong
+    usage
+  end
+end
+
+__END__
 # XXX sample below extracted to `draw_box_around_faces.rb`
 #     remove below once documentation is updated.
 
