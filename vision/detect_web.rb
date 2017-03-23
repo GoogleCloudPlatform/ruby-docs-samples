@@ -12,13 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-def detect_web image_path:
+def detect_web project_id:, image_path:
   # [START vision_web_annotation_detection]
+  # project_id = "Your Google Cloud project ID"
   # image_path = "Path to local image file, eg. './image.png'"
   
   require "google/cloud/vision"
 
-  vision = Google::Cloud::Vision.new
+  vision = Google::Cloud::Vision.new project: project_id
   image  = vision.image image_path
 
   web = image.web
@@ -36,13 +37,14 @@ end
 # This method is a duplicate of the above method, but with a different
 # description of the 'image_path' variable, demonstrating the gs://bucket/file
 # GCS storage URI format.
-def detect_web_gcs image_path:
+def detect_web_gcs project_id:, image_path:
   # [START vision_web_annotation_detection_gcs]
+  # project_id = "Your Google Cloud project ID"
   # image_path = "Google Cloud Storage URI, eg. 'gs://my-bucket/image.png'"
   
   require "google/cloud/vision"
 
-  vision = Google::Cloud::Vision.new
+  vision = Google::Cloud::Vision.new project: project_id
   image  = vision.image image_path
 
   web = image.web

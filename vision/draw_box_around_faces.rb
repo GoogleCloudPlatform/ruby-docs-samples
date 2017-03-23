@@ -23,7 +23,7 @@ require "rmagick"
 # [START detect_faces]
 def detect_faces path_to_image_file:, path_to_output_file:
   # [START get_vision_service]
-  vision = Google::Cloud::Vision.new
+  vision = Google::Cloud::Vision.new project: project_id
   # [END get_vision_service]
 
   # [START detect_face]
