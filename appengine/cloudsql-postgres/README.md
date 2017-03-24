@@ -53,8 +53,8 @@ create a [new user][user] and [database][database] for your application:
     printed to the console when you started the proxy, and is of the format:
     `/[DIR]/[YOUR_PROJECT_ID]:[YOUR_REGION]:[YOUR_INSTANCE_NAME]`.
 
-1. Set the `MYSQL_USER`, `MYSQL_PASSWORD`, `MYSQL_SOCKET_PATH`, and
-`MYSQL_DATABASE` environment variables. This allows the app to connect to your
+1. Set the `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_SOCKET_PATH`, and
+`POSTGRES_DATABASE` environment variables. This allows the app to connect to your
 Cloud SQL instance through the proxy.
 
 1. Update the values in `app.yaml` with your instance configuration.
@@ -74,10 +74,10 @@ It's recommended to follow the instructions above to run the Cloud SQL proxy.
 You will need to set the following environment variables via your shell before
 running the sample:
 
-    export MYSQL_USER="YOUR_USER"
-    export MYSQL_PASSWORD="YOUR_PASSWORD"
-    export MYSQL_SOCKET_PATH="YOUR_SOCKET_PATH"
-    export MYSQL_DATABASE="YOUR_DATABASE"
+    export POSTGRES_USER="YOUR_USER"
+    export POSTGRES_PASSWORD="YOUR_PASSWORD"
+    export POSTGRES_SOCKET_PATH="YOUR_SOCKET_PATH"
+    export POSTGRES_DATABASE="YOUR_DATABASE"
     bundle install
     bundle exec ruby create_tables.rb
     bundle exec ruby app.rb

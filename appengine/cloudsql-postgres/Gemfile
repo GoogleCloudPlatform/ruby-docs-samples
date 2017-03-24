@@ -15,7 +15,7 @@
 # [START dependencies]
 source "https://rubygems.org"
 
-gem "mysql2"
+gem "pg"
 gem "sequel"
 # [END dependencies]
 

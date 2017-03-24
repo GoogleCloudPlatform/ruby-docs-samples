@@ -17,10 +17,10 @@ require "digest/sha2"
 require "sinatra"
 require "sequel"
 
-DB = Sequel.mysql2 user:     ENV["MYSQL_USER"],
-                   password: ENV["MYSQL_PASSWORD"],
-                   database: ENV["MYSQL_DATABASE"],
-                   socket:   ENV["MYSQL_SOCKET_PATH"]
+DB = Sequel.postgres user:     ENV["POSTGRES_USER"],
+                     password: ENV["POSTGRES_PASSWORD"],
+                     database: ENV["POSTGRES_DATABASE"],
+                     socket:   ENV["POSTGRES_SOCKET_PATH"]
 
 get "/" do
   # Store a hash of the visitor's ip address
