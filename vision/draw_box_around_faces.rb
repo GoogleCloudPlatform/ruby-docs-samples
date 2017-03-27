@@ -67,10 +67,10 @@ if __FILE__ == $PROGRAM_NAME
                  path_to_output_file: ARGV.shift
   else
     puts <<-usage
-Usage: ruby detect_faces.rb image_file image_result
+Usage: ruby draw_box_around_faces.rb [input-file] [output-file]
 
 Example:
-  ruby detect_faces.rb images/face.png output-image.png
+  ruby draw_box_around_faces.rb images/face.png output-image.png
     usage
   end
 end
