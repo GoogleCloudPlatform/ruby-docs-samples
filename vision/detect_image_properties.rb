@@ -49,9 +49,10 @@ end
 
 if __FILE__ == $PROGRAM_NAME
   image_path = ARGV.shift
+  project_id = ENV["GOOGLE_CLOUD_PROJECT"]
 
   if image_path
-    detect_image_properties image_path: image_path
+    detect_image_properties image_path: image_path, project_id: project_id
   else
     puts <<-usage
 Usage: ruby detect_image_properties.rb [image file path]
