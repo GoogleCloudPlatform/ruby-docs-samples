@@ -9,7 +9,7 @@ content.
 
 [vision_docs]: https://cloud.google.com/vision/docs/
 
-[Vision How-to Guides](https://cloud-dot-devsite.googleplex.com/vision/docs/how-to)
+[Vision How-to Guides](https://cloud.google.com/vision/docs/how-to)
 
 ## Run samples
 
