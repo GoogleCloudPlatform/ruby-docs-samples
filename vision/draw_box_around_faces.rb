@@ -32,7 +32,7 @@ def draw_box_around_faces path_to_image_file:, path_to_output_file:
   # [END detect_face]
 
   # [START highlight_faces]
-  image = Magick::Image.read(path_to_image_file)[0]
+  image = Magick::Image.read(path_to_image_file).first
 
   faces.each do |face|
     puts "Face bounds:"
