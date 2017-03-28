@@ -12,8 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-def detect_labels project_id:, image_path:
-  # [START vision_label_detection]
+def detect_image_properties project_id:, image_path:
+  # [START vision_image_property_detection]
   # project_id = "Your Google Cloud project ID"
   # image_path = "Path to local image file, eg. './image.png'"
   
@@ -22,17 +22,17 @@ def detect_labels project_id:, image_path:
   vision = Google::Cloud::Vision.new project: project_id
   image  = vision.image image_path
 
-  image.labels.each do |label|
-    puts label.description
+  image.properties.colors.each do |color|
+    puts "Color #{color.red}, #{color.green}, #{color.blue}"
   end
-  # [END vision_label_detection]
+  # [END vision_image_property_detection]
 end
 
 # This method is a duplicate of the above method, but with a different
 # description of the 'image_path' variable, demonstrating the gs://bucket/file
 # GCS storage URI format.
-def detect_labels_gcs project_id:, image_path:
-  # [START vision_label_detection_gcs]
+def detect_image_properties_gcs project_id:, image_path:
+  # [START vision_image_property_detection_gcs]
   # project_id = "Your Google Cloud project ID"
   # image_path = "Google Cloud Storage URI, eg. 'gs://my-bucket/image.png'"
   
@@ -41,10 +41,10 @@ def detect_labels_gcs project_id:, image_path:
   vision = Google::Cloud::Vision.new project: project_id
   image  = vision.image image_path
 
-  image.labels.each do |label|
-    puts label.description
+  image.properties.colors.each do |color|
+    puts "Color #{color.red}, #{color.green}, #{color.blue}"
   end
-  # [END vision_label_detection_gcs]
+  # [END vision_image_property_detection_gcs]
 end
 
 if __FILE__ == $PROGRAM_NAME
@@ -52,15 +52,15 @@ if __FILE__ == $PROGRAM_NAME
   project_id = ENV["GOOGLE_CLOUD_PROJECT"]
 
   if image_path
-    detect_labels image_path: image_path, project_id: project_id
+    detect_image_properties image_path: image_path, project_id: project_id
   else
     puts <<-usage
-Usage: ruby detect_labels.rb [image file path]
+Usage: ruby detect_image_properties.rb [image file path]
 
 Example:
-  ruby detect_labels.rb image.png
-  ruby detect_labels.rb https://public-url/image.png
-  ruby detect_labels.rb gs://my-bucket/image.png
+  ruby detect_image_properties.rb image.png
+  ruby detect_image_properties.rb https://public-url/image.png
+  ruby detect_image_properties.rb gs://my-bucket/image.png
     usage
   end
 end

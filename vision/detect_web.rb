@@ -12,8 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-def detect_labels project_id:, image_path:
-  # [START vision_label_detection]
+def detect_web project_id:, image_path:
+  # [START vision_web_detection]
   # project_id = "Your Google Cloud project ID"
   # image_path = "Path to local image file, eg. './image.png'"
   
@@ -22,17 +22,23 @@ def detect_labels project_id:, image_path:
   vision = Google::Cloud::Vision.new project: project_id
   image  = vision.image image_path
 
-  image.labels.each do |label|
-    puts label.description
+  web = image.web
+
+  web.entities.each do |entity|
+    puts entity.description
   end
-  # [END vision_label_detection]
+
+  web.full_matching_images.each do |image|
+    puts image.url
+  end
+  # [END vision_web_detection]
 end
 
 # This method is a duplicate of the above method, but with a different
 # description of the 'image_path' variable, demonstrating the gs://bucket/file
 # GCS storage URI format.
-def detect_labels_gcs project_id:, image_path:
-  # [START vision_label_detection_gcs]
+def detect_web_gcs project_id:, image_path:
+  # [START vision_web_detection_gcs]
   # project_id = "Your Google Cloud project ID"
   # image_path = "Google Cloud Storage URI, eg. 'gs://my-bucket/image.png'"
   
@@ -41,10 +47,16 @@ def detect_labels_gcs project_id:, image_path:
   vision = Google::Cloud::Vision.new project: project_id
   image  = vision.image image_path
 
-  image.labels.each do |label|
-    puts label.description
+  web = image.web
+
+  web.entities.each do |entity|
+    entity.description
   end
-  # [END vision_label_detection_gcs]
+
+  web.full_matching_images.each do |image|
+    puts image.url
+  end
+  # [END vision_web_detection_gcs]
 end
 
 if __FILE__ == $PROGRAM_NAME
@@ -52,15 +64,15 @@ if __FILE__ == $PROGRAM_NAME
   project_id = ENV["GOOGLE_CLOUD_PROJECT"]
 
   if image_path
-    detect_labels image_path: image_path, project_id: project_id
+    detect_web image_path: image_path, project_id: project_id
   else
     puts <<-usage
-Usage: ruby detect_labels.rb [image file path]
+Usage: ruby detect_web.rb [image file path]
 
 Example:
-  ruby detect_labels.rb image.png
-  ruby detect_labels.rb https://public-url/image.png
-  ruby detect_labels.rb gs://my-bucket/image.png
+  ruby detect_web.rb image.png
+  ruby detect_web.rb https://public-url/image.png
+  ruby detect_web.rb gs://my-bucket/image.png
     usage
   end
 end

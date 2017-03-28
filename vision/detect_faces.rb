@@ -6,11 +6,74 @@
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
-# Unless required by applicable law or agreed to in write, software
+# Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+def detect_faces project_id:, image_path:
+  # [START vision_face_detection]
+  # project_id = "Your Google Cloud project ID"
+  # image_path = "Path to local image file, eg. './image.png'"
+  
+  require "google/cloud/vision"
+
+  vision = Google::Cloud::Vision.new project: project_id
+  image  = vision.image image_path
+
+  image.faces.each do |face|
+    puts "Joy:      #{face.likelihood.joy?}"
+    puts "Anger:    #{face.likelihood.anger?}"
+    puts "Sorrow:   #{face.likelihood.sorrow?}"
+    puts "Surprise: #{face.likelihood.surprise?}"
+  end
+  # [END vision_face_detection]
+end
+
+# This method is a duplicate of the above method, but with a different
+# description of the 'image_path' variable, demonstrating the gs://bucket/file
+# GCS storage URI format.
+def detect_faces_gcs project_id:, image_path:
+  # [START vision_face_detection_gcs]
+  # project_id = "Your Google Cloud project ID"
+  # image_path = "Google Cloud Storage URI, eg. 'gs://my-bucket/image.png'"
+  
+  require "google/cloud/vision"
+
+  vision = Google::Cloud::Vision.new project: project_id
+  image  = vision.image image_path
+
+  image.faces.each do |face|
+    puts "Joy:      #{face.likelihood.joy?}"
+    puts "Anger:    #{face.likelihood.anger?}"
+    puts "Sorrow:   #{face.likelihood.sorrow?}"
+    puts "Surprise: #{face.likelihood.surprise?}"
+  end
+  # [END vision_face_detection_gcs]
+end
+
+if __FILE__ == $PROGRAM_NAME
+  image_path = ARGV.shift
+  project_id = ENV["GOOGLE_CLOUD_PROJECT"]
+
+  if image_path
+    detect_faces image_path: image_path, project_id: project_id
+  else
+    puts <<-usage
+Usage: ruby detect_faces.rb [image file path]
+
+Example:
+  ruby detect_faces.rb image.png
+  ruby detect_faces.rb https://public-url/image.png
+  ruby detect_faces.rb gs://my-bucket/image.png
+    usage
+  end
+end
+
+__END__
+# XXX sample below extracted to `draw_box_around_faces.rb`
+#     remove below once documentation is updated.
 
 # [START all]
 # [START import_client_library]
@@ -23,7 +86,7 @@ require "rmagick"
 # [START detect_faces]
 def detect_faces path_to_image_file:, path_to_output_file:
   # [START get_vision_service]
-  vision = Google::Cloud::Vision.new
+  vision = Google::Cloud::Vision.new project: project_id
   # [END get_vision_service]
 
   # [START detect_face]
@@ -40,7 +103,7 @@ def detect_faces path_to_image_file:, path_to_output_file:
       puts "(#{vector.x}, #{vector.y})"
     end
 
-    draw        = Magick::Draw.new
+    draw = Magick::Draw.new
     draw.stroke = "green"
     draw.stroke_width 5
     draw.fill_opacity 0

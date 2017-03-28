@@ -20,4 +20,5 @@ gem "rmagick"
 group :test do
   gem "rspec"
   gem "rack-test"
+  gem "google-cloud-storage"
 end
