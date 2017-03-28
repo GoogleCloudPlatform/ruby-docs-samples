@@ -120,3 +120,10 @@ environment variable to the project name set in the
       ruby detect_web.rb image.png
       ruby detect_web.rb https://public-url/image.png
       ruby detect_web.rb gs://my-bucket/image.png
+
+### Face Detection Tutorial
+
+    Usage: ruby draw_box_around_faces.rb [input-file] [output-file]
+    
+    Example:
+      ruby draw_box_around_faces.rb images/face.png output-image.png
