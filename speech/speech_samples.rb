@@ -134,7 +134,7 @@ end
 require "google/cloud/speech"
 
 if __FILE__ == $PROGRAM_NAME
-  project_id = Google::Cloud::Speech.new.project_id
+  project_id = Google::Cloud::Speech.new.project
   command    = ARGV.shift
 
   case command
