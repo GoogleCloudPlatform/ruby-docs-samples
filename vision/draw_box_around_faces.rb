@@ -21,9 +21,10 @@ require "rmagick"
 # [END import_rmagick]
 
 # [START detect_faces]
-def draw_box_around_faces path_to_image_file:, path_to_output_file:
+def draw_box_around_faces path_to_image_file:, path_to_output_file:,
+                          project_id:
   # [START get_vision_service]
-  vision = Google::Cloud::Vision.new
+  vision = Google::Cloud::Vision.new project: project_id
   # [END get_vision_service]
 
   # [START detect_face]
@@ -62,9 +63,12 @@ end
 
 # [START main]
 if __FILE__ == $PROGRAM_NAME
+  project_id = ENV["GOOGLE_CLOUD_PROJECT"]
+
   if ARGV.size == 2
-    detect_faces path_to_image_file:  ARGV.shift,
-                 path_to_output_file: ARGV.shift
+    draw_box_around_faces path_to_image_file:  ARGV.shift,
+                          path_to_output_file: ARGV.shift,
+                          project_id:          project_id
   else
     puts <<-usage
 Usage: ruby draw_box_around_faces.rb [input-file] [output-file]
