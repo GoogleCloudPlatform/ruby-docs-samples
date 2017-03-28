@@ -19,6 +19,10 @@ require_relative "../draw_box_around_faces"
 
 describe "Draw box around faces sample" do
 
+  before do
+    @project_id = ENV["GOOGLE_CLOUD_PROJECT"]
+  end
+
   # Returns full path to sample image included in repository for testing
   def image_path filename
     File.expand_path "../images/#{filename}", __dir__
@@ -41,8 +45,9 @@ describe "Draw box around faces sample" do
 
     begin
       capture do
-        draw_box_around_faces path_to_image_file: image_path("face.png"),
-                     path_to_output_file: output_image_file.path
+        draw_box_around_faces path_to_image_file:  image_path("face.png"),
+                              path_to_output_file: output_image_file.path,
+                              project_id:          @project_id
       end
 
       expect(captured_output).to include "Face bounds:"
