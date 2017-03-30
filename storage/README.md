@@ -44,14 +44,18 @@ Environment variables:
 Usage: bundle exec ruby files.rb [command] [arguments]
 
 Commands:
-  list        <bucket>                List all files in the bucket
-  upload      <bucket> <file>         Upload local file to a bucket
-  download    <bucket> <file> <path>  Download a file from a bucket
-  delete      <bucket> <file>         Delete a file from a bucket
-  metadata    <bucket> <file>         Display metadata for a file in a bucket
-  make_public <bucket> <file>         Make a file in a bucket public
-  rename      <bucket> <file> <new>   Rename a file in a bucket
-  copy <srcBucket> <srcFile> <destBucket> <destFile>  Copy file to other bucket
+  list              <bucket>                                        List all files in the bucket
+  upload            <bucket> <file>                                 Upload local file to a bucket
+  encrypted_upload  <bucket> <file> <base64_encryption_key>         Upload local file as an encrypted file to a bucket
+  download           <bucket> <file> <path>                         Download a file from a bucket
+  encrypted_download <bucket> <file> <path> <base64_encryption_key> Download an encrypted file from a bucket
+  rotate_encryption_key <bucket> <file> <base64_current_encryption_key> <base64_new_encryption_key> Update encryption key of an encrypted file.
+  generate_encryption_key                                           Generate a sample encryption key
+  delete       <bucket> <file>                                      Delete a file from a bucket
+  metadata     <bucket> <file>                                      Display metadata for a file in a bucket
+  make_public  <bucket> <file>                                      Make a file in a bucket public
+  rename       <bucket> <file> <new>                                Rename a file in a bucket
+  copy <srcBucket> <srcFile> <destBucket> <destFile>                Copy file to other bucket
 
 Environment variables:
   GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID

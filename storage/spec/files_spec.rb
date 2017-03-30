@@ -231,4 +231,38 @@ describe "Google Cloud Storage files sample" do
       local_file.unlink
     end
   end
+
+  it "rotate encryption key for an encrypted file" do
+    begin
+      delete_file "file.txt"
+      upload(@local_file_path, "file.txt",
+             encryption_key: @encryption_key)
+
+      local_file = Tempfile.new "cloud-storage-encryption-tests"
+      expect(File.size local_file.path).to eq 0
+
+      new_encryption_key = generate_encryption_key
+
+      expect {
+        rotate_encryption_key(project_id:             @project_id,
+                              bucket_name:            @bucket_name,
+                              file_name:              "file.txt",
+                              current_encryption_key: @encryption_key,
+                              new_encryption_key:     new_encryption_key)
+      }.to output(
+        "The encryption key for file.txt in #{@bucket_name} was rotated.\n"
+      ).to_stdout
+
+      download_encrypted_file(project_id:        @project_id,
+                              bucket_name:       @bucket_name,
+                              storage_file_path: "file.txt",
+                              local_file_path:   local_file.path,
+                              encryption_key:    new_encryption_key)
+
+      expect(File.size local_file.path).not_to eq 0
+    ensure
+      local_file.close
+      local_file.unlink
+    end
+  end
 end

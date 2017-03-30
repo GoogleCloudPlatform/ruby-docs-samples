@@ -59,7 +59,7 @@ def generate_encryption_key_base64
 end
 
 def upload_file project_id:, bucket_name:, local_file_path:,
-                                           storage_file_path:
+                storage_file_path: nil
   # [START upload_file]
   # project_id        = "Your Google Cloud project ID"
   # bucket_name       = "Your Google Cloud Storage bucket name"
@@ -257,54 +257,83 @@ def copy_file project_id:, source_bucket_name:, source_file_name:,
   # [END copy_file]
 end
 
+def rotate_encryption_key project_id:, bucket_name:, file_name:,
+                          current_encryption_key:, new_encryption_key:
+  # [START rotate_encryption_key]
+  # project_id             = "Your Google Cloud project ID"
+  # bucket_name            = "Your Google Cloud Storage bucket name"
+  # file_name              = "Name of a file in the Cloud Storage bucket"
+  # current_encryption_key = "Encryption key currently being used"
+  # new_encryption_key     = "New encryption key to use"
+
+  require "google/cloud/storage"
+
+  storage = Google::Cloud::Storage.new project: project_id
+  bucket  = storage.bucket bucket_name
+  file    = bucket.file file_name, encryption_key: current_encryption_key
+
+  file.rotate encryption_key: current_encryption_key,
+              new_encryption_key: new_encryption_key
+
+  puts "The encryption key for #{file.name} in #{bucket.name} was rotated."
+  # [END rotate_encryption_key]
+end
+
 def run_sample arguments
   command = arguments.shift
+  project_id = ENV["GOOGLE_CLOUD_PROJECT"]
 
   case command
   when "list"
-    list_bucket_contents project_id:  ENV["GOOGLE_CLOUD_PROJECT"],
+    list_bucket_contents project_id:  project_id,
                          bucket_name: arguments.shift
   when "upload"
-    upload_file project_id:      ENV["GOOGLE_CLOUD_PROJECT"],
+    upload_file project_id:      project_id,
                 bucket_name:     arguments.shift,
                 local_file_path: arguments.shift
-  when "enc_upload"
-    upload_encrypted_file project_id:      ENV["GOOGLE_CLOUD_PROJECT"],
+  when "encrypted_upload"
+    upload_encrypted_file project_id:      project_id,
                           bucket_name:     arguments.shift,
                           local_file_path: arguments.shift,
                           encryption_key:  Base64.decode64(arguments.shift)
   when "download"
-    download_file project_id:  ENV["GOOGLE_CLOUD_PROJECT"],
+    download_file project_id:  project_id,
                   bucket_name: arguments.shift,
                   file_name:   arguments.shift,
                   local_path:  arguments.shift
-  when "enc_download"
-    download_file project_id:    ENV["GOOGLE_CLOUD_PROJECT"],
+  when "encrypted_download"
+    download_file project_id:    project_id,
                   bucket_name:   arguments.shift,
                   file_name:     arguments.shift,
                   local_path:    arguments.shift,
                   encrypted_key: Base64.decode64(arguments.shift)
-  when "gen_key"
+  when "rotate_encryption_key"
+    rotate_encryption_key project_id:             project_id,
+                          bucket_name:            arguments.shift,
+                          file_name:              arguments.shift,
+                          current_encryption_key: arguments.shift,
+                          new_encryption_key:     arguments.shift
+  when "generate_encryption_key"
     generate_encryption_key_base64
   when "delete"
-    delete_file project_id:  ENV["GOOGLE_CLOUD_PROJECT"],
+    delete_file project_id:  project_id,
                 bucket_name: arguments.shift,
                 file_name:   arguments.shift
   when "metadata"
-    list_file_details project_id:  ENV["GOOGLE_CLOUD_PROJECT"],
+    list_file_details project_id:  project_id,
                       bucket_name: arguments.shift,
                       file_name:   arguments.shift
   when "make_public"
-    make_file_public project_id:  ENV["GOOGLE_CLOUD_PROJECT"],
+    make_file_public project_id:  project_id,
                      bucket_name: arguments.shift,
                      file_name:   arguments.shift
   when "rename"
-    rename_file project_id:  ENV["GOOGLE_CLOUD_PROJECT"],
+    rename_file project_id:  project_id,
                 bucket_name: arguments.shift,
                 file_name:   arguments.shift,
                 new_name:    arguments.shift
   when "copy"
-    copy_file project_id:         ENV["GOOGLE_CLOUD_PROJECT"],
+    copy_file project_id:         project_id,
               source_bucket_name: arguments.shift,
               source_file_name:   arguments.shift,
               dest_bucket_name:   arguments.shift,
@@ -314,19 +343,18 @@ def run_sample arguments
 Usage: bundle exec ruby files.rb [command] [arguments]
 
 Commands:
-  list         <bucket>                List all files in the bucket
-  upload       <bucket> <file>         Upload local file to a bucket
-  enc_upload   <bucket> <file> <base64_enc_key> Upload local file as an
-                                         encrypted file to a bucket
-  download     <bucket> <file> <path>  Download a file from a bucket
-  enc_download <bucket> <file> <path> <base64_enc_key> Download an encrypted
-                                         file from a bucket
-  gen_key                              Generate a sample encryption key
-  delete       <bucket> <file>         Delete a file from a bucket
-  metadata     <bucket> <file>         Display metadata for a file in a bucket
-  make_public  <bucket> <file>         Make a file in a bucket public
-  rename       <bucket> <file> <new>   Rename a file in a bucket
-  copy <srcBucket> <srcFile> <destBucket> <destFile>  Copy file to other bucket
+  list              <bucket>                                        List all files in the bucket
+  upload            <bucket> <file>                                 Upload local file to a bucket
+  encrypted_upload  <bucket> <file> <base64_encryption_key>         Upload local file as an encrypted file to a bucket
+  download           <bucket> <file> <path>                         Download a file from a bucket
+  encrypted_download <bucket> <file> <path> <base64_encryption_key> Download an encrypted file from a bucket
+  rotate_encryption_key <bucket> <file> <base64_current_encryption_key> <base64_new_encryption_key> Update encryption key of an encrypted file.
+  generate_encryption_key                                           Generate a sample encryption key
+  delete       <bucket> <file>                                      Delete a file from a bucket
+  metadata     <bucket> <file>                                      Display metadata for a file in a bucket
+  make_public  <bucket> <file>                                      Make a file in a bucket public
+  rename       <bucket> <file> <new>                                Rename a file in a bucket
+  copy <srcBucket> <srcFile> <destBucket> <destFile>                Copy file to other bucket
 
 Environment variables:
   GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
