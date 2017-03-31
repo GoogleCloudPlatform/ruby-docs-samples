@@ -58,7 +58,10 @@ def entities_from_text project_id:, text_content:
   entities = document.entities
 
   entities.each do |entity|
-    puts "Entity #{entity.name} #{entity.type} #{entity.metadata['wikipedia_url']}"
+    puts "Entity #{entity.name} #{entity.type}"
+    if entity.metadata["wikipedia_url"]
+      puts "URL: #{entity.metadata['wikipedia_url']}"
+    end
   end
   # [END entities_from_text]
 end
@@ -75,7 +78,10 @@ def entities_from_cloud_storage_file project_id:, storage_path:
   entities = document.entities
 
   entities.each do |entity|
-    puts "Entity #{entity.name} #{entity.type} #{entity.metadata['wikipedia_url']}"
+    puts "Entity #{entity.name} #{entity.type}"
+    if entity.metadata["wikipedia_url"]
+      puts "URL: #{entity.metadata['wikipedia_url']}"
+    end
   end
   # [END entities_from_cloud_storage_file]
 end
