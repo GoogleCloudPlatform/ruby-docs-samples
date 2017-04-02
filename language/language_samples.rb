@@ -19,12 +19,16 @@ def sentiment_from_text project_id:, text_content:
 
   require "google/cloud/language"
 
-  language  = Google::Cloud::Language.new project: project_id
-  document  = language.document text_content
-  puts "Overall document sentiment: (#{document.sentiment.score})"
+  language = Google::Cloud::Language.new project: project_id
+  document = language.document text_content
+  sentiment = document.sentiment
+
+  puts "Overall document sentiment: (#{sentiment.score})"
   puts "Sentence level sentiment:"
+
   document.sentiment.sentences.each do |sentence|
-    puts "#{sentence.text}: (#{sentence.sentiment.score})"
+    sentiment = sentence.sentiment
+    puts "#{sentence.text}: (#{sentiment.score})"
   end
   # [END sentiment_from_text]
 end
@@ -36,12 +40,16 @@ def sentiment_from_cloud_storage_file project_id:, storage_path:
 
   require "google/cloud/language"
 
-  language  = Google::Cloud::Language.new project: project_id
-  document  = language.document storage_path
-  puts "Overall document sentiment: (#{document.sentiment.score})"
+  language = Google::Cloud::Language.new project: project_id
+  document = language.document storage_path
+  sentiment = document.sentiment
+
+  puts "Overall document sentiment: (#{sentiment.score})"
   puts "Sentence level sentiment:"
+
   document.sentiment.sentences.each do |sentence|
-    puts "#{sentence.text}: (#{sentence.sentiment.score})"
+    sentiment = sentence.sentiment
+    puts "#{sentence.text}: (#{sentiment.score})"
   end
   # [END sentiment_from_cloud_storage_file]
 end
@@ -59,6 +67,7 @@ def entities_from_text project_id:, text_content:
 
   entities.each do |entity|
     puts "Entity #{entity.name} #{entity.type}"
+
     if entity.metadata["wikipedia_url"]
       puts "URL: #{entity.metadata['wikipedia_url']}"
     end
@@ -79,6 +88,7 @@ def entities_from_cloud_storage_file project_id:, storage_path:
 
   entities.each do |entity|
     puts "Entity #{entity.name} #{entity.type}"
+
     if entity.metadata["wikipedia_url"]
       puts "URL: #{entity.metadata['wikipedia_url']}"
     end
