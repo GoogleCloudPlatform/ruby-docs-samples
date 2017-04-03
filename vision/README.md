@@ -9,7 +9,9 @@ content.
 
 [vision_docs]: https://cloud.google.com/vision/docs/
 
-## Run sample
+[Vision How-to Guides](https://cloud.google.com/vision/docs/how-to)
+
+## Run samples
 
 To run the sample, first install dependencies:
 
@@ -27,15 +29,101 @@ environment variable to the project name set in the
 
     export GOOGLE_CLOUD_PROJECT="YOUR-PROJECT-ID"
 
+## Samples
 
-### Run the labels detection sample:
+### Detect Crop Hints
 
-    bundle exec ruby detect_labels.rb images/cat.jpg
+    Usage: ruby detect_crop_hints.rb [image file path]
 
-### Run the landmark detection sample:
+    Example:
+      ruby detect_crop_hints.rb image.png
+      ruby detect_crop_hints.rb https://public-url/image.png
+      ruby detect_crop_hints.rb gs://my-bucket/image.png
 
-    bundle exec ruby detect_landmarks.rb images/eiffel_tower.jpg
+### Detect Document Text
+ 
+    Usage: ruby detect_document_text.rb [image file path]
 
-### Run the face detection sample:
+    Example:
+      ruby detect_document_text.rb image.png
+      ruby detect_document_text.rb https://public-url/image.png
+      ruby detect_document_text.rb gs://my-bucket/image.png
 
-    bundle exec ruby detect_faces.rb images/face.png output-image.png
+### Detect Faces
+     
+    Usage: ruby detect_faces.rb [image file path]
+
+    Example:
+      ruby detect_faces.rb image.png
+      ruby detect_faces.rb https://public-url/image.png
+      ruby detect_faces.rb gs://my-bucket/image.png
+
+### Detect Image Properties
+     
+    Usage: ruby detect_image_properties.rb [image file path]
+
+    Example:
+      ruby detect_image_properties.rb image.png
+      ruby detect_image_properties.rb https://public-url/image.png
+      ruby detect_image_properties.rb gs://my-bucket/image.png
+
+### Detect Labels
+     
+    Usage: ruby detect_labels.rb [image file path]
+
+    Example:
+      ruby detect_labels.rb image.png
+      ruby detect_labels.rb https://public-url/image.png
+      ruby detect_labels.rb gs://my-bucket/image.png
+
+### Detect Landmarks
+     
+    Usage: ruby detect_landmarks.rb [image file path]
+
+    Example:
+      ruby detect_landmarks.rb image.png
+      ruby detect_landmarks.rb https://public-url/image.png
+      ruby detect_landmarks.rb gs://my-bucket/image.png
+
+### Detect Logos
+     
+    Usage: ruby detect_logos.rb [image file path]
+
+    Example:
+      ruby detect_logos.rb image.png
+      ruby detect_logos.rb https://public-url/image.png
+      ruby detect_logos.rb gs://my-bucket/image.png
+
+### Detect Safe Search Properties
+     
+    Usage: ruby detect_safe_search.rb [image file path]
+
+    Example:
+      ruby detect_safe_search.rb image.png
+      ruby detect_safe_search.rb https://public-url/image.png
+      ruby detect_safe_search.rb gs://my-bucket/image.png
+
+### Detect Text
+     
+    Usage: ruby detect_text.rb [image file path]
+
+    Example:
+      ruby detect_text.rb image.png
+      ruby detect_text.rb https://public-url/image.png
+      ruby detect_text.rb gs://my-bucket/image.png
+
+### Detect Web Entities and Pages
+     
+    Usage: ruby detect_web.rb [image file path]
+
+    Example:
+      ruby detect_web.rb image.png
+      ruby detect_web.rb https://public-url/image.png
+      ruby detect_web.rb gs://my-bucket/image.png
+
+### Face Detection Tutorial
+
+    Usage: ruby draw_box_around_faces.rb [input-file] [output-file]
+    
+    Example:
+      ruby draw_box_around_faces.rb images/face.png output-image.png

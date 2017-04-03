@@ -12,33 +12,42 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require_relative "../detect_labels"
 require "rspec"
-require "tempfile"
+require "google/cloud/storage"
 
-describe "Detect Labels Sample" do
+require_relative "../detect_labels"
+
+describe "Detect Labels" do
+
+  before do
+    @storage    = Google::Cloud::Storage.new
+    @bucket     = @storage.bucket ENV["GOOGLE_CLOUD_STORAGE_BUCKET"]
+    @project_id = ENV["GOOGLE_CLOUD_PROJECT"]
+  end
 
   # Returns full path to sample image included in repository for testing
   def image_path filename
     File.expand_path "../images/#{filename}", __dir__
   end
 
-  # Capture and return STDOUT output by block
-  def capture &block
-    real_stdout = $stdout
-    $stdout = StringIO.new
-    block.call
-    @captured_output = $stdout.string
-  ensure
-    $stdout = real_stdout
+  example "detect labels from local image file" do
+    expect {
+      detect_labels project_id: @project_id,
+                    image_path: image_path("otter_crossing.jpg")
+    }.to output(
+      /traffic sign/
+    ).to_stdout
   end
-  attr_reader :captured_output
 
-  example "detect Cat labels" do
-    capture { detect_labels path_to_image_file: image_path("cat.jpg") }
+  example "detect labels from image file in Google Cloud Storage" do
+    storage_file = @bucket.upload_file image_path("otter_crossing.jpg"),
+                                       "otter_crossing.jpg"
 
-    expect(captured_output).to start_with "Image labels:"
-    expect(captured_output).to include "cat"
-    expect(captured_output).to include "mammal"
+    expect {
+      detect_labels_gcs project_id: @project_id,
+                        image_path: storage_file.to_gs_url
+    }.to output(
+      /traffic sign/
+    ).to_stdout
   end
 end

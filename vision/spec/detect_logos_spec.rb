@@ -15,9 +15,9 @@
 require "rspec"
 require "google/cloud/storage"
 
-require_relative "../detect_faces"
+require_relative "../detect_logos"
 
-describe "Detect Faces" do
+describe "Detect Logos" do
 
   before do
     @storage    = Google::Cloud::Storage.new
@@ -30,24 +30,24 @@ describe "Detect Faces" do
     File.expand_path "../images/#{filename}", __dir__
   end
 
-  example "detect faces from local image file" do
+  example "detect logos from local image file" do
     expect {
-      detect_faces project_id: @project_id,
-                   image_path: image_path("face_no_surprise.jpg")
+      detect_logos project_id: @project_id,
+                   image_path: image_path("logos.png")
     }.to output(
-      /Surprise: false/
+      "Google\n"
     ).to_stdout
   end
 
-  example "detect faces from image file in Google Cloud Storage" do
-    storage_file = @bucket.upload_file image_path("face_no_surprise.jpg"),
-                                       "face_no_surprise.jpg"
+  example "detect logos from image file in Google Cloud Storage" do
+    storage_file = @bucket.upload_file image_path("logos.png"),
+                                       "logos.png"
 
     expect {
-      detect_faces_gcs project_id: @project_id,
+      detect_logos_gcs project_id: @project_id,
                        image_path: storage_file.to_gs_url
     }.to output(
-      /Surprise: false/
+      "Google\n"
     ).to_stdout
   end
 end
