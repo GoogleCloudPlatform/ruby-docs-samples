@@ -26,7 +26,7 @@ describe "Cloud SQL sample", type: :feature do
   before do
     @database = Sequel.sqlite database: ":memory:"
 
-    expect(Sequel).to receive(:mysql2).and_return @database
+    expect(Sequel).to receive(:postgres).and_return @database
   end
 
   it "can create database schema by running create_tables.rb" do
