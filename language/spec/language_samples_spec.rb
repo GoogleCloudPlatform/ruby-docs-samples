@@ -48,67 +48,75 @@ describe "Google Cloud Natural Language API samples" do
   example "document sentiment from text" do
     positive_text = "Happy love it. I am glad, pleased, and delighted."
     negative_text = "I hate it. I am mad, annoyed, and irritated."
+    positive_output = /Overall document sentiment: \(\d\.\d+\)$/
+    negative_output = /Overall document sentiment: \(-\d\.\d+\)$/
 
     expect {
       sentiment_from_text project_id: @project_id, text_content: positive_text
-    }.to output(/Overall document sentiment: \(\d\.\d+\)$/).to_stdout
+    }.to output(positive_output).to_stdout
 
     expect {
       sentiment_from_text project_id: @project_id, text_content: negative_text
-    }.to output(/Overall document sentiment: \(-\d\.\d+\)$/).to_stdout
+    }.to output(negative_output).to_stdout
 
   end
 
   example "sentence-level sentiment from text" do
     positive_text = "Happy love it. I am glad, pleased, and delighted."
     negative_text = "I hate it. I am mad, annoyed, and irritated."
+    positive_output = /Sentence .*\n^.*\(\d\.\d+\)$\n^.*\(\d\.\d+\)$/
+    negative_output = /Sentence .*\n^.*\(-\d\.\d+\)$\n^.*\(-\d\.\d+\)$/
 
     expect {
       sentiment_from_text project_id: @project_id, text_content: positive_text
-    }.to output(/Sentence .*\n^.*\(\d\.\d+\)$\n^.*\(\d\.\d+\)$/).to_stdout
+    }.to output(positive_output).to_stdout
 
     expect {
       sentiment_from_text project_id: @project_id, text_content: negative_text
-    }.to output(/Sentence .*\n^.*\(-\d\.\d+\)$\n^.*\(-\d\.\d+\)$/).to_stdout
+    }.to output(negative_output).to_stdout
 
   end
 
   example "document sentiment from a file in Google Cloud Storage" do
     upload "positive.txt", "Happy love it. I am glad, pleased, and delighted."
     upload "negative.txt", "I hate it. I am mad, annoyed, and irritated."
+    positive_output = /Overall document sentiment: \(\d\.\d+\)$/
+    negative_output = /Overall document sentiment: \(-\d\.\d+\)$/
 
     expect {
       sentiment_from_cloud_storage_file(
         project_id:   @project_id,
         storage_path: "gs://#{@bucket_name}/positive.txt"
       )
-    }.to output(/Overall document sentiment: \(\d\.\d+\)$/).to_stdout
+    }.to output(positive_output).to_stdout
 
     expect {
       sentiment_from_cloud_storage_file(
         project_id:   @project_id,
         storage_path: "gs://#{@bucket_name}/negative.txt"
       )
-    }.to output(/Overall document sentiment: \(-\d\.\d+\)$/).to_stdout
+    }.to output(negative_output).to_stdout
   end
 
   example "sentence-level sentiment from a file in Google Cloud Storage" do
     upload "positive.txt", "Happy love it. I am glad, pleased, and delighted."
     upload "negative.txt", "I hate it. I am mad, annoyed, and irritated."
+    positive_output = /Sentence .*\n^.*\(\d\.\d+\)$\n^.*\(\d\.\d+\)$/
+    negative_output = /Sentence .*\n^.*\(-\d\.\d+\)$\n^.*\(-\d\.\d+\)$/
 
     expect {
       sentiment_from_cloud_storage_file(
         project_id:   @project_id,
         storage_path: "gs://#{@bucket_name}/positive.txt"
       )
-    }.to output(/Sentence .*\n^.*\(\d\.\d+\)$\n^.*\(\d\.\d+\)$/).to_stdout
+    }.to output(positive_output).to_stdout
 
     expect {
       sentiment_from_cloud_storage_file(
         project_id:   @project_id,
         storage_path: "gs://#{@bucket_name}/negative.txt"
       )
-    }.to output(/Sentence .*\n^.*\(-\d\.\d+\)$\n^.*\(-\d\.\d+\)$/).to_stdout
+    }.to output(negative_output).to_stdout
   end
 
   example "entities from text" do

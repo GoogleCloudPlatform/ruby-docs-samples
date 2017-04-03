@@ -19,14 +19,14 @@ def sentiment_from_text project_id:, text_content:
 
   require "google/cloud/language"
 
-  language = Google::Cloud::Language.new project: project_id
-  document = language.document text_content
+  language  = Google::Cloud::Language.new project: project_id
+  document  = language.document text_content
   sentiment = document.sentiment
 
   puts "Overall document sentiment: (#{sentiment.score})"
   puts "Sentence level sentiment:"
 
-  document.sentiment.sentences.each do |sentence|
+  sentiment.sentences.each do |sentence|
     sentiment = sentence.sentiment
     puts "#{sentence.text}: (#{sentiment.score})"
   end
@@ -40,14 +40,14 @@ def sentiment_from_cloud_storage_file project_id:, storage_path:
 
   require "google/cloud/language"
 
-  language = Google::Cloud::Language.new project: project_id
-  document = language.document storage_path
+  language  = Google::Cloud::Language.new project: project_id
+  document  = language.document storage_path
   sentiment = document.sentiment
 
   puts "Overall document sentiment: (#{sentiment.score})"
   puts "Sentence level sentiment:"
 
-  document.sentiment.sentences.each do |sentence|
+  sentiment.sentences.each do |sentence|
     sentiment = sentence.sentiment
     puts "#{sentence.text}: (#{sentiment.score})"
   end
