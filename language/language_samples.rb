@@ -23,7 +23,13 @@ def sentiment_from_text project_id:, text_content:
   document  = language.document text_content
   sentiment = document.sentiment
 
-  puts "#{sentiment.score} (#{sentiment.magnitude})"
+  puts "Overall document sentiment: (#{sentiment.score})"
+  puts "Sentence level sentiment:"
+
+  sentiment.sentences.each do |sentence|
+    sentiment = sentence.sentiment
+    puts "#{sentence.text}: (#{sentiment.score})"
+  end
   # [END sentiment_from_text]
 end
 
@@ -38,7 +44,13 @@ def sentiment_from_cloud_storage_file project_id:, storage_path:
   document  = language.document storage_path
   sentiment = document.sentiment
 
-  puts "#{sentiment.score} (#{sentiment.magnitude})"
+  puts "Overall document sentiment: (#{sentiment.score})"
+  puts "Sentence level sentiment:"
+
+  sentiment.sentences.each do |sentence|
+    sentiment = sentence.sentiment
+    puts "#{sentence.text}: (#{sentiment.score})"
+  end
   # [END sentiment_from_cloud_storage_file]
 end
 
@@ -55,6 +67,10 @@ def entities_from_text project_id:, text_content:
 
   entities.each do |entity|
     puts "Entity #{entity.name} #{entity.type}"
+
+    if entity.metadata["wikipedia_url"]
+      puts "URL: #{entity.metadata['wikipedia_url']}"
+    end
   end
   # [END entities_from_text]
 end
@@ -72,6 +88,10 @@ def entities_from_cloud_storage_file project_id:, storage_path:
 
   entities.each do |entity|
     puts "Entity #{entity.name} #{entity.type}"
+
+    if entity.metadata["wikipedia_url"]
+      puts "URL: #{entity.metadata['wikipedia_url']}"
+    end
   end
   # [END entities_from_cloud_storage_file]
 end
