@@ -109,6 +109,7 @@ class E2E
     end
 
     def url
+      return unless run?
       self.check()
       @url
     end
