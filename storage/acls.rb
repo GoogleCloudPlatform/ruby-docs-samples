@@ -163,8 +163,8 @@ def print_file_acl_for_user project_id:, bucket_name:, file_name:, email:
   file    = bucket.file file_name
 
   puts "Permissions for #{email}:"
-  puts "\tOWNER"  if bucket.acl.owners.include?  email
-  puts "\tREADER" if bucket.acl.readers.include? email
+  puts "\tOWNER"  if file.acl.owners.include?  email
+  puts "\tREADER" if file.acl.readers.include? email
   # [END print_file_acl_for_user]
 end
 
