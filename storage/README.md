@@ -74,13 +74,13 @@ Commands:
   print_bucket_acl <bucket>                  Print bucket Access Control List
   print_bucket_acl_for_user <bucket> <email> Print bucket ACL for an email
   add_bucket_owner <bucket> <email>          Add a new OWNER to a bucket
-  remove_bucket_owner <bucket> <email>       Remove an OWNER from a bucket
+  remove_bucket_acl <bucket> <email>         Remove an entity from a bucket ACL
   add_bucket_default_owner <bucket> <email>  Add a default OWNER for a bucket
-  remove_bucket_default_owner <bucket> <email> Remove a default OWNER from a bucket
-  print_file_acl <bucket> <file>               Print file ACL
+  remove_bucket_default_acl <bucket> <email> Remove an entity from default bucket ACL
+  print_file_acl <bucket> <file>             Print file ACL
   print_file_acl_for_user <bucket> <file> <email> Print file ACL for an email
   add_file_owner <bucket> <file> <email>          Add an OWNER to a file
-  remove_file_owner <bucket> <file> <email>       Remove an OWNER from a file
+  remove_file_acl <bucket> <file> <email>         Remove an entity from a file ACL
 
 Environment variables:
   GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID

@@ -73,8 +73,8 @@ def add_bucket_owner project_id:, bucket_name:, email:
   # [END add_bucket_owner]
 end
 
-def remove_bucket_owner project_id:, bucket_name:, email:
-  # [START remove_bucket_owner]
+def remove_bucket_acl project_id:, bucket_name:, email:
+  # [START remove_bucket_acl]
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
   # email       = "Google CLoud Storage ACL Entity email"
@@ -86,8 +86,8 @@ def remove_bucket_owner project_id:, bucket_name:, email:
 
   bucket.acl.delete email
 
-  puts "Removed OWNER permission for #{email} from #{bucket_name}"
-  # [END remove_bucket_owner]
+  puts "Removed ACL permissions for #{email} from #{bucket_name}"
+  # [END remove_bucket_acl]
 end
 
 def add_bucket_default_owner project_id:, bucket_name:, email:
@@ -107,8 +107,8 @@ def add_bucket_default_owner project_id:, bucket_name:, email:
   # [END add_bucket_default_owner]
 end
 
-def remove_bucket_default_owner project_id:, bucket_name:, email:
-  # [START remove_bucket_default_owner]
+def remove_bucket_default_acl project_id:, bucket_name:, email:
+  # [START remove_bucket_default_acl]
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
   # email       = "Google CLoud Storage ACL Entity email"
@@ -120,8 +120,8 @@ def remove_bucket_default_owner project_id:, bucket_name:, email:
 
   bucket.default_acl.delete email
 
-  puts "Removed default OWNER permission for #{email} from #{bucket_name}"
-  # [END remove_bucket_default_owner]
+  puts "Removed default ACL permissions for #{email} from #{bucket_name}"
+  # [END remove_bucket_default_acl]
 end
 
 def print_file_acl project_id:, bucket_name:, file_name:
@@ -187,8 +187,8 @@ def add_file_owner project_id:, bucket_name:, file_name:, email:
   # [END add_file_owner]
 end
 
-def remove_file_owner project_id:, bucket_name:, file_name:, email:
-  # [START remove_file_owner]
+def remove_file_acl project_id:, bucket_name:, file_name:, email:
+  # [START remove_file_acl]
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
   # file_name   = "Name of a file in the Storage bucket"
@@ -202,8 +202,8 @@ def remove_file_owner project_id:, bucket_name:, file_name:, email:
 
   file.acl.delete email
 
-  puts "Removed OWNER permission for #{email} from #{file_name}"
-  # [END remove_file_owner]
+  puts "Removed ACL permissions for #{email} from #{file_name}"
+  # [END remove_file_acl]
 end
 
 def run_sample arguments
@@ -222,16 +222,16 @@ def run_sample arguments
     add_bucket_owner(project_id: project_id,
                      bucket_name: arguments.shift,
                      email: arguments.shift)
-  when "remove_bucket_owner"
-    remove_bucket_owner(project_id: project_id,
+  when "remove_bucket_acl"
+    remove_bucket_acl(project_id: project_id,
                         bucket_name: arguments.shift,
                         email: arguments.shift)
   when "add_bucket_default_owner"
     add_bucket_default_owner(project_id: project_id,
                              bucket_name: arguments.shift,
                              email: arguments.shift)
-  when "remove_bucket_default_owner"
-    remove_bucket_default_owner(project_id: project_id,
+  when "remove_bucket_default_acl"
+    remove_bucket_default_acl(project_id: project_id,
                                 bucket_name: arguments.shift,
                                 email: arguments.shift)
   when "print_file_acl"
@@ -248,8 +248,8 @@ def run_sample arguments
                    bucket_name: arguments.shift,
                    file_name: arguments.shift,
                    email: arguments.shift)
-  when "remove_file_owner"
-    remove_file_owner(project_id: project_id,
+  when "remove_file_acl"
+    remove_file_acl(project_id: project_id,
                       bucket_name: arguments.shift,
                       file_name: arguments.shift,
                       email: arguments.shift)
@@ -261,13 +261,13 @@ Commands:
   print_bucket_acl <bucket>                  Print bucket Access Control List
   print_bucket_acl_for_user <bucket> <email> Print bucket ACL for an email
   add_bucket_owner <bucket> <email>          Add a new OWNER to a bucket
-  remove_bucket_owner <bucket> <email>       Remove an OWNER from a bucket
+  remove_bucket_acl <bucket> <email>         Remove an entity from a bucket ACL
   add_bucket_default_owner <bucket> <email>  Add a default OWNER for a bucket
-  remove_bucket_default_owner <bucket> <email> Remove a default OWNER from a bucket
-  print_file_acl <bucket> <file>               Print file ACL
+  remove_bucket_default_acl <bucket> <email> Remove an entity from default bucket ACL
+  print_file_acl <bucket> <file>             Print file ACL
   print_file_acl_for_user <bucket> <file> <email> Print file ACL for an email
   add_file_owner <bucket> <file> <email>          Add an OWNER to a file
-  remove_file_owner <bucket> <file> <email>       Remove an OWNER from a file
+  remove_file_acl <bucket> <file> <email>         Remove an entity from a file ACL
 
 Environment variables:
   GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
