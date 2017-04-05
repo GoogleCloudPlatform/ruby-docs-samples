@@ -279,6 +279,24 @@ def rotate_encryption_key project_id:, bucket_name:, file_name:,
   # [END rotate_encryption_key]
 end
 
+def generate_signed_url project_id:, bucket_name:, file_name:
+  # [START generate_signed_url]
+  # project_id             = "Your Google Cloud project ID"
+  # bucket_name            = "Your Google Cloud Storage bucket name"
+  # file_name              = "Name of a file in the Cloud Storage bucket"
+
+  require "google/cloud/storage"
+
+  storage = Google::Cloud::Storage.new project: project_id
+  bucket  = storage.bucket bucket_name
+  file    = bucket.file file_name
+
+  url = file.signed_url
+
+  puts "The signed url for #{file_name} is #{url}"
+  # [END generate_signed_url]
+end
+
 def run_sample arguments
   command = arguments.shift
   project_id = ENV["GOOGLE_CLOUD_PROJECT"]

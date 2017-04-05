@@ -16,6 +16,8 @@ require_relative "../files"
 require "rspec"
 require "google/cloud/storage"
 require "tempfile"
+require "net/http"
+require "uri"
 
 describe "Google Cloud Storage files sample" do
 
@@ -235,8 +237,7 @@ describe "Google Cloud Storage files sample" do
   it "rotate encryption key for an encrypted file" do
     begin
       delete_file "file.txt"
-      upload(@local_file_path, "file.txt",
-             encryption_key: @encryption_key)
+      upload @local_file_path, "file.txt", encryption_key: @encryption_key
 
       local_file = Tempfile.new "cloud-storage-encryption-tests"
       expect(File.size local_file.path).to eq 0
@@ -264,5 +265,25 @@ describe "Google Cloud Storage files sample" do
       local_file.close
       local_file.unlink
     end
+  end
+
+  it "can generate a signed url for a file" do
+    delete_file "file.txt"
+
+    upload @local_file_path, "file.txt"
+
+    capture do
+      generate_signed_url(project_id:  @project_id,
+                          bucket_name: @bucket_name,
+                          file_name:   "file.txt")
+    end
+
+    expect(@captured_output).to include "The signed url for file.txt"
+
+    signed_url_from_output = @captured_output.scan(/http.*$/).first
+
+    file_contents = Net::HTTP.get URI(signed_url_from_output)
+
+    expect(file_contents).to include "Content of test file.txt"
   end
 end
