@@ -17,6 +17,7 @@ Run the sample:
 
     bundle exec ruby buckets.rb
     bundle exec ruby files.rb
+    bundle exec ruby acls.rb
 
 ## Samples
 
@@ -57,6 +58,29 @@ Commands:
   rename       <bucket> <file> <new>                                Rename a file in a bucket
   copy <srcBucket> <srcFile> <destBucket> <destFile>                Copy file to other bucket
   generate_signed_url <bucket> <file>                               Generate a signed url for a file
+
+Environment variables:
+  GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
+```
+
+### Access Control List
+
+**Usage:** `bundle exec ruby acls.rb [command] [arguments]`
+
+```
+Usage: bundle exec ruby acls.rb [command] [arguments]
+
+Commands:
+  print_bucket_acl <bucket>                  Print bucket Access Control List
+  print_bucket_acl_for_user <bucket> <email> Print bucket ACL for an email
+  add_bucket_owner <bucket> <email>          Add a new OWNER to a bucket
+  remove_bucket_owner <bucket> <email>       Remove an OWNER from a bucket
+  add_bucket_default_owner <bucket> <email>  Add a default OWNER for a bucket
+  remove_bucket_default_owner <bucket> <email> Remove a default OWNER from a bucket
+  print_file_acl <bucket> <file>               Print file ACL
+  print_file_acl_for_user <bucket> <file> <email> Print file ACL for an email
+  add_file_owner <bucket> <file> <email>          Add an OWNER to a file
+  remove_file_owner <bucket> <file> <email>       Remove an OWNER from a file
 
 Environment variables:
   GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID

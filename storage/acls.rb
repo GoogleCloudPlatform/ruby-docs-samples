@@ -128,7 +128,7 @@ def print_file_acl project_id:, bucket_name:, file_name:
   # [START print_file_acl]
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
-  # file_name   = Name of a file in the Storage bucket"
+  # file_name   = "Name of a file in the Storage bucket"
   # email       = "Email to associate with permissions"
 
   require "google/cloud/storage"
@@ -258,16 +258,16 @@ def run_sample arguments
 Usage: bundle exec ruby acls.rb [command] [arguments]
 
 Commands:
-  print_bucket_acl <bucket>
-  print_bucket_acl_for_user <bucket> <email>
-  add_bucket_owner <bucket> <email>
-  remove_bucket_owner <bucket> <email>
-  add_bucket_default_owner <bucket> <email>
-  remove_bucket_default_owner <bucket> <email>
-  print_file_acl <bucket> <file>
-  print_file_acl_for_user <bucket> <file> <email>
-  add_file_owner <bucket> <file> <email>
-  remove_file_owner <bucket> <file> <email>
+  print_bucket_acl <bucket>                  Print bucket Access Control List
+  print_bucket_acl_for_user <bucket> <email> Print bucket ACL for an email
+  add_bucket_owner <bucket> <email>          Add a new OWNER to a bucket
+  remove_bucket_owner <bucket> <email>       Remove an OWNER from a bucket
+  add_bucket_default_owner <bucket> <email>  Add a default OWNER for a bucket
+  remove_bucket_default_owner <bucket> <email> Remove a default OWNER from a bucket
+  print_file_acl <bucket> <file>               Print file ACL
+  print_file_acl_for_user <bucket> <file> <email> Print file ACL for an email
+  add_file_owner <bucket> <file> <email>          Add an OWNER to a file
+  remove_file_owner <bucket> <file> <email>       Remove an OWNER from a file
 
 Environment variables:
   GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
