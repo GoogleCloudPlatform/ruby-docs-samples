@@ -42,7 +42,7 @@ def print_bucket_acl_for_user project_id:, bucket_name:, email:
   # [START print_bucket_acl_for_user]
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
-  # email       = "Email to associate with permissions"
+  # email       = "Google CLoud Storage ACL Entity email"
 
   require "google/cloud/storage"
 
@@ -60,7 +60,7 @@ def add_bucket_owner project_id:, bucket_name:, email:
   # [START add_bucket_owner]
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
-  # email       = "Email to associate with permissions"
+  # email       = "Google CLoud Storage ACL Entity email"
 
   require "google/cloud/storage"
 
@@ -77,7 +77,7 @@ def remove_bucket_owner project_id:, bucket_name:, email:
   # [START remove_bucket_owner]
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
-  # email       = "Email to associate with permissions"
+  # email       = "Google CLoud Storage ACL Entity email"
 
   require "google/cloud/storage"
 
@@ -94,7 +94,7 @@ def add_bucket_default_owner project_id:, bucket_name:, email:
   # [START add_bucket_default_owner]
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
-  # email       = "Email to associate with permissions"
+  # email       = "Google CLoud Storage ACL Entity email"
 
   require "google/cloud/storage"
 
@@ -111,7 +111,7 @@ def remove_bucket_default_owner project_id:, bucket_name:, email:
   # [START remove_bucket_default_owner]
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
-  # email       = "Email to associate with permissions"
+  # email       = "Google CLoud Storage ACL Entity email"
 
   require "google/cloud/storage"
 
@@ -129,7 +129,7 @@ def print_file_acl project_id:, bucket_name:, file_name:
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
   # file_name   = "Name of a file in the Storage bucket"
-  # email       = "Email to associate with permissions"
+  # email       = "Google CLoud Storage ACL Entity email"
 
   require "google/cloud/storage"
 
@@ -154,7 +154,7 @@ def print_file_acl_for_user project_id:, bucket_name:, file_name:, email:
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
   # file_name   = "Name of a file in the Storage bucket"
-  # email       = "Email to associate with permissions"
+  # email       = "Google CLoud Storage ACL Entity email"
 
   require "google/cloud/storage"
 
@@ -173,7 +173,7 @@ def add_file_owner project_id:, bucket_name:, file_name:, email:
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
   # file_name   = "Name of a file in the Storage bucket"
-  # email       = "Email to associate with permissions"
+  # email       = "Google CLoud Storage ACL Entity email"
 
   require "google/cloud/storage"
 
@@ -192,7 +192,7 @@ def remove_file_owner project_id:, bucket_name:, file_name:, email:
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
   # file_name   = "Name of a file in the Storage bucket"
-  # email       = "Email to associate with permissions"
+  # email       = "Google CLoud Storage ACL Entity email"
 
   require "google/cloud/storage"
 
