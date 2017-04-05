@@ -149,14 +149,15 @@ describe "Google Cloud Storage files sample" do
     ).to_stdout
 
     expect(@bucket.file "file.txt").not_to be nil
-    expect(storage_file_content("file.txt",
-                                encryption_key: @encryption_key)).
+    expect(storage_file_content("file.txt", encryption_key: @encryption_key)).
         to eq "Content of test file.txt\n"
   end
 
   it "can download a file from a bucket" do
     begin
       delete_file "file.txt"
+      expect(@bucket.file "file.txt").to be nil
+
       upload @local_file_path, "file.txt"
 
       local_file = Tempfile.new "cloud-storage-tests"
@@ -184,6 +185,8 @@ describe "Google Cloud Storage files sample" do
   it "can download an encrypted file from a bucket" do
     begin
       delete_file "file.txt"
+      expect(@bucket.file "file.txt").to be nil
+
       upload(@local_file_path, "file.txt",
              encryption_key: @encryption_key)
 
@@ -213,6 +216,8 @@ describe "Google Cloud Storage files sample" do
   it "can't download an encrypted file from a bucket with wrong key" do
     begin
       delete_file "file.txt"
+      expect(@bucket.file "file.txt").to be nil
+
       upload(@local_file_path, "file.txt",
              encryption_key: @encryption_key)
 
@@ -235,40 +240,30 @@ describe "Google Cloud Storage files sample" do
   end
 
   it "rotate encryption key for an encrypted file" do
-    begin
-      delete_file "file.txt"
-      upload @local_file_path, "file.txt", encryption_key: @encryption_key
+    delete_file "file.txt"
+    expect(@bucket.file "file.txt").to be nil
 
-      local_file = Tempfile.new "cloud-storage-encryption-tests"
-      expect(File.size local_file.path).to eq 0
+    upload @local_file_path, "file.txt", encryption_key: @encryption_key
 
-      new_encryption_key = generate_encryption_key
+    new_encryption_key = generate_encryption_key
 
-      expect {
-        rotate_encryption_key(project_id:             @project_id,
-                              bucket_name:            @bucket_name,
-                              file_name:              "file.txt",
-                              current_encryption_key: @encryption_key,
-                              new_encryption_key:     new_encryption_key)
-      }.to output(
-        "The encryption key for file.txt in #{@bucket_name} was rotated.\n"
-      ).to_stdout
+    expect {
+      rotate_encryption_key(project_id:             @project_id,
+                            bucket_name:            @bucket_name,
+                            file_name:              "file.txt",
+                            current_encryption_key: @encryption_key,
+                            new_encryption_key:     new_encryption_key)
+    }.to output(
+      "The encryption key for file.txt in #{@bucket_name} was rotated.\n"
+    ).to_stdout
 
-      download_encrypted_file(project_id:        @project_id,
-                              bucket_name:       @bucket_name,
-                              storage_file_path: "file.txt",
-                              local_file_path:   local_file.path,
-                              encryption_key:    new_encryption_key)
-
-      expect(File.size local_file.path).not_to eq 0
-    ensure
-      local_file.close
-      local_file.unlink
-    end
+    expect(storage_file_content "file.txt", encryption_key: new_encryption_key).
+        to eq "Content of test file.txt\n"
   end
 
   it "can generate a signed url for a file" do
     delete_file "file.txt"
+    expect(@bucket.file "file.txt").to be nil
 
     upload @local_file_path, "file.txt"
 
