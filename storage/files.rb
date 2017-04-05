@@ -281,9 +281,9 @@ end
 
 def generate_signed_url project_id:, bucket_name:, file_name:
   # [START generate_signed_url]
-  # project_id             = "Your Google Cloud project ID"
-  # bucket_name            = "Your Google Cloud Storage bucket name"
-  # file_name              = "Name of a file in the Cloud Storage bucket"
+  # project_id  = "Your Google Cloud project ID"
+  # bucket_name = "Your Google Cloud Storage bucket name"
+  # file_name   = "Name of a file in the Cloud Storage bucket"
 
   require "google/cloud/storage"
 
@@ -356,6 +356,10 @@ def run_sample arguments
               source_file_name:   arguments.shift,
               dest_bucket_name:   arguments.shift,
               dest_file_name:     arguments.shift
+  when "generate_signed_url"
+    generate_signed_url project_id:  project_id,
+                        bucket_name: arguments.shift,
+                        file_name:   arguments.shift
   else
     puts <<-usage
 Usage: bundle exec ruby files.rb [command] [arguments]
@@ -373,6 +377,7 @@ Commands:
   make_public  <bucket> <file>                                      Make a file in a bucket public
   rename       <bucket> <file> <new>                                Rename a file in a bucket
   copy <srcBucket> <srcFile> <destBucket> <destFile>                Copy file to other bucket
+  generate_signed_url <bucket> <file>                               Generate a signed url for a file
 
 Environment variables:
   GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID

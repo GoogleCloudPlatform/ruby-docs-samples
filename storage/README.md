@@ -56,6 +56,7 @@ Commands:
   make_public  <bucket> <file>                                      Make a file in a bucket public
   rename       <bucket> <file> <new>                                Rename a file in a bucket
   copy <srcBucket> <srcFile> <destBucket> <destFile>                Copy file to other bucket
+  generate_signed_url <bucket> <file>                               Generate a signed url for a file
 
 Environment variables:
   GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
