@@ -68,7 +68,7 @@ describe "Google Cloud Storage ACL sample" do
   end
   attr_reader :captured_output
 
-  it "can print owner bucket acl" do
+  it "can print bucket acl" do
     @bucket.acl.delete @test_email if email_in_bucket_acl? @test_email
     @bucket.acl.reload!
 
@@ -86,43 +86,7 @@ describe "Google Cloud Storage ACL sample" do
     expect(captured_output).to include "OWNER #{@test_email}"
   end
 
-  it "can print writer bucket acl" do
-    @bucket.acl.delete @test_email if email_in_bucket_acl?@test_email
-    @bucket.acl.reload!
-
-    expect(@bucket.acl.writers).not_to include @test_email
-
-    @bucket.acl.add_writer @test_email
-    @bucket.acl.reload!
-
-    expect(@bucket.acl.writers).to include @test_email
-
-    capture do
-      print_bucket_acl project_id: @project_id, bucket_name: @bucket_name
-    end
-
-    expect(captured_output).to include "WRITER #{@test_email}"
-  end
-
-  it "can print reader bucket acl" do
-    @bucket.acl.delete @test_email if email_in_bucket_acl? @test_email
-    @bucket.acl.reload!
-
-    expect(@bucket.acl.readers).not_to include @test_email
-
-    @bucket.acl.add_reader @test_email
-    @bucket.acl.reload!
-
-    expect(@bucket.acl.readers).to include @test_email
-
-    capture do
-      print_bucket_acl project_id: @project_id, bucket_name: @bucket_name
-    end
-
-    expect(captured_output).to include "READER #{@test_email}"
-  end
-
-  it "can print bucket OWNER acl for user" do
+  it "can print bucket acl for user" do
     @bucket.acl.delete @test_email if email_in_bucket_acl? @test_email
     @bucket.acl.reload!
 
@@ -142,49 +106,6 @@ describe "Google Cloud Storage ACL sample" do
     expect(captured_output).to include "Permissions for #{@test_email}"
     expect(captured_output).to include "OWNER"
   end
-
-  it "can print bucket WRITER acl for user" do
-    @bucket.acl.delete @test_email if email_in_bucket_acl? @test_email
-    @bucket.acl.reload!
-
-    expect(@bucket.acl.writers).not_to include @test_email
-
-    @bucket.acl.add_writer @test_email
-    @bucket.acl.reload!
-
-    expect(@bucket.acl.writers).to include @test_email
-
-    capture do
-      print_bucket_acl_for_user project_id:  @project_id,
-                                bucket_name: @bucket_name,
-                                email:       @test_email
-    end
-
-    expect(captured_output).to include "Permissions for #{@test_email}"
-    expect(captured_output).to include "WRITER"
-  end
-
-  it "can print bucket READER acl for user" do
-    @bucket.acl.delete @test_email if email_in_bucket_acl? @test_email
-    @bucket.acl.reload!
-
-    expect(@bucket.acl.readers).not_to include @test_email
-
-    @bucket.acl.add_reader @test_email
-    @bucket.acl.reload!
-
-    expect(@bucket.acl.readers).to include @test_email
-
-    capture do
-      print_bucket_acl_for_user project_id:  @project_id,
-                                bucket_name: @bucket_name,
-                                email:       @test_email
-    end
-
-    expect(captured_output).to include "Permissions for #{@test_email}"
-    expect(captured_output).to include "READER"
-  end
-
 
   it "can add bucket owner" do
     @bucket.acl.delete @test_email if email_in_bucket_acl? @test_email
@@ -270,7 +191,7 @@ describe "Google Cloud Storage ACL sample" do
     expect(@bucket.default_acl.owners).not_to include @test_email
   end
 
-  it "can print file OWNER acl" do
+  it "can print file acl" do
     file_name = "acl_file.txt"
 
     upload @local_file_path, file_name
@@ -296,34 +217,7 @@ describe "Google Cloud Storage ACL sample" do
     expect(captured_output).to include "OWNER #{@test_email}"
   end
 
-  it "can print file READER acl" do
-    file_name = "acl_file.txt"
-
-    upload @local_file_path, file_name
-
-    file = @bucket.file file_name
-
-    file.acl.delete @test_email if email_in_file_acl? file_name, @test_email
-    file.acl.reload!
-
-    expect(file.acl.readers).not_to include @test_email
-
-    file.acl.add_reader @test_email
-    file.acl.reload!
-
-    expect(file.acl.readers).to include @test_email
-
-    capture do
-      print_file_acl project_id:  @project_id,
-                     bucket_name: @bucket_name,
-                     file_name:   file_name
-    end
-
-    expect(captured_output).to include "READER #{@test_email}"
-  end
-
-
-  it "can print file OWNER acl for user" do
+  it "can print file acl for user" do
     file_name = "acl_file.txt"
 
     upload @local_file_path, file_name
@@ -350,35 +244,6 @@ describe "Google Cloud Storage ACL sample" do
     expect(captured_output).to include "Permissions for #{@test_email}"
     expect(captured_output).to include "OWNER"
   end
-
-  it "can print file READER acl for user" do
-    file_name = "acl_file.txt"
-
-    upload @local_file_path, file_name
-
-    file = @bucket.file file_name
-
-    file.acl.delete @test_email if email_in_file_acl? file_name, @test_email
-    file.acl.reload!
-
-    expect(file.acl.readers).not_to include @test_email
-
-    file.acl.add_reader @test_email
-    file.acl.reload!
-
-    expect(file.acl.readers).to include @test_email
-
-    capture do
-      print_file_acl_for_user project_id:  @project_id,
-                              bucket_name: @bucket_name,
-                              file_name:   file_name,
-                              email:       @test_email
-    end
-
-    expect(captured_output).to include "Permissions for #{@test_email}"
-    expect(captured_output).to include "READER"
-  end
-
 
   it "can add file owner" do
     file_name = "acl_file.txt"
