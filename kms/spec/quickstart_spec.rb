@@ -36,11 +36,12 @@ describe "Key Management Service Quickstart" do
   end
 
   it "can list global key rings by name" do
-    test_project_id = ENV["GOOGLE_CLOUD_PROJECT"]
+    test_project_id  = ENV["GOOGLE_CLOUD_PROJECT"]
     test_key_ring_id = "list-#{test_project_id}-#{Time.now.to_i}"
-    test_parent = "projects/#{test_project_id}/locations/global"
+    test_parent      = "projects/#{test_project_id}/locations/global"
 
     test_key_ring = create_test_key_ring test_parent, test_key_ring_id
+
     expect(test_key_ring).not_to eq nil
     expect(test_key_ring.name).to match /#{test_key_ring_id}/
 
@@ -52,7 +53,7 @@ describe "Key Management Service Quickstart" do
         and_wrap_original do |m, *args|
       response = m.call test_parent
 
-      key_rings = response.key_rings
+      key_rings       = response.key_rings
       next_page_token = response.next_page_token
 
       while next_page_token
@@ -63,7 +64,7 @@ describe "Key Management Service Quickstart" do
         next_page_token = new_response.next_page_token
       end
 
-      double({key_rings: key_rings})
+      double key_rings: key_rings
     end
 
     expect {
