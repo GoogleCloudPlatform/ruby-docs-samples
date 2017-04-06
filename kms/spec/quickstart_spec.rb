@@ -28,6 +28,15 @@ describe "Key Management Service Quickstart" do
                                             key_ring_id: key_ring_id
   end
 
+  def list_test_key_rings parent
+    client = Cloudkms::CloudKMSService.new
+    client.authorization = Google::Auth.get_application_default(
+      %[https://www.googleapis.com/auth/cloud-platform]
+    )
+
+    client.list_project_location_key_rings parent
+  end
+
   before :all do
     # Note: The quickstart sample defines a `Cloudkms` constant and causes
     #       "already initialized constant" warning because the spec defines the
@@ -36,27 +45,31 @@ describe "Key Management Service Quickstart" do
   end
 
   it "can list global key rings by name" do
-    test_project_id = ENV["GOOGLE_CLOUD_PROJECT"]
-    test_key_ring_id = "alist-#{test_project_id}-#{Time.now.to_i}"
-    test_parent = "projects/#{test_project_id}/locations/global"
+    test_project_id  = ENV["GOOGLE_CLOUD_PROJECT"]
+    test_key_ring_id = "a-keyring-list-#{test_project_id}"
+    test_parent      = "projects/#{test_project_id}/locations/global"
+    test_key_rings   = list_test_key_rings(test_parent).key_rings
 
-    test_key_ring = create_test_key_ring test_parent, test_key_ring_id
-    expect(test_key_ring).not_to eq nil
-    expect(test_key_ring.name).to match /#{test_key_ring_id}/
+    if test_key_rings.nil?
+      test_key_ring = create_test_key_ring test_parent, test_key_ring_id
+
+      expect(test_key_ring).not_to  eq nil
+      expect(test_key_ring.name).to include test_key_ring_id
+    end
 
     test_kms_client = Cloudkms::CloudKMSService.new
     expect(Cloudkms::CloudKMSService).to receive(:new).
                                          and_return(test_kms_client)
 
     expect(test_kms_client).to receive(:list_project_location_key_rings).
-                          and_wrap_original do |m, *args|
+        and_wrap_original do |m, *args|
       m.call test_parent
     end
 
     expect {
       load File.expand_path("../quickstart.rb", __dir__)
     }.to output(
-      /#{test_key_ring.name}/
+      /list-#{test_project_id}/
     ).to_stdout
   end
 end
