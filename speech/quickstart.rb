@@ -26,7 +26,9 @@ speech = Google::Cloud::Speech.new project: project_id
 file_name = "./audio_files/audio.raw"
 
 # The audio file's encoding and sample rate
-audio = speech.audio file_name, encoding: :raw, sample_rate: 16000
+audio = speech.audio file_name, encoding:    :raw,
+                                sample_rate: 16000,
+                                language:    "en-US"
 
 # Detects speech in the audio file
 results = audio.recognize

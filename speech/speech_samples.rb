@@ -20,7 +20,9 @@ def speech_sync_recognize project_id:, audio_file_path:
   require "google/cloud/speech"
 
   speech = Google::Cloud::Speech.new project: project_id
-  audio  = speech.audio audio_file_path, encoding: :raw, sample_rate: 16000
+  audio  = speech.audio audio_file_path, encoding:    :raw,
+                                         sample_rate: 16000,
+                                         language:    "en-US"
 
   results = audio.recognize
   result  = results.first
@@ -37,7 +39,9 @@ def speech_sync_recognize_gcs project_id:, storage_path:
   require "google/cloud/speech"
 
   speech = Google::Cloud::Speech.new project: project_id
-  audio  = speech.audio storage_path, encoding: :raw, sample_rate: 16000
+  audio  = speech.audio storage_path, encoding:    :raw,
+                                      sample_rate: 16000,
+                                      language:    "en-US"
 
   results = audio.recognize
   result  = results.first
@@ -54,15 +58,17 @@ def speech_async_recognize project_id:, audio_file_path:
   require "google/cloud/speech"
 
   speech = Google::Cloud::Speech.new project: project_id
-  audio  = speech.audio audio_file_path, encoding: :raw, sample_rate: 16000
+  audio  = speech.audio audio_file_path, encoding:    :raw,
+                                         sample_rate: 16000,
+                                         language:    "en-US"
 
-  job = audio.recognize_job
+  operation = audio.process
 
-  puts "Job started"
+  puts "Operation started"
 
-  job.wait_until_done!
+  operation.wait_until_done!
 
-  results = job.results
+  results = operation.results
   result  = results.first
 
   puts "Transcription: #{result.transcript}"
@@ -77,64 +83,27 @@ def speech_async_recognize_gcs project_id:, storage_path:
   require "google/cloud/speech"
 
   speech = Google::Cloud::Speech.new project: project_id
-  audio  = speech.audio storage_path, encoding: :raw, sample_rate: 16000
+  audio  = speech.audio storage_path, encoding:    :raw,
+                                      sample_rate: 16000,
+                                      language:    "en-US"
 
-  job = audio.recognize_job
+  operation = audio.process
 
-  puts "Job started"
+  puts "Operation started"
 
-  job.wait_until_done!
+  operation.wait_until_done!
 
-  results = job.results
+  results = operation.results
   result  = results.first
 
   puts "Transcription: #{result.transcript}"
 # [END speech_async_recognize_gcs]
 end
 
-# Deprecated sample below
-# XXX remove after above samples are published
-
-def begin_async_operation audio_file_path:
-  speech_service = initialize_speech_client
-
-  # [START begin_async_operation]
-  # audio_file_path = "Path to local audio file"
-
-  request        = Google::Apis::SpeechV1beta1::AsyncRecognizeRequest.new
-  request.audio  = { content: File.read(audio_file_path) }
-  request.config = { encoding: "LINEAR16", sample_rate: 16000 }
-
-  operation = speech_service.async_recognize_speech request
-
-  puts "Operation identifier: #{operation.name}"
-  # [END begin_async_operation]
-end
-
-def get_async_operation_results operation_name:
-  speech_service = initialize_speech_client
-
-  # [START get_async_operation_results]
-  # operation_name = "Name of operation returned from #async_recognize_speech"
-
-  operation = speech_service.get_operation operation_name
-
-  puts "Operation complete: #{operation.done?}"
-
-  if operation.done?
-    operation.response["results"].each do |recognize_result|
-      recognize_result["alternatives"].each do |alternative_hypothesis|
-        puts "Text: #{alternative_hypothesis['transcript']}"
-      end
-    end
-  end
-  # [END get_async_operation_results]
-end
-
 require "google/cloud/speech"
 
 if __FILE__ == $PROGRAM_NAME
-  project_id = Google::Cloud::Speech.new.project_id
+  project_id = Google::Cloud::Speech.new.project
   command    = ARGV.shift
 
   case command
