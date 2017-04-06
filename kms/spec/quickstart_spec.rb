@@ -54,7 +54,7 @@ describe "Key Management Service Quickstart" do
       test_key_ring = create_test_key_ring test_parent, test_key_ring_id
 
       expect(test_key_ring).not_to  eq nil
-      expect(test_key_ring.name).to match /#{test_key_ring_id}/
+      expect(test_key_ring.name).to include test_key_ring_id
     end
 
     test_kms_client = Cloudkms::CloudKMSService.new
