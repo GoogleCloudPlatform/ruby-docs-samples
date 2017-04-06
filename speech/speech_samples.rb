@@ -99,3 +99,32 @@ def speech_async_recognize_gcs project_id:, storage_path:
   puts "Transcription: #{result.transcript}"
 # [END speech_async_recognize_gcs]
 end
+
+require "google/cloud/speech"
+
+if __FILE__ == $PROGRAM_NAME
+  project_id = Google::Cloud::Speech.new.project_id
+  command    = ARGV.shift
+
+  case command
+  when "recognize"
+    speech_sync_recognize project_id: project_id, audio_file_path: ARGV.first
+  when "recognize_gcs"
+    speech_sync_recognize_gcs project_id: project_id, storage_path: ARGV.first
+  when "async_recognize"
+    speech_async_recognize project_id: project_id, audio_file_path: ARGV.first
+  when "async_recognize_gcs"
+    speech_async_recognize_gcs project_id: project_id, storage_path: ARGV.first
+  else
+    puts <<-usage
+Usage: ruby speech_samples.rb <command> [arguments]
+
+Commands:
+  recognize           <filename> Detects speech in a local audio file.
+  recognize_gcs       <gcsUri>   Detects speech in an audio file located in a Google Cloud Storage bucket.
+  async_recognize     <filename> Creates a job to detect speech in a local audio file, and waits for the job to complete.
+  async_recognize_gcs <gcsUri>   Creates a job to detect speech in an audio file located in a Google Cloud Storage bucket, and
+                                 waits for the job to complete.
+    usage
+  end
+end
