@@ -56,7 +56,7 @@ describe "Google Cloud Speech API samples" do
       speech_async_recognize project_id:      @project_id,
                              audio_file_path: @audio_file_path
     }.to output(
-      "Job started\nTranscription: how old is the Brooklyn Bridge\n"
+      "Operation started\nTranscription: how old is the Brooklyn Bridge\n"
     ).to_stdout
   end
 
@@ -68,7 +68,7 @@ describe "Google Cloud Speech API samples" do
       speech_async_recognize_gcs project_id:   @project_id,
                                  storage_path: path
     }.to output(
-      "Job started\nTranscription: how old is the Brooklyn Bridge\n"
+      "Operation started\nTranscription: how old is the Brooklyn Bridge\n"
     ).to_stdout
   end
 end

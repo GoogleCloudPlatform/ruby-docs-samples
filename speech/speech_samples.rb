@@ -20,7 +20,9 @@ def speech_sync_recognize project_id:, audio_file_path:
   require "google/cloud/speech"
 
   speech = Google::Cloud::Speech.new project: project_id
-  audio  = speech.audio audio_file_path, encoding: :raw, sample_rate: 16000
+  audio  = speech.audio audio_file_path, encoding:    :raw,
+                                         sample_rate: 16000,
+                                         language:    "en-US"
 
   results = audio.recognize
   result  = results.first
@@ -37,7 +39,9 @@ def speech_sync_recognize_gcs project_id:, storage_path:
   require "google/cloud/speech"
 
   speech = Google::Cloud::Speech.new project: project_id
-  audio  = speech.audio storage_path, encoding: :raw, sample_rate: 16000
+  audio  = speech.audio storage_path, encoding:    :raw,
+                                      sample_rate: 16000,
+                                      language:    "en-US"
 
   results = audio.recognize
   result  = results.first
@@ -54,15 +58,17 @@ def speech_async_recognize project_id:, audio_file_path:
   require "google/cloud/speech"
 
   speech = Google::Cloud::Speech.new project: project_id
-  audio  = speech.audio audio_file_path, encoding: :raw, sample_rate: 16000
+  audio  = speech.audio audio_file_path, encoding:    :raw,
+                                         sample_rate: 16000,
+                                         language:    "en-US"
 
-  job = audio.recognize_job
+  operation = audio.process
 
-  puts "Job started"
+  puts "Operation started"
 
-  job.wait_until_done!
+  operation.wait_until_done!
 
-  results = job.results
+  results = operation.results
   result  = results.first
 
   puts "Transcription: #{result.transcript}"
@@ -77,15 +83,17 @@ def speech_async_recognize_gcs project_id:, storage_path:
   require "google/cloud/speech"
 
   speech = Google::Cloud::Speech.new project: project_id
-  audio  = speech.audio storage_path, encoding: :raw, sample_rate: 16000
+  audio  = speech.audio storage_path, encoding:    :raw,
+                                      sample_rate: 16000,
+                                      language:    "en-US"
 
-  job = audio.recognize_job
+  operation = audio.process
 
-  puts "Job started"
+  puts "Operation started"
 
-  job.wait_until_done!
+  operation.wait_until_done!
 
-  results = job.results
+  results = operation.results
   result  = results.first
 
   puts "Transcription: #{result.transcript}"
