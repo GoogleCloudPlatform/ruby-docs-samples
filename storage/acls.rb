@@ -25,15 +25,15 @@ def print_bucket_acl project_id:, bucket_name:
   puts "ACL for #{bucket_name}:"
 
   bucket.acl.owners.each do |owner|
-    puts "\tOWNER #{owner}"
+    puts "OWNER #{owner}"
   end
 
   bucket.acl.writers.each do |writer|
-    puts "\tWRITER #{writer}"
+    puts "WRITER #{writer}"
   end
 
   bucket.acl.readers.each do |reader|
-    puts "\tREADER #{reader}"
+    puts "READER #{reader}"
   end
   # [END print_bucket_acl]
 end
@@ -42,7 +42,7 @@ def print_bucket_acl_for_user project_id:, bucket_name:, email:
   # [START print_bucket_acl_for_user]
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
-  # email       = "Google CLoud Storage ACL Entity email"
+  # email       = "Google Cloud Storage ACL Entity email"
 
   require "google/cloud/storage"
 
@@ -50,9 +50,9 @@ def print_bucket_acl_for_user project_id:, bucket_name:, email:
   bucket  = storage.bucket bucket_name
 
   puts "Permissions for #{email}:"
-  puts "\tOWNER"  if bucket.acl.owners.include?  email
-  puts "\tWRITER" if bucket.acl.writers.include? email
-  puts "\tREADER" if bucket.acl.readers.include? email
+  puts "OWNER"  if bucket.acl.owners.include?  email
+  puts "WRITER" if bucket.acl.writers.include? email
+  puts "READER" if bucket.acl.readers.include? email
   # [END print_bucket_acl_for_user]
 end
 
@@ -60,7 +60,7 @@ def add_bucket_owner project_id:, bucket_name:, email:
   # [START add_bucket_owner]
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
-  # email       = "Google CLoud Storage ACL Entity email"
+  # email       = "Google Cloud Storage ACL Entity email"
 
   require "google/cloud/storage"
 
@@ -77,7 +77,7 @@ def remove_bucket_acl project_id:, bucket_name:, email:
   # [START remove_bucket_acl]
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
-  # email       = "Google CLoud Storage ACL Entity email"
+  # email       = "Google Cloud Storage ACL Entity email"
 
   require "google/cloud/storage"
 
@@ -94,7 +94,7 @@ def add_bucket_default_owner project_id:, bucket_name:, email:
   # [START add_bucket_default_owner]
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
-  # email       = "Google CLoud Storage ACL Entity email"
+  # email       = "Google Cloud Storage ACL Entity email"
 
   require "google/cloud/storage"
 
@@ -111,7 +111,7 @@ def remove_bucket_default_acl project_id:, bucket_name:, email:
   # [START remove_bucket_default_acl]
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
-  # email       = "Google CLoud Storage ACL Entity email"
+  # email       = "Google Cloud Storage ACL Entity email"
 
   require "google/cloud/storage"
 
@@ -129,7 +129,7 @@ def print_file_acl project_id:, bucket_name:, file_name:
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
   # file_name   = "Name of a file in the Storage bucket"
-  # email       = "Google CLoud Storage ACL Entity email"
+  # email       = "Google Cloud Storage ACL Entity email"
 
   require "google/cloud/storage"
 
@@ -140,11 +140,11 @@ def print_file_acl project_id:, bucket_name:, file_name:
   puts "ACL for #{file_name} in #{bucket_name}:"
 
   file.acl.owners.each do |owner|
-    puts "\tOWNER #{owner}"
+    puts "OWNER #{owner}"
   end
 
   file.acl.readers.each do |reader|
-    puts "\tREADER #{reader}"
+    puts "READER #{reader}"
   end
   # [END print_file_acl]
 end
@@ -154,7 +154,7 @@ def print_file_acl_for_user project_id:, bucket_name:, file_name:, email:
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
   # file_name   = "Name of a file in the Storage bucket"
-  # email       = "Google CLoud Storage ACL Entity email"
+  # email       = "Google Cloud Storage ACL Entity email"
 
   require "google/cloud/storage"
 
@@ -163,8 +163,8 @@ def print_file_acl_for_user project_id:, bucket_name:, file_name:, email:
   file    = bucket.file file_name
 
   puts "Permissions for #{email}:"
-  puts "\tOWNER"  if file.acl.owners.include?  email
-  puts "\tREADER" if file.acl.readers.include? email
+  puts "OWNER"  if file.acl.owners.include?  email
+  puts "READER" if file.acl.readers.include? email
   # [END print_file_acl_for_user]
 end
 
@@ -173,7 +173,7 @@ def add_file_owner project_id:, bucket_name:, file_name:, email:
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
   # file_name   = "Name of a file in the Storage bucket"
-  # email       = "Google CLoud Storage ACL Entity email"
+  # email       = "Google Cloud Storage ACL Entity email"
 
   require "google/cloud/storage"
 
@@ -192,7 +192,7 @@ def remove_file_acl project_id:, bucket_name:, file_name:, email:
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
   # file_name   = "Name of a file in the Storage bucket"
-  # email       = "Google CLoud Storage ACL Entity email"
+  # email       = "Google Cloud Storage ACL Entity email"
 
   require "google/cloud/storage"
 
@@ -207,52 +207,52 @@ def remove_file_acl project_id:, bucket_name:, file_name:, email:
 end
 
 def run_sample arguments
-  command = arguments.shift
+  command    = arguments.shift
   project_id = ENV["GOOGLE_CLOUD_PROJECT"]
 
   case command
   when "print_bucket_acl"
-    print_bucket_acl(project_id: project_id,
-                     bucket_name: arguments.shift)
+    print_bucket_acl project_id: project_id,
+                     bucket_name: arguments.shift
   when "print_bucket_acl_for_user"
-    print_bucket_acl_for_user(project_id: project_id,
+    print_bucket_acl_for_user project_id: project_id,
                               bucket_name: arguments.shift,
-                              email: arguments.shift)
+                              email: arguments.shift
   when "add_bucket_owner"
-    add_bucket_owner(project_id: project_id,
+    add_bucket_owner project_id: project_id,
                      bucket_name: arguments.shift,
-                     email: arguments.shift)
+                     email: arguments.shift
   when "remove_bucket_acl"
-    remove_bucket_acl(project_id: project_id,
-                        bucket_name: arguments.shift,
-                        email: arguments.shift)
+    remove_bucket_acl project_id: project_id,
+                      bucket_name: arguments.shift,
+                      email: arguments.shift
   when "add_bucket_default_owner"
-    add_bucket_default_owner(project_id: project_id,
+    add_bucket_default_owner project_id: project_id,
                              bucket_name: arguments.shift,
-                             email: arguments.shift)
+                             email: arguments.shift
   when "remove_bucket_default_acl"
-    remove_bucket_default_acl(project_id: project_id,
-                                bucket_name: arguments.shift,
-                                email: arguments.shift)
+    remove_bucket_default_acl project_id: project_id,
+                              bucket_name: arguments.shift,
+                              email: arguments.shift
   when "print_file_acl"
-    print_file_acl(project_id: project_id,
+    print_file_acl project_id: project_id,
                    bucket_name: arguments.shift,
-                   file_name: arguments.shift)
+                   file_name: arguments.shift
   when "print_file_acl_for_user"
-    print_file_acl_for_user(project_id: project_id,
+    print_file_acl_for_user project_id: project_id,
                             bucket_name: arguments.shift,
                             file_name: arguments.shift,
-                            email: arguments.shift)
+                            email: arguments.shift
   when "add_file_owner"
-    add_file_owner(project_id: project_id,
+    add_file_owner project_id: project_id,
                    bucket_name: arguments.shift,
                    file_name: arguments.shift,
-                   email: arguments.shift)
+                   email: arguments.shift
   when "remove_file_acl"
-    remove_file_acl(project_id: project_id,
-                      bucket_name: arguments.shift,
-                      file_name: arguments.shift,
-                      email: arguments.shift)
+    remove_file_acl project_id: project_id,
+                    bucket_name: arguments.shift,
+                    file_name: arguments.shift,
+                    email: arguments.shift
   else
     puts <<-usage
 Usage: bundle exec ruby acls.rb [command] [arguments]

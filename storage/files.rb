@@ -272,7 +272,7 @@ def rotate_encryption_key project_id:, bucket_name:, file_name:,
   bucket  = storage.bucket bucket_name
   file    = bucket.file file_name, encryption_key: current_encryption_key
 
-  file.rotate encryption_key: current_encryption_key,
+  file.rotate encryption_key:     current_encryption_key,
               new_encryption_key: new_encryption_key
 
   puts "The encryption key for #{file.name} in #{bucket.name} was rotated."
@@ -298,7 +298,7 @@ def generate_signed_url project_id:, bucket_name:, file_name:
 end
 
 def run_sample arguments
-  command = arguments.shift
+  command    = arguments.shift
   project_id = ENV["GOOGLE_CLOUD_PROJECT"]
 
   case command

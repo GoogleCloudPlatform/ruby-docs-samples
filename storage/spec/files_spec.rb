@@ -71,14 +71,14 @@ describe "Google Cloud Storage files sample" do
   attr_reader :captured_output
 
   it "can generate a base64 encoded encryption key" do
-    mock_cipher = double()
-    mock_encrypt = double()
+    mock_cipher = double
+    mock_encrypt = double
     encryption_key_base64 = Base64.encode64 @encryption_key
 
     # Mock OpenSSL::Cipher
-    expect(OpenSSL::Cipher).to receive(:new).with("aes-256-cfb").and_return(mock_cipher)
-    expect(mock_cipher).to     receive(:encrypt).and_return(mock_encrypt)
-    expect(mock_encrypt).to    receive(:random_key).and_return(@encryption_key)
+    expect(OpenSSL::Cipher).to receive(:new).with("aes-256-cfb").and_return mock_cipher
+    expect(mock_cipher).to     receive(:encrypt).and_return mock_encrypt
+    expect(mock_encrypt).to    receive(:random_key).and_return @encryption_key
 
     expect {
       generate_encryption_key_base64
@@ -139,17 +139,17 @@ describe "Google Cloud Storage files sample" do
     expect(@bucket.file "file.txt").to be nil
 
     expect {
-      upload_encrypted_file(project_id:        @project_id,
+      upload_encrypted_file project_id:        @project_id,
                             bucket_name:       @bucket_name,
                             local_file_path:   @local_file_path,
                             storage_file_path: "file.txt",
-                            encryption_key:    @encryption_key)
+                            encryption_key:    @encryption_key
     }.to output(
       "Uploaded file.txt with encryption key\n"
     ).to_stdout
 
     expect(@bucket.file "file.txt").not_to be nil
-    expect(storage_file_content("file.txt", encryption_key: @encryption_key)).
+    expect(storage_file_content "file.txt", encryption_key: @encryption_key).
         to eq "Content of test file.txt\n"
   end
 
@@ -187,26 +187,23 @@ describe "Google Cloud Storage files sample" do
       delete_file "file.txt"
       expect(@bucket.file "file.txt").to be nil
 
-      upload(@local_file_path, "file.txt",
-             encryption_key: @encryption_key)
+      upload @local_file_path, "file.txt", encryption_key: @encryption_key
 
       local_file = Tempfile.new "cloud-storage-encryption-tests"
       expect(File.size local_file.path).to eq 0
 
       expect {
-        download_encrypted_file(project_id:        @project_id,
+        download_encrypted_file project_id:        @project_id,
                                 bucket_name:       @bucket_name,
                                 storage_file_path: "file.txt",
                                 local_file_path:   local_file.path,
-                                encryption_key:    @encryption_key)
+                                encryption_key:    @encryption_key
       }.to output(
         "Downloaded encrypted file.txt\n"
       ).to_stdout
 
       expect(File.size local_file.path).to be > 0
-      expect(File.read local_file.path).to eq(
-        "Content of test file.txt\n"
-      )
+      expect(File.read local_file.path).to eq "Content of test file.txt\n"
     ensure
       local_file.close
       local_file.unlink
@@ -218,19 +215,18 @@ describe "Google Cloud Storage files sample" do
       delete_file "file.txt"
       expect(@bucket.file "file.txt").to be nil
 
-      upload(@local_file_path, "file.txt",
-             encryption_key: @encryption_key)
+      upload @local_file_path, "file.txt", encryption_key: @encryption_key
 
       local_file = Tempfile.new "cloud-storage-encryption-tests"
       expect(File.size local_file.path).to eq 0
 
       expect {
-        download_encrypted_file(project_id:        @project_id,
+        download_encrypted_file project_id:        @project_id,
                                 bucket_name:       @bucket_name,
                                 storage_file_path: "file.txt",
                                 local_file_path:   local_file.path,
-                                encryption_key:    generate_encryption_key)
-      }.to raise_error(Google::Cloud::InvalidArgumentError)
+                                encryption_key:    generate_encryption_key
+      }.to raise_error Google::Cloud::InvalidArgumentError
 
       expect(File.size local_file.path).to eq 0
     ensure
@@ -248,11 +244,11 @@ describe "Google Cloud Storage files sample" do
     new_encryption_key = generate_encryption_key
 
     expect {
-      rotate_encryption_key(project_id:             @project_id,
+      rotate_encryption_key project_id:             @project_id,
                             bucket_name:            @bucket_name,
                             file_name:              "file.txt",
                             current_encryption_key: @encryption_key,
-                            new_encryption_key:     new_encryption_key)
+                            new_encryption_key:     new_encryption_key
     }.to output(
       "The encryption key for file.txt in #{@bucket_name} was rotated.\n"
     ).to_stdout
@@ -268,9 +264,9 @@ describe "Google Cloud Storage files sample" do
     upload @local_file_path, "file.txt"
 
     capture do
-      generate_signed_url(project_id:  @project_id,
+      generate_signed_url project_id:  @project_id,
                           bucket_name: @bucket_name,
-                          file_name:   "file.txt")
+                          file_name:   "file.txt"
     end
 
     expect(@captured_output).to include "The signed url for file.txt"

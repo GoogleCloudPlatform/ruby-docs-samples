@@ -69,15 +69,15 @@ describe "Google Cloud Storage ACL sample" do
   attr_reader :captured_output
 
   it "can print owner bucket acl" do
-    @bucket.acl.delete(@test_email) if email_in_bucket_acl?(@test_email)
+    @bucket.acl.delete @test_email if email_in_bucket_acl? @test_email
     @bucket.acl.reload!
 
-    expect(@bucket.acl.owners).not_to include(@test_email)
+    expect(@bucket.acl.owners).not_to include @test_email
 
     @bucket.acl.add_owner @test_email
     @bucket.reload!
 
-    expect(@bucket.acl.owners).to include(@test_email)
+    expect(@bucket.acl.owners).to include @test_email
 
     capture do
       print_bucket_acl project_id: @project_id, bucket_name: @bucket_name
@@ -87,15 +87,15 @@ describe "Google Cloud Storage ACL sample" do
   end
 
   it "can print writer bucket acl" do
-    @bucket.acl.delete(@test_email) if email_in_bucket_acl?(@test_email)
+    @bucket.acl.delete @test_email if email_in_bucket_acl?@test_email
     @bucket.acl.reload!
 
-    expect(@bucket.acl.writers).not_to include(@test_email)
+    expect(@bucket.acl.writers).not_to include @test_email
 
     @bucket.acl.add_writer @test_email
     @bucket.acl.reload!
 
-    expect(@bucket.acl.writers).to include(@test_email)
+    expect(@bucket.acl.writers).to include @test_email
 
     capture do
       print_bucket_acl project_id: @project_id, bucket_name: @bucket_name
@@ -105,15 +105,15 @@ describe "Google Cloud Storage ACL sample" do
   end
 
   it "can print reader bucket acl" do
-    @bucket.acl.delete(@test_email) if email_in_bucket_acl?(@test_email)
+    @bucket.acl.delete @test_email if email_in_bucket_acl? @test_email
     @bucket.acl.reload!
 
-    expect(@bucket.acl.readers).not_to include(@test_email)
+    expect(@bucket.acl.readers).not_to include @test_email
 
     @bucket.acl.add_reader @test_email
     @bucket.acl.reload!
 
-    expect(@bucket.acl.readers).to include(@test_email)
+    expect(@bucket.acl.readers).to include @test_email
 
     capture do
       print_bucket_acl project_id: @project_id, bucket_name: @bucket_name
@@ -123,20 +123,20 @@ describe "Google Cloud Storage ACL sample" do
   end
 
   it "can print bucket OWNER acl for user" do
-    @bucket.acl.delete(@test_email) if email_in_bucket_acl?(@test_email)
+    @bucket.acl.delete @test_email if email_in_bucket_acl? @test_email
     @bucket.acl.reload!
 
-    expect(@bucket.acl.owners).not_to include(@test_email)
+    expect(@bucket.acl.owners).not_to include @test_email
 
     @bucket.acl.add_owner @test_email
     @bucket.acl.reload!
 
-    expect(@bucket.acl.owners).to include(@test_email)
+    expect(@bucket.acl.owners).to include @test_email
 
     capture do
-      print_bucket_acl_for_user(project_id:  @project_id,
+      print_bucket_acl_for_user project_id:  @project_id,
                                 bucket_name: @bucket_name,
-                                email:       @test_email)
+                                email:       @test_email
     end
 
     expect(captured_output).to include "Permissions for #{@test_email}"
@@ -144,20 +144,20 @@ describe "Google Cloud Storage ACL sample" do
   end
 
   it "can print bucket WRITER acl for user" do
-    @bucket.acl.delete(@test_email) if email_in_bucket_acl?(@test_email)
+    @bucket.acl.delete @test_email if email_in_bucket_acl? @test_email
     @bucket.acl.reload!
 
-    expect(@bucket.acl.writers).not_to include(@test_email)
+    expect(@bucket.acl.writers).not_to include @test_email
 
     @bucket.acl.add_writer @test_email
     @bucket.acl.reload!
 
-    expect(@bucket.acl.writers).to include(@test_email)
+    expect(@bucket.acl.writers).to include @test_email
 
     capture do
-      print_bucket_acl_for_user(project_id:  @project_id,
+      print_bucket_acl_for_user project_id:  @project_id,
                                 bucket_name: @bucket_name,
-                                email:       @test_email)
+                                email:       @test_email
     end
 
     expect(captured_output).to include "Permissions for #{@test_email}"
@@ -165,20 +165,20 @@ describe "Google Cloud Storage ACL sample" do
   end
 
   it "can print bucket READER acl for user" do
-    @bucket.acl.delete(@test_email) if email_in_bucket_acl?(@test_email)
+    @bucket.acl.delete @test_email if email_in_bucket_acl? @test_email
     @bucket.acl.reload!
 
-    expect(@bucket.acl.readers).not_to include(@test_email)
+    expect(@bucket.acl.readers).not_to include @test_email
 
     @bucket.acl.add_reader @test_email
     @bucket.acl.reload!
 
-    expect(@bucket.acl.readers).to include(@test_email)
+    expect(@bucket.acl.readers).to include @test_email
 
     capture do
-      print_bucket_acl_for_user(project_id:  @project_id,
+      print_bucket_acl_for_user project_id:  @project_id,
                                 bucket_name: @bucket_name,
-                                email:       @test_email)
+                                email:       @test_email
     end
 
     expect(captured_output).to include "Permissions for #{@test_email}"
@@ -187,87 +187,87 @@ describe "Google Cloud Storage ACL sample" do
 
 
   it "can add bucket owner" do
-    @bucket.acl.delete(@test_email) if email_in_bucket_acl?(@test_email)
+    @bucket.acl.delete @test_email if email_in_bucket_acl? @test_email
     @bucket.acl.reload!
 
-    expect(@bucket.acl.owners).not_to include(@test_email)
+    expect(@bucket.acl.owners).not_to include @test_email
 
     expect {
-      add_bucket_owner(project_id:  @project_id,
+      add_bucket_owner project_id:  @project_id,
                        bucket_name: @bucket_name,
-                       email:       @test_email)
+                       email:       @test_email
     }.to output(
       /Added OWNER permission for #{@test_email} to #{@bucket_name}/
     ).to_stdout
 
     @bucket.acl.reload!
-    expect(@bucket.acl.owners).to include(@test_email)
+    expect(@bucket.acl.owners).to include @test_email
   end
 
   it "can remove bucket acl" do
-    @bucket.acl.delete @test_email if email_in_bucket_acl?(@test_email)
+    @bucket.acl.delete @test_email if email_in_bucket_acl? @test_email
     @bucket.acl.reload!
 
-    expect(@bucket.acl.owners).not_to include(@test_email)
+    expect(@bucket.acl.owners).not_to include @test_email
 
     @bucket.acl.add_owner @test_email
     @bucket.acl.reload!
 
-    expect(@bucket.acl.owners).to include(@test_email)
+    expect(@bucket.acl.owners).to include @test_email
 
     expect {
-      remove_bucket_acl(project_id:  @project_id,
+      remove_bucket_acl project_id:  @project_id,
                         bucket_name: @bucket_name,
-                        email:       @test_email)
+                        email:       @test_email
     }.to output(
       /Removed ACL permissions for #{@test_email} from #{@bucket_name}/
     ).to_stdout
 
     @bucket.acl.reload!
-    expect(@bucket.acl.owners).not_to include(@test_email)
+    expect(@bucket.acl.owners).not_to include @test_email
   end
 
   it "can add bucket default owner" do
-    if email_in_default_bucket_acl?(@test_email)
+    if email_in_default_bucket_acl? @test_email
       @bucket.default_acl.delete @test_email
     end
 
-    expect(@bucket.default_acl.owners).not_to include(@test_email)
+    expect(@bucket.default_acl.owners).not_to include @test_email
 
     expect {
-      add_bucket_default_owner(project_id:  @project_id,
+      add_bucket_default_owner project_id:  @project_id,
                                bucket_name: @bucket_name,
-                               email:       @test_email)
+                               email:       @test_email
     }.to output(
       /Added default OWNER permission for #{@test_email} to #{@bucket_name}/
     ).to_stdout
 
     @bucket.default_acl.reload!
-    expect(@bucket.default_acl.owners).to include(@test_email)
+    expect(@bucket.default_acl.owners).to include @test_email
   end
 
   it "can remove bucket default acl" do
-    if email_in_default_bucket_acl?(@test_email)
+    if email_in_default_bucket_acl? @test_email
       @bucket.default_acl.delete @test_email
     end
 
-    expect(@bucket.default_acl.owners).not_to include(@test_email)
+    expect(@bucket.default_acl.owners).not_to include @test_email
 
     @bucket.default_acl.add_owner @test_email
     @bucket.default_acl.reload!
 
-    expect(@bucket.default_acl.owners).to include(@test_email)
+    expect(@bucket.default_acl.owners).to include @test_email
 
     expect {
-      remove_bucket_default_acl(project_id:  @project_id,
+      remove_bucket_default_acl project_id:  @project_id,
                                 bucket_name: @bucket_name,
-                                email:       @test_email)
+                                email:       @test_email
     }.to output(
       /Removed default ACL permissions for #{@test_email} from #{@bucket_name}/
     ).to_stdout
 
     @bucket.default_acl.reload!
-    expect(@bucket.default_acl.owners).not_to include(@test_email)
+    expect(@bucket.default_acl.owners).not_to include @test_email
   end
 
   it "can print file OWNER acl" do
@@ -280,16 +280,17 @@ describe "Google Cloud Storage ACL sample" do
     file.acl.delete @test_email if email_in_file_acl? file_name, @test_email
     file.acl.reload!
 
-    expect(file.acl.owners).not_to include(@test_email)
+    expect(file.acl.owners).not_to include @test_email
 
     file.acl.add_owner @test_email
     file.acl.reload!
 
-    expect(file.acl.owners).to include(@test_email)
+    expect(file.acl.owners).to include @test_email
 
     capture do
-      print_file_acl(project_id: @project_id, bucket_name: @bucket_name,
-                     file_name:  file_name)
+      print_file_acl project_id:  @project_id,
+                     bucket_name: @bucket_name,
+                     file_name:   file_name
     end
 
     expect(captured_output).to include "OWNER #{@test_email}"
@@ -305,16 +306,17 @@ describe "Google Cloud Storage ACL sample" do
     file.acl.delete @test_email if email_in_file_acl? file_name, @test_email
     file.acl.reload!
 
-    expect(file.acl.readers).not_to include(@test_email)
+    expect(file.acl.readers).not_to include @test_email
 
     file.acl.add_reader @test_email
     file.acl.reload!
 
-    expect(file.acl.readers).to include(@test_email)
+    expect(file.acl.readers).to include @test_email
 
     capture do
-      print_file_acl(project_id: @project_id, bucket_name: @bucket_name,
-                     file_name:  file_name)
+      print_file_acl project_id:  @project_id,
+                     bucket_name: @bucket_name,
+                     file_name:   file_name
     end
 
     expect(captured_output).to include "READER #{@test_email}"
@@ -331,18 +333,18 @@ describe "Google Cloud Storage ACL sample" do
     file.acl.delete @test_email if email_in_file_acl? file_name, @test_email
     file.acl.reload!
 
-    expect(file.acl.owners).not_to include(@test_email)
+    expect(file.acl.owners).not_to include @test_email
 
     file.acl.add_owner @test_email
     file.acl.reload!
 
-    expect(file.acl.owners).to include(@test_email)
+    expect(file.acl.owners).to include @test_email
 
     capture do
-      print_file_acl_for_user(project_id:  @project_id,
+      print_file_acl_for_user project_id:  @project_id,
                               bucket_name: @bucket_name,
                               file_name:   file_name,
-                              email:       @test_email)
+                              email:       @test_email
     end
 
     expect(captured_output).to include "Permissions for #{@test_email}"
@@ -359,18 +361,18 @@ describe "Google Cloud Storage ACL sample" do
     file.acl.delete @test_email if email_in_file_acl? file_name, @test_email
     file.acl.reload!
 
-    expect(file.acl.readers).not_to include(@test_email)
+    expect(file.acl.readers).not_to include @test_email
 
     file.acl.add_reader @test_email
     file.acl.reload!
 
-    expect(file.acl.readers).to include(@test_email)
+    expect(file.acl.readers).to include @test_email
 
     capture do
-      print_file_acl_for_user(project_id:  @project_id,
+      print_file_acl_for_user project_id:  @project_id,
                               bucket_name: @bucket_name,
                               file_name:   file_name,
-                              email:       @test_email)
+                              email:       @test_email
     end
 
     expect(captured_output).to include "Permissions for #{@test_email}"
@@ -388,19 +390,19 @@ describe "Google Cloud Storage ACL sample" do
     file.acl.delete @test_email if email_in_file_acl? file_name, @test_email
     file.acl.reload!
 
-    expect(file.acl.owners).not_to include(@test_email)
+    expect(file.acl.owners).not_to include @test_email
 
     expect {
-      add_file_owner(project_id:  @project_id,
+      add_file_owner project_id:  @project_id,
                      bucket_name: @bucket_name,
                      file_name:   file_name,
-                     email:       @test_email)
+                     email:       @test_email
     }.to output(
       /Added OWNER permission for #{@test_email} to #{file_name}/
     ).to_stdout
 
     file.acl.reload!
-    expect(file.acl.owners).to include(@test_email)
+    expect(file.acl.owners).to include @test_email
   end
 
   it "can remove file acl" do
@@ -413,23 +415,23 @@ describe "Google Cloud Storage ACL sample" do
     file.acl.delete @test_email if email_in_file_acl? file_name, @test_email
     file.acl.reload!
 
-    expect(file.acl.owners).not_to include(@test_email)
+    expect(file.acl.owners).not_to include @test_email
 
     file.acl.add_owner @test_email
     file.acl.reload!
 
-    expect(file.acl.owners).to include(@test_email)
+    expect(file.acl.owners).to include @test_email
 
     expect {
-      remove_file_acl(project_id:  @project_id,
+      remove_file_acl project_id:  @project_id,
                       bucket_name: @bucket_name,
                       file_name:   file_name,
-                      email:       @test_email)
+                      email:       @test_email
     }.to output(
       /Removed ACL permissions for #{@test_email} from #{file_name}/
     ).to_stdout
 
     file.acl.reload!
-    expect(file.acl.owners).not_to include(@test_email)
+    expect(file.acl.owners).not_to include @test_email
   end
 end
