@@ -39,24 +39,6 @@ describe "Google Cloud Storage ACL sample" do
     end
   end
 
-  def email_in_bucket_acl? email
-    @bucket.acl.owners.include?(email)    ||
-      @bucket.acl.writers.include?(email) ||
-      @bucket.acl.readers.include?(email)
-  end
-
-  def email_in_default_bucket_acl? email
-    @bucket.default_acl.owners.include?(email)    ||
-      @bucket.default_acl.readers.include?(email)
-  end
-
-  def email_in_file_acl? file_path, email
-    file = @bucket.file file_path
-
-    file.acl.owners.include?(email)    ||
-      file.acl.readers.include?(email)
-  end
-
   # Capture and return STDOUT output by block
   def capture &block
     real_stdout = $stdout
@@ -69,11 +51,6 @@ describe "Google Cloud Storage ACL sample" do
   attr_reader :captured_output
 
   it "can print bucket acl" do
-    @bucket.acl.delete @test_email if email_in_bucket_acl? @test_email
-    @bucket.acl.reload!
-
-    expect(@bucket.acl.owners).not_to include @test_email
-
     @bucket.acl.add_owner @test_email
     @bucket.reload!
 
@@ -87,11 +64,6 @@ describe "Google Cloud Storage ACL sample" do
   end
 
   it "can print bucket acl for user" do
-    @bucket.acl.delete @test_email if email_in_bucket_acl? @test_email
-    @bucket.acl.reload!
-
-    expect(@bucket.acl.owners).not_to include @test_email
-
     @bucket.acl.add_owner @test_email
     @bucket.acl.reload!
 
@@ -108,7 +80,7 @@ describe "Google Cloud Storage ACL sample" do
   end
 
   it "can add bucket owner" do
-    @bucket.acl.delete @test_email if email_in_bucket_acl? @test_email
+    @bucket.acl.delete @test_email if @bucket.acl.owners.include? @test_email
     @bucket.acl.reload!
 
     expect(@bucket.acl.owners).not_to include @test_email
@@ -126,11 +98,6 @@ describe "Google Cloud Storage ACL sample" do
   end
 
   it "can remove bucket acl" do
-    @bucket.acl.delete @test_email if email_in_bucket_acl? @test_email
-    @bucket.acl.reload!
-
-    expect(@bucket.acl.owners).not_to include @test_email
-
     @bucket.acl.add_owner @test_email
     @bucket.acl.reload!
 
@@ -149,7 +116,7 @@ describe "Google Cloud Storage ACL sample" do
   end
 
   it "can add bucket default owner" do
-    if email_in_default_bucket_acl? @test_email
+    if @bucket.default_acl.owners.include? @test_email
       @bucket.default_acl.delete @test_email
     end
 
@@ -168,7 +135,7 @@ describe "Google Cloud Storage ACL sample" do
   end
 
   it "can remove bucket default acl" do
-    if email_in_default_bucket_acl? @test_email
+    if @bucket.default_acl.owners.include? @test_email
       @bucket.default_acl.delete @test_email
     end
 
@@ -198,11 +165,6 @@ describe "Google Cloud Storage ACL sample" do
 
     file = @bucket.file file_name
 
-    file.acl.delete @test_email if email_in_file_acl? file_name, @test_email
-    file.acl.reload!
-
-    expect(file.acl.owners).not_to include @test_email
-
     file.acl.add_owner @test_email
     file.acl.reload!
 
@@ -223,11 +185,6 @@ describe "Google Cloud Storage ACL sample" do
     upload @local_file_path, file_name
 
     file = @bucket.file file_name
-
-    file.acl.delete @test_email if email_in_file_acl? file_name, @test_email
-    file.acl.reload!
-
-    expect(file.acl.owners).not_to include @test_email
 
     file.acl.add_owner @test_email
     file.acl.reload!
@@ -252,7 +209,7 @@ describe "Google Cloud Storage ACL sample" do
 
     file = @bucket.file file_name
 
-    file.acl.delete @test_email if email_in_file_acl? file_name, @test_email
+    file.acl.delete @test_email if file.acl.owners.include? @test_email
     file.acl.reload!
 
     expect(file.acl.owners).not_to include @test_email
@@ -276,11 +233,6 @@ describe "Google Cloud Storage ACL sample" do
     upload @local_file_path, file_name
 
     file = @bucket.file file_name
-
-    file.acl.delete @test_email if email_in_file_acl? file_name, @test_email
-    file.acl.reload!
-
-    expect(file.acl.owners).not_to include @test_email
 
     file.acl.add_owner @test_email
     file.acl.reload!
