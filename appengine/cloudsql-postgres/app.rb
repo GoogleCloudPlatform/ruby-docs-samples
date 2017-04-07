@@ -20,7 +20,7 @@ require "sequel"
 DB = Sequel.postgres user:     ENV["POSTGRES_USER"],
                      password: ENV["POSTGRES_PASSWORD"],
                      database: ENV["POSTGRES_DATABASE"],
-                     socket:   ENV["POSTGRES_SOCKET_PATH"]
+                     host:     ENV["POSTGRES_SOCKET_PATH"]
 
 get "/" do
   # Store a hash of the visitor's ip address
