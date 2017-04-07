@@ -41,9 +41,10 @@ machine:
     where `[YOUR_INSTANCE_CONNECTION_NAME]` is the connection name of your
     instance on its Overview page in the Google Cloud Platform Console.
 
- 1. Set the `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_SOCKET_PATH`, and
-`POSTGRES_DATABASE` environment variables. This allows the app to connect to your
-Cloud SQL instance through the proxy.
+ 1. Set the `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DATABASE`
+    environment variables.  Set the `POSTGRES_SOCKET_PATH` environment variable
+    to `/cloudsql/[YOUR_INSTANCE_CONNECTION_NAME]`.
+    This allows the app to connect to your Cloud SQL instance through the proxy.
 
  1. Update the values in `app.yaml` with your instance configuration.
 
