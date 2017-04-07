@@ -9,6 +9,8 @@ This sample demonstrates how to use
 Before you can run or deploy the sample, you will need to do the following:
 
  1. [Create a Cloud SQL for PostgreSQL instance](https://cloud.google.com/sql/docs/postgres/create-instance).
+ 
+ 1. Create a new database in the instance databases page in the Google Cloud Platform Console.
 
  2. If you haven't already, set the password for the default user on your Cloud SQL instance:
 
@@ -23,7 +25,7 @@ Before you can run or deploy the sample, you will need to do the following:
 
         connectionName: project1:us-central1:instance1
 
-    You can also find this value in the **Instance overview** page of the Google Cloud Platform Console.
+    You can also find this value in the instance overview page in the Google Cloud Platform Console.
 
  1. Create a [Service Account][service] for your project. You will use this
 service account to connect to your Cloud SQL instance locally.
@@ -41,9 +43,10 @@ machine:
     where `[YOUR_INSTANCE_CONNECTION_NAME]` is the connection name of your
     instance on its Overview page in the Google Cloud Platform Console.
 
- 1. Set the `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_SOCKET_PATH`, and
-`POSTGRES_DATABASE` environment variables. This allows the app to connect to your
-Cloud SQL instance through the proxy.
+ 1. Set the `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DATABASE`
+    environment variables.  Set the `POSTGRES_SOCKET_PATH` environment variable
+    to `/cloudsql/[YOUR_INSTANCE_CONNECTION_NAME]`.
+    This allows the app to connect to your Cloud SQL instance through the proxy.
 
  1. Update the values in `app.yaml` with your instance configuration.
 
