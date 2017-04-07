@@ -13,4 +13,4 @@
 
 runtime: ruby
 env: flex
-entrypoint: bundle exec rails server -p $PORT
+entrypoint: bundle exec rails server

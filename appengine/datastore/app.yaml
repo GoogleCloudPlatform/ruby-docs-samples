@@ -15,5 +15,5 @@
 #[START all]
 runtime: ruby
 env: flex
-entrypoint: bundle exec ruby app.rb -p $PORT
+entrypoint: bundle exec ruby app.rb
 #[END all]
