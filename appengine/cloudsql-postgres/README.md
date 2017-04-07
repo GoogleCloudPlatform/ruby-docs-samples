@@ -1,35 +1,36 @@
-# Ruby Cloud SQL sample on Google App Engine flexible environment
+# Ruby Cloud SQL PostgreSQL sample on Google App Engine flexible environment
 
-This sample demonstrates how to use [Google Cloud SQL][sql] (or any other SQL
-server) on [Google App Engine flexible environment][flexible].
+This sample demonstrates how to use
+[Google Cloud SQL for PostgreSQL][postgres]
+(or any other SQL server) on [Google App Engine flexible environment][flexible].
 
 ## Setup
 
 Before you can run or deploy the sample, you will need to do the following:
 
-1. Create a [Second Generation Cloud SQL][gen] instance. You can do this from
-the [Cloud Console][console] or via the [Cloud SDK][sdk]. To create it via the
-SDK use the following command:
+ 1. [Create a Cloud SQL for PostgreSQL instance](https://cloud.google.com/sql/docs/postgres/create-instance).
 
-        gcloud sql instances create [YOUR_INSTANCE_NAME] \
-            --activation-policy=ALWAYS \
-            --tier=db-n1-standard-1
+ 2. If you haven't already, set the password for the default user on your Cloud SQL instance:
 
-    where `[YOUR_INSTANCE_NAME]` is a name of your choice, composed of lowercase letters, numbers, and hyphens; must start with a letter.
+        gcloud beta sql users set-password postgres no-host \
+          --instance [INSTANCE_NAME] --password [PASSWORD]
 
-1. Set the root password on your Cloud SQL instance:
+ 2. Record the connection name for the instance:
 
-        gcloud sql instances set-root-password [YOUR_INSTANCE_NAME] --password [YOUR_INSTANCE_ROOT_PASSWORD]
+        gcloud sql instances describe [INSTANCE_NAME]
 
-    where `[YOUR_INSTANCE_NAME]` is the name you chose in step 1 and
-    `[YOUR_INSTANCE_ROOT_PASSWORD]` is a password of your choice.
+    For example:
 
-1. Create a [Service Account][service] for your project. You will use this
+        connectionName: project1:us-central1:instance1
+
+    You can also find this value in the **Instance overview** page of the Google Cloud Platform Console.
+
+ 1. Create a [Service Account][service] for your project. You will use this
 service account to connect to your Cloud SQL instance locally.
 
-1. Download and install the [Cloud SQL Proxy][proxy].
+ 1. Download and install the [Cloud SQL Proxy][proxy].
 
-1. [Start the proxy][start] to allow connecting to your instance from your local
+ 1. [Start the proxy][start] to allow connecting to your instance from your local
 machine:
 
         cloud_sql_proxy \
@@ -38,28 +39,15 @@ machine:
             -credential_file=PATH_TO_YOUR_SERVICE_ACCOUNT_JSON
 
     where `[YOUR_INSTANCE_CONNECTION_NAME]` is the connection name of your
-    instance on its Overview page in the Google Cloud Platform Console, or use
-    `[YOUR_PROJECT_ID]:[YOUR_REGION]:[YOUR_INSTANCE_NAME]`.
+    instance on its Overview page in the Google Cloud Platform Console.
 
-1. Use the MySQL command line tools (or a management tool of your choice) to
-create a [new user][user] and [database][database] for your application:
-
-        mysql --socket [YOUR_SOCKET_PATH] -u root -p
-          mysql> create database YOUR_DATABASE;
-          mysql> create user 'YOUR_USER'@'%' identified by 'PASSWORD';
-          mysql> grant all on YOUR_DATABASE.* to 'YOUR_USER'@'%';
-
-    where `[YOUR_SOCKET_PATH]` is that socket opened by the proxy. This path was
-    printed to the console when you started the proxy, and is of the format:
-    `/[DIR]/[YOUR_PROJECT_ID]:[YOUR_REGION]:[YOUR_INSTANCE_NAME]`.
-
-1. Set the `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_SOCKET_PATH`, and
+ 1. Set the `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_SOCKET_PATH`, and
 `POSTGRES_DATABASE` environment variables. This allows the app to connect to your
 Cloud SQL instance through the proxy.
 
-1. Update the values in `app.yaml` with your instance configuration.
+ 1. Update the values in `app.yaml` with your instance configuration.
 
-1. Install dependencies
+ 1. Install dependencies
 
     bundle install
 
@@ -82,7 +70,7 @@ running the sample:
     bundle exec ruby create_tables.rb
     bundle exec ruby app.rb
 
-[sql]: https://cloud.google.com/sql/
+[postgres]: https://cloud.google.com/sql/docs/postgres/
 [flexible]: https://cloud.google.com/appengine
 [gen]: https://cloud.google.com/sql/docs/create-instance
 [console]: https://console.developers.google.com
