@@ -1,6 +1,6 @@
 runtime: ruby
 vm: true
-entrypoint: bundle exec ruby app.rb -p $PORT
+entrypoint: bundle exec ruby app.rb
 
 endpoints_api_service:
   # The following values are to be replaced by information from the output of
