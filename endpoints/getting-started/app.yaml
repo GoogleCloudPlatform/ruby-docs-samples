@@ -1,5 +1,5 @@
 runtime: ruby
-vm: true
+env: flex
 entrypoint: bundle exec ruby app.rb
 
 endpoints_api_service:
