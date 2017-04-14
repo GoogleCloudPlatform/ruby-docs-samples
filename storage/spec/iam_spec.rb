@@ -28,17 +28,6 @@ describe "Google Cloud Storage IAM sample" do
     @test_member = "user:test@test.com"
   end
 
-  # Capture and return STDOUT output by block
-  def capture &block
-    real_stdout = $stdout
-    $stdout = StringIO.new
-    block.call
-    @captured_output = $stdout.string
-  ensure
-    $stdout = real_stdout
-  end
-  attr_reader :captured_output
-
   it "can view bucket IAM members" do
     @bucket.policy do |policy|
       policy.roles[@test_role] = [@test_member]
@@ -47,11 +36,11 @@ describe "Google Cloud Storage IAM sample" do
     @bucket.policy force: true
     expect(@bucket.policy.roles[@test_role]).to include @test_member
 
-    capture do
+   expect {
       view_bucket_iam_members project_id: @project_id, bucket_name: @bucket_name
-    end
-
-    expect(captured_output).to match /#{@test_role} Members:.*#{@test_member}/
+   }.to output(
+      /#{@test_role} Members:.*#{@test_member}/
+   ).to_stdout
   end
 
   it "can add an IAM member" do
@@ -62,14 +51,14 @@ describe "Google Cloud Storage IAM sample" do
     @bucket.policy force: true
     expect(@bucket.policy.roles[@test_role]).to eq nil
 
-    capture do
+    expect {
       add_bucket_iam_member project_id:  @project_id,
                             bucket_name: @bucket_name,
                             role:        @test_role,
                             member:      @test_member
-    end
-
-    expect(captured_output).to include "Added #{@test_member} with role #{@test_role}"
+    }.to output(
+      /Added #{@test_member} with role #{@test_role}/
+    ).to_stdout
 
     @bucket.policy force: true
     expect(@bucket.policy.roles[@test_role]).to include @test_member
@@ -83,14 +72,14 @@ describe "Google Cloud Storage IAM sample" do
     @bucket.policy force: true
     expect(@bucket.policy.roles[@test_role]).to include @test_member
 
-    capture do
+    expect {
      remove_bucket_iam_member project_id:  @project_id,
                               bucket_name: @bucket_name,
                               role:        @test_role,
                               member:      @test_member
-    end
-
-    expect(captured_output).to include "Removed #{@test_member} with role #{@test_role}"
+    }.to output(
+      /Removed #{@test_member} with role #{@test_role}/
+    ).to_stdout
 
     @bucket.policy force: true
     expect(@bucket.policy.roles[@test_role]).to eq nil
