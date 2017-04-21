@@ -1,4 +1,4 @@
-# Ruby Cloud SQL PostgreSQL sample on Google App Engine flexible environment
+# Cloud SQL for PostgreSQL sample on Google App Engine flexible environment
 
 This sample demonstrates how to use
 [Google Cloud SQL for PostgreSQL][postgres]
