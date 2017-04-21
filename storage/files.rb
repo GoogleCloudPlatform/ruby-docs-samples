@@ -12,9 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require_relative "ruby_samples"
-
-sample :list_bucket_contents do |project_id:, bucket_name:|
+def list_bucket_contents project_id:, bucket_name:
   # [START list_bucket_contents]
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
@@ -30,7 +28,7 @@ sample :list_bucket_contents do |project_id:, bucket_name:|
   # [END list_bucket_contents]
 end
 
-sample :list_bucket_contents_with_prefix do |project_id:, bucket_name:, prefix:|
+def list_bucket_contents_with_prefix project_id:, bucket_name:, prefix:
   # [START list_bucket_contents_with_prefix]
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
@@ -79,8 +77,8 @@ def upload_file project_id:, bucket_name:, local_file_path:,
   # [END upload_file]
 end
 
-sample :upload_encrypted_file do |project_id:, bucket_name:, local_file_path:,
-                                  storage_file_path: nil, encryption_key:|
+def upload_encrypted_file project_id:, bucket_name:, local_file_path:,
+                          storage_file_path: nil, encryption_key:
   # [START upload_encrypted_file]
   # project_id        = "Your Google Cloud project ID"
   # bucket_name       = "Your Google Cloud Storage bucket name"
@@ -101,7 +99,7 @@ sample :upload_encrypted_file do |project_id:, bucket_name:, local_file_path:,
   # [END upload_encrypted_file]
 end
 
-sample :download_file do |project_id:, bucket_name:, file_name:, local_path:|
+def download_file project_id:, bucket_name:, file_name:, local_path:
   # [START download_file]
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
@@ -119,7 +117,6 @@ sample :download_file do |project_id:, bucket_name:, file_name:, local_path:|
   puts "Downloaded #{file.name}"
   # [END download_file]
 end
-
 
 def download_encrypted_file project_id:, bucket_name:, storage_file_path:,
                             local_file_path:, encryption_key:
