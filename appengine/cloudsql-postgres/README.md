@@ -52,7 +52,7 @@ machine:
 
  1. Install dependencies
 
-    bundle install
+        bundle install
 
 1. Finally, run `create_tables.rb` to ensure that the database is properly
 configured and to create the tables needed for the sample.
