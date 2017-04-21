@@ -1,7 +1,7 @@
-# Ruby Cloud SQL sample on Google App Engine flexible environment
+# Cloud SQL for MySQL sample on Google App Engine flexible environment
 
-This sample demonstrates how to use [Google Cloud SQL][sql] (or any other SQL
-server) on [Google App Engine flexible environment][flexible].
+This sample demonstrates how to use [Google Cloud SQL for MySQL][mysql]
+(or any other SQL server) on [Google App Engine flexible environment][flexible].
 
 ## Setup
 
@@ -12,7 +12,6 @@ the [Cloud Console][console] or via the [Cloud SDK][sdk]. To create it via the
 SDK use the following command:
 
         gcloud sql instances create [YOUR_INSTANCE_NAME] \
-            --activation-policy=ALWAYS \
             --tier=db-n1-standard-1
 
     where `[YOUR_INSTANCE_NAME]` is a name of your choice, composed of lowercase letters, numbers, and hyphens; must start with a letter.
@@ -51,7 +50,7 @@ create a [new user][user] and [database][database] for your application:
 
     where `[YOUR_SOCKET_PATH]` is that socket opened by the proxy. This path was
     printed to the console when you started the proxy, and is of the format:
-    `/[DIR]/[YOUR_PROJECT_ID]:[YOUR_REGION]:[YOUR_INSTANCE_NAME]`.
+    `/cloudsql/[YOUR_PROJECT_ID]:[YOUR_REGION]:[YOUR_INSTANCE_NAME]`.
 
 1. Set the `MYSQL_USER`, `MYSQL_PASSWORD`, `MYSQL_SOCKET_PATH`, and
 `MYSQL_DATABASE` environment variables. This allows the app to connect to your
@@ -82,7 +81,7 @@ running the sample:
     bundle exec ruby create_tables.rb
     bundle exec ruby app.rb
 
-[sql]: https://cloud.google.com/sql/
+[mysql]: https://cloud.google.com/sql/
 [flexible]: https://cloud.google.com/appengine
 [gen]: https://cloud.google.com/sql/docs/create-instance
 [console]: https://console.developers.google.com

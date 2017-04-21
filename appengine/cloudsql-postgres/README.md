@@ -4,13 +4,17 @@ This sample demonstrates how to use
 [Google Cloud SQL for PostgreSQL][postgres]
 (or any other SQL server) on [Google App Engine flexible environment][flexible].
 
+This sample demonstrates how to use [Google Cloud SQL for PostgreSQL][sql]
+(or any other SQL server) on [Google App Engine flexible environment][flexible].
+
 ## Setup
 
 Before you can run or deploy the sample, you will need to do the following:
 
  1. [Create a Cloud SQL for PostgreSQL instance](https://cloud.google.com/sql/docs/postgres/create-instance).
  
- 1. Create a new database in the instance databases page in the Google Cloud Platform Console.
+ 1. [Create a new database](https://cloud.google.com/sql/docs/postgres/create-manage-databases)
+    in the instance databases page in the Google Cloud Platform Console.
 
  2. If you haven't already, set the password for the default user on your Cloud SQL instance:
 
@@ -19,7 +23,7 @@ Before you can run or deploy the sample, you will need to do the following:
 
  2. Record the connection name for the instance:
 
-        gcloud sql instances describe [INSTANCE_NAME]
+        gcloud sql instances describe [INSTANCE_NAME] | grep connectionName
 
     For example:
 
