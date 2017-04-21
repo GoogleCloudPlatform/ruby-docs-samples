@@ -81,7 +81,7 @@ running the sample:
     bundle exec ruby create_tables.rb
     bundle exec ruby app.rb
 
-[mysql]: https://cloud.google.com/sql/
+[mysql]: https://cloud.google.com/sql/docs/mysql
 [flexible]: https://cloud.google.com/appengine
 [gen]: https://cloud.google.com/sql/docs/create-instance
 [console]: https://console.developers.google.com

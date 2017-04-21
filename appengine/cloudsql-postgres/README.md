@@ -4,9 +4,6 @@ This sample demonstrates how to use
 [Google Cloud SQL for PostgreSQL][postgres]
 (or any other SQL server) on [Google App Engine flexible environment][flexible].
 
-This sample demonstrates how to use [Google Cloud SQL for PostgreSQL][sql]
-(or any other SQL server) on [Google App Engine flexible environment][flexible].
-
 ## Setup
 
 Before you can run or deploy the sample, you will need to do the following:
