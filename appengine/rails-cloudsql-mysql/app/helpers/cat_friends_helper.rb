@@ -1,0 +1,2 @@
+module CatFriendsHelper
+end
