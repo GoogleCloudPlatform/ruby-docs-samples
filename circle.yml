@@ -6,6 +6,8 @@ machine:
 
 # Dependencies needed by run-all.sh
 dependencies:
+  pre:
+    - curl -O https://storage.googleapis.com/cloud-docs-samples/releases/latest/nodejs-repo-tools-linux && mv ./nodejs-repo-tools-linux $HOME/bin/samples && chmod +x $HOME/bin/samples
   override:
     - sudo apt-get update; sudo apt-get install realpath
 
@@ -13,7 +15,16 @@ dependencies:
 test:
   override:
     # Ruby 2.2.5
-    - rvm-exec 2.2.5 ./spec/run-all.sh
+    # - rvm-exec 2.2.5 ./spec/run-all.sh
     # Ruby 2.3.1
-    - rvm-exec 2.3.1 ./spec/run-all.sh
-
+    # - rvm-exec 2.3.1 ./spec/run-all.sh
+    - samples test build --install-args "install --deployment" --requires-key-file --async --local-path datastore
+    - samples test build --install-args "install --deployment" --requires-key-file --async --local-path bigquery --required-env-vars GOOGLE_CLOUD_STORAGE_BUCKET
+    - samples test build --install-args "install --deployment" --requires-key-file --async --local-path kms
+    - samples test build --install-args "install --deployment" --requires-key-file --async --local-path language --required-env-vars GOOGLE_CLOUD_STORAGE_BUCKET
+    - samples test build --install-args "install --deployment" --requires-key-file --async --local-path logging --required-env-vars GOOGLE_CLOUD_STORAGE_BUCKET,ALTERNATE_GOOGLE_CLOUD_STORAGE_BUCKET
+    - samples test build --install-args "install --deployment" --requires-key-file --async --local-path pubsub
+    - samples test build --install-args "install --deployment" --requires-key-file --async --local-path speech --required-env-vars GOOGLE_CLOUD_STORAGE_BUCKET
+    - samples test build --install-args "install --deployment" --requires-key-file --async --local-path storage --required-env-vars GOOGLE_CLOUD_STORAGE_BUCKET
+    - samples test build --install-args "install --deployment" --requires-key-file --async --local-path translate
+    - samples test build --install-args "install --deployment" --requires-key-file --async --local-path vision --required-env-vars GOOGLE_CLOUD_STORAGE_BUCKET

@@ -2,57 +2,47 @@
 
 # Google Cloud Natural Language API Ruby Samples
 
-[Cloud Natural Language API][language_docs] provides natural language
-understanding technologies to developers, including sentiment analysis, entity
-recognition, and syntax analysis. This API is part of the larger Cloud Machine
-Learning API.
+[![Build](https://storage.googleapis.com/cloud-docs-samples-badges/GoogleCloudPlatform/ruby-docs-samples/language.svg)]()
 
-[language_docs]: https://cloud.google.com/natural-language/docs/
+[Cloud Natural Language API](https://cloud.google.com/natural-language/docs) provides natural language understanding technologies to developers, including sentiment analysis, entity recognition, and syntax analysis. This API is part of the larger Cloud Machine Learning API.
 
-## Run sample
+## Table of Contents
 
-To run the sample, first install dependencies:
+* [Setup](#setup)
+* [Samples](#samples)
+  * [Analyze](#analyze)
+* [Running the tests](#running-the-tests)
 
-    bundle install
+## Setup
 
-Run the sample:
+1.  Read [Prerequisites][prereq] and [How to run a sample][run] first.
+1.  Install dependencies:
 
-    export GOOGLE_CLOUD_PROJECT="Your Google Cloud project ID"
+        bundle install
 
-    bundle exec ruby language_samples.rb
+[prereq]: ../README.md#prerequisities
+[run]: ../README.md#how-to-run-a-sample
 
-Usage:
+## Samples
 
-    Usage: ruby language_samples.rb <text-to-analyze>
+### Analyze
 
-Example:
 
-    bundle exec ruby language_samples.rb "Alice and Bob are frustrated. William Shakespeare is extremely amazingly great."
+View the [documentation][language_0_docs] or the [source code][language_0_code].
 
-    Sentiment:
-    Overall document sentiment: 0.20000000298023224
-    Sentence level sentiment:
-    Alice and Bob are frustrated. (-0.30000001192092896)
-    William Shakespeare is extremely amazingly great. (0.800000011920929)
+__Usage:__ `ruby language_samples.rb`
 
-    Entities:
-    Entity Alice PERSON
-    Entity Bob PERSON
-    Entity William Shakespeare PERSON http://en.wikipedia.org/wiki/William_Shakespeare
+```
+Usage: ruby language_samples.rb <text-to-analyze>
+```
 
-    Syntax:
-    Sentences: 2
-    Tokens: 13
-    NOUN Alice
-    CONJ and
-    NOUN Bob
-    VERB are
-    ADJ frustrated
-    PUNCT .
-    NOUN William
-    NOUN Shakespeare
-    VERB is
-    ADV extremely
-    ADV amazingly
-    ADJ great
-    PUNCT .
+[language_0_docs]: https://cloud.google.com/natural-language/docs
+[language_0_code]: language_samples.rb
+
+## Running the tests
+
+1.  Set the **GCLOUD_PROJECT** and **GOOGLE_APPLICATION_CREDENTIALS** environment variables.
+
+1.  Run the tests:
+
+        bundle exec rspec

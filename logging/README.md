@@ -1,5 +1,7 @@
 # Stackdriver Logging Sample
 
+[![Build](https://storage.googleapis.com/cloud-docs-samples-badges/GoogleCloudPlatform/ruby-docs-samples/logging.svg)]()
+
 This sample provides example code for
 [cloud.google.com/logging/docs](https://cloud.google.com/logging/docs).
 

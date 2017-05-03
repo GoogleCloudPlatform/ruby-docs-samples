@@ -1,0 +1,12 @@
+{
+  "product": "speech",
+  "samples": [
+    {
+      "id": "speech",
+      "name": "Speech",
+      "file": "speech_samples.rb",
+      "docs_link": "https://cloud.google.com/speech/docs",
+      "usage": "ruby speech_samples.rb --help"
+    }
+  ]
+}
