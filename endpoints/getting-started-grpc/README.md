@@ -14,13 +14,13 @@ Cloud account and [SDK](https://cloud.google.com/sdk/) configured.
 
     ```bash
     # In the background or another terminal run the server:
-    bundle exec greeter_server.rb
+    bundle exec ruby greeter_server.rb
 
     # Check the client parameters:
-    bundle exec greeter_client.rb
+    bundle exec ruby greeter_client.rb
 
     # Run the client
-    bundle exec greeter_client.rb localhost:50051 test
+    bundle exec ruby greeter_client.rb localhost:50051 test
     ```
 
 1. The gRPC Services have already been generated in `lib/`. If you
@@ -45,10 +45,10 @@ Cloud account and [SDK](https://cloud.google.com/sdk/) configured.
     # The Config ID should be printed out, looks like: 2017-02-01r0, remember this
 
     # set your project to make commands easier
-    GCLOUD_PROJECT=<Your Project ID>
+    GOOGLE_CLOUD_PROJECT=<Your Project ID>
 
     # Print out your Config ID again, in case you missed it
-    gcloud service-management configs list --service hellogrpc.endpoints.${GCLOUD_PROJECT}.cloud.goog
+    gcloud service-management configs list --service hellogrpc.endpoints.${GOOGLE_CLOUD_PROJECT}.cloud.goog
     ```
 
 1. Also get an API key from the Console's API Manager for use in the
@@ -57,7 +57,7 @@ Cloud account and [SDK](https://cloud.google.com/sdk/) configured.
 1. Build a docker image for your gRPC server, store in your Registry
 
     ```bash
-    gcloud container builds submit --tag gcr.io/${GCLOUD_PROJECT}/ruby-grpc-hello:1.0 .
+    gcloud container builds submit --tag gcr.io/${GOOGLE_CLOUD_PROJECT}/ruby-grpc-hello:1.0 .
     ```
 
 1. Either deploy to GCE (below) or GKE (further down)
@@ -74,8 +74,8 @@ Cloud account and [SDK](https://cloud.google.com/sdk/) configured.
 1. Set some variables to make commands easier
 
     ```bash
-    GCLOUD_PROJECT=$(curl -s "http://metadata.google.internal/computeMetadata/v1/project/project-id" -H "Metadata-Flavor: Google")
-    SERVICE_NAME=hellogrpc.endpoints.${GCLOUD_PROJECT}.cloud.goog
+    GOOGLE_CLOUD_PROJECT=$(curl -s "http://metadata.google.internal/computeMetadata/v1/project/project-id" -H "Metadata-Flavor: Google")
+    SERVICE_NAME=hellogrpc.endpoints.${GOOGLE_CLOUD_PROJECT}.cloud.goog
     SERVICE_CONFIG_ID=<Your Config ID>
     ```
 
@@ -84,7 +84,7 @@ Cloud account and [SDK](https://cloud.google.com/sdk/) configured.
 
     ```bash
     /usr/share/google/dockercfg_update.sh
-    docker run -d --name=grpc-hello gcr.io/${GCLOUD_PROJECT}/ruby-grpc-hello:1.0
+    docker run -d --name=grpc-hello gcr.io/${GOOGLE_CLOUD_PROJECT}/ruby-grpc-hello:1.0
     ```
 
 1. Run the Endpoints proxy
@@ -109,7 +109,7 @@ Cloud account and [SDK](https://cloud.google.com/sdk/) configured.
 1. Run the client
 
     ```bash
-    bundle exec greeter_client.rb <IP of GCE Instance>:80 <API Key from Console>
+    bundle exec ruby greeter_client.rb <IP of GCE Instance>:80 <API Key from Console>
     ```
 
 1. Cleanup
@@ -127,7 +127,7 @@ Cloud account and [SDK](https://cloud.google.com/sdk/) configured.
     ```
 
 1. Edit `container-engine.yaml`. Replace `SERVICE_NAME`,
-   `SERVICE_CONFIG_ID`, and `GCLOUD_PROJECT` with your values.
+   `SERVICE_CONFIG_ID`, and `GOOGLE_CLOUD_PROJECT` with your values.
 
 1. Deploy to GKE
 
@@ -144,7 +144,7 @@ Cloud account and [SDK](https://cloud.google.com/sdk/) configured.
 1. Run the client
 
     ```bash
-    bundle exec greeter_client.rb <IP of GKE LoadBalancer>:80 <API Key from Console>
+    bundle exec ruby greeter_client.rb <IP of GKE LoadBalancer>:80 <API Key from Console>
     ```
 
 1. Cleanup

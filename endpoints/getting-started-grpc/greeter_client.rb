@@ -1,64 +1,51 @@
-#!/usr/bin/env ruby
-
-# Copyright 2015, Google Inc.
-# All rights reserved.
+# Copyright 2017 Google, Inc
 #
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions are
-# met:
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
 #
-#     * Redistributions of source code must retain the above copyright
-# notice, this list of conditions and the following disclaimer.
-#     * Redistributions in binary form must reproduce the above
-# copyright notice, this list of conditions and the following disclaimer
-# in the documentation and/or other materials provided with the
-# distribution.
-#     * Neither the name of Google Inc. nor the names of its
-# contributors may be used to endorse or promote products derived from
-# this software without specific prior written permission.
+#     http://www.apache.org/licenses/LICENSE-2.0
 #
-# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-# A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-# OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-# SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-# LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+# Unless required by applicable law or agreed to in write, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
 # Sample app that connects to a Greeter service.
-#
-# Usage: $ path/to/greeter_client.rb
 
-this_dir = File.expand_path(File.dirname(__FILE__))
-lib_dir = File.join(this_dir, "lib")
-$LOAD_PATH.unshift(lib_dir) unless $LOAD_PATH.include?(lib_dir)
+GRPC_LIBRARY = File.join __dir__, "lib"
+$LOAD_PATH.unshift GRPC_LIBRARY unless $LOAD_PATH.include? GRPC_LIBRARY
 
 require "grpc"
 require "helloworld_services_pb"
 
 def main host, api_key, user
-  stub = Helloworld::Greeter::Stub.new(host, :this_channel_is_insecure)
-  metadata = { "x-api-key" => api_key }
-  message = stub.say_hello(Helloworld::HelloRequest.new(name: user), metadata: metadata).message
+  stub = Helloworld::Greeter::Stub.new host, :this_channel_is_insecure
+
+  request  = Helloworld::HelloRequest.new name: user
+  metadata = { "x-api-key": api_key }
+  response = stub.say_hello request, metadata: metadata
+  message  = response.message
+
   puts "Greeting: #{message}"
 end
 
-if ARGV.size < 2
-  puts <<-usage
-Usage: bundle exec greeter_client.rb <host> <api_key> [greetee]
+if __FILE__ == $PROGRAM_NAME
+  if ARGV.size < 2
+    puts <<-usage
+Usage: bundle exec ruby greeter_client.rb <host> <api_key> [greetee]
 
 Arguments:
   host                 gRPC host to connect to, ex: localhost:50051
   api_key              API key to add to request
   greetee              Optional, Who to greet
-  usage
-else
-  host = ARGV.shift
-  api_key = ARGV.shift
-  user = ARGV.size > 0 ?  ARGV.shift : "world"
-  main host, api_key, user
+    usage
+  else
+    host    = ARGV.shift
+    api_key = ARGV.shift
+    user    = ARGV.shift || "world"
+
+    main host, api_key, user
+  end
 end

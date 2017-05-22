@@ -14,4 +14,4 @@ COPY . /app/
 # Reset entrypoint to override base image.
 ENTRYPOINT []
 
-CMD ["bundle", "exec", "greeter_server.rb"]
+CMD ["bundle", "exec", "ruby", "greeter_server.rb"]

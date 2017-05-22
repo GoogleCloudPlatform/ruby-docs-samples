@@ -49,6 +49,6 @@ spec:
         ports:
           - containerPort: 9000
       - name: ruby-grpc-hello
-        image: gcr.io/GCLOUD_PROJECT/ruby-grpc-hello:1.0
+        image: gcr.io/GOOGLE_CLOUD_PROJECT/ruby-grpc-hello:1.0
         ports:
           - containerPort: 50051
