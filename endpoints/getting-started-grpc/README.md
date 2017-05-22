@@ -62,7 +62,7 @@ Cloud account and [SDK](https://cloud.google.com/sdk/) configured.
 
 1. Either deploy to GCE (below) or GKE (further down)
 
-### GCE
+### Google Compute Engine
 
 1. Create your instance and ssh in.
 
@@ -118,7 +118,7 @@ Cloud account and [SDK](https://cloud.google.com/sdk/) configured.
     gcloud compute instances delete grpc-host
     ```
 
-### GKE
+### Google Container Engine
 
 1. Create a cluster
 
