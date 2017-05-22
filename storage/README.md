@@ -2,6 +2,8 @@
 
 # Google Cloud Storage Ruby Samples
 
+[![Build](https://storage.googleapis.com/cloud-docs-samples-badges/GoogleCloudPlatform/ruby-docs-samples/storage.svg)]()
+
 [Cloud Storage][storage_docs] allows world-wide storage and retrieval of any
 amount of data at any time.
 

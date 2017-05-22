@@ -1,0 +1,12 @@
+{
+  "product": "nl",
+  "samples": [
+    {
+      "id": "language",
+      "name": "Analyze",
+      "file": "language_samples.rb",
+      "docs_link": "https://cloud.google.com/natural-language/docs",
+      "usage": "ruby language_samples.rb"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "product": "bigquery",
+  "samples": [
+    {
+      "id": "datasets",
+      "name": "Datasets",
+      "file": "datasets.rb",
+      "docs_link": "https://cloud.google.com/bigquery/docs",
+      "usage": "ruby datasets.rb --help"
+    },
+    {
+      "id": "tables",
+      "name": "Tables",
+      "file": "tables.rb",
+      "docs_link": "https://cloud.google.com/bigquery/docs",
+      "usage": "ruby tables.rb --help"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "product": "translate",
+  "samples": [
+    {
+      "id": "translate",
+      "name": "Translate",
+      "file": "translate_samples.rb",
+      "docs_link": "https://cloud.google.com/translate/docs",
+      "usage": "ruby translate_samples.rb --help"
+    }
+  ]
+}

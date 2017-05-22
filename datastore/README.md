@@ -1,5 +1,7 @@
 # Cloud Datastore Sample
 
+[![Build](https://storage.googleapis.com/cloud-docs-samples-badges/GoogleCloudPlatform/ruby-docs-samples/datastore.svg)]()
+
 This sample provides example code for
 [cloud.google.com/datastore/docs](https://cloud.google.com/datastore/docs).
 

@@ -4,6 +4,8 @@ width="96"/>
 
 # Google Cloud Key Management Service API Samples
 
+[![Build](https://storage.googleapis.com/cloud-docs-samples-badges/GoogleCloudPlatform/ruby-docs-samples/kms.svg)]()
+
 Cloud KMS allows you to keep encryption keys in one central cloud service, for
 direct use by other cloud resources and applications. With Cloud KMS you are the
 ultimate custodian of your data, you can manage encryption in the cloud the same

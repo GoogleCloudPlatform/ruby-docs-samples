@@ -2,31 +2,54 @@
 
 # Google Cloud Speech API Ruby Samples
 
-The [Cloud Speech API](https://cloud.google.com/speech/) enables easy
-integration of Google speech recognition technologies into developer applications.
+[![Build](https://storage.googleapis.com/cloud-docs-samples-badges/GoogleCloudPlatform/ruby-docs-samples/speech.svg)]()
 
-## Run sample
+The [Cloud Speech API](https://cloud.google.com/speech/docs) enables easy integration of Google speech recognition technologies into developer applications.
 
-To run the sample, first install dependencies:
+## Table of Contents
 
-    bundle install
+* [Setup](#setup)
+* [Samples](#samples)
+  * [Speech](#speech)
+* [Running the tests](#running-the-tests)
 
-Run the sample:
+## Setup
 
-    bundle exec ruby speech_samples.rb
+1.  Read [Prerequisites][prereq] and [How to run a sample][run] first.
+1.  Install dependencies:
 
-Usage:
+        bundle install
 
-    Usage: ruby speech_samples.rb <command> [arguments]
+[prereq]: ../README.md#prerequisities
+[run]: ../README.md#how-to-run-a-sample
 
-    Commands:
-    recognize           <filename> Detects speech in a local audio file.
-    recognize_gcs       <gcsUri>   Detects speech in an audio file located in a Google Cloud Storage bucket.
-    async_recognize     <filename> Creates a job to detect speech in a local audio file, and waits for the job to complete.
-    async_recognize_gcs <gcsUri>   Creates a job to detect speech in an audio file located in a Google Cloud Storage bucket, and
-                                   waits for the job to complete.
+## Samples
 
-Examples:
+### Speech
 
-    $ bundle exec ruby speech_samples.rb recognize audio_files/audio.raw
-    Text: how old is the Brooklyn Bridge
+
+View the [documentation][speech_0_docs] or the [source code][speech_0_code].
+
+__Usage:__ `ruby speech_samples.rb --help`
+
+```
+Usage: ruby speech_samples.rb <command> [arguments]
+
+Commands:
+  recognize           <filename> Detects speech in a local audio file.
+  recognize_gcs       <gcsUri>   Detects speech in an audio file located in a Google Cloud Storage bucket.
+  async_recognize     <filename> Creates a job to detect speech in a local audio file, and waits for the job to complete.
+  async_recognize_gcs <gcsUri>   Creates a job to detect speech in an audio file located in a Google Cloud Storage bucket, and
+                                 waits for the job to complete.
+```
+
+[speech_0_docs]: https://cloud.google.com/speech/docs
+[speech_0_code]: speech_samples.rb
+
+## Running the tests
+
+1.  Set the **GCLOUD_PROJECT** and **GOOGLE_APPLICATION_CREDENTIALS** environment variables.
+
+1.  Run the tests:
+
+        bundle exec rspec
