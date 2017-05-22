@@ -60,7 +60,8 @@ Cloud account and [SDK](https://cloud.google.com/sdk/) configured.
     gcloud container builds submit --tag gcr.io/${GOOGLE_CLOUD_PROJECT}/ruby-grpc-hello:1.0 .
     ```
 
-1. Either deploy to GCE (below) or GKE (further down)
+1. Either deploy to Google Compute Engine (GCE) below or Google Container Engine
+   (GKE) further down.
 
 ### Google Compute Engine
 
