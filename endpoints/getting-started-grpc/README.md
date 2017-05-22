@@ -30,7 +30,7 @@ Cloud account and [SDK](https://cloud.google.com/sdk/) configured.
     grpc_tools_ruby_protoc -I protos --ruby_out=lib --grpc_out=lib protos/helloworld.proto
     ```
 
-1. Generate the `out.pb` from the proto file.
+1. Generate the [file descriptor set][1] `out.pb` from the proto file.
 
     ```bash
     grpc_tools_ruby_protoc --include_imports --include_source_info protos/helloworld.proto --descriptor_set_out out.pb
@@ -153,3 +153,5 @@ Cloud account and [SDK](https://cloud.google.com/sdk/) configured.
     ```bash
     gcloud container clusters delete my-cluster
     ```
+
+[1]: https://developers.google.com/protocol-buffers/docs/techniques#self-description
