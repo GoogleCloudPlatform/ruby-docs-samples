@@ -4,8 +4,7 @@
 
 The [Google Cloud Natural Language API][language_docs] provides natural language
 understanding technologies to developers, including sentiment analysis, entity
-recognition, and syntax analysis. This API is part of the larger Cloud Machine
-Learning API.
+recognition, and syntax analysis.
 
 [language_docs]: https://cloud.google.com/natural-language/docs/
 

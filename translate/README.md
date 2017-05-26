@@ -5,8 +5,6 @@
 The [Google Cloud Translation API][translate_docs] can dynamically translate
 text between thousands of language pairs. The Cloud Translation API lets
 websites and programs integrate with the translation service programmatically.
-The Google Translation API is part of the larger Cloud Machine Learning API
-family.
 
 [translate_docs]: https://cloud.google.com/translate/docs/
 
