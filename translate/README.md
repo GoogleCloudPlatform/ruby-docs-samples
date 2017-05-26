@@ -18,7 +18,7 @@ To run the sample, first install dependencies:
 
 Set up authentication for the Translation API:
 
-    1. Generate a Service Account by following [Translation API authentication instructions](https://cloud.google.com/translate/docs/common/auth#service-accounts).
+    1. Generate a Service Account by following the [authentication instructions](https://cloud.google.com/docs/authentication#service_accounts).
     1. Set environment variable `GOOGLE_APPLICATION_CREDENTIALS=<path_to_service_account_file>`
 
 Next, set the configured project by setting the *GOOGLE_CLOUD_PROJECT*
