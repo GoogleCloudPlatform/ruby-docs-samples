@@ -9,24 +9,47 @@ Learning API.
 
 [language_docs]: https://cloud.google.com/natural-language/docs/
 
-## Run sample
+## Setup
 
-To run the sample, first install dependencies:
+### Authentication
 
-    bundle install
+Authentication is typically done through [Application Default Credentials](https://cloud.google.com/docs/authentication#getting_credentials_for_server-centric_flow)
+, which means you do not have to change the code to authenticate as long as your
+environment has credentials. You have a few options for setting up
+authentication:
 
-Set up authentication for the Natural Language API:
+1. When running locally, use the [Google Cloud SDK](https://cloud.google.com/sdk/)
 
-    1. Generate a Service Account by following the [authentication instructions](https://cloud.google.com/docs/authentication#service_accounts).
-    1. Set environment variable `GOOGLE_APPLICATION_CREDENTIALS=<path_to_service_account_file>`
+    gcloud auth application-default login
 
-Next, set the configured project by setting the *GOOGLE_CLOUD_PROJECT*
-environment variable to the project name set in the
+1. When running on App Engine or Compute Engine, credentials are already set-up.
+However, you may need to configure your Compute Engine instance with
+[additional scopes](https://cloud.google.com/compute/docs/authentication#using).
+
+1. You can create a [Service Account key file](https://cloud.google.com/docs/authentication#service_accounts)
+. This file can be used to authenticate to Google Cloud Platform services from
+any environment. To use the file, set the `GOOGLE_APPLICATION_CREDENTIALS`
+environment variable to the path to the key file, for example:
+
+    export GOOGLE_APPLICATION_CREDENTIALS=/path/to/service_account.json
+
+### Set Project ID
+
+Next, set the *GOOGLE_CLOUD_PROJECT* environment variable to the project name
+set in the
 [Google Cloud Platform Developer Console](https://console.cloud.google.com):
 
     export GOOGLE_CLOUD_PROJECT="YOUR-PROJECT-ID"
 
-## Samples
+### Install Dependencies
+
+1. Install the [Bundler](http://bundler.io/) gem.
+
+1. Install dependencies using:
+
+    bundle install
+
+## Run samples
 
 Run the sample:
 
