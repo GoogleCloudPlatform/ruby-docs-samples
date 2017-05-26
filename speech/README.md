@@ -2,7 +2,7 @@
 
 # Google Cloud Speech API Ruby Samples
 
-The [Cloud Speech API](https://cloud.google.com/speech/) enables easy
+The [Google Cloud Speech API](https://cloud.google.com/speech/) enables easy
 integration of Google speech recognition technologies into developer applications.
 
 ## Run sample
@@ -10,6 +10,19 @@ integration of Google speech recognition technologies into developer application
 To run the sample, first install dependencies:
 
     bundle install
+
+Set up authentication for the Speech API:
+
+    1. Generate a Service Account by following [Speech API authentication instructions](https://cloud.google.com/speech/docs/common/auth#service-accounts).
+    1. Set environment variable `GOOGLE_APPLICATION_CREDENTIALS=<path_to_service_account_file>`
+
+Next, set the configured project by setting the *GOOGLE_CLOUD_PROJECT*
+environment variable to the project name set in the
+[Google Cloud Platform Developer Console](https://console.cloud.google.com):
+
+    export GOOGLE_CLOUD_PROJECT="YOUR-PROJECT-ID"
+
+## Samples
 
 Run the sample:
 

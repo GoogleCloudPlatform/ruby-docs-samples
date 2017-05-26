@@ -2,7 +2,7 @@
 
 # Google Cloud Natural Language API Ruby Samples
 
-[Cloud Natural Language API][language_docs] provides natural language
+The [Google Cloud Natural Language API][language_docs] provides natural language
 understanding technologies to developers, including sentiment analysis, entity
 recognition, and syntax analysis. This API is part of the larger Cloud Machine
 Learning API.
@@ -15,9 +15,20 @@ To run the sample, first install dependencies:
 
     bundle install
 
-Run the sample:
+Set up authentication for the Natural Language API:
 
-    export GOOGLE_CLOUD_PROJECT="Your Google Cloud project ID"
+    1. Generate a Service Account by following [Natural Language API authentication instructions](https://cloud.google.com/language/docs/common/auth#service-accounts).
+    1. Set environment variable `GOOGLE_APPLICATION_CREDENTIALS=<path_to_service_account_file>`
+
+Next, set the configured project by setting the *GOOGLE_CLOUD_PROJECT*
+environment variable to the project name set in the
+[Google Cloud Platform Developer Console](https://console.cloud.google.com):
+
+    export GOOGLE_CLOUD_PROJECT="YOUR-PROJECT-ID"
+
+## Samples
+
+Run the sample:
 
     bundle exec ruby language_samples.rb
 
@@ -56,3 +67,4 @@ Example:
     ADV amazingly
     ADJ great
     PUNCT .
+

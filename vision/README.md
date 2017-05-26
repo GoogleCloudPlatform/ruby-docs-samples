@@ -2,7 +2,7 @@
 
 # Google Cloud Vision API Ruby Samples
 
-The [Cloud Vision API][vision_docs] allows developers to easily integrate vision
+The [Google Cloud Vision API][vision_docs] allows developers to easily integrate vision
 detection features within applications, including image labeling, face and
 landmark detection, optical character recognition (OCR), and tagging of explicit
 content.
@@ -17,11 +17,10 @@ To run the sample, first install dependencies:
 
     bundle install
 
-If you haven't already, configure default credentials for using the
-[Cloud SDK](https://cloud.google.com/sdk/):
+Set up authentication for the Vision API:
 
-    gcloud auth login
-    gcloud init
+    1. Generate a Service Account by following [Vision API authentication instructions](https://cloud.google.com/vision/docs/common/auth#service-accounts).
+    1. Set environment variable `GOOGLE_APPLICATION_CREDENTIALS=<path_to_service_account_file>`
 
 Next, set the configured project by setting the *GOOGLE_CLOUD_PROJECT*
 environment variable to the project name set in the
@@ -41,7 +40,7 @@ environment variable to the project name set in the
       ruby detect_crop_hints.rb gs://my-bucket/image.png
 
 ### Detect Document Text
- 
+
     Usage: ruby detect_document_text.rb [image file path]
 
     Example:
@@ -50,7 +49,7 @@ environment variable to the project name set in the
       ruby detect_document_text.rb gs://my-bucket/image.png
 
 ### Detect Faces
-     
+
     Usage: ruby detect_faces.rb [image file path]
 
     Example:
@@ -59,7 +58,7 @@ environment variable to the project name set in the
       ruby detect_faces.rb gs://my-bucket/image.png
 
 ### Detect Image Properties
-     
+
     Usage: ruby detect_image_properties.rb [image file path]
 
     Example:
@@ -68,7 +67,7 @@ environment variable to the project name set in the
       ruby detect_image_properties.rb gs://my-bucket/image.png
 
 ### Detect Labels
-     
+
     Usage: ruby detect_labels.rb [image file path]
 
     Example:
@@ -77,7 +76,7 @@ environment variable to the project name set in the
       ruby detect_labels.rb gs://my-bucket/image.png
 
 ### Detect Landmarks
-     
+
     Usage: ruby detect_landmarks.rb [image file path]
 
     Example:
@@ -86,7 +85,7 @@ environment variable to the project name set in the
       ruby detect_landmarks.rb gs://my-bucket/image.png
 
 ### Detect Logos
-     
+
     Usage: ruby detect_logos.rb [image file path]
 
     Example:
@@ -95,7 +94,7 @@ environment variable to the project name set in the
       ruby detect_logos.rb gs://my-bucket/image.png
 
 ### Detect Safe Search Properties
-     
+
     Usage: ruby detect_safe_search.rb [image file path]
 
     Example:
@@ -104,7 +103,7 @@ environment variable to the project name set in the
       ruby detect_safe_search.rb gs://my-bucket/image.png
 
 ### Detect Text
-     
+
     Usage: ruby detect_text.rb [image file path]
 
     Example:
@@ -113,7 +112,7 @@ environment variable to the project name set in the
       ruby detect_text.rb gs://my-bucket/image.png
 
 ### Detect Web Entities and Pages
-     
+
     Usage: ruby detect_web.rb [image file path]
 
     Example:
@@ -124,6 +123,6 @@ environment variable to the project name set in the
 ### Face Detection Tutorial
 
     Usage: ruby draw_box_around_faces.rb [input-file] [output-file]
-    
+
     Example:
       ruby draw_box_around_faces.rb images/face.png output-image.png
