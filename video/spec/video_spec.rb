@@ -17,7 +17,7 @@ require "rspec"
 require "tempfile"
 require "google/cloud/storage"
 
-describe "Google Cloud Storage IAM sample" do
+describe "Google Cloud Video API sample" do
 
   before do
     @bucket_name      = ENV["GOOGLE_CLOUD_STORAGE_BUCKET"]
