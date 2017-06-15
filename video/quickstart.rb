@@ -50,3 +50,4 @@ end
 puts "Processing video for label annotations:"
 operation.wait_until_done!
 # [END videointelligence_quickstart]
+

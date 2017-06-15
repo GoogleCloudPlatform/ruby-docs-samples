@@ -79,3 +79,4 @@ describe "Google Cloud Storage IAM sample" do
     ).to_stdout
   end
 end
+
