@@ -223,11 +223,11 @@ def run_sample arguments
 Usage: bundle exec ruby video_samples.rb [command] [arguments]
 
 Commands:
-  analyze_labels       <gcs_path> Detects labels given a GCS path.
+  analyze_labels       <gcs_path>   Detects labels given a GCS path.
   analyze_labels_local <local_path> Detects labels given file path.
-  analyze_faces        <gcs_path> Analyze Detects faces given a GCS path.
-  analyze_safe_search  <gcs_path>
-  analyze_shots        <gcs_path>
+  analyze_faces        <gcs_path>   Detects faces given a GCS path.
+  analyze_safe_search  <gcs_path>   Detects safe search features the GCS path to a video.
+  analyze_shots        <gcs_path>   Detects camera shot changes.
     usage
   end
 end
