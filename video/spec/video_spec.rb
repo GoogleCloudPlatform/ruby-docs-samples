@@ -34,7 +34,7 @@ describe "Google Cloud Storage IAM sample" do
    expect {
      analyze_labels_gcs path: "gs://#{@bucket_name}/#{@labels_file}"
    }.to output(
-     /Description: Animal/
+     /Label description: Animal/
    ).to_stdout
   end
 
@@ -47,7 +47,7 @@ describe "Google Cloud Storage IAM sample" do
       expect {
         analyze_labels_local path: local_tempfile.path
       }.to output(
-        /Description: Animal/
+        /Label description: Animal/
       ).to_stdout
     ensure
       local_tempfile.close
@@ -59,7 +59,7 @@ describe "Google Cloud Storage IAM sample" do
     expect {
       analyze_faces path: "gs://#{@bucket_name}/#{@labels_file}"
     }.to output(
-      "Thumbnail size: \d+"
+      /Thumbnail size: \d+/
     ).to_stdout
   end
 

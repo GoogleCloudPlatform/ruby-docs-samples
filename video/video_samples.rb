@@ -24,33 +24,32 @@ def analyze_labels_gcs path:
   # Register a callback during the method call
   operation = video_client.annotate_video path, features do |operation|
     raise operation.results.message? if operation.error?
-    puts "Video labels completed"
+    puts "Finished Processing."
 
-    annotation_results = operation.results.annotation_results
+    # first result is retrieved because a single video was processed
+    annotation_result = operation.results.annotation_results.first
 
-    if annotation_results.any?
-      annotation_results.each do |annotation_result|
-        puts "Labels:"
-        annotation_result.label_annotations.each do |label_annotation|
-          puts "\tDescription: #{label_annotation.description}"
-          label_annotation.locations.each do |location|
-            if location.level == :VIDEO_LEVEL
-              puts "\tLocation: Entire video"
-            else
-              segment      = location.segment
-              start_offset = segment.start_time_offset / 1000000.0
-              end_offset   = segment.end_time_offset / 1000000.0
-              puts "\tLocation: #{start_offset}s - #{end_offset}s"
-            end
-          end
+    annotation_result.label_annotations.each do |label_annotation|
+      puts "Label description: #{label_annotation.description}"
+      puts "Locations:"
+
+      label_annotation.locations.each do |location|
+        positions = "Entire video"
+
+        if location.level != :VIDEO_LEVEL
+          segment      = location.segment
+          start_offset = segment.start_time_offset / 1000000.0
+          end_offset   = segment.end_time_offset / 1000000.0
+
+          positions = "#{start_offset}s - #{end_offset}s"
         end
+
+        puts "\t#{positions}"
       end
-    else
-      puts "No labels detected in #{path}"
     end
   end
 
-  puts "Waiting for operation to complete..."
+  puts "Processing video for label annotations:"
   operation.wait_until_done!
   # [END analyze_labels_gcs]
 end
@@ -62,42 +61,40 @@ def analyze_labels_local path:
   require "base64"
   require "google/cloud/video_intelligence/v1beta1"
 
-  video_client = Google::Cloud::VideoIntelligence::V1beta1::VideoIntelligenceServiceClient.new
-  features     = [Google::Cloud::Videointelligence::V1beta1::Feature::LABEL_DETECTION]
-
-  video_contents         = File.read path
-  encoded_video_contents = Base64.encode64 video_contents
+  video_client  = Google::Cloud::VideoIntelligence::V1beta1::VideoIntelligenceServiceClient.new
+  features      = [Google::Cloud::Videointelligence::V1beta1::Feature::LABEL_DETECTION]
+  video_file    = File.read path
+  encoded_video = Base64.encode64 video_file
 
   # Register a callback during the method call
-  operation = video_client.annotate_video nil, features, input_content: encoded_video_contents do |operation|
+  operation = video_client.annotate_video nil, features, input_content: encoded_video do |operation|
     raise operation.results.message? if operation.error?
-    puts "Video labels completed"
+    puts "Finished processing."
 
-    annotation_results = operation.results.annotation_results
+    # first result is retrieved because a single video was processed
+    annotation_result = operation.results.annotation_results.first
 
-    if annotation_results.any?
-      annotation_results.each do |annotation_result|
-        puts "Labels:"
-        annotation_result.label_annotations.each do |label_annotation|
-          puts "\tDescription: #{label_annotation.description}"
-          label_annotation.locations.each do |location|
-            if location.level == :VIDEO_LEVEL
-              puts "\tLocation: Entire video"
-            else
-              segment      = location.segment
-              start_offset = segment.start_time_offset / 1000000.0
-              end_offset   = segment.end_time_offset / 1000000.0
-              puts "\tLocation: #{start_offset}s - #{end_offset}s"
-            end
-          end
+    annotation_result.label_annotations.each do |label_annotation|
+      puts "Label description: #{label_annotation.description}"
+      puts "Locations:"
+
+      label_annotation.locations.each do |location|
+        positions = "Entire video"
+
+        if location.level != :VIDEO_LEVEL
+          segment      = location.segment
+          start_offset = segment.start_time_offset / 1000000.0
+          end_offset   = segment.end_time_offset / 1000000.0
+
+          positions = "#{start_offset}s - #{end_offset}s"
         end
+
+        puts "\t#{positions}"
       end
-    else
-      puts "No labels detected in #{path}"
     end
   end
 
-  puts "Waiting for operation to complete..."
+  puts "Processing video for label annotations:"
   operation.wait_until_done!
   # [END analyze_labels_local]
 end
@@ -114,28 +111,32 @@ def analyze_faces path:
   # Register a callback during the method call
   operation = video_client.annotate_video path, features do |operation|
     raise operation.results.message? if operation.error?
-    annotation_results = operation.results.annotation_results
+    puts "Finished processing."
 
-    annotation_results.each do |annotation_result|
-      if annotation_result.face_annotations.any?
-        annotation_result.face_annotations.each do |face_annotation|
-          puts "Thumbnail size: #{face_annotation.thumbnail.length}"
-          face_annotation.segments.each do |segment|
-            start_offset = segment.start_time_offset / 1000000.0
-            end_offset   = segment.end_time_offset / 1000000.0
+    # first result is retrieved because a single video was processed
+    annotation_result = operation.results.annotation_results.first
 
-            puts "\tLocation: #{start_offset}s - #{end_offset}s"
-          end
+    annotation_result.face_annotations.each do |face_annotation|
+      segment_id = 1
+      puts "Thumbnail size: #{face_annotation.thumbnail.length}"
+
+      face_annotation.segments.each do |segment|
+        positions = 'Entire video'
+
+        if segment.start_time_offset != -1 && segment.end_time_offset != -1
+          start_offset = segment.start_time_offset / 1000000.0
+          end_offset   = segment.end_time_offset / 1000000.0
+          positions    = "#{start_offset}s - #{end_offset}s"
         end
-      else
-        puts "No faces detected in #{path}"
+
+        puts "\tLocation #{segment_id}: #{positions}"
+        segment_id += 1
       end
     end
   end
 
   puts "Processing video for face annotations:"
   operation.wait_until_done!
-  puts "Finished processing"
   # [END analyze_faces]
 end
 
@@ -151,23 +152,23 @@ def analyze_safe_search path:
   # Register a callback during the method call
   operation = video_client.annotate_video path, features do |operation|
     raise operation.results.message? if operation.error?
-    annotation_results = operation.results.annotation_results
+    puts "Finished processing."
 
-    annotation_results.each do |annotation_result|
-      annotation_result.safe_search_annotations.each do |safe_search_annotation|
-        puts "Time: #{safe_search_annotation.time_offset / 1000000.0}"
-        puts "\tadult:   #{safe_search_annotation.adult}"
-        puts "\tspoof:   #{safe_search_annotation.spoof}"
-        puts "\tmedical: #{safe_search_annotation.medical}"
-        puts "\tracy:    #{safe_search_annotation.racy}"
-        puts "\tviolent: #{safe_search_annotation.violent}"
-      end
+    # first result is retrieved because a single video was processed
+    annotation_result = operation.results.annotation_results.first
+
+    annotation_result.safe_search_annotations.each do |safe_search_annotation|
+      puts "Time: #{safe_search_annotation.time_offset / 1000000.0}"
+      puts "\tadult:   #{safe_search_annotation.adult}"
+      puts "\tspoof:   #{safe_search_annotation.spoof}"
+      puts "\tmedical: #{safe_search_annotation.medical}"
+      puts "\tracy:    #{safe_search_annotation.racy}"
+      puts "\tviolent: #{safe_search_annotation.violent}"
     end
   end
 
   puts "Processing video for face annotations:"
   operation.wait_until_done!
-  puts "Finished processing"
   # [END analyze_safe_search]
 end
 
@@ -183,24 +184,23 @@ def analyze_shots path:
   # Register a callback during the method call
   operation = video_client.annotate_video path, features do |operation|
     raise operation.results.message? if operation.error?
-    annotation_results = operation.results.annotation_results
+    puts "Finished processing."
 
-    shot_number = 1
+    # first result is retrieved because a single video was processed
+    annotation_result = operation.results.annotation_results.first
+    shot_number       = 1
 
-    annotation_results.each do |annotation_result|
-      annotation_result.shot_annotations.each do |shot_annotation|
-        start_time = shot_annotation.start_time_offset / 1000000.0
-        end_time   = shot_annotation.end_time_offset / 1000000.0
+    annotation_result.shot_annotations.each do |shot_annotation|
+      start_time = shot_annotation.start_time_offset / 1000000.0
+      end_time   = shot_annotation.end_time_offset / 1000000.0
 
-        puts "\t Scene #{shot_number}: #{start_time}s to #{end_time}"
-        shot_number += 1
-      end
+      puts "Scene #{shot_number}: #{start_time}s to #{end_time}"
+      shot_number += 1
     end
   end
 
   puts "Processing video for shot change annotations:"
   operation.wait_until_done!
-  puts "Finished processing"
   # [END analyze_shots]
 end
 
