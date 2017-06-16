@@ -15,24 +15,21 @@
 require_relative "../video_samples"
 require "rspec"
 require "tempfile"
-require "google/cloud/storage"
+require "net/http"
+require "uri"
 
 describe "Google Cloud Video API sample" do
 
   before do
-    @bucket_name      = ENV["GOOGLE_CLOUD_STORAGE_TEST_DATA"]
-    @storage          = Google::Cloud::Storage.new
-    @project_id       = @storage.project
-    @bucket           = @storage.bucket @bucket_name
-    @faces_file       = "google_gmail.mp4"
-    @labels_file      = "cat.mp4"
-    @shots_file       = "gbikes_dinosaur.mp4"
-    @safe_search_file = "animals.mp4"
+    @faces_file       = "demomaker/google_gmail.mp4"
+    @labels_file      = "demomaker/cat.mp4"
+    @shots_file       = "demomaker/gbikes_dinosaur.mp4"
+    @safe_search_file = "demomaker/animals.mp4"
   end
 
   it "can analyze labels from a gcs file" do
    expect {
-     analyze_labels_gcs path: "gs://#{@bucket_name}/#{@labels_file}"
+     analyze_labels_gcs path: "gs://#{@labels_file}"
    }.to output(
      /Label description: Animal/
    ).to_stdout
@@ -41,8 +38,11 @@ describe "Google Cloud Video API sample" do
   it "can analyze labels from a local file" do
     begin
       local_tempfile = Tempfile.new "temp_video"
-      storage_file = @bucket.file @labels_file
-      storage_file.download local_tempfile.path
+      File.open local_tempfile.path, "w" do |file|
+        file_contents = Net::HTTP.get URI("http://storage.googleapis.com/#{@labels_file}")
+        file.write file_contents
+        file.flush
+      end
 
       expect {
         analyze_labels_local path: local_tempfile.path
@@ -57,7 +57,7 @@ describe "Google Cloud Video API sample" do
 
   it "can analyze faces from a gcs file" do
     expect {
-      analyze_faces path: "gs://#{@bucket_name}/#{@labels_file}"
+      analyze_faces path: "gs://#{@labels_file}"
     }.to output(
       /Thumbnail size: \d+/
     ).to_stdout
@@ -65,7 +65,7 @@ describe "Google Cloud Video API sample" do
 
   it "can analyze safe search from a gcs file" do
     expect {
-      analyze_safe_search path: "gs://#{@bucket_name}/#{@safe_search_file}"
+      analyze_safe_search path: "gs://#{@safe_search_file}"
     }.to output(
       /adult:   VERY_UNLIKELY/
     ).to_stdout
@@ -73,7 +73,7 @@ describe "Google Cloud Video API sample" do
 
   it "can analyze shots from a gcs file" do
     expect {
-      analyze_shots path: "gs://#{@bucket_name}/#{@shots_file}"
+      analyze_shots path: "gs://#{@shots_file}"
     }.to output(
       /Scene 2: \d+.\d+s to \d/
     ).to_stdout
