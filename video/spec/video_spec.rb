@@ -20,7 +20,7 @@ require "google/cloud/storage"
 describe "Google Cloud Video API sample" do
 
   before do
-    @bucket_name      = ENV["GOOGLE_CLOUD_STORAGE_BUCKET"]
+    @bucket_name      = ENV["GOOGLE_CLOUD_STORAGE_TEST_DATA"]
     @storage          = Google::Cloud::Storage.new
     @project_id       = @storage.project
     @bucket           = @storage.bucket @bucket_name
