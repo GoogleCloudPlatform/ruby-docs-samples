@@ -24,7 +24,7 @@ describe "Google Cloud Video API sample" do
     @faces_file       = "demomaker/google_gmail.mp4"
     @labels_file      = "demomaker/cat.mp4"
     @shots_file       = "demomaker/gbikes_dinosaur.mp4"
-    @safe_search_file = "demomaker/google_gmail.mp4"
+    @safe_search_file = "demomaker/pizza.mp4"
   end
 
   it "can analyze labels from a gcs file" do
