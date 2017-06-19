@@ -16,7 +16,7 @@
 require "google/cloud/video_intelligence/v1beta1"
 
 video_client = Google::Cloud::VideoIntelligence::V1beta1::VideoIntelligenceServiceClient.new
-features     = [Google::Cloud::Videointelligence::V1beta1::Feature::LABEL_DETECTION]
+features     = [:LABEL_DETECTION]
 path         = "gs://demomaker/cat.mp4"
 
 # Register a callback during the method call

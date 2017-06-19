@@ -19,7 +19,7 @@ def analyze_labels_gcs path:
   require "google/cloud/video_intelligence/v1beta1"
 
   video_client = Google::Cloud::VideoIntelligence::V1beta1::VideoIntelligenceServiceClient.new
-  features     = [Google::Cloud::Videointelligence::V1beta1::Feature::LABEL_DETECTION]
+  features     = [:LABEL_DETECTION]
 
   # Register a callback during the method call
   operation = video_client.annotate_video path, features do |operation|
@@ -62,7 +62,7 @@ def analyze_labels_local path:
   require "google/cloud/video_intelligence/v1beta1"
 
   video_client  = Google::Cloud::VideoIntelligence::V1beta1::VideoIntelligenceServiceClient.new
-  features      = [Google::Cloud::Videointelligence::V1beta1::Feature::LABEL_DETECTION]
+  features      = [:LABEL_DETECTION]
   video_file    = File.read path
   encoded_video = Base64.encode64 video_file
 
@@ -106,7 +106,7 @@ def analyze_faces path:
   require "google/cloud/video_intelligence/v1beta1"
 
   video_client = Google::Cloud::VideoIntelligence::V1beta1::VideoIntelligenceServiceClient.new
-  features     = [Google::Cloud::Videointelligence::V1beta1::Feature::FACE_DETECTION]
+  features     = [:FACE_DETECTION]
 
   # Register a callback during the method call
   operation = video_client.annotate_video path, features do |operation|
@@ -147,7 +147,7 @@ def analyze_safe_search path:
   require "google/cloud/video_intelligence/v1beta1"
 
   video_client = Google::Cloud::VideoIntelligence::V1beta1::VideoIntelligenceServiceClient.new
-  features     = [Google::Cloud::Videointelligence::V1beta1::Feature::SAFE_SEARCH_DETECTION]
+  features     = [:SAFE_SEARCH_DETECTION]
 
   # Register a callback during the method call
   operation = video_client.annotate_video path, features do |operation|
@@ -179,7 +179,7 @@ def analyze_shots path:
   require "google/cloud/video_intelligence/v1beta1"
 
   video_client = Google::Cloud::VideoIntelligence::V1beta1::VideoIntelligenceServiceClient.new
-  features     = [Google::Cloud::Videointelligence::V1beta1::Feature::SHOT_CHANGE_DETECTION]
+  features     = [:SHOT_CHANGE_DETECTION]
 
   # Register a callback during the method call
   operation = video_client.annotate_video path, features do |operation|
