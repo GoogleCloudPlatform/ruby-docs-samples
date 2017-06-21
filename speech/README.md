@@ -61,6 +61,7 @@ Usage:
     async_recognize     <filename> Creates a job to detect speech in a local audio file, and waits for the job to complete.
     async_recognize_gcs <gcsUri>   Creates a job to detect speech in an audio file located in a Google Cloud Storage bucket, and
                                    waits for the job to complete.
+    stream_recognize    <filename> Detects speech in a local audio file by streaming it to the Speech API.
 
 Examples:
 
