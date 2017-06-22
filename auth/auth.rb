@@ -29,17 +29,15 @@ def implicit project_id:
   # [END implicit]
 end
 
-def explicit project_id: # NOT DONE
-  # Need to include a bit about keyfile: being available in all google-cloud-ruby .. what about GAPIC? (Ask Jon)
+def explicit project_id:, key_file:
   # [START explicit]
   # project_id = "Your Google Cloud project ID"
-
+  # key_file   = "path/to/service-account.json"
   require "google/cloud/storage"
 
   # Explicitly use service account credentials by specifying the private key
-  # file. All client in google-cloud-ruby have this helper,
-  # https://github.com/GoogleCloudPlatform/google-cloud-ruby/blob/google-cloud/v0.32.0/google-cloud-core/lib/google/cloud.rb#L60
-  storage = Google::Cloud::Storage.new project: project_id, keyfile: "service-account.json"
+  # file.
+  storage = Google::Cloud::Storage.new project: project_id, keyfile: key_file
 
   # Make an authenticated API request
   storage.buckets.each do |bucket|
@@ -48,18 +46,16 @@ def explicit project_id: # NOT DONE
   # [END explicit]
 end
 
-def explicit_compute_engine project_id: # NOT DONE
-  # Using compute engine credentials??? (Ask Remi)
+def explicit_compute_engine
   # [START explicit_compute_engine]
-  # project_id = "Your Google Cloud project ID"
-
-  # https://github.com/google/google-auth-library-ruby/blob/master/lib/googleauth.rb
+  require "googleauth"
+  require "google/cloud/env"
   require "google/cloud/storage"
 
   # Explicitly use service account credentials by specifying the private key
-  # file. All client in google-cloud-ruby have this helper,
-  # https://github.com/GoogleCloudPlatform/google-cloud-ruby/blob/google-cloud/v0.32.0/google-cloud-core/lib/google/cloud.rb#L60
-  storage = Google::Cloud::Storage.new project: project_id, keyfile: "service-account.json"
+  # file.
+  storage = Google::Cloud::Storage.new project: Google::Cloud.env.project_id,
+                                       keyfile: Google::Auth::GCECredentials.new
 
   # Make an authenticated API request
   storage.buckets.each do |bucket|
