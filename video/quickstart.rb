@@ -32,17 +32,15 @@ operation = video_client.annotate_video path, features do |operation|
     puts "Locations:"
 
     label_annotation.locations.each do |location|
-      positions = "Entire video"
+      if location.level == :VIDEO_LEVEL
+        puts "Entire video"
+      else
+        segment          = location.segment
+        start_in_seconds = segment.start_time_offset / 1000000.0
+        end_in_seconds   = segment.end_time_offset / 1000000.0
 
-      if location.level != :VIDEO_LEVEL
-        segment      = location.segment
-        start_offset = segment.start_time_offset / 1000000.0
-        end_offset   = segment.end_time_offset / 1000000.0
-
-        positions = "#{start_offset}s - #{end_offset}s"
+        puts "#{start_in_seconds} through #{end_in_seconds}"
       end
-
-      puts "\t#{positions}"
     end
   end
 end

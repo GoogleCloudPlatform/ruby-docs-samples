@@ -75,7 +75,7 @@ describe "Google Cloud Video API sample" do
     expect {
       analyze_shots path: "gs://#{@shots_file}"
     }.to output(
-      /Scene 2: \d+.\d+s to \d/
+      /Scene \d+: \d+.\d+ to \d/
     ).to_stdout
   end
 end
