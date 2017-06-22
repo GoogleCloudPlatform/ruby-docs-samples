@@ -71,4 +71,13 @@ describe "Google Cloud Speech API samples" do
       "Operation started\nTranscription: how old is the Brooklyn Bridge\n"
     ).to_stdout
   end
+
+  example "streaming operation to transcribe audio file" do
+    expect {
+      speech_streaming_recognize project_id:      @project_id,
+                                 audio_file_path: @audio_file_path
+    }.to output(
+      /how old is the Brooklyn Bridge/
+    ).to_stdout
+  end
 end
