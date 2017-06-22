@@ -25,14 +25,7 @@ describe "Google Cloud Storage buckets sample" do
   end
 
   before do
-    delete_bucket!
-    @storage.create_bucket @bucket_name
-  end
-
-  after :all do
-    # Other tests assume that this bucket exists,
-    # so create it before exiting this spec suite
-    @storage.create_bucket @bucket_name unless @storage.bucket(@bucket_name)
+    @storage.create_bucket @bucket_name unless @storage.bucket @bucket_name
   end
 
   it "implicit auth to list buckets" do
@@ -45,18 +38,23 @@ describe "Google Cloud Storage buckets sample" do
 
   it "explicit auth to list buckets" do
     expect {
-      explicit project_id: @project_id, credentials: @credentials
+      explicit project_id: @project_id, key_file: @credentials
     }.to output(
       /#{@bucket_name}/
     ).to_stdout
   end
 
   it "explicit auth in compute engine to list buckets" do
+    env_object = double()
+
+    expect(Google::Cloud).to receive(:env).and_return env_object
+    expect(env_object).to receive(:project_id).and_return @project_id
+    expect(Google::Auth::GCECredentials).to receive(:new).and_return @credentials
+
     expect {
-      explicit_compute_engine project_id: @project_id
+      explicit_compute_engine
     }.to output(
       /#{@bucket_name}/
     ).to_stdout
   end
-
 end
