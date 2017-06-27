@@ -17,7 +17,7 @@ require "google/cloud/spanner"
 
 describe "Spanner Quickstart" do
 
-  it "outputs a 1" do # what the hell is the 1 for?
+  it "outputs a 1" do
     spanner         = Google::Cloud::Spanner.new
     instance_id     = ENV["GOOGLE_CLOUD_SPANNER_TEST_INSTANCE"]
     database_id     = ENV["GOOGLE_CLOUD_SPANNER_TEST_DATABASE"]
