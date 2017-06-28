@@ -59,7 +59,7 @@ describe "Google Cloud Video API sample" do
     expect {
       analyze_faces path: "gs://#{@labels_file}"
     }.to output(
-      /Thumbnail size: \d+/
+      /Thumbnail size: 1948/
     ).to_stdout
   end
 
@@ -75,7 +75,7 @@ describe "Google Cloud Video API sample" do
     expect {
       analyze_shots path: "gs://#{@shots_file}"
     }.to output(
-      /Scene \d+: \d+.\d+ to \d/
+      /0.0 through 5/
     ).to_stdout
   end
 end

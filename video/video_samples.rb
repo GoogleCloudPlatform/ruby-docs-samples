@@ -113,20 +113,18 @@ def analyze_faces path:
     annotation_result = operation.results.annotation_results.first
 
     annotation_result.face_annotations.each do |face_annotation|
-      segment_counter = 1
       puts "Thumbnail size: #{face_annotation.thumbnail.length}"
+      puts "Locations:"
 
       face_annotation.segments.each do |segment|
         if segment.start_time_offset == -1 && segment.end_time_offset == -1
-          puts "Location #{segment_counter}: Entire video"
+          puts "Entire video"
         else
           start_in_seconds = segment.start_time_offset / 1000000.0
           end_in_seconds   = segment.end_time_offset / 1000000.0
 
-          puts "Location #{segment_counter}: #{start_in_seconds} through #{end_in_seconds}"
+          puts "#{start_in_seconds} through #{end_in_seconds}"
         end
-
-        segment_counter += 1
       end
     end
   end
@@ -156,12 +154,12 @@ def analyze_safe_search path:
     annotation_result.safe_search_annotations.each do |safe_search_annotation|
       time_in_seconds = safe_search_annotation.time_offset / 1000000.0
 
-      puts "Time: #{time_in_seconds}"
-      puts "\tadult:   #{safe_search_annotation.adult}"
-      puts "\tspoof:   #{safe_search_annotation.spoof}"
-      puts "\tmedical: #{safe_search_annotation.medical}"
-      puts "\tracy:    #{safe_search_annotation.racy}"
-      puts "\tviolent: #{safe_search_annotation.violent}"
+      puts "Time:    #{time_in_seconds}"
+      puts "adult:   #{safe_search_annotation.adult}"
+      puts "spoof:   #{safe_search_annotation.spoof}"
+      puts "medical: #{safe_search_annotation.medical}"
+      puts "racy:    #{safe_search_annotation.racy}"
+      puts "violent: #{safe_search_annotation.violent}"
     end
   end
 
@@ -186,14 +184,13 @@ def analyze_shots path:
 
     # first result is retrieved because a single video was processed
     annotation_result = operation.results.annotation_results.first
-    shot_counter      = 1
+    puts "Scenes:"
 
     annotation_result.shot_annotations.each do |shot_annotation|
       start_in_seconds = shot_annotation.start_time_offset / 1000000.0
       end_in_seconds   = shot_annotation.end_time_offset / 1000000.0
 
-      puts "Scene #{shot_counter}: #{start_in_seconds} to #{end_in_seconds}"
-      shot_counter += 1
+      puts "#{start_in_seconds} through #{end_in_seconds}"
     end
   end
 
