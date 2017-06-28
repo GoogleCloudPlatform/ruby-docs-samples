@@ -117,14 +117,10 @@ def analyze_faces path:
       puts "Locations:"
 
       face_annotation.segments.each do |segment|
-        if segment.start_time_offset == -1 && segment.end_time_offset == -1
-          puts "Entire video"
-        else
-          start_in_seconds = segment.start_time_offset / 1000000.0
-          end_in_seconds   = segment.end_time_offset / 1000000.0
+        start_in_seconds = segment.start_time_offset / 1000000.0
+        end_in_seconds   = segment.end_time_offset / 1000000.0
 
-          puts "#{start_in_seconds} through #{end_in_seconds}"
-        end
+        puts "#{start_in_seconds} through #{end_in_seconds}"
       end
     end
   end
