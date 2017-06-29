@@ -33,7 +33,7 @@ describe "Spanner Quickstart" do
 
     expect {
       load File.expand_path("../quickstart.rb", __dir__)
-    }.to output("1").to_stdout
+    }.to output(/1/).to_stdout
   end
 
 end
