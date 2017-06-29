@@ -28,7 +28,7 @@ describe "Spanner Quickstart" do
                                       and_return(spanner)
 
     expect(spanner).to receive(:client).
-                       with("my-instance", "my-databaes").
+                       with("my-instance", "my-database").
                        and_return(database_client)
 
     expect {
