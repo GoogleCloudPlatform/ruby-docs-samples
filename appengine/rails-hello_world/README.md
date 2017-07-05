@@ -1,24 +1,9 @@
-# README
+# Rails on Google App Engine
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+You can follow along with the associated [tutorial][1] for this sample project
+showing you how to run a Rails application on Google App Engine flexible
+environment.
 
-Things you may want to cover:
+[1]: https://cloud.google.com/ruby/rails/appengine
 
-* Ruby version
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
