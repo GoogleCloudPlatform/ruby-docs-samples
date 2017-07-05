@@ -5,4 +5,4 @@
 The samples show different authentication workflows using the
 [Google Cloud Ruby Client Library][ruby_client].
 
-[ruby_client]: https://github.com/GoogleCloudPlatform/google-cloud-rub://googlecloudplatform.github.io/google-cloud-ruby/#
+[ruby_client]: https://googlecloudplatform.github.io/google-cloud-ruby/#/
