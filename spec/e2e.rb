@@ -47,7 +47,7 @@ class E2E
       version = "#{test_name}-#{build_id}"
 
       # read in our credentials file
-      key_path = File.expand_path("../../client_secrets.json", __FILE__)
+      key_path = File.expand_path("../../../service-account.json", __FILE__)
       key_file = File.read(key_path)
       key_json = JSON.parse(key_file)
 
