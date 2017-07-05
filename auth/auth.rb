@@ -52,8 +52,9 @@ def explicit_compute_engine
   require "google/cloud/env"
   require "google/cloud/storage"
 
-  # Explicitly use service account credentials by specifying the private key
-  # file.
+  # Explicitly use Compute Engine credentials and a project ID to create a new
+  # Cloud Storage client. These credentials are available on Compute Engine,
+  # App Engine Flexible, and Container Engine.
   storage = Google::Cloud::Storage.new project: Google::Cloud.env.project_id,
                                        keyfile: Google::Auth::GCECredentials.new
 
