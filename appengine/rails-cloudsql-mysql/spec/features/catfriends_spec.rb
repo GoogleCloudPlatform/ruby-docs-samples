@@ -15,6 +15,16 @@ require "rails_helper"
 
 RSpec.feature "Cat Friends" do
   fixtures :cats
+
+  before :all do
+    @cloud_proxy_process_id = Process.fork { "$HOME/cloud_sql_proxy -dir=/cloudsql" }
+  end
+
+  after :all do
+    Process.kill "KILL", @cloud_proxy_process_id
+    Process.wait @cloud_proxy_process_id
+  end
+
   scenario "should display a list of cats" do
     visit "/"
 

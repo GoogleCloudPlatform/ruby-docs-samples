@@ -12,7 +12,6 @@ dependencies:
       mv cloud_sql_proxy.linux.amd64 cloud_sql_proxy &&
       chmod +x cloud_sql_proxy
     - sudo mkdir /cloudsql && sudo chmod 0777 /cloudsql
-    - ./cloud_sql_proxy -dir=/cloudsql 2> /dev/null &
 
 # Test
 test:
