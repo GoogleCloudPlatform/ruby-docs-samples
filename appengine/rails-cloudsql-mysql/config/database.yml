@@ -20,18 +20,18 @@ test:
   adapter: mysql2
   pool: 5
   timeout: 5000
-  username: [MYSQL_USER]
-  password: [MYSQL_PASSWORD]
-  database: catfriends_test
-  socket: /cloudsql/[YOUR_INSTANCE_CONNECTION_NAME]
+  username: "[YOUR_MYSQL_USER]"
+  password: "[YOUR_MYSQL_PASSWORD]"
+  database: "catfriends_test"
+  socket:   "/cloudsql/[YOUR_INSTANCE_CONNECTION_NAME]"
 
 # [START production]
 production:
   adapter: mysql2
   pool: 5
   timeout: 5000
-  username: [MYSQL_USER]
-  password: [MYSQL_PASSWORD]
-  database: catfriends_production
-  socket: /cloudsql/[YOUR_INSTANCE_CONNECTION_NAME]
+  username: "[YOUR_MYSQL_USER]"
+  password: "[YOUR_MYSQL_PASSWORD]"
+  database: "catfriends_production"
+  socket:   "/cloudsql/[YOUR_INSTANCE_CONNECTION_NAME]"
 # [END production]

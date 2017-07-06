@@ -12,9 +12,9 @@
 
 ActiveRecord::Schema.define(version: 20170706163250) do
 
-  create_table "cats", force: :cascade do |t|
+  create_table "cats", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "name"
-    t.decimal "age"
+    t.decimal "age", precision: 10
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

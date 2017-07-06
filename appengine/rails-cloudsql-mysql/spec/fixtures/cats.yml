@@ -1,0 +1,8 @@
+# List of Cats
+cat_one:
+  name: Mr. Whiskers
+  age: 4
+
+cat_two:
+  name: Ms. Paws
+  age: 2
