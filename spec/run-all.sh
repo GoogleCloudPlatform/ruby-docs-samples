@@ -7,7 +7,7 @@ function PrepareAppYaml () {
 	if [ -a "app.yaml" ]; then
 	  if [ -a "bin/rails" ]; then
 	    sed -i'.bak' \
-	      -e "s/\[SECRET_KEY\]/$(bundle exec rails secret)/g" \
+	      -e "s/\[SECRET_KEY\]/f718ac9358feac88412edd41c83bb2c9eba69517b6d65634f083e60a70fe04926a366c04446e4f26eb24009d14aaf1215823f6e81cc1c8c3ce41fbeb861c50ed/g" \
 	      app.yaml
 	  fi
 	fi
