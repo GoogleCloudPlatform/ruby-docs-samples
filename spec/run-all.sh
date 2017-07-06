@@ -1,5 +1,16 @@
 #!/bin/bash
 
+# print command to stdout
+set -x
+
+function PrepareAppYaml () {
+	if [ -a "app.yaml" ]; then
+		sed -i'.bak' \
+			-e "s/\[SECRET_KEY\]/$(bundle exec rails secret)/g" \
+			app.yaml
+	fi
+}
+
 for required_variable in                       \
 	GOOGLE_CLOUD_PROJECT                   \
 	GOOGLE_APPLICATION_CREDENTIALS         \
@@ -26,8 +37,9 @@ do
 	export BUILD_ID=$CIRCLE_BUILD_NUM
 	echo "[$product]"
 	pushd "$repo_directory/$product/"
+	PrepareAppYaml
 	bundle install && bundle exec rspec --format documentation
-
+	
 	# Check status of bundle exec rspec
 	if [ $? != 0 ]; then
 		status_return=1
