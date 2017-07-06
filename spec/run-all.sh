@@ -1,14 +1,23 @@
 #!/bin/bash
 
-# print command to stdout
-set -x
-
 function PrepareAppYaml () {
 	if [ -a "app.yaml" ]; then
 	  if [ -a "bin/rails" ]; then
 	    sed -i'.bak' \
 	      -e "s/\[SECRET_KEY\]/${RAILS_SECRET_KEY_BASE}/g" \
 	      app.yaml
+	    sed -i'.bak' \
+	      -e "s/\[YOUR_INSTANCE_CONNECTION_NAME\]/${CLOUD_SQL_CONNECTION_NAME}/g" \
+	      app.yaml
+	    sed -i'.bak' \
+	      -e "s/\[MYSQL_USER\]/${CLOUD_SQL_MYSQL_USERNAME}/g" \
+	      config/database.yml
+	    sed -i'.bak' \
+	      -e "s/\[MYSQL_PASSWORD\]/${CLOUD_SQL_MYSQL_PASSWORD}/g" \
+	      config/database.yml
+	    sed -i'.bak' \
+	      -e "s/\[YOUR_INSTANCE_CONNECTION_NAME\]/${CLOUD_SQL_CONNECTION_NAME}/g" \
+	      config/database.yml
 	  fi
 	fi
 }
@@ -35,8 +44,8 @@ ruby --version
 while read product
 do
 	# Run Tets
-	export TEST_DIR=$product
 	export BUILD_ID=$CIRCLE_BUILD_NUM
+	export TEST_DIR=$product
 	echo "[$product]"
 	pushd "$repo_directory/$product/"
 	PrepareAppYaml
