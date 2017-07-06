@@ -20,7 +20,7 @@ status_return=0 # everything passed
 ruby --version
 
 # Run cloud proxy
-$HOME/cloud_sql_proxy -dir=/cloudsql &
+$HOME/cloud_sql_proxy -dir=/cloudsql -credential_file=$GOOGLE_APPLICATION_CREDENTIALS &
 
 while read product
 do
