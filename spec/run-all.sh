@@ -19,8 +19,9 @@ status_return=0 # everything passed
 # Print out Ruby version
 ruby --version
 
-# Run cloud proxy
+# Start Cloud SQL Proxy
 $HOME/cloud_sql_proxy -dir=/cloudsql -credential_file=$GOOGLE_APPLICATION_CREDENTIALS &
+export CLOUD_SQL_PROXY_PROCESS_ID=$!
 
 while read product
 do
@@ -41,5 +42,8 @@ do
 	
 	popd
 done < <(find * -type d -name 'spec' -path "*rails-*/*" -not -path "*vendor/*" -exec dirname {} \;)
+
+# Stop Cloud SQL Proxy
+kill $CLOUD_SQL_PROXY_PROCESS_ID
 
 exit $status_return
