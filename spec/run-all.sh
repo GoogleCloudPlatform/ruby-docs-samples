@@ -23,14 +23,19 @@ while read product
 do
 	# Run Tets
 	export TEST_DIR=$product
+	export BUILD_ID="$(CIRCLE_BUILD_NUM)"
 	echo "[$product]"
 	pushd "$repo_directory/$product/"
 	bundle install && bundle exec rspec --format documentation
 
-	 # Check status of bundle exec rspec
+	# Check status of bundle exec rspec
 	if [ $? != 0 ]; then
 		status_return=1
 	fi
+	
+	# Clean up deployed version
+	bundle exec ruby "$repo_directory/spec/e2e_cleanup.rb" "$TEST_DIR" "$BUILD_ID"
+	
 	popd
 done < <(find * -type d -name 'spec' -path "*/*" -not -path "*vendor/*" -exec dirname {} \;)
 
