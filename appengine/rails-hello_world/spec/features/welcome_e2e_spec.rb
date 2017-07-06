@@ -15,12 +15,12 @@ require "rails_helper"
 
 RSpec.feature "Hello World" do
   before :all do
-    skip "End-to-end tets skipped" unless E2E.run?
+    skip "End-to-end test skipped" unless E2E.run?
 
     @url = E2E.url
   end
 
-  scenario "should be shown" do
+  scenario "should display a homepage" do
     visit @url
 
     expect(page).to have_content "This is a home page for a new Rails App on Google Cloud Platform!"

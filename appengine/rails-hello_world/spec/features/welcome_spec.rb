@@ -14,7 +14,7 @@
 require "rails_helper"
 
 RSpec.feature "Hello World" do
-  scenario "should be shown" do
+  scenario "should display a homepage" do
     visit "/"
 
     expect(page).to have_content "This is a home page for a new Rails App on Google Cloud Platform!"
