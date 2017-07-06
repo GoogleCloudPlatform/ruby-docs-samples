@@ -1,8 +1,24 @@
-# Rails using Cloud SQL for MySQL
+# README
 
-You can follow along with the associated [tutorial][1] for this sample project
-*Cat Friends*.
+This README would normally document whatever steps are necessary to get the
+application up and running.
 
-[1]: https://cloud.google.com/ruby/rails/using-cloudsql
+Things you may want to cover:
 
+* Ruby version
 
+* System dependencies
+
+* Configuration
+
+* Database creation
+
+* Database initialization
+
+* How to run the test suite
+
+* Services (job queues, cache servers, search engines, etc.)
+
+* Deployment instructions
+
+* ...
