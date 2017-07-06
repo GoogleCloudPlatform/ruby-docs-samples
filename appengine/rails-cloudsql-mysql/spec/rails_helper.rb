@@ -9,16 +9,14 @@ require "capybara/rspec"
 require File.expand_path "../../../../spec/e2e", __FILE__
 
 # Apply configuration to database.yml for tests
-File.open File.expand_path("../../config/database.yml", __FILE__) do |file|
-  configuration = file.read
-  configuration.sub! "[YOUR_MYSQL_USERNAME]",           ENV["CLOUD_SQL_MYSQL_USERNAME"]
-  configuration.sub! "[YOUR_MYSQL_PASSWORD]",           ENV["CLOUD_SQL_MYSQL_PASSWORD"]
-  configuration.sub! "[YOUR_INSTANCE_CONNECTION_NAME]", ENV["CLOUD_SQL_MYSQL_CONNECTION_NAME"]
+database_yml  = File.expand_path("../../config/database.yml", __FILE__)
+configuration = File.read(database_yml)
 
-  file.write configuration
-end
+configuration.gsub! "[YOUR_MYSQL_USERNAME]",           ENV["CLOUD_SQL_MYSQL_USERNAME"]
+configuration.gsub! "[YOUR_MYSQL_PASSWORD]",           ENV["CLOUD_SQL_MYSQL_PASSWORD"]
+configuration.gsub! "[YOUR_INSTANCE_CONNECTION_NAME]", ENV["CLOUD_SQL_MYSQL_CONNECTION_NAME"]
 
-
+File.write database_yml, configuration
 
 # Checks for pending migration and applies them before tests are run.
 ActiveRecord::Migration.maintain_test_schema!

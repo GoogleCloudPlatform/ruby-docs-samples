@@ -17,13 +17,13 @@ RSpec.feature "Cat Friends" do
   before :all do
     skip "End-to-end test skipped" unless E2E.run?
 
-    File.open File.expand_path("../../app.yaml", __FILE__) do |file|
-      configuration = file.read
-      configuration.sub! "[SECRET_KEY]",                    ENV["RAILS_SECRET_KEY_BASE"]
-      configuration.sub! "[YOUR_INSTANCE_CONNECTION_NAME]", ENV["CLOUD_SQL_MYSQL_CONNECTION_NAME"]
+    app_yaml      = File.expand_path("../../app.yaml", __FILE__)
+    configuration = File.read(app_yaml)
 
-      file.write configuration
-    end
+    configuration.sub! "[SECRET_KEY]",                    ENV["RAILS_SECRET_KEY_BASE"]
+    configuration.sub! "[YOUR_INSTANCE_CONNECTION_NAME]", ENV["CLOUD_SQL_MYSQL_CONNECTION_NAME"]
+
+    File.write app_yaml, configuration
 
     @url = E2E.url
   end

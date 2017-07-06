@@ -14,8 +14,8 @@
 require "rails_helper"
 
 RSpec.feature "Cat Friends" do
+  fixtures :cats
   scenario "should display a list of cats" do
-    fixtures :cats
     visit "/"
 
     expect(page).to have_content "A list of my Cats Ms. Paws is 2 years old! Mr. Whiskers is 4 years old!"
