@@ -17,7 +17,7 @@ RSpec.feature "Hello World" do
   before :all do
     skip "End-to-end test skipped" unless E2E.run?
 
-    app_yaml      = File.expand_path("../../app.yaml", __FILE__)
+    app_yaml      = File.expand_path("../../../app.yaml", __FILE__)
     configuration = File.read(app_yaml)
 
     configuration.sub! "[SECRET_KEY]", ENV["RAILS_SECRET_KEY_BASE"]
