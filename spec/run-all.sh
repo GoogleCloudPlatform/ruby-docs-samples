@@ -19,6 +19,9 @@ status_return=0 # everything passed
 # Print out Ruby version
 ruby --version
 
+# Run cloud proxy
+$HOME/cloud_sql_proxy -dir=/cloudsql &
+
 while read product
 do
 	# Run Tets
