@@ -13,11 +13,11 @@
 
 require "rails_helper"
 
-RSpec.feature "Cat Friends" do
+RSpec.feature "Cat Friends E2E" do
   before :all do
     skip "End-to-end test skipped" unless E2E.run?
 
-    app_yaml      = File.expand_path("../../app.yaml", __FILE__)
+    app_yaml      = File.expand_path("../../../app.yaml", __FILE__)
     configuration = File.read(app_yaml)
 
     configuration.sub! "[SECRET_KEY]",                    ENV["RAILS_SECRET_KEY_BASE"]

@@ -13,7 +13,7 @@
 
 require "rails_helper"
 
-RSpec.feature "Hello World" do
+RSpec.feature "Hello World E2E" do
   before :all do
     skip "End-to-end test skipped" unless E2E.run?
 
