@@ -5,9 +5,11 @@ set -x
 
 function PrepareAppYaml () {
 	if [ -a "app.yaml" ]; then
-		sed -i'.bak' \
-			-e "s/\[SECRET_KEY\]/$(bundle exec rails secret)/g" \
-			app.yaml
+	  if [ -a "bin/rails" ]; then
+	    sed -i'.bak' \
+	      -e "s/\[SECRET_KEY\]/$(bundle exec rails secret)/g" \
+	      app.yaml
+	  fi
 	fi
 }
 
