@@ -23,7 +23,7 @@ while read product
 do
 	# Run Tets
 	export TEST_DIR=$product
-	export BUILD_ID="$(CIRCLE_BUILD_NUM)"
+	export BUILD_ID=$CIRCLE_BUILD_NUM
 	echo "[$product]"
 	pushd "$repo_directory/$product/"
 	bundle install && bundle exec rspec --format documentation
