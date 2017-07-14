@@ -46,3 +46,41 @@ def create_database project_id:, instance_id:, database_id:
   puts "Created database #{database_id} on instance #{instance_id}"
   # [END create_database]
 end
+
+def insert_data project_id:, instance_id:, database_id:
+  # [START insert_data]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+
+  spanner = Google::Cloud::Spanner.new project: project_id
+
+  # Creates a Cloud Spanner client for your database.
+  # A client is used to read and/or modify data in a Cloud Spanner database.
+  # All of your interactions with Cloud Spanner data must go through a client.
+  # Typically you create a client when your application starts up,
+  # then you re-use that client to read, write, and execute transactions.
+  client = spanner.client instance_id, database_id
+
+  client.commit do |c|
+    c.insert "Singers", [
+      { SingerId: "1", FirstName: "Marc", LastName: "Richards" },
+      { SingerId: "2", FirstName: "Catalina", LastName: "Smith" },
+      { SingerId: "3", FirstName: "Alice", LastName: "Trentor" },
+      { SingerId: "4", FirstName: "Lea", LastName: "Martin" },
+      { SingerId: "5", FirstName: "David", LastName: "Lomond" }
+    ]
+    c.insert "Albums", [
+      { SingerId: "1", AlbumId: "1", AlbumTitle: "Go, Go, Go" },
+      { SingerId: "1", AlbumId: "2", AlbumTitle: "Total Junk" },
+      { SingerId: "2", AlbumId: "1", AlbumTitle: "Green" },
+      { SingerId: "2", AlbumId: "2", AlbumTitle: "Forever Hold your Peace" },
+      { SingerId: "2", AlbumId: "3", AlbumTitle: "Terrified" }
+    ]
+  end
+
+  puts "Inserted data"
+  # [END insert_data]
+end

@@ -22,13 +22,41 @@ describe "Google Cloud Spanner API samples" do
     @spanner    = Google::Cloud::Spanner.new
     @project_id = @spanner.project_id
     @instance   = @spanner.instance ENV["GOOGLE_CLOUD_SPANNER_TEST_INSTANCE"]
+
+    # Most samples create Cloud Spanner database(s)
+    # @temporary_databases tracks databases to drop after the test runs
+    @temporary_databases = []
   end
 
   after do
-    # delete the temporary database that was used for this example
-    if @database_id && @instance.database(@database_id)
-      @instance.database(@database_id).drop
-    end
+    @temporary_databases.each &:drop
+  end
+
+  # All code samples use this database schema (Singers and Albums tables)
+  # By default this database will be dropped after the test runs
+  # TODO Create table before(:all), truncate after each test, drop after(:all)
+  def create_singers_albums_database instance: @instance, temporary: true
+    database_id = "db_for_all_tests_#{Time.now.to_i}"
+
+    instance.create_database(database_id, statements: [
+      "CREATE TABLE Singers (
+        SingerId     INT64 NOT NULL,
+        FirstName    STRING(1024),
+        LastName     STRING(1024),
+        SingerInfo   BYTES(MAX)
+      ) PRIMARY KEY (SingerId)",
+
+      "CREATE TABLE Albums (
+        SingerId     INT64 NOT NULL,
+        AlbumId      INT64 NOT NULL,
+        AlbumTitle   STRING(MAX)
+      ) PRIMARY KEY (SingerId, AlbumId),
+      INTERLEAVE IN PARENT Singers ON DELETE CASCADE"
+    ]).wait_until_done!
+
+    database = instance.database database_id
+    @temporary_databases << database if temporary
+    database
   end
 
   # Capture and return STDOUT output by block
@@ -69,4 +97,25 @@ describe "Google Cloud Spanner API samples" do
     expect(data_definition_statements.last).to  include "CREATE TABLE Albums"
   end
 
+  example "insert data" do
+    database = create_singers_albums_database
+    client   = @spanner.client @instance.instance_id, database.database_id
+
+    expect(client.execute("SELECT * FROM Singers").rows.count).to eq 0
+    expect(client.execute("SELECT * FROM Albums").rows.count).to eq 0
+
+    expect {
+      insert_data project_id:  @project_id,
+                  instance_id: @instance.instance_id,
+                  database_id: database.database_id
+    }.to output("Inserted data\n").to_stdout
+
+    singers = client.execute("SELECT * FROM Singers").rows.to_a
+    expect(singers.count).to eq 5
+    expect(singers.find {|s| s[:FirstName] == "Catalina" }).not_to be nil
+
+    albums = client.execute("SELECT * FROM Albums").rows.to_a
+    expect(albums.count).to eq 5
+    expect(albums.find {|s| s[:AlbumTitle] == "Go, Go, Go" }).not_to be nil
+  end
 end
