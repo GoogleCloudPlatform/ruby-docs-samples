@@ -84,3 +84,20 @@ def insert_data project_id:, instance_id:, database_id:
   puts "Inserted data"
   # [END insert_data]
 end
+
+def query_data project_id:, instance_id:, database_id:
+  # [START query_data]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+
+  spanner = Google::Cloud::Spanner.new project: project_id
+  client  = spanner.client instance_id, database_id
+
+  client.execute("SELECT SingerId, AlbumId, AlbumTitle FROM Albums").rows.each do |row|
+    puts "#{row[:SingerId]} #{row[:AlbumId]} #{row[:AlbumTitle]}"
+  end
+  # [END query_data]
+end
