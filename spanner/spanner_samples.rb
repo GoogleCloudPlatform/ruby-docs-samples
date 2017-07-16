@@ -118,3 +118,27 @@ def read_data project_id:, instance_id:, database_id:
   end
   # [END read_data]
 end
+
+def create_index project_id:, instance_id:, database_id:
+  # [START create_index]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+
+  spanner  = Google::Cloud::Spanner.new project: project_id
+  instance = spanner.instance instance_id
+  database = instance.database database_id
+
+  job = database.update statements: [
+    "CREATE INDEX AlbumsByAlbumTitle ON Albums(AlbumTitle)"
+  ]
+
+  puts "Waiting for database update to complete"
+
+  job.wait_until_done!
+
+  puts "Added the AlbumsByAlbumTitle index"
+  # [END create_index]
+end

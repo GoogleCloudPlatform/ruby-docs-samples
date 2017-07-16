@@ -162,4 +162,25 @@ describe "Google Cloud Spanner API samples" do
     expect(captured_output).to include "2 2 Forever Hold your Peace"
     expect(captured_output).to include "2 3 Terrified"
   end
+
+  example "create index" do
+    database = create_singers_albums_database
+
+    expect(database.ddl force: true).not_to include(
+      "CREATE INDEX AlbumsByAlbumTitle ON Albums(AlbumTitle)"
+    )
+
+    capture do
+      create_index project_id:  @project_id,
+                   instance_id: @instance.instance_id,
+                   database_id: database.database_id
+    end
+
+    expect(captured_output).to include "Waiting for database update to complete"
+    expect(captured_output).to include "Added the AlbumsByAlbumTitle index"
+
+    expect(database.ddl force: true).to include(
+      "CREATE INDEX AlbumsByAlbumTitle ON Albums(AlbumTitle)"
+    )
+  end
 end
