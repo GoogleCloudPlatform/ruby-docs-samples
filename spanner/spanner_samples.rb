@@ -187,3 +187,22 @@ def query_data_with_index project_id:, instance_id:, database_id:
   end
   # [END query_data_with_index]
 end
+
+def read_data_with_index project_id:, instance_id:, database_id:
+  # [START read_data_with_index]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+
+  spanner = Google::Cloud::Spanner.new project: project_id
+  client  = spanner.client instance_id, database_id
+
+  result = client.read "Albums", [:AlbumId, :AlbumTitle], index: "AlbumsByAlbumTitle"
+
+  result.rows.each do |row|
+    puts "#{row[:AlbumId]} #{row[:AlbumTitle]}"
+  end
+  # [END read_data_with_index]
+end

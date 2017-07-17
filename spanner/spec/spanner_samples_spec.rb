@@ -230,4 +230,33 @@ describe "Google Cloud Spanner API samples" do
     expect(captured_output).to include "1 Go, Go, Go"
     expect(captured_output).to include "2 Forever Hold your Peace"
   end
+
+  example "read data with index" do
+    database = create_singers_albums_database
+    client   = @spanner.client @instance.instance_id, database.database_id
+
+    # Insert Singers and Albums (re-use insert_data sample to populate)
+    insert_data project_id:  @project_id,
+                instance_id: @instance.instance_id,
+                database_id: database.database_id
+
+    # Add MarketingBudget column (re-use add_column to add)
+    add_column project_id:  @project_id,
+               instance_id: @instance.instance_id,
+               database_id: database.database_id
+
+    # Add index on Albums(AlbumTitle) (re-use create_index to add)
+    create_index project_id:  @project_id,
+                 instance_id: @instance.instance_id,
+                 database_id: database.database_id
+
+    capture do
+      read_data_with_index project_id:  @project_id,
+                           instance_id: @instance.instance_id,
+                           database_id: database.database_id
+    end
+
+    expect(captured_output).to include "1 Go, Go, Go"
+    expect(captured_output).to include "2 Forever Hold your Peace"
+  end
 end
