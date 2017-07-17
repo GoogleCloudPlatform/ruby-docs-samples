@@ -143,6 +143,31 @@ def create_index project_id:, instance_id:, database_id:
   # [END create_index]
 end
 
+def create_storing_index project_id:, instance_id:, database_id:
+  # [START create_storing_index]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+
+  spanner  = Google::Cloud::Spanner.new project: project_id
+  instance = spanner.instance instance_id
+  database = instance.database database_id
+
+  job = database.update statements: [
+    "CREATE INDEX AlbumsByAlbumTitle2 ON Albums(AlbumTitle) " +
+    "STORING (MarketingBudget)"
+  ]
+
+  puts "Waiting for database update to complete"
+
+  job.wait_until_done!
+
+  puts "Added the AlbumsByAlbumTitle2 storing index"
+  # [END create_storing_index]
+end
+
 def add_column project_id:, instance_id:, database_id:
   # [START add_column]
   # project_id  = "Your Google Cloud project ID"
@@ -199,10 +224,37 @@ def read_data_with_index project_id:, instance_id:, database_id:
   spanner = Google::Cloud::Spanner.new project: project_id
   client  = spanner.client instance_id, database_id
 
-  result = client.read "Albums", [:AlbumId, :AlbumTitle], index: "AlbumsByAlbumTitle"
+  result = client.read(
+    "Albums",
+    [:AlbumId, :AlbumTitle],
+    index: "AlbumsByAlbumTitle"
+  )
 
   result.rows.each do |row|
     puts "#{row[:AlbumId]} #{row[:AlbumTitle]}"
   end
   # [END read_data_with_index]
+end
+
+def read_data_with_storing_index project_id:, instance_id:, database_id:
+  # [START read_data_with_storing_index]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+
+  spanner = Google::Cloud::Spanner.new project: project_id
+  client  = spanner.client instance_id, database_id
+
+  result = client.read(
+    "Albums",
+    [:AlbumId, :AlbumTitle, :MarketingBudget],
+    index: "AlbumsByAlbumTitle2"
+  )
+
+  result.rows.each do |row|
+    puts "#{row[:AlbumId]} #{row[:AlbumTitle]} #{row[:MarketingBudget]}"
+  end
+  # [END read_data_with_storing_index]
 end
