@@ -142,3 +142,27 @@ def create_index project_id:, instance_id:, database_id:
   puts "Added the AlbumsByAlbumTitle index"
   # [END create_index]
 end
+
+def add_column project_id:, instance_id:, database_id:
+  # [START add_column]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+
+  spanner  = Google::Cloud::Spanner.new project: project_id
+  instance = spanner.instance instance_id
+  database = instance.database database_id
+
+  job = database.update statements: [
+    "ALTER TABLE Albums ADD COLUMN MarketingBudget INT64"
+  ]
+
+  puts "Waiting for database update to complete"
+
+  job.wait_until_done!
+
+  puts "Added the MarketingBudget column"
+  # [END add_column]
+end

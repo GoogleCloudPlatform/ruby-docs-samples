@@ -166,7 +166,7 @@ describe "Google Cloud Spanner API samples" do
   example "create index" do
     database = create_singers_albums_database
 
-    expect(database.ddl force: true).not_to include(
+    expect(database.ddl(force: true).join).not_to include(
       "CREATE INDEX AlbumsByAlbumTitle ON Albums(AlbumTitle)"
     )
 
@@ -179,8 +179,26 @@ describe "Google Cloud Spanner API samples" do
     expect(captured_output).to include "Waiting for database update to complete"
     expect(captured_output).to include "Added the AlbumsByAlbumTitle index"
 
-    expect(database.ddl force: true).to include(
+    expect(database.ddl(force: true).join).to include(
       "CREATE INDEX AlbumsByAlbumTitle ON Albums(AlbumTitle)"
+    )
+  end
+
+  example "add column" do
+    database = create_singers_albums_database
+
+    expect(database.ddl(force: true).join).not_to include(
+      "MarketingBudget INT64"
+    )
+
+    capture do
+      add_column project_id:  @project_id,
+                 instance_id: @instance.instance_id,
+                 database_id: database.database_id
+    end
+
+    expect(database.ddl(force: true).join).to include(
+      "MarketingBudget INT64"
     )
   end
 end
