@@ -166,3 +166,24 @@ def add_column project_id:, instance_id:, database_id:
   puts "Added the MarketingBudget column"
   # [END add_column]
 end
+
+def query_data_with_index project_id:, instance_id:, database_id:
+  # [START query_data_with_index]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+
+  spanner = Google::Cloud::Spanner.new project: project_id
+  client  = spanner.client instance_id, database_id
+
+  sql_query = 'SELECT AlbumId, AlbumTitle, MarketingBudget
+               FROM Albums@{FORCE_INDEX=AlbumsByAlbumTitle}
+               WHERE AlbumTitle >= "Aardvark" AND AlbumTitle < "Goo"'
+
+  client.execute(sql_query).rows.each do |row|
+    puts "#{row[:AlbumId]} #{row[:AlbumTitle]} #{row[:MarketingBudget]}"
+  end
+  # [END query_data_with_index]
+end
