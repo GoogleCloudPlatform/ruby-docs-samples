@@ -31,6 +31,8 @@ RSpec.feature "Cat Friends E2E" do
   scenario "should display a list of cats" do
     visit "/"
 
+    # This test requires that the database contain Cat data found in fixtures.
+
     expect(page).to have_content "A list of my Cats Ms. Paws is 2 years old! Mr. Whiskers is 4 years old!"
   end
 end
