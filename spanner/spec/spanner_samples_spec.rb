@@ -206,6 +206,39 @@ describe "Google Cloud Spanner API samples" do
     )
   end
 
+  example "update data" do
+    database = create_singers_albums_database
+    client   = @spanner.client @instance.instance_id, database.database_id
+
+    # Insert Singers and Albums (re-use insert_data sample to populate)
+    insert_data project_id:  @project_id,
+                instance_id: @instance.instance_id,
+                database_id: database.database_id
+
+    # Add MarketingBudget column (re-use add_column to add)
+    add_column project_id:  @project_id,
+               instance_id: @instance.instance_id,
+               database_id: database.database_id
+
+    albums = client.execute("SELECT * FROM Albums").rows.map &:to_h
+    expect(albums).to include(
+      { SingerId: 1, AlbumId: 1, AlbumTitle: "Go, Go, Go", MarketingBudget: nil }
+    )
+
+    capture do
+      update_data project_id:  @project_id,
+                  instance_id: @instance.instance_id,
+                  database_id: database.database_id
+    end
+
+    expect(captured_output).to include "Updated data"
+
+    albums = client.execute("SELECT * FROM Albums").rows.map &:to_h
+    expect(albums).to include(
+      { SingerId: 1, AlbumId: 1, AlbumTitle: "Go, Go, Go", MarketingBudget: 100000 }
+    )
+  end
+
   example "query data with index" do
     database = create_singers_albums_database
     client   = @spanner.client @instance.instance_id, database.database_id

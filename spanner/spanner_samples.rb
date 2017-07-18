@@ -192,6 +192,28 @@ def add_column project_id:, instance_id:, database_id:
   # [END add_column]
 end
 
+def update_data project_id:, instance_id:, database_id:
+  # [START update_data]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+
+  spanner = Google::Cloud::Spanner.new project: project_id
+  client  = spanner.client instance_id, database_id
+
+  client.commit do |c|
+    c.update "Albums", [
+      { SingerId: "1", AlbumId: "1", MarketingBudget: "100000" },
+      { SingerId: "2", AlbumId: "2", MarketingBudget: "500000" }
+    ]
+  end
+
+  puts "Updated data"
+  # [END update_data]
+end
+
 def query_data_with_index project_id:, instance_id:, database_id:
   # [START query_data_with_index]
   # project_id  = "Your Google Cloud project ID"
