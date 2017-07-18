@@ -22,41 +22,23 @@ describe "Google Cloud Spanner API samples" do
     @spanner    = Google::Cloud::Spanner.new
     @project_id = @spanner.project_id
     @instance   = @spanner.instance ENV["GOOGLE_CLOUD_SPANNER_TEST_INSTANCE"]
-
-    # Most samples create Cloud Spanner database(s)
-    # @temporary_databases tracks databases to drop after the test runs
-    @temporary_databases = []
   end
 
   after do
-    @temporary_databases.each &:drop
+    @test_database.drop if @test_database
   end
 
-  # All code samples use this database schema (Singers and Albums tables)
-  # By default this database will be dropped after the test runs
-  # TODO Create table before(:all), truncate after each test, drop after(:all)
-  def create_singers_albums_database instance: @instance, temporary: true
+  # Creates a temporary database with random ID (will be dropped after test)
+  # (re-uses create_database to create database with Albums/Singers schema)
+  def create_singers_albums_database
     database_id = "db_for_all_tests_#{Time.now.to_i}"
 
-    instance.create_database(database_id, statements: [
-      "CREATE TABLE Singers (
-        SingerId     INT64 NOT NULL,
-        FirstName    STRING(1024),
-        LastName     STRING(1024),
-        SingerInfo   BYTES(MAX)
-      ) PRIMARY KEY (SingerId)",
+    create_database project_id:  @project_id,
+                    instance_id: @instance.instance_id,
+                    database_id: database_id
 
-      "CREATE TABLE Albums (
-        SingerId     INT64 NOT NULL,
-        AlbumId      INT64 NOT NULL,
-        AlbumTitle   STRING(MAX)
-      ) PRIMARY KEY (SingerId, AlbumId),
-      INTERLEAVE IN PARENT Singers ON DELETE CASCADE"
-    ]).wait_until_done!
-
-    database = instance.database database_id
-    @temporary_databases << database if temporary
-    database
+    @test_database = @instance.database database_id
+    @test_database
   end
 
   # Capture and return STDOUT output by block
