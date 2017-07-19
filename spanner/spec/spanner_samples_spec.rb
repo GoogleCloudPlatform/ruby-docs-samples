@@ -221,6 +221,74 @@ describe "Google Cloud Spanner API samples" do
     )
   end
 
+  example "read/write transaction (successful transfer)" do
+    database = create_singers_albums_database
+    client   = @spanner.client @instance.instance_id, database.database_id
+
+    # Insert Singers and Albums (re-use insert_data sample to populate)
+    insert_data project_id:  @project_id,
+                instance_id: @instance.instance_id,
+                database_id: database.database_id
+
+    # Add MarketingBudget column (re-use add_column to add)
+    add_column project_id:  @project_id,
+               instance_id: @instance.instance_id,
+               database_id: database.database_id
+
+    # Second Album(2, 2) needs at least $300,000 to transfer successfully
+    # to Album(1, 1). This should transfer successfully.
+    client.commit do |c|
+      c.update "Albums", [
+        { SingerId: "1", AlbumId: "1", MarketingBudget: "100000" },
+        { SingerId: "2", AlbumId: "2", MarketingBudget: "300000" }
+      ]
+    end
+
+    capture do
+      read_write_transaction project_id:  @project_id,
+                             instance_id: @instance.instance_id,
+                             database_id: database.database_id
+    end
+
+    expect(captured_output).to include "Transaction complete"
+
+    first_album  = client.read("Albums", [:MarketingBudget], keys: [[1,1]]).rows.first
+    second_album = client.read("Albums", [:MarketingBudget], keys: [[2,2]]).rows.first
+
+    expect(first_album[:MarketingBudget]).to eq 300_000
+    expect(second_album[:MarketingBudget]).to eq 100_000
+  end
+
+  example "read/write transaction (not enough funds)" do
+    database = create_singers_albums_database
+    client   = @spanner.client @instance.instance_id, database.database_id
+
+    # Insert Singers and Albums (re-use insert_data sample to populate)
+    insert_data project_id:  @project_id,
+                instance_id: @instance.instance_id,
+                database_id: database.database_id
+
+    # Add MarketingBudget column (re-use add_column to add)
+    add_column project_id:  @project_id,
+               instance_id: @instance.instance_id,
+               database_id: database.database_id
+
+    # Second Album(2, 2) needs at least $300,000 to transfer successfully
+    # to Album(1, 1). Without enough funds, an exception should be raised.
+    client.commit do |c|
+      c.update "Albums", [
+        { SingerId: "1", AlbumId: "1", MarketingBudget: "100000" },
+        { SingerId: "2", AlbumId: "2", MarketingBudget: "299999" }
+      ]
+    end
+
+    expect {
+      read_write_transaction project_id:  @project_id,
+                             instance_id: @instance.instance_id,
+                             database_id: database.database_id
+    }.to raise_error("The second album does not have enough funds to transfer")
+  end
+
   example "query data with index" do
     database = create_singers_albums_database
     client   = @spanner.client @instance.instance_id, database.database_id

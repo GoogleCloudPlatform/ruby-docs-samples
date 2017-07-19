@@ -214,6 +214,47 @@ def update_data project_id:, instance_id:, database_id:
   # [END update_data]
 end
 
+def read_write_transaction project_id:, instance_id:, database_id:
+  # [START read_write_transaction]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  # Performs a read-write transaction to update two sample records in the
+  # database.
+  #
+  # This will transfer $200,000 from the `MarketingBudget` field of the second
+  # Album(2, 2) to the first Album(1, 1).
+  # If the `MarketingBudget` of the second Album(2, 2) is less than $300,000,
+  # it will raise an exception.
+
+  require "google/cloud/spanner"
+
+  spanner = Google::Cloud::Spanner.new project: project_id
+  client  = spanner.client instance_id, database_id
+
+  client.transaction do |tx|
+    second_album = tx.read("Albums", [:MarketingBudget], keys: [[2,2]]).rows.first
+
+    if second_album[:MarketingBudget] < 300_000
+      raise "The second album does not have enough funds to transfer"
+    end
+
+    first_album = tx.read("Albums", [:MarketingBudget], keys: [[1,1]]).rows.first
+
+    new_first_album_budget  = first_album[:MarketingBudget]  + 200_000
+    new_second_album_budget = second_album[:MarketingBudget] - 200_000
+
+    tx.update "Albums", [
+      { SingerId: "1", AlbumId: "1", MarketingBudget: new_first_album_budget },
+      { SingerId: "2", AlbumId: "2", MarketingBudget: new_second_album_budget }
+    ]
+  end
+
+  puts "Transaction complete"
+  # [END read_write_transaction]
+end
+
 def query_data_with_index project_id:, instance_id:, database_id:
   # [START query_data_with_index]
   # project_id  = "Your Google Cloud project ID"
