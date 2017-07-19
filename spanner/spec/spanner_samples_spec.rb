@@ -308,4 +308,23 @@ describe "Google Cloud Spanner API samples" do
     expect(captured_output).to include "1 Go, Go, Go"
     expect(captured_output).to include "2 Forever Hold your Peace"
   end
+
+  example "read only transaction" do
+    database = create_singers_albums_database
+    client   = @spanner.client @instance.instance_id, database.database_id
+
+    # Insert Singers and Albums (re-use insert_data sample to populate)
+    insert_data project_id:  @project_id,
+                instance_id: @instance.instance_id,
+                database_id: database.database_id
+
+    capture do
+      read_only_transaction project_id:  @project_id,
+                            instance_id: @instance.instance_id,
+                            database_id: database.database_id
+    end
+
+    expect(captured_output).to include "1 1 Go, Go, Go"
+    expect(captured_output).to include "2 2 Forever Hold your Peace"
+  end
 end

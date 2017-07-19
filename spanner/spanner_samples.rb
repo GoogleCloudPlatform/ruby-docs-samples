@@ -280,3 +280,26 @@ def read_data_with_storing_index project_id:, instance_id:, database_id:
   end
   # [END read_data_with_storing_index]
 end
+
+def read_only_transaction project_id:, instance_id:, database_id:
+  # [START read_only_transaction]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+
+  spanner = Google::Cloud::Spanner.new project: project_id
+  client  = spanner.client instance_id, database_id
+
+  result = client.read(
+    "Albums",
+    [:SingerId, :AlbumId, :AlbumTitle],
+    single_use: { strong: true }
+  )
+
+  result.rows.each do |row|
+    puts "#{row[:SingerId]} #{row[:AlbumId]} #{row[:AlbumTitle]}"
+  end
+  # [END read_only_transaction]
+end
