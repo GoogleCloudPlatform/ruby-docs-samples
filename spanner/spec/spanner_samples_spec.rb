@@ -166,9 +166,7 @@ describe "Google Cloud Spanner API samples" do
     )
   end
 
-  example "create storing index" do
-    pending
-  end
+  skip "create storing index"
 
   example "add column" do
     database = create_singers_albums_database
@@ -217,7 +215,7 @@ describe "Google Cloud Spanner API samples" do
 
     albums = client.execute("SELECT * FROM Albums").rows.map &:to_h
     expect(albums).to include(
-      { SingerId: 1, AlbumId: 1, AlbumTitle: "Go, Go, Go", MarketingBudget: 100000 }
+      { SingerId: 1, AlbumId: 1, AlbumTitle: "Go, Go, Go", MarketingBudget: 100_000 }
     )
   end
 
@@ -239,8 +237,8 @@ describe "Google Cloud Spanner API samples" do
     # to Album(1, 1). This should transfer successfully.
     client.commit do |c|
       c.update "Albums", [
-        { SingerId: "1", AlbumId: "1", MarketingBudget: "100000" },
-        { SingerId: "2", AlbumId: "2", MarketingBudget: "300000" }
+        { SingerId: 1, AlbumId: 1, MarketingBudget: 100_000 },
+        { SingerId: 2, AlbumId: 2, MarketingBudget: 300_000 }
       ]
     end
 
@@ -277,8 +275,8 @@ describe "Google Cloud Spanner API samples" do
     # to Album(1, 1). Without enough funds, an exception should be raised.
     client.commit do |c|
       c.update "Albums", [
-        { SingerId: "1", AlbumId: "1", MarketingBudget: "100000" },
-        { SingerId: "2", AlbumId: "2", MarketingBudget: "299999" }
+        { SingerId: 1, AlbumId: 1, MarketingBudget: 100_000 },
+        { SingerId: 2, AlbumId: 2, MarketingBudget: 299_999 }
       ]
     end
 
@@ -392,7 +390,7 @@ describe "Google Cloud Spanner API samples" do
                             database_id: database.database_id
     end
 
-    expect(captured_output).to include "1 1 Go, Go, Go"
-    expect(captured_output).to include "2 2 Forever Hold your Peace"
+    expect(captured_output).to include "1 Go, Go, Go 1"
+    expect(captured_output).to include "2 Forever Hold your Peace 2"
   end
 end

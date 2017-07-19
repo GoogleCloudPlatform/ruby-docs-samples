@@ -66,18 +66,18 @@ def insert_data project_id:, instance_id:, database_id:
 
   client.commit do |c|
     c.insert "Singers", [
-      { SingerId: "1", FirstName: "Marc", LastName: "Richards" },
-      { SingerId: "2", FirstName: "Catalina", LastName: "Smith" },
-      { SingerId: "3", FirstName: "Alice", LastName: "Trentor" },
-      { SingerId: "4", FirstName: "Lea", LastName: "Martin" },
-      { SingerId: "5", FirstName: "David", LastName: "Lomond" }
+      { SingerId: 1, FirstName: "Marc",     LastName: "Richards" },
+      { SingerId: 2, FirstName: "Catalina", LastName: "Smith" },
+      { SingerId: 3, FirstName: "Alice",    LastName: "Trentor" },
+      { SingerId: 4, FirstName: "Lea",      LastName: "Martin" },
+      { SingerId: 5, FirstName: "David",    LastName: "Lomond" }
     ]
     c.insert "Albums", [
-      { SingerId: "1", AlbumId: "1", AlbumTitle: "Go, Go, Go" },
-      { SingerId: "1", AlbumId: "2", AlbumTitle: "Total Junk" },
-      { SingerId: "2", AlbumId: "1", AlbumTitle: "Green" },
-      { SingerId: "2", AlbumId: "2", AlbumTitle: "Forever Hold your Peace" },
-      { SingerId: "2", AlbumId: "3", AlbumTitle: "Terrified" }
+      { SingerId: 1, AlbumId: 1, AlbumTitle: "Go, Go, Go" },
+      { SingerId: 1, AlbumId: 2, AlbumTitle: "Total Junk" },
+      { SingerId: 2, AlbumId: 1, AlbumTitle: "Green" },
+      { SingerId: 2, AlbumId: 2, AlbumTitle: "Forever Hold your Peace" },
+      { SingerId: 2, AlbumId: 3, AlbumTitle: "Terrified" }
     ]
   end
 
@@ -205,8 +205,8 @@ def update_data project_id:, instance_id:, database_id:
 
   client.commit do |c|
     c.update "Albums", [
-      { SingerId: "1", AlbumId: "1", MarketingBudget: "100000" },
-      { SingerId: "2", AlbumId: "2", MarketingBudget: "500000" }
+      { SingerId: 1, AlbumId: 1, MarketingBudget: 100_000 },
+      { SingerId: 2, AlbumId: 2, MarketingBudget: 500_000 }
     ]
   end
 
@@ -246,8 +246,8 @@ def read_write_transaction project_id:, instance_id:, database_id:
     new_second_album_budget = second_album[:MarketingBudget] - 200_000
 
     tx.update "Albums", [
-      { SingerId: "1", AlbumId: "1", MarketingBudget: new_first_album_budget },
-      { SingerId: "2", AlbumId: "2", MarketingBudget: new_second_album_budget }
+      { SingerId: 1, AlbumId: 1, MarketingBudget: new_first_album_budget  },
+      { SingerId: 2, AlbumId: 2, MarketingBudget: new_second_album_budget }
     ]
   end
 
@@ -287,11 +287,8 @@ def read_data_with_index project_id:, instance_id:, database_id:
   spanner = Google::Cloud::Spanner.new project: project_id
   client  = spanner.client instance_id, database_id
 
-  result = client.read(
-    "Albums",
-    [:AlbumId, :AlbumTitle],
-    index: "AlbumsByAlbumTitle"
-  )
+  result = client.read "Albums", [:AlbumId, :AlbumTitle],
+                       index: "AlbumsByAlbumTitle"
 
   result.rows.each do |row|
     puts "#{row[:AlbumId]} #{row[:AlbumTitle]}"
@@ -310,11 +307,8 @@ def read_data_with_storing_index project_id:, instance_id:, database_id:
   spanner = Google::Cloud::Spanner.new project: project_id
   client  = spanner.client instance_id, database_id
 
-  result = client.read(
-    "Albums",
-    [:AlbumId, :AlbumTitle, :MarketingBudget],
-    index: "AlbumsByAlbumTitle2"
-  )
+  result = client.read "Albums", [:AlbumId, :AlbumTitle, :MarketingBudget],
+                       index: "AlbumsByAlbumTitle2"
 
   result.rows.each do |row|
     puts "#{row[:AlbumId]} #{row[:AlbumTitle]} #{row[:MarketingBudget]}"
@@ -333,14 +327,11 @@ def read_only_transaction project_id:, instance_id:, database_id:
   spanner = Google::Cloud::Spanner.new project: project_id
   client  = spanner.client instance_id, database_id
 
-  result = client.read(
-    "Albums",
-    [:SingerId, :AlbumId, :AlbumTitle],
-    single_use: { strong: true }
-  )
+  result = client.read "Albums", [:AlbumId, :AlbumTitle, :SingerId],
+                       single_use: { strong: true }
 
   result.rows.each do |row|
-    puts "#{row[:SingerId]} #{row[:AlbumId]} #{row[:AlbumTitle]}"
+    puts "#{row[:AlbumId]} #{row[:AlbumTitle]} #{row[:SingerId]}"
   end
   # [END read_only_transaction]
 end
