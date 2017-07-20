@@ -166,7 +166,31 @@ describe "Google Cloud Spanner API samples" do
     )
   end
 
-  skip "create storing index"
+  example "create storing index" do
+    database = create_singers_albums_database
+
+    expect(database.ddl(force: true).join).not_to include(
+      "CREATE INDEX AlbumsByAlbumTitle2 ON Albums(AlbumTitle) STORING (MarketingBudget)"
+    )
+
+    capture do
+      create_storing_index project_id:  @project_id,
+                           instance_id: @instance.instance_id,
+                           database_id: database.database_id
+    end
+
+    expect(captured_output).to include "Waiting for database update to complete"
+    expect(captured_output).to include "Added the AlbumsByAlbumTitle2 storing index"
+
+    # This test confirms that create_storing_index runs and outputs the
+    # correct (hardcoded) messages but STORING INDICES aren't showing up in
+    # the table's DDL (unlike non-storing indices) so we can't confirm success
+    skip "Cannot confirm STORING INDEX added to Albums at this time (not shown in DDL)"
+
+    expect(database.ddl(force: true).join).to include(
+      "CREATE INDEX AlbumsByAlbumTitle2 ON Albums(AlbumTitle) STORING (MarketingBudget)"
+    )
+  end
 
   example "add column" do
     database = create_singers_albums_database
