@@ -214,6 +214,23 @@ def update_data project_id:, instance_id:, database_id:
   # [END update_data]
 end
 
+def query_data_with_new_column project_id:, instance_id:, database_id:
+  # [START query_data_with_new_column]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+
+  spanner = Google::Cloud::Spanner.new project: project_id
+  client  = spanner.client instance_id, database_id
+
+  client.execute("SELECT SingerId, AlbumId, MarketingBudget FROM Albums").rows.each do |row|
+    puts "#{row[:SingerId]} #{row[:AlbumId]} #{row[:MarketingBudget]}"
+  end
+  # [END query_data_with_new_column]
+end
+
 def read_write_transaction project_id:, instance_id:, database_id:
   # [START read_write_transaction]
   # project_id  = "Your Google Cloud project ID"

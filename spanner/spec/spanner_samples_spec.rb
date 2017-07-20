@@ -219,6 +219,38 @@ describe "Google Cloud Spanner API samples" do
     )
   end
 
+  example "query data with new column" do
+    database = create_singers_albums_database
+    client   = @spanner.client @instance.instance_id, database.database_id
+
+    # Insert Singers and Albums (re-use insert_data sample to populate)
+    insert_data project_id:  @project_id,
+                instance_id: @instance.instance_id,
+                database_id: database.database_id
+
+    # Add MarketingBudget column (re-use add_column to add)
+    add_column project_id:  @project_id,
+               instance_id: @instance.instance_id,
+               database_id: database.database_id
+
+    # Add data to MarketingBudget column (re-use update_data to populate)
+    update_data project_id:  @project_id,
+                instance_id: @instance.instance_id,
+                database_id: database.database_id
+
+    capture do
+      query_data_with_new_column project_id:  @project_id,
+                                 instance_id: @instance.instance_id,
+                                 database_id: database.database_id
+    end
+
+    expect(captured_output).to include "1 1 100000"
+    expect(captured_output).to include "1 2"
+    expect(captured_output).to include "2 1"
+    expect(captured_output).to include "2 2 500000"
+    expect(captured_output).to include "2 3"
+  end
+
   example "read/write transaction (successful transfer)" do
     database = create_singers_albums_database
     client   = @spanner.client @instance.instance_id, database.database_id
