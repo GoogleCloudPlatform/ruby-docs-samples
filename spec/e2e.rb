@@ -47,7 +47,7 @@ class E2E
       version = "#{test_name}-#{build_id}"
 
       # read in our credentials file
-      key_path = File.expand_path("../../client_secrets.json", __FILE__)
+      key_path = File.expand_path("../../../service-account.json", __FILE__)
       key_file = File.read(key_path)
       key_json = JSON.parse(key_file)
 
@@ -92,7 +92,7 @@ class E2E
 
       # run gcloud command
       test_name = self.versionize(test_dir)
-      self.exec "gcloud app modules delete default --version=#{test_name}-#{build_id} -q"
+      self.exec "gcloud app versions delete #{test_name}-#{build_id} -q"
 
       # return the result of the gcloud delete command
       if $?.to_i != 0

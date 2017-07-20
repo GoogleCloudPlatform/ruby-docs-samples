@@ -7,7 +7,11 @@ machine:
 # Dependencies needed by run-all.sh
 dependencies:
   override:
-    - sudo apt-get update; sudo apt-get install realpath
+    - sudo apt-get update; sudo apt-get install realpath wget
+    - wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 &&
+      mv cloud_sql_proxy.linux.amd64 $HOME/cloud_sql_proxy &&
+      chmod +x $HOME/cloud_sql_proxy
+    - sudo mkdir /cloudsql && sudo chmod 0777 /cloudsql
 
 # Test
 test:
