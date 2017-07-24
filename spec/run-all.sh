@@ -19,19 +19,31 @@ status_return=0 # everything passed
 # Print out Ruby version
 ruby --version
 
+# Start Cloud SQL Proxy
+$HOME/cloud_sql_proxy -dir=/cloudsql -credential_file=$GOOGLE_APPLICATION_CREDENTIALS &
+export CLOUD_SQL_PROXY_PROCESS_ID=$!
+
 while read product
 do
 	# Run Tets
+	export BUILD_ID=$CIRCLE_BUILD_NUM
 	export TEST_DIR=$product
 	echo "[$product]"
 	pushd "$repo_directory/$product/"
 	bundle install && bundle exec rspec --format documentation
-
-	 # Check status of bundle exec rspec
+	
+	# Check status of bundle exec rspec
 	if [ $? != 0 ]; then
 		status_return=1
 	fi
+	
+	# Clean up deployed version
+	bundle exec ruby "$repo_directory/spec/e2e_cleanup.rb" "$TEST_DIR" "$BUILD_ID"
+	
 	popd
 done < <(find * -type d -name 'spec' -path "*/*" -not -path "*vendor/*" -exec dirname {} \;)
+
+# Stop Cloud SQL Proxy
+kill $CLOUD_SQL_PROXY_PROCESS_ID
 
 exit $status_return
