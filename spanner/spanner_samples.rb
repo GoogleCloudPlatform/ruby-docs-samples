@@ -56,13 +56,7 @@ def insert_data project_id:, instance_id:, database_id:
   require "google/cloud/spanner"
 
   spanner = Google::Cloud::Spanner.new project: project_id
-
-  # Creates a Cloud Spanner client for your database.
-  # A client is used to read and/or modify data in a Cloud Spanner database.
-  # All of your interactions with Cloud Spanner data must go through a client.
-  # Typically you create a client when your application starts up,
-  # then you re-use that client to read, write, and execute transactions.
-  client = spanner.client instance_id, database_id
+  client  = spanner.client instance_id, database_id
 
   client.commit do |c|
     c.insert "Singers", [
