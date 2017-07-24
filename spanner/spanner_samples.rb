@@ -231,14 +231,6 @@ def read_write_transaction project_id:, instance_id:, database_id:
   # instance_id = "Your Spanner instance ID"
   # database_id = "Your Spanner database ID"
 
-  # Performs a read-write transaction to update two sample records in the
-  # database.
-  #
-  # This will transfer $200,000 from the `MarketingBudget` field of the second
-  # Album(2, 2) to the first Album(1, 1).
-  # If the `MarketingBudget` of the second Album(2, 2) is less than $300,000,
-  # it will raise an exception.
-
   require "google/cloud/spanner"
 
   spanner = Google::Cloud::Spanner.new project: project_id
