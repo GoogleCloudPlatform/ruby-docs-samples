@@ -237,13 +237,12 @@ def read_write_transaction project_id:, instance_id:, database_id:
   client  = spanner.client instance_id, database_id
 
   client.transaction do |tx|
+    first_album  = tx.read("Albums", [:MarketingBudget], keys: [[1,1]]).rows.first
     second_album = tx.read("Albums", [:MarketingBudget], keys: [[2,2]]).rows.first
 
     if second_album[:MarketingBudget] < 300_000
       raise "The second album does not have enough funds to transfer"
     end
-
-    first_album = tx.read("Albums", [:MarketingBudget], keys: [[1,1]]).rows.first
 
     new_first_album_budget  = first_album[:MarketingBudget]  + 200_000
     new_second_album_budget = second_album[:MarketingBudget] - 200_000
