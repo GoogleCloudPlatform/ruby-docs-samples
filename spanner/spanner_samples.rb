@@ -365,9 +365,9 @@ end
 
 def run_sample arguments
   command     = arguments.shift
-  project_id  = ENV["GOOGLE_CLOUD_PROJECT"]
   instance_id = arguments.shift
   database_id = arguments.shift
+  project_id  = ENV["GOOGLE_CLOUD_PROJECT"]
 
   commands = [
     "create_database", "insert_data", "query_data", "read_data", "create_index",
