@@ -74,7 +74,7 @@ describe "Google Cloud Spanner API samples" do
     expect(database).not_to be nil
 
     data_definition_statements = database.ddl
-    expect(data_definition_statements.size).to eq 2
+    expect(data_definition_statements.size).to  eq 2
     expect(data_definition_statements.first).to include "CREATE TABLE Singers"
     expect(data_definition_statements.last).to  include "CREATE TABLE Albums"
   end
