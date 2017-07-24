@@ -150,8 +150,8 @@ def create_storing_index project_id:, instance_id:, database_id:
   database = instance.database database_id
 
   job = database.update statements: [
-    "CREATE INDEX AlbumsByAlbumTitle2 ON Albums(AlbumTitle) " +
-    "STORING (MarketingBudget)"
+    "CREATE INDEX AlbumsByAlbumTitle2 ON Albums(AlbumTitle)
+     STORING (MarketingBudget)"
   ]
 
   puts "Waiting for database update to complete"
