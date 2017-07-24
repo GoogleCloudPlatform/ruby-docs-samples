@@ -84,7 +84,7 @@ describe "Google Cloud Spanner API samples" do
     client   = @spanner.client @instance.instance_id, database.database_id
 
     expect(client.execute("SELECT * FROM Singers").rows.count).to eq 0
-    expect(client.execute("SELECT * FROM Albums").rows.count).to eq 0
+    expect(client.execute("SELECT * FROM Albums").rows.count).to  eq 0
 
     expect {
       insert_data project_id:  @project_id,
@@ -309,7 +309,7 @@ describe "Google Cloud Spanner API samples" do
     first_album  = client.read("Albums", [:MarketingBudget], keys: [[1,1]]).rows.first
     second_album = client.read("Albums", [:MarketingBudget], keys: [[2,2]]).rows.first
 
-    expect(first_album[:MarketingBudget]).to eq 300_000
+    expect(first_album[:MarketingBudget]).to  eq 300_000
     expect(second_album[:MarketingBudget]).to eq 100_000
   end
 
