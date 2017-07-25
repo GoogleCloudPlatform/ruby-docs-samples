@@ -329,11 +329,10 @@ def read_only_transaction project_id:, instance_id:, database_id:
   spanner = Google::Cloud::Spanner.new project: project_id
   client  = spanner.client instance_id, database_id
 
-  result = client.read "Albums", [:AlbumId, :AlbumTitle, :SingerId],
-                       single_use: { strong: true }
-
-  result.rows.each do |row|
-    puts "#{row[:AlbumId]} #{row[:AlbumTitle]} #{row[:SingerId]}"
+  client.snapshot do |snapshot|
+    snapshot.read("Albums", [:AlbumId, :AlbumTitle, :SingerId]).rows.each do |row|
+      puts "#{row[:AlbumId]} #{row[:AlbumTitle]} #{row[:SingerId]}"
+    end
   end
   # [END read_only_transaction]
 end
