@@ -29,9 +29,12 @@ Run the sample:
 sage: bundle exec ruby buckets.rb [command] [arguments]
 
 Commands:
-  list               List all buckets in the authenticated project
-  create <bucket>    Create a new bucket with the provided name
-  delete <bucket>    Delete bucket with the provided name
+  list                            List all buckets in the authenticated project
+  enable_requester_pays  <bucket> Enable requester pays for a bucket
+  disable_requester_pays <bucket> Disable requester pays for a bucket
+  check_requester_pays   <bucket> Check status of requester pays for a bucket
+  create                 <bucket> Create a new bucket with the provided name
+  delete                 <bucket> Delete bucket with the provided name
 
 Environment variables:
   GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID

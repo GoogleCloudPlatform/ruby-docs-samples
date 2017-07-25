@@ -52,6 +52,49 @@ describe "Google Cloud Storage buckets sample" do
     ).to_stdout
   end
 
+  example "disable requester pays" do
+    @storage.bucket(@bucket_name).requester_pays = true
+
+    expect(@storage.bucket(@bucket_name).requester_pays).to be true
+
+    expect {
+      disable_requester_pays project_id:  @project_id,
+                             bucket_name: @bucket_name
+    }.to output{
+      /Requester pays has been disabled for #{@bucket_name}/
+    }.to_stdout
+
+    expect(@storage.bucket(@bucket_name).requester_pays).to be false
+  end
+
+  example "enable requester pays" do
+    @storage.bucket(@bucket_name).requester_pays = false
+
+    expect(@storage.bucket(@bucket_name).requester_pays).to be false
+
+    expect {
+      enable_requester_pays project_id:  @project_id,
+                            bucket_name: @bucket_name
+    }.to output{
+      /Requester pays has been enabled for #{@bucket_name}/
+    }.to_stdout
+
+    expect(@storage.bucket(@bucket_name).requester_pays).to be true
+  end
+
+  example "check requester pays" do
+    @storage.bucket(@bucket_name).requester_pays = true
+
+    expect(@storage.bucket(@bucket_name).requester_pays).to be true
+
+    expect {
+      get_requester_pays_status project_id:  @project_id,
+                                bucket_name: @bucket_name
+    }.to output{
+      /Requester Pays is enabled for #{@bucket_name}/
+    }.to_stdout
+  end
+
   example "create bucket" do
     delete_bucket!
 
