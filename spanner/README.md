@@ -44,3 +44,25 @@ environment variable to the path to the key file, for example:
 
     bundle exec ruby quickstart.rb
 
+## Run the samples
+
+    Usage: bundle exec ruby spanner_samples.rb [command] [arguments]
+
+    Commands:
+      create_database              <instance_id> <database_id> Create Database
+      insert_data                  <instance_id> <database_id> Insert Data
+      query_data                   <instance_id> <database_id> Query Data
+      read_data                    <instance_id> <database_id> Read Data
+      create_index                 <instance_id> <database_id> Create Index
+      create_storing_index         <instance_id> <database_id> Create Storing Index
+      add_column                   <instance_id> <database_id> Add Column
+      update_data                  <instance_id> <database_id> Update Data
+      query_data_with_new_column   <instance_id> <database_id> Query Data with New Column
+      read_write_transaction       <instance_id> <database_id> Read-Write Transaction
+      query_data_with_index        <instance_id> <database_id> Query Data with Index
+      read_data_with_index         <instance_id> <database_id> Read Data with Index
+      read_data_with_storing_index <instance_id> <database_id> Read Data with Storing Index
+      read_only_transaction        <instance_id> <database_id> Read-Only Transaction
+
+    Environment variables:
+      GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID

@@ -23,10 +23,10 @@ project_id = "YOUR_PROJECT_ID"
 spanner = Google::Cloud::Spanner.new project: project_id
 
 # Your Cloud Spanner instance ID
-instance_id = "my-instance";
+instance_id = "my-instance"
 
 # Your Cloud Spanner database ID
-database_id = "my-database";
+database_id = "my-database"
 
 # Gets a reference to a Cloud Spanner instance database
 database_client = spanner.client instance_id, database_id
