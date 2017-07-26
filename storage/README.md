@@ -53,6 +53,7 @@ Commands:
   encrypted_upload  <bucket> <file> <base64_encryption_key>         Upload local file as an encrypted file to a bucket
   download           <bucket> <file> <path>                         Download a file from a bucket
   encrypted_download <bucket> <file> <path> <base64_encryption_key> Download an encrypted file from a bucket
+  download_with_requester_pays <project> <bucket> <file> <path>     Download a file from a requester pays enabled bucket
   rotate_encryption_key <bucket> <file> <base64_current_encryption_key> <base64_new_encryption_key> Update encryption key of an encrypted file.
   generate_encryption_key                                           Generate a sample encryption key
   delete       <bucket> <file>                                      Delete a file from a bucket
