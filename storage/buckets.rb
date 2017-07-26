@@ -39,7 +39,7 @@ def disable_requester_pays project_id:, bucket_name:
   bucket.requester_pays = false
 
   puts "Requester pays has been disabled for #{bucket_name}"
-  # [END dsable_requester_pays]
+  # [END disable_requester_pays]
 end
 
 def enable_requester_pays project_id:, bucket_name:
