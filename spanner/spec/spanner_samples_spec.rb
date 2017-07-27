@@ -116,8 +116,8 @@ describe "Google Cloud Spanner API samples" do
                  database_id: database.database_id
     end
 
-    expect(captured_output).to include "1 1 Go, Go, Go"
-    expect(captured_output).to include "1 2 Total Junk"
+    expect(captured_output).to include "1 1 Total Junk"
+    expect(captured_output).to include "1 2 Go, Go, Go"
     expect(captured_output).to include "2 1 Green"
     expect(captured_output).to include "2 2 Forever Hold your Peace"
     expect(captured_output).to include "2 3 Terrified"
@@ -138,8 +138,8 @@ describe "Google Cloud Spanner API samples" do
                 database_id: database.database_id
     end
 
-    expect(captured_output).to include "1 1 Go, Go, Go"
-    expect(captured_output).to include "1 2 Total Junk"
+    expect(captured_output).to include "1 1 Total Junk"
+    expect(captured_output).to include "1 2 Go, Go, Go"
     expect(captured_output).to include "2 1 Green"
     expect(captured_output).to include "2 2 Forever Hold your Peace"
     expect(captured_output).to include "2 3 Terrified"
@@ -226,7 +226,7 @@ describe "Google Cloud Spanner API samples" do
 
     albums = client.execute("SELECT * FROM Albums").rows.map &:to_h
     expect(albums).to include(
-      { SingerId: 1, AlbumId: 1, AlbumTitle: "Go, Go, Go", MarketingBudget: nil }
+      { SingerId: 1, AlbumId: 1, AlbumTitle: "Total Junk", MarketingBudget: nil }
     )
 
     capture do
@@ -239,7 +239,7 @@ describe "Google Cloud Spanner API samples" do
 
     albums = client.execute("SELECT * FROM Albums").rows.map &:to_h
     expect(albums).to include(
-      { SingerId: 1, AlbumId: 1, AlbumTitle: "Go, Go, Go", MarketingBudget: 100_000 }
+      { SingerId: 1, AlbumId: 1, AlbumTitle: "Total Junk", MarketingBudget: 100_000 }
     )
   end
 
@@ -368,7 +368,7 @@ describe "Google Cloud Spanner API samples" do
                             database_id: database.database_id
     end
 
-    expect(captured_output).to include "1 Go, Go, Go"
+    expect(captured_output).to include "2 Go, Go, Go"
     expect(captured_output).to include "2 Forever Hold your Peace"
   end
 
@@ -397,7 +397,7 @@ describe "Google Cloud Spanner API samples" do
                            database_id: database.database_id
     end
 
-    expect(captured_output).to include "1 Go, Go, Go"
+    expect(captured_output).to include "1 Total Junk"
     expect(captured_output).to include "2 Forever Hold your Peace"
   end
 
@@ -416,7 +416,6 @@ describe "Google Cloud Spanner API samples" do
                database_id: database.database_id
 
     # Add index on Albums(AlbumTitle) (re-use create_index to add)
-    # XXX create_storing_index is not yet tested, but is required by this test
     create_storing_index project_id:  @project_id,
                          instance_id: @instance.instance_id,
                          database_id: database.database_id
@@ -427,7 +426,7 @@ describe "Google Cloud Spanner API samples" do
                                    database_id: database.database_id
     end
 
-    expect(captured_output).to include "1 Go, Go, Go"
+    expect(captured_output).to include "1 Total Junk"
     expect(captured_output).to include "2 Forever Hold your Peace"
   end
 
@@ -446,7 +445,7 @@ describe "Google Cloud Spanner API samples" do
                             database_id: database.database_id
     end
 
-    expect(captured_output).to include "1 Go, Go, Go 1"
+    expect(captured_output).to include "1 Total Junk 1"
     expect(captured_output).to include "2 Forever Hold your Peace 2"
   end
 end
