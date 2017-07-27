@@ -80,6 +80,8 @@ describe "Google Cloud Storage buckets sample" do
     }.to_stdout
 
     expect(@storage.bucket(@bucket_name).requester_pays).to be true
+
+    @storage.bucket(@bucket_name).requester_pays = false
   end
 
   example "check requester pays" do
@@ -93,6 +95,8 @@ describe "Google Cloud Storage buckets sample" do
     }.to output{
       /Requester Pays is enabled for #{@bucket_name}/
     }.to_stdout
+
+    @storage.bucket(@bucket_name).requester_pays = false
   end
 
   example "create bucket" do
