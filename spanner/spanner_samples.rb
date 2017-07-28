@@ -70,7 +70,7 @@ def insert_data project_id:, instance_id:, database_id:
       { SingerId: 1, AlbumId: 1, AlbumTitle: "Total Junk"              },
       { SingerId: 1, AlbumId: 2, AlbumTitle: "Go, Go, Go"              },
       { SingerId: 2, AlbumId: 1, AlbumTitle: "Green"                   },
-      { SingerId: 2, AlbumId: 2, AlbumTitle: "Forever Hold your Peace" },
+      { SingerId: 2, AlbumId: 2, AlbumTitle: "Forever Hold Your Peace" },
       { SingerId: 2, AlbumId: 3, AlbumTitle: "Terrified"               }
     ]
   end

@@ -119,7 +119,7 @@ describe "Google Cloud Spanner API samples" do
     expect(captured_output).to include "1 1 Total Junk"
     expect(captured_output).to include "1 2 Go, Go, Go"
     expect(captured_output).to include "2 1 Green"
-    expect(captured_output).to include "2 2 Forever Hold your Peace"
+    expect(captured_output).to include "2 2 Forever Hold Your Peace"
     expect(captured_output).to include "2 3 Terrified"
   end
 
@@ -141,7 +141,7 @@ describe "Google Cloud Spanner API samples" do
     expect(captured_output).to include "1 1 Total Junk"
     expect(captured_output).to include "1 2 Go, Go, Go"
     expect(captured_output).to include "2 1 Green"
-    expect(captured_output).to include "2 2 Forever Hold your Peace"
+    expect(captured_output).to include "2 2 Forever Hold Your Peace"
     expect(captured_output).to include "2 3 Terrified"
   end
 
@@ -369,7 +369,7 @@ describe "Google Cloud Spanner API samples" do
     end
 
     expect(captured_output).to include "2 Go, Go, Go"
-    expect(captured_output).to include "2 Forever Hold your Peace"
+    expect(captured_output).to include "2 Forever Hold Your Peace"
   end
 
   example "read data with index" do
@@ -398,7 +398,7 @@ describe "Google Cloud Spanner API samples" do
     end
 
     expect(captured_output).to include "1 Total Junk"
-    expect(captured_output).to include "2 Forever Hold your Peace"
+    expect(captured_output).to include "2 Forever Hold Your Peace"
   end
 
   example "read data with storing index" do
@@ -427,7 +427,7 @@ describe "Google Cloud Spanner API samples" do
     end
 
     expect(captured_output).to include "1 Total Junk"
-    expect(captured_output).to include "2 Forever Hold your Peace"
+    expect(captured_output).to include "2 Forever Hold Your Peace"
   end
 
   example "read only transaction" do
@@ -446,6 +446,6 @@ describe "Google Cloud Spanner API samples" do
     end
 
     expect(captured_output).to include "1 Total Junk 1"
-    expect(captured_output).to include "2 Forever Hold your Peace 2"
+    expect(captured_output).to include "2 Forever Hold Your Peace 2"
   end
 end
