@@ -330,6 +330,12 @@ def read_only_transaction project_id:, instance_id:, database_id:
   client  = spanner.client instance_id, database_id
 
   client.snapshot do |snapshot|
+    snapshot.execute("SELECT SingerId, AlbumId, AlbumTitle FROM Albums").rows.each do |row|
+      puts "#{row[:AlbumId]} #{row[:AlbumTitle]} #{row[:SingerId]}"
+    end
+
+    # Even if changes occur in-between the reads, the transaction ensures that
+    # both return the same data.
     snapshot.read("Albums", [:AlbumId, :AlbumTitle, :SingerId]).rows.each do |row|
       puts "#{row[:AlbumId]} #{row[:AlbumTitle]} #{row[:SingerId]}"
     end
