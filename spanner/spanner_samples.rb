@@ -67,10 +67,10 @@ def insert_data project_id:, instance_id:, database_id:
       { SingerId: 5, FirstName: "David",    LastName: "Lomond"   }
     ]
     c.insert "Albums", [
-      { SingerId: 1, AlbumId: 1, AlbumTitle: "Go, Go, Go"              },
-      { SingerId: 1, AlbumId: 2, AlbumTitle: "Total Junk"              },
+      { SingerId: 1, AlbumId: 1, AlbumTitle: "Total Junk"              },
+      { SingerId: 1, AlbumId: 2, AlbumTitle: "Go, Go, Go"              },
       { SingerId: 2, AlbumId: 1, AlbumTitle: "Green"                   },
-      { SingerId: 2, AlbumId: 2, AlbumTitle: "Forever Hold your Peace" },
+      { SingerId: 2, AlbumId: 2, AlbumTitle: "Forever Hold Your Peace" },
       { SingerId: 2, AlbumId: 3, AlbumTitle: "Terrified"               }
     ]
   end
@@ -330,6 +330,12 @@ def read_only_transaction project_id:, instance_id:, database_id:
   client  = spanner.client instance_id, database_id
 
   client.snapshot do |snapshot|
+    snapshot.execute("SELECT SingerId, AlbumId, AlbumTitle FROM Albums").rows.each do |row|
+      puts "#{row[:AlbumId]} #{row[:AlbumTitle]} #{row[:SingerId]}"
+    end
+
+    # Even if changes occur in-between the reads, the transaction ensures that
+    # both return the same data.
     snapshot.read("Albums", [:AlbumId, :AlbumTitle, :SingerId]).rows.each do |row|
       puts "#{row[:AlbumId]} #{row[:AlbumTitle]} #{row[:SingerId]}"
     end
