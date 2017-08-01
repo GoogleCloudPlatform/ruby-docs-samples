@@ -87,7 +87,7 @@ def speech_async_recognize_gcs project_id:, storage_path:
                                       sample_rate: 16000,
                                       language:    "en-US"
 
-  operation = audio.process
+  operation = audio.process words: true
 
   puts "Operation started"
 
@@ -97,6 +97,10 @@ def speech_async_recognize_gcs project_id:, storage_path:
   result  = results.first
 
   puts "Transcription: #{result.transcript}"
+
+  result.words.each do |word|
+    puts "Word: #{word.word} #{word.start_time} #{word.end_time}"
+  end
 # [END speech_async_recognize_gcs]
 end
 
