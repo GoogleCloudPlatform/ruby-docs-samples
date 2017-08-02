@@ -199,9 +199,7 @@ describe "Google Cloud Storage files sample" do
       expect(File.size local_file.path).to eq 0
 
       @bucket.policy do |policy|
-        policy.roles["roles/storage.legacyBucketReader"] = []
         policy.roles["roles/storage.objectViewer"] = []
-        policy.add "roles/storage.legacyBucketReader", "allUsers"
         policy.add "roles/storage.objectViewer", "allUsers"
       end
 
@@ -225,7 +223,6 @@ describe "Google Cloud Storage files sample" do
 
       @bucket.policy do |policy|
         policy.remove "roles/storage.objectViewer", "allUsers"
-        policy.remove "roles/storage.legacyBucketReader", "allUsers"
       end
 
       @bucket.requester_pays = false
@@ -249,9 +246,7 @@ describe "Google Cloud Storage files sample" do
       expect(File.size local_file.path).to eq 0
 
       @bucket.policy do |policy|
-        policy.roles["roles/storage.legacyBucketReader"] = []
         policy.roles["roles/storage.objectViewer"] = []
-        policy.add "roles/storage.legacyBucketReader", "allUsers"
         policy.add "roles/storage.objectViewer", "allUsers"
       end
 
@@ -270,7 +265,6 @@ describe "Google Cloud Storage files sample" do
 
       @bucket.policy do |policy|
         policy.remove "roles/storage.objectViewer", "allUsers"
-        policy.remove "roles/storage.legacyBucketReader", "allUsers"
       end
 
       @bucket.requester_pays = false

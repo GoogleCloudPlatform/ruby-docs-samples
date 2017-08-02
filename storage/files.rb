@@ -128,7 +128,7 @@ def download_file_requester_pays project_id:, bucket_name:, file_name:, local_pa
   require "google/cloud/storage"
 
   storage = Google::Cloud::Storage.new project: project_id
-  bucket  = storage.bucket bucket_name, user_project: true
+  bucket  = storage.bucket bucket_name, skip_lookup: true, user_project: true
   file    = bucket.file file_name
 
   file.download local_path
