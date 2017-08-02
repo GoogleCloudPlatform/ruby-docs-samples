@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-def speech_sync_recognize project_id:, audio_file_path:
+def speech_sync_recognize project_id: nil, audio_file_path: nil
 # [START speech_sync_recognize]
   # project_id      = "Your Google Cloud project ID"
   # audio_file_path = "Path to file on which to perform speech recognition"
@@ -31,7 +31,7 @@ def speech_sync_recognize project_id:, audio_file_path:
 # [END speech_sync_recognize]
 end
 
-def speech_sync_recognize_gcs project_id:, storage_path:
+def speech_sync_recognize_gcs project_id: nil, storage_path: nil
 # [START speech_sync_recognize_gcs]
   # project_id   = "Your Google Cloud project ID"
   # storage_path = "Path to file in Cloud Storage, eg. gs://bucket/audio.raw"
@@ -50,7 +50,7 @@ def speech_sync_recognize_gcs project_id:, storage_path:
 # [END speech_sync_recognize_gcs]
 end
 
-def speech_async_recognize project_id:, audio_file_path:
+def speech_async_recognize project_id: nil, audio_file_path: nil
 # [START speech_async_recognize]
   # project_id      = "Your Google Cloud project ID"
   # audio_file_path = "Path to file on which to perform speech recognition"
@@ -75,7 +75,7 @@ def speech_async_recognize project_id:, audio_file_path:
 # [END speech_async_recognize]
 end
 
-def speech_async_recognize_gcs project_id:, storage_path:
+def speech_async_recognize_gcs project_id: nil, storage_path: nil
 # [START speech_async_recognize_gcs]
   # project_id   = "Your Google Cloud project ID"
   # storage_path = "Path to file in Cloud Storage, eg. gs://bucket/audio.raw"
@@ -104,7 +104,7 @@ def speech_async_recognize_gcs project_id:, storage_path:
 # [END speech_async_recognize_gcs]
 end
 
-def speech_streaming_recognize project_id:, audio_file_path:
+def speech_streaming_recognize project_id: nil, audio_file_path: nil
 # [START speech_streaming]
   # project_id      = "Your Google Cloud project ID"
   # audio_file_path = "Path to file on which to perform speech recognition"
