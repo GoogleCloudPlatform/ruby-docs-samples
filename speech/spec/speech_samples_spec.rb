@@ -63,12 +63,19 @@ describe "Google Cloud Speech API samples" do
   end
 
   example "async operation to transcribe audio file" do
-    expect {
+    capture do
       speech_async_recognize project_id:      @project_id,
                              audio_file_path: @audio_file_path
-    }.to output(
-      "Operation started\nTranscription: how old is the Brooklyn Bridge\n"
-    ).to_stdout
+    end
+
+    expect(captured_output).to include "Operation started"
+    expect(captured_output).to include "Transcription: how old is the Brooklyn Bridge"
+    expect(captured_output).to include "Word: how 0 0.3"
+    expect(captured_output).to include "Word: old 0.3 0.6"
+    expect(captured_output).to include "Word: is 0.6 0.8"
+    expect(captured_output).to include "Word: the 0.8 0.9"
+    expect(captured_output).to include "Word: Brooklyn 0.9 1.1"
+    expect(captured_output).to include "Word: Bridge 1.1 1.5"
   end
 
   example "async operation to transcribe audio file from GCS" do
