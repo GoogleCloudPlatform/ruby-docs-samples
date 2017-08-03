@@ -30,6 +30,8 @@ describe "Google Cloud Storage buckets sample" do
   end
 
   after :all do
+    @storage.requester_pays = false if @storage.bucket(@bucket_name)
+
     # Other tests assume that this bucket exists,
     # so create it before exiting this spec suite
     @storage.create_bucket @bucket_name unless @storage.bucket(@bucket_name)
@@ -80,8 +82,6 @@ describe "Google Cloud Storage buckets sample" do
     }.to_stdout
 
     expect(@storage.bucket(@bucket_name).requester_pays).to be true
-
-    @storage.bucket(@bucket_name).requester_pays = false
   end
 
   example "check requester pays" do
@@ -95,8 +95,6 @@ describe "Google Cloud Storage buckets sample" do
     }.to output{
       /Requester Pays is enabled for #{@bucket_name}/
     }.to_stdout
-
-    @storage.bucket(@bucket_name).requester_pays = false
   end
 
   example "create bucket" do
