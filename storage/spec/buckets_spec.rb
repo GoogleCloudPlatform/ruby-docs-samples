@@ -30,7 +30,7 @@ describe "Google Cloud Storage buckets sample" do
   end
 
   after :all do
-    @storage.requester_pays = false if @storage.bucket(@bucket_name)
+    @storage.bucket(@bucket_name).requester_pays = false if @storage.bucket(@bucket_name)
 
     # Other tests assume that this bucket exists,
     # so create it before exiting this spec suite

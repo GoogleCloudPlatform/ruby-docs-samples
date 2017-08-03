@@ -41,6 +41,8 @@ describe "Google Cloud Storage files sample" do
     @bucket.policy do |policy|
       policy.remove "roles/storage.objectViewer", "allUsers"
     end
+
+    @bucket.requester_pays = false
   end
 
   def generate_encryption_key
