@@ -51,17 +51,16 @@ Run the sample:
 
     bundle exec ruby speech_samples.rb
 
-Usage:
+Usage: ruby speech_samples.rb <command> [arguments]
 
-    Usage: ruby speech_samples.rb <command> [arguments]
-
-    Commands:
-    recognize           <filename> Detects speech in a local audio file.
-    recognize_gcs       <gcsUri>   Detects speech in an audio file located in a Google Cloud Storage bucket.
-    async_recognize     <filename> Creates a job to detect speech in a local audio file, and waits for the job to complete.
-    async_recognize_gcs <gcsUri>   Creates a job to detect speech in an audio file located in a Google Cloud Storage bucket, and
-                                   waits for the job to complete.
-    stream_recognize    <filename> Detects speech in a local audio file by streaming it to the Speech API.
+Commands:
+  recognize                 <filename> Detects speech in a local audio file.
+  recognize_words           <filename> Detects speech in a local audio file with word offsets.
+  recognize_gcs             <gcsUri>   Detects speech in an audio file located in a Google Cloud Storage bucket.
+  async_recognize           <filename> Creates a job to detect speech in a local audio file, and waits for the job to complete.
+  async_recognize_gcs       <gcsUri>   Creates a job to detect speech in an audio file located in a Google Cloud Storage bucket, and waits for the job to complete.
+  async_recognize_gcs_words <gcsUri>   Creates a job to detect speech with wordsoffsets in an audio file located in a Google Cloud Storage bucket, and waits for the job to complete.
+  stream_recognize          <filename> Detects speech in a local audio file by streaming it to the Speech API.
 
 Examples:
 
