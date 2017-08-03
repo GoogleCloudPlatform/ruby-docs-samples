@@ -31,6 +31,16 @@ describe "Google Cloud Storage files sample" do
     @project_id_secondary = @storage_secondary.project
     @local_file_path      = File.expand_path "resources/file.txt", __dir__
     @encryption_key       = generate_encryption_key
+
+    @bucket.policy do |policy|
+      policy.add "roles/storage.objectViewer", "allUsers"
+    end
+  end
+
+  after do
+    @bucket.policy do |policy|
+      policy.remove "roles/storage.objectViewer", "allUsers"
+    end
   end
 
   def generate_encryption_key
@@ -198,11 +208,6 @@ describe "Google Cloud Storage files sample" do
       local_file = Tempfile.new "cloud-storage-tests"
       expect(File.size local_file.path).to eq 0
 
-      @bucket.policy do |policy|
-        policy.roles["roles/storage.objectViewer"] = []
-        policy.add "roles/storage.objectViewer", "allUsers"
-      end
-
       expect(Google::Cloud::Storage).to receive(:new).
                                         with(project: @project_id_secondary).
                                         and_return @storage_secondary
@@ -220,12 +225,6 @@ describe "Google Cloud Storage files sample" do
       expect(File.read local_file.path).to eq(
         "Content of test file.txt\n"
       )
-
-      @bucket.policy do |policy|
-        policy.remove "roles/storage.objectViewer", "allUsers"
-      end
-
-      @bucket.requester_pays = false
     ensure
       local_file.close
       local_file.unlink
@@ -245,11 +244,6 @@ describe "Google Cloud Storage files sample" do
       local_file = Tempfile.new "cloud-storage-tests"
       expect(File.size local_file.path).to eq 0
 
-      @bucket.policy do |policy|
-        policy.roles["roles/storage.objectViewer"] = []
-        policy.add "roles/storage.objectViewer", "allUsers"
-      end
-
       expect(Google::Cloud::Storage).to receive(:new).
                                         with(project: @project_id_secondary).
                                         and_return @storage_secondary
@@ -262,17 +256,12 @@ describe "Google Cloud Storage files sample" do
       }.to raise_error Google::Cloud::InvalidArgumentError
 
       expect(File.size local_file.path).to be 0
-
-      @bucket.policy do |policy|
-        policy.remove "roles/storage.objectViewer", "allUsers"
-      end
-
-      @bucket.requester_pays = false
     ensure
       local_file.close
       local_file.unlink
     end
   end
+
   it "can download an encrypted file from a bucket" do
     begin
       delete_file "file.txt"
