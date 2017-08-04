@@ -29,14 +29,6 @@ environment variable to the path to the key file, for example:
 
     `export GOOGLE_APPLICATION_CREDENTIALS=/path/to/service_account.json`
 
-### Set Project ID
-
-Next, set the *GOOGLE_CLOUD_PROJECT* environment variable to the project name
-set in the
-[Google Cloud Platform Developer Console](https://console.cloud.google.com):
-
-    `export GOOGLE_CLOUD_PROJECT="YOUR-PROJECT-ID"`
-
 ### Install Dependencies
 
 1. Install the [Bundler](http://bundler.io/) gem.
