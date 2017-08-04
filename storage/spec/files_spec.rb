@@ -22,12 +22,27 @@ require "uri"
 describe "Google Cloud Storage files sample" do
 
   before do
-    @bucket_name     = ENV["GOOGLE_CLOUD_STORAGE_BUCKET"]
-    @storage         = Google::Cloud::Storage.new
-    @project_id      = @storage.project
-    @bucket          = @storage.bucket @bucket_name
-    @local_file_path = File.expand_path "resources/file.txt", __dir__
-    @encryption_key  = generate_encryption_key
+    @bucket_name          = ENV["GOOGLE_CLOUD_STORAGE_BUCKET"]
+    @storage              = Google::Cloud::Storage.new
+    @project_id           = @storage.project
+    @bucket               = @storage.bucket @bucket_name
+    @storage_secondary    = Google::Cloud::Storage.new project: ENV["GOOGLE_CLOUD_PROJECT_SECONDARY"],
+                                                       keyfile: ENV["GOOGLE_APPLICATION_CREDENTIALS_SECONDARY"]
+    @project_id_secondary = @storage_secondary.project
+    @local_file_path      = File.expand_path "resources/file.txt", __dir__
+    @encryption_key       = generate_encryption_key
+
+    @bucket.policy do |policy|
+      policy.add "roles/storage.objectViewer", "allUsers"
+    end
+  end
+
+  after do
+    @bucket.policy do |policy|
+      policy.remove "roles/storage.objectViewer", "allUsers"
+    end
+
+    @bucket.requester_pays = false
   end
 
   def generate_encryption_key
@@ -176,6 +191,73 @@ describe "Google Cloud Storage files sample" do
       expect(File.read local_file.path).to eq(
         "Content of test file.txt\n"
       )
+    ensure
+      local_file.close
+      local_file.unlink
+    end
+  end
+
+  it "can download a file from a bucket using requester pays" do
+    begin
+      @bucket.requester_pays = true
+      expect(@storage.bucket(@bucket_name).requester_pays).to be true
+
+      delete_file "file.txt"
+      expect(@bucket.file "file.txt").to be nil
+
+      upload @local_file_path, "file.txt"
+
+      local_file = Tempfile.new "cloud-storage-tests"
+      expect(File.size local_file.path).to eq 0
+
+      expect(Google::Cloud::Storage).to receive(:new).
+                                        with(project: @project_id_secondary).
+                                        and_return @storage_secondary
+
+      expect {
+        download_file_requester_pays project_id:  @project_id_secondary,
+                                     bucket_name: @bucket_name,
+                                     local_path:  local_file.path,
+                                     file_name:   "file.txt"
+      }.to output(
+        "Downloaded file.txt using billing project #{@project_id_secondary}\n"
+      ).to_stdout
+
+      expect(File.size local_file.path).to be > 0
+      expect(File.read local_file.path).to eq(
+        "Content of test file.txt\n"
+      )
+    ensure
+      local_file.close
+      local_file.unlink
+    end
+  end
+
+  it "can't download a file from a bucket using requester pays without flag" do
+    begin
+      @bucket.requester_pays = true
+      expect(@storage.bucket(@bucket_name).requester_pays).to be true
+
+      delete_file "file.txt"
+      expect(@bucket.file "file.txt").to be nil
+
+      upload @local_file_path, "file.txt"
+
+      local_file = Tempfile.new "cloud-storage-tests"
+      expect(File.size local_file.path).to eq 0
+
+      expect(Google::Cloud::Storage).to receive(:new).
+                                        with(project: @project_id_secondary).
+                                        and_return @storage_secondary
+
+      expect {
+        download_file project_id:  @project_id_secondary,
+                      bucket_name: @bucket_name,
+                      local_path:  local_file.path,
+                      file_name:   "file.txt"
+      }.to raise_error Google::Cloud::InvalidArgumentError
+
+      expect(File.size local_file.path).to be 0
     ensure
       local_file.close
       local_file.unlink

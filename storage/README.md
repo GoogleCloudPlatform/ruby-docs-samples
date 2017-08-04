@@ -29,9 +29,12 @@ Run the sample:
 sage: bundle exec ruby buckets.rb [command] [arguments]
 
 Commands:
-  list               List all buckets in the authenticated project
-  create <bucket>    Create a new bucket with the provided name
-  delete <bucket>    Delete bucket with the provided name
+  list                            List all buckets in the authenticated project
+  enable_requester_pays  <bucket> Enable requester pays for a bucket
+  disable_requester_pays <bucket> Disable requester pays for a bucket
+  check_requester_pays   <bucket> Check status of requester pays for a bucket
+  create                 <bucket> Create a new bucket with the provided name
+  delete                 <bucket> Delete bucket with the provided name
 
 Environment variables:
   GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
@@ -50,6 +53,7 @@ Commands:
   encrypted_upload  <bucket> <file> <base64_encryption_key>         Upload local file as an encrypted file to a bucket
   download           <bucket> <file> <path>                         Download a file from a bucket
   encrypted_download <bucket> <file> <path> <base64_encryption_key> Download an encrypted file from a bucket
+  download_with_requester_pays <project> <bucket> <file> <path>     Download a file from a requester pays enabled bucket
   rotate_encryption_key <bucket> <file> <base64_current_encryption_key> <base64_new_encryption_key> Update encryption key of an encrypted file.
   generate_encryption_key                                           Generate a sample encryption key
   delete       <bucket> <file>                                      Delete a file from a bucket

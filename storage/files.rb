@@ -118,6 +118,25 @@ def download_file project_id:, bucket_name:, file_name:, local_path:
   # [END download_file]
 end
 
+def download_file_requester_pays project_id:, bucket_name:, file_name:, local_path:
+  # [START download_file_requester_pays]
+  # project_id  = "Your Google Cloud billable project ID"
+  # bucket_name = "A Google Cloud Storage bucket name"
+  # file_name   = "Name of file in Google Cloud Storage to download locally"
+  # local_path  = "Path to local file to save"
+
+  require "google/cloud/storage"
+
+  storage = Google::Cloud::Storage.new project: project_id
+  bucket  = storage.bucket bucket_name, skip_lookup: true, user_project: true
+  file    = bucket.file file_name
+
+  file.download local_path
+
+  puts "Downloaded #{file.name} using billing project #{project_id}"
+  # [END download_file_requester_pays]
+end
+
 def download_encrypted_file project_id:, bucket_name:, storage_file_path:,
                             local_file_path:, encryption_key:
   # [START download_encrypted_file]
@@ -325,6 +344,11 @@ def run_sample arguments
                   file_name:     arguments.shift,
                   local_path:    arguments.shift,
                   encrypted_key: Base64.decode64(arguments.shift)
+  when "download_with_requester_pays"
+    download_file_requester_pays project_id:  arguments.shift,
+                                 bucket_name: arguments.shift,
+                                 file_name:   arguments.shift,
+                                 local_path:  arguments.shift
   when "rotate_encryption_key"
     rotate_encryption_key project_id:             project_id,
                           bucket_name:            arguments.shift,
@@ -370,6 +394,7 @@ Commands:
   encrypted_upload  <bucket> <file> <base64_encryption_key>         Upload local file as an encrypted file to a bucket
   download           <bucket> <file> <path>                         Download a file from a bucket
   encrypted_download <bucket> <file> <path> <base64_encryption_key> Download an encrypted file from a bucket
+  download_with_requester_pays <project> <bucket> <file> <path>     Download a file from a requester pays enabled bucket
   rotate_encryption_key <bucket> <file> <base64_current_encryption_key> <base64_new_encryption_key> Update encryption key of an encrypted file.
   generate_encryption_key                                           Generate a sample encryption key
   delete       <bucket> <file>                                      Delete a file from a bucket

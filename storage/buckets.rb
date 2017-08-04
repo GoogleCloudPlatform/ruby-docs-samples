@@ -26,6 +26,56 @@ def list_buckets project_id:
   # [END list_buckets]
 end
 
+def disable_requester_pays project_id:, bucket_name:
+  # [START disable_requester_pays]
+  # project_id  = "Your Google Cloud project ID"
+  # bucket_name = "Name of your Google Cloud Storage bucket"
+
+  require "google/cloud/storage"
+
+  storage = Google::Cloud::Storage.new project: project_id
+  bucket  = storage.bucket bucket_name
+
+  bucket.requester_pays = false
+
+  puts "Requester pays has been disabled for #{bucket_name}"
+  # [END disable_requester_pays]
+end
+
+def enable_requester_pays project_id:, bucket_name:
+  # [START enable_requester_pays]
+  # project_id  = "Your Google Cloud project ID"
+  # bucket_name = "Name of your Google Cloud Storage bucket"
+
+  require "google/cloud/storage"
+
+  storage = Google::Cloud::Storage.new project: project_id
+  bucket  = storage.bucket bucket_name
+
+  bucket.requester_pays = true
+
+  puts "Requester pays has been enabled for #{bucket_name}"
+  # [END enable_requester_pays]
+end
+
+def get_requester_pays_status project_id:, bucket_name:
+  # [START get_requester_pays_status]
+  # project_id  = "Your Google Cloud project ID"
+  # bucket_name = "Name of your Google Cloud Storage bucket"
+
+  require "google/cloud/storage"
+
+  storage = Google::Cloud::Storage.new project: project_id
+  bucket  = storage.bucket bucket_name
+
+  if bucket.requester_pays
+    puts "Requester Pays is enabled for #{bucket_name}"
+  else
+    puts "Requester Pays is disabled for #{bucket_name}"
+  end
+  # [END get_requester_pays_status]
+end
+
 def create_bucket project_id:, bucket_name:
   # [START create_bucket]
   # project_id  = "Your Google Cloud project ID"
@@ -71,9 +121,12 @@ if __FILE__ == $0
 Usage: bundle exec ruby buckets.rb [command] [arguments]
 
 Commands:
-  list               List all buckets in the authenticated project
-  create <bucket>    Create a new bucket with the provided name
-  delete <bucket>    Delete bucket with the provided name
+  list                            List all buckets in the authenticated project
+  enable_requester_pays  <bucket> Enable requester pays for a bucket
+  disable_requester_pays <bucket> Disable requester pays for a bucket
+  check_requester_pays   <bucket> Check status of requester pays for a bucket
+  create                 <bucket> Create a new bucket with the provided name
+  delete                 <bucket> Delete bucket with the provided name
 
 Environment variables:
   GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
