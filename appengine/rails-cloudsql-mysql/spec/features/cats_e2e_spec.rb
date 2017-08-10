@@ -15,6 +15,15 @@ require "rails_helper"
 
 
 RSpec.feature "Cat Friends E2E" do
+
+  def wait_until times: 5, delay: 5, &condition
+    times.times do
+      return if condition.call
+      sleep delay
+    end
+    raise "Condition not met. Waited #{times} times with #{delay} sec delay"
+  end
+
   before :all do
     skip "End-to-end test skipped" unless E2E.run?
     Capybara.run_server = false
@@ -53,6 +62,11 @@ RSpec.feature "Cat Friends E2E" do
   end
 
   scenario "should display a list of cats" do
+    wait_until do
+      visit @url + root_path
+      page.contains "Cats"
+    end
+
     visit @url + new_cat_path
     fill_in "Name", with: "Ms. Paws"
     fill_in "Age", with: 2
