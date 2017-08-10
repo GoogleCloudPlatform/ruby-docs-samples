@@ -62,10 +62,10 @@ RSpec.feature "Cat Friends E2E" do
   end
 
   scenario "should display a list of cats" do
-    wait_until do
-      visit @url + root_path
-      has_text? "Cats"
-    end
+    # wait_until do
+    #   visit @url + root_path
+    #   has_text? "Cats"
+    # end
 
     visit @url + new_cat_path
     fill_in "Name", with: "Ms. Paws"
