@@ -41,7 +41,7 @@ do
 	bundle exec ruby "$repo_directory/spec/e2e_cleanup.rb" "$TEST_DIR" "$BUILD_ID"
 	
 	popd
-done < <(find * -type d -name 'spec' -path "*/*" -not -path "*vendor/*" -exec dirname {} \;)
+done < <(find * -type d -name 'spec' -path "*/rails-cloudsql*" -not -path "*vendor/*" -exec dirname {} \;)
 
 # Stop Cloud SQL Proxy
 kill $CLOUD_SQL_PROXY_PROCESS_ID
