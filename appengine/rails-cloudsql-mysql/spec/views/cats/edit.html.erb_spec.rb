@@ -12,24 +12,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START cat_routes]
-Rails.application.routes.draw do
-  resources :cats
-  get 'cats/index'
+require 'rails_helper'
 
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-  root 'cats#index'
+RSpec.describe "cats/edit", type: :view do
+  before(:each) do
+    @cat = assign(:cat, Cat.create!(
+      :name => "Mr. Whiskers",
+      :age => 4
+    ))
+  end
+
+  it "renders the edit cat form" do
+    render
+
+    assert_select "form[action=?][method=?]", cat_path(@cat), "post" do
+
+      assert_select "input#cat_name[name=?]", "cat[name]"
+
+      assert_select "input#cat_age[name=?]", "cat[age]"
+    end
+  end
 end
-# [END cat_routes]
-
-=begin
-# [START boilerplate]
-Rails.application.routes.draw do
-  resources :cats
-  get 'cats/index'
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-
-end
-# [END boilerplate]
-=end
-

@@ -12,24 +12,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START cat_routes]
-Rails.application.routes.draw do
-  resources :cats
-  get 'cats/index'
-
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-  root 'cats#index'
-end
-# [END cat_routes]
-
-=begin
-# [START boilerplate]
-Rails.application.routes.draw do
-  resources :cats
-  get 'cats/index'
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-
-end
-# [END boilerplate]
-=end
-
+json.array! @cats, partial: 'cats/cat', as: :cat

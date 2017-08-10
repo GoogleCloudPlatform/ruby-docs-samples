@@ -12,24 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START cat_routes]
-Rails.application.routes.draw do
-  resources :cats
-  get 'cats/index'
+class CreateCats < ActiveRecord::Migration[5.1]
+  def change
+    create_table :cats do |t|
+      t.string :name
+      t.integer :age
 
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-  root 'cats#index'
+      t.timestamps
+    end
+  end
 end
-# [END cat_routes]
-
-=begin
-# [START boilerplate]
-Rails.application.routes.draw do
-  resources :cats
-  get 'cats/index'
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-
-end
-# [END boilerplate]
-=end
-
