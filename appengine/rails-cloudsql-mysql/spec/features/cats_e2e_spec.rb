@@ -50,8 +50,8 @@ RSpec.feature "Cat Friends E2E" do
 
     File.write database_yml_path, database_yml
 
-    puts `gcloud sql databases delete "catfriends_production" --instance=#{sql_instance_name} -q || true`
-    puts `gcloud sql databases create "catfriends_production" --instance=#{sql_instance_name} -q`
+    puts `gcloud sql databases delete "cat_list_production" --instance=#{sql_instance_name} -q || true`
+    puts `gcloud sql databases create "cat_list_production" --instance=#{sql_instance_name} -q`
     @url = E2E.url
 
     puts `bundle exec rake appengine:exec -- bundle exec rake db:migrate`

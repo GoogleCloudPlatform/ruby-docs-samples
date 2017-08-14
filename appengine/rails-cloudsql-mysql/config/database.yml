@@ -41,6 +41,6 @@ production:
   timeout: 5000
   username: "[YOUR_MYSQL_USERNAME]"
   password: "[YOUR_MYSQL_PASSWORD]"
-  database: "catfriends_production"
+  database: "cat_list_production"
   socket:   "/cloudsql/[YOUR_INSTANCE_CONNECTION_NAME]"
 # [END production]
