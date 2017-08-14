@@ -105,7 +105,10 @@ class E2E
     end
 
     def versionize(name)
-      return name.tr('^A-Za-z0-9', '-')
+      version_name = name.tr('^A-Za-z0-9', '-')
+      name_length  = 10
+
+      version_name[-name_length, name_length] || version_name
     end
 
     def url
