@@ -12,7 +12,7 @@ for required_variable in                         \
 	CLOUD_SQL_MYSQL_USERNAME                 \
 	CLOUD_SQL_MYSQL_PASSWORD                 \
 	CLOUD_SQL_MYSQL_CONNECTION_NAME          \
-	RAILS_SECRET_KEY_BASE
+	RAILS_SECRET_KEY_BASE                    \
 ; do
 	if [[ -z "${!required_variable}" ]]; then
 		echo "Must set $required_variable"
