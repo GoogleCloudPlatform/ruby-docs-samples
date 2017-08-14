@@ -1,10 +1,18 @@
 #!/bin/bash
 
-for required_variable in                       \
-	GOOGLE_CLOUD_PROJECT                   \
-	GOOGLE_APPLICATION_CREDENTIALS         \
-	GOOGLE_CLOUD_STORAGE_BUCKET            \
-	ALTERNATE_GOOGLE_CLOUD_STORAGE_BUCKET  \
+for required_variable in                         \
+	GOOGLE_CLOUD_PROJECT                     \
+	GOOGLE_CLOUD_PROJECT_SECONDARY           \
+	GOOGLE_APPLICATION_CREDENTIALS           \
+	GOOGLE_APPLICATION_CREDENTIALS_SECONDARY \
+	GOOGLE_CLOUD_STORAGE_BUCKET              \
+	ALTERNATE_GOOGLE_CLOUD_STORAGE_BUCKET    \
+	GOOGLE_CLOUD_SPANNER_TEST_INSTANCE       \
+	GOOGLE_CLOUD_SPANNER_TEST_DATABASE       \
+	CLOUD_SQL_MYSQL_USERNAME                 \
+	CLOUD_SQL_MYSQL_PASSWORD                 \
+	CLOUD_SQL_MYSQL_CONNECTION_NAME          \
+	RAILS_SECRET_KEY_BASE
 ; do
 	if [[ -z "${!required_variable}" ]]; then
 		echo "Must set $required_variable"
@@ -41,7 +49,7 @@ do
 	bundle exec ruby "$repo_directory/spec/e2e_cleanup.rb" "$TEST_DIR" "$BUILD_ID"
 	
 	popd
-done < <(find * -type d -name 'spec' -path "*/rails-cloudsql*" -not -path "*vendor/*" -exec dirname {} \;)
+done < <(find * -type d -name 'spec' -path "*/*" -not -path "*vendor/*" -exec dirname {} \;)
 
 # Stop Cloud SQL Proxy
 kill $CLOUD_SQL_PROXY_PROCESS_ID
