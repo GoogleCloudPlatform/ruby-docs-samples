@@ -8,11 +8,34 @@ is saved using the Dataset `save` method. Then, the ten most recent
 visits are retrieved in descending order by building a Query, and
 using the Dataset `run` method.
 
-## Run
+## Run Locally
+
+1. Make sure `gcloud` is installed. 
+2. Start the Datastore emulator.
+
+```
+gcloud beta emulators datastore start
+```
+
+3. Set the environment.
+
+```
+$(gcloud beta emulators datastore env-init)
+```
+
+4. Run the sample.
+
+```
+bundle install
+bundle exec ruby app.rb -p 8080
+```
+
+5. Visit the application at [http://localhost:8080/](http://localhost:8080/)
+
+## Run Using Cloud Datastore
 
 Make sure `gcloud` is installed and authenticated. You can find your
 project id with `gcloud config list`.
-
 
 ```
 export GOOGLE_CLOUD_PROJECT=<your-project-id>
