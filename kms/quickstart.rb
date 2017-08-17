@@ -32,7 +32,7 @@ kms_client.authorization = Google::Auth.get_application_default(
   "https://www.googleapis.com/auth/cloud-platform"
 )
 
-# The resource name of the location associated with the Key rings
+# The resource name of the location associated with the key rings
 parent = "projects/#{project_id}/locations/#{location}"
 
 # Request list of key rings

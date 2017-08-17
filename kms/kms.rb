@@ -16,7 +16,7 @@
 #       method definitions in Ruby. To allow for this, code snippets in this
 #       sample are wrapped in global lambdas.
 
-$create_keyring = -> (project_id:, key_ring_id:, location:) do
+$create_key_ring = -> (project_id:, key_ring_id:, location:) do
   # [START kms_create_keyring]
   # project_id  = "Your Google Cloud project ID"
   # key_ring_id = "The ID of the new key ring"
@@ -45,7 +45,7 @@ $create_keyring = -> (project_id:, key_ring_id:, location:) do
   # [END kms_create_keyring]
 end
 
-$create_cryptokey = -> (project_id:, key_ring_id:, crypto_key:, location:) do
+$create_crypto_key = -> (project_id:, key_ring_id:, crypto_key:, location:) do
   # [START kms_create_cryptokey]
   # project_id  = "Your Google Cloud project ID"
   # key_ring_id = "The ID of the new key ring"
@@ -148,7 +148,7 @@ $decrypt = -> (project_id:, key_ring_id:, crypto_key:, location:, input_file:, o
   # [END kms_decrypt]
 end
 
-$create_cryptokey_version = -> (project_id:, key_ring_id:, crypto_key:, location:) do
+$create_crypto_key_version = -> (project_id:, key_ring_id:, crypto_key:, location:) do
   # [START kms_create_cryptokey_version]
   # project_id  = "Your Google Cloud project ID"
   # key_ring_id = "The ID of the key ring"
@@ -179,7 +179,7 @@ $create_cryptokey_version = -> (project_id:, key_ring_id:, crypto_key:, location
   # [END kms_create_cryptokey_version]
 end
 
-$set_cryptokey_primary_version = -> (project_id:, key_ring_id:, crypto_key:, version:, location:) do
+$set_crypto_key_primary_version = -> (project_id:, key_ring_id:, crypto_key:, version:, location:) do
   # [START kms_set_cryptokey_primary_version]
   # project_id  = "Your Google Cloud project ID"
   # key_ring_id = "The ID of the key ring"
@@ -211,7 +211,7 @@ $set_cryptokey_primary_version = -> (project_id:, key_ring_id:, crypto_key:, ver
   # [END kms_set_cryptokey_primary_version]
 end
 
-$enable_cryptokey_version = -> (project_id:, key_ring_id:, crypto_key:, version:, location:) do
+$enable_crypto_key_version = -> (project_id:, key_ring_id:, crypto_key:, version:, location:) do
   # [START kms_enable_cryptokey_version]
   # project_id  = "Your Google Cloud project ID"
   # key_ring_id = "The ID of the key ring"
@@ -249,7 +249,7 @@ $enable_cryptokey_version = -> (project_id:, key_ring_id:, crypto_key:, version:
   # [END kms_enable_cryptokey_version]
 end
 
-$disable_cryptokey_version = -> (project_id:, key_ring_id:, crypto_key:, version:, location:) do
+$disable_crypto_key_version = -> (project_id:, key_ring_id:, crypto_key:, version:, location:) do
   # [START kms_disable_cryptokey_version]
   # project_id  = "Your Google Cloud project ID"
   # key_ring_id = "The ID of the key ring"
@@ -287,7 +287,7 @@ $disable_cryptokey_version = -> (project_id:, key_ring_id:, crypto_key:, version
   # [END kms_disable_cryptokey_version]
 end
 
-$restore_cryptokey_version = -> (project_id:, key_ring_id:, crypto_key:, version:, location:) do
+$restore_crypto_key_version = -> (project_id:, key_ring_id:, crypto_key:, version:, location:) do
   # [START kms_restore_cryptokey_version]
   # project_id  = "Your Google Cloud project ID"
   # key_ring_id = "The ID of the key ring"
@@ -320,7 +320,7 @@ $restore_cryptokey_version = -> (project_id:, key_ring_id:, crypto_key:, version
 end
 
 
-$destroy_cryptokey_version = -> (project_id:, key_ring_id:, crypto_key:, version:, location:) do
+$destroy_crypto_key_version = -> (project_id:, key_ring_id:, crypto_key:, version:, location:) do
   # [START kms_destroy_cryptokey_version]
   # project_id  = "Your Google Cloud project ID"
   # key_ring_id = "The ID of the key ring"
@@ -352,7 +352,7 @@ $destroy_cryptokey_version = -> (project_id:, key_ring_id:, crypto_key:, version
   # [END kms_destroy_cryptokey_version]
 end
 
-$add_member_to_keyring_policy = -> (project_id:, key_ring_id:, member:, role:, location:) do
+$add_member_to_key_ring_policy = -> (project_id:, key_ring_id:, member:, role:, location:) do
   # [START kms_add_member_to_keyring_policy]
   # project_id  = "Your Google Cloud project ID"
   # key_ring_id = "The ID of the key ring"
@@ -389,7 +389,7 @@ $add_member_to_keyring_policy = -> (project_id:, key_ring_id:, member:, role:, l
   # [END kms_add_member_to_keyring_policy]
 end
 
-$add_member_to_cryptokey_policy = -> (project_id:, key_ring_id:, crypto_key:, member:, role:, location:) do
+$add_member_to_crypto_key_policy = -> (project_id:, key_ring_id:, crypto_key:, member:, role:, location:) do
   # [START kms_add_member_to_cryptokey_policy]
   # project_id  = "Your Google Cloud project ID"
   # key_ring_id = "The ID of the key ring"
@@ -427,7 +427,7 @@ $add_member_to_cryptokey_policy = -> (project_id:, key_ring_id:, crypto_key:, me
   # [END kms_add_member_to_cryptokey_policy]
 end
 
-$remove_member_from_cryptokey_policy = -> (project_id:, key_ring_id:, crypto_key:, member:, role:, location:) do
+$remove_member_from_crypto_key_policy = -> (project_id:, key_ring_id:, crypto_key:, member:, role:, location:) do
   # [START kms_remove_member_from_cryptokey_policy]
   # project_id  = "Your Google Cloud project ID"
   # key_ring_id = "The ID of the key ring"
@@ -468,7 +468,7 @@ $remove_member_from_cryptokey_policy = -> (project_id:, key_ring_id:, crypto_key
   # [END kms_remove_member_from_cryptokey_policy]
 end
 
-$get_keyring_policy = -> (project_id:, key_ring_id:, location:) do
+$get_key_ring_policy = -> (project_id:, key_ring_id:, location:) do
   # [START kms_get_keyring_policy]
   # project_id  = "Your Google Cloud project ID"
   # key_ring_id = "The ID of the key ring"
@@ -506,14 +506,14 @@ def run_sample arguments
   project_id = ENV["GOOGLE_CLOUD_PROJECT"]
 
   case command
-  when "create_keyring"
-    $create_keyring.call(
+  when "create_key_ring"
+    $create_key_ring.call(
       project_id: project_id,
       key_ring_id: arguments.shift,
       location: arguments.shift
     )
-  when "create_cryptokey"
-    $create_cryptokey.call(
+  when "create_crypto_key"
+    $create_crypto_key.call(
       project_id: project_id,
       key_ring_id: arguments.shift,
       crypto_key: arguments.shift,
@@ -537,72 +537,63 @@ def run_sample arguments
       input_file: arguments.shift,
       output_file: arguments.shift
     )
-  when "create_cryptokey_version"
-    $create_cryptokey_version.call(
+  when "create_crypto_key_version"
+    $create_crypto_key_version.call(
       project_id: project_id,
       key_ring_id: arguments.shift,
       crypto_key: arguments.shift,
       location: arguments.shift
     )
-  when "set_cryptokey_primary_version"
-    $set_cryptokey_primary_version.call(
-      project_id: project_id,
-      key_ring_id: arguments.shift,
-      crypto_key: arguments.shift,
-      version: arguments.shift,
-      location: arguments.shift
-    )
-  when "enable_cryptokey_version"
-    $enable_cryptokey_version.call(
+  when "set_crypto_key_primary_version"
+    $set_crypto_key_primary_version.call(
       project_id: project_id,
       key_ring_id: arguments.shift,
       crypto_key: arguments.shift,
       version: arguments.shift,
       location: arguments.shift
     )
-  when "disable_cryptokey_version"
-    $disable_cryptokey_version.call(
+  when "enable_crypto_key_version"
+    $enable_crypto_key_version.call(
       project_id: project_id,
       key_ring_id: arguments.shift,
       crypto_key: arguments.shift,
       version: arguments.shift,
       location: arguments.shift
     )
-  when "restore_cryptokey_version"
-    $restore_cryptokey_version.call(
+  when "disable_crypto_key_version"
+    $disable_crypto_key_version.call(
       project_id: project_id,
       key_ring_id: arguments.shift,
       crypto_key: arguments.shift,
       version: arguments.shift,
       location: arguments.shift
     )
-  when "destroy_cryptokey_version"
-    $destroy_cryptokey_version.call(
+  when "restore_crypto_key_version"
+    $restore_crypto_key_version.call(
       project_id: project_id,
       key_ring_id: arguments.shift,
       crypto_key: arguments.shift,
       version: arguments.shift,
       location: arguments.shift
     )
-  when "add_member_to_keyring_policy"
-    $add_member_to_keyring_policy.call(
+  when "destroy_crypto_key_version"
+    $destroy_crypto_key_version.call(
+      project_id: project_id,
+      key_ring_id: arguments.shift,
+      crypto_key: arguments.shift,
+      version: arguments.shift,
+      location: arguments.shift
+    )
+  when "add_member_to_key_ring_policy"
+    $add_member_to_key_ring_policy.call(
       project_id: project_id,
       key_ring_id: arguments.shift,
       member: arguments.shift,
       role: arguments.shift,
       location: arguments.shift
     )
-  when "add_member_to_cryptokey_policy"
-    $add_member_to_cryptokey_policy.call(
-      project_id: project_id,
-      key_ring_id: arguments.shift,
-      crypto_key: arguments.shift,
-      member: arguments.shift,
-      role: arguments.shift,
-      location: arguments.shift
-    )
-  when "remove_member_from_cryptokey_policy"
-    $remove_member_from_cryptokey_policy.call(
+  when "add_member_to_crypto_key_policy"
+    $add_member_to_crypto_key_policy.call(
       project_id: project_id,
       key_ring_id: arguments.shift,
       crypto_key: arguments.shift,
@@ -610,8 +601,17 @@ def run_sample arguments
       role: arguments.shift,
       location: arguments.shift
     )
-  when "get_keyring_policy"
-    $get_keyring_policy.call(
+  when "remove_member_from_crypto_key_policy"
+    $remove_member_from_crypto_key_policy.call(
+      project_id: project_id,
+      key_ring_id: arguments.shift,
+      crypto_key: arguments.shift,
+      member: arguments.shift,
+      role: arguments.shift,
+      location: arguments.shift
+    )
+  when "get_key_ring_policy"
+    $get_key_ring_policy.call(
       project_id: project_id,
       key_ring_id: arguments.shift,
       location: arguments.shift
@@ -621,20 +621,20 @@ def run_sample arguments
 Usage: bundle exec ruby kms.rb [command] [arguments]
 
 Commands:
-  create_keyring                      <key_ring> <location> Create a new keyring
-  create_cryptokey                    <key_ring> <crypto_key> <location> Create a new cryptokey
-  encrypt_file                        <key_ring> <crypto_key> <location> <input_file> <output_file> Encrypt a file
-  decrypt_file                        <key_ring> <crypto_key> <location> <input_file> <output_file> Decrypt a file
-  create_cryptokey_version            <key_ring> <crypto_key> <location> Create a new cryptokey version
-  set_cryptokey_primary_version       <key_ring> <crypto_key> <verison> <location> Set a primary cryptokey version
-  enable_cryptokey_version            <key_ring> <crypto_key> <version> <location> Enable a cryptokey version
-  disable_cryptokey_version           <key_ring> <crypto_key> <version> <location> Disable a cryptokey version
-  restore_cryptokey_version           <key_ring> <crypto_key> <version> <location> Restore a cryptokey version
-  destroy_cryptokey_version           <key_ring> <crypto_key> <version> <location> Destroy a cryptokey version
-  add_member_to_keyring_policy        <key_ring> <member> <role> <location> Add member to keyring IAM policy
-  add_member_to_cryptokey_policy      <key_ring> <crypto_key> <member> <role> <location> Add member to cryptokey IAM policy
-  remove_member_from_cryptokey_policy <key_ring> <crypto_key> <member> <role> <location> Remove member from cryptokey IAM policy
-  get_keyring_policy                  <key_ring> <location> Get a keyring IAM policy
+  create_key_ring                      <key_ring> <location> Create a new key ring
+  create_crypto_key                    <key_ring> <crypto_key> <location> Create a new crypto key
+  encrypt_file                         <key_ring> <crypto_key> <location> <input_file> <output_file> Encrypt a file
+  decrypt_file                         <key_ring> <crypto_key> <location> <input_file> <output_file> Decrypt a file
+  create_crypto_key_version            <key_ring> <crypto_key> <location> Create a new crypto key version
+  set_crypto_key_primary_version       <key_ring> <crypto_key> <verison> <location> Set a primary crypto key version
+  enable_crypto_key_version            <key_ring> <crypto_key> <version> <location> Enable a crypto key version
+  disable_crypto_key_version           <key_ring> <crypto_key> <version> <location> Disable a crypto key version
+  restore_crypto_key_version           <key_ring> <crypto_key> <version> <location> Restore a crypto key version
+  destroy_crypto_key_version           <key_ring> <crypto_key> <version> <location> Destroy a crypto key version
+  add_member_to_key_ring_policy        <key_ring> <member> <role> <location> Add member to key ring IAM policy
+  add_member_to_crypto_key_policy      <key_ring> <crypto_key> <member> <role> <location> Add member to crypto key IAM policy
+  remove_member_from_crypto_key_policy <key_ring> <crypto_key> <member> <role> <location> Remove member from crypto key IAM policy
+  get_key_ring_policy                  <key_ring> <location> Get a key ring IAM policy
 
 Environment variables:
   GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
