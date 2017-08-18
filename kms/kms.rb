@@ -76,14 +76,14 @@ $create_crypto_key = -> (project_id:, location_id:, key_ring_id:, crypto_key_id:
   # [END kms_create_cryptokey]
 end
 
-$encrypt = -> (project_id:, location_id:, key_ring_id:, crypto_key_id:, input_file:, output_file:) do
+$encrypt = -> (project_id:, location_id:, key_ring_id:, crypto_key_id:, plaintext_file:, ciphertext_file:) do
   # [START kms_encrypt]
-  # project_id    = "Your Google Cloud project ID"
-  # location_id   = "The location of the key ring"
-  # key_ring_id   = "The ID of the key ring"
-  # crypto_key_id = "The ID of the crypto key"
-  # input_file    = "File to encrypt"
-  # output_file   = "File name to use for encrypted input file"
+  # project_id      = "Your Google Cloud project ID"
+  # location_id     = "The location of the key ring"
+  # key_ring_id     = "The ID of the key ring"
+  # crypto_key_id   = "The ID of the crypto key"
+  # plaintext_file  = "File to encrypt"
+  # ciphertext_file = "File to store encrypted input data"
 
   require "google/apis/cloudkms_v1"
 
@@ -98,28 +98,29 @@ $encrypt = -> (project_id:, location_id:, key_ring_id:, crypto_key_id:, input_fi
   resource = "projects/#{project_id}/locations/#{location_id}/" +
              "keyRings/#{key_ring_id}/cryptoKeys/#{crypto_key_id}"
 
-  # Use the KMS API to encrypt the text
-  plain_text = File.read input_file
+  # Read the secret data from the file
+  plaintext = File.read plaintext_file
 
-  request = Cloudkms::EncryptRequest.new plaintext: plain_text
+  request = Cloudkms::EncryptRequest.new plaintext: plaintext
 
+  # Use the KMS API to encrypt the data
   response = kms_client.encrypt_crypto_key resource, request
 
-  # Write the encrypted text to a file
-  File.write output_file, response.ciphertext
+  # Write the encrypted text to the output file
+  File.write ciphertext_file, response.ciphertext
 
-  puts "Saved encrypted #{input_file} as #{output_file}"
+  puts "Saved encrypted #{plaintext_file} as #{ciphertext_file}"
   # [END kms_encrypt]
 end
 
-$decrypt = -> (project_id:, location_id:, key_ring_id:, crypto_key_id:, input_file:, output_file:) do
+$decrypt = -> (project_id:, location_id:, key_ring_id:, crypto_key_id:, ciphertext_file:, plaintext_file:) do
   # [START kms_decrypt]
   # project_id    = "Your Google Cloud project ID"
   # location_id   = "The location of the key ring"
   # key_ring_id   = "The ID of the key ring"
   # crypto_key_id = "The ID of the crypto key"
-  # input_file    = "The path to an encrypted file"
-  # output_file   = "The path to write the decrypted file"
+  # ciphertext_file = "File to decrypt"
+  # plaintext_file  = "File to store decrypted data"
 
   require "google/apis/cloudkms_v1"
 
@@ -134,17 +135,18 @@ $decrypt = -> (project_id:, location_id:, key_ring_id:, crypto_key_id:, input_fi
   resource = "projects/#{project_id}/locations/#{location_id}/" +
              "keyRings/#{key_ring_id}/cryptoKeys/#{crypto_key_id}"
 
-  # Use the KMS API to decrypt the text
-  encrypted_text = File.read input_file
+  # Read the encrypted data from the file
+  ciphertext = File.read ciphertext_file
 
-  request = Cloudkms::DecryptRequest.new ciphertext: encrypted_text
+  request = Cloudkms::DecryptRequest.new ciphertext: ciphertext
 
+  # Use the KMS API to decrypt the data
   response = kms_client.decrypt_crypto_key resource, request
 
-  # Write the decrypted text to a file
-  File.write output_file, response.plaintext
+  # Write the decrypted text to the output file
+  File.write plaintext_file, response.plaintext
 
-  puts "Saved decrypted #{input_file} as #{output_file}"
+  puts "Saved decrypted #{ciphertext_file} as #{plaintext_file}"
   # [END kms_decrypt]
 end
 
