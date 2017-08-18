@@ -239,38 +239,38 @@ describe "Key Management Service" do
     kms_client.set_key_ring_iam_policy resource, policy_request
   end
 
-  def encrypt_test_file project_id:, location_id:, key_ring_id:, crypto_key_id:, input_file:, output_file:
+  def encrypt_test_file project_id:, location_id:, key_ring_id:, crypto_key_id:, plaintext_file:, ciphertext_file:
     kms_client = create_service_client
 
     name = "projects/#{project_id}/locations/#{location_id}/" +
            "keyRings/#{key_ring_id}/cryptoKeys/#{crypto_key_id}"
 
-    plain_text = File.read input_file
+    plaintext = File.read plaintext_file
 
     request = Google::Apis::CloudkmsV1::EncryptRequest.new(
-      plaintext: plain_text
+      plaintext: plaintext
     )
 
     response = kms_client.encrypt_crypto_key name, request
 
-    File.write output_file, response.ciphertext
+    File.write ciphertext_file, response.ciphertext
   end
 
-  def decrypt_test_file project_id:, location_id:, key_ring_id:, crypto_key_id:, input_file:, output_file:
+  def decrypt_test_file project_id:, location_id:, key_ring_id:, crypto_key_id:, ciphertext_file:, plaintext_file:
     kms_client = create_service_client
 
     name = "projects/#{project_id}/locations/#{location_id}/" +
            "keyRings/#{key_ring_id}/cryptoKeys/#{crypto_key_id}"
 
-    encrypted_text = File.read input_file
+    ciphertext = File.read ciphertext_file
 
     request = Google::Apis::CloudkmsV1::DecryptRequest.new(
-      ciphertext: encrypted_text
+      ciphertext: ciphertext
     )
 
     response = kms_client.decrypt_crypto_key name, request
 
-    File.write output_file, response.plaintext
+    File.write plaintext_file, response.plaintext
   end
 
   before :all do
@@ -286,7 +286,7 @@ describe "Key Management Service" do
         location_id: @location_id, key_ring_id: @key_ring_id,
         crypto_key_id: @crypto_key_id
 
-    @input_file = File.expand_path "resources/file.txt", __dir__
+    @plaintext_file = File.expand_path "resources/file.txt", __dir__
 
     # Note: All samples define a `Cloudkms` constant and cause
     #       "already initialized constant" warnings. $VERBOSE is disabled to
@@ -345,23 +345,23 @@ describe "Key Management Service" do
         location_id: @location_id,
         key_ring_id: @key_ring_id,
         crypto_key_id: @crypto_key_id,
-        input_file: @input_file,
-        output_file: temp_output.path
+        plaintext_file: @plaintext_file,
+        ciphertext_file: temp_output.path
       )
-    }.to output(/#{@input_file}/).to_stdout
+    }.to output(/#{@plaintext_file}/).to_stdout
 
     decrypt_test_file(
       project_id: @project_id,
       location_id: @location_id,
       key_ring_id: @key_ring_id,
       crypto_key_id: @crypto_key_id,
-      input_file: temp_output.path,
-      output_file: temp_output.path
+      ciphertext_file: temp_output.path,
+      plaintext_file: temp_output.path
     )
 
-    decrypted_file = File.read temp_output.path
+    plaintext = File.read temp_output.path
 
-    expect(decrypted_file).to match /Some information/
+    expect(plaintext).to match /Some information/
   end
 
   it "can decrypt an encrypted file" do
@@ -372,8 +372,8 @@ describe "Key Management Service" do
       location_id: @location_id,
       key_ring_id: @key_ring_id,
       crypto_key_id: @crypto_key_id,
-      input_file: @input_file,
-      output_file: temp_output.path
+      plaintext_file: @plaintext_file,
+      ciphertext_file: temp_output.path
     )
 
     expect {
@@ -382,14 +382,14 @@ describe "Key Management Service" do
         location_id: @location_id,
         key_ring_id: @key_ring_id,
         crypto_key_id: @crypto_key_id,
-        input_file: temp_output.path,
-        output_file: temp_output.path
+        ciphertext_file: temp_output.path,
+        plaintext_file: temp_output.path
       )
     }.to output(/#{temp_output.path}/).to_stdout
 
-    decrypted_file = File.read temp_output.path
+    plaintext = File.read temp_output.path
 
-    expect(decrypted_file).to match /Some information/
+    expect(plaintext).to match /Some information/
   end
 
   it "can create a crypto key version" do
