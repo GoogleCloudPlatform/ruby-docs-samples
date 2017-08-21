@@ -12,10 +12,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START catfriends_controller]
-class CatFriendsController < ApplicationController
-  def index
-    @cats = Cat.all
-  end
-end
-# [END catfriends_controller]
+json.partial! "cats/cat", cat: @cat

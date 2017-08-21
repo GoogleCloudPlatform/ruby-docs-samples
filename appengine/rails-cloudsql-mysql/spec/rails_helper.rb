@@ -6,20 +6,14 @@ abort("The Rails environment is running in production mode!") if Rails.env.produ
 require "spec_helper"
 require "rspec/rails"
 require "capybara/rspec"
+require "capybara/poltergeist"
+
 require File.expand_path "../../../../spec/e2e", __FILE__
-
-# Apply configuration to database.yml for tests
-database_yml  = File.expand_path("../../config/database.yml", __FILE__)
-configuration = File.read(database_yml)
-
-configuration.gsub! "[YOUR_MYSQL_USERNAME]",           ENV["CLOUD_SQL_MYSQL_USERNAME"]
-configuration.gsub! "[YOUR_MYSQL_PASSWORD]",           ENV["CLOUD_SQL_MYSQL_PASSWORD"]
-configuration.gsub! "[YOUR_INSTANCE_CONNECTION_NAME]", ENV["CLOUD_SQL_MYSQL_CONNECTION_NAME"]
-
-File.write database_yml, configuration
 
 # Checks for pending migration and applies them before tests are run.
 ActiveRecord::Migration.maintain_test_schema!
+
+Capybara.current_driver = :poltergeist
 
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures

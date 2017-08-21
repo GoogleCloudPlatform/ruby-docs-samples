@@ -16,8 +16,8 @@ dependencies:
 # Test
 test:
   override:
-    # Ruby 2.2.5
-    - rvm-exec 2.2.5 ./spec/run-all.sh
-    # Ruby 2.3.1
-    - rvm-exec 2.3.1 ./spec/run-all.sh
+    # Ruby 2.3.4
+    - rvm-exec 2.3.4 ./spec/run-all.sh
+    # Ruby 2.4.1
+    - rvm-exec 2.4.1 ./spec/run-all.sh
 

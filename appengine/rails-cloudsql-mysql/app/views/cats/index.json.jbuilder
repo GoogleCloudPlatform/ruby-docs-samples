@@ -12,7 +12,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-class Cat < ApplicationRecord
-  validates :name, presence: true
-  validates :age,  presence: true, numericality: { only_integer: true }
-end
+json.array! @cats, partial: 'cats/cat', as: :cat
