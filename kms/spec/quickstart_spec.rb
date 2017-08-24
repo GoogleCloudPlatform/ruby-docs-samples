@@ -50,8 +50,8 @@ describe "Key Management Service Quickstart" do
     test_parent      = "projects/#{test_project_id}/locations/global"
     test_key_rings   = list_test_key_rings(test_parent).key_rings
 
-    created = test_key_rings.any? do
-      |key_ring| key_ring.name.end_with?(test_key_ring_id)
+    created = test_key_rings.any? do |key_ring|
+      key_ring.name.end_with?(test_key_ring_id)
     end
     if !created
       test_key_ring = create_test_key_ring test_parent, test_key_ring_id
