@@ -510,113 +510,113 @@ def run_sample arguments
   case command
   when "create_key_ring"
     $create_key_ring.call(
-      project_id: project_id,
-      location_id: arguments.shift,
-      key_ring_id: arguments.shift
+      project_id:    project_id,
+      location_id:   arguments.shift,
+      key_ring_id:   arguments.shift
     )
   when "create_crypto_key"
     $create_crypto_key.call(
-      project_id: project_id,
-      location_id: arguments.shift,
-      key_ring_id: arguments.shift,
+      project_id:    project_id,
+      location_id:   arguments.shift,
+      key_ring_id:   arguments.shift,
       crypto_key_id: arguments.shift
     )
   when "encrypt_file"
     $encrypt.call(
-      project_id: project_id,
-      location_id: arguments.shift,
-      key_ring_id: arguments.shift,
+      project_id:    project_id,
+      location_id:   arguments.shift,
+      key_ring_id:   arguments.shift,
       crypto_key_id: arguments.shift,
-      input_file: arguments.shift,
-      output_file: arguments.shift
+      input_file:    arguments.shift,
+      output_file:   arguments.shift
     )
   when "decrypt_file"
     $decrypt.call(
-      project_id: project_id,
-      location_id: arguments.shift,
-      key_ring_id: arguments.shift,
+      project_id:    project_id,
+      location_id:   arguments.shift,
+      key_ring_id:   arguments.shift,
       crypto_key_id: arguments.shift,
-      input_file: arguments.shift,
-      output_file: arguments.shift
+      input_file:    arguments.shift,
+      output_file:   arguments.shift
     )
   when "create_crypto_key_version"
     $create_crypto_key_version.call(
-      project_id: project_id,
-      location_id: arguments.shift,
-      key_ring_id: arguments.shift,
+      project_id:    project_id,
+      location_id:   arguments.shift,
+      key_ring_id:   arguments.shift,
       crypto_key_id: arguments.shift
     )
   when "set_crypto_key_primary_version"
     $set_crypto_key_primary_version.call(
-      project_id: project_id,
-      location_id: arguments.shift,
-      key_ring_id: arguments.shift,
+      project_id:    project_id,
+      location_id:   arguments.shift,
+      key_ring_id:   arguments.shift,
       crypto_key_id: arguments.shift,
-      version_id: arguments.shift
+      version_id:    arguments.shift
     )
   when "enable_crypto_key_version"
     $enable_crypto_key_version.call(
-      project_id: project_id,
-      location_id: arguments.shift,
-      key_ring_id: arguments.shift,
+      project_id:    project_id,
+      location_id:   arguments.shift,
+      key_ring_id:   arguments.shift,
       crypto_key_id: arguments.shift,
-      version_id: arguments.shift
+      version_id:    arguments.shift
     )
   when "disable_crypto_key_version"
     $disable_crypto_key_version.call(
-      project_id: project_id,
-      location_id: arguments.shift,
-      key_ring_id: arguments.shift,
+      project_id:    project_id,
+      location_id:   arguments.shift,
+      key_ring_id:   arguments.shift,
       crypto_key_id: arguments.shift,
-      version_id: arguments.shift
+      version_id:    arguments.shift
     )
   when "restore_crypto_key_version"
     $restore_crypto_key_version.call(
-      project_id: project_id,
-      key_ring_id: arguments.shift,
+      project_id:    project_id,
+      key_ring_id:   arguments.shift,
       crypto_key_id: arguments.shift,
-      version_id: arguments.shift,
-      location_id: arguments.shift,
+      version_id:    arguments.shift,
+      location_id:   arguments.shift,
     )
   when "destroy_crypto_key_version"
     $destroy_crypto_key_version.call(
-      project_id: project_id,
-      location_id: arguments.shift,
-      key_ring_id: arguments.shift,
+      project_id:    project_id,
+      location_id:   arguments.shift,
+      key_ring_id:   arguments.shift,
       crypto_key_id: arguments.shift,
-      version_id: arguments.shift
+      version_id:    arguments.shift
     )
   when "add_member_to_key_ring_policy"
     $add_member_to_key_ring_policy.call(
-      project_id: project_id,
-      location_id: arguments.shift,
-      key_ring_id: arguments.shift,
-      member: arguments.shift,
-      role: arguments.shift
+      project_id:    project_id,
+      location_id:   arguments.shift,
+      key_ring_id:   arguments.shift,
+      member:        arguments.shift,
+      role:          arguments.shift
     )
   when "add_member_to_crypto_key_policy"
     $add_member_to_crypto_key_policy.call(
-      project_id: project_id,
-      location_id: arguments.shift,
-      key_ring_id: arguments.shift,
+      project_id:    project_id,
+      location_id:   arguments.shift,
+      key_ring_id:   arguments.shift,
       crypto_key_id: arguments.shift,
-      member: arguments.shift,
-      role: arguments.shift
+      member:        arguments.shift,
+      role:          arguments.shift
     )
   when "remove_member_from_crypto_key_policy"
     $remove_member_from_crypto_key_policy.call(
-      project_id: project_id,
-      location_id: arguments.shift,
-      key_ring_id: arguments.shift,
+      project_id:    project_id,
+      location_id:   arguments.shift,
+      key_ring_id:   arguments.shift,
       crypto_key_id: arguments.shift,
-      member: arguments.shift,
-      role: arguments.shift
+      member:        arguments.shift,
+      role:          arguments.shift
     )
   when "get_key_ring_policy"
     $get_key_ring_policy.call(
-      project_id: project_id,
-      location_id: arguments.shift,
-      key_ring_id: arguments.shift
+      project_id:    project_id,
+      location_id:   arguments.shift,
+      key_ring_id:   arguments.shift
     )
   else
     puts <<-usage
