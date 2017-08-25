@@ -20,7 +20,7 @@ require "google/apis/cloudkms_v1"
 project_id = "YOUR_PROJECT_ID"
 
 # Lists keys in the "global" location.
-location = "global"
+location_id = "global"
 
 # Instantiate the client
 Cloudkms   = Google::Apis::CloudkmsV1 # Alias the module
@@ -32,8 +32,8 @@ kms_client.authorization = Google::Auth.get_application_default(
   "https://www.googleapis.com/auth/cloud-platform"
 )
 
-# The resource name of the location associated with the Key rings
-parent = "projects/#{project_id}/locations/#{location}"
+# The resource name of the location associated with the key rings
+parent = "projects/#{project_id}/locations/#{location_id}"
 
 # Request list of key rings
 response = kms_client.list_project_location_key_rings parent
