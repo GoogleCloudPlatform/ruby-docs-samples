@@ -40,8 +40,8 @@ production:
   encoding: postgresql
   pool: 5
   timeout: 5000
-  username: "[YOUR_MYSQL_USERNAME]"
-  password: "[YOUR_MYSQL_PASSWORD]"
+  username: "[YOUR_POSTGRES_USERNAME]"
+  password: "[YOUR_POSTGRES_PASSWORD]"
   database: "cat_list_production"
   host:   "/cloudsql/[YOUR_INSTANCE_CONNECTION_NAME]"
 # [END production]

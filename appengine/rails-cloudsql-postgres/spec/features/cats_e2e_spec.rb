@@ -20,12 +20,12 @@ RSpec.feature "Cat Friends E2E" do
     skip "End-to-end test skipped" unless E2E.run?
     Capybara.run_server = false
 
-    sql_connection_name = ENV["CLOUD_SQL_MYSQL_CONNECTION_NAME"]
+    sql_connection_name = ENV["CLOUD_SQL_POSTGRES_CONNECTION_NAME"]
     sql_instance_name   = sql_connection_name.split(":").last
 
     # Apply configuration to app.yaml for tests
     app_yaml_path = File.expand_path "../../../app.yaml", __FILE__
-    app_yaml = File.read app_yaml_path
+    app_yaml      = File.read app_yaml_path
 
     app_yaml.sub! "[SECRET_KEY]",                    ENV["RAILS_SECRET_KEY_BASE"]
     app_yaml.sub! "[YOUR_INSTANCE_CONNECTION_NAME]", sql_connection_name
@@ -34,16 +34,17 @@ RSpec.feature "Cat Friends E2E" do
 
     # Apply configuration to database.yml for tests
     database_yml_path  = File.expand_path "../../../config/database.yml", __FILE__
-    database_yml = File.read database_yml_path
+    database_yml       = File.read database_yml_path
 
-    database_yml.gsub! "[YOUR_MYSQL_USERNAME]",           ENV["CLOUD_SQL_MYSQL_USERNAME"]
-    database_yml.gsub! "[YOUR_MYSQL_PASSWORD]",           ENV["CLOUD_SQL_MYSQL_PASSWORD"]
+    database_yml.gsub! "[YOUR_POSTGRES_USERNAME]",        ENV["CLOUD_SQL_POSTGRES_USERNAME"]
+    database_yml.gsub! "[YOUR_POSTGRES_PASSWORD]",        ENV["CLOUD_SQL_POSTGRES_PASSWORD"]
     database_yml.gsub! "[YOUR_INSTANCE_CONNECTION_NAME]", sql_connection_name
 
     File.write database_yml_path, database_yml
 
     puts `gcloud sql databases delete "cat_list_production" --instance=#{sql_instance_name} -q || true`
     puts `gcloud sql databases create "cat_list_production" --instance=#{sql_instance_name} -q`
+
     @url = E2E.url
 
     puts `bundle exec rake appengine:exec -- bundle exec rake db:migrate`
