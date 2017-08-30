@@ -90,6 +90,68 @@ def create_bucket project_id:, bucket_name:
   # [END create_bucket]
 end
 
+def get_bucket_labels project_id:, bucket_name:
+  # [START get_bucket_labels]
+  # project_id  = "Your Google Cloud project ID"
+  # bucket_name = "Name of your Google Cloud Storage bucket"
+
+  require "google/cloud/storage"
+
+  storage = Google::Cloud::Storage.new project: project_id
+  bucket  = storage.bucket bucket_name
+
+  puts "Updated labels for #{bucket_name}"
+  bucket.labels.each do |key, value|
+    puts "#{key} = #{value}"
+  end
+  # [END get_bucket_labels]
+end
+
+def add_bucket_label project_id:, bucket_name:, label_key:, label_value:
+  # [START add_bucket_label]
+  # project_id  = "Your Google Cloud project ID"
+  # bucket_name = "Name of your Google Cloud Storage bucket"
+  # label_key   = "Cloud Storage bucket Label Key"
+  # label_value = "Cloud Storage bucket Label Value"
+
+  require "google/cloud/storage"
+
+  storage = Google::Cloud::Storage.new project: project_id
+  bucket  = storage.bucket bucket_name
+
+  bucket.update do |bucket|
+    bucket.labels[label_key] = label_value
+  end
+
+  puts "Updated labels for #{bucket_name}"
+  bucket.labels.each do |key, value|
+    puts "#{key} = #{value}"
+  end
+  # [END add_bucket_label]
+end
+
+def remove_bucket_label project_id:, bucket_name:, label_key:
+  # [START remove_bucket_label]
+  # project_id  = "Your Google Cloud project ID"
+  # bucket_name = "Name of your Google Cloud Storage bucket"
+  # label_key   = "Cloud Storage bucket Label Key"
+
+  require "google/cloud/storage"
+
+  storage = Google::Cloud::Storage.new project: project_id
+  bucket  = storage.bucket bucket_name
+
+  bucket.update do |bucket|
+    bucket.labels[label_key] = nil
+  end
+
+  puts "Updated labels for #{bucket_name}"
+  bucket.labels.each do |key, value|
+    puts "#{key} = #{value}"
+  end
+  # [END remove_bucket_label]
+end
+
 def delete_bucket project_id:, bucket_name:
   # [START delete_bucket]
   # project_id  = "Your Google Cloud project ID"
@@ -116,17 +178,29 @@ if __FILE__ == $0
   when "delete"
     delete_bucket project_id:  ENV["GOOGLE_CLOUD_PROJECT"],
                   bucket_name: ARGV.shift
+  when "enable_requester_pays"
+    enable_requester_pays project_id:  ENV["GOOGLE_CLOUD_PROJECT"],
+                          bucket_name: ARGV.shift
+  when "disable_requester_pays"
+    disable_requester_pays project_id:  ENV["GOOGLE_CLOUD_PROJECT"],
+                           bucket_name: ARGV.shift
+  when "check_requester_pays"
+    check_requester_pays project_id:  ENV["GOOGLE_CLOUD_PROJECT"],
+                         bucket_name: ARGV.shift
   else
     puts <<-usage
 Usage: bundle exec ruby buckets.rb [command] [arguments]
 
 Commands:
-  list                            List all buckets in the authenticated project
-  enable_requester_pays  <bucket> Enable requester pays for a bucket
-  disable_requester_pays <bucket> Disable requester pays for a bucket
-  check_requester_pays   <bucket> Check status of requester pays for a bucket
-  create                 <bucket> Create a new bucket with the provided name
-  delete                 <bucket> Delete bucket with the provided name
+  list                                                      List all buckets in the authenticated project
+  enable_requester_pays  <bucket>                           Enable requester pays for a bucket
+  disable_requester_pays <bucket>                           Disable requester pays for a bucket
+  check_requester_pays   <bucket>                           Check status of requester pays for a bucket
+  create                 <bucket>                           Create a new bucket with the provided name
+  get_bucket_labels      <bucket>                           Get bucket labels
+  add_bucket_label       <bucket> <label_key> <label_value> Add bucket label
+  remove_bucket_label    <bucket> <label_key>               Remove bucket label
+  delete                 <bucket>                           Delete bucket with the provided name
 
 Environment variables:
   GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
