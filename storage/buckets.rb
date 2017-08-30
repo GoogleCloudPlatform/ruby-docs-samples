@@ -90,25 +90,23 @@ def create_bucket project_id:, bucket_name:
   # [END create_bucket]
 end
 
-def create_bucket_class_location project_id:, bucket_name:, location:, storage_class:
+def create_bucket_class_location project_id:, bucket_name:
   # [START create_bucket_class_location]
   # project_id    = "Your Google Cloud project ID"
   # bucket_name   = "Name of Google Cloud Storage bucket to create"
-  # location      = "Location of your Google Cloud Storage bucket"
-  # storage_class = "Storage class of your Google Cloud Storage bucket"
 
   require "google/cloud/storage"
 
   storage = Google::Cloud::Storage.new project: project_id
   bucket  = storage.create_bucket bucket_name,
-                                  location:      location,
-                                  storage_class: storage_class
+                                  location:      "ASIA",
+                                  storage_class: "COLDLINE"
 
-  puts "Created bucket #{bucket.name} in #{location} with storage class #{storage_class}"
+  puts "Created bucket #{bucket.name}"
   # [END create_bucket_class_location]
 end
 
-def get_bucket_labels project_id:, bucket_name:
+def list_bucket_labels project_id:, bucket_name:
   # [START get_bucket_labels]
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Name of your Google Cloud Storage bucket"
@@ -141,14 +139,11 @@ def add_bucket_label project_id:, bucket_name:, label_key:, label_value:
     bucket.labels[label_key] = label_value
   end
 
-  puts "Updated labels for #{bucket_name}"
-  bucket.labels.each do |key, value|
-    puts "#{key} = #{value}"
-  end
+  puts "Added label to #{bucket_name}"
   # [END add_bucket_label]
 end
 
-def remove_bucket_label project_id:, bucket_name:, label_key:
+def delete_bucket_label project_id:, bucket_name:, label_key:
   # [START remove_bucket_label]
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Name of your Google Cloud Storage bucket"
@@ -163,10 +158,7 @@ def remove_bucket_label project_id:, bucket_name:, label_key:
     bucket.labels[label_key] = nil
   end
 
-  puts "Updated labels for #{bucket_name}"
-  bucket.labels.each do |key, value|
-    puts "#{key} = #{value}"
-  end
+  puts "Deleted label from #{bucket_name}"
   # [END remove_bucket_label]
 end
 
@@ -205,26 +197,33 @@ if __FILE__ == $0
   when "check_requester_pays"
     check_requester_pays project_id:  ENV["GOOGLE_CLOUD_PROJECT"],
                          bucket_name: ARGV.shift
+  when "list_bucket_labels"
+    list_bucket_labels project_id: ENV["GOOGLE_CLOUD_PROJECT"]
+  when "add_bucket_label"
+    add_bucket_label project_id:  ENV["GOOGLE_CLOUD_PROJECT"],
+                     label_key:   ARGV.shift,
+                     label_value: ARGV.shift
+  when "delete_bucket_label"
+    delete_bucket_label project_id: ENV["GOOGLE_CLOUD_PROJECT"],
+                        label_key:  ARGV.shift
   when "create_with"
     create_bucket_class_location project_id:    ENV["GOOGLE_CLOUD_PROJECT"],
-                                 bucket_name:   ARGV.shift,
-                                 location:      ARGV.shift,
-                                 storage_class: ARGV.shift
+                                 bucket_name:   ARGV.shift
   else
     puts <<-usage
 Usage: bundle exec ruby buckets.rb [command] [arguments]
 
 Commands:
-  list                                                       List all buckets in the authenticated project
-  enable_requester_pays  <bucket>                            Enable requester pays for a bucket
-  disable_requester_pays <bucket>                            Disable requester pays for a bucket
-  check_requester_pays   <bucket>                            Check status of requester pays for a bucket
-  create                 <bucket>                            Create a new bucket with the provided name
-  create_with            <bucket> <location> <storage_class> Create a new bucket with specific storage class and location
-  get_bucket_labels      <bucket>                            Get bucket labels
-  add_bucket_label       <bucket> <label_key> <label_value>  Add bucket label
-  remove_bucket_label    <bucket> <label_key>                Remove bucket label
-  delete                 <bucket>                            Delete bucket with the provided name
+  list                                                              List all buckets in the authenticated project
+  enable_requester_pays         <bucket>                            Enable requester pays for a bucket
+  disable_requester_pays        <bucket>                            Disable requester pays for a bucket
+  check_requester_pays          <bucket>                            Check status of requester pays for a bucket
+  create                        <bucket>                            Create a new bucket with the provided name
+  create_location_storage_class <bucket>                            Create a new bucket with specific storage class and location
+  list_bucket_labels            <bucket>                            List bucket labels
+  add_bucket_label              <bucket> <label_key> <label_value>  Add bucket label
+  delete_bucket_label           <bucket> <label_key>                Delete bucket label
+  delete                        <bucket>                            Delete bucket with the provided name
 
 Environment variables:
   GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID

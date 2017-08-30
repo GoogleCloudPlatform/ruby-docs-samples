@@ -117,16 +117,14 @@ describe "Google Cloud Storage buckets sample" do
 
     expect(@storage.bucket @bucket_name).to be nil
 
-    location      = "US"
-    storage_class = "NEARLINE"
+    location      = "ASIA"
+    storage_class = "COLDLINE"
 
     expect {
       create_bucket_class_location project_id:  @project_id,
-                                   bucket_name: @bucket_name,
-                                   location:    location,
-                                   storage_class: storage_class
+                                   bucket_name: @bucket_name
     }.to output(
-      "Created bucket #{@bucket_name} in #{location} with storage class #{storage_class}\n"
+      "Created bucket #{@bucket_name}\n"
     ).to_stdout
 
     bucket = @storage.bucket @bucket_name
@@ -135,7 +133,7 @@ describe "Google Cloud Storage buckets sample" do
     expect(bucket.storage_class).to eql storage_class
   end
 
-  example "get bucket labels" do
+  example "list bucket labels" do
     bucket = @storage.bucket @bucket_name
     expect(bucket).not_to be nil
 
@@ -147,7 +145,7 @@ describe "Google Cloud Storage buckets sample" do
     end
 
     expect {
-      get_bucket_labels project_id:  @project_id,
+      list_bucket_labels project_id:  @project_id,
                         bucket_name: @bucket_name
     }.to output(
       /#{label_key} = #{label_value}/
@@ -173,13 +171,13 @@ describe "Google Cloud Storage buckets sample" do
                        label_key:   label_key,
                        label_value: label_value
     }.to output(
-      /#{label_key} = #{label_value}/
+      "Added label to #{@bucket_name}\n"
     ).to_stdout
 
     expect(@storage.bucket(@bucket_name).labels.key? label_key).to be true
   end
 
-  example "remove bucket label" do
+  example "delete bucket label" do
     bucket = @storage.bucket @bucket_name
     expect(bucket).not_to be nil
 
@@ -193,11 +191,11 @@ describe "Google Cloud Storage buckets sample" do
     expect(@storage.bucket(@bucket_name).labels.key? label_key).to be true
 
     expect {
-      remove_bucket_label project_id:  @project_id,
+      delete_bucket_label project_id:  @project_id,
                           bucket_name: @bucket_name,
                           label_key:   label_key
-    }.not_to output(
-      /#{label_key} = #{label_value}/
+    }.to output(
+      "Deleted label from #{@bucket_name}\n"
     ).to_stdout
 
     expect(@storage.bucket(@bucket_name).labels.key? label_key).to be false
