@@ -112,6 +112,29 @@ describe "Google Cloud Storage buckets sample" do
     expect(@storage.bucket @bucket_name).not_to be nil
   end
 
+  example "create bucket with specified class and location" do
+    delete_bucket!
+
+    expect(@storage.bucket @bucket_name).to be nil
+
+    location      = "US"
+    storage_class = "NEARLINE"
+
+    expect {
+      create_bucket_class_location project_id:  @project_id,
+                                   bucket_name: @bucket_name,
+                                   location:    location,
+                                   storage_class: storage_class
+    }.to output(
+      "Created bucket #{@bucket_name} in #{location} with storage class #{storage_class}\n"
+    ).to_stdout
+
+    bucket = @storage.bucket @bucket_name
+    expect(bucket).not_to           be nil
+    expect(bucket.location).to      eql location
+    expect(bucket.storage_class).to eql storage_class
+  end
+
   example "get bucket labels" do
     bucket = @storage.bucket @bucket_name
     expect(bucket).not_to be nil
