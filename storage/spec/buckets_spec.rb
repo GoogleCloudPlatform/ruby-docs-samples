@@ -171,7 +171,7 @@ describe "Google Cloud Storage buckets sample" do
                        label_key:   label_key,
                        label_value: label_value
     }.to output(
-      "Added label to #{@bucket_name}\n"
+      "Added label #{label_key} with value #{label_value} to #{@bucket_name}\n"
     ).to_stdout
 
     expect(@storage.bucket(@bucket_name).labels.key? label_key).to be true
@@ -195,7 +195,7 @@ describe "Google Cloud Storage buckets sample" do
                           bucket_name: @bucket_name,
                           label_key:   label_key
     }.to output(
-      "Deleted label from #{@bucket_name}\n"
+      "Deleted label #{label_key} from #{@bucket_name}\n"
     ).to_stdout
 
     expect(@storage.bucket(@bucket_name).labels.key? label_key).to be false

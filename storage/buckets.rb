@@ -139,7 +139,7 @@ def add_bucket_label project_id:, bucket_name:, label_key:, label_value:
     bucket.labels[label_key] = label_value
   end
 
-  puts "Added label to #{bucket_name}"
+  puts "Added label #{label_key} with value #{label_value} to #{bucket_name}"
   # [END add_bucket_label]
 end
 
@@ -158,7 +158,7 @@ def delete_bucket_label project_id:, bucket_name:, label_key:
     bucket.labels[label_key] = nil
   end
 
-  puts "Deleted label from #{bucket_name}"
+  puts "Deleted label #{label_key} from #{bucket_name}"
   # [END remove_bucket_label]
 end
 
