@@ -10,8 +10,8 @@ in your `config/environments/*.rb` files.
 
 ## Rack and Sinatra
 
-Sinatra example apps load middleware using a rack configuration file. Sinatra
-samples are prefixed with `sinatra_` and Rack examples use the extension `.ru`.
+Sinatra samples are prefixed with `sinatra_` and Rack examples use the extension
+`.ru`.
 
 The following list provides samples used per Stackdriver product.
 
