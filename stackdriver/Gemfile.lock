@@ -60,11 +60,10 @@ GEM
     memoist (0.16.0)
     multi_json (1.12.2)
     multipart-post (2.0.0)
-    mustermann (1.0.1)
     os (0.9.6)
     public_suffix (3.0.0)
-    rack (2.0.3)
-    rack-protection (2.0.0)
+    rack (1.6.8)
+    rack-protection (1.5.3)
       rack
     rly (0.2.3)
     signet (0.7.3)
@@ -72,11 +71,10 @@ GEM
       faraday (~> 0.9)
       jwt (~> 1.5)
       multi_json (~> 1.10)
-    sinatra (2.0.0)
-      mustermann (~> 1.0)
-      rack (~> 2.0)
-      rack-protection (= 2.0.0)
-      tilt (~> 2.0)
+    sinatra (1.4.8)
+      rack (~> 1.5)
+      rack-protection (~> 1.4)
+      tilt (>= 1.3, < 3)
     stackdriver (0.9.0)
       google-cloud-debugger (~> 0.28.0)
       google-cloud-error_reporting (~> 0.26.0)
@@ -89,7 +87,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  sinatra
+  sinatra (~> 1.4)
   stackdriver
 
 BUNDLED WITH
