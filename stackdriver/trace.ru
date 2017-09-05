@@ -1,11 +1,3 @@
-require_relative "sinatra_trace"
-
-# [START trace_middleware]
-require "google/cloud/trace"
-
-use Google::Cloud::Trace::Middleware
-# [END trace_middleware]
-
 # [START trace_configure]
 require "google/cloud/trace"
 
@@ -16,4 +8,10 @@ Google::Cloud.configure do |config|
 end
 # [END trace_configure]
 
-run Sinatra::Application
+# [START trace_middleware]
+require "google/cloud/trace"
+
+use Google::Cloud::Trace::Middleware
+# [END trace_middleware]
+
+run Proc.new { |env| ["200", {"Content-Type" => "text/html"}, ["Hello world!"]] }

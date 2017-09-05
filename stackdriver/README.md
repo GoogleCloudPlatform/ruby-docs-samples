@@ -1,19 +1,17 @@
 # Stackdriver Samples
 
-Samples used by Stackdriver documentation. The samples don't work out-of-the-box
-and require some modification. The samples are provided as reference guides
-when using Rails, Sinatra, other-rack frameworks, and non-rack apps.
+Samples used by Stackdriver documentation. The samples are provided as reference
+guides when using Rails, Sinatra, other-rack frameworks, and pure Ruby.
 
 ## Rails
 
-The `rails_configuration.rb` provides a configuration example that can be used
+The `rails_configuration.rb` provides configuration examples that can be used
 in your `config/environments/*.rb` files.
 
-## Sinatra
+## Rack and Sinatra
 
-Sinatra exmple apps load middleware using a rack configuration file. For example
-`rackup rack_debugger.ru` is an example of starting a Sinatra app with
-Stackdriver Debugger.
+Sinatra example apps load middleware using a rack configuration file. Sinatra
+samples are prefixed with `sinatra_` and Rack examples use the extension `.ru`.
 
 The following list provides samples used per Stackdriver product.
 
@@ -39,12 +37,13 @@ The following list provides samples used per Stackdriver product.
 
 ### Shared Configuration
 
-Stackdriver gems can be configured using shared configuration which is shown in
-`shared_config.ru`
+The following file shows an example of using shared configuration in a Rack app,
+and can also be used in Sinatra or pure Ruby apps.
 
-## Non-rack apps
+- `shared_config.ru`
 
-An additional example shows that Debugger doesn't require a Rack
-based app.
+## Pure Ruby apps
 
-- `non_rack_debugger.rb`
+An additional example shows that Debugger doesn't require a Rack based app.
+
+- `ruby_debugger.rb`

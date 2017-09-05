@@ -1,11 +1,3 @@
-require_relative "sinatra_error_reporting"
-
-# [START error_reporting_middleware]
-require "google/cloud/error_reporting"
-
-use Google::Cloud::ErrorReporting::Middleware
-# [END error_reporting_middleware]
-
 # [START error_reporting_configure]
 require "google/cloud/error_reporting"
 
@@ -16,4 +8,10 @@ Google::Cloud.configure do |config|
 end
 # [END error_reporting_configure]
 
-run Sinatra::Application
+# [START error_reporting_middleware]
+require "google/cloud/error_reporting"
+
+use Google::Cloud::ErrorReporting::Middleware
+# [END error_reporting_middleware]
+
+run Proc.new { |env| ["200", {"Content-Type" => "text/html"}, ["Hello world!"]] }

@@ -1,11 +1,3 @@
-require_relative "sinatra_logging"
-
-# [START logging_middleware]
-require "google/cloud/logging"
-
-use Google::Cloud::Logging::Middleware
-# [END logging_middleware]
-
 # [START logging_configure]
 require "google/cloud/logging"
 
@@ -16,5 +8,10 @@ Google::Cloud.configure do |config|
 end
 # [END logging_configure]
 
-run Sinatra::Application
+# [START logging_middleware]
+require "google/cloud/logging"
 
+use Google::Cloud::Logging::Middleware
+# [END logging_middleware]
+
+run Proc.new { |env| ["200", {"Content-Type" => "text/html"}, ["Hello world!"]] }

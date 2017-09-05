@@ -1,11 +1,3 @@
-require_relative "sinatra_debugger"
-
-# [START debugger_middleware]
-require "google/cloud/debugger"
-
-use Google::Cloud::Debugger::Middleware
-# [END debugger_middleware]
-
 # [START debugger_configure]
 require "google/cloud/debugger"
 
@@ -16,5 +8,11 @@ Google::Cloud.configure do |config|
 end
 # [END debugger_configure]
 
-run Sinatra::Application
+# [START debugger_middleware]
+require "google/cloud/debugger"
+
+use Google::Cloud::Debugger::Middleware
+# [END debugger_middleware]
+
+run Proc.new { |env| ["200", {"Content-Type" => "text/html"}, ["Hello world!"]] }
 
