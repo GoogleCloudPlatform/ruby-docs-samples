@@ -116,7 +116,7 @@ def list_bucket_labels project_id:, bucket_name:
   storage = Google::Cloud::Storage.new project: project_id
   bucket  = storage.bucket bucket_name
 
-  puts "Updated labels for #{bucket_name}"
+  puts "Labels for #{bucket_name}"
   bucket.labels.each do |key, value|
     puts "#{key} = #{value}"
   end
