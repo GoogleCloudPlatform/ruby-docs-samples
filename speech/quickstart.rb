@@ -32,8 +32,10 @@ audio = speech.audio file_name, encoding:    :linear16,
 
 # Detects speech in the audio file
 results = audio.recognize
-result  = results.first
 
-puts "Transcription: #{result.transcript}"
+# Each result represents a consecutive portion of the audio
+results.each do |result|
+  puts "Transcription: #{result.transcript}"
+end
 # [END speech_quickstart]
 

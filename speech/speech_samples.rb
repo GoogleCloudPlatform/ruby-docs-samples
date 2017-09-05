@@ -25,9 +25,10 @@ def speech_sync_recognize project_id: nil, audio_file_path: nil
                                          language:    "en-US"
 
   results = audio.recognize
-  result  = results.first
 
-  puts "Transcription: #{result.transcript}"
+  results.each do |result|
+    puts "Transcription: #{result.transcript}"
+  end
 # [END speech_sync_recognize]
 end
 
@@ -44,12 +45,13 @@ def speech_sync_recognize_words project_id: nil, audio_file_path: nil
                                          language:    "en-US"
 
   results = audio.recognize words: true
-  result  = results.first
 
-  puts "Transcription: #{result.transcript}"
+  results.each do |result|
+    puts "Transcription: #{result.transcript}"
 
-  result.words.each do |word|
-    puts "Word: #{word.word} #{word.start_time} #{word.end_time}"
+    result.words.each do |word|
+      puts "Word: #{word.word} #{word.start_time} #{word.end_time}"
+    end
   end
 # [END speech_sync_recognize_words]
 end
@@ -67,9 +69,10 @@ def speech_sync_recognize_gcs project_id: nil, storage_path: nil
                                       language:    "en-US"
 
   results = audio.recognize
-  result  = results.first
 
-  puts "Transcription: #{result.transcript}"
+  results.each do |result|
+    puts "Transcription: #{result.transcript}"
+  end
 # [END speech_sync_recognize_gcs]
 end
 
@@ -92,9 +95,10 @@ def speech_async_recognize project_id: nil, audio_file_path: nil
   operation.wait_until_done!
 
   results = operation.results
-  result  = results.first
 
-  puts "Transcription: #{result.transcript}"
+  results.each do |result|
+    puts "Transcription: #{result.transcript}"
+  end
 # [END speech_async_recognize]
 end
 
@@ -117,9 +121,10 @@ def speech_async_recognize_gcs project_id: nil, storage_path: nil
   operation.wait_until_done!
 
   results = operation.results
-  result  = results.first
 
-  puts "Transcription: #{result.transcript}"
+  results.each do |result|
+    puts "Transcription: #{result.transcript}"
+  end
 # [END speech_async_recognize_gcs]
 end
 
@@ -142,12 +147,13 @@ def speech_async_recognize_gcs_words project_id: nil, storage_path: nil
   operation.wait_until_done!
 
   results = operation.results
-  result  = results.first
 
-  puts "Transcription: #{result.transcript}"
+  results.each do |result|
+    puts "Transcription: #{result.transcript}"
 
-  result.words.each do |word|
-    puts "Word: #{word.word} #{word.start_time} #{word.end_time}"
+    result.words.each do |word|
+      puts "Word: #{word.word} #{word.start_time} #{word.end_time}"
+    end
   end
 # [END speech_async_recognize_gcs_words]
 end
@@ -182,6 +188,7 @@ def speech_streaming_recognize project_id: nil, audio_file_path: nil
   stream.wait_until_complete!
 
   results = stream.results
+
   results.each do |result|
     puts "Transcript: #{result.transcript}"
   end
