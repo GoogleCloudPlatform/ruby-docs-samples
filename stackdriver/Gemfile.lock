@@ -87,7 +87,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  sinatra (~> 1.4)
+  sinatra
   stackdriver
 
 BUNDLED WITH
