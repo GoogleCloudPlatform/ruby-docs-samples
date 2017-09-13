@@ -1,3 +1,10 @@
+PATH
+  remote: google-cloud-ruby/google-cloud-vision
+  specs:
+    google-cloud-vision (0.6.8)
+      google-gax (~> 0.8.6)
+      googleapis-common-protos (~> 1.3.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -24,19 +31,19 @@ GEM
       digest-crc (~> 0.4)
       google-api-client (~> 0.10.0)
       google-cloud-core (~> 0.21.0)
-    google-cloud-vision (0.23.0)
-      google-cloud-core (~> 0.21.0)
-      google-gax (~> 0.8.0)
-    google-gax (0.8.1)
+    google-gax (0.8.7)
       google-protobuf (~> 3.2)
       googleapis-common-protos (~> 1.3.5)
       googleauth (~> 0.5.1)
       grpc (~> 1.0)
       rly (~> 0.2.3)
-    google-protobuf (3.2.0.2)
-    googleapis-common-protos (1.3.5)
-      google-protobuf (~> 3.2)
+    google-protobuf (3.4.0.2)
+    googleapis-common-protos (1.3.6)
+      google-protobuf (~> 3.0)
+      googleapis-common-protos-types (~> 1.0)
       grpc (~> 1.0)
+    googleapis-common-protos-types (1.0.0)
+      google-protobuf (~> 3.0)
     googleauth (0.5.1)
       faraday (~> 0.9)
       jwt (~> 1.4)
@@ -45,7 +52,7 @@ GEM
       multi_json (~> 1.11)
       os (~> 0.9)
       signet (~> 0.7)
-    grpc (1.2.0)
+    grpc (1.6.0)
       google-protobuf (~> 3.1)
       googleauth (~> 0.5.1)
     httpclient (2.8.3)
@@ -98,10 +105,10 @@ PLATFORMS
 
 DEPENDENCIES
   google-cloud-storage
-  google-cloud-vision
+  google-cloud-vision!
   rack-test
   rmagick
   rspec
 
 BUNDLED WITH
-   1.14.6
+   1.15.4
