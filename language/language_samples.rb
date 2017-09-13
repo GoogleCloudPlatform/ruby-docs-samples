@@ -12,58 +12,62 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-def sentiment_from_text project_id:, text_content:
+def sentiment_from_text text_content:
   # [START sentiment_from_text]
-  # project_id   = "Your Google Cloud project ID"
   # text_content = "Text to run sentiment analysis on"
 
   require "google/cloud/language"
 
-  language  = Google::Cloud::Language.new project: project_id
-  document  = language.document text_content
-  sentiment = document.sentiment
+  language = Google::Cloud::Language.new
+  response = language.analyze_sentiment content: text_content, type: :PLAIN_TEXT
+
+  sentiment = response.document_sentiment
 
   puts "Overall document sentiment: (#{sentiment.score})"
   puts "Sentence level sentiment:"
 
-  sentiment.sentences.each do |sentence|
+  sentences = response.sentences
+
+  sentences.each do |sentence|
     sentiment = sentence.sentiment
     puts "#{sentence.text}: (#{sentiment.score})"
   end
   # [END sentiment_from_text]
 end
 
-def sentiment_from_cloud_storage_file project_id:, storage_path:
+def sentiment_from_cloud_storage_file storage_path:
   # [START sentiment_from_cloud_storage_file]
-  # project_id   = "Your Google Cloud project ID"
   # storage_path = "Path to file in Google Cloud Storage, eg. gs://bucket/file"
 
   require "google/cloud/language"
 
-  language  = Google::Cloud::Language.new project: project_id
-  document  = language.document storage_path
-  sentiment = document.sentiment
+  language = Google::Cloud::Language.new
+  response = language.analyze_sentiment gcs_content_uri: storage_path, type: :PLAIN_TEXT
+
+  sentiment = response.document_sentiment
 
   puts "Overall document sentiment: (#{sentiment.score})"
   puts "Sentence level sentiment:"
 
-  sentiment.sentences.each do |sentence|
+  sentences = response.sentences
+
+  sentences.each do |sentence|
     sentiment = sentence.sentiment
     puts "#{sentence.text}: (#{sentiment.score})"
   end
   # [END sentiment_from_cloud_storage_file]
 end
 
-def entities_from_text project_id:, text_content:
+def entities_from_text text_content:
   # [START entities_from_text]
-  # project_id   = "Your Google Cloud project ID"
   # text_content = "Text to extract entities from"
 
   require "google/cloud/language"
 
-  language = Google::Cloud::Language.new project: project_id
-  document = language.document text_content
-  entities = document.entities
+  language = Google::Cloud::Language.new
+  response = language.analyze_entities content: text_content, type: :PLAIN_TEXT
+
+  entities = response.entities
 
   entities.each do |entity|
     puts "Entity #{entity.name} #{entity.type}"
@@ -75,16 +79,16 @@ def entities_from_text project_id:, text_content:
   # [END entities_from_text]
 end
 
-def entities_from_cloud_storage_file project_id:, storage_path:
+def entities_from_cloud_storage_file storage_path:
   # [START entities_from_cloud_storage_file]
-  # project_id   = "Your Google Cloud project ID"
   # storage_path = "Path to file in Google Cloud Storage, eg. gs://bucket/file"
 
   require "google/cloud/language"
 
-  language = Google::Cloud::Language.new project: project_id
-  document = language.document storage_path
-  entities = document.entities
+  language = Google::Cloud::Language.new
+  response = language.analyze_entities gcs_content_uri: storage_path, type: :PLAIN_TEXT
+
+  entities = response.entities
 
   entities.each do |entity|
     puts "Entity #{entity.name} #{entity.type}"
@@ -96,56 +100,57 @@ def entities_from_cloud_storage_file project_id:, storage_path:
   # [END entities_from_cloud_storage_file]
 end
 
-def syntax_from_text project_id:, text_content:
+def syntax_from_text text_content:
   # [START syntax_from_text]
-  # project_id   = "Your Google Cloud project ID"
   # text_content = "Text to analyze syntax of"
 
   require "google/cloud/language"
 
-  language = Google::Cloud::Language.new project: project_id
-  document = language.document text_content
-  syntax   = document.syntax
+  language = Google::Cloud::Language.new
+  response = language.analyze_syntax content: text_content, type: :PLAIN_TEXT
 
-  puts "Sentences: #{syntax.sentences.count}"
-  puts "Tokens: #{syntax.tokens.count}"
+  sentences = response.sentences
+  tokens    = response.tokens
 
-  syntax.tokens.each do |token|
-    puts "#{token.part_of_speech.tag} #{token.text_span.text}"
+  puts "Sentences: #{sentences.count}"
+  puts "Tokens: #{tokens.count}"
+
+  tokens.each do |token|
+    puts "#{token.part_of_speech.tag} #{token.text.content}"
   end
   # [END syntax_from_text]
 end
 
-def syntax_from_cloud_storage_file project_id:, storage_path:
+def syntax_from_cloud_storage_file storage_path:
   # [START syntax_from_cloud_storage_file]
-  # project_id   = "Your Google Cloud project ID"
   # storage_path = "Path to file in Google Cloud Storage, eg. gs://bucket/file"
 
   require "google/cloud/language"
 
-  language = Google::Cloud::Language.new project: project_id
-  document = language.document storage_path
-  syntax   = document.syntax
+  language = Google::Cloud::Language.new
+  response = language.analyze_syntax gcs_content_uri: storage_path, type: :PLAIN_TEXT
 
-  puts "Sentences: #{syntax.sentences.count}"
-  puts "Tokens: #{syntax.tokens.count}"
+  sentences = response.sentences
+  tokens    = response.tokens
 
-  syntax.tokens.each do |token|
-    puts "#{token.part_of_speech.tag} #{token.text_span.text}"
+  puts "Sentences: #{sentences.count}"
+  puts "Tokens: #{tokens.count}"
+
+  tokens.each do |token|
+    puts "#{token.part_of_speech.tag} #{token.text.content}"
   end
   # [END syntax_from_cloud_storage_file]
 end
 
 if __FILE__ == $PROGRAM_NAME
-  project_id = ENV["GOOGLE_CLOUD_PROJECT"]
 
   if ARGV.length == 1
     puts "Sentiment:"
-    sentiment_from_text project_id: project_id, text_content: ARGV.first
+    sentiment_from_text text_content: ARGV.first
     puts "Entities:"
-    entities_from_text project_id: project_id, text_content: ARGV.first
+    entities_from_text text_content: ARGV.first
     puts "Syntax:"
-    syntax_from_text project_id: project_id, text_content: ARGV.first
+    syntax_from_text text_content: ARGV.first
   else
     puts "Usage: ruby language_samples.rb <text-to-analyze>"
   end

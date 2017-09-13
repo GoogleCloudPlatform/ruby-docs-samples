@@ -14,7 +14,7 @@
 
 source "https://rubygems.org"
 
-gem "google-cloud-vision"
+gem "google-cloud-vision", path: "google-cloud-ruby/google-cloud-vision"
 gem "rmagick"
 
 group :test do

@@ -7,7 +7,6 @@ require "google/cloud/storage"
 describe "Google Cloud Natural Language API samples" do
 
   before do
-    @project_id  = Google::Cloud::Language.new.project
     @bucket_name = ENV["GOOGLE_CLOUD_STORAGE_BUCKET"]
     @storage     = Google::Cloud::Storage.new
     @bucket      = @storage.bucket @bucket_name
@@ -52,11 +51,11 @@ describe "Google Cloud Natural Language API samples" do
     negative_output = /Overall document sentiment: \(-\d\.\d+\)$/
 
     expect {
-      sentiment_from_text project_id: @project_id, text_content: positive_text
+      sentiment_from_text text_content: positive_text
     }.to output(positive_output).to_stdout
 
     expect {
-      sentiment_from_text project_id: @project_id, text_content: negative_text
+      sentiment_from_text text_content: negative_text
     }.to output(negative_output).to_stdout
 
   end
@@ -68,11 +67,11 @@ describe "Google Cloud Natural Language API samples" do
     negative_output = /Sentence .*\n^.*\(-\d\.\d+\)$\n^.*\(-\d\.\d+\)$/
 
     expect {
-      sentiment_from_text project_id: @project_id, text_content: positive_text
+      sentiment_from_text text_content: positive_text
     }.to output(positive_output).to_stdout
 
     expect {
-      sentiment_from_text project_id: @project_id, text_content: negative_text
+      sentiment_from_text text_content: negative_text
     }.to output(negative_output).to_stdout
 
   end
@@ -85,14 +84,12 @@ describe "Google Cloud Natural Language API samples" do
 
     expect {
       sentiment_from_cloud_storage_file(
-        project_id:   @project_id,
         storage_path: "gs://#{@bucket_name}/positive.txt"
       )
     }.to output(positive_output).to_stdout
 
     expect {
       sentiment_from_cloud_storage_file(
-        project_id:   @project_id,
         storage_path: "gs://#{@bucket_name}/negative.txt"
       )
     }.to output(negative_output).to_stdout
@@ -106,14 +103,12 @@ describe "Google Cloud Natural Language API samples" do
 
     expect {
       sentiment_from_cloud_storage_file(
-        project_id:   @project_id,
         storage_path: "gs://#{@bucket_name}/positive.txt"
       )
     }.to output(positive_output).to_stdout
 
     expect {
       sentiment_from_cloud_storage_file(
-        project_id:   @project_id,
         storage_path: "gs://#{@bucket_name}/negative.txt"
       )
     }.to output(negative_output).to_stdout
@@ -121,8 +116,7 @@ describe "Google Cloud Natural Language API samples" do
 
   example "entities from text" do
     output = capture {
-      entities_from_text project_id:   @project_id,
-                        text_content: "Alice wrote a book. Bob likes the book."
+      entities_from_text text_content: "Alice wrote a book. Bob likes the book."
     }
 
     expect(output).to include "Alice PERSON"
@@ -131,8 +125,7 @@ describe "Google Cloud Natural Language API samples" do
 
   example "entities with metadata from text" do
     output = capture {
-      entities_from_text project_id:   @project_id,
-                        text_content: "William Shakespeare is great."
+      entities_from_text text_content: "William Shakespeare is great."
     }
 
     expect(output).to include "Entity William Shakespeare PERSON"
@@ -144,7 +137,6 @@ describe "Google Cloud Natural Language API samples" do
 
     output = capture {
       entities_from_cloud_storage_file(
-        project_id:   @project_id,
         storage_path: "gs://#{@bucket_name}/entities.txt"
       )
     }
@@ -158,7 +150,6 @@ describe "Google Cloud Natural Language API samples" do
 
     output = capture {
       entities_from_cloud_storage_file(
-        project_id:   @project_id,
         storage_path: "gs://#{@bucket_name}/entities.txt"
       )
     }
@@ -170,7 +161,6 @@ describe "Google Cloud Natural Language API samples" do
   example "syntax from text" do
     output = capture {
       syntax_from_text(
-        project_id: @project_id,
         text_content: "I am Fox Tall. The porcupine stole my pickup truck."
       )
     }
@@ -187,7 +177,6 @@ describe "Google Cloud Natural Language API samples" do
 
     output = capture {
       syntax_from_cloud_storage_file(
-        project_id:   @project_id,
         storage_path: "gs://#{@bucket_name}/syntax.txt"
       )
     }
