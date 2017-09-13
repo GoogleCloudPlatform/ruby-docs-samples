@@ -112,6 +112,95 @@ describe "Google Cloud Storage buckets sample" do
     expect(@storage.bucket @bucket_name).not_to be nil
   end
 
+  example "create bucket with specified class and location" do
+    delete_bucket!
+
+    expect(@storage.bucket @bucket_name).to be nil
+
+    location      = "ASIA"
+    storage_class = "COLDLINE"
+
+    expect {
+      create_bucket_class_location project_id:  @project_id,
+                                   bucket_name: @bucket_name
+    }.to output(
+      "Created bucket #{@bucket_name}\n"
+    ).to_stdout
+
+    bucket = @storage.bucket @bucket_name
+    expect(bucket).not_to           be nil
+    expect(bucket.location).to      eql location
+    expect(bucket.storage_class).to eql storage_class
+  end
+
+  example "list bucket labels" do
+    bucket = @storage.bucket @bucket_name
+    expect(bucket).not_to be nil
+
+    label_key   = "get-label-key"
+    label_value = "get-label-value"
+
+    bucket.update do |bucket_update|
+      bucket_update.labels[label_key] = label_value
+    end
+
+    expect {
+      list_bucket_labels project_id:  @project_id,
+                        bucket_name: @bucket_name
+    }.to output(
+      /#{label_key} = #{label_value}/
+    ).to_stdout
+  end
+
+  example "add bucket label" do
+    bucket = @storage.bucket @bucket_name
+    expect(bucket).not_to be nil
+
+    label_key   = "add-label-key"
+    label_value = "add-label-value"
+
+    bucket.update do |bucket_update|
+      bucket_update.labels = Hash.new
+    end
+
+    expect(@storage.bucket(@bucket_name).labels.key? label_key).to be false
+
+    expect {
+      add_bucket_label project_id:  @project_id,
+                       bucket_name: @bucket_name,
+                       label_key:   label_key,
+                       label_value: label_value
+    }.to output(
+      "Added label #{label_key} with value #{label_value} to #{@bucket_name}\n"
+    ).to_stdout
+
+    expect(@storage.bucket(@bucket_name).labels.key? label_key).to be true
+  end
+
+  example "delete bucket label" do
+    bucket = @storage.bucket @bucket_name
+    expect(bucket).not_to be nil
+
+    label_key   = "add-label-key"
+    label_value = "add-label-value"
+
+    bucket.update do |bucket_update|
+      bucket_update.labels[label_key] = label_value
+    end
+
+    expect(@storage.bucket(@bucket_name).labels.key? label_key).to be true
+
+    expect {
+      delete_bucket_label project_id:  @project_id,
+                          bucket_name: @bucket_name,
+                          label_key:   label_key
+    }.to output(
+      "Deleted label #{label_key} from #{@bucket_name}\n"
+    ).to_stdout
+
+    expect(@storage.bucket(@bucket_name).labels.key? label_key).to be false
+  end
+
   example "delete bucket" do
     expect(@storage.bucket @bucket_name).not_to be nil
 
