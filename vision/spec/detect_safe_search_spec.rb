@@ -33,7 +33,7 @@ describe "Detect Safe Search Properties" do
     expect {
       detect_safe_search image_path: image_path("otter_crossing.jpg")
     }.to output(
-      /Violence: false/
+      /Violence: VERY_UNLIKELY/
     ).to_stdout
   end
 
@@ -44,7 +44,7 @@ describe "Detect Safe Search Properties" do
     expect {
       detect_safe_search_gcs image_path: storage_file.to_gs_url
     }.to output(
-      /Violence: false/
+      /Violence: VERY_UNLIKELY/
     ).to_stdout
   end
 end

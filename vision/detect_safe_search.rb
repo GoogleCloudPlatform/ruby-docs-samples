@@ -23,7 +23,7 @@ def detect_safe_search image_path:
   image = File.binread image_path
 
   request  = [image:    { content: image },
-              features: [{ type: :LANDMARK_DETECTION }]]
+              features: [{ type: :SAFE_SEARCH_DETECTION }]]
 
   response = vision.batch_annotate_images request
 
@@ -31,11 +31,12 @@ def detect_safe_search image_path:
   image = response.responses.first
 
   safe_search = image.safe_search_annotation
+  p safe_search
 
-  puts "Adult:    #{safe_search.adult.likelihood}"
-  puts "Spoof:    #{safe_search.spoof.likelihood}"
-  puts "Medical:  #{safe_search.medical.likelihood}"
-  puts "Violence: #{safe_search.violence.likelihood}"
+  puts "Adult:    #{safe_search.adult}"
+  puts "Spoof:    #{safe_search.spoof}"
+  puts "Medical:  #{safe_search.medical}"
+  puts "Violence: #{safe_search.violence}"
   # [END vision_safe_search_detection]
 end
 
@@ -51,7 +52,7 @@ def detect_safe_search_gcs image_path:
   vision = Google::Cloud::Vision.new
 
   request  = [image:    { source: { gcs_image_uri: image_path }},
-              features: [{ type: :LANDMARK_DETECTION }]]
+              features: [{ type: :SAFE_SEARCH_DETECTION }]]
 
   response = vision.batch_annotate_images request
 
@@ -60,10 +61,10 @@ def detect_safe_search_gcs image_path:
 
   safe_search = image.safe_search_annotation
 
-  puts "Adult:    #{safe_search.adult.likelihood}"
-  puts "Spoof:    #{safe_search.spoof.likelihood}"
-  puts "Medical:  #{safe_search.medical.likelihood}"
-  puts "Violence: #{safe_search.violence.likelihood}"
+  puts "Adult:    #{safe_search.adult}"
+  puts "Spoof:    #{safe_search.spoof}"
+  puts "Medical:  #{safe_search.medical}"
+  puts "Violence: #{safe_search.violence}"
   # [END vision_safe_search_detection_gcs]
 end
 
