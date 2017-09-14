@@ -22,7 +22,6 @@ describe "Detect Crop Hints" do
   before do
     @storage    = Google::Cloud::Storage.new
     @bucket     = @storage.bucket ENV["GOOGLE_CLOUD_STORAGE_BUCKET"]
-    @project_id = ENV["GOOGLE_CLOUD_PROJECT"]
   end
 
   # Returns full path to sample image included in repository for testing
@@ -32,8 +31,7 @@ describe "Detect Crop Hints" do
 
   example "detect crop hints from local image file" do
     expect {
-      detect_crop_hints project_id: @project_id,
-                        image_path: image_path("otter_crossing.jpg")
+      detect_crop_hints image_path: image_path("otter_crossing.jpg")
     }.to output(
       /0, 0/
     ).to_stdout
@@ -44,8 +42,7 @@ describe "Detect Crop Hints" do
                                        "otter_crossing.jpg"
 
     expect {
-      detect_crop_hints_gcs project_id: @project_id,
-                            image_path: storage_file.to_gs_url
+      detect_crop_hints_gcs image_path: storage_file.to_gs_url
     }.to output(
       /0, 0/
     ).to_stdout

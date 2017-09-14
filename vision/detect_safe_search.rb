@@ -12,53 +12,66 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-def detect_safe_search project_id:, image_path:
+def detect_safe_search image_path:
   # [START vision_safe_search_detection]
-  # project_id = "Your Google Cloud project ID"
   # image_path = "Path to local image file, eg. './image.png'"
-  
+
   require "google/cloud/vision"
 
-  vision = Google::Cloud::Vision.new project: project_id
-  image  = vision.image image_path
+  vision = Google::Cloud::Vision.new
 
-  safe_search = image.safe_search
+  image = File.binread image_path
 
-  puts "Adult:    #{safe_search.adult?}"
-  puts "Spoof:    #{safe_search.spoof?}"
-  puts "Medical:  #{safe_search.medical?}"
-  puts "Violence: #{safe_search.violence?}"
+  request  = [image:    { content: image },
+              features: [{ type: :LANDMARK_DETECTION }]]
+
+  response = vision.batch_annotate_images request
+
+  # Get first element as we only annotated one image.
+  image = response.responses.first
+
+  safe_search = image.safe_search_annotation
+
+  puts "Adult:    #{safe_search.adult.likelihood}"
+  puts "Spoof:    #{safe_search.spoof.likelihood}"
+  puts "Medical:  #{safe_search.medical.likelihood}"
+  puts "Violence: #{safe_search.violence.likelihood}"
   # [END vision_safe_search_detection]
 end
 
 # This method is a duplicate of the above method, but with a different
 # description of the 'image_path' variable, demonstrating the gs://bucket/file
 # GCS storage URI format.
-def detect_safe_search_gcs project_id:, image_path:
+def detect_safe_search_gcs image_path:
   # [START vision_safe_search_detection_gcs]
-  # project_id = "Your Google Cloud project ID"
   # image_path = "Google Cloud Storage URI, eg. 'gs://my-bucket/image.png'"
-  
+
   require "google/cloud/vision"
 
-  vision = Google::Cloud::Vision.new project: project_id
-  image  = vision.image image_path
+  vision = Google::Cloud::Vision.new
 
-  safe_search = image.safe_search
+  request  = [image:    { source: { gcs_image_uri: image_path }},
+              features: [{ type: :LANDMARK_DETECTION }]]
 
-  puts "Adult:    #{safe_search.adult?}"
-  puts "Spoof:    #{safe_search.spoof?}"
-  puts "Medical:  #{safe_search.medical?}"
-  puts "Violence: #{safe_search.violence?}"
+  response = vision.batch_annotate_images request
+
+  # Get first element as we only annotated one image.
+  image = response.responses.first
+
+  safe_search = image.safe_search_annotation
+
+  puts "Adult:    #{safe_search.adult.likelihood}"
+  puts "Spoof:    #{safe_search.spoof.likelihood}"
+  puts "Medical:  #{safe_search.medical.likelihood}"
+  puts "Violence: #{safe_search.violence.likelihood}"
   # [END vision_safe_search_detection_gcs]
 end
 
 if __FILE__ == $PROGRAM_NAME
   image_path = ARGV.shift
-  project_id = ENV["GOOGLE_CLOUD_PROJECT"]
 
   if image_path
-    detect_safe_search image_path: image_path, project_id: project_id
+    detect_safe_search image_path: image_path
   else
     puts <<-usage
 Usage: ruby detect_safe_search.rb [image file path]

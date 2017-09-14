@@ -22,7 +22,6 @@ describe "Detect Labels" do
   before do
     @storage    = Google::Cloud::Storage.new
     @bucket     = @storage.bucket ENV["GOOGLE_CLOUD_STORAGE_BUCKET"]
-    @project_id = ENV["GOOGLE_CLOUD_PROJECT"]
   end
 
   # Returns full path to sample image included in repository for testing
@@ -32,8 +31,7 @@ describe "Detect Labels" do
 
   example "detect labels from local image file" do
     expect {
-      detect_labels project_id: @project_id,
-                    image_path: image_path("otter_crossing.jpg")
+      detect_labels image_path: image_path("otter_crossing.jpg")
     }.to output(
       /traffic sign/
     ).to_stdout
@@ -44,8 +42,7 @@ describe "Detect Labels" do
                                        "otter_crossing.jpg"
 
     expect {
-      detect_labels_gcs project_id: @project_id,
-                        image_path: storage_file.to_gs_url
+      detect_labels_gcs image_path: storage_file.to_gs_url
     }.to output(
       /traffic sign/
     ).to_stdout

@@ -12,43 +12,60 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-def detect_text project_id:, image_path:
+def detect_text image_path:
   # [START vision_text_detection]
-  # project_id = "Your Google Cloud project ID"
   # image_path = "Path to local image file, eg. './image.png'"
-  
+
   require "google/cloud/vision"
 
-  vision = Google::Cloud::Vision.new project: project_id
-  image  = vision.image image_path
+  vision = Google::Cloud::Vision.new
 
-  puts image.text
+  image = File.binread image_path
+
+  request  = [image:    { content: image },
+              features: [{ type: :TEXT_DETECTION }]]
+
+  response = vision.batch_annotate_images request
+
+  # Get first element as we only annotated one image.
+  image = response.responses.first
+
+  image.text_annotations.each do |text|
+    puts text.description
+  end
   # [END vision_text_detection]
 end
 
 # This method is a duplicate of the above method, but with a different
 # description of the 'image_path' variable, demonstrating the gs://bucket/file
 # GCS storage URI format.
-def detect_text_gcs project_id:, image_path:
+def detect_text_gcs image_path:
   # [START vision_text_detection_gcs]
-  # project_id = "Your Google Cloud project ID"
   # image_path = "Google Cloud Storage URI, eg. 'gs://my-bucket/image.png'"
-  
+
   require "google/cloud/vision"
 
-  vision = Google::Cloud::Vision.new project: project_id
-  image  = vision.image image_path
+  vision = Google::Cloud::Vision.new
 
-  puts image.text
+  request  = [image:    { source: { gcs_image_uri: image_path }},
+              features: [{ type: :TEXT_DETECTION }]]
+
+  response = vision.batch_annotate_images request
+
+  # Get first element as we only annotated one image.
+  image = response.responses.first
+
+  image.text_annotations.each do |text|
+    puts text.description
+  end
   # [END vision_text_detection_gcs]
 end
 
 if __FILE__ == $PROGRAM_NAME
   image_path = ARGV.shift
-  project_id = ENV["GOOGLE_CLOUD_PROJECT"]
 
   if image_path
-    detect_text image_path: image_path, project_id: project_id
+    detect_text image_path: image_path
   else
     puts <<-usage
 Usage: ruby detect_text.rb [image file path]
