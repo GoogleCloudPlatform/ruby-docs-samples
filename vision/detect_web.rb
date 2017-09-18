@@ -28,13 +28,13 @@ def detect_web image_path:
   response = vision.batch_annotate_images request
 
   # Get first element as we only annotated one image.
-  image = response.responses.first
+  web_detection = response.responses.first.web_detection
 
-  image.web_detection.web_entities.each do |entity|
-    puts entity.description
+  web_detection.web_entities.each do |web_entity|
+    puts web_entity.description
   end
 
-  image.web_detection.full_matching_images.each do |image|
+  web_detection.full_matching_images.each do |image|
     puts image.url
   end
   # [END vision_web_detection]
@@ -57,13 +57,13 @@ def detect_web_gcs image_path:
   response = vision.batch_annotate_images request
 
   # Get first element as we only annotated one image.
-  image = response.responses.first
+  web_detection = response.responses.first.web_detection
 
-  image.web_detection.web_entities.each do |entity|
-    puts entity.description
+  web_detection.web_entities.each do |web_entity|
+    puts web_entity.description
   end
 
-  image.web_detection.full_matching_images.each do |image|
+  web_detection.full_matching_images.each do |image|
     puts image.url
   end
   # [END vision_web_detection_gcs]

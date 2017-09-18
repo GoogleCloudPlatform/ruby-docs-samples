@@ -28,15 +28,12 @@ def detect_safe_search image_path:
   response = vision.batch_annotate_images request
 
   # Get first element as we only annotated one image.
-  image = response.responses.first
+  safe_search_annotation = response.responses.first.safe_search_annotation
 
-  safe_search = image.safe_search_annotation
-  p safe_search
-
-  puts "Adult:    #{safe_search.adult}"
-  puts "Spoof:    #{safe_search.spoof}"
-  puts "Medical:  #{safe_search.medical}"
-  puts "Violence: #{safe_search.violence}"
+  puts "Adult:    #{safe_search_annotation.adult}"
+  puts "Spoof:    #{safe_search_annotation.spoof}"
+  puts "Medical:  #{safe_search_annotation.medical}"
+  puts "Violence: #{safe_search_annotation.violence}"
   # [END vision_safe_search_detection]
 end
 
@@ -57,14 +54,12 @@ def detect_safe_search_gcs image_path:
   response = vision.batch_annotate_images request
 
   # Get first element as we only annotated one image.
-  image = response.responses.first
+  safe_search_annotation = response.responses.first.safe_search_annotation
 
-  safe_search = image.safe_search_annotation
-
-  puts "Adult:    #{safe_search.adult}"
-  puts "Spoof:    #{safe_search.spoof}"
-  puts "Medical:  #{safe_search.medical}"
-  puts "Violence: #{safe_search.violence}"
+  puts "Adult:    #{safe_search_annotation.adult}"
+  puts "Spoof:    #{safe_search_annotation.spoof}"
+  puts "Medical:  #{safe_search_annotation.medical}"
+  puts "Violence: #{safe_search_annotation.violence}"
   # [END vision_safe_search_detection_gcs]
 end
 

@@ -28,9 +28,9 @@ def detect_text image_path:
   response = vision.batch_annotate_images request
 
   # Get first element as we only annotated one image.
-  image = response.responses.first
+  text_annotations = response.responses.first.text_annotations
 
-  image.text_annotations.each do |text|
+  text_annotations.each do |text|
     puts text.description
   end
   # [END vision_text_detection]
@@ -53,9 +53,9 @@ def detect_text_gcs image_path:
   response = vision.batch_annotate_images request
 
   # Get first element as we only annotated one image.
-  image = response.responses.first
+  text_annotations = response.responses.first.text_annotations
 
-  image.text_annotations.each do |text|
+  text_annotations.each do |text|
     puts text.description
   end
   # [END vision_text_detection_gcs]

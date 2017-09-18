@@ -28,9 +28,9 @@ def detect_image_properties image_path:
   response = vision.batch_annotate_images request
 
   # Get first element as we only annotated one image.
-  image = response.responses.first
+  image_properties_annotation = response.responses.first.image_properties_annotation
 
-  image.image_properties_annotation.dominant_colors.colors.each do |color_info|
+  image_properties_annotation.dominant_colors.colors.each do |color_info|
     puts "Color #{color_info.color.red}, #{color_info.color.green}, #{color_info.color.blue}"
   end
   # [END vision_image_property_detection]
@@ -51,9 +51,9 @@ def detect_image_properties_gcs image_path:
   response = vision.batch_annotate_images request
 
   # Get first element as we only annotated one image.
-  image = response.responses.first
+  image_properties_annotation = response.responses.first.image_properties_annotation
 
-  image.image_properties_annotation.dominant_colors.colors.each do |color_info|
+  image_properties_annotation.dominant_colors.colors.each do |color_info|
     puts "Color #{color_info.color.red}, #{color_info.color.green}, #{color_info.color.blue}"
   end
   # [END vision_image_property_detection_gcs]

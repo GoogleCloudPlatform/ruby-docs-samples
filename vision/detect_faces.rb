@@ -28,9 +28,9 @@ def detect_faces image_path:
   response = vision.batch_annotate_images request
 
   # Get first element as we only annotated one image.
-  image = response.responses.first
+  face_annotations = response.responses.first.face_annotations
 
-  image.face_annotations.each do |face|
+  face_annotations.each do |face|
     puts "Joy:      #{face.joy_likelihood}"
     puts "Anger:    #{face.anger_likelihood}"
     puts "Sorrow:   #{face.sorrow_likelihood}"

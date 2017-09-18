@@ -28,9 +28,9 @@ def detect_landmarks image_path:
   response = vision.batch_annotate_images request
 
   # Get first element as we only annotated one image.
-  image = response.responses.first
+  landmark_annotations = response.responses.first.landmark_annotations
 
-  image.landmark_annotations.each do |landmark|
+  landmark_annotations.each do |landmark|
     puts landmark.description
 
     landmark.locations.each do |location|
@@ -57,9 +57,9 @@ def detect_landmarks_gcs image_path:
   response = vision.batch_annotate_images request
 
   # Get first element as we only annotated one image.
-  image = response.responses.first
+  landmark_annotations = response.responses.first.landmark_annotations
 
-  image.landmark_annotations.each do |landmark|
+  landmark_annotations.each do |landmark|
     puts landmark.description
 
     landmark.locations.each do |location|

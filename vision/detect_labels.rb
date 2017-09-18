@@ -28,9 +28,9 @@ def detect_labels image_path:
   response = vision.batch_annotate_images request
 
   # Get first element as we only annotated one image.
-  image = response.responses.first
+  label_annotations = response.responses.first.label_annotations
 
-  image.label_annotations.each do |label|
+  label_annotations.each do |label|
     puts label.description
   end
   # [END vision_label_detection]
@@ -53,9 +53,9 @@ def detect_labels_gcs image_path:
   response = vision.batch_annotate_images request
 
   # Get first element as we only annotated one image.
-  image = response.responses.first
+  label_annotations = response.responses.first.label_annotations
 
-  image.label_annotations.each do |label|
+  label_annotations.each do |label|
     puts label.description
   end
   # [END vision_label_detection_gcs]

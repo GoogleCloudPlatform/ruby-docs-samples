@@ -28,9 +28,9 @@ def detect_logos image_path:
   response = vision.batch_annotate_images request
 
   # Get first element as we only annotated one image.
-  image = response.responses.first
+  logo_annotations = response.responses.first.logo_annotations
 
-  image.logo_annotations.each do |logo|
+  logo_annotations.each do |logo|
     puts logo.description
   end
   # [END vision_logo_detection]
@@ -53,9 +53,9 @@ def detect_logos_gcs image_path:
   response = vision.batch_annotate_images request
 
   # Get first element as we only annotated one image.
-  image = response.responses.first
+  logo_annotations = response.responses.first.logo_annotations
 
-  image.logo_annotations.each do |logo|
+  logo_annotations.each do |logo|
     puts logo.description
   end
   # [END vision_logo_detection_gcs]
