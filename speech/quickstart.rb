@@ -16,26 +16,28 @@
 # Imports the Google Cloud client library
 require "google/cloud/speech"
 
-# Your Google Cloud Platform project ID
-project_id = "YOUR_PROJECT_ID"
-
 # Instantiates a client
-speech = Google::Cloud::Speech.new project: project_id
+speech = Google::Cloud::Speech.new
 
 # The name of the audio file to transcribe
 file_name = "./audio_files/audio.raw"
 
+# The raw audio
+audio_file = File.binread file_name
+
 # The audio file's encoding and sample rate
-audio = speech.audio file_name, encoding:    :linear16,
-                                sample_rate: 16000,
-                                language:    "en-US"
+config = { encoding: :LINEAR16, sample_rate_hertz: 16000, language_code: "en-US" }
+audio  = { content: audio_file }
 
 # Detects speech in the audio file
-results = audio.recognize
+response = speech.recognize config, audio
+
+# Get first result because we only processed a single audio file
+alternatives = response.results.first.alternatives
 
 # Each result represents a consecutive portion of the audio
-results.each do |result|
-  puts "Transcription: #{result.transcript}"
+alternatives.each do |alternatives|
+  puts "Transcription: #{alternatives.transcript}"
 end
 # [END speech_quickstart]
 

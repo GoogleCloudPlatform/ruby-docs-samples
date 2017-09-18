@@ -12,160 +12,168 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-def speech_sync_recognize project_id: nil, audio_file_path: nil
+def speech_sync_recognize audio_file_path: nil
 # [START speech_sync_recognize]
-  # project_id      = "Your Google Cloud project ID"
   # audio_file_path = "Path to file on which to perform speech recognition"
 
   require "google/cloud/speech"
 
-  speech = Google::Cloud::Speech.new project: project_id
-  audio  = speech.audio audio_file_path, encoding:    :linear16,
-                                         sample_rate: 16000,
-                                         language:    "en-US"
+  speech = Google::Cloud::Speech.new
 
-  results = audio.recognize
+  audio_file = File.binread audio_file_path
+  config     = { encoding: :LINEAR16, sample_rate_hertz: 16000, language_code: "en-US" }
+  audio      = { content: audio_file }
 
-  results.each do |result|
-    puts "Transcription: #{result.transcript}"
+  response = speech.recognize config, audio
+
+  alternatives = response.results.first.alternatives
+
+  alternatives.each do |alternative|
+    puts "Transcription: #{alternative.transcript}"
   end
 # [END speech_sync_recognize]
 end
 
-def speech_sync_recognize_words project_id: nil, audio_file_path: nil
+def speech_sync_recognize_words audio_file_path: nil
 # [START speech_sync_recognize_words]
-  # project_id      = "Your Google Cloud project ID"
   # audio_file_path = "Path to file on which to perform speech recognition"
 
   require "google/cloud/speech"
 
-  speech = Google::Cloud::Speech.new project: project_id
-  audio  = speech.audio audio_file_path, encoding:    :linear16,
-                                         sample_rate: 16000,
-                                         language:    "en-US"
+  speech = Google::Cloud::Speech.new
 
-  results = audio.recognize words: true
+  audio_file = File.binread audio_file_path
+  config     = { encoding: :LINEAR16, sample_rate_hertz: 16000, language_code: "en-US", enable_word_time_offsets: true }
+  audio      = { content: audio_file }
 
-  results.each do |result|
-    puts "Transcription: #{result.transcript}"
+  response = speech.recognize config, audio
 
-    result.words.each do |word|
-      puts "Word: #{word.word} #{word.start_time} #{word.end_time}"
+  alternatives = response.results.first.alternatives
+
+  alternatives.each do |alternative|
+    puts "Transcription: #{alternative.transcript}"
+
+    alternative.words.each do |word|
+      start_time = word.start_time.seconds + word.start_time.nanos/1000000000.0
+      end_time   = word.end_time.seconds + word.end_time.nanos/1000000000.0
+
+      puts "Word: #{word.word} #{start_time} #{end_time}"
     end
   end
 # [END speech_sync_recognize_words]
 end
 
-def speech_sync_recognize_gcs project_id: nil, storage_path: nil
+def speech_sync_recognize_gcs storage_path: nil
 # [START speech_sync_recognize_gcs]
-  # project_id   = "Your Google Cloud project ID"
   # storage_path = "Path to file in Cloud Storage, eg. gs://bucket/audio.raw"
 
   require "google/cloud/speech"
 
-  speech = Google::Cloud::Speech.new project: project_id
-  audio  = speech.audio storage_path, encoding:    :linear16,
-                                      sample_rate: 16000,
-                                      language:    "en-US"
+  speech = Google::Cloud::Speech.new
 
-  results = audio.recognize
+  config = { encoding: :LINEAR16, sample_rate_hertz: 16000, language_code: "en-US" }
+  audio  = { uri: storage_path }
 
-  results.each do |result|
-    puts "Transcription: #{result.transcript}"
+  response = speech.recognize config, audio
+
+  alternatives = response.results.first.alternatives
+
+  alternatives.each do |alternative|
+    puts "Transcription: #{alternative.transcript}"
   end
 # [END speech_sync_recognize_gcs]
 end
 
-def speech_async_recognize project_id: nil, audio_file_path: nil
+def speech_async_recognize audio_file_path: nil
 # [START speech_async_recognize]
-  # project_id      = "Your Google Cloud project ID"
   # audio_file_path = "Path to file on which to perform speech recognition"
 
   require "google/cloud/speech"
 
-  speech = Google::Cloud::Speech.new project: project_id
-  audio  = speech.audio audio_file_path, encoding:    :linear16,
-                                         sample_rate: 16000,
-                                         language:    "en-US"
+  speech = Google::Cloud::Speech.new
 
-  operation = audio.process
+  audio_file = File.binread audio_file_path
+  config     = { encoding: :LINEAR16, sample_rate_hertz: 16000, language_code: "en-US" }
+  audio      = { content: audio_file }
 
-  puts "Operation started"
+  operation = speech.long_running_recognize config, audio
 
   operation.wait_until_done!
 
-  results = operation.results
+  raise operation.results.message if operation.error?
 
-  results.each do |result|
-    puts "Transcription: #{result.transcript}"
+  alternatives = operation.results.first.alternatives
+
+  alternatives.each do |alternative|
+    puts "Transcription: #{alternative.transcript}"
   end
 # [END speech_async_recognize]
 end
 
-def speech_async_recognize_gcs project_id: nil, storage_path: nil
+def speech_async_recognize_gcs storage_path: nil
 # [START speech_async_recognize_gcs]
-  # project_id   = "Your Google Cloud project ID"
   # storage_path = "Path to file in Cloud Storage, eg. gs://bucket/audio.raw"
 
   require "google/cloud/speech"
 
-  speech = Google::Cloud::Speech.new project: project_id
-  audio  = speech.audio storage_path, encoding:    :linear16,
-                                      sample_rate: 16000,
-                                      language:    "en-US"
+  speech = Google::Cloud::Speech.new
 
-  operation = audio.process
+  config = { encoding: :LINEAR16, sample_rate_hertz: 16000, language_code: "en-US" }
+  audio  = { uri: storage_path }
 
-  puts "Operation started"
+  operation = speech.long_running_recognize config, audio
 
   operation.wait_until_done!
 
-  results = operation.results
+  raise operation.results.message if operation.error?
 
-  results.each do |result|
-    puts "Transcription: #{result.transcript}"
+  alternatives = operation.results.first.alternatives
+
+  alternatives.each do |alternative|
+    puts "Transcription: #{alternative.transcript}"
   end
 # [END speech_async_recognize_gcs]
 end
 
-def speech_async_recognize_gcs_words project_id: nil, storage_path: nil
+def speech_async_recognize_gcs_words storage_path: nil
 # [START speech_async_recognize_gcs_words]
-  # project_id   = "Your Google Cloud project ID"
   # storage_path = "Path to file in Cloud Storage, eg. gs://bucket/audio.raw"
 
   require "google/cloud/speech"
 
-  speech = Google::Cloud::Speech.new project: project_id
-  audio  = speech.audio storage_path, encoding:    :linear16,
-                                      sample_rate: 16000,
-                                      language:    "en-US"
+  speech = Google::Cloud::Speech.new
 
-  operation = audio.process words: true
+  config = { encoding: :LINEAR16, sample_rate_hertz: 16000, language_code: "en-US", enable_word_time_offsets: true }
+  audio  = { uri: storage_path }
 
-  puts "Operation started"
+  operation = speech.long_running_recognize config, audio
 
   operation.wait_until_done!
 
-  results = operation.results
+  raise operation.results.message if operation.error?
 
-  results.each do |result|
-    puts "Transcription: #{result.transcript}"
+  alternatives = operation.results.first.alternatives
 
-    result.words.each do |word|
-      puts "Word: #{word.word} #{word.start_time} #{word.end_time}"
+  alternatives.each do |alternative|
+    puts "Transcription: #{alternative.transcript}"
+
+    alternative.words.each do |word|
+      start_time = word.start_time.seconds + word.start_time.nanos/1000000000.0
+      end_time   = word.end_time.seconds + word.end_time.nanos/1000000000.0
+
+      puts "Word: #{word.word} #{start_time} #{end_time}"
     end
   end
 # [END speech_async_recognize_gcs_words]
 end
 
-def speech_streaming_recognize project_id: nil, audio_file_path: nil
+def speech_streaming_recognize audio_file_path: nil
 # [START speech_streaming]
-  # project_id      = "Your Google Cloud project ID"
   # audio_file_path = "Path to file on which to perform speech recognition"
 
   require "google/cloud/speech"
 
-  speech = Google::Cloud::Speech.new project: project_id
+  speech = Google::Cloud::Speech.new
   stream = speech.stream encoding:    :linear16,
                          sample_rate: 16000,
                          language:    "en-US"
@@ -198,24 +206,23 @@ end
 require "google/cloud/speech"
 
 if __FILE__ == $PROGRAM_NAME
-  project_id = Google::Cloud::Speech.new.project
   command    = ARGV.shift
 
   case command
   when "recognize"
-    speech_sync_recognize project_id: project_id, audio_file_path: ARGV.first
+    speech_sync_recognize audio_file_path: ARGV.first
   when "recognize_words"
-    speech_sync_recognize_words project_id: project_id, audio_file_path: ARGV.first
+    speech_sync_recognize_words audio_file_path: ARGV.first
   when "recognize_gcs"
-    speech_sync_recognize_gcs project_id: project_id, storage_path: ARGV.first
+    speech_sync_recognize_gcs storage_path: ARGV.first
   when "async_recognize"
-    speech_async_recognize project_id: project_id, audio_file_path: ARGV.first
+    speech_async_recognize audio_file_path: ARGV.first
   when "async_recognize_gcs"
-    speech_async_recognize_gcs project_id: project_id, storage_path: ARGV.first
+    speech_async_recognize_gcs storage_path: ARGV.first
   when "async_recognize_gcs_words"
-    speech_async_recognize_gcs_words project_id: project_id, storage_path: ARGV.first
+    speech_async_recognize_gcs_words storage_path: ARGV.first
   when "stream_recognize"
-    speech_streaming_recognize project_id: project_id, audio_file_path: ARGV.first
+    speech_streaming_recognize audio_file_path: ARGV.first
   else
     puts <<-usage
 Usage: ruby speech_samples.rb <command> [arguments]

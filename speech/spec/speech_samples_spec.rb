@@ -20,7 +20,6 @@ require "google/cloud/storage"
 describe "Google Cloud Speech API samples" do
 
   before do
-    @project_id  = Google::Cloud::Speech.new.project
     @bucket_name = ENV["GOOGLE_CLOUD_STORAGE_BUCKET"]
     @storage     = Google::Cloud::Storage.new
     @bucket      = @storage.bucket @bucket_name
@@ -47,19 +46,17 @@ describe "Google Cloud Speech API samples" do
 
   example "transcribe audio file" do
     expect {
-      speech_sync_recognize project_id:      @project_id,
-                            audio_file_path: @audio_file_path
+      speech_sync_recognize audio_file_path: @audio_file_path
     }.to output("Transcription: #{@audio_file_transcript}\n").to_stdout
   end
 
   example "transcribe audio file with words" do
     capture do
-      speech_sync_recognize_words project_id:      @project_id,
-                                  audio_file_path: @audio_file_path
+      speech_sync_recognize_words audio_file_path: @audio_file_path
     end
 
     expect(captured_output).to include "Transcription: how old is the Brooklyn Bridge"
-    expect(captured_output).to include "Word: how 0 0.3"
+    expect(captured_output).to include "Word: how 0.0 0.3"
     expect(captured_output).to include "Word: old 0.3 0.6"
     expect(captured_output).to include "Word: is 0.6 0.8"
     expect(captured_output).to include "Word: the 0.8 0.9"
@@ -72,15 +69,13 @@ describe "Google Cloud Speech API samples" do
     path = "gs://#{file.bucket}/audio.raw"
 
     expect {
-      speech_sync_recognize_gcs project_id:   @project_id,
-                                storage_path: path
+      speech_sync_recognize_gcs storage_path: path
     }.to output("Transcription: #{@audio_file_transcript}\n").to_stdout
   end
 
   example "async operation to transcribe audio file" do
     expect {
-      speech_async_recognize project_id:      @project_id,
-                             audio_file_path: @audio_file_path
+      speech_async_recognize audio_file_path: @audio_file_path
     }.to output("Operation started\nTranscription: #{@audio_file_transcript}\n").to_stdout
   end
 
@@ -89,8 +84,7 @@ describe "Google Cloud Speech API samples" do
     path = "gs://#{file.bucket}/audio.raw"
 
     expect {
-      speech_async_recognize_gcs project_id:   @project_id,
-                                 storage_path: path
+      speech_async_recognize_gcs storage_path: path
     }.to output("Operation started\nTranscription: #{@audio_file_transcript}\n").to_stdout
   end
 
@@ -99,13 +93,12 @@ describe "Google Cloud Speech API samples" do
     path = "gs://#{file.bucket}/audio.raw"
 
     capture do
-      speech_async_recognize_gcs_words project_id:   @project_id,
-                                       storage_path: path
+      speech_async_recognize_gcs_words storage_path: path
     end
 
     expect(captured_output).to include "Operation started"
     expect(captured_output).to include "Transcription: how old is the Brooklyn Bridge"
-    expect(captured_output).to include "Word: how 0 0.3"
+    expect(captured_output).to include "Word: how 0.0 0.3"
     expect(captured_output).to include "Word: old 0.3 0.6"
     expect(captured_output).to include "Word: is 0.6 0.8"
     expect(captured_output).to include "Word: the 0.8 0.9"
@@ -115,8 +108,7 @@ describe "Google Cloud Speech API samples" do
 
   example "streaming operation to transcribe audio file" do
     expect {
-      speech_streaming_recognize project_id:      @project_id,
-                                 audio_file_path: @audio_file_path
+      speech_streaming_recognize audio_file_path: @audio_file_path
     }.to output(
       /how old is the Brooklyn Bridge/
     ).to_stdout
