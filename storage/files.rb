@@ -218,7 +218,7 @@ def set_metadata project_id:, bucket_name:, content_type:, file_name:, metadata_
   # [START set_metadata]
   # project_id     = "Your Google Cloud project ID"
   # bucket_name    = "Your Google Cloud Storage bucket name"
-  # file_name      = "Name of file in Google Cloud Storage to make public"
+  # file_name      = "Name of file in Google Cloud Storage"
   # content_type   = "file content type"
   # metadata_key   = "Custom metadata key"
   # metadata_value = "Custom metadata value"
@@ -229,7 +229,10 @@ def set_metadata project_id:, bucket_name:, content_type:, file_name:, metadata_
   file    = bucket.file file_name
 
   file.update do |file_update|
-    file_update.content_type           = content_type
+    # Fixed-key metadata
+    file_update.content_type = content_type
+
+    # Custom metadata
     file_update.metadata[metadata_key] = metadata_value
   end
 
