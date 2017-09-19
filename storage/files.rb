@@ -214,7 +214,7 @@ def list_file_details project_id:, bucket_name:, file_name:
   # [END list_file_details]
 end
 
-def set_metadata project_id:, bucket_name:, content_type:, file_name:, metadata_key:, metadata_value:
+def set_metadata project_id:, bucket_name:, file_name:, content_type:, metadata_key:, metadata_value:
   # [START set_metadata]
   # project_id     = "Your Google Cloud project ID"
   # bucket_name    = "Your Google Cloud Storage bucket name"
@@ -228,12 +228,10 @@ def set_metadata project_id:, bucket_name:, content_type:, file_name:, metadata_
   bucket  = storage.bucket bucket_name
   file    = bucket.file file_name
 
-  file.update do |file_update|
-    # Fixed-key metadata
-    file_update.content_type = content_type
+  file.update do |file|
+    file.content_type = content_type
 
-    # Custom metadata
-    file_update.metadata[metadata_key] = metadata_value
+    file.metadata[metadata_key] = metadata_value
   end
 
   puts "Metadata for #{file_name} has been updated."
