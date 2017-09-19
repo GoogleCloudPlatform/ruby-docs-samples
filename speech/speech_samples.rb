@@ -186,31 +186,18 @@ def speech_streaming_recognize audio_file_path: nil
   #request = speech.streaming_recognize([{streaming_config: streaming_config}])
 
   audio_content = File.binread audio_file_path
-  bytes_total   = audio_content.size
-  bytes_sent    = 0
-  chunk_size    = 32000
-
-  request_queue = Queue.new
   final_result = []
 
   # Send chunks of the audio content to the Speech API 1 second at a time
-  while bytes_sent < bytes_total do
-    result = speech.streaming_recognize([
-      {streaming_config: streaming_config},
-      {audio_content:    audio_content[bytes_sent, chunk_size]}
-    ]).each do |response|
-       response.results.each do |result|
-        result.alternatives.each do |alternative|
-          final_result << alternative.transcript if result.is_final
-        end
+  result = speech.streaming_recognize([
+    {streaming_config: streaming_config},
+    {audio_content:    audio_content}
+  ]).each do |response|
+     response.results.each do |result|
+      result.alternatives.each do |alternative|
+        final_result << alternative.transcript if result.is_final
       end
     end
-
-    # Enqueue result
-    request_queue << result
-
-    bytes_sent += chunk_size
-    sleep 1
   end
 
   puts final_result.join " "
