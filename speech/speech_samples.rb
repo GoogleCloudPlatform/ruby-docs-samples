@@ -98,11 +98,13 @@ def speech_async_recognize audio_file_path: nil
 
   operation = speech.long_running_recognize config, audio
 
+  puts "Operation started"
+
   operation.wait_until_done!
 
   raise operation.results.message if operation.error?
 
-  alternatives = operation.results.first.alternatives
+  alternatives = operation.response.results.first.alternatives
 
   alternatives.each do |alternative|
     puts "Transcription: #{alternative.transcript}"
@@ -123,11 +125,13 @@ def speech_async_recognize_gcs storage_path: nil
 
   operation = speech.long_running_recognize config, audio
 
+  puts "Operation started"
+
   operation.wait_until_done!
 
   raise operation.results.message if operation.error?
 
-  alternatives = operation.results.first.alternatives
+  alternatives = operation.response.results.first.alternatives
 
   alternatives.each do |alternative|
     puts "Transcription: #{alternative.transcript}"
@@ -148,11 +152,13 @@ def speech_async_recognize_gcs_words storage_path: nil
 
   operation = speech.long_running_recognize config, audio
 
+  puts "Operation started"
+
   operation.wait_until_done!
 
   raise operation.results.message if operation.error?
 
-  alternatives = operation.results.first.alternatives
+  alternatives = operation.response.results.first.alternatives
 
   alternatives.each do |alternative|
     puts "Transcription: #{alternative.transcript}"
@@ -174,9 +180,12 @@ def speech_streaming_recognize audio_file_path: nil
   require "google/cloud/speech"
 
   speech = Google::Cloud::Speech.new
-  stream = speech.stream encoding:    :linear16,
-                         sample_rate: 16000,
-                         language:    "en-US"
+
+  streaming_config = { config: { encoding: :LINEAR16, sample_rate_hertz: 16000, language_code: "en-US", enable_word_time_offsets: true } }
+
+  speech.streaming_recognize([{streaming_config: streaming_config}]).each do |response|
+    p repsonse
+  end
 
   audio_content = File.binread audio_file_path
   bytes_total   = audio_content.size
@@ -185,21 +194,23 @@ def speech_streaming_recognize audio_file_path: nil
 
   # Send chunks of the audio content to the Speech API 1 second at a time
   while bytes_sent < bytes_total do
-    stream.send audio_content[bytes_sent, chunk_size]
+    speech.streaming_recognize([{
+      streaming_config: streaming_config,
+      audio_content:    audio_content[bytes_sent, chunk_size]
+    }]).each do |response|
+      puts response.results
+    end
+
     bytes_sent += chunk_size
     sleep 1
   end
 
   # Signal the completion of audio content
-  stream.stop
+  #results = stream.results
 
-  stream.wait_until_complete!
-
-  results = stream.results
-
-  results.each do |result|
-    puts "Transcript: #{result.transcript}"
-  end
+  #results.each do |result|
+  #  puts "Transcript: #{result.transcript}"
+  #end
 # [END speech_streaming]
 end
 
