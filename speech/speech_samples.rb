@@ -194,9 +194,9 @@ def speech_streaming_recognize audio_file_path: nil
 
   # Send chunks of the audio content to the Speech API 1 second at a time
   while bytes_sent < bytes_total do
-    speech.streaming_recognize([{
-      streaming_config: streaming_config,
-      audio_content:    audio_content[bytes_sent, chunk_size]
+    speech.streaming_recognize([
+      {streaming_config: streaming_config},
+      {audio_content:    audio_content[bytes_sent, chunk_size]
     }]).each do |response|
       puts response.results
     end
