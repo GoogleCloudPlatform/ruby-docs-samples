@@ -183,30 +183,45 @@ def speech_streaming_recognize audio_file_path: nil
 
   streaming_config = { config: { encoding: :LINEAR16, sample_rate_hertz: 16000, language_code: "en-US", enable_word_time_offsets: true } }
 
-  speech.streaming_recognize([{streaming_config: streaming_config}]).each do |response|
-    p repsonse
-  end
+  request = speech.streaming_recognize([{streaming_config: streaming_config}])
 
   audio_content = File.binread audio_file_path
   bytes_total   = audio_content.size
   bytes_sent    = 0
   chunk_size    = 32000
 
+  request_queue = Queue.new
+  final_result = ""
+
   # Send chunks of the audio content to the Speech API 1 second at a time
   while bytes_sent < bytes_total do
-    speech.streaming_recognize([
+    result = speech.streaming_recognize([
       {streaming_config: streaming_config},
-      {audio_content:    audio_content[bytes_sent, chunk_size]
-    }]).each do |response|
-      puts response.results
-    end
+      {audio_content:    audio_content[bytes_sent, chunk_size]}
+    ])
+
+    # Enqueue result
+    request_queue << result
 
     bytes_sent += chunk_size
     sleep 1
   end
 
+  unless request_queue.empty?
+    request = request_queue.pop
+    request.each do |response|
+     final_grpc, interim_grpcs = *response.results
+      response.results.each do |result|
+        result.alternatives.each do |alternative|
+          final_result << alternative.transcript if result.is_final
+        end
+      end
+    end
+  end
+
+  puts final_result
   # Signal the completion of audio content
-  #results = stream.results
+  #results = final_result.results
 
   #results.each do |result|
   #  puts "Transcript: #{result.transcript}"
