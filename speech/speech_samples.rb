@@ -181,19 +181,29 @@ def speech_streaming_recognize audio_file_path: nil
 
   speech = Google::Cloud::Speech.new
 
-  streaming_config = { config: { encoding: :LINEAR16, sample_rate_hertz: 16000, language_code: "en-US", enable_word_time_offsets: true } }
-
-  #request = speech.streaming_recognize([{streaming_config: streaming_config}])
-
   audio_content = File.binread audio_file_path
-  final_result = []
+  bytes_total   = audio_content.size
+  bytes_sent    = 0
+  chunk_size    = 32000
+  final_result  = []
 
-  # Send chunks of the audio content to the Speech API 1 second at a time
-  result = speech.streaming_recognize([
-    {streaming_config: streaming_config},
-    {audio_content:    audio_content}
-  ]).each do |response|
-     response.results.each do |result|
+  requests = Enumerator.new do |enum|
+    streaming_config = {config:{encoding:                :LINEAR16,
+                                sample_rate_hertz:       16000,
+                                language_code:           "en-US",
+                                enable_word_time_offsets: true     }}
+    enum << {streaming_config: streaming_config}
+
+    while bytes_sent < bytes_total do
+      enum << {audio_content: audio_content[bytes_sent, chunk_size]}
+      bytes_sent += chunk_size
+      sleep 1
+    end
+  end
+
+  responses = speech.streaming_recognize requests
+  responses.each do |response|
+    response.results.each do |result|
       result.alternatives.each do |alternative|
         final_result << alternative.transcript if result.is_final
       end
@@ -201,12 +211,6 @@ def speech_streaming_recognize audio_file_path: nil
   end
 
   puts final_result.join " "
-  # Signal the completion of audio content
-  #results = final_result.results
-
-  #results.each do |result|
-  #  puts "Transcript: #{result.transcript}"
-  #end
 # [END speech_streaming]
 end
 
