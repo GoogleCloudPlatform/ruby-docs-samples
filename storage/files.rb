@@ -214,6 +214,32 @@ def list_file_details project_id:, bucket_name:, file_name:
   # [END list_file_details]
 end
 
+def set_metadata project_id:, bucket_name:, file_name:, content_type:, metadata_key:, metadata_value:
+  # [START set_metadata]
+  # project_id     = "Your Google Cloud project ID"
+  # bucket_name    = "Your Google Cloud Storage bucket name"
+  # file_name      = "Name of file in Google Cloud Storage"
+  # content_type   = "file Content-Type"
+  # metadata_key   = "Custom metadata key"
+  # metadata_value = "Custom metadata value"
+  require "google/cloud/storage"
+
+  storage = Google::Cloud::Storage.new project: project_id
+  bucket  = storage.bucket bucket_name
+  file    = bucket.file file_name
+
+  file.update do |file|
+    # Fixed key file metadata
+    file.content_type = content_type
+
+    # Custom file metadata
+    file.metadata[metadata_key] = metadata_value
+  end
+
+  puts "Metadata for #{file_name} has been updated."
+  # [END set_metadata]
+end
+
 def make_file_public project_id:, bucket_name:, file_name:
   # [START make_file_public]
   # project_id  = "Your Google Cloud project ID"
