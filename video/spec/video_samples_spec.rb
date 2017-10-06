@@ -31,7 +31,7 @@ describe "Google Cloud Video API sample" do
    expect {
      analyze_labels_gcs path: "gs://#{@labels_file}"
    }.to output(
-     /Label description: Animal/
+     /Label description: animal/
    ).to_stdout
   end
 
@@ -47,7 +47,7 @@ describe "Google Cloud Video API sample" do
       expect {
         analyze_labels_local path: local_tempfile.path
       }.to output(
-        /Label description: Animal/
+        /Label description: animal/
       ).to_stdout
     ensure
       local_tempfile.close
