@@ -19,7 +19,7 @@ describe "Video Intelligence API Quickstart" do
     expect {
       load File.expand_path("../quickstart.rb", __dir__)
     }.to output(
-      /Label description: Animal/
+      /Label description: animal/
     ).to_stdout
   end
 end
