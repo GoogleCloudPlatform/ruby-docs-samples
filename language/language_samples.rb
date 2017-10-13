@@ -19,9 +19,13 @@ def sentiment_from_text text_content:
   require "google/cloud/language"
 
   language = Google::Cloud::Language.new
+
+  # [START migration_analyze_sentiment]
+  # [START migration_sentiment]
   response = language.analyze_sentiment content: text_content, type: :PLAIN_TEXT
 
   sentiment = response.document_sentiment
+  # [END migration_sentiment]
 
   puts "Overall document sentiment: (#{sentiment.score})"
   puts "Sentence level sentiment:"
@@ -32,6 +36,7 @@ def sentiment_from_text text_content:
     sentiment = sentence.sentiment
     puts "#{sentence.text}: (#{sentiment.score})"
   end
+  # [END migration_analyze_sentiment]
   # [END sentiment_from_text]
 end
 
@@ -42,9 +47,12 @@ def sentiment_from_cloud_storage_file storage_path:
   require "google/cloud/language"
 
   language = Google::Cloud::Language.new
+
+  # [START migration_sentiment_gcs]
   response = language.analyze_sentiment gcs_content_uri: storage_path, type: :PLAIN_TEXT
 
   sentiment = response.document_sentiment
+  # [END migration_sentiment_gcs]
 
   puts "Overall document sentiment: (#{sentiment.score})"
   puts "Sentence level sentiment:"
@@ -65,6 +73,8 @@ def entities_from_text text_content:
   require "google/cloud/language"
 
   language = Google::Cloud::Language.new
+
+  # [START migration_analyze_entities]
   response = language.analyze_entities content: text_content, type: :PLAIN_TEXT
 
   entities = response.entities
@@ -76,6 +86,7 @@ def entities_from_text text_content:
       puts "URL: #{entity.metadata['wikipedia_url']}"
     end
   end
+  # [END migration_analyze_entities]
   # [END entities_from_text]
 end
 
@@ -107,6 +118,7 @@ def syntax_from_text text_content:
   require "google/cloud/language"
 
   language = Google::Cloud::Language.new
+  # [START migration_analyze_syntax]
   response = language.analyze_syntax content: text_content, type: :PLAIN_TEXT
 
   sentences = response.sentences
@@ -118,6 +130,7 @@ def syntax_from_text text_content:
   tokens.each do |token|
     puts "#{token.part_of_speech.tag} #{token.text.content}"
   end
+  # [END migration_analyze_syntax]
   # [END syntax_from_text]
 end
 

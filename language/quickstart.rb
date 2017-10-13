@@ -14,10 +14,14 @@
 
 # [START language_quickstart]
 # Imports the Google Cloud client library
+# [START language_require]
 require "google/cloud/language"
+# [END language_require]
 
 # Instantiates a client
+# [START language_create]
 language = Google::Cloud::Language.new
+# [END language_create]
 
 # The text to analyze
 text = "Hello, world!"
