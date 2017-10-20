@@ -113,6 +113,25 @@ def read_data project_id:, instance_id:, database_id:
   # [END read_data]
 end
 
+def read_stale_data project_id:, instance_id:, database_id:
+  # [START read_stale_data]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+  require "google/cloud/spanner"
+
+  spanner = Google::Cloud::Spanner.new project: project_id
+  client  = spanner.client instance_id, database_id
+
+  # Perform a read with a data staleness of 10 seconds
+  client.snapshot staleness: 10 do |snapshot|
+    snapshot.read("Albums", [:SingerId, :AlbumId, :AlbumTitle]).rows.each do |row|
+      puts "#{row[:SingerId]} #{row[:AlbumId]} #{row[:AlbumTitle]}"
+    end
+  end
+  # [END read_stale_data]
+end
+
 def create_index project_id:, instance_id:, database_id:
   # [START create_index]
   # project_id  = "Your Google Cloud project ID"
@@ -352,6 +371,7 @@ Commands:
   insert_data                  <instance_id> <database_id> Insert Data
   query_data                   <instance_id> <database_id> Query Data
   read_data                    <instance_id> <database_id> Read Data
+  read_stale_data              <instance_id> <database_id> Read Stale Data
   create_index                 <instance_id> <database_id> Create Index
   create_storing_index         <instance_id> <database_id> Create Storing Index
   add_column                   <instance_id> <database_id> Add Column
@@ -375,10 +395,10 @@ def run_sample arguments
   project_id  = ENV["GOOGLE_CLOUD_PROJECT"]
 
   commands = [
-    "create_database", "insert_data", "query_data", "read_data", "create_index",
-    "create_storing_index", "add_column", "update_data", "query_data_with_new_column",
-    "read_write_transaction", "query_data_with_index", "read_data_with_index",
-    "read_data_with_storing_index", "read_only_transaction",
+    "create_database", "insert_data", "query_data", "read_data", "read_stale_data",
+    "create_index", "create_storing_index", "add_column", "update_data",
+    "query_data_with_new_column", "read_write_transaction", "query_data_with_index",
+    "read_data_with_index", "read_data_with_storing_index", "read_only_transaction",
   ]
 
   if commands.include?(command) && instance_id && database_id

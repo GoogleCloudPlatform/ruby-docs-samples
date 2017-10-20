@@ -145,6 +145,42 @@ describe "Google Cloud Spanner API samples" do
     expect(captured_output).to include "2 3 Terrified"
   end
 
+  example "read stale data" do
+    database = create_singers_albums_database
+    client   = @spanner.client @instance.instance_id, database.database_id
+
+    # Insert Singers and Albums (re-use insert_data sample to populate)
+    insert_data project_id:  @project_id,
+                instance_id: @instance.instance_id,
+                database_id: database.database_id
+
+    capture do
+      read_stale_data project_id:  @project_id,
+                      instance_id: @instance.instance_id,
+                      database_id: database.database_id
+    end
+
+    expect(captured_output).not_to include "1 1 Total Junk"
+    expect(captured_output).not_to include "1 2 Go, Go, Go"
+    expect(captured_output).not_to include "2 1 Green"
+    expect(captured_output).not_to include "2 2 Forever Hold Your Peace"
+    expect(captured_output).not_to include "2 3 Terrified"
+
+    sleep 11 # read_stale_data expects staleness of at least 10 seconds
+
+    capture do
+      read_stale_data project_id:  @project_id,
+                      instance_id: @instance.instance_id,
+                      database_id: database.database_id
+    end
+
+    expect(captured_output).to include "1 1 Total Junk"
+    expect(captured_output).to include "1 2 Go, Go, Go"
+    expect(captured_output).to include "2 1 Green"
+    expect(captured_output).to include "2 2 Forever Hold Your Peace"
+    expect(captured_output).to include "2 3 Terrified"
+  end
+
   example "create index" do
     database = create_singers_albums_database
 

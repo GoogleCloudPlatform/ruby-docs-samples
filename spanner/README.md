@@ -53,6 +53,7 @@ environment variable to the path to the key file, for example:
       insert_data                  <instance_id> <database_id> Insert Data
       query_data                   <instance_id> <database_id> Query Data
       read_data                    <instance_id> <database_id> Read Data
+      read_stale_data              <instance_id> <database_id> Read Stale Data
       create_index                 <instance_id> <database_id> Create Index
       create_storing_index         <instance_id> <database_id> Create Storing Index
       add_column                   <instance_id> <database_id> Add Column
