@@ -21,24 +21,34 @@ require "rmagick"
 # [END import_rmagick]
 
 # [START detect_faces]
-def draw_box_around_faces path_to_image_file:, path_to_output_file:,
-                          project_id:
+def draw_box_around_faces path_to_image_file:, path_to_output_file:
   # [START get_vision_service]
-  vision = Google::Cloud::Vision.new project: project_id
+  vision = Google::Cloud::Vision.new
   # [END get_vision_service]
 
   # [START detect_face]
-  image = vision.image path_to_image_file
-  faces = image.faces
+  image = File.binread path_to_image_file
+
+  # Construct the request for label detection
+  request  = [image:    { content: image },
+              features: [{ type: :FACE_DETECTION }]]
+
+  # Perform label detection on the image file
+  response = vision.batch_annotate_images request
+
+  image = response.responses.first
+  faces = image.face_annotations
   # [END detect_face]
 
   # [START highlight_faces]
   image = Magick::Image.read(path_to_image_file).first
 
   faces.each do |face|
+    bounds = face.bounding_poly
+
     puts "Face bounds:"
-    face.bounds.face.each do |vector|
-      puts "(#{vector.x}, #{vector.y})"
+    bounds.vertices.each do |vertex|
+      puts "(#{vertex.x}, #{vertex.y})"
     end
 
     draw = Magick::Draw.new
@@ -46,10 +56,10 @@ def draw_box_around_faces path_to_image_file:, path_to_output_file:,
     draw.stroke_width 5
     draw.fill_opacity 0
 
-    x1 = face.bounds.face[0].x.to_i
-    y1 = face.bounds.face[0].y.to_i
-    x2 = face.bounds.face[2].x.to_i
-    y2 = face.bounds.face[2].y.to_i
+    x1 = bounds.vertices[0].x.to_i
+    y1 = bounds.vertices[0].y.to_i
+    x2 = bounds.vertices[2].x.to_i
+    y2 = bounds.vertices[2].y.to_i
 
     draw.rectangle x1, y1, x2, y2
     draw.draw image
