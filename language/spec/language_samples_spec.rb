@@ -187,4 +187,28 @@ describe "Google Cloud Natural Language API samples" do
     expect(output).to include "VERB am"
     expect(output).to include "NOUN Fox"
   end
+
+  example "Classify text" do
+    output = capture {
+      classify_text text_content: "Google, headquartered in Mountain View, unveiled "  +
+                                  "the new Android phone at the Consumer Electronic "  +
+                                  "Show Sundar Pichai said in his keynote that users " +
+                                  "love their new Android phones."
+    }
+
+    expect(output).to include "Computers & Electronics Confidence"
+  end
+
+  example "Classify text from a file stored in Google Cloud Storage" do
+    upload "classify.txt", "Google, headquartered in Mountain View, unveiled "  +
+                           "the new Android phone at the Consumer Electronic "  +
+                           "Show Sundar Pichai said in his keynote that users " +
+                           "love their new Android phones."
+
+    output = capture {
+      classify_text_from_cloud_storage_file storage_path: "gs://#{@bucket_name}/classify.txt"
+    }
+
+    expect(output).to include "Computers & Electronics Confidence"
+  end
 end

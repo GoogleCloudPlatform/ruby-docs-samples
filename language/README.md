@@ -60,33 +60,67 @@ Usage:
 
 Example:
 
-    bundle exec ruby language_samples.rb "Alice and Bob are frustrated. William Shakespeare is extremely amazingly great."
+    bundle exec ruby language_samples.rb "Google, headquartered in Mountain View, unveiled the new Android phone at the Consumer Electronic Show. Sundar Pichai said in his keynote that users love their new Android phones."
 
     Sentiment:
-    Overall document sentiment: 0.20000000298023224
+    Overall document sentiment: (0.30000001192092896)
     Sentence level sentiment:
-    Alice and Bob are frustrated. (-0.30000001192092896)
-    William Shakespeare is extremely amazingly great. (0.800000011920929)
+    Google, headquartered in Mountain View, unveiled the new Android phone at the Consumer Electronic Show.: (0.0)
+    Sundar Pichai said in his keynote that users love their new Android phones.: (0.6000000238418579)
 
     Entities:
-    Entity Alice PERSON
-    Entity Bob PERSON
-    Entity William Shakespeare PERSON http://en.wikipedia.org/wiki/William_Shakespeare
+    Entity Google ORGANIZATION
+    URL: https://en.wikipedia.org/wiki/Google
+    Entity users PERSON
+    Entity phone CONSUMER_GOOD
+    Entity Android CONSUMER_GOOD
+    URL: https://en.wikipedia.org/wiki/Android_(operating_system)
+    Entity Sundar Pichai PERSON
+    URL: https://en.wikipedia.org/wiki/Sundar_Pichai
+    Entity Mountain View LOCATION
+    URL: https://en.wikipedia.org/wiki/Mountain_View,_California
+    Entity Consumer Electronic Show EVENT
+    URL: https://en.wikipedia.org/wiki/Consumer_Electronics_Show
+    Entity phones CONSUMER_GOOD
+    Entity keynote OTHER
 
     Syntax:
     Sentences: 2
-    Tokens: 13
-    NOUN Alice
-    CONJ and
-    NOUN Bob
-    VERB are
-    ADJ frustrated
+    Tokens: 32
+    NOUN Google
+    PUNCT ,
+    VERB headquartered
+    ADP in
+    NOUN Mountain
+    NOUN View
+    PUNCT ,
+    VERB unveiled
+    DET the
+    ADJ new
+    NOUN Android
+    NOUN phone
+    ADP at
+    DET the
+    NOUN Consumer
+    NOUN Electronic
+    NOUN Show
     PUNCT .
-    NOUN William
-    NOUN Shakespeare
-    VERB is
-    ADV extremely
-    ADV amazingly
-    ADJ great
+    NOUN Sundar
+    NOUN Pichai
+    VERB said
+    ADP in
+    PRON his
+    NOUN keynote
+    ADP that
+    NOUN users
+    VERB love
+    PRON their
+    ADJ new
+    NOUN Android
+    NOUN phones
     PUNCT .
 
+    Classify:
+    Name: /Computers & Electronics Confidence: 0.6100000143051147
+    Name: /Internet & Telecom/Mobile & Wireless Confidence: 0.5299999713897705
+    Name: /News Confidence: 0.5299999713897705

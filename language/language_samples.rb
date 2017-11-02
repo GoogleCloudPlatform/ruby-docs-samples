@@ -33,7 +33,7 @@ def sentiment_from_text text_content:
 
   sentences.each do |sentence|
     sentiment = sentence.sentiment
-    puts "#{sentence.text}: (#{sentiment.score})"
+    puts "#{sentence.text.content}: (#{sentiment.score})"
   end
   # [END sentiment_from_text]
 end
@@ -59,7 +59,7 @@ def sentiment_from_cloud_storage_file storage_path:
 
   sentences.each do |sentence|
     sentiment = sentence.sentiment
-    puts "#{sentence.text}: (#{sentiment.score})"
+    puts "#{sentence.text.content}: (#{sentiment.score})"
   end
   # [END sentiment_from_cloud_storage_file]
 end
@@ -149,6 +149,41 @@ def syntax_from_cloud_storage_file storage_path:
   # [END syntax_from_cloud_storage_file]
 end
 
+def classify_text text_content:
+  # [START language_classify_string]
+  # text_content = "Text to classify"
+
+  require "google/cloud/language"
+
+  language = Google::Cloud::Language.new
+  response = language.classify_text content: text_content, type: :PLAIN_TEXT
+
+  categories = response.categories
+
+  categories.each do |category|
+    puts "Name: #{category.name} Confidence: #{category.confidence}"
+  end
+  # [END language_classify_string]
+end
+
+def classify_text_from_cloud_storage_file storage_path:
+  # [START language_classify_file]
+  # storage_path = "Text to classify"
+
+  require "google/cloud/language"
+
+  language = Google::Cloud::Language.new
+  response = language.classify_text gcs_content_uri: storage_path, type: :PLAIN_TEXT
+
+  categories = response.categories
+
+  categories.each do |category|
+    puts "Name: #{category.name} Confidence: #{category.confidence}"
+  end
+  # [END language_classify_file]
+end
+
+
 if __FILE__ == $PROGRAM_NAME
 
   if ARGV.length == 1
@@ -158,6 +193,8 @@ if __FILE__ == $PROGRAM_NAME
     entities_from_text text_content: ARGV.first
     puts "Syntax:"
     syntax_from_text text_content: ARGV.first
+    puts "Classify:"
+    classify_text text_content: ARGV.first
   else
     puts "Usage: ruby language_samples.rb <text-to-analyze>"
   end
