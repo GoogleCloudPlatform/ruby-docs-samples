@@ -33,7 +33,6 @@ describe "Google Cloud Storage IAM sample" do
       policy.roles[@test_role] = [@test_member]
     end
 
-    @bucket.policy force: true
     expect(@bucket.policy.roles[@test_role]).to include @test_member
 
    expect {
@@ -48,7 +47,6 @@ describe "Google Cloud Storage IAM sample" do
       policy.roles[@test_role] = []
     end
 
-    @bucket.policy force: true
     expect(@bucket.policy.roles[@test_role]).to eq nil
 
     expect {
@@ -60,7 +58,6 @@ describe "Google Cloud Storage IAM sample" do
       /Added #{@test_member} with role #{@test_role}/
     ).to_stdout
 
-    @bucket.policy force: true
     expect(@bucket.policy.roles[@test_role]).to include @test_member
   end
 
@@ -69,7 +66,6 @@ describe "Google Cloud Storage IAM sample" do
       policy.roles[@test_role] = [@test_member]
     end
 
-    @bucket.policy force: true
     expect(@bucket.policy.roles[@test_role]).to include @test_member
 
     expect {
@@ -81,7 +77,6 @@ describe "Google Cloud Storage IAM sample" do
       /Removed #{@test_member} with role #{@test_role}/
     ).to_stdout
 
-    @bucket.policy force: true
     expect(@bucket.policy.roles[@test_role]).to eq nil
   end
 end
