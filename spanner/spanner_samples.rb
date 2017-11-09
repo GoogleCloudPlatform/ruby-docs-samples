@@ -123,8 +123,8 @@ def read_stale_data project_id:, instance_id:, database_id:
   spanner = Google::Cloud::Spanner.new project: project_id
   client  = spanner.client instance_id, database_id
 
-  # Perform a read with a data staleness of 10 seconds
-  client.snapshot staleness: 10 do |snapshot|
+  # Perform a read with a data staleness of 15 seconds
+  client.snapshot staleness: 15 do |snapshot|
     snapshot.read("Albums", [:SingerId, :AlbumId, :AlbumTitle]).rows.each do |row|
       puts "#{row[:SingerId]} #{row[:AlbumId]} #{row[:AlbumTitle]}"
     end
