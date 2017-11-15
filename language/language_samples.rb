@@ -168,7 +168,7 @@ end
 
 def classify_text_from_cloud_storage_file storage_path:
   # [START language_classify_file]
-  # storage_path = "Text to classify"
+  # storage_path = "Path to file in Google Cloud Storage, eg. gs://bucket/file"
 
   require "google/cloud/language"
 
