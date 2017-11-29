@@ -276,22 +276,27 @@ def read_write_transaction project_id:, instance_id:, database_id:
   # [END read_write_transaction]
 end
 
-def query_data_with_index project_id:, instance_id:, database_id:
+def query_data_with_index project_id:, instance_id:, database_id:, start_title: "Ardvark", end_title: "Goo"
   # [START query_data_with_index]
   # project_id  = "Your Google Cloud project ID"
   # instance_id = "Your Spanner instance ID"
   # database_id = "Your Spanner database ID"
+  # start_title = "An album title to start with such as 'Ardvark'"
+  # end_title   = "An album title to end with such as 'Goo'"
 
   require "google/cloud/spanner"
 
   spanner = Google::Cloud::Spanner.new project: project_id
   client  = spanner.client instance_id, database_id
 
-  sql_query = 'SELECT AlbumId, AlbumTitle, MarketingBudget
+  sql_query = "SELECT AlbumId, AlbumTitle, MarketingBudget
                FROM Albums@{FORCE_INDEX=AlbumsByAlbumTitle}
-               WHERE AlbumTitle >= "Aardvark" AND AlbumTitle < "Goo"'
+               WHERE AlbumTitle >= @start_title AND AlbumTitle < @end_title"
 
-  client.execute(sql_query).rows.each do |row|
+  params      = { start_title: start_title, end_title: end_title }
+  param_types = { start_title: :STRING,     end_title: :STRING }
+
+  client.execute(sql_query, params: params, types: param_types).rows.each do |row|
     puts "#{row[:AlbumId]} #{row[:AlbumTitle]} #{row[:MarketingBudget]}"
   end
   # [END query_data_with_index]
@@ -379,7 +384,7 @@ Commands:
   query_data_with_new_column   <instance_id> <database_id> Query Data with New Column
   read_write_transaction       <instance_id> <database_id> Read-Write Transaction
   query_data_with_index        <instance_id> <database_id> Query Data with Index
-  read_data_with_index         <instance_id> <database_id> Read Data with Index
+  read_data_with_index         <instance_id> <database_id> <start_title> <end_title> Read Data with Index
   read_data_with_storing_index <instance_id> <database_id> Read Data with Storing Index
   read_only_transaction        <instance_id> <database_id> Read-Only Transaction
 
@@ -401,7 +406,13 @@ def run_sample arguments
     "read_data_with_index", "read_data_with_storing_index", "read_only_transaction",
   ]
 
-  if commands.include?(command) && instance_id && database_id
+  if command.eql? "query_data_with_index" && instance_id && database_id && arguments.size >= 2
+    query_data_with_index project_id:  project_id,
+                          instance_id: instance_id,
+                          database_id: database_id,
+                          start_title: arguments.shift,
+                          end_title:   arguments.shift
+  elsif commands.include?(command) && instance_id && database_id
     send command, project_id:  project_id,
                   instance_id: instance_id,
                   database_id: database_id
