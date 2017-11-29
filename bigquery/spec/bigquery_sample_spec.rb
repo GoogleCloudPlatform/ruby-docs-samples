@@ -192,15 +192,16 @@ describe "Google Cloud BigQuery samples" do
         csv << [ "Bob",   10 ]
       end
 
-      @table.load(csv_file.path).wait_until_done!
+      @table.load csv_file.path
 
-      expect {
+      capture {
         list_table_data project_id: @project_id,
                         dataset_id: @dataset_name,
                         table_id:   @table_name
-      }.to output(
-        "name = Alice\nvalue = 5\nname = Bob\nvalue = 10\n"
-      ).to_stdout
+      }
+
+      expect(captured_output).to include "name = Bob\nvalue = 10"
+      expect(captured_output).to include "name = Alice\nvalue = 5"
     end
 
     example "list table data with pagination"
@@ -235,8 +236,8 @@ describe "Google Cloud BigQuery samples" do
 
       expect(loaded_data).not_to be_empty
       expect(loaded_data.count).to eq 2
-      expect(loaded_data).to include({ "name" => "Alice", "value" => 5  })
-      expect(loaded_data).to include({ "name" => "Bob",   "value" => 10 })
+      expect(loaded_data).to include({ name: "Alice", value: 5  })
+      expect(loaded_data).to include({ name: "Bob",   value: 10 })
     end
 
     example "import data from Cloud Storage" do
@@ -271,8 +272,8 @@ describe "Google Cloud BigQuery samples" do
 
       expect(loaded_data).not_to be_empty
       expect(loaded_data.count).to eq 2
-      expect(loaded_data).to include({ "name" => "Alice", "value" => 5  })
-      expect(loaded_data).to include({ "name" => "Bob",   "value" => 10 })
+      expect(loaded_data).to include({ name: "Alice", value: 5  })
+      expect(loaded_data).to include({ name: "Bob",   value: 10 })
     end
 
     example "stream data import" do
@@ -301,8 +302,8 @@ describe "Google Cloud BigQuery samples" do
 
       expect(loaded_data).not_to be_empty
       expect(loaded_data.count).to eq 2
-      expect(loaded_data).to include({ "name" => "Alice", "value" => 5  })
-      expect(loaded_data).to include({ "name" => "Bob",   "value" => 10 })
+      expect(loaded_data).to include({ name: "Alice", value: 5  })
+      expect(loaded_data).to include({ name: "Bob",   value: 10 })
     end
   end
 
@@ -313,7 +314,7 @@ describe "Google Cloud BigQuery samples" do
         csv << [ "Bob",   10 ]
       end
 
-      @table.load(csv_file.path).wait_until_done!
+      @table.load csv_file.path
 
       expect(@bucket.file "#{@file_name}.csv").to be nil
 
@@ -342,9 +343,9 @@ describe "Google Cloud BigQuery samples" do
 
       csv = CSV.read local_file.path
 
-      expect(csv[0]).to eq %w[ name value ]
-      expect(csv[1]).to eq %w[ Alice 5    ]
-      expect(csv[2]).to eq %w[ Bob   10   ]
+      expect(csv).to include %w[ name value ]
+      expect(csv).to include %w[ Alice 5    ]
+      expect(csv).to include %w[ Bob   10   ]
     end
   end
 
@@ -353,27 +354,27 @@ describe "Google Cloud BigQuery samples" do
       capture do
         run_query(
           project_id:   @project_id,
-          query_string: "SELECT TOP(word, 50) as word, COUNT(*) as count " +
-                        "FROM publicdata:samples.shakespeare"
+          query_string: "SELECT APPROX_TOP_COUNT(word, 50) as word, COUNT(*) as count " +
+                        "FROM `publicdata.samples.shakespeare`"
         )
       end
 
-      expect(captured_output).to include '{"word"=>"you", "count"=>42}'
+      expect(captured_output).to include '{:value=>"you", :count=>42}'
     end
 
     example "run query as job" do
       capture do
         run_query_as_job(
           project_id:   @project_id,
-          query_string: "SELECT TOP(word, 50) as word, COUNT(*) as count " +
-                        "FROM publicdata:samples.shakespeare"
+          query_string: "SELECT APPROX_TOP_COUNT(word, 50) as word, COUNT(*) as count " +
+                        "FROM `publicdata.samples.shakespeare`"
         )
       end
 
       expect(captured_output).to include "Running query"
       expect(captured_output).to include "Waiting for query to complete"
       expect(captured_output).to include "Query results:"
-      expect(captured_output).to include '{"word"=>"you", "count"=>42}'
+      expect(captured_output).to include '{:value=>"you", :count=>42}'
     end
   end
 end
