@@ -13,34 +13,34 @@
 # limitations under the License.
 
 # [START videointelligence_quickstart]
-require "google/cloud/video_intelligence/v1beta1"
+require "google/cloud/video_intelligence"
 
-video_client = Google::Cloud::VideoIntelligence::V1beta1::VideoIntelligenceServiceClient.new
+video_client = Google::Cloud::VideoIntelligence.new
 features     = [:LABEL_DETECTION]
 path         = "gs://demomaker/cat.mp4"
 
 # Register a callback during the method call
-operation = video_client.annotate_video path, features do |operation|
+operation = video_client.annotate_video input_uri: path, features: [:LABEL_DETECTION] do |operation|
   raise operation.results.message? if operation.error?
   puts "Finished Processing."
 
-  # first result is retrieved because a single video was processed
-  annotation_result = operation.results.annotation_results.first
+  labels = operation.results.annotation_results.first.segment_label_annotations
 
-  annotation_result.label_annotations.each do |label_annotation|
-    puts "Label description: #{label_annotation.description}"
-    puts "Locations:"
+  labels.each do |label|
+    puts "Label description: #{label.entity.description}"
 
-    label_annotation.locations.each do |location|
-      if location.level == :VIDEO_LEVEL
-        puts "Entire video"
-      else
-        segment          = location.segment
-        start_in_seconds = segment.start_time_offset / 1000000.0
-        end_in_seconds   = segment.end_time_offset / 1000000.0
+    label.category_entities.each do |category_entity|
+      puts "Label category description: #{category_entity.description}"
+    end
 
-        puts "#{start_in_seconds} through #{end_in_seconds}"
-      end
+    label.segments.each do |segment|
+      start_time = ( segment.segment.start_time_offset.seconds +
+                     segment.segment.start_time_offset.nanos / 1e9 )
+      end_time =   ( segment.segment.end_time_offset.seconds +
+                     segment.segment.end_time_offset.nanos / 1e9 )
+
+      puts "Segment: #{start_time} to #{end_time}"
+      puts "Confidence: #{segment.confidence}"
     end
   end
 end
@@ -48,4 +48,3 @@ end
 puts "Processing video for label annotations:"
 operation.wait_until_done!
 # [END videointelligence_quickstart]
-
