@@ -20,7 +20,7 @@ features     = [:LABEL_DETECTION]
 path         = "gs://demomaker/cat.mp4"
 
 # Register a callback during the method call
-operation = video_client.annotate_video input_uri: path, features: [:LABEL_DETECTION] do |operation|
+operation = video_client.annotate_video input_uri: path, features: features do |operation|
   raise operation.results.message? if operation.error?
   puts "Finished Processing."
 
