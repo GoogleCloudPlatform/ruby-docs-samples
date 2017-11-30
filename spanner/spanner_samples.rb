@@ -382,9 +382,9 @@ Commands:
   add_column                   <instance_id> <database_id> Add Column
   update_data                  <instance_id> <database_id> Update Data
   query_data_with_new_column   <instance_id> <database_id> Query Data with New Column
+  query_data_with_index        <instance_id> <database_id> <start_title> <end_title> Query Data with Index
   read_write_transaction       <instance_id> <database_id> Read-Write Transaction
-  query_data_with_index        <instance_id> <database_id> Query Data with Index
-  read_data_with_index         <instance_id> <database_id> <start_title> <end_title> Read Data with Index
+  read_data_with_index         <instance_id> <database_id> Read Data with Index
   read_data_with_storing_index <instance_id> <database_id> Read Data with Storing Index
   read_only_transaction        <instance_id> <database_id> Read-Only Transaction
 
@@ -406,7 +406,12 @@ def run_sample arguments
     "read_data_with_index", "read_data_with_storing_index", "read_only_transaction",
   ]
 
-  if command.eql? "query_data_with_index" && instance_id && database_id && arguments.size >= 2
+  puts instance_id
+  puts database_id
+  puts arguments.size
+
+  if command.eql?("query_data_with_index") && instance_id && database_id && arguments.size >= 2
+    puts "hello"
     query_data_with_index project_id:  project_id,
                           instance_id: instance_id,
                           database_id: database_id,
