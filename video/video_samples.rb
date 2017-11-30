@@ -161,10 +161,6 @@ def run_sample arguments
     analyze_labels_gcs path: arguments.shift
   when "analyze_labels_local"
     analyze_labels_local path: arguments.shift
-  when "analyze_faces"
-    analyze_faces path: arguments.shift
-  when "analyze_safe_search"
-    analyze_safe_search path: arguments.shift
   when "analyze_shots"
     analyze_shots path: arguments.shift
   when "analyze_explicit_content"
