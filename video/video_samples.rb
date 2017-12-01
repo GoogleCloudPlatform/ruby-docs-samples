@@ -55,12 +55,11 @@ def analyze_labels_local path:
   # [START analyze_labels_local]
   # path = "Path to a local video file: path/to/file.mp4"
 
-  require "base64"
   require "google/cloud/video_intelligence"
 
-  video         = Google::Cloud::VideoIntelligence.new
-  video_file    = File.read path
-  encoded_video = Base64.encode64 video_file
+  video = Google::Cloud::VideoIntelligence.new
+
+  encoded_video = File.binread path
 
   # Register a callback during the method call
   operation = video.annotate_video input_content: encoded_video, features: [:LABEL_DETECTION] do |operation|
