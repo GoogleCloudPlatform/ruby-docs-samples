@@ -59,10 +59,10 @@ def analyze_labels_local path:
 
   video = Google::Cloud::VideoIntelligence.new
 
-  encoded_video = File.binread path
+  video_contents = File.binread path
 
   # Register a callback during the method call
-  operation = video.annotate_video input_content: encoded_video, features: [:LABEL_DETECTION] do |operation|
+  operation = video.annotate_video input_content: video_contents, features: [:LABEL_DETECTION] do |operation|
     raise operation.results.message? if operation.error?
     puts "Finished Processing."
 
