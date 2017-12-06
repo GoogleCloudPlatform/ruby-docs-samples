@@ -30,6 +30,8 @@ paths:
         required: true
         schema:
           $ref: "#/definitions/echoMessage"
+      security:
+      - api_key: []
   "/auth/info/googlejwt":
     get:
       description: "Returns the requests' authentication information."
@@ -106,9 +108,6 @@ definitions:
         type: "string"
       email:
         type: "string"
-# This section requires all requests to any path to require an API key.
-security:
-- api_key: []
 securityDefinitions:
   # This section configures basic authentication with an API key.
   api_key:

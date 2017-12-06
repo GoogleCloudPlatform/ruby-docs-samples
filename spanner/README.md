@@ -59,8 +59,8 @@ environment variable to the path to the key file, for example:
       add_column                   <instance_id> <database_id> Add Column
       update_data                  <instance_id> <database_id> Update Data
       query_data_with_new_column   <instance_id> <database_id> Query Data with New Column
+      query_data_with_index        <instance_id> <database_id> <start_title> <end_title> Query Data with Index
       read_write_transaction       <instance_id> <database_id> Read-Write Transaction
-      query_data_with_index        <instance_id> <database_id> Query Data with Index
       read_data_with_index         <instance_id> <database_id> Read Data with Index
       read_data_with_storing_index <instance_id> <database_id> Read Data with Storing Index
       read_only_transaction        <instance_id> <database_id> Read-Only Transaction

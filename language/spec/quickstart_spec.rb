@@ -20,7 +20,6 @@ describe "Language Quickstart" do
   it "detect sentiment" do
     language = Google::Cloud::Language.new
     expect(Google::Cloud::Language).to receive(:new).
-                                       with(project: "YOUR_PROJECT_ID").
                                        and_return(language)
 
     expect {

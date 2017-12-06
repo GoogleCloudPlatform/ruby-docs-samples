@@ -121,7 +121,7 @@ def import_table_data_from_file project_id:, dataset_id:, table_id:,
   table    = dataset.table table_id
 
   puts "Importing data from file: #{local_file_path}"
-  load_job = table.load local_file_path
+  load_job = table.load_job local_file_path
 
   puts "Waiting for load job to complete: #{load_job.job_id}"
   load_job.wait_until_done!
@@ -145,7 +145,7 @@ def import_table_data_from_cloud_storage project_id:, dataset_id:, table_id:,
   table    = dataset.table table_id
 
   puts "Importing data from Cloud Storage file: #{storage_path}"
-  load_job = table.load storage_path
+  load_job = table.load_job storage_path
 
   puts "Waiting for load job to complete: #{load_job.job_id}"
   load_job.wait_until_done!
@@ -169,7 +169,7 @@ def export_table_data_to_cloud_storage project_id:, dataset_id:, table_id:,
   table    = dataset.table table_id
 
   puts "Exporting data to Cloud Storage file: #{storage_path}"
-  extract_job = table.extract storage_path
+  extract_job = table.extract_job storage_path
 
   puts "Waiting for extract job to complete: #{extract_job.job_id}"
   extract_job.wait_until_done!

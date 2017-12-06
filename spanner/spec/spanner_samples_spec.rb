@@ -166,7 +166,7 @@ describe "Google Cloud Spanner API samples" do
     expect(captured_output).not_to include "2 2 Forever Hold Your Peace"
     expect(captured_output).not_to include "2 3 Terrified"
 
-    sleep 11 # read_stale_data expects staleness of at least 10 seconds
+    sleep 16 # read_stale_data expects staleness of at least 15 seconds
 
     capture do
       read_stale_data project_id:  @project_id,
