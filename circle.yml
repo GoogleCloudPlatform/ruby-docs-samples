@@ -17,11 +17,11 @@ dependencies:
 test:
   override:
     # Ruby 2.2.8
-    - rvm-exec 2.2.8 ./spec/run-all.sh
+    #- rvm-exec 2.2.8 ./spec/run-all.sh
     # Ruby 2.3.5
-    - rvm-exec 2.3.5 ./spec/run-all.sh
+    #- rvm-exec 2.3.5 ./spec/run-all.sh
     # Ruby 2.4.2
-    - rvm-exec 2.4.2 ./spec/run-all.sh
+    #- rvm-exec 2.4.2 ./spec/run-all.sh
     # Ruby 2.5
     - rvm-exec 2.5.0-preview1 ./spec/run-all.sh
 
