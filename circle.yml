@@ -24,7 +24,7 @@ test:
     #- rvm-exec 2.3.5 ./spec/run-all.sh
     # Ruby 2.4.2
     #- rvm-exec 2.4.2 ./spec/run-all.sh
-    # Ruby 2.5
-    - rvm-exec 2.5.0-preview1 ./spec/run-all.sh
+    # Ruby HEAD
+    - rvm-exec ruby-head ./spec/run-all.sh
 
 
