@@ -14,6 +14,10 @@ dependencies:
     - sudo mkdir /cloudsql && sudo chmod 0777 /cloudsql
     - rvm get stable
     - gem update --system
+    - rvm-exec 2.2.8 gem install bundler
+    - rvm-exec 2.3.5 gem install bundler
+    - rvm-exec 2.4.2 gem install bundler
+    - rvm-exec ruby-head gem install bundler
 
 # Test
 test:
