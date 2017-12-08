@@ -19,13 +19,12 @@ require "google/cloud/storage"
 
 describe "Logging sample" do
 
-  # Simple wait method. Test for condition 5 times, delaying 1 second each time
-  def wait_until times: 5, delay: 1, &condition
-    times.times do
+  def wait_until &condition
+    1.upto(5) do |n|
       return if condition.call
-      sleep delay
+      sleep 2**n
     end
-    raise "Condition not met.  Waited #{times} times with #{delay} sec delay"
+    raise "Attempted to wait but Condition not met."
   end
 
   # Frequently used full path to "my_application_log" for test project
@@ -193,6 +192,13 @@ describe "Logging sample" do
   end
 
   it "can delete log" do
+    write_log_entry
+
+    wait_until do
+      entries = my_application_log_entries
+      entries.any?
+    end
+
     expect { delete_log }.not_to raise_error
   end
 

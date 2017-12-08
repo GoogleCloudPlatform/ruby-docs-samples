@@ -17,20 +17,18 @@ require "google/cloud/logging"
 
 describe "Logging Quickstart" do
 
-  # Simple wait method. Test for condition 5 times, delaying 1 second each time
-  def wait_until times: 5, delay: 1, &condition
-    times.times do
+  def wait_until &condition
+    1.upto(5) do |n|
       return if condition.call
-      sleep delay
+      sleep 2**n
     end
-    raise "Condition not met. Waited #{times} times with #{delay} sec delay"
+    raise "Attempted to wait but Condition not met."
   end
 
   before do
     @logging  = Google::Cloud::Logging.new
     @entry    = @logging.entry
-    @log_name = "projects/#{@logging.project}/logs/" +
-                "quickstart_log_#{Time.now.to_i}"
+    @log_name = "projects/#{@logging.project}/logs/quickstart_log"
 
     @entry.log_name = @log_name
   end
@@ -43,7 +41,7 @@ describe "Logging Quickstart" do
   end
 
   def test_log_entries
-    @logging.entries filter: %Q{logName="#{@log_name}"}
+    @logging.entries filter: %Q{logName = "#{@log_name}"}
   end
 
   it "logs a new entry" do
@@ -62,6 +60,8 @@ describe "Logging Quickstart" do
     ).to_stdout
 
     entries = []
+
+    entries = test_log_entries;
 
     wait_until { entries = test_log_entries; entries.any? }
 
