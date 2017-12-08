@@ -29,6 +29,12 @@ describe "Datastore task list" do
     delete_tasks
   end
 
+  def wait_until times: 5, delay: 10, &condition
+    times.times do
+      return if condition.call
+    end
+  end
+
   def delete_tasks
     tasks = @datastore.run @datastore.query("Task")
     @datastore.delete(*tasks.map(&:key)) unless tasks.empty?
@@ -68,6 +74,9 @@ describe "Datastore task list" do
       t.exclude_from_indexes! "description", true
     end
     @datastore.save task1, task2
+
+    query = @datastore.query("Task").order("created")
+    wait_until { @datastore.run(query).any? }
 
     expect { list_tasks }.to output(/Test 1/).to_stdout
   end
