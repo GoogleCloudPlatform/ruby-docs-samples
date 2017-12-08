@@ -25,19 +25,25 @@ describe "Logging Quickstart" do
     raise "Attempted to wait but Condition not met."
   end
 
+  def delete_log_entries
+    begin
+      @logging.delete_log @log_name
+    rescue Google::Cloud::NotFoundError
+    end
+  end
+
   before do
     @logging  = Google::Cloud::Logging.new
     @entry    = @logging.entry
     @log_name = "projects/#{@logging.project}/logs/quickstart_log"
 
     @entry.log_name = @log_name
+
+    delete_log_entries
   end
 
   after do
-    begin
-      @logging.delete_log @log_name
-    rescue Google::Cloud::NotFoundError
-    end
+    delete_log_entries
   end
 
   def test_log_entries
