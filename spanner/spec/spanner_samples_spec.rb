@@ -19,9 +19,9 @@ require "google/cloud/spanner"
 describe "Google Cloud Spanner API samples" do
 
   before do
-    @spanner            = Google::Cloud::Spanner.new
-    @project_id         = @spanner.project_id
-    @instance           = @spanner.instance ENV["GOOGLE_CLOUD_SPANNER_TEST_INSTANCE"]
+    @spanner    = Google::Cloud::Spanner.new
+    @project_id = @spanner.project_id
+    @instance   = @spanner.instance ENV["GOOGLE_CLOUD_SPANNER_TEST_INSTANCE"]
   end
 
   before :each do

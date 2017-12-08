@@ -12,16 +12,30 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+require_relative "../spanner_samples"
 require "rspec"
 require "google/cloud/spanner"
 
 describe "Spanner Quickstart" do
 
   it "outputs a 1" do
-    spanner         = Google::Cloud::Spanner.new
-    instance_id     = ENV["GOOGLE_CLOUD_SPANNER_TEST_INSTANCE"]
-    database_id     = ENV["GOOGLE_CLOUD_SPANNER_TEST_DATABASE"]
+    spanner     = Google::Cloud::Spanner.new
+    project_id  = spanner.project_id
+    instance_id = ENV["GOOGLE_CLOUD_SPANNER_TEST_INSTANCE"]
+    database_id = "db_for_all_tests"
+    instance = spanner.instance instance_id
+
+    unless instance.database database_id
+      real_stdout = $stdout
+      $stdout = StringIO.new
+      create_database project: project_id,
+                      instance_id: instance_id,
+                      database_id: database_id
+      $stdout = real_stdout
+    end
+
     database_client = spanner.client instance_id, database_id
+
 
     expect(Google::Cloud::Spanner).to receive(:new).
                                       with(project: "YOUR_PROJECT_ID").
@@ -34,6 +48,8 @@ describe "Spanner Quickstart" do
     expect {
       load File.expand_path("../quickstart.rb", __dir__)
     }.to output(/1/).to_stdout
+
+    instance.database(database_id).drop
   end
 
 end
