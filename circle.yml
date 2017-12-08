@@ -17,7 +17,6 @@ dependencies:
     - rvm-exec 2.2.8 gem install bundler
     - rvm-exec 2.3.5 gem install bundler
     - rvm-exec 2.4.2 gem install bundler
-    - rvm-exec ruby-head gem install bundler
 
 # Test
 test:
@@ -28,7 +27,4 @@ test:
     - rvm-exec 2.3.5 ./spec/run-all.sh
     # Ruby 2.4.2
     - rvm-exec 2.4.2 ./spec/run-all.sh
-    # Ruby HEAD
-    - rvm-exec ruby-head ./spec/run-all.sh
-
 
