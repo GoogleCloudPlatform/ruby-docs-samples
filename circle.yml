@@ -12,6 +12,8 @@ dependencies:
       mv cloud_sql_proxy.linux.amd64 $HOME/cloud_sql_proxy &&
       chmod +x $HOME/cloud_sql_proxy
     - sudo mkdir /cloudsql && sudo chmod 0777 /cloudsql
+    - rvm get stable
+    - gem update --system
 
 # Test
 test:
