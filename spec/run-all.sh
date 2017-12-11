@@ -8,7 +8,6 @@ for required_variable in                         \
 	GOOGLE_CLOUD_STORAGE_BUCKET              \
 	ALTERNATE_GOOGLE_CLOUD_STORAGE_BUCKET    \
 	GOOGLE_CLOUD_SPANNER_TEST_INSTANCE       \
-	GOOGLE_CLOUD_SPANNER_TEST_DATABASE       \
 	CLOUD_SQL_MYSQL_USERNAME                 \
 	CLOUD_SQL_MYSQL_PASSWORD                 \
 	CLOUD_SQL_MYSQL_CONNECTION_NAME          \

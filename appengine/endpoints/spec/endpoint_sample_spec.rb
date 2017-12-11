@@ -90,7 +90,7 @@ describe "Ruby Endpoints Sample" do
     header "Origin", "example.com"
     options "/auth/info/firebase"
     expect(last_response.status).to eq 200
-    expect(last_response.headers["Access-Control-Allow-Origin"]).to eq "example.com"
+    expect(last_response.headers["Access-Control-Allow-Origin"]).to eq "*"
     expect(last_response.headers["Access-Control-Allow-Methods"]).to eq "GET, POST, OPTIONS"
   end
 

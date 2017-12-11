@@ -83,6 +83,7 @@ class E2E
     end
 
     def cleanup(test_dir, build_id = nil)
+      return nil unless ENV["E2E"]
       # determine build number
       build_id ||= ENV['BUILD_ID']
       if build_id.nil?

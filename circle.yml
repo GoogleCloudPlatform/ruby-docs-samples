@@ -12,12 +12,19 @@ dependencies:
       mv cloud_sql_proxy.linux.amd64 $HOME/cloud_sql_proxy &&
       chmod +x $HOME/cloud_sql_proxy
     - sudo mkdir /cloudsql && sudo chmod 0777 /cloudsql
+    - rvm get stable
+    - gem update --system
+    - rvm-exec 2.2.8 gem install bundler
+    - rvm-exec 2.3.5 gem install bundler
+    - rvm-exec 2.4.2 gem install bundler
 
 # Test
 test:
   override:
-    # Ruby 2.3.4
-    - rvm-exec 2.3.4 ./spec/run-all.sh
-    # Ruby 2.4.1
-    - rvm-exec 2.4.1 ./spec/run-all.sh
+    # Ruby 2.2.8
+    - rvm-exec 2.2.8 ./spec/run-all.sh
+    # Ruby 2.3.5
+    - rvm-exec 2.3.5 ./spec/run-all.sh
+    # Ruby 2.4.2
+    - rvm-exec 2.4.2 ./spec/run-all.sh
 
