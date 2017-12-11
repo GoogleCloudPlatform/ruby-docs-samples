@@ -19,5 +19,6 @@ gem "google-cloud-datastore"
 
 group :test do
   gem "rspec"
+  gem "rspec-retry"
   gem "rack-test"
 end

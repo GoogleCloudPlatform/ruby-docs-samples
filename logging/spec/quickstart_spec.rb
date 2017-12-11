@@ -13,6 +13,7 @@
 # limitations under the License.
 
 require "rspec"
+require "rspec/retry"
 require "google/cloud/logging"
 
 describe "Logging Quickstart" do

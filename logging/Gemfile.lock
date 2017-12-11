@@ -50,7 +50,7 @@ GEM
       multi_json (~> 1.11)
       os (~> 0.9)
       signet (~> 0.7)
-    grpc (1.7.2)
+    grpc (1.7.3)
       google-protobuf (~> 3.1)
       googleapis-common-protos-types (~> 1.0.0)
       googleauth (>= 0.5.1, < 0.7)
@@ -89,6 +89,8 @@ GEM
     rspec-mocks (3.7.0)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.7.0)
+    rspec-retry (0.5.6)
+      rspec-core (> 3.3, < 3.8)
     rspec-support (3.7.0)
     signet (0.8.1)
       addressable (~> 2.3)
@@ -106,6 +108,7 @@ DEPENDENCIES
   google-cloud-storage
   rack-test
   rspec
+  rspec-retry
 
 BUNDLED WITH
    1.16.0

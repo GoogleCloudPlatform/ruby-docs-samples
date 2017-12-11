@@ -14,6 +14,7 @@
 
 require_relative "../sample"
 require "rspec"
+require "rspec/retry"
 require "google/cloud/logging"
 require "google/cloud/storage"
 
