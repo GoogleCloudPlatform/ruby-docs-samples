@@ -107,9 +107,8 @@ class E2E
 
     def versionize(name)
       version_name = name.tr('^A-Za-z0-9', '-')
-      name_length  = 10
 
-      version_name[-name_length, name_length] || version_name
+      version_name[0, 5] || version_name
     end
 
     def url
