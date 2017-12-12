@@ -28,7 +28,7 @@ scaffolding for other frameworks and use cases.
 
 ## Contributing changes
 
-Contributions to this library are always welcome and highly encouraged.
+Contributions to this sample repository are always welcome and highly encouraged.
 
 See [CONTRIBUTING](CONTRIBUTING.md) for more information on how to get started.
 
