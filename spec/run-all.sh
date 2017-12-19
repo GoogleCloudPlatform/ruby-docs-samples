@@ -32,7 +32,7 @@ export CLOUD_SQL_PROXY_PROCESS_ID=$!
 
 while read product
 do
-	# Run Tets
+	# Run Tests
 	export BUILD_ID=$CIRCLE_BUILD_NUM
 	export TEST_DIR=$product
 	echo "[$product]"
