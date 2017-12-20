@@ -1,6 +1,4 @@
-#!/usr/bin/env ruby
-
-# Copyright 2015 Google, Inc.
+# Copyright 2017 Google LCC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# A short sample demonstrating making a BigQuery request
+# A short sample demonstrating how to make a BigQuery API request
 
 # [START bigquery_simple_app_all]
 # [START bigquery_simple_app_deps]
@@ -28,17 +26,13 @@ bigquery = Google::Cloud::Bigquery.new
 # [END bigquery_simple_app_client]
 
 # [START bigquery_simple_app_query]
-sql = <<-END_SQL
-SELECT
-  CONCAT(
-    'https://stackoverflow.com/questions/',
-    CAST(id as STRING)) as url,
-  view_count
-FROM `bigquery-public-data.stackoverflow.posts_questions`
-WHERE tags like '%google-bigquery%'
-ORDER BY view_count DESC
-LIMIT 10
-END_SQL
+sql = "SELECT " +
+      "CONCAT('https://stackoverflow.com/questions/', " +
+      "       CAST(id as STRING)) as url, " +
+      "view_count " +
+      "FROM `bigquery-public-data.stackoverflow.posts_questions` " +
+      "WHERE tags like '%google-bigquery%' " +
+      "ORDER BY view_count DESC LIMIT 10"
 results = bigquery.query sql
 # [END bigquery_simple_app_query]
 
