@@ -40,3 +40,4 @@ results.each do |row|
   puts "#{row[:url]}: #{row[:view_count]} views"
 end
 # [END bigquery_simple_app_print]
+# [END bigquery_simple_app_all]
