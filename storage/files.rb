@@ -104,7 +104,7 @@ def download_file project_id:, bucket_name:, file_name:, local_path:
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
   # file_name   = "Name of file in Google Cloud Storage to download locally"
-  # local_path  = "Path to local file to save"
+  # local_path  = "Destination path for downloaded file"
 
   require "google/cloud/storage"
 
@@ -120,9 +120,9 @@ end
 
 def download_public_file bucket_name:, file_name:, local_path:
   # [START download_public_file]
-  # bucket_name = "Your Google Cloud Storage bucket name"
+  # bucket_name = "A public Google Cloud Storage bucket name"
   # file_name   = "Name of a file in the Cloud Storage bucket"
-  # local_path  = "Path to local file to save"
+  # local_path  = "Destination path for downloaded file"
 
   require "google/cloud/storage"
 
@@ -141,7 +141,7 @@ def download_file_requester_pays project_id:, bucket_name:, file_name:, local_pa
   # project_id  = "Your Google Cloud billable project ID"
   # bucket_name = "A Google Cloud Storage bucket name"
   # file_name   = "Name of file in Google Cloud Storage to download locally"
-  # local_path  = "Path to local file to save"
+  # local_path  = "Destination path for downloaded file"
 
   require "google/cloud/storage"
 
@@ -161,7 +161,7 @@ def download_encrypted_file project_id:, bucket_name:, storage_file_path:,
   # project_id     = "Your Google Cloud project ID"
   # bucket_name    = "Your Google Cloud Storage bucket name"
   # file_name      = "Name of file in Google Cloud Storage to download locally"
-  # local_path     = "Path to local file to save"
+  # local_path     = "Destination path for downloaded file"
   # encryption_key = "AES-256 encryption key"
 
   require "google/cloud/storage"
