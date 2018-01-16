@@ -46,7 +46,7 @@ Environment variables:
 
 ### Files
 
-**Usage:** `bundle exec ruby files.rb [command] [arguments]`
+**Usage:** `bundle exec ruby files.rb [command] [arguments]
 
 ```
 Usage: bundle exec ruby files.rb [command] [arguments]
@@ -66,6 +66,7 @@ Commands:
   rename       <bucket> <file> <new>                                Rename a file in a bucket
   copy <srcBucket> <srcFile> <destBucket> <destFile>                Copy file to other bucket
   generate_signed_url <bucket> <file>                               Generate a signed url for a file
+  public_file_download <bucket> <file> <path>                       Download a public accessible file from a bucket
 
 Environment variables:
   GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID

@@ -118,6 +118,24 @@ def download_file project_id:, bucket_name:, file_name:, local_path:
   # [END download_file]
 end
 
+def download_public_file bucket_name:, file_name:, local_path:
+  # [START download_public_file]
+  # bucket_name = "Your Google Cloud Storage bucket name"
+  # file_name   = "Name of a file in the Cloud Storage bucket"
+  # local_path  = "Path to local file to save"
+
+  require "google/cloud/storage"
+
+  storage = Google::Cloud::Storage.anonymous
+  bucket  = storage.bucket bucket_name, skip_lookup: true
+  file    = bucket.file file_name
+
+  file.download local_path
+
+  puts "Downloaded #{file.name}"
+  # [END public_file_download]
+end
+
 def download_file_requester_pays project_id:, bucket_name:, file_name:, local_path:
   # [START download_file_requester_pays]
   # project_id  = "Your Google Cloud billable project ID"
@@ -410,6 +428,10 @@ def run_sample arguments
     generate_signed_url project_id:  project_id,
                         bucket_name: arguments.shift,
                         file_name:   arguments.shift
+  when "public_file_download"
+    public_file_download bucket_name: arguments.shift,
+                         file_name:   arguments.shift,
+                         local_path:  arguments.shift
   else
     puts <<-usage
 Usage: bundle exec ruby files.rb [command] [arguments]
@@ -429,6 +451,7 @@ Commands:
   rename       <bucket> <file> <new>                                Rename a file in a bucket
   copy <srcBucket> <srcFile> <destBucket> <destFile>                Copy file to other bucket
   generate_signed_url <bucket> <file>                               Generate a signed url for a file
+  public_file_download <bucket> <file> <path>                       Download a public accessible file from a bucket
 
 Environment variables:
   GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
