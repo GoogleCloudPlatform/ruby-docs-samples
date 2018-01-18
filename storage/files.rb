@@ -133,7 +133,7 @@ def download_public_file bucket_name:, file_name:, local_path:
   file.download local_path
 
   puts "Downloaded #{file.name}"
-  # [END public_file_download]
+  # [END download_public_file]
 end
 
 def download_file_requester_pays project_id:, bucket_name:, file_name:, local_path:
