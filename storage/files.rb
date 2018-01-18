@@ -382,6 +382,10 @@ def run_sample arguments
                   bucket_name: arguments.shift,
                   file_name:   arguments.shift,
                   local_path:  arguments.shift
+  when "download_public_file"
+    download_public_file bucket_name: arguments.shift,
+                         file_name:   arguments.shift,
+                         local_path:  arguments.shift
   when "encrypted_download"
     download_file project_id:    project_id,
                   bucket_name:   arguments.shift,
@@ -428,19 +432,16 @@ def run_sample arguments
     generate_signed_url project_id:  project_id,
                         bucket_name: arguments.shift,
                         file_name:   arguments.shift
-  when "public_file_download"
-    public_file_download bucket_name: arguments.shift,
-                         file_name:   arguments.shift,
-                         local_path:  arguments.shift
   else
     puts <<-usage
 Usage: bundle exec ruby files.rb [command] [arguments]
 
 Commands:
-  list              <bucket>                                        List all files in the bucket
-  upload            <bucket> <file>                                 Upload local file to a bucket
-  encrypted_upload  <bucket> <file> <base64_encryption_key>         Upload local file as an encrypted file to a bucket
-  download           <bucket> <file> <path>                         Download a file from a bucket
+  list                 <bucket>                                     List all files in the bucket
+  upload               <bucket> <file>                              Upload local file to a bucket
+  encrypted_upload     <bucket> <file> <base64_encryption_key>      Upload local file as an encrypted file to a bucket
+  download             <bucket> <file> <path>                       Download a file from a bucket
+  download_public_file <bucket> <file> <path>                       Download a publically accessible file from a bucket
   encrypted_download <bucket> <file> <path> <base64_encryption_key> Download an encrypted file from a bucket
   download_with_requester_pays <project> <bucket> <file> <path>     Download a file from a requester pays enabled bucket
   rotate_encryption_key <bucket> <file> <base64_current_encryption_key> <base64_new_encryption_key> Update encryption key of an encrypted file.
@@ -451,7 +452,6 @@ Commands:
   rename       <bucket> <file> <new>                                Rename a file in a bucket
   copy <srcBucket> <srcFile> <destBucket> <destFile>                Copy file to other bucket
   generate_signed_url <bucket> <file>                               Generate a signed url for a file
-  public_file_download <bucket> <file> <path>                       Download a public accessible file from a bucket
 
 Environment variables:
   GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
