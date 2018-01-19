@@ -236,6 +236,32 @@ describe "Google Cloud Storage files sample" do
     end
   end
 
+  it "can download a public readable file from a bucket" do
+    begin
+      delete_file "file.txt"
+      expect(@bucket.file "file.txt").to be nil
+
+      upload @local_file_path, "file.txt"
+
+      local_file = Tempfile.new "cloud-storage-tests"
+      expect(File.size local_file.path).to eq 0
+
+      expect {
+        download_public_file bucket_name: @bucket_name,
+                             file_name:   "file.txt",
+                             local_path:  local_file.path
+      }.to output("Downloaded file.txt\n").to_stdout
+
+      expect(File.size local_file.path).to be > 0
+      expect(File.read local_file.path).to eq(
+        "Content of test file.txt\n"
+      )
+    ensure
+      local_file.close
+      local_file.unlink
+    end
+  end
+
   it "can download a file from a bucket using requester pays" do
     begin
       @bucket.requester_pays = true
