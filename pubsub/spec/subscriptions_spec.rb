@@ -1,3 +1,17 @@
+# Copyright 2018 Google, Inc
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 require_relative "../subscriptions"
 require "spec_helper"
 require "rspec/retry"
@@ -16,12 +30,12 @@ end
 describe "Pub/Sub subscriptions sample" do
 
   before do
-    @pubsub            = Google::Cloud::Pubsub.new
-    @project_id        = ENV["GOOGLE_CLOUD_PROJECT"]
-    @topic_name        = "my-topic"
+    @pubsub                 = Google::Cloud::Pubsub.new
+    @project_id             = ENV["GOOGLE_CLOUD_PROJECT"]
+    @topic_name             = "my-topic"
     @pull_subscription_name = "my-pull-subscription"
     @push_subscription_name = "my-push-subscription"
-    @service_account   =
+    @service_account        =
       "serviceAccount:test-account@#{@pubsub.project}" +
       ".iam.gserviceaccount.com"
     cleanup!
@@ -56,7 +70,7 @@ describe "Pub/Sub subscriptions sample" do
     subscription = topic.subscribe @pull_subscription_name
 
     expect {
-      list_subscriptions @project_id
+      list_subscriptions project_id: @project_id
     }.to output(/#{@pull_subscription_name}/).to_stdout
   end
 
@@ -68,8 +82,9 @@ describe "Pub/Sub subscriptions sample" do
     expect(@pubsub.subscription(@push_subscription_name)).not_to be nil
 
     expect {
-      update_push_configuration @project_id, @push_subscription_name,
-        "https://#{@pubsub.project}.appspot.com/push_2"
+      update_push_configuration project_id: @project_id, 
+                                subscription_name: @push_subscription_name,
+                                new_endpoint: "https://#{@pubsub.project}.appspot.com/push_2"
     }.to output(/Push endpoint updated/).to_stdout
   end
 
@@ -78,7 +93,8 @@ describe "Pub/Sub subscriptions sample" do
     subscription = topic.subscribe @pull_subscription_name
 
     expect {
-      get_subscription_policy @project_id, @pull_subscription_name
+      get_subscription_policy project_id: @project_id, 
+                              subscription_name: @pull_subscription_name
     }.to output(/Subscription policy/).to_stdout
   end
 
@@ -95,7 +111,8 @@ describe "Pub/Sub subscriptions sample" do
       end
 
     expect {
-      set_subscription_policy @project_id, @pull_subscription_name
+      set_subscription_policy project_id: @project_id,
+                              subscription_name: @pull_subscription_name
       }.not_to raise_error
     
 
@@ -108,8 +125,9 @@ describe "Pub/Sub subscriptions sample" do
     subscription = topic.subscribe @pull_subscription_name
 
     expect {
-      test_subscription_permissions @project_id, @pull_subscription_name
-    }.to output(/true\ntrue/).to_stdout
+      test_subscription_permissions project_id: @project_id, 
+                                    subscription_name: @pull_subscription_name
+    }.to output(/Permission to consume\nPermission to update/).to_stdout
   end
 
   it "pulls message" do
@@ -122,7 +140,8 @@ describe "Pub/Sub subscriptions sample" do
 
     expect_with_retry do
       expect {
-        pull_messages @project_id, @pull_subscription_name
+        pull_messages project_id: @project_id, 
+                      subscription_name: @pull_subscription_name
       }.to output(/Message pulled: This is a test message/).to_stdout
     end
   end
@@ -134,7 +153,8 @@ describe "Pub/Sub subscriptions sample" do
     topic.publish "This is a test message."
 
     expect {
-      listen_for_messages @project_id, @pull_subscription_name
+      listen_for_messages project_id: @project_id, 
+                          subscription_name: @pull_subscription_name
     }.to output(/Received message: This is a test message/).to_stdout
   end
 
@@ -145,7 +165,8 @@ describe "Pub/Sub subscriptions sample" do
     topic.publish "This is a test message."
 
     expect {
-      listen_for_messages_with_flow_control @project_id, @pull_subscription_name
+      listen_for_messages_with_flow_control project_id: @project_id, 
+                                            subscription_name: @pull_subscription_name
     }.to output(/Received message: This is a test message/).to_stdout
   end
 
@@ -156,8 +177,8 @@ describe "Pub/Sub subscriptions sample" do
     topic.publish "This is a test message."
 
     expect {
-      listen_for_messages_with_concurrency_control @project_id,
-        @pull_subscription_name
+      listen_for_messages_with_concurrency_control project_id: @project_id,
+                                                   subscription_name: @pull_subscription_name
     }.to output(/Received message: This is a test message/).to_stdout
   end
 
@@ -166,7 +187,8 @@ describe "Pub/Sub subscriptions sample" do
     subscription = topic.subscribe @pull_subscription_name
 
     expect {
-      delete_subscription @project_id, @pull_subscription_name
+      delete_subscription project_id: @project_id, 
+                          subscription_name: @pull_subscription_name
     }.to output(/Subscription #{@pull_subscription_name} deleted/).to_stdout
   end
 end

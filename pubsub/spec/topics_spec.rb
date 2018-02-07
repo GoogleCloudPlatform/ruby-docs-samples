@@ -1,3 +1,17 @@
+# Copyright 2018 Google, Inc
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 require_relative "../topics"
 require "spec_helper"
 require "rspec/retry"
@@ -16,12 +30,12 @@ end
 describe "Pub/Sub topics sample" do
 
   before do
-    @pubsub            = Google::Cloud::Pubsub.new
-    @project_id        = ENV["GOOGLE_CLOUD_PROJECT"]
-    @topic_name        = "my-topic"
+    @pubsub                 = Google::Cloud::Pubsub.new
+    @project_id             = ENV["GOOGLE_CLOUD_PROJECT"]
+    @topic_name             = "my-topic"
     @pull_subscription_name = "my-pull-subscription"
     @push_subscription_name = "my-push-subscription"
-    @service_account   =
+    @service_account        =
       "serviceAccount:test-account@#{@pubsub.project}" +
       ".iam.gserviceaccount.com"
     cleanup!
@@ -53,7 +67,8 @@ describe "Pub/Sub topics sample" do
 
   it "creates topic" do
     expect { 
-    	create_topic @project_id, @topic_name
+      create_topic project_id: @project_id, 
+                   topic_name: @topic_name
     }.to output(/#{@topic_name} created/).to_stdout
 
     topic = @pubsub.topic @topic_name
@@ -66,7 +81,9 @@ describe "Pub/Sub topics sample" do
     @pubsub.create_topic @topic_name
 
     expect_with_retry do
-      expect { list_topics @project_id }.to output(/#{@topic_name}/).to_stdout
+      expect { 
+        list_topics project_id: @project_id 
+      }.to output(/#{@topic_name}/).to_stdout
     end
   end
 
@@ -74,7 +91,9 @@ describe "Pub/Sub topics sample" do
     @pubsub.create_topic @topic_name
 
     expect {
-      create_pull_subscription @project_id, @topic_name, @pull_subscription_name
+      create_pull_subscription project_id: @project_id, 
+                               topic_name: @topic_name, 
+                               subscription_name: @pull_subscription_name
     }.to output(/#{@pull_subscription_name} created/).to_stdout
 
     subscription = @pubsub.subscription @pull_subscription_name
@@ -88,8 +107,10 @@ describe "Pub/Sub topics sample" do
     @pubsub.create_topic @topic_name
 
     expect {
-      create_push_subscription @project_id, @topic_name, @push_subscription_name,
-        "https://#{@pubsub.project}.appspot.com/push"
+      create_push_subscription project_id: @project_id, 
+                               topic_name: @topic_name, 
+                               subscription_name: @push_subscription_name,
+                               endpoint: "https://#{@pubsub.project}.appspot.com/push"
     }.to output(/#{@push_subscription_name} created/).to_stdout
 
     subscription = @pubsub.subscription @push_subscription_name
@@ -104,7 +125,8 @@ describe "Pub/Sub topics sample" do
     @pubsub.create_topic @topic_name
 
     expect {
-      get_topic_policy @project_id, @topic_name
+      get_topic_policy project_id: @project_id, 
+                       topic_name: @topic_name
     }.to output(/Topic policy:/).to_stdout
   end
 
@@ -120,7 +142,8 @@ describe "Pub/Sub topics sample" do
       end
 
     expect {
-      set_topic_policy @project_id, @topic_name
+      set_topic_policy project_id: @project_id, 
+                       topic_name: @topic_name
     }.not_to raise_error
 
     expect(@pubsub.topic(@topic_name).policy.roles).to \
@@ -131,7 +154,8 @@ describe "Pub/Sub topics sample" do
     @pubsub.create_topic @topic_name
 
     expect {
-      test_topic_permissions @project_id, @topic_name
+      test_topic_permissions project_id: @project_id,
+                             topic_name: @topic_name
     }.to output(/true\ntrue\ntrue/).to_stdout
   end
 
@@ -140,7 +164,8 @@ describe "Pub/Sub topics sample" do
     subscription = topic.subscribe @pull_subscription_name
 
     expect {
-      publish_message @project_id, @topic_name
+      publish_message project_id: @project_id, 
+                      topic_name: @topic_name
     }.to output(/Message published/).to_stdout
 
     expect_with_retry do
@@ -156,7 +181,8 @@ describe "Pub/Sub topics sample" do
     subscription = topic.subscribe @pull_subscription_name
 
     expect {
-      publish_messages_with_batch_settings @project_id, @topic_name
+      publish_messages_with_batch_settings project_id: @project_id, 
+                                           topic_name: @topic_name
     }.to output(/Messages published in batch/).to_stdout
 
     messages = []
@@ -179,7 +205,8 @@ describe "Pub/Sub topics sample" do
     subscription = topic.subscribe @pull_subscription_name
 
     expect {
-      publish_message_async @project_id, @topic_name
+      publish_message_async project_id: @project_id, 
+                            topic_name: @topic_name
     }.not_to raise_error
 
     expect_with_retry do
@@ -195,7 +222,8 @@ describe "Pub/Sub topics sample" do
     subscription = topic.subscribe @pull_subscription_name
 
     expect {
-      publish_messages_async_with_batch_settings @project_id, @topic_name
+      publish_messages_async_with_batch_settings project_id: @project_id, 
+                                                 topic_name: @topic_name
     }.not_to raise_error
 
     messages = []
@@ -218,7 +246,8 @@ describe "Pub/Sub topics sample" do
     subscription = topic.subscribe @pull_subscription_name
 
     expect {
-      publish_messages_async_with_concurrency_control @project_id, @topic_name
+      publish_messages_async_with_concurrency_control project_id: @project_id, 
+                                                      topic_name: @topic_name
     }.not_to raise_error
 
     expect_with_retry do
@@ -233,13 +262,10 @@ describe "Pub/Sub topics sample" do
     topic = @pubsub.create_topic @topic_name
 
     expect {
-      delete_topic @project_id, @topic_name
+      delete_topic project_id: @project_id, 
+                   topic_name: @topic_name
     }.to output(/Topic #{@topic_name} deleted/).to_stdout
 
     expect(@pubsub.topic @topic_name).to be nil
   end
 end
-
-
-
-
