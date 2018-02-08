@@ -25,30 +25,30 @@ describe "Cloud IoT Core" do
     @project_id = ENV["GOOGLE_CLOUD_PROJECT"]
     @region     = "us-central1"
     @seed       = SecureRandom.hex(8)
-		@topics     = []
+    @topics     = []
   end
 
-	after do
-		# Delete any Pub/Sub topics created during the test
-		@topics.each &:delete
-	end
+  after do
+    # Delete any Pub/Sub topics created during the test
+    @topics.each &:delete
+  end
 
-	# Helper to get path to files in spec/resources/
-	def resource path
-		File.expand_path "resources/#{path}", __dir__
-	end
+  # Helper to get path to files in spec/resources/
+  def resource path
+    File.expand_path "resources/#{path}", __dir__
+  end
 
-	# Helper for creating PubSub topic
-	def create_pubsub_topic topic_id
-		pubsub = Google::Cloud::Pubsub.new project: @project_id
-		topic  = pubsub.create_topic topic_id
-		policy = topic.policy do |p|
-			p.add "roles/pubsub.publisher",
-						"serviceAccount:cloud-iot@system.gserviceaccount.com"
-		end
-		@topics << topic
-		topic
-	end
+  # Helper for creating PubSub topic
+  def create_pubsub_topic topic_id
+    pubsub = Google::Cloud::Pubsub.new project: @project_id
+    topic  = pubsub.create_topic topic_id
+    policy = topic.policy do |p|
+      p.add "roles/pubsub.publisher",
+            "serviceAccount:cloud-iot@system.gserviceaccount.com"
+    end
+    @topics << topic
+    topic
+  end
 
   example "Create / Delete registry" do
     # Setup scenario
