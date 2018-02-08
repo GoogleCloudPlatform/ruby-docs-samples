@@ -462,7 +462,7 @@ $get_device_configs = -> (project_id:, location_id:, registry_id:, device_id:) d
     resource
   )
   configs.device_configs.each do |config|
-		puts "Version [#{config.version}]: #{config.binary_data}"
+    puts "Version [#{config.version}]: #{config.binary_data}"
   end
   # [END iot_get_device_configs]
 end
