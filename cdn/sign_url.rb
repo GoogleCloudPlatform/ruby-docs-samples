@@ -25,8 +25,8 @@ def signed_url url:, key_name:, key_file:, expiration:
   require "uri"
 
   # Read in url safe base64 encoded file
-  key         = File.read key_file
-  decoded_key = Base64.urlsafe_decode64 key_file
+  key         = File.binread(key_file).chomp
+  decoded_key = Base64.urlsafe_decode64 key
 
   # Determine which seperator makes sense given a URL
   seperator = "?"
