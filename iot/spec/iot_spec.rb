@@ -15,7 +15,7 @@
 require "google/apis/cloudiot_v1"
 require "google/cloud/pubsub"
 require "rspec"
-require 'securerandom'
+require "securerandom"
 require "tempfile"
 require_relative "../iot"
 
@@ -23,28 +23,46 @@ describe "Cloud IoT Core" do
 
   before do
     @project_id = ENV["GOOGLE_CLOUD_PROJECT"]
-    @region = "us-central1"
-    @seed = SecureRandom.hex(8)
+    @region     = "us-central1"
+    @seed       = SecureRandom.hex(8)
+    @topics     = []
   end
 
+  after do
+    # Delete any Pub/Sub topics created during the test
+    @topics.each &:delete
+  end
 
-  it "Create / Delete registry" do
-    # Build up
-    topic_name = "A#{@seed}-create_delete_tester"
+  # Helper to get path to files in spec/resources/
+  def resource path
+    File.expand_path "resources/#{path}", __dir__
+  end
+
+  # Helper for creating PubSub topic
+  def create_pubsub_topic topic_id
+    pubsub = Google::Cloud::Pubsub.new project: @project_id
+    topic  = pubsub.create_topic topic_id
+    policy = topic.policy do |p|
+      p.add "roles/pubsub.publisher",
+            "serviceAccount:cloud-iot@system.gserviceaccount.com"
+    end
+    @topics << topic
+    topic
+  end
+
+  example "Create / Delete registry" do
+    # Setup scenario
+    topic_name    = "A#{@seed}-create_delete_tester"
     registry_name = "A#{@seed}create_delete_test"
-    topic = $create_pubsub_topic.call(
-      project_id: @project_id,
-      topic_id: topic_name
-    )
-
+    topic         = create_pubsub_topic topic_name
 
     # Create a registry
     expect {
       $create_registry.call(
-        project_id:    @project_id,
-        location_id:   @region,
-        registry_id:   registry_name,
-        pubsub_topic:  topic.name
+        project_id:   @project_id,
+        location_id:  @region,
+        registry_id:  registry_name,
+        pubsub_topic: topic.name
       )
     }.to output(
       /Created registry/m
@@ -53,35 +71,25 @@ describe "Cloud IoT Core" do
     # Delete a registry
     expect {
       $delete_registry.call(
-        project_id:    @project_id,
-        location_id:   @region,
-        registry_id:   registry_name
+        project_id:  @project_id,
+        location_id: @region,
+        registry_id: registry_name
       )
     }.to output(
       /Deleted registry/m
     ).to_stdout
-
-    #tear_down
-    $delete_pubsub_topic.call(
-      project_id: @project_id,
-      topic_id: topic_name
-    )
   end
 
-
-  it "Set/Get IAM permissions" do
-    # Build up
-    topic_name = "A#{@seed}-iam_perm_test"
+  example "Set/Get IAM permissions" do
+    # Setup scenario
+    topic_name    = "A#{@seed}-iam_perm_test"
     registry_name = "A#{@seed}create_delete_test"
-    topic = $create_pubsub_topic.call(
-      project_id: @project_id,
-      topic_id: topic_name
-    )
+    topic         = create_pubsub_topic topic_name
     $create_registry.call(
-      project_id:    @project_id,
-      location_id:   @region,
-      registry_id:   registry_name,
-      pubsub_topic:  topic.name
+      project_id:   @project_id,
+      location_id:  @region,
+      registry_id:  registry_name,
+      pubsub_topic: topic.name
     )
 
     # Test setting IAM permissions
@@ -89,14 +97,14 @@ describe "Cloud IoT Core" do
     role = "roles/viewer"
     expect {
       $set_iam_policy.call(
-        project_id: @project_id,
+        project_id:  @project_id,
         location_id: @region,
         registry_id: registry_name,
-        member: member,
-        role: role
+        member:      member,
+        role:        role
       )
       $get_iam_policy.call(
-        project_id: @project_id,
+        project_id:  @project_id,
         location_id: @region,
         registry_id: registry_name,
       )
@@ -104,188 +112,157 @@ describe "Cloud IoT Core" do
       /Binding set:/m
     ).to_stdout
 
-
-    #tear_down
+    # Clean up resources
     $delete_registry.call(
-      project_id:    @project_id,
-      location_id:   @region,
-      registry_id:   registry_name
-    )
-    $delete_pubsub_topic.call(
-      project_id: @project_id,
-      topic_id: topic_name
+      project_id:  @project_id,
+      location_id: @region,
+      registry_id: registry_name
     )
   end
 
-
-  it "Create/Delete unauth device" do
-    # Build up
-    topic_name = "A#{@seed}-iot_unauth_device"
+  example "Create/Delete unauth device" do
+    # Setup scenario
+    topic_name    = "A#{@seed}-iot_unauth_device"
     registry_name = "A#{@seed}create_delete_test"
-    topic = $create_pubsub_topic.call(
-      project_id: @project_id,
-      topic_id: topic_name
-    )
+    topic         = create_pubsub_topic topic_name
     $create_registry.call(
-      project_id:    @project_id,
-      location_id:   @region,
-      registry_id:   registry_name,
-      pubsub_topic:  topic.name
+      project_id:   @project_id,
+      location_id:  @region,
+      registry_id:  registry_name,
+      pubsub_topic: topic.name
     )
 
     # Test setting IAM permissions
     device_id = "unauth_device"
     expect {
       $create_unauth_device.call(
-        project_id: @project_id,
+        project_id:  @project_id,
         location_id: @region,
         registry_id: registry_name,
-        device_id: device_id
+        device_id:   device_id
       )
     }.to output(
       /Device:/m
     ).to_stdout
     expect {
       $delete_device.call(
-        project_id: @project_id,
+        project_id:  @project_id,
         location_id: @region,
         registry_id: registry_name,
-        device_id: device_id
+        device_id:   device_id
       )
     }.to output(
       /Deleted device./m
     ).to_stdout
 
-    #tear_down
+    # Clean up resources
     $delete_registry.call(
-      project_id:    @project_id,
-      location_id:   @region,
-      registry_id:   registry_name
-    )
-    $delete_pubsub_topic.call(
-      project_id: @project_id,
-      topic_id: topic_name
+      project_id:  @project_id,
+      location_id: @region,
+      registry_id: registry_name
     )
   end
 
-
-  it "Create/Delete ES device" do
-    # Build up
-    topic_name = "A#{@seed}-iot_es_device"
+  example "Create/Delete ES device" do
+    # Setup scenario
+    topic_name    = "A#{@seed}-iot_es_device"
     registry_name = "A#{@seed}create_delete_test_es"
-    topic = $create_pubsub_topic.call(
-      project_id: @project_id,
-      topic_id: topic_name
-    )
+    topic         = create_pubsub_topic topic_name
     $create_registry.call(
-      project_id:    @project_id,
-      location_id:   @region,
-      registry_id:   registry_name,
-      pubsub_topic:  topic.name
+      project_id:   @project_id,
+      location_id:  @region,
+      registry_id:  registry_name,
+      pubsub_topic: topic.name
     )
 
     # Test create / delete ES256 device
     device_id = "ec_device"
     expect {
       $create_es_device.call(
-        project_id: @project_id,
+        project_id:  @project_id,
         location_id: @region,
         registry_id: registry_name,
-        device_id: device_id,
-        cert_path: "resources/ec_public.pem"
+        device_id:   device_id,
+        cert_path:   resource("ec_public.pem")
       )
     }.to output(
       /Device:/m
     ).to_stdout
     expect {
       $delete_device.call(
-        project_id: @project_id,
+        project_id:  @project_id,
         location_id: @region,
         registry_id: registry_name,
-        device_id: device_id
+        device_id:   device_id
       )
     }.to output(
       /Deleted device./m
     ).to_stdout
 
-    #tear_down
+    # Clean up resources
     $delete_registry.call(
-      project_id:    @project_id,
-      location_id:   @region,
-      registry_id:   registry_name
-    )
-    $delete_pubsub_topic.call(
-      project_id: @project_id,
-      topic_id: topic_name
+      project_id:  @project_id,
+      location_id: @region,
+      registry_id: registry_name
     )
   end
 
-
-  it "Create/Delete RSA device" do
-    # Build up
-    topic_name = "A#{@seed}-iot_rsa_device"
+  example "Create/Delete RSA device" do
+    # Setup scenario
+    topic_name    = "A#{@seed}-iot_rsa_device"
     registry_name = "A#{@seed}create_delete_test_rsa"
-    topic = $create_pubsub_topic.call(
-      project_id: @project_id,
-      topic_id: topic_name
-    )
+    topic         = create_pubsub_topic topic_name
     $create_registry.call(
-      project_id:    @project_id,
-      location_id:   @region,
-      registry_id:   registry_name,
-      pubsub_topic:  topic.name
+      project_id:   @project_id,
+      location_id:  @region,
+      registry_id:  registry_name,
+      pubsub_topic: topic.name
     )
 
     # Test creating / removing device with RSA cert
     device_id = "ec_device"
     expect {
       $create_rsa_device.call(
-        project_id: @project_id,
+        project_id:  @project_id,
         location_id: @region,
         registry_id: registry_name,
-        device_id: device_id,
-        cert_path: "resources/rsa_cert.pem"
+        device_id:   device_id,
+        cert_path:   resource("rsa_cert.pem")
       )
     }.to output(
       /Device:/m
     ).to_stdout
     expect {
       $delete_device.call(
-        project_id: @project_id,
+        project_id:  @project_id,
         location_id: @region,
         registry_id: registry_name,
-        device_id: device_id
+        device_id:   device_id
       )
     }.to output(
       /Deleted device./m
     ).to_stdout
 
-    #tear_down
+    # Clean up resources
     $delete_registry.call(
-      project_id:    @project_id,
-      location_id:   @region,
-      registry_id:   registry_name
-    )
-    $delete_pubsub_topic.call(
-      project_id: @project_id,
-      topic_id: topic_name
+      project_id:  @project_id,
+      location_id: @region,
+      registry_id: registry_name
     )
   end
 
-
-  it "List registries" do
+  example "List registries" do
     expect {
       $list_registries.call(
-        project_id:    @project_id,
-        location_id:   @region,
+        project_id:  @project_id,
+        location_id: @region,
       )
     }.to output(
       /Registries:/m
     ).to_stdout
   end
 
-
-  it "Get unknown registry registry" do
+  example "Get unknown registry registry" do
     unknown_regname = "some_unknown_registry"
     expect {
       $get_registry.call(
@@ -298,8 +275,7 @@ describe "Cloud IoT Core" do
     )
   end
 
-
-  it "Get unknown device" do
+  example "Get unknown device" do
     unknown_regname = "some_unknown_registry"
     unknown_devname = "some_unknown_device"
     expect {
@@ -314,8 +290,7 @@ describe "Cloud IoT Core" do
     )
   end
 
-
-  it "List devices without registry" do
+  example "List devices without registry" do
     unknown_regname = "some_unknown_registry"
     expect {
       $list_devices.call(
@@ -328,112 +303,95 @@ describe "Cloud IoT Core" do
     )
   end
 
-
-  it "Patches device" do
-    # Build up
-    topic_name = "A#{@seed}-iot_unauth_device_patches"
+  example "Patches device" do
+    # Setup scenario
+    topic_name    = "A#{@seed}-iot_unauth_device_patches"
     registry_name = "A#{@seed}create_delete_test_patches"
-    device_id = "patches_unauth_device"
-    topic = $create_pubsub_topic.call(
-      project_id: @project_id,
-      topic_id: topic_name
-    )
+    device_id     = "patches_unauth_device"
+    topic         = create_pubsub_topic topic_name
     $create_registry.call(
-      project_id:    @project_id,
-      location_id:   @region,
-      registry_id:   registry_name,
-      pubsub_topic:  topic.name
+      project_id:   @project_id,
+      location_id:  @region,
+      registry_id:  registry_name,
+      pubsub_topic: topic.name
     )
     $create_unauth_device.call(
-      project_id: @project_id,
+      project_id:  @project_id,
       location_id: @region,
       registry_id: registry_name,
-      device_id: device_id
+      device_id:   device_id
     )
 
     # Test patching device with ES cert
     expect {
       $patch_es_device.call(
-        project_id: @project_id,
+        project_id:  @project_id,
         location_id: @region,
         registry_id: registry_name,
-        device_id: device_id,
-        cert_path: "resources/ec_public.pem"
+        device_id:   device_id,
+        cert_path:   resource("ec_public.pem")
       )
     }.to output(
       /Device: /m
     ).to_stdout
 
-    #tear_down
+    # Clean up resources
     $delete_device.call(
-      project_id: @project_id,
+      project_id:  @project_id,
       location_id: @region,
       registry_id: registry_name,
-      device_id: device_id
+      device_id:   device_id
     )
     $delete_registry.call(
-      project_id:    @project_id,
-      location_id:   @region,
-      registry_id:   registry_name
-    )
-    $delete_pubsub_topic.call(
-      project_id: @project_id,
-      topic_id: topic_name
+      project_id:  @project_id,
+      location_id: @region,
+      registry_id: registry_name
     )
   end
 
-
-  it "Patchrsa device" do
-    # Build up
-    topic_name = "A#{@seed}-iot_unauth_device_patchrsa"
+  example "Patchrsa device" do
+    # Setup scenario
+    topic_name    = "A#{@seed}-iot_unauth_device_patchrsa"
     registry_name = "A#{@seed}create_delete_test_patchrsa"
-    device_id = "patchrsa_unauth_device"
-    topic = $create_pubsub_topic.call(
-      project_id: @project_id,
-      topic_id: topic_name
-    )
+    device_id     = "patchrsa_unauth_device"
+    topic         = create_pubsub_topic topic_name
     $create_registry.call(
-      project_id:    @project_id,
-      location_id:   @region,
-      registry_id:   registry_name,
-      pubsub_topic:  topic.name
+      project_id:   @project_id,
+      location_id:  @region,
+      registry_id:  registry_name,
+      pubsub_topic: topic.name
     )
     $create_unauth_device.call(
-      project_id: @project_id,
+      project_id:  @project_id,
       location_id: @region,
       registry_id: registry_name,
-      device_id: device_id
+      device_id:   device_id
     )
 
     # Test patch with RSA
     expect {
       $patch_rsa_device.call(
-        project_id: @project_id,
+        project_id:  @project_id,
         location_id: @region,
         registry_id: registry_name,
-        device_id: device_id,
-        cert_path: "resources/rsa_cert.pem"
+        device_id:   device_id,
+        cert_path:   resource("rsa_cert.pem")
       )
     }.to output(
       /Device: /m
     ).to_stdout
 
-
-    #tear_down
+    # Clean up resources
     $delete_device.call(
-      project_id: @project_id,
+      project_id:  @project_id,
       location_id: @region,
       registry_id: registry_name,
-      device_id: device_id
+      device_id:   device_id
     )
     $delete_registry.call(
-      project_id:    @project_id,
-      location_id:   @region,
-      registry_id:   registry_name
-    )
-    $delete_pubsub_topic.call(
-      project_id: @project_id,
-      topic_id: topic_name
+      project_id:  @project_id,
+      location_id: @region,
+      registry_id: registry_name
     )
   end
 end

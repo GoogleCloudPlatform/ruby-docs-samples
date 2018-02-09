@@ -16,26 +16,6 @@
 #       method definitions in Ruby. To allow for this, code snippets in this
 #       sample are wrapped in global lambdas.
 
-# Helper for creating / deleting PubSub topics
-
-$create_pubsub_topic = -> (project_id:, topic_id:) do
-  pubsub = Google::Cloud::Pubsub.new project: project_id
-  topic = pubsub.create_topic topic_id
-  policy = topic.policy do |p|
-    p.add "roles/pubsub.publisher",
-          "serviceAccount:cloud-iot@system.gserviceaccount.com"
-  end
-  return topic
-end
-
-
-$delete_pubsub_topic = -> (project_id:, topic_id:) do
-  pubsub = Google::Cloud::Pubsub.new project: project_id
-  topic = pubsub.topic topic_id
-  topic.delete
-end
-
-
 $create_registry = -> (project_id:, location_id:, registry_id:, pubsub_topic:) do
   # [START iot_create_registry]
   # project_id   = "Your Google Cloud project ID"
@@ -46,7 +26,7 @@ $create_registry = -> (project_id:, location_id:, registry_id:, pubsub_topic:) d
   require "google/apis/cloudiot_v1"
 
   # Initialize the client and authenticate with the specified scope
-  Cloudiot = Google::Apis::CloudiotV1
+  Cloudiot   = Google::Apis::CloudiotV1
   iot_client = Cloudiot::CloudIotService.new
   iot_client.authorization = Google::Auth.get_application_default(
     "https://www.googleapis.com/auth/cloud-platform"
@@ -68,7 +48,6 @@ $create_registry = -> (project_id:, location_id:, registry_id:, pubsub_topic:) d
   # [END iot_create_registry]
 end
 
-
 $delete_registry = -> (project_id:, location_id:, registry_id:) do
   # [START iot_delete_registry]
   # project_id  = "Your Google Cloud project ID"
@@ -78,7 +57,7 @@ $delete_registry = -> (project_id:, location_id:, registry_id:) do
   require "google/apis/cloudiot_v1"
 
   # Initialize the client and authenticate with the specified scope
-  Cloudiot = Google::Apis::CloudiotV1
+  Cloudiot   = Google::Apis::CloudiotV1
   iot_client = Cloudiot::CloudIotService.new
   iot_client.authorization = Google::Auth.get_application_default(
     "https://www.googleapis.com/auth/cloud-platform"
@@ -92,7 +71,6 @@ $delete_registry = -> (project_id:, location_id:, registry_id:) do
   # [END iot_delete_registry]
 end
 
-
 $get_iam_policy = -> (project_id:, location_id:, registry_id:) do
   # [START iot_get_iam_policy]
   # project_id  = "Your Google Cloud project ID"
@@ -102,14 +80,14 @@ $get_iam_policy = -> (project_id:, location_id:, registry_id:) do
   require "google/apis/cloudiot_v1"
 
   # Initialize the client and authenticate with the specified scope
-  Cloudiot = Google::Apis::CloudiotV1
+  Cloudiot   = Google::Apis::CloudiotV1
   iot_client = Cloudiot::CloudIotService.new
   iot_client.authorization = Google::Auth.get_application_default(
     "https://www.googleapis.com/auth/cloud-platform"
   )
 
   # The resource name of the location associated with the project
-  parent = "projects/#{project_id}/locations/#{location_id}"
+  parent   = "projects/#{project_id}/locations/#{location_id}"
   resource = "#{parent}/registries/#{registry_id}"
 
   # List the devices in the provided region
@@ -119,16 +97,15 @@ $get_iam_policy = -> (project_id:, location_id:, registry_id:) do
 
   puts policy
   puts policy.inspect
-  if policy.bindings != nil
-    policy.bindings.each {
-      |binding| puts "Role: #{binding.role} Member: #{binding.members[0]}"
-    }
+  if policy.bindings
+    policy.bindings.each do |binding|
+      puts "Role: #{binding.role} Member: #{binding.members[0]}"
+    end
   else
     puts "No bindings"
   end
   # [END iot_get_iam_policy]
 end
-
 
 $get_registry = -> (project_id:, location_id:, registry_id:) do
   # [START iot_get_registry]
@@ -139,7 +116,7 @@ $get_registry = -> (project_id:, location_id:, registry_id:) do
   require "google/apis/cloudiot_v1"
 
   # Initialize the client and authenticate with the specified scope
-  Cloudiot = Google::Apis::CloudiotV1
+  Cloudiot   = Google::Apis::CloudiotV1
   iot_client = Cloudiot::CloudIotService.new
   iot_client.authorization = Google::Auth.get_application_default(
     "https://www.googleapis.com/auth/cloud-platform"
@@ -157,16 +134,15 @@ $get_registry = -> (project_id:, location_id:, registry_id:) do
   puts "\tHTTP Config: #{registry.http_config.http_enabled_state}"
   puts "\tMQTT Config: #{registry.mqtt_config.mqtt_enabled_state}"
   puts "\tName: #{registry.name}"
-  if registry.event_notification_configs != nil
-    registry.event_notification_configs.each{
-      |config| puts "\tTopic: #{config.pubsub_topic_name}"
-    }
+  if registry.event_notification_configs
+    registry.event_notification_configs.each do |config|
+      puts "\tTopic: #{config.pubsub_topic_name}"
+    end
   else
       puts "\tTopic: no associated topics"
   end
   # [END iot_get_registry]
 end
-
 
 $list_registries = -> (project_id:, location_id:) do
   # [START iot_list_registries]
@@ -176,7 +152,7 @@ $list_registries = -> (project_id:, location_id:) do
   require "google/apis/cloudiot_v1"
 
   # Initialize the client and authenticate with the specified scope
-  Cloudiot = Google::Apis::CloudiotV1
+  Cloudiot   = Google::Apis::CloudiotV1
   iot_client = Cloudiot::CloudIotService.new
   iot_client.authorization = Google::Auth.get_application_default(
     "https://www.googleapis.com/auth/cloud-platform"
@@ -191,73 +167,71 @@ $list_registries = -> (project_id:, location_id:) do
   )
 
   puts "Registries:"
-  if registries.device_registries == nil or registries.device_registries.count < 1
-    puts "\tNo device registries found in this region for your project."
-  else
+  if registries.device_registries && registries.device_registries.any?
     registries.device_registries.each { |registry| puts "\t#{registry.id}" }
+  else
+    puts "\tNo device registries found in this region for your project."
   end
   # [END iot_list_registries]
 end
-
 
 $set_iam_policy = -> (project_id:, location_id:, registry_id:, member:, role:) do
   # [START iot_set_iam_policy]
   # project_id  = "Your Google Cloud project ID"
   # location_id = "The Cloud region the registry is located in"
   # registry_id = "The registry to set an IAM policy for"
-  # member = "The member to add to the policy bindings"
-  # role = "The role for the binding the policy is set to"
+  # member      = "The member to add to the policy bindings"
+  # role        = "The role for the binding the policy is set to"
 
   require "google/apis/cloudiot_v1"
 
   # Initialize the client and authenticate with the specified scope
-  Cloudiot = Google::Apis::CloudiotV1
+  Cloudiot   = Google::Apis::CloudiotV1
   iot_client = Cloudiot::CloudIotService.new
   iot_client.authorization = Google::Auth.get_application_default(
     "https://www.googleapis.com/auth/cloud-platform"
   )
 
   # The resource name of the location associated with the project
-  parent = "projects/#{project_id}/locations/#{location_id}"
+  parent   = "projects/#{project_id}/locations/#{location_id}"
   resource = "#{parent}/registries/#{registry_id}"
 
   request = Google::Apis::CloudiotV1::SetIamPolicyRequest.new
-  policy = Google::Apis::CloudiotV1::Policy.new
+  policy  = Google::Apis::CloudiotV1::Policy.new
   binding = Google::Apis::CloudiotV1::Binding.new
   binding.members = [member]
-  binding.role = role
+  binding.role    = role
   policy.bindings = [binding]
-  request.policy = policy
+  request.policy  = policy
 
   # List the devices in the provided region
   res = iot_client.set_registry_iam_policy(
     resource, request
   )
 
-  if res.bindings != nil
+  if res.bindings
     puts "Binding set:"
-    res.bindings.each {
-      |binding| puts "\tRole: #{binding.role} Member: #{binding.members[0]}"
-    }
+    res.bindings.each do |binding|
+      puts "\tRole: #{binding.role} Member: #{binding.members[0]}"
+    end
   else
     puts "No bindings"
   end
   # [END iot_set_iam_policy]
 end
 
-
 $create_es_device = -> (project_id:, location_id:, registry_id:, device_id:, cert_path:) do
   # [START iot_create_es_device]
   # project_id  = "Your Google Cloud project ID"
   # location_id = "The Cloud region the registry is located in"
   # registry_id = "The registry to create a device in"
-  # device_id = "The identifier of the device to create"
-  # cert_path = "The path to the EC certificate"
+  # device_id   = "The identifier of the device to create"
+  # cert_path   = "The path to the EC certificate"
 
   require "google/apis/cloudiot_v1"
 
   # Initialize the client and authenticate with the specified scope
-  Cloudiot = Google::Apis::CloudiotV1
+  Cloudiot   = Google::Apis::CloudiotV1
   iot_client = Cloudiot::CloudIotService.new
   iot_client.authorization = Google::Auth.get_application_default(
     "https://www.googleapis.com/auth/cloud-platform"
@@ -269,7 +243,7 @@ $create_es_device = -> (project_id:, location_id:, registry_id:, device_id:, cer
   device = Cloudiot::Device.new
   device.id = device_id
 
-  pubkey= Google::Apis::CloudiotV1::PublicKeyCredential.new
+  pubkey = Google::Apis::CloudiotV1::PublicKeyCredential.new
   pubkey.key = File.read(cert_path)
   pubkey.format = "ES256_PEM"
 
@@ -279,9 +253,7 @@ $create_es_device = -> (project_id:, location_id:, registry_id:, device_id:, cer
   device.credentials = [cred]
 
   # Create the device
-  device = iot_client.create_project_location_registry_device(
-    parent, device
-  )
+  device = iot_client.create_project_location_registry_device parent, device
 
   puts "Device: #{device.id}"
   puts "\tBlocked: #{device.blocked}"
@@ -291,19 +263,18 @@ $create_es_device = -> (project_id:, location_id:, registry_id:, device_id:, cer
   # [END iot_create_es_device]
 end
 
-
 $create_rsa_device = -> (project_id:, location_id:, registry_id:, device_id:, cert_path:) do
   # [START iot_create_rsa_device]
   # project_id  = "Your Google Cloud project ID"
   # location_id = "The Cloud region the registry is located in"
   # registry_id = "The registry to create a device in"
-  # device_id = "The identifier of the device to create"
-  # cert_path = "The path to the RSA certificate"
+  # device_id   = "The identifier of the device to create"
+  # cert_path   = "The path to the RSA certificate"
 
   require "google/apis/cloudiot_v1"
 
   # Initialize the client and authenticate with the specified scope
-  Cloudiot = Google::Apis::CloudiotV1
+  Cloudiot   = Google::Apis::CloudiotV1
   iot_client = Cloudiot::CloudIotService.new
   iot_client.authorization = Google::Auth.get_application_default(
     "https://www.googleapis.com/auth/cloud-platform"
@@ -322,9 +293,7 @@ $create_rsa_device = -> (project_id:, location_id:, registry_id:, device_id:, ce
   device.credentials = [credential]
 
   # Create the device
-  device = iot_client.create_project_location_registry_device(
-    parent, device
-  )
+  device = iot_client.create_project_location_registry_device parent, device
 
   puts "Device: #{device.id}"
   puts "\tBlocked: #{device.blocked}"
@@ -334,18 +303,17 @@ $create_rsa_device = -> (project_id:, location_id:, registry_id:, device_id:, ce
   # [END iot_create_rsa_device]
 end
 
-
 $create_unauth_device = -> (project_id:, location_id:, registry_id:, device_id:) do
   # [START iot_create_unauth_device]
   # project_id  = "Your Google Cloud project ID"
   # location_id = "The Cloud region the registry is located in"
   # registry_id = "The registry to create a device in"
-  # device_id = "The identifier of the device to create"
+  # device_id   = "The identifier of the device to create"
 
   require "google/apis/cloudiot_v1"
 
   # Initialize the client and authenticate with the specified scope
-  Cloudiot = Google::Apis::CloudiotV1
+  Cloudiot   = Google::Apis::CloudiotV1
   iot_client = Cloudiot::CloudIotService.new
   iot_client.authorization = Google::Auth.get_application_default(
     "https://www.googleapis.com/auth/cloud-platform"
@@ -358,9 +326,7 @@ $create_unauth_device = -> (project_id:, location_id:, registry_id:, device_id:)
   device.id = device_id
 
   # Create the device
-  device = iot_client.create_project_location_registry_device(
-    parent, device
-  )
+  device = iot_client.create_project_location_registry_device parent, device
 
   puts "Device: #{device.id}"
   puts "\tBlocked: #{device.blocked}"
@@ -370,18 +336,17 @@ $create_unauth_device = -> (project_id:, location_id:, registry_id:, device_id:)
   # [END iot_create_unauth_device]
 end
 
-
 $delete_device = -> (project_id:, location_id:, registry_id:, device_id:) do
   # [START iot_delete_device]
   # project_id  = "Your Google Cloud project ID"
   # location_id = "The Cloud region the registry is located in"
   # registry_id = "The registry to create a device in"
-  # device_id = "The identifier of the device to create"
+  # device_id   = "The identifier of the device to create"
 
   require "google/apis/cloudiot_v1"
 
   # Initialize the client and authenticate with the specified scope
-  Cloudiot = Google::Apis::CloudiotV1
+  Cloudiot   = Google::Apis::CloudiotV1
   iot_client = Cloudiot::CloudIotService.new
   iot_client.authorization = Google::Auth.get_application_default(
     "https://www.googleapis.com/auth/cloud-platform"
@@ -401,7 +366,6 @@ $delete_device = -> (project_id:, location_id:, registry_id:, device_id:) do
   # [END iot_delete_device]
 end
 
-
 $list_devices = -> (project_id:, location_id:, registry_id:) do
   # [START iot_list_devices]
   # project_id  = "Your Google Cloud project ID"
@@ -411,7 +375,7 @@ $list_devices = -> (project_id:, location_id:, registry_id:) do
   require "google/apis/cloudiot_v1"
 
   # Initialize the client and authenticate with the specified scope
-  Cloudiot = Google::Apis::CloudiotV1
+  Cloudiot   = Google::Apis::CloudiotV1
   iot_client = Cloudiot::CloudIotService.new
   iot_client.authorization = Google::Auth.get_application_default(
     "https://www.googleapis.com/auth/cloud-platform"
@@ -426,26 +390,25 @@ $list_devices = -> (project_id:, location_id:, registry_id:) do
   )
 
   puts "Devices:"
-  if response.devices == nil or response.devices.count < 1
-    puts "\tNo device registries found in this region for your project."
-  else
+  if response.devices && response.devices.any?
     response.devices.each { |device| puts "\t#{device.id}" }
+  else
+    puts "\tNo device registries found in this region for your project."
   end
   # [END iot_list_devices]
 end
-
 
 $get_device = -> (project_id:, location_id:, registry_id:, device_id:) do
   # [START iot_get_device]
   # project_id  = "Your Google Cloud project ID"
   # location_id = "The Cloud region the registry is located in"
   # registry_id = "The registry to get a device from"
-  # device_id = "The identifier of the device to get"
+  # device_id   = "The identifier of the device to get"
 
   require "google/apis/cloudiot_v1"
 
   # Initialize the client and authenticate with the specified scope
-  Cloudiot = Google::Apis::CloudiotV1
+  Cloudiot   = Google::Apis::CloudiotV1
   iot_client = Cloudiot::CloudIotService.new
   iot_client.authorization = Google::Auth.get_application_default(
     "https://www.googleapis.com/auth/cloud-platform"
@@ -466,45 +429,43 @@ $get_device = -> (project_id:, location_id:, registry_id:, device_id:) do
   puts "\tLast State Time: #{device.last_state_time}"
   puts "\tName: #{device.name}"
   puts "\tCertificate formats:"
-  if device.credentials == nil
-    puts "\t\tNo certificates for device"
-  else
+  if device.credentials
     device.credentials.each { |cert| puts "\t\t#{cert.public_key.format}"}
+  else
+    puts "\t\tNo certificates for device"
   end
   # [END iot_get_device]
 end
-
 
 $get_device_configs = -> (project_id:, location_id:, registry_id:, device_id:) do
   # [START iot_get_device_configs]
   # project_id  = "Your Google Cloud project ID"
   # location_id = "The Cloud region the registry is located in"
   # registry_id = "The registry to get a device from"
-  # device_id = "The identifier of the device to get configurations for"
+  # device_id   = "The identifier of the device to get configurations for"
 
   require "google/apis/cloudiot_v1"
 
   # Initialize the client and authenticate with the specified scope
-  Cloudiot = Google::Apis::CloudiotV1
+  Cloudiot   = Google::Apis::CloudiotV1
   iot_client = Cloudiot::CloudIotService.new
   iot_client.authorization = Google::Auth.get_application_default(
     "https://www.googleapis.com/auth/cloud-platform"
   )
 
   # The resource name of the location associated with the project
-  parent = "projects/#{project_id}/locations/#{location_id}"
+  parent   = "projects/#{project_id}/locations/#{location_id}"
   resource = "#{parent}/registries/#{registry_id}/devices/#{device_id}"
 
   # List the configurations for the provided device
   configs = iot_client.list_project_location_registry_device_config_versions(
     resource
   )
-  configs.device_configs.each {
-      |config| puts "\Version [#{config.version}]: #{config.binary_data}"
-  }
+  configs.device_configs.each do |config|
+    puts "Version [#{config.version}]: #{config.binary_data}"
+  end
   # [END iot_get_device_configs]
 end
-
 
 $patch_es_device = -> (project_id:, location_id:, registry_id:, device_id:, cert_path:) do
   # [START iot_patch_es_device]
@@ -517,7 +478,7 @@ $patch_es_device = -> (project_id:, location_id:, registry_id:, device_id:, cert
   require "google/apis/cloudiot_v1"
 
   # Initialize the client and authenticate with the specified scope
-  Cloudiot = Google::Apis::CloudiotV1
+  Cloudiot   = Google::Apis::CloudiotV1
   iot_client = Cloudiot::CloudIotService.new
   iot_client.authorization = Google::Auth.get_application_default(
     "https://www.googleapis.com/auth/cloud-platform"
@@ -539,7 +500,7 @@ $patch_es_device = -> (project_id:, location_id:, registry_id:, device_id:, cert
 
   # Patch the device
   device = iot_client.patch_project_location_registry_device(
-    path, device, update_mask: 'credentials'
+    path, device, update_mask: "credentials"
   )
 
   puts "Device: #{device.id}"
@@ -548,27 +509,26 @@ $patch_es_device = -> (project_id:, location_id:, registry_id:, device_id:, cert
   puts "\tLast State Time: #{device.last_state_time}"
   puts "\tName: #{device.name}"
   puts "\tCertificate formats:"
-  if device.credentials == nil
-    puts "\t\tNo certificates for device"
-  else
+  if device.credentials
     device.credentials.each { |cert| puts "\t\t#{cert.public_key.format}"}
+  else
+    puts "\t\tNo certificates for device"
   end
   # [END iot_patch_es_device]
 end
-
 
 $patch_rsa_device = -> (project_id:, location_id:, registry_id:, device_id:, cert_path:) do
   # [START iot_patch_rsa_device]
   # project_id  = "Your Google Cloud project ID"
   # location_id = "The Cloud region the registry is located in"
   # registry_id = "The registry to create a device in"
-  # device_id = "The identifier of the device to patch"
-  # cert_path = "The path to the RSA certificate"
+  # device_id   = "The identifier of the device to patch"
+  # cert_path   = "The path to the RSA certificate"
 
   require "google/apis/cloudiot_v1"
 
   # Initialize the client and authenticate with the specified scope
-  Cloudiot = Google::Apis::CloudiotV1
+  Cloudiot   = Google::Apis::CloudiotV1
   iot_client = Cloudiot::CloudIotService.new
   iot_client.authorization = Google::Auth.get_application_default(
     "https://www.googleapis.com/auth/cloud-platform"
@@ -576,7 +536,7 @@ $patch_rsa_device = -> (project_id:, location_id:, registry_id:, device_id:, cer
 
   # The resource name of the location associated with the project
   parent = "projects/#{project_id}/locations/#{location_id}/registries/#{registry_id}"
-  path = "#{parent}/devices/#{device_id}"
+  path   = "#{parent}/devices/#{device_id}"
 
   credential = Google::Apis::CloudiotV1::DeviceCredential.new
   credential.public_key = Google::Apis::CloudiotV1::PublicKeyCredential.new
@@ -588,7 +548,7 @@ $patch_rsa_device = -> (project_id:, location_id:, registry_id:, device_id:, cer
 
   # Create the device
   device = iot_client.patch_project_location_registry_device(
-    path, device, update_mask: 'credentials'
+    path, device, update_mask: "credentials"
   )
 
   puts "Device: #{device.id}"
@@ -597,44 +557,40 @@ $patch_rsa_device = -> (project_id:, location_id:, registry_id:, device_id:, cer
   puts "\tLast State Time: #{device.last_state_time}"
   puts "\tName: #{device.name}"
   puts "\tCertificate formats:"
-  if device.credentials == nil
-    puts "\t\tNo certificates for device"
-  else
+  if device.credentials
     device.credentials.each { |cert| puts "\t\t#{cert.public_key.format}"}
+  else
+    puts "\t\tNo certificates for device"
   end
   # [END iot_patch_rsa_device]
 end
-
 
 $send_device_config = -> (project_id:, location_id:, registry_id:, device_id:, data:) do
   # [START send_device_config]
   # project_id  = "Your Google Cloud project ID"
   # location_id = "The Cloud region the registry is located in"
   # registry_id = "The registry to get a device from"
-  # device_id = "The identifier of the device to set configurations on"
-  # data = "The data, e.g. {fan: on} to send to the device"
+  # device_id   = "The identifier of the device to set configurations on"
+  # data        = "The data, e.g. {fan: on} to send to the device"
 
   require "google/apis/cloudiot_v1"
 
   # Initialize the client and authenticate with the specified scope
-  Cloudiot = Google::Apis::CloudiotV1
+  Cloudiot   = Google::Apis::CloudiotV1
   iot_client = Cloudiot::CloudIotService.new
   iot_client.authorization = Google::Auth.get_application_default(
     "https://www.googleapis.com/auth/cloud-platform"
   )
 
   # The resource name of the location associated with the project
-  parent = "projects/#{project_id}/locations/#{location_id}"
+  parent   = "projects/#{project_id}/locations/#{location_id}"
   resource = "#{parent}/registries/#{registry_id}/devices/#{device_id}"
 
   config = Cloudiot::DeviceConfig.new
   config.binary_data = data
 
   # Set configuration for the provided device
-  res = iot_client.modify_cloud_to_device_config(
-    resource,
-    config
-  )
+  res = iot_client.modify_cloud_to_device_config resource, config
   puts "Configuration updated!"
   # [END send_device_config]
 end
@@ -647,16 +603,16 @@ def run_sample arguments
   # Registry management
   when "create_registry"
     $create_registry.call(
-      project_id:    project_id,
-      location_id:   arguments.shift,
-      registry_id:   arguments.shift,
-      pubsub_topic:  arguments.shift,
+      project_id:   project_id,
+      location_id:  arguments.shift,
+      registry_id:  arguments.shift,
+      pubsub_topic: arguments.shift,
     )
   when "delete_registry"
     $delete_registry.call(
-      project_id:    project_id,
-      location_id:   arguments.shift,
-      registry_id:   arguments.shift,
+      project_id:  project_id,
+      location_id: arguments.shift,
+      registry_id: arguments.shift,
     )
   when "get_iam_policy"
     $get_iam_policy.call(
@@ -666,22 +622,22 @@ def run_sample arguments
     )
   when "get_registry"
     $get_registry.call(
-      project_id:    project_id,
-      location_id:   arguments.shift,
-      registry_id:   arguments.shift,
+      project_id:  project_id,
+      location_id: arguments.shift,
+      registry_id: arguments.shift,
     )
   when "list_registries"
     $list_registries.call(
-      project_id:    project_id,
-      location_id:   arguments.shift,
+      project_id:  project_id,
+      location_id: arguments.shift,
     )
   when "set_iam_policy"
     $set_iam_policy.call(
       project_id:  project_id,
       location_id: arguments.shift,
       registry_id: arguments.shift,
-      member: arguments.shift,
-      role: arguments.shift,
+      member:      arguments.shift,
+      role:        arguments.shift,
     )
 
   # Device management
