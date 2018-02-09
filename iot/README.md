@@ -33,6 +33,11 @@ These samples show how to use the [Google Cloud IoT Core API]
     $ export GOOGLE_CLOUD_PROJECT="YOUR_PROJECT_ID"
 ```
 
+1. Use the `generate_keys.sh` script to generate your signing keys:
+```
+    ./generate_keys.sh
+```
+
 1. **Run samples**
 
 ```

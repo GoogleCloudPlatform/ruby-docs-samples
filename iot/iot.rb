@@ -95,8 +95,6 @@ $get_iam_policy = -> (project_id:, location_id:, registry_id:) do
     resource
   )
 
-  puts policy
-  puts policy.inspect
   if policy.bindings
     policy.bindings.each do |binding|
       puts "Role: #{binding.role} Member: #{binding.members[0]}"
@@ -355,7 +353,6 @@ $delete_device = -> (project_id:, location_id:, registry_id:, device_id:) do
   # The resource name of the location associated with the project
   parent = "projects/#{project_id}/locations/#{location_id}"
   device_path = "#{parent}/registries/#{registry_id}/devices/#{device_id}"
-  puts device_path
 
   # Create the device
   res = iot_client.delete_project_location_registry_device(
@@ -590,7 +587,7 @@ $send_device_config = -> (project_id:, location_id:, registry_id:, device_id:, d
   config.binary_data = data
 
   # Set configuration for the provided device
-  res = iot_client.modify_cloud_to_device_config resource, config
+  iot_client.modify_cloud_to_device_config resource, config
   puts "Configuration updated!"
   # [END send_device_config]
 end
