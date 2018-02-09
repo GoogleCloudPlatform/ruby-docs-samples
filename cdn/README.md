@@ -21,6 +21,7 @@ provides faster delivery of content to your users while reducing serving costs.
 
 ## Run samples
 
+```
 Usage: bundle exec ruby sign_url.rb <url> <key_name> <key_file> <expiration>
 
 Arguments:
@@ -28,4 +29,5 @@ Arguments:
   key_name   - Signing key name
   key_file   - Signing key file name with a urlsafe base64 encoded key
   expiration - Expiration time for signed URL formatted as a Unix Timestamp
+```
 
