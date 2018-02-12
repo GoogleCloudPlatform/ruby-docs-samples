@@ -20,15 +20,7 @@ def detect_safe_search image_path:
 
   vision = Google::Cloud::Vision.new
 
-  image = File.binread image_path
-
-  request  = [image:    { content: image },
-              features: [{ type: :SAFE_SEARCH_DETECTION }]]
-
-  response = vision.batch_annotate_images request
-
-  # Get first element as we only annotated one image.
-  safe_search_annotation = response.responses.first.safe_search_annotation
+  safe_search_annotation = vision.safe_search_detection(image_path).safe_search_annotation
 
   puts "Adult:    #{safe_search_annotation.adult}"
   puts "Spoof:    #{safe_search_annotation.spoof}"
@@ -48,13 +40,7 @@ def detect_safe_search_gcs image_path:
 
   vision = Google::Cloud::Vision.new
 
-  request  = [image:    { source: { gcs_image_uri: image_path }},
-              features: [{ type: :SAFE_SEARCH_DETECTION }]]
-
-  response = vision.batch_annotate_images request
-
-  # Get first element as we only annotated one image.
-  safe_search_annotation = response.responses.first.safe_search_annotation
+  safe_search_annotation = vision.safe_search_detection(image_path).safe_search_annotation
 
   puts "Adult:    #{safe_search_annotation.adult}"
   puts "Spoof:    #{safe_search_annotation.spoof}"

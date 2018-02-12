@@ -20,15 +20,7 @@ def detect_labels image_path:
 
   vision = Google::Cloud::Vision.new
 
-  image = File.binread image_path
-
-  request  = [image:    { content: image },
-              features: [{ type: :LABEL_DETECTION }]]
-
-  response = vision.batch_annotate_images request
-
-  # Get first element as we only annotated one image.
-  label_annotations = response.responses.first.label_annotations
+  label_annotations = vision.label_detection(image_path).label_annotations
 
   label_annotations.each do |label|
     puts label.description
@@ -47,13 +39,7 @@ def detect_labels_gcs image_path:
 
   vision = Google::Cloud::Vision.new
 
-  request  = [image:    { source: { gcs_image_uri: image_path }},
-              features: [{ type: :LABEL_DETECTION }]]
-
-  response = vision.batch_annotate_images request
-
-  # Get first element as we only annotated one image.
-  label_annotations = response.responses.first.label_annotations
+  label_annotations = vision.label_detection(image_path).label_annotations
 
   label_annotations.each do |label|
     puts label.description

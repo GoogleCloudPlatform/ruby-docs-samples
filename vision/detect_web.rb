@@ -20,15 +20,7 @@ def detect_web image_path:
 
   vision = Google::Cloud::Vision.new
 
-  image = File.binread image_path
-
-  request  = [image:    { content: image },
-              features: [{ type: :WEB_DETECTION }]]
-
-  response = vision.batch_annotate_images request
-
-  # Get first element as we only annotated one image.
-  web_detection = response.responses.first.web_detection
+  web_detection = vision.web_detection(image_path).web_detection
 
   web_detection.web_entities.each do |web_entity|
     puts web_entity.description
@@ -51,13 +43,7 @@ def detect_web_gcs image_path:
 
   vision = Google::Cloud::Vision.new
 
-  request  = [image:    { source: { gcs_image_uri: image_path }},
-              features: [{ type: :WEB_DETECTION }]]
-
-  response = vision.batch_annotate_images request
-
-  # Get first element as we only annotated one image.
-  web_detection = response.responses.first.web_detection
+  web_detection = vision.web_detection(image_path).web_detection
 
   web_detection.web_entities.each do |web_entity|
     puts web_entity.description

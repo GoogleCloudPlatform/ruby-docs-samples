@@ -20,14 +20,7 @@ def detect_crop_hints image_path:
 
   vision = Google::Cloud::Vision.new
 
-  image = File.binread image_path
-
-  request  = [image:    { content: image },
-              features: [{ type: :CROP_HINTS }]]
-
-  response = vision.batch_annotate_images request
-
-  crop_hints = response.responses.first.crop_hints_annotation.crop_hints
+	crop_hints = vision.crop_hints(image_path).crop_hints_annotation.crop_hints
 
   crop_hints.each do |crop_hint|
     puts "Crop hint bounding polygon:"
@@ -49,12 +42,7 @@ def detect_crop_hints_gcs image_path:
 
   vision = Google::Cloud::Vision.new
 
-  request  = [image:    { source: { gcs_image_uri: image_path }},
-              features: [{ type: :CROP_HINTS }]]
-
-  response = vision.batch_annotate_images request
-
-  crop_hints = response.responses.first.crop_hints_annotation.crop_hints
+	crop_hints = vision.crop_hints(image_path).crop_hints_annotation.crop_hints
 
   crop_hints.each do |crop_hint|
     puts "Crop hint bounding polygon:"

@@ -20,15 +20,7 @@ def detect_logos image_path:
 
   vision = Google::Cloud::Vision.new
 
-  image = File.binread image_path
-
-  request  = [image:    { content: image },
-              features: [{ type: :LOGO_DETECTION }]]
-
-  response = vision.batch_annotate_images request
-
-  # Get first element as we only annotated one image.
-  logo_annotations = response.responses.first.logo_annotations
+  logo_annotations = vision.logo_detection(image_path).logo_annotations
 
   logo_annotations.each do |logo|
     puts logo.description
@@ -47,13 +39,7 @@ def detect_logos_gcs image_path:
 
   vision = Google::Cloud::Vision.new
 
-  request  = [image:    { source: { gcs_image_uri: image_path }},
-              features: [{ type: :LOGO_DETECTION }]]
-
-  response = vision.batch_annotate_images request
-
-  # Get first element as we only annotated one image.
-  logo_annotations = response.responses.first.logo_annotations
+  logo_annotations = vision.logo_detection(image_path).logo_annotations
 
   logo_annotations.each do |logo|
     puts logo.description

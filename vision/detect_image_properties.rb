@@ -20,17 +20,9 @@ def detect_image_properties image_path:
 
   vision = Google::Cloud::Vision.new
 
-  image = File.binread image_path
+  image_properties = vision.image_properties(image_path).image_properties_annotation
 
-  request  = [image:    { content: image },
-              features: [{ type: :IMAGE_PROPERTIES }]]
-
-  response = vision.batch_annotate_images request
-
-  # Get first element as we only annotated one image.
-  image_properties_annotation = response.responses.first.image_properties_annotation
-
-  image_properties_annotation.dominant_colors.colors.each do |color_info|
+  image_properties.dominant_colors.colors.each do |color_info|
     puts "Color #{color_info.color.red}, #{color_info.color.green}, #{color_info.color.blue}"
   end
   # [END vision_image_property_detection]
@@ -45,15 +37,9 @@ def detect_image_properties_gcs image_path:
 
   vision = Google::Cloud::Vision.new
 
-  request  = [image:    { source: { gcs_image_uri: image_path }},
-              features: [{ type: :IMAGE_PROPERTIES }]]
+  image_properties = vision.image_properties(image_path).image_properties_annotation
 
-  response = vision.batch_annotate_images request
-
-  # Get first element as we only annotated one image.
-  image_properties_annotation = response.responses.first.image_properties_annotation
-
-  image_properties_annotation.dominant_colors.colors.each do |color_info|
+  image_properties.dominant_colors.colors.each do |color_info|
     puts "Color #{color_info.color.red}, #{color_info.color.green}, #{color_info.color.blue}"
   end
   # [END vision_image_property_detection_gcs]

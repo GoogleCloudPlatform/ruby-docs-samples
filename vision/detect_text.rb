@@ -20,15 +20,7 @@ def detect_text image_path:
 
   vision = Google::Cloud::Vision.new
 
-  image = File.binread image_path
-
-  request  = [image:    { content: image },
-              features: [{ type: :TEXT_DETECTION }]]
-
-  response = vision.batch_annotate_images request
-
-  # Get first element as we only annotated one image.
-  text_annotations = response.responses.first.text_annotations
+  text_annotations = vision.text_detection(image_path).text_annotations
 
   text_annotations.each do |text|
     puts text.description
@@ -47,13 +39,7 @@ def detect_text_gcs image_path:
 
   vision = Google::Cloud::Vision.new
 
-  request  = [image:    { source: { gcs_image_uri: image_path }},
-              features: [{ type: :TEXT_DETECTION }]]
-
-  response = vision.batch_annotate_images request
-
-  # Get first element as we only annotated one image.
-  text_annotations = response.responses.first.text_annotations
+  text_annotations = vision.text_detection(image_path).text_annotations
 
   text_annotations.each do |text|
     puts text.description

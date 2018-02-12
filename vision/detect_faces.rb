@@ -20,15 +20,7 @@ def detect_faces image_path:
 
   vision = Google::Cloud::Vision.new
 
-  image = File.binread image_path
-
-  request  = [image:    { content: image },
-              features: [{ type: :FACE_DETECTION }]]
-
-  response = vision.batch_annotate_images request
-
-  # Get first element as we only annotated one image.
-  face_annotations = response.responses.first.face_annotations
+  face_annotations = vision.face_detection(image_path).face_annotations
 
   face_annotations.each do |face|
     puts "Joy:      #{face.joy_likelihood}"
@@ -50,15 +42,9 @@ def detect_faces_gcs image_path:
 
   vision = Google::Cloud::Vision.new
 
-  request  = [image:    { source: { gcs_image_uri: image_path }},
-              features: [{ type: :FACE_DETECTION }]]
+  face_annotations = vision.face_detection(image_path).face_annotations
 
-  response = vision.batch_annotate_images request
-
-  # Get first element as we only annotated one image.
-  image = response.responses.first
-
-  image.face_annotations.each do |face|
+  face_annotations.each do |face|
     puts "Joy:      #{face.joy_likelihood}"
     puts "Anger:    #{face.anger_likelihood}"
     puts "Sorrow:   #{face.sorrow_likelihood}"

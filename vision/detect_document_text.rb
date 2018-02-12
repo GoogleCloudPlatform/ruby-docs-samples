@@ -20,14 +20,7 @@ def detect_document_text image_path:
 
   vision = Google::Cloud::Vision.new
 
-  image = File.binread image_path
-
-  request  = [image:    { content: image },
-              features: [{ type: :DOCUMENT_TEXT_DETECTION }]]
-
-  response = vision.batch_annotate_images request
-
-  document = response.responses.first.full_text_annotation
+	document = vision.document_text_detection(image_path).full_text_annotation
 
   puts document.text
   # [END vision_fulltext_detection]
@@ -44,12 +37,7 @@ def detect_document_text_gcs image_path:
 
   vision = Google::Cloud::Vision.new
 
-  request  = [image:    { source: { gcs_image_uri: image_path }},
-              features: [{ type: :DOCUMENT_TEXT_DETECTION }]]
-
-  response = vision.batch_annotate_images request
-
-  document = response.responses.first.full_text_annotation
+	document = vision.document_text_detection(image_path).full_text_annotation
 
   puts document.text
   # [END vision_fulltext_detection_gcs]
