@@ -26,6 +26,7 @@ def detect_safe_search image_path:
   puts "Spoof:    #{safe_search_annotation.spoof}"
   puts "Medical:  #{safe_search_annotation.medical}"
   puts "Violence: #{safe_search_annotation.violence}"
+  puts "Racy:     #{safe_search_annotation.racy}"
   # [END vision_safe_search_detection]
 end
 
@@ -46,6 +47,7 @@ def detect_safe_search_gcs image_path:
   puts "Spoof:    #{safe_search_annotation.spoof}"
   puts "Medical:  #{safe_search_annotation.medical}"
   puts "Violence: #{safe_search_annotation.violence}"
+  puts "Racy:     #{safe_search_annotation.racy}"
   # [END vision_safe_search_detection_gcs]
 end
 

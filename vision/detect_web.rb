@@ -20,14 +20,29 @@ def detect_web image_path:
 
   vision = Google::Cloud::Vision.new
 
-  web_detection = vision.web_detection(image_path).web_detection
+  annotation = vision.web_detection(image_path).web_detection
 
-  web_detection.web_entities.each do |web_entity|
-    puts web_entity.description
+  annotation.best_guess_labels.each do |label|
+    puts "Best guess label: #{label.label}"
   end
 
-  web_detection.full_matching_images.each do |image|
-    puts image.url
+  annotation.pages_with_matching_images.each do |page|
+    puts "Page with matching images found: #{page.url}"
+    page.full_matching_images.each do |image|
+      puts "Full matching image url: #{image.url}"
+    end
+    page.partial_matching_images.each do |image|
+      puts "Partial matching image url: #{image.url}"
+    end
+  end
+
+  annotation.web_entities.each do |web_entity|
+    puts "Web entity description: #{web_entity.description}"
+    puts "Web entity score:       #{web_entity.score}"
+  end
+
+  annotation.visually_similar_images.each do |image|
+    puts "Visually similar image url: #{image.url}"
   end
   # [END vision_web_detection]
 end
@@ -43,14 +58,29 @@ def detect_web_gcs image_path:
 
   vision = Google::Cloud::Vision.new
 
-  web_detection = vision.web_detection(image_path).web_detection
+  annotation = vision.web_detection(image_path).web_detection
 
-  web_detection.web_entities.each do |web_entity|
-    puts web_entity.description
+  annotation.best_guess_labels.each do |label|
+    puts "Best guess label: #{label.label}"
   end
 
-  web_detection.full_matching_images.each do |image|
-    puts image.url
+  annotation.pages_with_matching_images.each do |page|
+    puts "Page with matching images found: #{page.url}"
+    page.full_matching_images.each do |image|
+      puts "Full matching image url: #{image.url}"
+    end
+    page.partial_matching_images.each do |image|
+      puts "Partial matching image url: #{image.url}"
+    end
+  end
+
+  annotation.web_entities.each do |web_entity|
+    puts "Web entity description: #{web_entity.description}"
+    puts "Web entity score:       #{web_entity.score}"
+  end
+
+  annotation.visually_similar_images.each do |image|
+    puts "Visually similar image url: #{image.url}"
   end
   # [END vision_web_detection_gcs]
 end

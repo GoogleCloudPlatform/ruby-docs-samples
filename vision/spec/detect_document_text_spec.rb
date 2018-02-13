@@ -31,20 +31,19 @@ describe "Detect Document Text" do
 
   example "detect document text from local image file" do
     expect {
-      detect_document_text image_path: image_path("otter_crossing.jpg")
+      detect_document_text image_path: image_path("text.jpg")
     }.to output(
-      /Otters/
+      /Preparing to install.*Word text: install.*Symbol confidence: \d\.\d/m
     ).to_stdout
   end
 
   example "detect document text from image file in Google Cloud Storage" do
-    storage_file = @bucket.upload_file image_path("otter_crossing.jpg"),
-                                       "otter_crossing.jpg"
+    storage_file = @bucket.upload_file image_path("text.jpg"), "text.jpg"
 
     expect {
       detect_document_text_gcs image_path: storage_file.to_gs_url
     }.to output(
-      /Otters/
+      /Preparing to install.*Word text: install.*Symbol confidence: \d\.\d/m
     ).to_stdout
   end
 end

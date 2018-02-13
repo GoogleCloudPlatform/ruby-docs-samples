@@ -20,9 +20,25 @@ def detect_document_text image_path:
 
   vision = Google::Cloud::Vision.new
 
-	document = vision.document_text_detection(image_path).full_text_annotation
+  document = vision.document_text_detection(image_path).full_text_annotation
 
-  puts document.text
+  puts "Full document text: #{document.text}"
+
+  document.pages.each do |page|
+    page.blocks.each  do |block|
+      block.paragraphs.each do |paragraph|
+        puts "Paragraph confidence: #{paragraph.confidence}"
+        paragraph.words.each do |word|
+          puts "\tWord confidence: #{word.confidence}"
+          puts "\tWord text: #{word.symbols.map(&:text).join}"
+          word.symbols.each do |symbol|
+            puts "\t\tSymbol text: #{symbol.text}"
+            puts "\t\tSymbol confidence: #{symbol.confidence}"
+          end
+        end
+      end
+    end
+  end
   # [END vision_fulltext_detection]
 end
 
@@ -37,9 +53,25 @@ def detect_document_text_gcs image_path:
 
   vision = Google::Cloud::Vision.new
 
-	document = vision.document_text_detection(image_path).full_text_annotation
+  document = vision.document_text_detection(image_path).full_text_annotation
 
-  puts document.text
+  puts "Full document text: #{document.text}"
+
+  document.pages.each do |page|
+    page.blocks.each  do |block|
+      block.paragraphs.each do |paragraph|
+        puts "Paragraph confidence: #{paragraph.confidence}"
+        paragraph.words.each do |word|
+          puts "\tWord confidence: #{word.confidence}"
+          puts "\tWord text: #{word.symbols.map(&:text).join}"
+          word.symbols.each do |symbol|
+            puts "\t\tSymbol text: #{symbol.text}"
+            puts "\t\tSymbol confidence: #{symbol.confidence}"
+          end
+        end
+      end
+    end
+  end
   # [END vision_fulltext_detection_gcs]
 end
 
