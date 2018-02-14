@@ -178,6 +178,35 @@ def export_table_data_to_cloud_storage project_id:, dataset_id:, table_id:,
   # [END export_table_data_to_cloud_storage]
 end
 
+def import_table_from_gcs_json project_id:, dataset_id:, table_id:
+  # [START bigquery_load_table_gcs_json]
+  # project_id   = "Your Google Cloud project ID"
+  # dataset_id   = "ID of the dataset containing table"
+  # table_id     = "ID of the table to import data into"
+
+  require "google/cloud/bigquery"
+
+  bigquery = Google::Cloud::Bigquery.new project: project_id
+  dataset  = bigquery.dataset dataset_id
+  table    = dataset.table table_id
+
+  table.schema do |schema|
+    schema.string "name"
+    schema.string "post_abbr"
+  end
+
+  storage_path = 'gs://cloud-samples-data/bigquery/us-states/us-states.json'
+
+  puts "Importing data from Cloud Storage file: #{storage_path}"
+  load_job = table.load_job storage_path, format: "json"
+
+  puts "Waiting for load job to complete: #{load_job.job_id}"
+  load_job.wait_until_done!
+
+  puts "Data imported"
+  # [END bigquery_load_table_gcs_json]
+end
+
 def run_query project_id:, query_string:
 # [START run_query]
   # [START get_query_results]
@@ -253,6 +282,10 @@ if __FILE__ == $PROGRAM_NAME
                                          dataset_id:   ARGV.shift,
                                          table_id:     ARGV.shift,
                                          storage_path: ARGV.shift
+ when "import_gcs_json"
+   import_table_from_gcs_json project_id: project_id,
+                              dataset_id: ARGV.shift,
+                              table_id:   ARGV.shift
   when "import_data"
     import_table_data project_id: project_id,
                       dataset_id: ARGV.shift,
@@ -272,16 +305,17 @@ if __FILE__ == $PROGRAM_NAME
 Usage: ruby tables.rb <command> [arguments]
 
 Commands:
-  create      <dataset_id> <table_id>  Create a new table with the specified ID
-  list        <dataset_id>             List all tables in the specified dataset
-  delete      <dataset_id> <table_id>  Delete table with the specified ID
-  list_data   <dataset_id> <table_id>  List data in table with the specified ID
-  import_file <dataset_id> <table_id> <file_path>
-  import_gcs  <dataset_id> <table_id> <cloud_storage_path>
-  import_data <dataset_id> <table_id> "[{ <json row data> }]"
-  export      <dataset_id> <table_id> <cloud_storage_path>
-  query       <query>
-  query_job   <query>
+  create          <dataset_id> <table_id>  Create a new table with the specified ID
+  list            <dataset_id>             List all tables in the specified dataset
+  delete          <dataset_id> <table_id>  Delete table with the specified ID
+  list_data       <dataset_id> <table_id>  List data in table with the specified ID
+  import_file     <dataset_id> <table_id> <file_path>
+  import_gcs      <dataset_id> <table_id> <cloud_storage_path>
+  import_gcs_json <dataset_id> <table_id>
+  import_data     <dataset_id> <table_id> "[{ <json row data> }]"
+  export          <dataset_id> <table_id> <cloud_storage_path>
+  query           <query>
+  query_job       <query>
     usage
   end
 end

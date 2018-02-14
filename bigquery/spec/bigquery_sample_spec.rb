@@ -276,6 +276,32 @@ describe "Google Cloud BigQuery samples" do
       expect(loaded_data).to include({ name: "Bob",   value: 10 })
     end
 
+    example "import json data from Cloud Storage" do
+      expect(@table.data).to be_empty
+
+      capture do
+        import_table_from_gcs_json(
+          project_id:   @project_id,
+          dataset_id:   @dataset.dataset_id,
+          table_id:     @table.table_id
+        )
+      end
+
+      expect(captured_output).to include(
+        "Importing data from Cloud Storage file: " +
+        "gs://cloud-samples-data/bigquery/us-states/us-states.json"
+      )
+      expect(captured_output).to match(
+        /Waiting for load job to complete: job/
+      )
+      expect(captured_output).to include "Data imported"
+
+      loaded_data = @table.data
+
+      expect(loaded_data).not_to be_empty
+      expect(loaded_data.count).to be > 0
+    end
+
     example "stream data import" do
       expect(@table.data).to be_empty
 
