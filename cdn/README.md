@@ -27,7 +27,7 @@ Usage: bundle exec ruby sign_url.rb <url> <key_name> <key> <expiration>
 Arguments:
   url        - URL of the endpoint served by Cloud CDN
   key_name   - Name of the signing key added to the Google Cloud Storage bucket or service
-  key_file   - Signing key as a urlsafe base64 encoded string
+  key        - Signing key as a urlsafe base64 encoded string
   expiration - Expiration date and time for the signed URL
 ```
 
