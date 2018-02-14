@@ -20,7 +20,6 @@ def signed_url url:, key_name:, key:, expiration:
   # expiration = "Expiration date and time for the signed URL"
 
   require "base64"
-  require "cgi"
   require "openssl"
   require "time"
   require "uri"
