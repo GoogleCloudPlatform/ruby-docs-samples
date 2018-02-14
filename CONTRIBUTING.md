@@ -14,7 +14,7 @@
    - [Executing snippets](#executing-snippets)
      - [Argument parsing](#argument-parsing)
    - [Tutorial applications](#tutorial-applications)
-     
+
 ## How to become a contributor and submit your own code
 
 ### Contributor License Agreements
@@ -26,11 +26,11 @@ Please fill out either the individual or corporate Contributor License Agreement
 (CLA).
 
   * If you are an individual writing original source code and you're sure you
-    own the intellectual property, then you'll need to sign an [individual CLA]
-    (https://developers.google.com/open-source/cla/individual).
+    own the intellectual property, then you'll need to sign an
+    [individual CLA](https://developers.google.com/open-source/cla/individual).
   * If you work for a company that wants to allow you to contribute your work,
-    then you'll need to sign a [corporate CLA]
-    (https://developers.google.com/open-source/cla/corporate).
+    then you'll need to sign a
+    [corporate CLA](https://developers.google.com/open-source/cla/corporate).
 
 Follow either of the two links above to access the appropriate CLA and
 instructions for how to sign and return it. Once we receive it, we'll be able to
@@ -98,13 +98,13 @@ def create_bucket project_id:, bucket_name:
   # [START create_bucket]
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
-  
+
   require "google/cloud/storage"
-  
+
   storage = Google::Cloud::Storage.new project: project_id
-  
+
   bucket = storage.create_bucket bucket_name
-  
+
   puts "Created bucket #{bucket.name}"
   # [END create_bucket]
 end
@@ -129,9 +129,9 @@ Example:
 ```ruby
 # project_id  = "Your Google Cloud project ID"
 # bucket_name = "Your Google Cloud Storage bucket name"
-  
+
 require "google/cloud/storage"
-  
+
 storage = Google::Cloud::Storage.new project: project_id
 ```
 
@@ -182,7 +182,7 @@ end
 
 if __FILE__ == $PROGRAM_NAME
   command = ARGV.shift
-  
+
   case command
   when "create"
     create_bucket project_id:  ENV["GOOGLE_CLOUD_PROJECT"],
@@ -193,7 +193,7 @@ Usage: bundle exec ruby buckets.rb [command] [arguments]
 
 Commands:
   create <bucket>    Create a new bucket with the provided name
-  
+
 Environment variables:
   GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
    usage
@@ -255,7 +255,7 @@ def get_latest_notifications
   subscription  = @pubsub.subscription "mobile-notifications"
   messages      = subscription.pull
   notifications = messages.map { |msg| Notifiction.new msg.data }
-  
+
   notifications
 end
 ```
