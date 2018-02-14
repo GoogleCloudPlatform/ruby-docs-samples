@@ -21,7 +21,7 @@ describe "Google Cloud CDN signed url" do
       signed_url url:        "http://www.example.com/",
                  key_name:   "my-key",
                  key:        "nZtRohdNF9m3cKM24IcK4w==",
-                 expiration: "Nov 6 00:00:00 GMT 2021"
+                 expiration: Time.gm(2021, 11, 6)
     }.to output(
       /http:\/\/www\.example\.com\/\?Expires=1636156800&KeyName=my-key&Signature=fHM540uiAcrzc7yw3W3Ci0FUtsw=/
     ).to_stdout
