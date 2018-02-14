@@ -12,8 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START signed_url]
 def signed_url url:, key_name:, key:, expiration:
-  # [START signed_url]
   # url        = "URL of the endpoint served by Cloud CDN"
   # key_name   = "Name of the signing key added to the Google Cloud Storage bucket or service"
   # key        = "Signing key as urlsafe base64 encoded string"
@@ -40,25 +40,26 @@ def signed_url url:, key_name:, key:, expiration:
   signature         = OpenSSL::HMAC.digest "SHA1", decoded_key, url
   encoded_signature = Base64.urlsafe_encode64 signature
 
-  puts "Signed URL: #{url}&Signature=#{encoded_signature}"
-  # [END signed_url]
+  # Concatenate the URL and encoded signature
+  signed_url = "#{url}&Signature=#{encoded_signature}"
 end
+# [END signed_url]
 
 if __FILE__ == $PROGRAM_NAME
   if ARGV.count == 4
-    signed_url url:        ARGV.shift,
-               key_name:   ARGV.shift,
-               key:        ARGV.shift,
-               expiration: Time.now + ARGV.shift.to_i
+    puts signed_url url:        ARGV.shift,
+                    key_name:   ARGV.shift,
+                    key:        ARGV.shift,
+                    expiration: Time.now + ARGV.shift.to_i
   else
     puts <<-usage
-Usage: bundle exec ruby sign_url.rb <url> <key_name> <key> <expiration>
+Usage: bundle exec ruby sign_url.rb <url> <key_name> <key> <expires_in>
 
 Arguments:
   url        - URL of the endpoint served by Cloud CDN
   key_name   - Name of the signing key added to the Google Cloud Storage bucket or service
   key        - Signing key as a urlsafe base64 encoded string
-  expiration - Expire signed URL in number of seconds from current time
+  expires_in - Expire signed URL in number of seconds from current time
     usage
   end
 end

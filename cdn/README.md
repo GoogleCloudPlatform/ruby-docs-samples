@@ -22,12 +22,12 @@ provides faster delivery of content to your users while reducing serving costs.
 ## Run samples
 
 ```
-Usage: bundle exec ruby sign_url.rb <url> <key_name> <key> <expiration>
+Usage: bundle exec ruby sign_url.rb <url> <key_name> <key> <expires_in>
 
 Arguments:
   url        - URL of the endpoint served by Cloud CDN
   key_name   - Name of the signing key added to the Google Cloud Storage bucket or service
   key        - Signing key as a urlsafe base64 encoded string
-  expiration - Expiration date and time for the signed URL
+  expires_in - Expire signed URL in number of seconds from current time
 ```
 
