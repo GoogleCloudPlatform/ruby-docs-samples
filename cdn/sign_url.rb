@@ -22,7 +22,6 @@ def signed_url url:, key_name:, key:, expiration:
   require "base64"
   require "openssl"
   require "time"
-  require "uri"
 
   # Decode the URL safe base64 encode key
   decoded_key = Base64.urlsafe_decode64 key
