@@ -17,7 +17,7 @@ def signed_url url:, key_name:, key:, expiration:
   # url        = "URL of the endpoint served by Cloud CDN"
   # key_name   = "Name of the signing key added to the Google Cloud Storage bucket or service"
   # key        = "Signing key as urlsafe base64 encoded string"
-  # expiration = Ruby Time object with experiation time
+  # expiration = Ruby Time object with expiration time
 
   require "base64"
   require "openssl"
