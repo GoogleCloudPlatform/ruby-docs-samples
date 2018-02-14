@@ -17,19 +17,13 @@ require "rspec"
 
 describe "Google Cloud CDN signed url" do
   it "Signs a test URL" do
-    example_signed_url = "Signed URL: http://cloud.google.com/?Expires=1518135720&KeyName=my-key&Signature=wiaxR2ySCzFNFZbswBhkTKr6Cdw=\n"
-    example_url        = "http://cloud.google.com/"
-    example_expiration = "1518135720"
-    example_key_file   = File.expand_path "resources/key.txt", __dir__
-    example_key_name   = "my-key"
-
     expect {
-      signed_url url:        example_url,
-                 key_name:   example_key_name,
-                 key_file:   example_key_file,
-                 expiration: example_expiration
+      signed_url url:        "http://www.example.com/",
+                 key_name:   "my-key",
+                 key:        "nZtRohdNF9m3cKM24IcK4w==",
+                 expiration: "1518135720"
     }.to output(
-      example_signed_url
+      /http:\/\/www\.example\.com\/\?Expires=1518135720&KeyName=my-key&Signature=PLkPHFh3BdQKTgF3DlUucS6n1vw=/
     ).to_stdout
   end
 end

@@ -12,11 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-def signed_url url:, key_name:, key_file:, expiration:
+def signed_url url:, key_name:, key:, expiration:
   # [START signed_url]
   # url        = "URL to content served by Google Cloud CDN"
   # key_name   = "Signing key name"
-  # key_file   = "Signing key file name with a urlsafe base64 encoded key"
+  # key        = "Signing key as urlsafe base64 encoded string"
   # expiration = "Expiration time for signed URL formatted as a Unix Timestamp"
 
   require "base64"
@@ -24,8 +24,7 @@ def signed_url url:, key_name:, key_file:, expiration:
   require "openssl"
   require "uri"
 
-  # Read in url safe base64 encoded file
-  key         = File.binread(key_file).chomp
+  # Decode the URL safe base64 encode key
   decoded_key = Base64.urlsafe_decode64 key
 
   # Determine which seperator makes sense given a URL
@@ -47,16 +46,16 @@ if __FILE__ == $PROGRAM_NAME
   if ARGV.count == 4
     signed_url url:        ARGV.shift,
                key_name:   ARGV.shift,
-               key_file:   ARGV.shift,
+               key:        ARGV.shift,
                expiration: ARGV.shift
   else
     puts <<-usage
-Usage: bundle exec ruby sign_url.rb <url> <key_name> <key_file> <expiration>
+Usage: bundle exec ruby sign_url.rb <url> <key_name> <key> <expiration>
 
 Arguments:
   url        - URL to content served by Google Cloud CDN
   key_name   - Signing key name
-  key_file   - Signing key file name with a urlsafe base64 encoded key
+  key_file   - Signing key as a urlsafe base64 encoded string
   expiration - Expiration time for signed URL formatted as a Unix Timestamp
     usage
   end
