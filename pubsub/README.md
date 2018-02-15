@@ -50,11 +50,10 @@ set in the [Google Cloud Platfrom Developer COnsole](https://console.cloud.googl
 
 Run the sample for using topics:
 
-    `bundle exec ruby topics.rb`
+    bundle exec ruby topics.rb
 
 Usage:
 
-    ```
     bundle exec ruby topics.rb [command] [arguments]
 
     Commands:
@@ -72,23 +71,19 @@ Usage:
     publish_message_async                           <project_id> <topic_name>                     Publish messages asynchronously
     publish_messages_async_with_batch_settings      <project_id> <topic_name>                     Publish messages asynchronously in batch
     publish_messages_async_with_concurrency_control <project_id> <topic_name>                     Publish messages asynchronously with concurrency control
-    ```
 
 Example:
 
-    ```
     bundle exec ruby create_topic YOUR-PROJECT-ID new_topic
 
     Topic new_topic created.
-    ```
 
 Run the sample for using subscriptions:
 
-    `bundle exec ruby subscriptions.rb`
+    bundle exec ruby subscriptions.rb
 
 Usage:
 
-    ```
     bundle exec ruby subscriptions.rb [command] [arguments]
 
     Commands:
@@ -103,30 +98,24 @@ Usage:
     listen_for_messages_with_error_handler       <project_id> <subscription_name>            Listen for messages with an error handler
     listen_for_messages_with_flow_control        <project_id> <subscription_name>            Listen for messages with flow control
     listen_for_messages_with_concurrency_control <project_id> <subscription_name>            Listen for messages with concurrency control
-    ```
 
 Example:
 
-    ```
     bundle exec ruby list_subscriptions YOUR-PROJECT-ID
 
     Subscriptions:
     YOUR-SUBSCRIPTION
-    ```
+
 
 ## Test samples
 
 Test the sample:
 
-    ```bash
     $ bundle exec rspec
-    ```
 
 Deploy the push listener:
 
-    ```bash
     $ gcloud app deploy --promote
-    ```
 
 You will see messages pushed to the listener in
 [Google Cloud Logging](https://cloud.google.com/logging/docs/).
