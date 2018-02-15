@@ -156,7 +156,7 @@ describe "Pub/Sub topics sample" do
     expect {
       test_topic_permissions project_id: @project_id,
                              topic_name: @topic_name
-    }.to output(/true\ntrue\ntrue/).to_stdout
+    }.to output(/Permission to attach subscription\nPermission to publish\nPermission to update/).to_stdout
   end
 
   it "publishes message" do

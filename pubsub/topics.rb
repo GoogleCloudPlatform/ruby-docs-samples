@@ -16,21 +16,27 @@ require "google/cloud/pubsub"
 
 def create_topic project_id:, topic_name:
   # [START create_topic]
-  # project_id = Your Google Cloud Project ID
-  # topic_name = Your Pubsub topic name
+  # project_id = "Your Google Cloud Project ID"
+  # topic_name = "Your Pubsub topic name"
+  require "google/cloud/pubsub"
+
   pubsub = Google::Cloud::Pubsub.new project: project_id
 
-  topic = pubsub.create_topic topic_name
+  topic  = pubsub.create_topic topic_name
+
   puts "Topic #{topic.name} created."
   # [END create_topic]
 end
 
 def list_topics project_id:
   # [START list_topics]
-  # project_id = Your Google Cloud Project ID
+  # project_id = "Your Google Cloud Project ID"
+  require "google/cloud/pubsub"
+
   pubsub = Google::Cloud::Pubsub.new project: project_id
 
   topics = pubsub.topics
+
   puts "Topics in project:"
   topics.each do |topic|
     puts topic.name
@@ -40,12 +46,15 @@ end
 
 def list_topic_subscriptions project_id:, topic_name:
   # [START list_topic_subscriptions]
-  # project_id = Your Google Cloud Project ID
-  # topic_name = Your Pubsub topic name
+  # project_id = "Your Google Cloud Project ID"
+  # topic_name = "Your Pubsub topic name"
+  require "google/cloud/pubsub"
+
   pubsub = Google::Cloud::Pubsub.new project: project_id
 
-  topic = pubsub.topic topic_name
+  topic  = pubsub.topic topic_name
   subscriptions = topic.subscriptions
+
   puts "Subscriptions in topic #{topic.name}:"
   subscriptions.each do |subscription|
     puts subscription.name
@@ -55,24 +64,30 @@ end
 
 def delete_topic project_id:, topic_name:
   # [START delete_topic]
-  # project_id = Your Google Cloud Project ID
-  # topic_name = Your Pubsub topic name
+  # project_id = "Your Google Cloud Project ID"
+  # topic_name = "Your Pubsub topic name"
+  require "google/cloud/pubsub"
+
   pubsub = Google::Cloud::Pubsub.new project: project_id
 
-  topic = pubsub.topic topic_name
+  topic  = pubsub.topic topic_name
   topic.delete
+
   puts "Topic #{topic_name} deleted."
   # [END delete_topic]
 end
 
 def get_topic_policy project_id:, topic_name:
   # [START get_topic_policy]
-  # project_id = Your Google Cloud Project ID
-  # topic_name = Your Pubsub topic name
+  # project_id = "Your Google Cloud Project ID"
+  # topic_name = "Your Pubsub topic name"
+  require "google/cloud/pubsub"
+
   pubsub = Google::Cloud::Pubsub.new project: project_id
 
-  topic = pubsub.topic topic_name
+  topic  = pubsub.topic topic_name
   policy = topic.policy
+
   puts "Topic policy:"
   puts policy.roles
   # [END get_topic_polic]
@@ -80,11 +95,13 @@ end
 
 def set_topic_policy project_id:, topic_name:
   # [START set_topic_policy]
-  # project_id = Your Google Cloud Project ID
-  # topic_name = Your Pubsub topic name
+  # project_id = "Your Google Cloud Project ID"
+  # topic_name = "Your Pubsub topic name"
+  require "google/cloud/pubsub"
+
   pubsub = Google::Cloud::Pubsub.new project: project_id
 
-  topic = pubsub.topic topic_name
+  topic  = pubsub.topic topic_name
   topic.policy do |policy|
     policy.add "roles/pubsub.publisher", 
       "serviceAccount:account_name@project_name.iam.gserviceaccount.com"
@@ -94,82 +111,99 @@ end
 
 def test_topic_permissions project_id:, topic_name:
   # [START test_topic_permissions]
-  # project_id = Your Google Cloud Project ID
-  # topic_name = Your Pubsub topic name
-  pubsub = Google::Cloud::Pubsub.new project: project_id
+  # project_id = "Your Google Cloud Project ID"
+  # topic_name = "Your Pubsub topic name"
+  require "google/cloud/pubsub"
 
-  topic = pubsub.topic topic_name
+  pubsub      = Google::Cloud::Pubsub.new project: project_id
+
+  topic       = pubsub.topic topic_name
   permissions = topic.test_permissions "pubsub.topics.attachSubscription",
     "pubsub.topics.publish", "pubsub.topics.update"
-  puts permissions.include? "pubsub.topics.attachSubscription"
-  puts permissions.include? "pubsub.topics.publish"
-  puts permissions.include? "pubsub.topics.update"
+
+  puts "Permission to attach subscription" if permissions.include? "pubsub.topics.attachSubscription"
+  puts "Permission to publish" if permissions.include? "pubsub.topics.publish"
+  puts "Permission to update" if permissions.include? "pubsub.topics.update"
   # [END test_topic_permissions]
 end
 
 def create_pull_subscription project_id:, topic_name:, subscription_name:
   # [START create_pull_subscription]
-  # project_id        = Your Google Cloud Project ID
-  # topic_name        = Your Pubsub topic name
-  # subscription_name = Your Pubsub subscription name
+  # project_id        = "Your Google Cloud Project ID"
+  # topic_name        = "Your Pubsub topic name"
+  # subscription_name = "Your Pubsub subscription name"
+  require "google/cloud/pubsub"
+
   pubsub = Google::Cloud::Pubsub.new project: project_id
 
-  topic = pubsub.topic topic_name
+  topic  = pubsub.topic topic_name
   subscription = topic.subscribe subscription_name
+
   puts "Pull subscription #{subscription_name} created."
   # [END create_pull_subscription]
 end
 
 def create_push_subscription project_id:, topic_name:, subscription_name:, endpoint:
   # [START create_push_subscription]
-  # project_id        = Your Google Cloud Project ID
-  # topic_name        = Your Pubsub topic name
-  # subscription_name = Your Pubsub subscription name
-  # endpoint          = Endpoint where your app receives messages
+  # project_id        = "Your Google Cloud Project ID"
+  # topic_name        = "Your Pubsub topic name"
+  # subscription_name = "Your Pubsub subscription name"
+  # endpoint          = "Endpoint where your app receives messages"
+  require "google/cloud/pubsub"
+
   pubsub = Google::Cloud::Pubsub.new project: project_id
 
-  topic = pubsub.topic topic_name
+  topic  = pubsub.topic topic_name
   subscription = topic.subscribe subscription_name,
     endpoint: endpoint
+
   puts "Push subscription #{subscription_name} created."
   # [END create_push_subscription]
 end
 
 def publish_message project_id:, topic_name:
   # [START publish_message] 
-  # project_id = Your Google Cloud Project ID
-  # topic_name = Your Pubsub topic name
+  # project_id = "Your Google Cloud Project ID"
+  # topic_name = "Your Pubsub topic name"
+  require "google/cloud/pubsub"
+
   pubsub = Google::Cloud::Pubsub.new project: project_id
 
-  topic = pubsub.topic topic_name
+  topic  = pubsub.topic topic_name
   topic.publish data: "This is a test message."
+
   puts "Message published."
   # [END publish_message]
 end
 
 def publish_messages_with_batch_settings project_id:, topic_name:
   # [START publish_messages_with_batch_settings]
-  # project_id = Your Google Cloud Project ID
-  # topic_name = Your Pubsub topic name
+  # project_id = "Your Google Cloud Project ID"
+  # topic_name = "Your Pubsub topic name"
+  require "google/cloud/pubsub"
+
   pubsub = Google::Cloud::Pubsub.new project: project_id
 
-  topic = pubsub.topic topic_name
+  topic  = pubsub.topic topic_name
   topic.publish do |batch|
     10.times do |i|
       batch.publish "This is message \##{i}."
     end
   end
+
   puts "Messages published in batch."
   # [END publish_messages_with_batch_settings]
 end
 
 def publish_message_async project_id:, topic_name:
   # [START publish_message_async]
-  # project_id = Your Google Cloud Project ID
-  # topic_name = Your Pubsub topic name
+  # project_id = "Your Google Cloud Project ID"
+  # topic_name = "Your Pubsub topic name"
+  require "google/cloud/pubsub"
+
   pubsub = Google::Cloud::Pubsub.new project: project_id
 
-  topic = pubsub.topic topic_name
+  topic  = pubsub.topic topic_name
   topic.publish_async "This is a test message." do |result|
     if result.succeeded?
       puts "Message published asynchronously."
@@ -177,6 +211,7 @@ def publish_message_async project_id:, topic_name:
       raise "Failed to publish the message."
     end
   end
+
   # Stop the async_publisher to send all queued messages immediately.
   topic.async_publisher.stop.wait!
   # [END publish_message_async]
@@ -184,19 +219,22 @@ end
 
 def publish_messages_async_with_batch_settings project_id:, topic_name:
   # [START publish_messages_async_with_batch_settings]
-  # project_id = Your Google Cloud Project ID
-  # topic_name = Your Pubsub topic name
+  # project_id = "Your Google Cloud Project ID"
+  # topic_name = "Your Pubsub topic name"
+  require "google/cloud/pubsub"
+
   pubsub = Google::Cloud::Pubsub.new project: project_id
 
-  topic = pubsub.topic topic_name, async: {
-    # Start sending messages in one request once the size of all queued messages
-    # reaches 1 MB or the number of queued messages reaches 20
+  # Start sending messages in one request once the size of all queued messages
+  # reaches 1 MB or the number of queued messages reaches 20
+  topic  = pubsub.topic topic_name, async: {
     :max_bytes => 1000000,
     :max_messages => 20
   }
   10.times do |i|
     topic.publish_async "This is message \##{i}."
   end
+
   # Stop the async_publisher to send all queued messages immediately.
   topic.async_publisher.stop.wait!
   puts "Messages published asynchronously in batch."
@@ -205,11 +243,13 @@ end
 
 def publish_messages_async_with_concurrency_control project_id:, topic_name:
   # [START publish_messages_async_with_concurrency_settings]
-  # project_id = Your Google Cloud Project ID
-  # topic_name = Your Pubsub topic name
+  # project_id = "Your Google Cloud Project ID"
+  # topic_name = "Your Pubsub topic name"
+  require "google/cloud/pubsub"
+
   pubsub = Google::Cloud::Pubsub.new project: project_id
 
-  topic = pubsub.topic topic_name, async: {
+  topic  = pubsub.topic topic_name, async: {
     :threads => {
       # Use exactly one thread for publishing message and exactly one thread
       # for executing callbacks
@@ -224,6 +264,7 @@ def publish_messages_async_with_concurrency_control project_id:, topic_name:
       raise "Failed to publish the message."
     end
   end
+
   # Stop the async_publisher to send all queued messages immediately.
   topic.async_publisher.stop.wait!
   # [END publish_messages_async_with_concurrency_settings]
