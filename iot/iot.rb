@@ -488,8 +488,12 @@ $get_device_states = -> (project_id:, location_id:, registry_id:, device_id:) do
   res = iot_client.list_project_location_registry_device_states(
     resource
   )
-  res.device_states.each do |state|
-    puts "#{state.update_time}: #{state.binary_data}"
+  if res.device_states
+    res.device_states.each do |state|
+      puts "#{state.update_time}: #{state.binary_data}"
+    end
+  else
+    puts "No state messages"
   end
   # [END iot_get_device_states]
 end

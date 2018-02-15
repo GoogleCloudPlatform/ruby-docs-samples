@@ -132,7 +132,6 @@ describe "Cloud IoT Core" do
       pubsub_topic: topic.name
     )
 
-    # Test setting IAM permissions
     device_id = "unauth_device"
     expect {
       $create_unauth_device.call(
@@ -156,6 +155,61 @@ describe "Cloud IoT Core" do
     ).to_stdout
 
     # Clean up resources
+    $delete_registry.call(
+      project_id:  @project_id,
+      location_id: @region,
+      registry_id: registry_name
+    )
+  end
+
+  example "Get configs and states" do
+    # Setup scenario
+    topic_name    = "A#{@seed}-iot_device_configstate"
+    registry_name = "A#{@seed}-iot_device_configstate"
+    topic         = create_pubsub_topic topic_name
+    $create_registry.call(
+      project_id:   @project_id,
+      location_id:  @region,
+      registry_id:  registry_name,
+      pubsub_topic: topic.name
+    )
+    device_id = "unauth_device_noconfigstate"
+    $create_unauth_device.call(
+      project_id:  @project_id,
+      location_id: @region,
+      registry_id: registry_name,
+      device_id:   device_id
+    )
+
+    # Test get config / state
+    expect {
+      $get_device_configs.call(
+        project_id:  @project_id,
+        location_id: @region,
+        registry_id: registry_name,
+        device_id:   device_id,
+      )
+    }.to output(
+      /Version \[1\]/m
+    ).to_stdout
+    expect {
+      $get_device_states.call(
+        project_id:  @project_id,
+        location_id: @region,
+        registry_id: registry_name,
+        device_id:   device_id,
+      )
+    }.to output(
+      /No state messages/m
+    ).to_stdout
+
+    # Clean up resources
+    $delete_device.call(
+      project_id:  @project_id,
+      location_id: @region,
+      registry_id: registry_name,
+      device_id:   device_id
+    )
     $delete_registry.call(
       project_id:  @project_id,
       location_id: @region,
