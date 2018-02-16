@@ -464,6 +464,40 @@ $get_device_configs = -> (project_id:, location_id:, registry_id:, device_id:) d
   # [END iot_get_device_configs]
 end
 
+$get_device_states = -> (project_id:, location_id:, registry_id:, device_id:) do
+  # [START iot_get_device_states]
+  # project_id  = "Your Google Cloud project ID"
+  # location_id = "The Cloud region the registry is located in"
+  # registry_id = "The registry to get device states from"
+  # device_id   = "The identifier of the device to get states for"
+
+  require "google/apis/cloudiot_v1"
+
+  # Initialize the client and authenticate with the specified scope
+  Cloudiot   = Google::Apis::CloudiotV1
+  iot_client = Cloudiot::CloudIotService.new
+  iot_client.authorization = Google::Auth.get_application_default(
+    "https://www.googleapis.com/auth/cloud-platform"
+  )
+
+  # The resource name of the location associated with the project
+  parent   = "projects/#{project_id}/locations/#{location_id}"
+  resource = "#{parent}/registries/#{registry_id}/devices/#{device_id}"
+
+  # List the configurations for the provided device
+  res = iot_client.list_project_location_registry_device_states(
+    resource
+  )
+  if res.device_states
+    res.device_states.each do |state|
+      puts "#{state.update_time}: #{state.binary_data}"
+    end
+  else
+    puts "No state messages"
+  end
+  # [END iot_get_device_states]
+end
+
 $patch_es_device = -> (project_id:, location_id:, registry_id:, device_id:, cert_path:) do
   # [START iot_patch_es_device]
   # project_id  = "Your Google Cloud project ID"
@@ -682,6 +716,13 @@ def run_sample arguments
       registry_id: arguments.shift,
       device_id:   arguments.shift,
     )
+  when "get_device_states"
+    $get_device_states.call(
+      project_id:  project_id,
+      location_id: arguments.shift,
+      registry_id: arguments.shift,
+      device_id:   arguments.shift,
+    )
   when "list_devices"
     $list_devices.call(
       project_id:  project_id,
@@ -731,6 +772,7 @@ Device Management Commands:
   delete_device <location> <registry_id> <device_id> Delete a device from a registry
   get_device <location> <registry_id> <device_id> Gets a device from a registry.
   get_device_configs <location> <registry_id> <device_id> List device configurations.
+  get_device_states <location> <registry_id> <device_id> List device state history.
   list_devices <location> <registry_id> List the devices in the provided registry.
   patch_es_device <location> <registry_id> <device_id> <public_key_path> Patch a device with an ES256 credential
   patch_rsa_device <location> <registry_id> <device_id> <public_key_path> Patch a device with an RSA credential
