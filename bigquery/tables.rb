@@ -243,13 +243,41 @@ def append_json_data_from_gcs project_id:, dataset_id:, table_id:
   storage_path = "gs://cloud-samples-data/bigquery/us-states/us-states.json"
 
   puts "Importing data from Cloud Storage file: #{storage_path}"
-  load_job = table.load_job storage_path, format: "json", write: "WRITE_APPEND"
+  load_job = table.load_job storage_path,
+                            format: "json",
+                            write: "WRITE_APPEND"
 
   puts "Waiting for load job to complete: #{load_job.job_id}"
   load_job.wait_until_done!
 
   puts "Data imported"
   # [END bigquery_load_table_gcs_json_append]
+end
+
+def write_truncate_json_data_from_gcs project_id:, dataset_id:, table_id:
+  # [START bigquery_load_table_gcs_json_truncate]
+  # project_id   = "Your Google Cloud project ID"
+  # dataset_id   = "ID of the dataset containing table"
+  # table_id     = "ID of the table to append data into"
+
+  require "google/cloud/bigquery"
+
+  bigquery = Google::Cloud::Bigquery.new project: project_id
+  dataset  = bigquery.dataset dataset_id
+  table    = dataset.table table_id
+
+  storage_path = "gs://cloud-samples-data/bigquery/us-states/us-states.json"
+
+  puts "Importing data from Cloud Storage file: #{storage_path}"
+  load_job = table.load_job storage_path,
+                            format: "json",
+                            write: "WRITE_TRUNCATE"
+
+  puts "Waiting for load job to complete: #{load_job.job_id}"
+  load_job.wait_until_done!
+
+  puts "Data imported"
+  # [END bigquery_load_table_gcs_json_truncate]
 end
 
 def run_query project_id:, query_string:
@@ -335,10 +363,14 @@ if __FILE__ == $PROGRAM_NAME
                       dataset_id: ARGV.shift,
                       table_id:   ARGV.shift,
                       row_data:   JSON.parse(ARGV.shift)
-  when "append_gcs_json"
+  when "append_rows"
     append_json_data_from_gcs project_id: project_id,
                               dataset_id: ARGV.shift,
                               table_id:   ARGV.shift
+  when "overwrite_rows"
+    write_truncate_json_data_from_gcs project_id: project_id,
+                                      dataset_id: ARGV.shift,
+                                      table_id:   ARGV.shift
   when "export"
     export_table_data_to_cloud_storage project_id:   project_id,
                                        dataset_id:   ARGV.shift,
@@ -361,7 +393,8 @@ Commands:
   import_gcs      <dataset_id> <table_id> <cloud_storage_path>
   import_gcs_json <dataset_id>
   import_data     <dataset_id> <table_id> "[{ <json row data> }]"
-  append_gcs_json <dataset_id> <table_id>
+  append_rows     <dataset_id> <table_id>
+  overwrite_rows  <dataset_id> <table_id>
   export          <dataset_id> <table_id> <cloud_storage_path>
   query           <query>
   query_job       <query>
