@@ -178,27 +178,23 @@ def export_table_data_to_cloud_storage project_id:, dataset_id:, table_id:,
   # [END export_table_data_to_cloud_storage]
 end
 
-def import_table_from_gcs_json project_id:, dataset_id:, table_id:
+def import_table_from_gcs_json project_id:, dataset_id:
   # [START bigquery_load_table_gcs_json]
   # project_id   = "Your Google Cloud project ID"
-  # dataset_id   = "ID of the dataset containing table"
-  # table_id     = "ID of the table to import data into"
+  # dataset_id   = "ID of the dataset to create table in"
 
   require "google/cloud/bigquery"
 
   bigquery = Google::Cloud::Bigquery.new project: project_id
   dataset  = bigquery.dataset dataset_id
-  table    = dataset.table table_id
+  table_id = "us_states"
+  storage_path = "gs://cloud-samples-data/bigquery/us-states/us-states.json"
 
-  table.schema do |schema|
+  puts "Importing data from Cloud Storage file: #{storage_path}"
+  load_job = dataset.load_job table_id, storage_path, format: "json" do |schema|
     schema.string "name"
     schema.string "post_abbr"
   end
-
-  storage_path = 'gs://cloud-samples-data/bigquery/us-states/us-states.json'
-
-  puts "Importing data from Cloud Storage file: #{storage_path}"
-  load_job = table.load_job storage_path, format: "json"
 
   puts "Waiting for load job to complete: #{load_job.job_id}"
   load_job.wait_until_done!
@@ -217,7 +213,7 @@ def import_table_from_gcs_json_autodetect project_id:, dataset_id:
   bigquery = Google::Cloud::Bigquery.new project: project_id
   dataset  = bigquery.dataset dataset_id
   table_id = "us_states"
-  storage_path = 'gs://cloud-samples-data/bigquery/us-states/us-states.json'
+  storage_path = "gs://cloud-samples-data/bigquery/us-states/us-states.json"
 
   puts "Importing data from Cloud Storage file: #{storage_path}"
   load_job = dataset.load_job table_id,
@@ -309,8 +305,7 @@ if __FILE__ == $PROGRAM_NAME
                                          storage_path: ARGV.shift
  when "import_gcs_json"
    import_table_from_gcs_json project_id: project_id,
-                              dataset_id: ARGV.shift,
-                              table_id:   ARGV.shift
+                              dataset_id: ARGV.shift
   when "import_data"
     import_table_data project_id: project_id,
                       dataset_id: ARGV.shift,
@@ -336,7 +331,7 @@ Commands:
   list_data       <dataset_id> <table_id>  List data in table with the specified ID
   import_file     <dataset_id> <table_id> <file_path>
   import_gcs      <dataset_id> <table_id> <cloud_storage_path>
-  import_gcs_json <dataset_id> <table_id>
+  import_gcs_json <dataset_id>
   import_data     <dataset_id> <table_id> "[{ <json row data> }]"
   export          <dataset_id> <table_id> <cloud_storage_path>
   query           <query>

@@ -276,14 +276,13 @@ describe "Google Cloud BigQuery samples" do
       expect(loaded_data).to include({ name: "Bob",   value: 10 })
     end
 
-    example "import json data from Cloud Storage" do
-      expect(@table.data).to be_empty
+    example "import json data from GCS as new table" do
+      expect(@dataset.table "us_states").to be nil
 
       capture do
         import_table_from_gcs_json(
           project_id:   @project_id,
-          dataset_id:   @dataset.dataset_id,
-          table_id:     @table.table_id
+          dataset_id:   @dataset.dataset_id
         )
       end
 
@@ -296,13 +295,13 @@ describe "Google Cloud BigQuery samples" do
       )
       expect(captured_output).to include "Data imported"
 
-      loaded_data = @table.data
+      loaded_data = @dataset.table("us_states").data
 
       expect(loaded_data).not_to be_empty
-      expect(loaded_data.count).to be > 0
+      expect(loaded_data.count).to eq 50
     end
 
-    example "import json data from Cloud Storage with autodetect" do
+    example "import json data from GCS as new table with autodetect" do
       expect(@dataset.table "us_states").to be nil
 
       capture do
