@@ -180,14 +180,14 @@ end
 
 def import_table_from_gcs_json project_id:, dataset_id:
   # [START bigquery_load_table_gcs_json]
-  # project_id   = "Your Google Cloud project ID"
-  # dataset_id   = "ID of the dataset to create table in"
+  # project_id = "Your Google Cloud project ID"
+  # dataset_id = "ID of the dataset to create table in"
 
   require "google/cloud/bigquery"
 
-  bigquery = Google::Cloud::Bigquery.new project: project_id
-  dataset  = bigquery.dataset dataset_id
-  table_id = "us_states"
+  bigquery     = Google::Cloud::Bigquery.new project: project_id
+  dataset      = bigquery.dataset dataset_id
+  table_id     = "us_states"
   storage_path = "gs://cloud-samples-data/bigquery/us-states/us-states.json"
 
   puts "Importing data from Cloud Storage file: #{storage_path}"
@@ -205,14 +205,14 @@ end
 
 def import_table_from_gcs_json_autodetect project_id:, dataset_id:
   # [START bigquery_load_table_gcs_json_autodetect]
-  # project_id   = "Your Google Cloud project ID"
-  # dataset_id   = "ID of the dataset to create table in"
+  # project_id = "Your Google Cloud project ID"
+  # dataset_id = "ID of the dataset to create table in"
 
   require "google/cloud/bigquery"
 
-  bigquery = Google::Cloud::Bigquery.new project: project_id
-  dataset  = bigquery.dataset dataset_id
-  table_id = "us_states"
+  bigquery     = Google::Cloud::Bigquery.new project: project_id
+  dataset      = bigquery.dataset dataset_id
+  table_id     = "us_states"
   storage_path = "gs://cloud-samples-data/bigquery/us-states/us-states.json"
 
   puts "Importing data from Cloud Storage file: #{storage_path}"
@@ -230,9 +230,9 @@ end
 
 def append_json_data_from_gcs project_id:, dataset_id:, table_id:
   # [START bigquery_load_table_gcs_json_append]
-  # project_id   = "Your Google Cloud project ID"
-  # dataset_id   = "ID of the dataset containing table"
-  # table_id     = "ID of the table to append data into"
+  # project_id = "Your Google Cloud project ID"
+  # dataset_id = "ID of the dataset containing table"
+  # table_id   = "ID of the table to append data into"
 
   require "google/cloud/bigquery"
 
@@ -256,9 +256,9 @@ end
 
 def write_truncate_json_data_from_gcs project_id:, dataset_id:, table_id:
   # [START bigquery_load_table_gcs_json_truncate]
-  # project_id   = "Your Google Cloud project ID"
-  # dataset_id   = "ID of the dataset containing table"
-  # table_id     = "ID of the table to append data into"
+  # project_id = "Your Google Cloud project ID"
+  # dataset_id = "ID of the dataset containing table"
+  # table_id   = "ID of the table to append data into"
 
   require "google/cloud/bigquery"
 

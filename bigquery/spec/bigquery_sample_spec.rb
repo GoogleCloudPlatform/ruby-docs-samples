@@ -227,9 +227,7 @@ describe "Google Cloud BigQuery samples" do
       expect(captured_output).to include(
         "Importing data from file: #{csv_file.path}\n"
       )
-      expect(captured_output).to match(
-        /Waiting for load job to complete: job/
-      )
+      expect(captured_output).to include "Waiting for load job to complete: job"
       expect(captured_output).to include "Data imported"
 
       loaded_data = @table.data
@@ -263,9 +261,7 @@ describe "Google Cloud BigQuery samples" do
         "Importing data from Cloud Storage file: " +
         "gs://#{@bucket.name}/#{@file_name}.csv"
       )
-      expect(captured_output).to match(
-        /Waiting for load job to complete: job/
-      )
+      expect(captured_output).to include "Waiting for load job to complete: job"
       expect(captured_output).to include "Data imported"
 
       loaded_data = @table.data
@@ -281,8 +277,8 @@ describe "Google Cloud BigQuery samples" do
 
       capture do
         import_table_from_gcs_json(
-          project_id:   @project_id,
-          dataset_id:   @dataset.dataset_id
+          project_id: @project_id,
+          dataset_id: @dataset.dataset_id
         )
       end
 
@@ -290,9 +286,7 @@ describe "Google Cloud BigQuery samples" do
         "Importing data from Cloud Storage file: " +
         "gs://cloud-samples-data/bigquery/us-states/us-states.json"
       )
-      expect(captured_output).to match(
-        /Waiting for load job to complete: job/
-      )
+      expect(captured_output).to include "Waiting for load job to complete: job"
       expect(captured_output).to include "Data imported"
 
       loaded_data = @dataset.table("us_states").data
@@ -306,8 +300,8 @@ describe "Google Cloud BigQuery samples" do
 
       capture do
         import_table_from_gcs_json_autodetect(
-          project_id:   @project_id,
-          dataset_id:   @dataset.dataset_id
+          project_id: @project_id,
+          dataset_id: @dataset.dataset_id
         )
       end
 
@@ -315,9 +309,7 @@ describe "Google Cloud BigQuery samples" do
         "Importing data from Cloud Storage file: " +
         "gs://cloud-samples-data/bigquery/us-states/us-states.json"
       )
-      expect(captured_output).to match(
-        /Waiting for load job to complete: job/
-      )
+      expect(captured_output).to include "Waiting for load job to complete: job"
       expect(captured_output).to include "Data imported"
 
       loaded_data = @dataset.table("us_states").data
@@ -339,9 +331,9 @@ describe "Google Cloud BigQuery samples" do
 
       capture do
         append_json_data_from_gcs(
-          project_id:   @project_id,
-          dataset_id:   @dataset.dataset_id,
-          table_id:     @table.table_id
+          project_id: @project_id,
+          dataset_id: @dataset.dataset_id,
+          table_id:   @table.table_id
         )
       end
 
@@ -349,9 +341,7 @@ describe "Google Cloud BigQuery samples" do
         "Importing data from Cloud Storage file: " +
         "gs://cloud-samples-data/bigquery/us-states/us-states.json"
       )
-      expect(captured_output).to match(
-        /Waiting for load job to complete: job/
-      )
+      expect(captured_output).to include "Waiting for load job to complete: job"
       expect(captured_output).to include "Data imported"
 
       loaded_data = @table.data
@@ -373,9 +363,9 @@ describe "Google Cloud BigQuery samples" do
 
       capture do
         write_truncate_json_data_from_gcs(
-          project_id:   @project_id,
-          dataset_id:   @dataset.dataset_id,
-          table_id:     @table.table_id
+          project_id: @project_id,
+          dataset_id: @dataset.dataset_id,
+          table_id:   @table.table_id
         )
       end
 
@@ -383,9 +373,7 @@ describe "Google Cloud BigQuery samples" do
         "Importing data from Cloud Storage file: " +
         "gs://cloud-samples-data/bigquery/us-states/us-states.json"
       )
-      expect(captured_output).to match(
-        /Waiting for load job to complete: job/
-      )
+      expect(captured_output).to include "Waiting for load job to complete: job"
       expect(captured_output).to include "Data imported"
 
       loaded_data = @table.data
@@ -449,9 +437,7 @@ describe "Google Cloud BigQuery samples" do
         "Exporting data to Cloud Storage file: " +
         "gs://#{@bucket.name}/#{@file_name}.csv"
       )
-      expect(captured_output).to match(
-        /Waiting for extract job to complete: job/
-      )
+      expect(captured_output).to include "Waiting for extract job to complete: job"
       expect(captured_output).to include "Data exported"
 
       expect(@bucket.file "#{@file_name}.csv").not_to be nil
