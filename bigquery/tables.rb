@@ -207,6 +207,31 @@ def import_table_from_gcs_json project_id:, dataset_id:, table_id:
   # [END bigquery_load_table_gcs_json]
 end
 
+def import_table_from_gcs_json_autodetect project_id:, dataset_id:
+  # [START bigquery_load_table_gcs_json_autodetect]
+  # project_id   = "Your Google Cloud project ID"
+  # dataset_id   = "ID of the dataset to create table in"
+
+  require "google/cloud/bigquery"
+
+  bigquery = Google::Cloud::Bigquery.new project: project_id
+  dataset  = bigquery.dataset dataset_id
+  table_id = "us_states"
+  storage_path = 'gs://cloud-samples-data/bigquery/us-states/us-states.json'
+
+  puts "Importing data from Cloud Storage file: #{storage_path}"
+  load_job = dataset.load_job table_id,
+                              storage_path,
+                              format: "json",
+                              autodetect: true
+
+  puts "Waiting for load job to complete: #{load_job.job_id}"
+  load_job.wait_until_done!
+
+  puts "Data imported"
+  # [END bigquery_load_table_gcs_json_autodetect]
+end
+
 def run_query project_id:, query_string:
 # [START run_query]
   # [START get_query_results]

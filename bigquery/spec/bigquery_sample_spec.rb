@@ -302,6 +302,31 @@ describe "Google Cloud BigQuery samples" do
       expect(loaded_data.count).to be > 0
     end
 
+    example "import json data from Cloud Storage with autodetect" do
+      expect(@dataset.table "us_states").to be nil
+
+      capture do
+        import_table_from_gcs_json_autodetect(
+          project_id:   @project_id,
+          dataset_id:   @dataset.dataset_id
+        )
+      end
+
+      expect(captured_output).to include(
+        "Importing data from Cloud Storage file: " +
+        "gs://cloud-samples-data/bigquery/us-states/us-states.json"
+      )
+      expect(captured_output).to match(
+        /Waiting for load job to complete: job/
+      )
+      expect(captured_output).to include "Data imported"
+
+      loaded_data = @dataset.table("us_states").data
+
+      expect(loaded_data).not_to be_empty
+      expect(loaded_data.count).to eq 50
+    end
+
     example "stream data import" do
       expect(@table.data).to be_empty
 
