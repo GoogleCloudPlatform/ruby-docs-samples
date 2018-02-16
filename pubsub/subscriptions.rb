@@ -21,7 +21,7 @@ def update_push_configuration project_id:, subscription_name:, new_endpoint:
   # new_endpoint      = "Endpoint where your app receives messages""
   require "google/cloud/pubsub"
 
-  pubsub                = Google::Cloud::Pubsub.new project: project_id
+  pubsub = Google::Cloud::Pubsub.new project: project_id
 
   subscription          = pubsub.subscription subscription_name
   subscription.endpoint = new_endpoint
@@ -35,7 +35,7 @@ def list_subscriptions project_id:
   # project_id = Your Google Cloud Project ID
   require "google/cloud/pubsub"
 
-  pubsub        = Google::Cloud::Pubsub.new project: project_id
+  pubsub = Google::Cloud::Pubsub.new project: project_id
 
   subscriptions = pubsub.list_subscriptions
 
@@ -52,7 +52,7 @@ def delete_subscription project_id:, subscription_name:
   # subscription_name = "Your Pubsub subscription name"
   require "google/cloud/pubsub"
 
-  pubsub       = Google::Cloud::Pubsub.new project: project_id
+  pubsub = Google::Cloud::Pubsub.new project: project_id
 
   subscription = pubsub.subscription subscription_name
   subscription.delete
@@ -67,7 +67,7 @@ def get_subscription_policy project_id:, subscription_name:
   # subscription_name = "Your Pubsub subscription name"
   require "google/cloud/pubsub"
 
-  pubsub       = Google::Cloud::Pubsub.new project: project_id
+  pubsub = Google::Cloud::Pubsub.new project: project_id
 
   subscription = pubsub.subscription subscription_name
   policy       = subscription.policy
@@ -83,7 +83,7 @@ def set_subscription_policy project_id:, subscription_name:
   # subscription_name = "Your Pubsub subscription name"
   require "google/cloud/pubsub"
 
-  pubsub       = Google::Cloud::Pubsub.new project: project_id
+  pubsub = Google::Cloud::Pubsub.new project: project_id
 
   subscription = pubsub.subscription subscription_name
   subscription.policy do |policy|
@@ -99,7 +99,7 @@ def test_subscription_permissions project_id:, subscription_name:
   # subscription_name = "Your Pubsub subscription name"
   require "google/cloud/pubsub"
 
-  pubsub       = Google::Cloud::Pubsub.new project: project_id
+  pubsub = Google::Cloud::Pubsub.new project: project_id
 
   subscription = pubsub.subscription subscription_name
   permissions  = subscription.test_permissions "pubsub.subscriptions.consume",
@@ -116,7 +116,7 @@ def listen_for_messages project_id:, subscription_name:
   # subscription_name = "Your Pubsub subscription name"
   require "google/cloud/pubsub"
 
-  pubsub       = Google::Cloud::Pubsub.new project: project_id
+  pubsub = Google::Cloud::Pubsub.new project: project_id
 
   subscription = pubsub.subscription subscription_name
   subscriber   = subscription.listen do |received_message|
@@ -138,7 +138,7 @@ def pull_messages project_id:, subscription_name:
   # subscription_name = "Your Pubsub subscription name"
   require "google/cloud/pubsub"
 
-  pubsub       = Google::Cloud::Pubsub.new project: project_id
+  pubsub = Google::Cloud::Pubsub.new project: project_id
 
   subscription = pubsub.subscription subscription_name
   subscription.pull.each do |message|
@@ -154,7 +154,7 @@ def listen_for_messages_with_error_handler project_id:, subscription_name:
   # subscription_name = "Your Pubsub subscription name"
   require "google/cloud/pubsub"
 
-  pubsub       = Google::Cloud::Pubsub.new project: project_id
+  pubsub = Google::Cloud::Pubsub.new project: project_id
 
   subscription = pubsub.subscription subscription_name
   subscriber   = subscription.listen do |received_message|
@@ -185,7 +185,7 @@ def listen_for_messages_with_flow_control project_id:, subscription_name:
   # subscription_name = "Your Pubsub subscription name"
   require "google/cloud/pubsub"
 
-  pubsub       = Google::Cloud::Pubsub.new project: project_id
+  pubsub = Google::Cloud::Pubsub.new project: project_id
 
   subscription = pubsub.subscription subscription_name
   subscriber   = subscription.listen inventory: 10 do |received_message|
@@ -207,7 +207,7 @@ def listen_for_messages_with_concurrency_control project_id:, subscription_name:
   # subscription_name = "Your Pubsub subscription name"
   require "google/cloud/pubsub"
 
-  pubsub       = Google::Cloud::Pubsub.new project: project_id
+  pubsub = Google::Cloud::Pubsub.new project: project_id
 
   subscription = pubsub.subscription subscription_name
   # Use 2 threads for streaming, 4 threads for executing callbacks and 2 threads
@@ -228,7 +228,7 @@ def listen_for_messages_with_concurrency_control project_id:, subscription_name:
   # [END listen_for_messages_with_concurrency_control]
 end
 
-if __FILE__ == $0
+if __FILE__ == $PROGRAM_NAME
   case ARGV.shift
   when "update_push_configuration"
     update_push_configuration project_id: ARGV.shift, 

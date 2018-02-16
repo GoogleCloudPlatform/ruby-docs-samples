@@ -48,6 +48,10 @@ set in the [Google Cloud Platfrom Developer COnsole](https://console.cloud.googl
 
 ## Run samples
 
+Deploy the push listener:
+
+    gcloud app deploy --promote
+
 Run the sample for using topics:
 
     bundle exec ruby topics.rb
@@ -111,11 +115,7 @@ Example:
 
 Test the sample:
 
-    $ bundle exec rspec
-
-Deploy the push listener:
-
-    $ gcloud app deploy --promote
+    bundle exec rspec
 
 You will see messages pushed to the listener in
 [Google Cloud Logging](https://cloud.google.com/logging/docs/).

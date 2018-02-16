@@ -52,7 +52,7 @@ def list_topic_subscriptions project_id:, topic_name:
 
   pubsub = Google::Cloud::Pubsub.new project: project_id
 
-  topic  = pubsub.topic topic_name
+  topic         = pubsub.topic topic_name
   subscriptions = topic.subscriptions
 
   puts "Subscriptions in topic #{topic.name}:"
@@ -70,7 +70,7 @@ def delete_topic project_id:, topic_name:
 
   pubsub = Google::Cloud::Pubsub.new project: project_id
 
-  topic  = pubsub.topic topic_name
+  topic = pubsub.topic topic_name
   topic.delete
 
   puts "Topic #{topic_name} deleted."
@@ -101,7 +101,7 @@ def set_topic_policy project_id:, topic_name:
 
   pubsub = Google::Cloud::Pubsub.new project: project_id
 
-  topic  = pubsub.topic topic_name
+  topic = pubsub.topic topic_name
   topic.policy do |policy|
     policy.add "roles/pubsub.publisher", 
       "serviceAccount:account_name@project_name.iam.gserviceaccount.com"
@@ -115,7 +115,7 @@ def test_topic_permissions project_id:, topic_name:
   # topic_name = "Your Pubsub topic name"
   require "google/cloud/pubsub"
 
-  pubsub      = Google::Cloud::Pubsub.new project: project_id
+  pubsub = Google::Cloud::Pubsub.new project: project_id
 
   topic       = pubsub.topic topic_name
   permissions = topic.test_permissions "pubsub.topics.attachSubscription",
@@ -136,7 +136,7 @@ def create_pull_subscription project_id:, topic_name:, subscription_name:
 
   pubsub = Google::Cloud::Pubsub.new project: project_id
 
-  topic  = pubsub.topic topic_name
+  topic        = pubsub.topic topic_name
   subscription = topic.subscribe subscription_name
 
   puts "Pull subscription #{subscription_name} created."
@@ -153,7 +153,7 @@ def create_push_subscription project_id:, topic_name:, subscription_name:, endpo
 
   pubsub = Google::Cloud::Pubsub.new project: project_id
 
-  topic  = pubsub.topic topic_name
+  topic        = pubsub.topic topic_name
   subscription = topic.subscribe subscription_name,
     endpoint: endpoint
 
@@ -169,7 +169,7 @@ def publish_message project_id:, topic_name:
 
   pubsub = Google::Cloud::Pubsub.new project: project_id
 
-  topic  = pubsub.topic topic_name
+  topic = pubsub.topic topic_name
   topic.publish data: "This is a test message."
 
   puts "Message published."
@@ -184,7 +184,7 @@ def publish_messages_with_batch_settings project_id:, topic_name:
 
   pubsub = Google::Cloud::Pubsub.new project: project_id
 
-  topic  = pubsub.topic topic_name
+  topic = pubsub.topic topic_name
   topic.publish do |batch|
     10.times do |i|
       batch.publish "This is message \##{i}."
@@ -203,7 +203,7 @@ def publish_message_async project_id:, topic_name:
 
   pubsub = Google::Cloud::Pubsub.new project: project_id
 
-  topic  = pubsub.topic topic_name
+  topic = pubsub.topic topic_name
   topic.publish_async "This is a test message." do |result|
     if result.succeeded?
       puts "Message published asynchronously."
@@ -227,7 +227,7 @@ def publish_messages_async_with_batch_settings project_id:, topic_name:
 
   # Start sending messages in one request once the size of all queued messages
   # reaches 1 MB or the number of queued messages reaches 20
-  topic  = pubsub.topic topic_name, async: {
+  topic = pubsub.topic topic_name, async: {
     :max_bytes => 1000000,
     :max_messages => 20
   }
@@ -249,7 +249,7 @@ def publish_messages_async_with_concurrency_control project_id:, topic_name:
 
   pubsub = Google::Cloud::Pubsub.new project: project_id
 
-  topic  = pubsub.topic topic_name, async: {
+  topic = pubsub.topic topic_name, async: {
     :threads => {
       # Use exactly one thread for publishing message and exactly one thread
       # for executing callbacks
@@ -270,7 +270,7 @@ def publish_messages_async_with_concurrency_control project_id:, topic_name:
   # [END publish_messages_async_with_concurrency_settings]
 end
 
-if __FILE__ == $0
+if __FILE__ == $PROGRAM_NAME
   case ARGV.shift
   when "create_topic"
     create_topic project_id: ARGV.shift,
