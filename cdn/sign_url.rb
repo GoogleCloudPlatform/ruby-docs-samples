@@ -29,12 +29,12 @@ def signed_url url:, key_name:, key:, expiration:
   # Get UTC time in seconds
   expiration_utc = expiration.utc.to_i
 
-  # Determine which seperator makes sense given a URL
-  seperator = "?"
-  seperator = "&" if url.include? '?'
+  # Determine which separator makes sense given a URL
+  separator = "?"
+  separator = "&" if url.include? '?'
 
   # Concatenate url with expected query parameters Expires and KeyName
-  url = "#{url}#{seperator}Expires=#{expiration_utc}&KeyName=#{key_name}"
+  url = "#{url}#{separator}Expires=#{expiration_utc}&KeyName=#{key_name}"
 
   # Sign the url using the key and url safe base64 encode the signature
   signature         = OpenSSL::HMAC.digest "SHA1", decoded_key, url
