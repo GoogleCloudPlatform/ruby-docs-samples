@@ -2,12 +2,14 @@
 
 source $KOKORO_GFILE_DIR/secrets.sh
 
-cd github/ruby-docs-samples/storage
-echo $GOOGLE_APPLICATION_CREDENTIALS
-ls -l $GOOGLE_APPLICATION_CREDENTIALS
-ls -l $KOKORO_GFILE_DIR
+sudo apt-get update
+sudo apt-get install realpath wget
+wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64
 
-gem install bundle
-bundle install
-bundle exec rspec spec/quickstart_spec.rb
+# Unsure about the following section because of Ruby image
+mv cloud_sql_proxy.linux.amd64 $HOME/cloud_sql_proxy
+chmod +x $HOME/cloud_sql_proxy
+sudo mkdir /cloudsql && sudo chmod 0777 /cloudsql
 
+cd github/ruby-docs-samples/
+./spec/run-all.sh
