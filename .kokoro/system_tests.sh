@@ -2,7 +2,7 @@
 
 source $KOKORO_GFILE_DIR/secrets.sh
 
-export GOOGLE_APPLICATION_CREDENTIALS=$KOKORO_GFILE_DIR/client_secret_978467553869-f5a190d93kfbv0req8ejnpkj41quuncd.apps.googleusercontent.com.json
+export GOOGLE_APPLICATION_CREDENTIALS=$KOKORO_GFILE_DIR/cloud-samples-tests-ruby-35fe8d65344c.json
 
 cd github/ruby-docs-samples/storage
 echo $GOOGLE_APPLICATION_CREDENTIALS
