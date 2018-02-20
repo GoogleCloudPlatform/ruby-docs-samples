@@ -90,7 +90,7 @@ def get_topic_policy project_id:, topic_name:
 
   puts "Topic policy:"
   puts policy.roles
-  # [END get_topic_polic]
+  # [END get_topic_policy]
 end
 
 def set_topic_policy project_id:, topic_name:
