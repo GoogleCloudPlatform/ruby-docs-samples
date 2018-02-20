@@ -358,6 +358,9 @@ if __FILE__ == $PROGRAM_NAME
   when "import_gcs_json"
     import_table_from_gcs_json project_id: project_id,
                                dataset_id: ARGV.shift
+  when "import_gcs_json_autodetect"
+   import_table_from_gcs_json_autodetect project_id: project_id,
+                                         dataset_id: ARGV.shift
   when "import_data"
     import_table_data project_id: project_id,
                       dataset_id: ARGV.shift,
@@ -385,19 +388,20 @@ if __FILE__ == $PROGRAM_NAME
 Usage: ruby tables.rb <command> [arguments]
 
 Commands:
-  create          <dataset_id> <table_id>  Create a new table with the specified ID
-  list            <dataset_id>             List all tables in the specified dataset
-  delete          <dataset_id> <table_id>  Delete table with the specified ID
-  list_data       <dataset_id> <table_id>  List data in table with the specified ID
-  import_file     <dataset_id> <table_id> <file_path>
-  import_gcs      <dataset_id> <table_id> <cloud_storage_path>
-  import_gcs_json <dataset_id>
-  import_data     <dataset_id> <table_id> "[{ <json row data> }]"
-  append_rows     <dataset_id> <table_id>
-  overwrite_rows  <dataset_id> <table_id>
-  export          <dataset_id> <table_id> <cloud_storage_path>
-  query           <query>
-  query_job       <query>
+  create                     <dataset_id> <table_id>  Create a new table with the specified ID
+  list                       <dataset_id>             List all tables in the specified dataset
+  delete                     <dataset_id> <table_id>  Delete table with the specified ID
+  list_data                  <dataset_id> <table_id>  List data in table with the specified ID
+  import_file                <dataset_id> <table_id> <file_path>
+  import_gcs                 <dataset_id> <table_id> <cloud_storage_path>
+  import_gcs_json            <dataset_id>
+  import_gcs_json_autodetect <dataset_id>
+  import_data                <dataset_id> <table_id> "[{ <json row data> }]"
+  append_rows                <dataset_id> <table_id>
+  overwrite_rows             <dataset_id> <table_id>
+  export                     <dataset_id> <table_id> <cloud_storage_path>
+  query                      <query>
+  query_job                  <query>
     usage
   end
 end
