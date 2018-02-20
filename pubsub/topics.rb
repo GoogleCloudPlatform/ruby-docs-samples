@@ -242,7 +242,7 @@ def publish_messages_async_with_batch_settings project_id:, topic_name:
 end
 
 def publish_messages_async_with_concurrency_control project_id:, topic_name:
-  # [START publish_messages_async_with_concurrency_settings]
+  # [START publish_messages_async_with_concurrency_control]
   # project_id = "Your Google Cloud Project ID"
   # topic_name = "Your Pubsub topic name"
   require "google/cloud/pubsub"
@@ -267,7 +267,7 @@ def publish_messages_async_with_concurrency_control project_id:, topic_name:
 
   # Stop the async_publisher to send all queued messages immediately.
   topic.async_publisher.stop.wait!
-  # [END publish_messages_async_with_concurrency_settings]
+  # [END publish_messages_async_with_concurrency_control]
 end
 
 if __FILE__ == $PROGRAM_NAME
