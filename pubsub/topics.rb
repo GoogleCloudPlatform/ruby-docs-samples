@@ -316,7 +316,7 @@ if __FILE__ == $PROGRAM_NAME
     publish_messages_async_with_concurrency_control project_id: ARGV.shift, 
                                                     topic_name: ARGV.shift
   else
-    puts <<~usage
+    puts <<-usage
 Usage: bundle exec ruby topics.rb [command] [arguments]
 
 Commands:
