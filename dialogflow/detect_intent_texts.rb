@@ -50,7 +50,7 @@ if __FILE__ == $PROGRAM_NAME
   texts = ARGV
 
   if texts
-    detect_intent_texts project_id: project_id, session_id: session_id, \
+    detect_intent_texts project_id: project_id, session_id: session_id,
                         texts: texts, language_code:language_code
   else
     puts <<-usage
