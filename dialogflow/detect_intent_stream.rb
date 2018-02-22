@@ -69,13 +69,13 @@ def detect_intent_stream project_id:, session_id:, audio_file_path:,
   # The first request needs to be the configuration.
   request_queue.push(streaming_config)
 
-  # Consume the queue and process response in a separate thread
+  # Consume the queue and process responses in a separate thread
   Thread.new do
     session_client.streaming_detect_intent(request_queue.each_item).each do |response|
       if response.recognition_result
         puts "Intermediate transcript: #{response.recognition_result.transcript}"
       else
-        # the last response has the detected intent
+        # the last response has the actual query result
         query_result = response.query_result
         puts "=" * 20
         puts "Query text:        #{query_result.query_text}"
