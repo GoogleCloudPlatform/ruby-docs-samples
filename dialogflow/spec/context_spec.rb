@@ -16,6 +16,7 @@ require "rspec"
 require "google/cloud/dialogflow"
 
 require_relative "../context_management"
+require_relative "../detect_intent_texts"
 
 describe "Context Management" do
 
@@ -26,7 +27,12 @@ describe "Context Management" do
   end
 
   example "create context" do
-    expectation = expect {
+    # create a session
+    detect_intent_texts project_id:    @project_id,
+                        session_id:    @session_id,
+                        texts:         ['hi'],
+                        language_code: 'en-US' 
+    expect {
       create_context project_id: @project_id,
                      session_id: @session_id,
                      context_id: @context_id
