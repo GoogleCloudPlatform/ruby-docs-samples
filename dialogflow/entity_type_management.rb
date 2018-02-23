@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'pry'
 
 def list_entity_types project_id:
   # [START dialogflow_list_entity_types]

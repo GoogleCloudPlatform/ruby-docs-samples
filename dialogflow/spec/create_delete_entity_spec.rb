@@ -22,7 +22,7 @@ describe "Entity Type and Entity Management" do
 
   before do
     @project_id               = ENV["GOOGLE_CLOUD_PROJECT"]
-    @entity_type_display_name = "fake_entity_type_for_testing-for-testing"
+    @entity_type_display_name = "fake_entity_type_for_testing"
     @kind                     = :KIND_MAP
     @entity_value_1           = "fake_entity_for_testing_1"
     @entity_value_2           = "fake_entity_for_testing_2"
