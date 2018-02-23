@@ -49,7 +49,7 @@ if __FILE__ == $PROGRAM_NAME
 
   texts = ARGV
 
-  if texts
+  if !texts.empty?
     detect_intent_texts project_id: project_id, session_id: session_id,
                         texts: texts, language_code:language_code
   else
