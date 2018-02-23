@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+require 'pry'
 
 def list_entity_types project_id:
   # [START dialogflow_list_entity_types]
@@ -20,14 +21,14 @@ def list_entity_types project_id:
   require "google/cloud/dialogflow"
 
   entity_types_client = Google::Cloud::Dialogflow::EntityTypes.new
-  parent = entity_types_client.class.entity_type_path project_id
+  parent = entity_types_client.class.project_agent_path project_id
 
   entity_types = entity_types_client.list_entity_types(parent)
 
   entity_types.each do |entity_type|
     puts "Entity type name:         #{entity_type.name}"
     puts "Entity type display name: #{entity_type.display_name}"
-    puts "Number of entities:       #{entity_type.size}"
+    puts "Number of entities:       #{entity_type.entities.size}"
   end
   # [END dialogflow_list_entity_types]
 end
@@ -45,10 +46,10 @@ def create_entity_type project_id:, display_name:, kind:
   parent = entity_types_client.class.project_agent_path project_id
 
   entity_type = { display_name: display_name, kind: kind }
-
   response = entity_types_client.create_entity_type parent, entity_type
 
-  puts "Entity type created: \n#{response}"
+  puts "Entity type created: #{response}"
+  puts "Display name:        #{response.display_name}"
   # [END dialogflow_create_entity_type]
 end
 
@@ -80,9 +81,13 @@ def get_entity_type_ids project_id:, display_name:
 
   entity_types = entity_types_client.list_entity_types parent
 
-  entity_type_names = ...
+  entity_type_names = entity_types.map do |entity_type|
+    entity_type.name if entity_type.display_name == display_name
+  end.compact
 
-  entity_type_ids = ...
+  entity_type_ids = entity_type_names.map do |entity_type_name|
+    entity_type_name.split('/').last
+  end
 
   return entity_type_ids
 end
@@ -92,25 +97,23 @@ if __FILE__ == $PROGRAM_NAME
   project_id = ENV["GOOGLE_CLOUD_PROJECT"]
   case ARGV.shift
   when "list"
-    entity_type_id = ARGV.shift
-    list_entities project_id, entity_type_id
+    list_entity_types project_id: project_id
   when "create"
-    entity_type_id = ARGV.shift
-    entity_value = ARGV.shift
-    synonyms = ARGV
-    create_entity project_id, entity_type_id, entity_value, synonyms
+    display_name = ARGV.shift
+    kind = (ARGV.shift or "KIND_MAP")
+    create_entity_type project_id: project_id, display_name: display_name,
+                       kind: kind.to_sym
   when "delete"
     entity_type_id = ARGV.shift
-    entity_value = ARGV.shift
-    create_entity project_id, entity_type_id, entity_value
+    delete_entity_type project_id: project_id, entity_type_id: entity_type_id
   else
     puts <<-usage
-Usage: ruby entity_management.rb [commang] [arguments]
+Usage: ruby entity_type_management.rb [commang] [arguments]
 
 Commands:
-  list    <entity_type_id>
-  create  <entity_type_id> <entity_value> [<synonym1> [<synonym2> ...]]
-  delete  <entity_type_id> <entity_value>
+  list
+  create  <display_name> [KIND_MAP or KIND_LIST]
+  delete  <entity_type_id>
 
 Environment variables:
   GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID

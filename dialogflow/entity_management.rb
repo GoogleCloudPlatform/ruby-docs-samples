@@ -27,7 +27,7 @@ def list_entities project_id:, entity_type_id:
 
   entities.each do |entity|
     puts "Entity value:    #{entity.value}"
-    puts "Entity synonymx: #{entity.synonyms}"
+    puts "Entity synonyms: #{entity.synonyms}"
   end
   # [END dialogflow_list_entities]
 end
@@ -65,7 +65,7 @@ def delete_entity project_id:, entity_type_id:, entity_value:
   entity_types_client = Google::Cloud::Dialogflow::EntityTypes.new
   entity_type_path = entity_types_client.class.entity_type_path project_id, entity_type_id
 
-  response = entity_types_client.batch_delete_entities entity_type_path
+  response = entity_types_client.batch_delete_entities entity_type_path, [entity_value]
   # [END dialogflow_delete_entity]
 end
 
@@ -75,16 +75,18 @@ if __FILE__ == $PROGRAM_NAME
   case ARGV.shift
   when "list"
     entity_type_id = ARGV.shift
-    list_entities project_id, entity_type_id
+    list_entities project_id: project_id, entity_type_id: entity_type_id
   when "create"
     entity_type_id = ARGV.shift
     entity_value = ARGV.shift
     synonyms = ARGV
-    create_entity project_id, entity_type_id, entity_value, synonyms
+    create_entity project_id: project_id, entity_type_id: entity_type_id,
+                  entity_value: entity_value, synonyms: synonyms
   when "delete"
     entity_type_id = ARGV.shift
     entity_value = ARGV.shift
-    create_entity project_id, entity_type_id, entity_value
+    delete_entity project_id: project_id, entity_type_id: entity_type_id,
+                  entity_value: entity_value
   else
     puts <<-usage
 Usage: ruby entity_management.rb [commang] [arguments]
