@@ -390,7 +390,6 @@ def spanner_batch_client project_id:, instance_id:, database_id:
   batch_snapshot = batch_client.batch_snapshot strong: true
 
   # Get partitions for specified query
-  # TODO: What is a pre-executed partition?
   partitions       = batch_snapshot.partition_query "SELECT SingerId, FirstName, LastName FROM Singers"
   total_partitions = partitions.size
 
