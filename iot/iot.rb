@@ -465,7 +465,7 @@ $get_device_configs = -> (project_id:, location_id:, registry_id:, device_id:) d
 end
 
 $get_device_states = -> (project_id:, location_id:, registry_id:, device_id:) do
-  # [START iot_get_device_states]
+  # [START iot_get_device_state]
   # project_id  = "Your Google Cloud project ID"
   # location_id = "The Cloud region the registry is located in"
   # registry_id = "The registry to get device states from"
@@ -495,11 +495,11 @@ $get_device_states = -> (project_id:, location_id:, registry_id:, device_id:) do
   else
     puts "No state messages"
   end
-  # [END iot_get_device_states]
+  # [END iot_get_device_state]
 end
 
 $patch_es_device = -> (project_id:, location_id:, registry_id:, device_id:, cert_path:) do
-  # [START iot_patch_es_device]
+  # [START iot_patch_es]
   # project_id  = "Your Google Cloud project ID"
   # location_id = "The Cloud region the registry is located in"
   # registry_id = "The registry to create a device in"
@@ -545,11 +545,11 @@ $patch_es_device = -> (project_id:, location_id:, registry_id:, device_id:, cert
   else
     puts "\t\tNo certificates for device"
   end
-  # [END iot_patch_es_device]
+  # [END iot_patch_es]
 end
 
 $patch_rsa_device = -> (project_id:, location_id:, registry_id:, device_id:, cert_path:) do
-  # [START iot_patch_rsa_device]
+  # [START iot_patch_rsa]
   # project_id  = "Your Google Cloud project ID"
   # location_id = "The Cloud region the registry is located in"
   # registry_id = "The registry to create a device in"
@@ -593,11 +593,11 @@ $patch_rsa_device = -> (project_id:, location_id:, registry_id:, device_id:, cer
   else
     puts "\t\tNo certificates for device"
   end
-  # [END iot_patch_rsa_device]
+  # [END iot_patch_rsa]
 end
 
 $send_device_config = -> (project_id:, location_id:, registry_id:, device_id:, data:) do
-  # [START send_device_config]
+  # [START iot_set_device_config]
   # project_id  = "Your Google Cloud project ID"
   # location_id = "The Cloud region the registry is located in"
   # registry_id = "The registry to get a device from"
@@ -623,7 +623,7 @@ $send_device_config = -> (project_id:, location_id:, registry_id:, device_id:, d
   # Set configuration for the provided device
   iot_client.modify_cloud_to_device_config resource, config
   puts "Configuration updated!"
-  # [END send_device_config]
+  # [END iot_set_device_config]
 end
 
 def run_sample arguments
