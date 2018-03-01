@@ -13,7 +13,7 @@
 # limitations under the License.
 
 def create_database project_id:, instance_id:, database_id:
-  # [START create_database]
+  # [START spanner_create_database]
   # project_id  = "Your Google Cloud project ID"
   # instance_id = "Your Spanner instance ID"
   # database_id = "Your Spanner database ID"
@@ -44,11 +44,11 @@ def create_database project_id:, instance_id:, database_id:
   job.wait_until_done!
 
   puts "Created database #{database_id} on instance #{instance_id}"
-  # [END create_database]
+  # [END spanner_create_database]
 end
 
 def insert_data project_id:, instance_id:, database_id:
-  # [START insert_data]
+  # [START spanner_insert_data]
   # project_id  = "Your Google Cloud project ID"
   # instance_id = "Your Spanner instance ID"
   # database_id = "Your Spanner database ID"
@@ -76,11 +76,11 @@ def insert_data project_id:, instance_id:, database_id:
   end
 
   puts "Inserted data"
-  # [END insert_data]
+  # [END spanner_insert_data]
 end
 
 def query_data project_id:, instance_id:, database_id:
-  # [START query_data]
+  # [START spanner_query_data]
   # project_id  = "Your Google Cloud project ID"
   # instance_id = "Your Spanner instance ID"
   # database_id = "Your Spanner database ID"
@@ -93,11 +93,11 @@ def query_data project_id:, instance_id:, database_id:
   client.execute("SELECT SingerId, AlbumId, AlbumTitle FROM Albums").rows.each do |row|
     puts "#{row[:SingerId]} #{row[:AlbumId]} #{row[:AlbumTitle]}"
   end
-  # [END query_data]
+  # [END spanner_query_data]
 end
 
 def read_data project_id:, instance_id:, database_id:
-  # [START read_data]
+  # [START spanner_read_data]
   # project_id  = "Your Google Cloud project ID"
   # instance_id = "Your Spanner instance ID"
   # database_id = "Your Spanner database ID"
@@ -110,11 +110,11 @@ def read_data project_id:, instance_id:, database_id:
   client.read("Albums", [:SingerId, :AlbumId, :AlbumTitle]).rows.each do |row|
     puts "#{row[:SingerId]} #{row[:AlbumId]} #{row[:AlbumTitle]}"
   end
-  # [END read_data]
+  # [END spanner_read_data]
 end
 
 def read_stale_data project_id:, instance_id:, database_id:
-  # [START read_stale_data]
+  # [START spanner_read_stale_data]
   # project_id  = "Your Google Cloud project ID"
   # instance_id = "Your Spanner instance ID"
   # database_id = "Your Spanner database ID"
@@ -129,11 +129,11 @@ def read_stale_data project_id:, instance_id:, database_id:
       puts "#{row[:SingerId]} #{row[:AlbumId]} #{row[:AlbumTitle]}"
     end
   end
-  # [END read_stale_data]
+  # [END spanner_read_stale_data]
 end
 
 def create_index project_id:, instance_id:, database_id:
-  # [START create_index]
+  # [START spanner_create_index]
   # project_id  = "Your Google Cloud project ID"
   # instance_id = "Your Spanner instance ID"
   # database_id = "Your Spanner database ID"
@@ -153,11 +153,11 @@ def create_index project_id:, instance_id:, database_id:
   job.wait_until_done!
 
   puts "Added the AlbumsByAlbumTitle index"
-  # [END create_index]
+  # [END spanner_create_index]
 end
 
 def create_storing_index project_id:, instance_id:, database_id:
-  # [START create_storing_index]
+  # [START spanner_create_storing_index]
   # project_id  = "Your Google Cloud project ID"
   # instance_id = "Your Spanner instance ID"
   # database_id = "Your Spanner database ID"
@@ -178,11 +178,11 @@ def create_storing_index project_id:, instance_id:, database_id:
   job.wait_until_done!
 
   puts "Added the AlbumsByAlbumTitle2 storing index"
-  # [END create_storing_index]
+  # [END spanner_create_storing_index]
 end
 
 def add_column project_id:, instance_id:, database_id:
-  # [START add_column]
+  # [START spanner_add_column]
   # project_id  = "Your Google Cloud project ID"
   # instance_id = "Your Spanner instance ID"
   # database_id = "Your Spanner database ID"
@@ -202,11 +202,11 @@ def add_column project_id:, instance_id:, database_id:
   job.wait_until_done!
 
   puts "Added the MarketingBudget column"
-  # [END add_column]
+  # [END spanner_add_column]
 end
 
 def update_data project_id:, instance_id:, database_id:
-  # [START update_data]
+  # [START spanner_update_data]
   # project_id  = "Your Google Cloud project ID"
   # instance_id = "Your Spanner instance ID"
   # database_id = "Your Spanner database ID"
@@ -224,11 +224,11 @@ def update_data project_id:, instance_id:, database_id:
   end
 
   puts "Updated data"
-  # [END update_data]
+  # [END spanner_update_data]
 end
 
 def query_data_with_new_column project_id:, instance_id:, database_id:
-  # [START query_data_with_new_column]
+  # [START spanner_query_data_with_new_column]
   # project_id  = "Your Google Cloud project ID"
   # instance_id = "Your Spanner instance ID"
   # database_id = "Your Spanner database ID"
@@ -241,11 +241,11 @@ def query_data_with_new_column project_id:, instance_id:, database_id:
   client.execute("SELECT SingerId, AlbumId, MarketingBudget FROM Albums").rows.each do |row|
     puts "#{row[:SingerId]} #{row[:AlbumId]} #{row[:MarketingBudget]}"
   end
-  # [END query_data_with_new_column]
+  # [END spanner_query_data_with_new_column]
 end
 
 def read_write_transaction project_id:, instance_id:, database_id:
-  # [START read_write_transaction]
+  # [START spanner_read_write_transaction]
   # project_id  = "Your Google Cloud project ID"
   # instance_id = "Your Spanner instance ID"
   # database_id = "Your Spanner database ID"
@@ -273,11 +273,11 @@ def read_write_transaction project_id:, instance_id:, database_id:
   end
 
   puts "Transaction complete"
-  # [END read_write_transaction]
+  # [END spanner_read_write_transaction]
 end
 
 def query_data_with_index project_id:, instance_id:, database_id:, start_title: "Ardvark", end_title: "Goo"
-  # [START query_data_with_index]
+  # [START spanner_query_data_with_index]
   # project_id  = "Your Google Cloud project ID"
   # instance_id = "Your Spanner instance ID"
   # database_id = "Your Spanner database ID"
@@ -299,11 +299,11 @@ def query_data_with_index project_id:, instance_id:, database_id:, start_title: 
   client.execute(sql_query, params: params, types: param_types).rows.each do |row|
     puts "#{row[:AlbumId]} #{row[:AlbumTitle]} #{row[:MarketingBudget]}"
   end
-  # [END query_data_with_index]
+  # [END spanner_query_data_with_index]
 end
 
 def read_data_with_index project_id:, instance_id:, database_id:
-  # [START read_data_with_index]
+  # [START spanner_read_data_with_index]
   # project_id  = "Your Google Cloud project ID"
   # instance_id = "Your Spanner instance ID"
   # database_id = "Your Spanner database ID"
@@ -319,11 +319,11 @@ def read_data_with_index project_id:, instance_id:, database_id:
   result.rows.each do |row|
     puts "#{row[:AlbumId]} #{row[:AlbumTitle]}"
   end
-  # [END read_data_with_index]
+  # [END spanner_read_data_with_index]
 end
 
 def read_data_with_storing_index project_id:, instance_id:, database_id:
-  # [START read_data_with_storing_index]
+  # [START spanner_read_data_with_storing_index]
   # project_id  = "Your Google Cloud project ID"
   # instance_id = "Your Spanner instance ID"
   # database_id = "Your Spanner database ID"
@@ -339,11 +339,11 @@ def read_data_with_storing_index project_id:, instance_id:, database_id:
   result.rows.each do |row|
     puts "#{row[:AlbumId]} #{row[:AlbumTitle]} #{row[:MarketingBudget]}"
   end
-  # [END read_data_with_storing_index]
+  # [END spanner_read_data_with_storing_index]
 end
 
 def read_only_transaction project_id:, instance_id:, database_id:
-  # [START read_only_transaction]
+  # [START spanner_read_only_transaction]
   # project_id  = "Your Google Cloud project ID"
   # instance_id = "Your Spanner instance ID"
   # database_id = "Your Spanner database ID"
@@ -364,7 +364,7 @@ def read_only_transaction project_id:, instance_id:, database_id:
       puts "#{row[:AlbumId]} #{row[:AlbumTitle]} #{row[:SingerId]}"
     end
   end
-  # [END read_only_transaction]
+  # [END spanner_read_only_transaction]
 end
 
 def usage
