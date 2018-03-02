@@ -367,6 +367,61 @@ def read_only_transaction project_id:, instance_id:, database_id:
   # [END spanner_read_only_transaction]
 end
 
+def spanner_batch_client project_id:, instance_id:, database_id:
+  # [START spanner_batch_client]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+
+  # Prepare a thread pool with number of processors
+  processor_count  = Concurrent.processor_count
+  thread_pool      = Concurrent::FixedThreadPool.new processor_count
+
+  # Prepare AtomicFixnum to count total records using multiple threads
+  total_records = Concurrent::AtomicFixnum.new
+
+  # Create a new Spanner batch client
+  spanner        = Google::Cloud::Spanner.new project: project_id
+  batch_client   = spanner.batch_client instance_id, database_id
+
+  # Get a strong timestamp bound batch_snapshot
+  batch_snapshot = batch_client.batch_snapshot strong: true
+
+  # Get partitions for specified query
+  partitions       = batch_snapshot.partition_query "SELECT SingerId, FirstName, LastName FROM Singers"
+  total_partitions = partitions.size
+
+  # Enqueue a new thread pool job
+  partitions.each_with_index do |partition, partition_index|
+    thread_pool.post do
+      # Increment total_records per new row
+      batch_snapshot.execute_partition(partition).rows.each do |row|
+        total_records.increment
+      end
+    end
+  end
+
+  # Wait for queued jobs to complete
+  thread_pool.shutdown
+  thread_pool.wait_for_termination
+
+  # Close the client connection and release resources.
+  batch_snapshot.close
+
+  # Collect statistics for batch query
+  average_records_per_partition = 0.0
+  if total_partitions != 0
+    average_records_per_partition = total_records.value.to_f / total_partitions.to_f
+  end
+
+  puts "Total Partitions: #{total_partitions}"
+  puts "Total Records: #{total_records.value}"
+  puts "Average records per Partition: #{average_records_per_partition}"
+  # [END spanner_batch_client]
+end
+
 def usage
     puts <<-usage
 Usage: bundle exec ruby spanner_samples.rb [command] [arguments]
@@ -387,6 +442,7 @@ Commands:
   read_data_with_index         <instance_id> <database_id> Read Data with Index
   read_data_with_storing_index <instance_id> <database_id> Read Data with Storing Index
   read_only_transaction        <instance_id> <database_id> Read-Only Transaction
+  spanner_batch_client         <instance_id> <database_id> Use Spanner batch query with a thread pool
 
 Environment variables:
   GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
@@ -404,14 +460,10 @@ def run_sample arguments
     "create_index", "create_storing_index", "add_column", "update_data",
     "query_data_with_new_column", "read_write_transaction", "query_data_with_index",
     "read_data_with_index", "read_data_with_storing_index", "read_only_transaction",
+    "spanner_batch_client"
   ]
 
-  puts instance_id
-  puts database_id
-  puts arguments.size
-
   if command.eql?("query_data_with_index") && instance_id && database_id && arguments.size >= 2
-    puts "hello"
     query_data_with_index project_id:  project_id,
                           instance_id: instance_id,
                           database_id: database_id,
