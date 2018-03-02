@@ -531,4 +531,25 @@ describe "Google Cloud Spanner API samples" do
     expect(captured_output).to include "1 Total Junk 1"
     expect(captured_output).to include "2 Forever Hold Your Peace 2"
   end
+
+  example "batch client read partitions across threads" do
+    database = create_singers_albums_database
+    client   = @spanner.client @instance.instance_id, database.database_id
+
+    # Ignore the following capture block
+    capture do
+      # Insert Singers and Albums (re-use insert_data sample to populate)
+      insert_data project_id:  @project_id,
+                  instance_id: @instance.instance_id,
+                  database_id: database.database_id
+    end
+
+    capture do
+      spanner_batch_client project_id:  @project_id,
+                           instance_id: @instance.instance_id,
+                           database_id: database.database_id
+    end
+
+    expect(captured_output).to include "Total Records: 5"
+  end
 end
