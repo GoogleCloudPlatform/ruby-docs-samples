@@ -12,4 +12,4 @@ chmod +x $HOME/cloud_sql_proxy
 sudo mkdir /cloudsql && sudo chmod 0777 /cloudsql
 
 cd github/ruby-docs-samples/
-./spec/run-all.sh
+./spec/kokoro-run-all.sh
