@@ -77,7 +77,6 @@ Cloud account and [SDK](https://cloud.google.com/sdk/) configured.
     ```bash
     GOOGLE_CLOUD_PROJECT=$(curl -s "http://metadata.google.internal/computeMetadata/v1/project/project-id" -H "Metadata-Flavor: Google")
     SERVICE_NAME=hellogrpc.endpoints.${GOOGLE_CLOUD_PROJECT}.cloud.goog
-    SERVICE_CONFIG_ID=<Your Config ID>
     ```
 
 1. Pull your credentials to access Container Registry, and run your
@@ -96,7 +95,7 @@ Cloud account and [SDK](https://cloud.google.com/sdk/) configured.
         --link=grpc-hello:grpc-hello \
         gcr.io/endpoints-release/endpoints-runtime:1 \
         -s ${SERVICE_NAME} \
-        -v ${SERVICE_CONFIG_ID} \
+        --rollout_strategy managed \
         -P 9000 \
         -a grpc://grpc-hello:50051
     ```
@@ -127,8 +126,7 @@ Cloud account and [SDK](https://cloud.google.com/sdk/) configured.
     gcloud container clusters create my-cluster
     ```
 
-1. Edit `deployment.yaml`. Replace `SERVICE_NAME`,
-   `SERVICE_CONFIG_ID`, and `GOOGLE_CLOUD_PROJECT` with your values.
+1. Edit `deployment.yaml`. Replace `SERVICE_NAME` and `GOOGLE_CLOUD_PROJECT` with your values.
 
 1. Deploy to GKE
 
