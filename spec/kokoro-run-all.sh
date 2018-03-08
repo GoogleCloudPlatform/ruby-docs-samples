@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e -u -o pipefail
+
 for required_variable in                   \
   GOOGLE_CLOUD_PROJECT                     \
   GOOGLE_APPLICATION_CREDENTIALS           \
@@ -11,28 +13,27 @@ for required_variable in                   \
   fi
 done
 
-script_directory="$(dirname "`realpath $0`")"
-repo_directory="$(dirname $script_directory)"
-status_return=0 # everything passed
+script_directory="$(dirname "$(realpath "$0")")"
+repo_directory="$(dirname "$script_directory")"
+
+# Capture failures
+exit_status=0 # everything passed
+function set_failed_status {
+  exit_status=1
+}
 
 # Print out Ruby version
 ruby --version
 
 for product in \
-  auth
+  auth # leave this until all tests are added
 do
   # Run Tests
-  export BUILD_ID=$CIRCLE_BUILD_NUM
-  export TEST_DIR=$product
   echo "[$product]"
   pushd "$repo_directory/$product/"
-  bundle install && bundle exec rspec --format documentation
 
-  # Check status of bundle exec rspec
-  if [ $? != 0 ]; then
-      status_return=1
-  fi
+  (bundle install && bundle exec rspec --format documentation) || set_failed_status
   popd
 done
 
-exit $status_return
+exit $exit_status
