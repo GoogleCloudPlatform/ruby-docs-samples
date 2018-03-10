@@ -1,3 +1,5 @@
+# DO NOT SUBMIT
+
 ## Ruby docs samples
 
 [![CircleCI](https://circleci.com/gh/GoogleCloudPlatform/ruby-docs-samples/tree/master.svg?style=svg)](https://circleci.com/gh/GoogleCloudPlatform/ruby-docs-samples/tree/master) 
