@@ -28,7 +28,8 @@ ruby --version
 # leave this until all tests are added
 for product in \
   auth \
-  cdn
+  cdn \
+  iot
 do
   # Run Tests
   echo "[$product]"
