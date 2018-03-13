@@ -25,8 +25,10 @@ function set_failed_status {
 # Print out Ruby version
 ruby --version
 
+# leave this until all tests are added
 for product in \
-  auth # leave this until all tests are added
+  auth \
+  cdn
 do
   # Run Tests
   echo "[$product]"
