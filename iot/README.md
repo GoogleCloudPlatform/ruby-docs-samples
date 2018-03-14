@@ -9,7 +9,7 @@ width="96"/>
 These samples show how to use the [Google Cloud IoT Core API](https://cloud.google.com/iot-core/).
 
 ## Build and Run
-1.  **Enable APIs** - [Enable the Cloud IOT API](https://console.cloud.google.com/flows/enableapi?apiid=cloudiot.googleapis.com)
+1.  **Enable APIs** - [Enable the Cloud IoT Core API](https://console.cloud.google.com/flows/enableapi?apiid=cloudiot.googleapis.com)
     and create a new project or select an existing project.
 1.  **Install and Initialize Cloud SDK**
     Follow instructions from the available [quickstarts](https://cloud.google.com/sdk/docs/quickstarts)
