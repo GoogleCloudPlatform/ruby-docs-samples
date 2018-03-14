@@ -44,14 +44,13 @@ end
 
 if __FILE__ == $PROGRAM_NAME
   project_id = ENV["GOOGLE_CLOUD_PROJECT"]
-  session_id = SecureRandom.uuid
-  language_code = 'en-US'
-
   texts = ARGV
 
   if !texts.empty?
-    detect_intent_texts project_id: project_id, session_id: session_id,
-                        texts: texts, language_code:language_code
+    detect_intent_texts project_id: project_id,
+                        session_id: session_id,
+                        texts: texts,
+                        language_code:'en-US'
   else
     puts <<-usage
 Usage: ruby detect_intent_texts.rb [texts]

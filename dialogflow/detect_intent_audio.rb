@@ -57,15 +57,13 @@ end
 
 if __FILE__ == $PROGRAM_NAME
   project_id = ENV["GOOGLE_CLOUD_PROJECT"]
-  session_id = SecureRandom.uuid
-  language_code = 'en-US'
-
   audio_file_path = ARGV.shift
 
   if audio_file_path
-    detect_intent_audio project_id: project_id, session_id: session_id,
+    detect_intent_audio project_id: project_id,
+                        session_id: SecureRandom.uuid,
                         audio_file_path: audio_file_path,
-                        language_code:language_code
+                        language_code:'en-US'
   else
     puts <<-usage
 Usage: ruby detect_intent_audio.rb [audio_file_path]
