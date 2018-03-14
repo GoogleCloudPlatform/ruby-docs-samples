@@ -1,29 +1,53 @@
-# DLP Sample
+<img src="https://avatars2.githubusercontent.com/u/2810941?v=3&s=96" alt="Google
+Cloud Platform logo" title="Google Cloud Platform" align="right" height="96"
+width="96"/>
 
-This sample provides example code for
-[cloud.google.com/dlp/docs](https://cloud.google.com/dlp/docs).
+# Google Cloud DLP API Samples
 
-## Setup
+## Description
 
-Before you can run or test the sample, you will need to enable the DLP API in the [Google Developers Console](https://console.developers.google.com/projectselector/apis/api/dlp.googleapis.com/overview).
+These samples show how to use the [Google Cloud IoT Core API](https://cloud.google.com/iot-core/).
 
-## Testing
+## Build and Run
+1.  **Enable APIs** - [Enable the Cloud IoT Core API](https://console.cloud.google.com/flows/enableapi?apiid=cloudiot.googleapis.com)
+    and create a new project or select an existing project.
+1.  **Install and Initialize Cloud SDK**
+    Follow instructions from the available [quickstarts](https://cloud.google.com/sdk/docs/quickstarts)
+1.  **Clone the repo** and cd into this directory
+    ```
+    $ git clone https://github.com/GoogleCloudPlatform/ruby-docs-samples
+    $ cd ruby-docs-samples/iot
+    ```
 
-The tests for the sample are integration tests that run against the DLP
-service and require authentication.
+1. **Install Dependencies** via [Bundler](https://bundler.io).
 
-### Authenticating
+    `$ bundle install`
 
-Set the following environment variable to your Google Cloud Platform project ID:
+1. **Create a [Service Account key file](https://cloud.google.com/docs/authentication#service_accounts)** - This file can be used to authenticate to Google Cloud Platform services from any environment. To use the file, set the `GOOGLE_APPLICATION_CREDENTIALS` environment variable to the path to the key file, for example:
 
-* `GOOGLE_CLOUD_PROJECT`
+    `$ export GOOGLE_APPLICATION_CREDENTIALS=/path/to/service_account.json`
 
-For more information, see
-[Authentication](https://googlecloudplatform.github.io/gcloud-ruby/#/docs/guides/authentication).
+1. **Set your Project Environment Variables**
 
-### Running the tests
+    `$ export GOOGLE_CLOUD_PROJECT="YOUR_PROJECT_ID"`
 
-```bash
-$ bundle exec rspec
-```
+1. **Run samples**
+    ```
+    Usage: ruby sample.rb <command> [arguments]
 
+    Commands:
+      inspect_string <content> <max_findings> Inspect a string.
+      inspect_file <filename> <max_findings> Inspect a local file.
+
+    Environment variables:
+      GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
+      GOOGLE_APPLICATION_CREDENTIALS set to the path to your JSON credentials
+    ```
+
+## Contributing changes
+
+* See [CONTRIBUTING.md](../CONTRIBUTING.md)
+
+## Licensing
+
+* See [LICENSE](../LICENSE)
