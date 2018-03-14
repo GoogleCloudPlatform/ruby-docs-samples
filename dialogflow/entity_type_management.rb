@@ -98,13 +98,12 @@ if __FILE__ == $PROGRAM_NAME
   when "list"
     list_entity_types project_id: project_id
   when "create"
-    display_name = ARGV.shift
-    kind = (ARGV.shift or "KIND_MAP")
-    create_entity_type project_id: project_id, display_name: display_name,
-                       kind: kind.to_sym
+    create_entity_type project_id: project_id,
+                       display_name: ARGV.shift,
+                       kind: (ARGV.shift or "KIND_MAP").to_sym
   when "delete"
-    entity_type_id = ARGV.shift
-    delete_entity_type project_id: project_id, entity_type_id: entity_type_id
+    delete_entity_type project_id: project_id,
+                       entity_type_id: ARGV.shift
   else
     puts <<-usage
 Usage: ruby entity_type_management.rb [commang] [arguments]

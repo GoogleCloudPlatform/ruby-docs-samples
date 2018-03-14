@@ -96,20 +96,17 @@ if __FILE__ == $PROGRAM_NAME
   project_id = ENV["GOOGLE_CLOUD_PROJECT"]
   case ARGV.shift
   when "list"
-    session_id = ARGV.shift
-    list_session_entity_types project_id: project_id, session_id: session_id
+    list_session_entity_types project_id: project_id,
+                              session_id: ARGV.shift
   when "create"
-    session_id               = ARGV.shift
-    entity_type_display_name = ARGV.shift
-    entity_values            = ARGV
-    create_session_entity_type project_id: project_id, session_id: session_id,
-                               entity_type_display_name: entity_type_display_name,
-                               entity_values: entity_values
+    create_session_entity_type project_id: project_id,
+                               session_id: ARGV.shift,
+                               entity_type_display_name: ARGV.shift,
+                               entity_values: ARGV
   when "delete"
-    session_id               = ARGV.shift
-    entity_type_display_name = ARGV.shift
-    delete_session_entity_type project_id: project_id, session_id: session_id,
-                               entity_type_display_name: entity_type_display_name
+    delete_session_entity_type project_id: project_id,
+                               session_id: ARGV.shift,
+                               entity_type_display_name: ARGV.shift
   else
     puts <<-usage
 Usage: ruby session_entity_type_management.rb [commang] [arguments]

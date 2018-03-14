@@ -88,18 +88,16 @@ if __FILE__ == $PROGRAM_NAME
   project_id = ENV["GOOGLE_CLOUD_PROJECT"]
   case ARGV.shift
   when "list"
-    session_id = ARGV.shift
-    list_contexts project_id: project_id, session_id: session_id
+    list_contexts project_id: project_id,
+                  session_id: ARGV.shift
   when "create"
-    session_id = ARGV.shift
-    context_id = SecureRandom.uuid
-    create_context project_id: project_id, session_id: session_id,
-                   context_id: context_id
+    create_context project_id: project_id,
+                   session_id: ARGV.shift,
+                   context_id: SecureRandom.uuid
   when "delete"
-    session_id = ARGV.shift
-    context_id = ARGV.shift
-    delete_context project_id: project_id, session_id: session_id,
-                   context_id: context_id
+    delete_context project_id: project_id,
+                   session_id: ARGV.shift,
+                   context_id: ARGV.shift
   else
     puts <<-usage
 Usage: ruby context_management.rb [commang] [arguments]

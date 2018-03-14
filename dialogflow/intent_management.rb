@@ -120,15 +120,13 @@ if __FILE__ == $PROGRAM_NAME
   when "list"
     list_intents project_id: project_id
   when "create"
-    display_name           = ARGV.shift
-    message_text           = ARGV.shift
-    training_phrases_parts = ARGV
-    create_intent project_id: project_id, display_name: display_name,
-                  message_text: message_text,
-                  training_phrases_parts: training_phrases_parts
+    create_intent project_id: project_id,
+                  display_name: ARGV.shift,
+                  message_text: ARGV.shift,
+                  training_phrases_parts: ARGV
   when "delete"
-    intent_id = ARGV.shift
-    delete_intent project_id: project_id, intent_id: intent_id
+    delete_intent project_id: project_id,
+                  intent_id: ARGV.shift
   else
     puts <<-usage
 Usage: ruby intent_management.rb [commang] [arguments]

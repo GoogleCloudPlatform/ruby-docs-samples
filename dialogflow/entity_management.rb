@@ -74,19 +74,17 @@ if __FILE__ == $PROGRAM_NAME
   project_id = ENV["GOOGLE_CLOUD_PROJECT"]
   case ARGV.shift
   when "list"
-    entity_type_id = ARGV.shift
-    list_entities project_id: project_id, entity_type_id: entity_type_id
+    list_entities project_id: project_id,
+                  entity_type_id: ARGV.shift
   when "create"
-    entity_type_id = ARGV.shift
-    entity_value = ARGV.shift
-    synonyms = ARGV
-    create_entity project_id: project_id, entity_type_id: entity_type_id,
-                  entity_value: entity_value, synonyms: synonyms
+    create_entity project_id: project_id,
+                  entity_type_id: ARGV.shift,
+                  entity_value: ARGV.shift,
+                  synonyms: ARGV
   when "delete"
-    entity_type_id = ARGV.shift
-    entity_value = ARGV.shift
-    delete_entity project_id: project_id, entity_type_id: entity_type_id,
-                  entity_value: entity_value
+    delete_entity project_id: project_id,
+                  entity_type_id: ARGV.shift,
+                  entity_value: ARGV.shift
   else
     puts <<-usage
 Usage: ruby entity_management.rb [commang] [arguments]
