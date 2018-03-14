@@ -1,4 +1,4 @@
-# Copyright 2017 Google, Inc
+# Copyright 2018 Google, Inc
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ request_configuration = {
 item_to_inspect = { value: "Robert Frost" }
 
 # Run request
-parent = dlp.class.project_path ENV["GCLOUD_PROJECT"]
+parent = dlp.class.project_path ENV["GOOGLE_CLOUD_PROJECT"]
 response = dlp.inspect_content parent,
   inspect_config: request_configuration,
   item: item_to_inspect

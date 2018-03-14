@@ -16,7 +16,7 @@ service and require authentication.
 
 Set the following environment variable to your Google Cloud Platform project ID:
 
-* `GCLOUD_PROJECT`
+* `GOOGLE_CLOUD_PROJECT`
 
 For more information, see
 [Authentication](https://googlecloudplatform.github.io/gcloud-ruby/#/docs/guides/authentication).

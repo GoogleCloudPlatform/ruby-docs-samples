@@ -1,4 +1,4 @@
-# Copyright 2016 Google, Inc
+# Copyright 2018 Google, Inc
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,11 +18,11 @@ require "rspec"
 describe "DLP sample" do
 
   before do
-    @project = ENV["GCLOUD_PROJECT"]
+    @project = ENV["GOOGLE_CLOUD_PROJECT"]
   end
 
   it "can inspect name in string" do
-    expect { inspect_string string: "Robert Frost", project_id: @project }.to output(
+    expect { inspect_string content: "Robert Frost", project_id: @project }.to output(
       "Quote:      Robert Frost\n" +
       "Info type:  PERSON_NAME\n" +
       "Likelihood: LIKELY\n"

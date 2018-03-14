@@ -1,4 +1,4 @@
-# Copyright 2016 Google, Inc
+# Copyright 2018 Google, Inc
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,11 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-def inspect_string string: nil, project_id: nil, max_findings: 0
+def inspect_string project_id: nil, content: nil, max_findings: 0
   # [START dlp_inspect_string]
-  # string       = "the text to inspect"
   # project_id   = "Your Google Cloud project ID"
-  # max_findings = "maximum number of findings to report per request (0 = server maximum)"
+  # content       = "The text to inspect"
+  # max_findings = "Maximum number of findings to report per request (0 = server maximum)"
 
   require "google/cloud/dlp"
 
@@ -36,30 +36,30 @@ def inspect_string string: nil, project_id: nil, max_findings: 0
   }
 
   # The item to inspect
-  item_to_inspect = { value: string }
+  item_to_inspect = { value: content }
 
   # Run request
-  parent = dlp.class.project_path project_id
+  parent = "projects/#{project_id}"
   response = dlp.inspect_content parent,
     inspect_config: inspect_config,
-    item: item_to_inspect
+    item:           item_to_inspect
 
   # Print the results
-  response.result.findings.each do |finding|
+  response.result.findings.each { |finding|
     puts "Quote:      #{finding.quote}"
     puts "Info type:  #{finding.info_type.name}"
     puts "Likelihood: #{finding.likelihood}"
-  end.empty? and begin
+  }.empty? and begin
     puts "No findings"
   end
   # [END dlp_inspect_string]
 end
 
-def inspect_file filename: nil, project_id: nil, max_findings: 0
+def inspect_file project_id: nil, filename: nil, max_findings: 0
   # [START dlp_inspect_file]
-  # string       = "the text to inspect"
   # project_id   = "Your Google Cloud project ID"
-  # max_findings = "maximum number of findings to report per request (0 = server maximum)"
+  # filename     = "The file path to the file to inspect"
+  # max_findings = "Maximum number of findings to report per request (0 = server maximum)"
 
   require "google/cloud/dlp"
 
@@ -80,34 +80,32 @@ def inspect_file filename: nil, project_id: nil, max_findings: 0
 
   # The item to inspect
   file = File.open filename, "rb"
-  item = { byte_item: { type: :BYTES_TYPE_UNSPECIFIED, data: file.read } }
+  item_to_inspect = { byte_item: { type: :BYTES_TYPE_UNSPECIFIED, data: file.read } }
 
   # Run request
-  parent = dlp.class.project_path project_id
+  parent = "projects/#{project_id}"
   response = dlp.inspect_content parent,
     inspect_config: inspect_config,
-    item: item
+    item:           item_to_inspect
 
   # Print the results
-  response.result.findings.each do |finding|
+  response.result.findings.each { |finding|
     puts "Quote:      #{finding.quote}"
     puts "Info type:  #{finding.info_type.name}"
     puts "Likelihood: #{finding.likelihood}"
-  end.empty? and begin
+  }.empty? and begin
     puts "No findings"
   end
   # [END dlp_inspect_file]
 end
 
-require "google/cloud/dlp"
-
 if __FILE__ == $PROGRAM_NAME
-  project_id = ENV["GCLOUD_PROJECT"]
+  project_id = ENV["GOOGLE_CLOUD_PROJECT"]
   command    = ARGV.shift
 
   case command
   when "inspect_string"
-    inspect_string project_id: project_id, string: ARGV.first
+    inspect_string project_id: project_id, content: ARGV.first
   when "inspect_file"
     inspect_file project_id: project_id, filename: ARGV.first
   else
@@ -115,7 +113,7 @@ if __FILE__ == $PROGRAM_NAME
 Usage: ruby sample.rb <command> [arguments]
 
 Commands:
-  inspect_string                 <filename> Inspect a string.
+  inspect_string                 <content> Inspect a string.
   inspect_file                   <filename> Inspect a local file.
     usage
   end
