@@ -36,7 +36,7 @@ end
 def create_entity_type project_id:, display_name:, kind:
   # [START dialogflow_create_entity_type]
   # project_id = "Your Google Cloud project ID"
-  # display_name = "some_display_name"
+  # display_name = "New Display Name"
   # kind = :KIND_LIST
   
   require "google/cloud/dialogflow"
@@ -56,7 +56,7 @@ end
 def delete_entity_type project_id:, entity_type_id:
   # [START dialogflow_delete_entity_type]
   # project_id = "Your Google Cloud project ID"
-  # entity_type_id = "some_entity_type_id"
+  # entity_type_id = "Existing Entity Type ID"
   
   require "google/cloud/dialogflow"
 
@@ -71,7 +71,7 @@ end
 # Helper
 def get_entity_type_ids project_id:, display_name:
   # project_id = "Your Google Cloud project ID"
-  # display_name = "some_display_name"
+  # display_name = "Existing Display Name"
   
   require "google/cloud/dialogflow"
 

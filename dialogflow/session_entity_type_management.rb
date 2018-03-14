@@ -18,7 +18,7 @@ require 'securerandom'
 def list_session_entity_types project_id:, session_id:
   # [START dialogflow_list_session_entity_types]
   # project_id = "Your Google Cloud project ID"
-  # session_id = "existing_session_id"
+  # session_id = "Existing Session ID"
   
   require "google/cloud/dialogflow"
 
@@ -45,8 +45,8 @@ def create_session_entity_type project_id:, session_id:,
                                entity_values:
   # [START dialogflow_create_session_entity_type]
   # project_id = "Your Google Cloud project ID"
-  # session_id = "existing_session_id"
-  # entity_type_display_name = "existing_session_entity_type_display_name"
+  # session_id = "Existing Session ID"
+  # entity_type_display_name = "Existing Entity Type Display Name"
   # entity_values = ["entity1", "entity2"]
   
   require "google/cloud/dialogflow"
@@ -79,8 +79,8 @@ def delete_session_entity_type project_id:, session_id:,
                                entity_type_display_name:
   # [START dialogflow_delete_session_entity_type]
   # project_id = "Your Google Cloud project ID"
-  # session_id = "existing_session_id"
-  # entity_type_display_name = "existing_session_entity_type_display_name"
+  # session_id = "Existing Session ID"
+  # entity_type_display_name = "Existing Entity Type Display Name"
   
   require "google/cloud/dialogflow"
 

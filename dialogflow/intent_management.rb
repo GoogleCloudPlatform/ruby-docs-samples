@@ -50,7 +50,7 @@ def create_intent project_id:, display_name:, message_text:,
                   training_phrases_parts:
   # [START dialogflow_create_intent]
   # project_id = "Your Google Cloud project ID"
-  # display_name = "some_display_name"
+  # display_name = "New Display Name"
   # message_text = "some message text"
   # training_phrases_parts = ["part1", "part2"]
   
@@ -78,7 +78,7 @@ end
 def delete_intent project_id:, intent_id:
   # [START dialogflow_delete_intent]
   # project_id = "Your Google Cloud project ID"
-  # intent_id = "some_intent_id"
+  # intent_id = "Existing Intent ID"
   
   require "google/cloud/dialogflow"
 
@@ -93,7 +93,7 @@ end
 # Helper
 def get_intent_ids project_id:, display_name:
   # project_id = "Your Google Cloud project ID"
-  # display_name = "some_display_name"
+  # display_name = "Existing Display Name"
   
   require "google/cloud/dialogflow"
 

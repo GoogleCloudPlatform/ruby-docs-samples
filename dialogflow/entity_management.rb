@@ -16,7 +16,7 @@
 def list_entities project_id:, entity_type_id:
   # [START dialogflow_list_entities]
   # project_id = "Your Google Cloud project ID"
-  # entity_type_id = "some_entity_type_id"
+  # entity_type_id = "Existing Entity Type ID"
   
   require "google/cloud/dialogflow"
 
@@ -36,8 +36,8 @@ end
 def create_entity project_id:, entity_type_id:, entity_value:, synonyms:
   # [START dialogflow_create_entity]
   # project_id = "Your Google Cloud project ID"
-  # entity_type_id = "some_entity_type_id"
-  # entity_value = "some_entity_value"
+  # entity_type_id = "Existing Entity Type ID"
+  # entity_value = "New Entity Value"
   # synonyms = ["synonym1", "synonym2"]
   
   require "google/cloud/dialogflow"
@@ -57,8 +57,8 @@ end
 def delete_entity project_id:, entity_type_id:, entity_value:
   # [START dialogflow_delete_entity]
   # project_id = "Your Google Cloud project ID"
-  # entity_type_id = "some_entity_type_id"
-  # entity_value = "some_entity_value"
+  # entity_type_id = "Existing Entity Type ID"
+  # entity_value = "Existing Entity Value"
   
   require "google/cloud/dialogflow"
 

@@ -18,7 +18,7 @@ require 'securerandom'
 def list_contexts project_id:, session_id:
   # [START dialogflow_list_contexts]
   # project_id = "Your Google Cloud project ID"
-  # session_id = "existing_session_id"
+  # session_id = "Existing Session ID"
   
   require "google/cloud/dialogflow"
 
@@ -27,7 +27,7 @@ def list_contexts project_id:, session_id:
 
   contexts = contexts_client.list_contexts(session_path)
 
-  puts "Contexts for session #{session_path}:\n"
+  puts "Contexts for session #{session_path}:\n\n"
   contexts.each do |context|
     puts "Context name:   #{context.name}"
     puts "Lifespan count: #{context.lifespan_count}"
@@ -47,8 +47,8 @@ end
 def create_context project_id:, session_id:, context_id:
   # [START dialogflow_create_context]
   # project_id = "Your Google Cloud project ID"
-  # session_id = "existing_session_id"
-  # context_id = "new_context_id"
+  # session_id = "Existing Session ID"
+  # context_id = "New Context ID"
   
   require "google/cloud/dialogflow"
 
@@ -71,7 +71,7 @@ end
 def delete_context project_id:, session_id:, context_id:
   # [START dialogflow_delete_context]
   # project_id = "Your Google Cloud project ID"
-  # context_id = "some_context_id"
+  # context_id = "Existing Context ID"
   
   require "google/cloud/dialogflow"
 
