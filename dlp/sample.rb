@@ -15,7 +15,7 @@
 def inspect_string project_id: nil, content: nil, max_findings: 0
   # [START dlp_inspect_string]
   # project_id   = "Your Google Cloud project ID"
-  # content       = "The text to inspect"
+  # content      = "The text to inspect"
   # max_findings = "Maximum number of findings to report per request (0 = server maximum)"
 
   require "google/cloud/dlp"
@@ -45,12 +45,14 @@ def inspect_string project_id: nil, content: nil, max_findings: 0
     item:           item_to_inspect
 
   # Print the results
-  response.result.findings.each { |finding|
-    puts "Quote:      #{finding.quote}"
-    puts "Info type:  #{finding.info_type.name}"
-    puts "Likelihood: #{finding.likelihood}"
-  }.empty? and begin
+  if response.result.findings.empty?
     puts "No findings"
+  else
+    response.result.findings.each do |finding|
+      puts "Quote:      #{finding.quote}"
+      puts "Info type:  #{finding.info_type.name}"
+      puts "Likelihood: #{finding.likelihood}"
+    end
   end
   # [END dlp_inspect_string]
 end
@@ -89,12 +91,14 @@ def inspect_file project_id: nil, filename: nil, max_findings: 0
     item:           item_to_inspect
 
   # Print the results
-  response.result.findings.each { |finding|
-    puts "Quote:      #{finding.quote}"
-    puts "Info type:  #{finding.info_type.name}"
-    puts "Likelihood: #{finding.likelihood}"
-  }.empty? and begin
+  if response.result.findings.empty?
     puts "No findings"
+  else
+    response.result.findings.each do |finding|
+      puts "Quote:      #{finding.quote}"
+      puts "Info type:  #{finding.info_type.name}"
+      puts "Likelihood: #{finding.likelihood}"
+    end
   end
   # [END dlp_inspect_file]
 end
@@ -105,16 +109,28 @@ if __FILE__ == $PROGRAM_NAME
 
   case command
   when "inspect_string"
-    inspect_string project_id: project_id, content: ARGV.first
+    inspect_string(
+      project_id: project_id,
+      content: ARGV.shift.to_s,
+      max_findings: ARGV.shift.to_i
+    )
   when "inspect_file"
-    inspect_file project_id: project_id, filename: ARGV.first
+    inspect_file(
+      project_id: project_id,
+      filename: ARGV.shift.to_s,
+      max_findings: ARGV.shift.to_i
+    )
   else
     puts <<-usage
 Usage: ruby sample.rb <command> [arguments]
 
 Commands:
-  inspect_string                 <content> Inspect a string.
-  inspect_file                   <filename> Inspect a local file.
+  inspect_string <content> <max_findings> Inspect a string.
+  inspect_file <filename> <max_findings> Inspect a local file.
+
+Environment variables:
+  GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
+  GOOGLE_APPLICATION_CREDENTIALS set to the path to your JSON credentials
     usage
   end
 end
