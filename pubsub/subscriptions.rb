@@ -130,7 +130,35 @@ def listen_for_messages project_id:, subscription_name:
   sleep 60
   subscriber.stop.wait!
   # [END listen_for_messages]
-end 
+end
+
+def listen_for_messages_with_custom_attributes project_id:, subscription_name:
+  # [START listen_for_messages_with_custom_attributes]
+  # project_id        = "Your Google Cloud Project ID"
+  # subscription_name = "Your Pubsub subscription name"
+  require "google/cloud/pubsub"
+
+  pubsub = Google::Cloud::Pubsub.new project: project_id
+
+  subscription = pubsub.subscription subscription_name
+  subscriber   = subscription.listen do |received_message|
+    puts "Received message: #{received_message.data}"
+    if !received_message.attributes.empty?
+      puts "Attributes:"
+      received_message.attributes.each do |key, value|
+        puts "#{key}: #{value}"
+      end
+    end
+    received_message.acknowledge!
+  end
+
+  subscriber.start
+  # Let the main thread sleep for 60 seconds so the thread for listening
+  # messages does not quit
+  sleep 60
+  subscriber.stop.wait!
+  # [END listen_for_messages]
+end
 
 def pull_messages project_id:, subscription_name:
   # [START pull_messages]

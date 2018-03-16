@@ -217,6 +217,24 @@ describe "Pub/Sub topics sample" do
     end
   end
 
+  it "publishes messages with custom attributes asynchronously" do
+    topic = @pubsub.create_topic @topic_name
+    subscription = topic.subscribe @pull_subscription_name
+
+    expect {
+      publish_message_async_with_custom_attributes project_id: @project_id, 
+                                                   topic_name: @topic_name
+    }.not_to raise_error
+
+    expect_with_retry do
+      subscription.pull(max: 1).each do |message|
+        expect(message.data).to eq("This is a test message.")
+        expect(message.attributes).to include("origin" => "ruby-sample")
+        expect(message.attributes).to include("username" => "gcp")
+      end
+    end
+  end
+
   it "publishes messages with batch settings asynchronously" do
     topic = @pubsub.create_topic @topic_name
     subscription = topic.subscribe @pull_subscription_name

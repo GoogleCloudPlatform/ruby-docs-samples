@@ -158,6 +158,19 @@ describe "Pub/Sub subscriptions sample" do
     }.to output(/Received message: This is a test message/).to_stdout
   end
 
+  it "listens for messages with custom attributes" do
+    topic = @pubsub.create_topic @topic_name
+    subscription = topic.subscribe @pull_subscription_name
+
+    topic.publish "This is a test message.",
+                  origin: "ruby-sample"
+
+    expect {
+      listen_for_messages_with_custom_attributes project_id: @project_id,
+                                                 subscription_name: @pull_subscription_name
+    }.to output(/origin: ruby-sample/).to_stdout
+  end
+
   it "listens for messages with flow control" do
     topic = @pubsub.create_topic @topic_name
     subscription = topic.subscribe @pull_subscription_name
