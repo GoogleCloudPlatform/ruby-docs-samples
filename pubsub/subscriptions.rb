@@ -279,6 +279,9 @@ if __FILE__ == $PROGRAM_NAME
   when "listen_for_messages"
     listen_for_messages project_id: ARGV.shift, 
                         subscription_name: ARGV.shift
+  when "listen_for_messages_with_custom_attributes"
+    listen_for_messages_with_custom_attributes project_id: ARGV.shift,
+                                               subscription_name: ARGV.shift
   when "pull_messages"
     pull_messages project_id: ARGV.shift,
                   subscription_name: ARGV.shift
@@ -303,6 +306,7 @@ Commands:
   set_subscription_policy                      <project_id> <subscription_name>            Set policies of a subscription
   test_subscription_policy                     <project_id> <subscription_name>            Test policies of a subscription
   listen_for_messages                          <project_id> <subscription_name>            Listen for messages
+  listen_for_messages_with_custom_attributes   <project_id> <subscription_name>            Listen for messages with custom attributes
   pull_messages                                <project_id> <subscription_name>            Pull messages
   listen_for_messages_with_error_handler       <project_id> <subscription_name>            Listen for messages with an error handler
   listen_for_messages_with_flow_control        <project_id> <subscription_name>            Listen for messages with flow control

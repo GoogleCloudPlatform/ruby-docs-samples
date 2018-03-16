@@ -360,7 +360,7 @@ Commands:
   publish_message                                 <project_id> <topic_name>                     Publish message 
   publish_messages_with_batch_settings            <project_id> <topic_name>                     Publish messages in batch
   publish_message_async                           <project_id> <topic_name>                     Publish messages asynchronously
-  publish_message_async_with_custom_attributes    <project_id> <topic_name>
+  publish_message_async_with_custom_attributes    <project_id> <topic_name>                     Publish messages asynchronously with custom attributes
   publish_messages_async_with_batch_settings      <project_id> <topic_name>                     Publish messages asynchronously in batch
   publish_messages_async_with_concurrency_control <project_id> <topic_name>                     Publish messages asynchronously with concurrency control
     usage
