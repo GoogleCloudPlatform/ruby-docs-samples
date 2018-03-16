@@ -239,7 +239,7 @@ def publish_message_async_with_custom_attributes project_id:, topic_name:
 
   # Stop the async_publisher to send all queued messages immediately.
   topic.async_publisher.stop.wait!
-  # [END publish_message_async]
+  # [END publish_message_async_with_custom_attributes]
 end
 
 def publish_messages_async_with_batch_settings project_id:, topic_name:

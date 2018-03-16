@@ -157,7 +157,7 @@ def listen_for_messages_with_custom_attributes project_id:, subscription_name:
   # messages does not quit
   sleep 60
   subscriber.stop.wait!
-  # [END listen_for_messages]
+  # [END listen_for_messages_with_custom_attributes]
 end
 
 def pull_messages project_id:, subscription_name:
