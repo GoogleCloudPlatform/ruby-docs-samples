@@ -21,15 +21,15 @@ These samples show how to use the [Google Cloud DLP API](https://cloud.google.co
 
 1. **Install Dependencies** via [Bundler](https://bundler.io).
 
-    `$ bundle install`
+    `bundle install`
 
 1. **Create a [Service Account key file](https://cloud.google.com/docs/authentication#service_accounts)** - This file can be used to authenticate to Google Cloud Platform services from any environment. To use the file, set the `GOOGLE_APPLICATION_CREDENTIALS` environment variable to the path to the key file, for example:
 
-    `$ export GOOGLE_APPLICATION_CREDENTIALS=/path/to/service_account.json`
+    `export GOOGLE_APPLICATION_CREDENTIALS=/path/to/service_account.json`
 
 1. **Set your Project Environment Variables**
 
-    `$ export GOOGLE_CLOUD_PROJECT="YOUR_PROJECT_ID"`
+    `export GOOGLE_CLOUD_PROJECT="YOUR_PROJECT_ID"`
 
 1. **Run samples**
     ```

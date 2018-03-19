@@ -14,7 +14,7 @@
 
 source "https://rubygems.org"
 
-gem "google-cloud-dlp", git: "git@github.com:GoogleCloudPlatform/google-cloud-ruby-private.git", branch: "dlpv2"
+gem "google-cloud-dlp", "~> 0.2"
 
 group :test do
   gem "rspec"
