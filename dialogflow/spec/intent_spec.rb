@@ -23,14 +23,14 @@ describe "Intent Management" do
     @project_id             = ENV["GOOGLE_CLOUD_PROJECT"]
     @intent_display_name    = "fake_intent_for_testing"
     @message_text           = "fake_message_text_for_testing"
-    @training_phrases_parts = ['fake_training_phrase_part_1',
-                               'fake_training_phease_part_2']
+    @training_phrases_parts = ["fake_training_phrase_part_1",
+                               "fake_training_phease_part_2"]
   end
 
   example "create intent" do
     expect(
-      (get_intent_ids project_id: @project_id,
-                      display_name: @intent_display_name).size
+      get_intent_ids(project_id: @project_id,
+                     display_name: @intent_display_name).size
     ).to eq(0)
 
     expectation = expect {
@@ -43,8 +43,8 @@ describe "Intent Management" do
     ).to_stdout
 
     expect(
-      (get_intent_ids project_id: @project_id,
-                      display_name: @intent_display_name).size
+      get_intent_ids(project_id: @project_id,
+                     display_name: @intent_display_name).size
     ).to eq(1)
   end
 

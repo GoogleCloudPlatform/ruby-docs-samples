@@ -19,13 +19,13 @@ require_relative "../session_entity_type_management"
 require_relative "../detect_intent_texts"
 require_relative "../entity_type_management"
 
-describe "Session_entity_type Management" do
+describe "Session Entity Type Management" do
 
   before do
     @project_id = ENV["GOOGLE_CLOUD_PROJECT"]
     @session_id = "fake_session_for_testing"
-    @entity_type_display_name = 'fake_display_name_for_testing'
-    @entity_values = ['fake_entity_value_1', 'fake_entity_value_2']
+    @entity_type_display_name = "fake_display_name_for_testing_session_entity_types"
+    @entity_values = ["fake_entity_value_1", "fake_entity_value_2"]
   end
 
   example "create session_entity_type" do
@@ -37,8 +37,8 @@ describe "Session_entity_type Management" do
     # create a session
     detect_intent_texts project_id:    @project_id,
                         session_id:    @session_id,
-                        texts:         ['hi'],
-                        language_code: 'en-US' 
+                        texts:         ["hi"],
+                        language_code: "en-US" 
 
     create_session_entity_type project_id: @project_id,
                                session_id: @session_id,

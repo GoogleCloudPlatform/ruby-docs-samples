@@ -13,7 +13,7 @@
 # limitations under the License.
 
 
-require 'securerandom'
+require "securerandom"
 
 def detect_intent_audio project_id:, session_id:, audio_file_path:,
                         language_code:
@@ -29,7 +29,7 @@ def detect_intent_audio project_id:, session_id:, audio_file_path:,
   puts "Session path: #{session}"
 
   begin
-    audio_file = File.open(audio_file_path, 'rb')
+    audio_file = File.open(audio_file_path, "rb")
     input_audio = audio_file.read
   ensure
     audio_file.close
@@ -63,7 +63,7 @@ if __FILE__ == $PROGRAM_NAME
     detect_intent_audio project_id: project_id,
                         session_id: SecureRandom.uuid,
                         audio_file_path: audio_file_path,
-                        language_code:'en-US'
+                        language_code:"en-US"
   else
     puts <<-usage
 Usage: ruby detect_intent_audio.rb [audio_file_path]

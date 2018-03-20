@@ -90,9 +90,12 @@ if __FILE__ == $PROGRAM_NAME
 Usage: ruby entity_management.rb [commang] [arguments]
 
 Commands:
-  list    <entity_type_id>
+  list    <entity_type_id> 
+    List all entities of an entity type
   create  <entity_type_id> <entity_value> [<synonym1> [<synonym2> ...]]
-  delete  <entity_type_id> <entity_value>
+    Create a new entity of an entity type
+  delete  <entity_type_id> <entity_value> 
+    Delete an entity of an entity type
 
 Environment variables:
   GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID

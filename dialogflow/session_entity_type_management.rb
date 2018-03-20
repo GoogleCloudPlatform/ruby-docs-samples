@@ -13,7 +13,7 @@
 # limitations under the License.
 
 
-require 'securerandom'
+require "securerandom"
 
 def list_session_entity_types project_id:, session_id:
   # [START dialogflow_list_session_entity_types]
@@ -23,14 +23,13 @@ def list_session_entity_types project_id:, session_id:
   require "google/cloud/dialogflow"
 
   session_entity_types_client = Google::Cloud::Dialogflow::SessionEntityTypes.new
-  session_path = session_entity_types_client.class.session_path project_id,
-                                                                session_id
+  session_path = session_entity_types_client.class.session_path project_id, session_id
 
   session_entity_types = session_entity_types_client.list_session_entity_types session_path
 
   puts "SessionEntityTypes for session #{session_path}:\n"
   session_entity_types.each do |session_entity_type|
-    entity_values = session_entity_type.entities.map {|e| e.value}
+    entity_values = session_entity_type.entities.map { |e| e.value }
     puts "=" * 20
     puts "SessionEntityType name: #{session_entity_type.name}"
     puts "Numer of entities:      #{session_entity_type.entities.size}"
@@ -56,9 +55,7 @@ def create_session_entity_type project_id:, session_id:,
   session_entity_type_name = session_entity_types_client.class.session_entity_type_path project_id, session_id, entity_type_display_name
 
   # Here we use the entity value as the only synonym.
-  entities = entity_values.map do |entity_value|
-    { value: entity_value, synonyms: [entity_value] }
-  end
+  entities = entity_values.map { |entity_value| { value: entity_value, synonyms: [entity_value] } }
 
   session_entity_type = { 
     name:                 session_entity_type_name,
@@ -113,8 +110,11 @@ Usage: ruby session_entity_type_management.rb [commang] [arguments]
 
 Commands:
   list
-  create  <session_id>
+    List all session entity types
+  create  <session_id> <entity_type_display_name> [entity_value1, [entity_value2, ...]]
+    Create a session entity type
   delete  <sessino_id> <session_entity_type_id>
+    Delete a session entity type
 
 Environment variables:
   GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID

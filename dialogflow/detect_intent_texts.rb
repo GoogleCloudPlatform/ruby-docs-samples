@@ -13,7 +13,7 @@
 # limitations under the License.
 
 
-require 'securerandom'
+require "securerandom"
 
 def detect_intent_texts project_id:, session_id:, texts:, language_code:
   # [START dialogflow_detect_intent_texts]
@@ -50,7 +50,7 @@ if __FILE__ == $PROGRAM_NAME
     detect_intent_texts project_id: project_id,
                         session_id: session_id,
                         texts: texts,
-                        language_code:'en-US'
+                        language_code:"en-US"
   else
     puts <<-usage
 Usage: ruby detect_intent_texts.rb [texts]

@@ -80,13 +80,9 @@ def get_entity_type_ids project_id:, display_name:
 
   entity_types = entity_types_client.list_entity_types parent
 
-  entity_type_names = entity_types.map do |entity_type|
-    entity_type.name if entity_type.display_name == display_name
-  end.compact
+  selected_entity_types = entity_types.select { |entity_type| entity_type.display_name == display_name }
 
-  entity_type_ids = entity_type_names.map do |entity_type_name|
-    entity_type_name.split('/').last
-  end
+  entity_type_ids = selected_entity_types.map { |entity_type| entity_type.name.split("/").last }
 
   return entity_type_ids
 end
@@ -109,9 +105,9 @@ if __FILE__ == $PROGRAM_NAME
 Usage: ruby entity_type_management.rb [commang] [arguments]
 
 Commands:
-  list
-  create  <display_name> [KIND_MAP or KIND_LIST]
-  delete  <entity_type_id>
+  list                                           List all entitiy types
+  create  <display_name> [KIND_MAP or KIND_LIST] Create a new entity type
+  delete  <entity_type_id>                       Delete an entity type
 
 Environment variables:
   GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID

@@ -22,7 +22,7 @@ describe "Detect Intent Stream" do
   before do
     @project_id      = ENV["GOOGLE_CLOUD_PROJECT"]
     @session_id      = "session-for-testing"
-    @audio_file_path = 'resources/book_a_room.wav'
+    @audio_file_path = "resources/book_a_room.wav"
     @language_code   = "en-US"
   end
 

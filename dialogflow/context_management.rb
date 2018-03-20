@@ -13,7 +13,7 @@
 # limitations under the License.
 
 
-require 'securerandom'
+require "securerandom"
 
 def list_contexts project_id:, session_id:
   # [START dialogflow_list_contexts]
@@ -31,7 +31,7 @@ def list_contexts project_id:, session_id:
   contexts.each do |context|
     puts "Context name:   #{context.name}"
     puts "Lifespan count: #{context.lifespan_count}"
-    if !context.parameters.nil?
+    if context.parameters
       puts "Fields:"
       context.parameters.fields.each do |field, value|
         if value.string_value
@@ -103,9 +103,9 @@ if __FILE__ == $PROGRAM_NAME
 Usage: ruby context_management.rb [commang] [arguments]
 
 Commands:
-  list
-  create  <session_id>
-  delete  <sessino_id> <context_id>
+  list                              List all contexts
+  create  <session_id>              Create a context for a session
+  delete  <sessino_id> <context_id> Delete a context
 
 Environment variables:
   GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID

@@ -30,8 +30,8 @@ describe "Context Management" do
     # create a session
     detect_intent_texts project_id:    @project_id,
                         session_id:    @session_id,
-                        texts:         ['hi'],
-                        language_code: 'en-US' 
+                        texts:         ["hi"],
+                        language_code: "en-US" 
     expect {
       create_context project_id: @project_id,
                      session_id: @session_id,

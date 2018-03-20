@@ -13,8 +13,8 @@
 # limitations under the License.
 
 
-require 'securerandom'
-require 'forwardable'
+require "securerandom"
+require "forwardable"
 
 class EnumeratorQueue
   extend Forwardable
@@ -89,7 +89,7 @@ def detect_intent_stream project_id:, session_id:, audio_file_path:,
 
   # While the main thread adds chunks of audio data to the queue
   begin
-    audio_file = File.open(audio_file_path, 'rb')
+    audio_file = File.open(audio_file_path, "rb")
       while true
         chunk = audio_file.read 4096
         break if not chunk
@@ -117,7 +117,7 @@ if __FILE__ == $PROGRAM_NAME
     detect_intent_stream project_id: project_id,
                          session_id: SecureRandom.uuid,
                          audio_file_path: audio_file_path,
-                         language_code:'en-US'
+                         language_code:"en-US"
   else
     puts <<-usage
 Usage: ruby detect_intent_stream.rb [audio_file_path]

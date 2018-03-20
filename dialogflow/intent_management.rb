@@ -32,12 +32,12 @@ def list_intents project_id:
     puts "Root followup intent:   #{intent.root_followup_intent_name}"
     puts "Parent followup intent: #{intent.parent_followup_intent_name}"
 
-    puts('Input contexts:')
+    puts("Input contexts:")
     intent.input_context_names.each do |input_context_name|
       puts "\tName: #{input_context_name}"
     end
 
-    puts('Output contexts:')
+    puts("Output contexts:")
     intent.output_contexts.each do |output_context|
       puts "\tName: #{output_context.name}"
     end
@@ -62,9 +62,8 @@ def create_intent project_id:, display_name:, message_text:,
   intent = { 
     display_name: display_name,
     messages: [{ text: { text: [message_text] } }],
-    training_phrases: training_phrases_parts.map do |part|
-      { parts: [{ text: part }]}
-    end
+    training_phrases: training_phrases_parts.map { |part|
+      { parts: [{ text: part }]} }
   }
   response = intents_client.create_intent parent, intent
 
@@ -102,13 +101,9 @@ def get_intent_ids project_id:, display_name:
 
   intents = intents_client.list_intents parent
 
-  intent_names = intents.map do |intent|
-    intent.name if intent.display_name == display_name
-  end.compact
+  selected_intents = intents.select { |intent| intent.display_name == display_name }
 
-  intent_ids = intent_names.map do |intent_name|
-    intent_name.split('/').last
-  end
+  intent_ids = selected_intents.map { |intent| intent.name.split("/").last }
 
   return intent_ids
 end
@@ -133,8 +128,11 @@ Usage: ruby intent_management.rb [commang] [arguments]
 
 Commands:
   list
+    List all intents
   create  <display_name> <message_text> [training_phrase1, [training_phrase2, ...]]
-  delete  <intent_id>
+    Create a new intent
+  delete  <intent_id> 
+    Delete an intent
 
 Environment variables:
   GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
