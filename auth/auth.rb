@@ -13,7 +13,7 @@
 # limitations under the License.
 
 def implicit project_id:
-  # [START implicit]
+  # [START auth_cloud_implicit]
   # project_id = "Your Google Cloud project ID"
 
   require "google/cloud/storage"
@@ -26,11 +26,11 @@ def implicit project_id:
   storage.buckets.each do |bucket|
     puts bucket.name
   end
-  # [END implicit]
+  # [END auth_cloud_implicit]
 end
 
 def explicit project_id:, key_file:
-  # [START explicit]
+  # [START auth_cloud_explicit]
   # project_id = "Your Google Cloud project ID"
   # key_file   = "path/to/service-account.json"
   require "google/cloud/storage"
@@ -43,11 +43,11 @@ def explicit project_id:, key_file:
   storage.buckets.each do |bucket|
     puts bucket.name
   end
-  # [END explicit]
+  # [END auth_cloud_explicit]
 end
 
 def explicit_compute_engine
-  # [START explicit_compute_engine]
+  # [START auth_cloud_explicit_compute_engine]
   require "googleauth"
   require "google/cloud/env"
   require "google/cloud/storage"
@@ -62,6 +62,6 @@ def explicit_compute_engine
   storage.buckets.each do |bucket|
     puts bucket.name
   end
-  # [END explicit_compute_engine]
+  # [END auth_cloud_explicit_compute_engine]
 end
 
