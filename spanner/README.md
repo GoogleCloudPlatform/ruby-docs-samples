@@ -64,6 +64,8 @@ environment variable to the path to the key file, for example:
       read_data_with_index         <instance_id> <database_id> Read Data with Index
       read_data_with_storing_index <instance_id> <database_id> Read Data with Storing Index
       read_only_transaction        <instance_id> <database_id> Read-Only Transaction
+      spanner_batch_client         <instance_id> <database_id> Use Spanner batch query with a thread pool
 
     Environment variables:
       GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
+
