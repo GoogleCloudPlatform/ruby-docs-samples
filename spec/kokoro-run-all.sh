@@ -1,6 +1,10 @@
 #!/bin/bash
 
-set -e -u -o pipefail
+set -x -e -u -o pipefail
+
+# Temporary workaround for a known bundler+docker issue:
+# https://github.com/bundler/bundler/issues/6154
+export BUNDLE_GEMFILE=
 
 for required_variable in                   \
   GOOGLE_CLOUD_PROJECT                     \
@@ -28,7 +32,8 @@ ruby --version
 # leave this until all tests are added
 for product in \
   auth \
-  cdn
+  cdn \
+  iot
 do
   # Run Tests
   echo "[$product]"
