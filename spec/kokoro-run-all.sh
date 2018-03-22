@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e -u -o pipefail
+set -x -e -u -o pipefail
 
 for required_variable in                   \
   GOOGLE_CLOUD_PROJECT                     \
