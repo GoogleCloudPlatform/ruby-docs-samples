@@ -2,6 +2,10 @@
 
 set -x -e -u -o pipefail
 
+# Temporary workaround for a known bundler+docker issue:
+# https://github.com/bundler/bundler/issues/6154
+export BUNDLE_GEMFILE=
+
 for required_variable in                   \
   GOOGLE_CLOUD_PROJECT                     \
   GOOGLE_APPLICATION_CREDENTIALS           \
