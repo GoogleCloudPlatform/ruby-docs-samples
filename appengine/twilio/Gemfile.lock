@@ -4,7 +4,7 @@ GEM
     diff-lcs (1.3)
     domain_name (0.5.20170404)
       unf (>= 0.0.5, < 1.0.0)
-    faraday (0.13.1)
+    faraday (0.14.0)
       multipart-post (>= 1.2, < 3)
     http-cookie (1.0.3)
       domain_name (~> 0.5)
@@ -14,12 +14,12 @@ GEM
     mime-types-data (3.2016.0521)
     mini_portile2 (2.3.0)
     multipart-post (2.0.0)
-    mustermann (1.0.1)
+    mustermann (1.0.2)
     netrc (0.11.0)
-    nokogiri (1.8.1)
+    nokogiri (1.8.2)
       mini_portile2 (~> 2.3.0)
-    rack (2.0.3)
-    rack-protection (2.0.0)
+    rack (2.0.4)
+    rack-protection (2.0.1)
       rack
     rest-client (2.0.2)
       http-cookie (>= 1.0.2, < 2.0)
@@ -29,7 +29,7 @@ GEM
       rspec-core (~> 3.7.0)
       rspec-expectations (~> 3.7.0)
       rspec-mocks (~> 3.7.0)
-    rspec-core (3.7.0)
+    rspec-core (3.7.1)
       rspec-support (~> 3.7.0)
     rspec-expectations (3.7.0)
       diff-lcs (>= 1.2.0, < 2.0)
@@ -37,20 +37,20 @@ GEM
     rspec-mocks (3.7.0)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.7.0)
-    rspec-support (3.7.0)
-    sinatra (2.0.0)
+    rspec-support (3.7.1)
+    sinatra (2.0.1)
       mustermann (~> 1.0)
       rack (~> 2.0)
-      rack-protection (= 2.0.0)
+      rack-protection (= 2.0.1)
       tilt (~> 2.0)
     tilt (2.0.8)
-    twilio-ruby (5.5.1)
+    twilio-ruby (5.7.1)
       faraday (~> 0.9)
       jwt (>= 1.5, <= 2.5)
       nokogiri (>= 1.6, < 2.0)
     unf (0.1.4)
       unf_ext
-    unf_ext (0.0.7.4)
+    unf_ext (0.0.7.5)
 
 PLATFORMS
   ruby
@@ -62,4 +62,4 @@ DEPENDENCIES
   twilio-ruby
 
 BUNDLED WITH
-   1.16.0
+   1.16.1
