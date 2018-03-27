@@ -38,6 +38,7 @@ for product in \
   language \
   translate \
   speech \
+  video \
   vision
 do
   # Run Tests
