@@ -50,6 +50,16 @@ describe "Google Cloud Spanner API samples" do
     @test_database
   end
 
+  def create_performances_table
+    capture do
+      database_id = "db_for_all_tests"
+
+      create_table_with_timestamp_column project_id:  @project_id,
+                                         instance_id: @instance.instance_id,
+                                         database_id: database_id
+    end
+  end
+
   # Capture and return STDOUT output by block
   def capture &block
     real_stdout = $stdout
@@ -88,6 +98,30 @@ describe "Google Cloud Spanner API samples" do
     expect(data_definition_statements.last).to  include "CREATE TABLE Albums"
   end
 
+  example "create table with timestamp column" do
+    @database_id = "db_for_all_tests"
+    database     = create_singers_albums_database
+
+    expect(@instance.databases.map(&:database_id)).to include @database_id
+
+    capture do
+      create_table_with_timestamp_column project_id:  @project_id,
+                                         instance_id: @instance.instance_id,
+                                         database_id: @database_id
+    end
+
+    expect(captured_output).to include(
+      "Waiting for update database operation to complete"
+    )
+    expect(captured_output).to include(
+      "Created table Performances in #{@database_id}"
+    )
+
+    data_definition_statements = database.ddl(force: true)
+    expect(data_definition_statements.size).to  eq 3
+    expect(data_definition_statements.last).to include "CREATE TABLE Performances"
+  end
+
   example "insert data" do
     database = create_singers_albums_database
     client   = @spanner.client @instance.instance_id, database.database_id
@@ -108,6 +142,31 @@ describe "Google Cloud Spanner API samples" do
     albums = client.execute("SELECT * FROM Albums").rows.to_a
     expect(albums.count).to eq 5
     expect(albums.find {|s| s[:AlbumTitle] == "Go, Go, Go" }).not_to be nil
+  end
+
+  example "insert data with timestamp column" do
+    database = create_singers_albums_database
+    create_performances_table
+    # Ignore the following capture block
+    capture do
+      # Insert Singers and Albums (re-use insert_data sample to populate)
+      insert_data project_id:  @project_id,
+                  instance_id: @instance.instance_id,
+                  database_id: database.database_id
+    end
+
+    client = @spanner.client @instance.instance_id, database.database_id
+
+    expect(client.execute("SELECT * FROM Performances").rows.count).to eq 0
+
+    expect {
+      insert_data_with_timestamp_column project_id:  @project_id,
+                                        instance_id: @instance.instance_id,
+                                        database_id: database.database_id
+    }.to output("Inserted data\n").to_stdout
+
+    performances = client.execute("SELECT * FROM Performances").rows.to_a
+    expect(performances.count).to eq 3
   end
 
   example "query data" do
@@ -133,6 +192,43 @@ describe "Google Cloud Spanner API samples" do
     expect(captured_output).to include "2 1 Green"
     expect(captured_output).to include "2 2 Forever Hold Your Peace"
     expect(captured_output).to include "2 3 Terrified"
+  end
+
+  example "query data_with_timestamp_column" do
+    database = create_singers_albums_database
+    client   = @spanner.client @instance.instance_id, database.database_id
+
+    # Ignore the following capture block
+    capture do
+      # Insert Singers and Albums (re-use insert_data sample to populate)
+      insert_data project_id:  @project_id,
+                  instance_id: @instance.instance_id,
+                  database_id: database.database_id
+
+      add_column project_id: @project_id,
+                 instance_id: @instance.instance_id,
+                 database_id: database.database_id
+
+      update_data project_id:  @project_id,
+                  instance_id: @instance.instance_id,
+                  database_id: database.database_id
+
+      add_timestamp_column project_id:  @project_id,
+                           instance_id: @instance.instance_id,
+                           database_id: database.database_id
+
+      update_data_with_timestamp_column project_id:  @project_id,
+                                        instance_id: @instance.instance_id,
+                                        database_id: database.database_id
+    end
+
+    capture do
+      query_data_with_timestamp_column project_id:  @project_id,
+                                       instance_id: @instance.instance_id,
+                                       database_id: database.database_id
+    end
+
+    expect(captured_output).to match /1 1 100000 \d+/
   end
 
   example "read data" do
@@ -267,6 +363,24 @@ describe "Google Cloud Spanner API samples" do
     )
   end
 
+  example "add column timestamp column" do
+    database = create_singers_albums_database
+
+    expect(database.ddl(force: true).join).not_to include(
+      "MarketingBudget INT64"
+    )
+
+    capture do
+      add_timestamp_column project_id:  @project_id,
+                           instance_id: @instance.instance_id,
+                           database_id: database.database_id
+    end
+
+    expect(database.ddl(force: true).join).to include(
+      "LastUpdateTime TIMESTAMP"
+    )
+  end
+
   example "update data" do
     database = create_singers_albums_database
     client   = @spanner.client @instance.instance_id, database.database_id
@@ -302,6 +416,47 @@ describe "Google Cloud Spanner API samples" do
     albums = client.execute("SELECT * FROM Albums").rows.map &:to_h
     expect(albums).to include(
       { SingerId: 1, AlbumId: 1, AlbumTitle: "Total Junk", MarketingBudget: 100_000 }
+    )
+  end
+
+  example "update data with timestamp column" do
+    database = create_singers_albums_database
+    client   = @spanner.client @instance.instance_id, database.database_id
+
+    # Ignore the following capture block
+    capture do
+      # Insert Singers and Albums (re-use insert_data sample to populate)
+      insert_data project_id:  @project_id,
+                  instance_id: @instance.instance_id,
+                  database_id: database.database_id
+
+      # Add MarketingBudget column (re-use add_column to add)
+      add_column project_id:  @project_id,
+                 instance_id: @instance.instance_id,
+                 database_id: database.database_id
+
+      # Add Timestamp column
+      add_timestamp_column project_id:  @project_id,
+                           instance_id: @instance.instance_id,
+                           database_id: database.database_id
+    end
+
+    albums = client.execute("SELECT * FROM Albums").rows.map &:to_h
+    expect(albums).to include(
+      { SingerId: 1, AlbumId: 1, AlbumTitle: "Total Junk", MarketingBudget: nil, LastUpdateTime: nil }
+    )
+
+    capture do
+      update_data_with_timestamp_column project_id:  @project_id,
+                                        instance_id: @instance.instance_id,
+                                        database_id: database.database_id
+    end
+
+    expect(captured_output).to include "Updated data"
+
+    albums = client.execute("SELECT * FROM Albums").rows.map &:to_h
+    expect(albums).not_to include(
+      { LastUpdateTime: nil  }
     )
   end
 
