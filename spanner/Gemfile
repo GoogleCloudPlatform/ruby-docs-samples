@@ -14,8 +14,7 @@
 
 source "https://rubygems.org"
 
-# TODO: remove local client library
-gem "google-cloud-spanner", path: "google-cloud-ruby-private/google-cloud-spanner"
+gem "google-cloud-spanner"
 gem "concurrent-ruby"
 
 group :test do
