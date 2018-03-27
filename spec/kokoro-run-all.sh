@@ -35,6 +35,7 @@ for product in \
   cdn \
   iot \
   translate \
+  speech \
   vision
 do
   # Run Tests
