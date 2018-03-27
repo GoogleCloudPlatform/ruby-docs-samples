@@ -33,7 +33,8 @@ ruby --version
 for product in \
   auth \
   cdn \
-  iot
+  iot \
+  vision
 do
   # Run Tests
   echo "[$product]"
