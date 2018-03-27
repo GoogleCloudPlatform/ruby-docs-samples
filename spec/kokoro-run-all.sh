@@ -34,6 +34,7 @@ for product in \
   auth \
   cdn \
   iot \
+  language \
   translate \
   speech \
   vision
