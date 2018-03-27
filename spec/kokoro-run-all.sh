@@ -35,6 +35,7 @@ for product in \
   cdn \
   kms \
   iot \
+  pubsub \
   language \
   translate \
   speech \
