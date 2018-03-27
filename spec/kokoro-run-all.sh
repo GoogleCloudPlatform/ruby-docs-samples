@@ -33,6 +33,7 @@ ruby --version
 for product in \
   auth \
   cdn \
+  kms \
   iot \
   language \
   translate \
