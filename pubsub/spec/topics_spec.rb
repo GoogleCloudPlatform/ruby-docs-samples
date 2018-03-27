@@ -177,6 +177,7 @@ describe "Pub/Sub topics sample" do
   end
 
   it "publishes messages with batch settings" do
+    sleep(30)
     topic = @pubsub.create_topic @topic_name
     subscription = topic.subscribe @pull_subscription_name
 
