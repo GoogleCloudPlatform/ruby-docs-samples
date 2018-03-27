@@ -78,7 +78,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  concurrent-ruby
   google-cloud-spanner
   rspec
 
