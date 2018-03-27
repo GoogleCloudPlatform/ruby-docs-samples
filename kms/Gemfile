@@ -18,5 +18,6 @@ gem "google-api-client", "~> 0.10"
 
 group :test do
   gem "rspec"
+  gem "rspec-retry"
 end
 
