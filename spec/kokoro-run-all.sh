@@ -34,6 +34,7 @@ for product in \
   auth \
   cdn \
   iot \
+  translate \
   vision
 do
   # Run Tests
