@@ -129,7 +129,7 @@ describe "Google Cloud Natural Language API samples" do
     }
 
     expect(output).to include "Entity William Shakespeare PERSON"
-    expect(output).to include "wikipedia.org/wiki/.*Shakespeare"
+    expect(output).to match /wikipedia.org\/wiki\/.*Shakespeare/
   end
 
   example "entities from a file in Google Cloud Storage" do
@@ -155,7 +155,7 @@ describe "Google Cloud Natural Language API samples" do
     }
 
     expect(output).to include "Entity William Shakespeare PERSON"
-    expect(output).to include "wikipedia.org/wiki/.*Shakespeare"
+    expect(output).to match /wikipedia.org\/wiki\/.*Shakespeare/
   end
 
   example "syntax from text" do
