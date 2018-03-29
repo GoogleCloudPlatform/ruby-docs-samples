@@ -22,7 +22,7 @@ RSpec.configure do |config|
   # show exception that triggers a retry if verbose_retry is set to true
   config.display_try_failure_messages = true
 
-  # set retry count and retry sleep interval to 10 seconds
+  # set retry count and retry sleep interval to 30 seconds
   config.default_retry_count = 5
   config.default_sleep_interval = 30
 end
@@ -39,7 +39,7 @@ describe "Pub/Sub topics sample" do
       "serviceAccount:test-account@#{@pubsub.project}" +
       ".iam.gserviceaccount.com"
     cleanup!
-    sleep(30)
+    sleep(60)
   end
 
   after do
