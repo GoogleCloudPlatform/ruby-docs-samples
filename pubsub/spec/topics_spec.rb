@@ -24,7 +24,7 @@ RSpec.configure do |config|
 
   # set retry count and retry sleep interval to 10 seconds
   config.default_retry_count = 5
-  config.default_sleep_interval = 10
+  config.default_sleep_interval = 30
 end
 
 describe "Pub/Sub topics sample" do
@@ -39,6 +39,7 @@ describe "Pub/Sub topics sample" do
       "serviceAccount:test-account@#{@pubsub.project}" +
       ".iam.gserviceaccount.com"
     cleanup!
+    sleep(30)
   end
 
   after do
@@ -177,7 +178,6 @@ describe "Pub/Sub topics sample" do
   end
 
   it "publishes messages with batch settings" do
-    sleep(30)
     topic = @pubsub.create_topic @topic_name
     subscription = topic.subscribe @pull_subscription_name
 

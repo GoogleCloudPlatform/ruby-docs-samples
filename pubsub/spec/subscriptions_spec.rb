@@ -24,7 +24,7 @@ RSpec.configure do |config|
 
   # set retry count and retry sleep interval to 10 seconds
   config.default_retry_count = 5
-  config.default_sleep_interval = 10
+  config.default_sleep_interval = 30
 end
 
 describe "Pub/Sub subscriptions sample" do
