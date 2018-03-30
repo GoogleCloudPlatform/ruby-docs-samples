@@ -31,6 +31,8 @@ describe "Pub/Sub topics sample" do
 
   before do
     @pubsub                 = Google::Cloud::Pubsub.new
+    cleanup!
+    sleep(60)
     @project_id             = ENV["GOOGLE_CLOUD_PROJECT"]
     @topic_name             = "my-topic"
     @pull_subscription_name = "my-pull-subscription"
@@ -38,8 +40,6 @@ describe "Pub/Sub topics sample" do
     @service_account        =
       "serviceAccount:test-account@#{@pubsub.project}" +
       ".iam.gserviceaccount.com"
-    cleanup!
-    sleep(60)
   end
 
   after do
