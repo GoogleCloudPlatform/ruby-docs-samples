@@ -217,6 +217,31 @@ def publish_message_async project_id:, topic_name:
   # [END publish_message_async]
 end
 
+def publish_message_async_with_custom_attributes project_id:, topic_name:
+  # [START publish_message_async_with_custom_attributes]
+  # project_id = "Your Google Cloud Project ID"
+  # topic_name = "Your Pubsub topic name"
+  require "google/cloud/pubsub"
+
+  pubsub = Google::Cloud::Pubsub.new project: project_id
+
+  topic = pubsub.topic topic_name
+  # Add two attributes, origin and username, to the message
+  topic.publish_async "This is a test message.",
+                      origin: "ruby-sample",
+                      username: "gcp" do |result|
+    if result.succeeded?
+      puts "Message with custom attributes published asynchronously."
+    else
+      raise "Failed to publish the message."
+    end
+  end
+
+  # Stop the async_publisher to send all queued messages immediately.
+  topic.async_publisher.stop.wait!
+  # [END publish_message_async_with_custom_attributes]
+end
+
 def publish_messages_async_with_batch_settings project_id:, topic_name:
   # [START publish_messages_async_with_batch_settings]
   # project_id = "Your Google Cloud Project ID"
@@ -309,6 +334,9 @@ if __FILE__ == $PROGRAM_NAME
   when "publish_message_async"
     publish_message_async project_id: ARGV.shift,
                           topic_name: ARGV.shift
+  when "publish_message_async_with_custom_attributes"
+    publish_message_async_with_custom_attributes project_id: ARGV.shift,
+                                                 topic_name: ARGV.shift
   when "publish_messages_async_with_batch_settings"
     publish_messages_with_batch_settings project_id: ARGV.shift,
                                          topic_name: ARGV.shift
@@ -332,6 +360,7 @@ Commands:
   publish_message                                 <project_id> <topic_name>                     Publish message 
   publish_messages_with_batch_settings            <project_id> <topic_name>                     Publish messages in batch
   publish_message_async                           <project_id> <topic_name>                     Publish messages asynchronously
+  publish_message_async_with_custom_attributes    <project_id> <topic_name>                     Publish messages asynchronously with custom attributes
   publish_messages_async_with_batch_settings      <project_id> <topic_name>                     Publish messages asynchronously in batch
   publish_messages_async_with_concurrency_control <project_id> <topic_name>                     Publish messages asynchronously with concurrency control
     usage

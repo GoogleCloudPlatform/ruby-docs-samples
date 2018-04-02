@@ -130,7 +130,35 @@ def listen_for_messages project_id:, subscription_name:
   sleep 60
   subscriber.stop.wait!
   # [END listen_for_messages]
-end 
+end
+
+def listen_for_messages_with_custom_attributes project_id:, subscription_name:
+  # [START listen_for_messages_with_custom_attributes]
+  # project_id        = "Your Google Cloud Project ID"
+  # subscription_name = "Your Pubsub subscription name"
+  require "google/cloud/pubsub"
+
+  pubsub = Google::Cloud::Pubsub.new project: project_id
+
+  subscription = pubsub.subscription subscription_name
+  subscriber   = subscription.listen do |received_message|
+    puts "Received message: #{received_message.data}"
+    if !received_message.attributes.empty?
+      puts "Attributes:"
+      received_message.attributes.each do |key, value|
+        puts "#{key}: #{value}"
+      end
+    end
+    received_message.acknowledge!
+  end
+
+  subscriber.start
+  # Let the main thread sleep for 60 seconds so the thread for listening
+  # messages does not quit
+  sleep 60
+  subscriber.stop.wait!
+  # [END listen_for_messages_with_custom_attributes]
+end
 
 def pull_messages project_id:, subscription_name:
   # [START pull_messages]
@@ -251,6 +279,9 @@ if __FILE__ == $PROGRAM_NAME
   when "listen_for_messages"
     listen_for_messages project_id: ARGV.shift, 
                         subscription_name: ARGV.shift
+  when "listen_for_messages_with_custom_attributes"
+    listen_for_messages_with_custom_attributes project_id: ARGV.shift,
+                                               subscription_name: ARGV.shift
   when "pull_messages"
     pull_messages project_id: ARGV.shift,
                   subscription_name: ARGV.shift
@@ -275,6 +306,7 @@ Commands:
   set_subscription_policy                      <project_id> <subscription_name>            Set policies of a subscription
   test_subscription_policy                     <project_id> <subscription_name>            Test policies of a subscription
   listen_for_messages                          <project_id> <subscription_name>            Listen for messages
+  listen_for_messages_with_custom_attributes   <project_id> <subscription_name>            Listen for messages with custom attributes
   pull_messages                                <project_id> <subscription_name>            Pull messages
   listen_for_messages_with_error_handler       <project_id> <subscription_name>            Listen for messages with an error handler
   listen_for_messages_with_flow_control        <project_id> <subscription_name>            Listen for messages with flow control

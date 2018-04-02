@@ -22,9 +22,9 @@ RSpec.configure do |config|
   # show exception that triggers a retry if verbose_retry is set to true
   config.display_try_failure_messages = true
 
-  # set retry count and retry sleep interval to 10 seconds
+  # set retry count and retry sleep interval to 30 seconds
   config.default_retry_count = 5
-  config.default_sleep_interval = 10
+  config.default_sleep_interval = 30
 end
 
 describe "Pub/Sub subscriptions sample" do
@@ -156,6 +156,19 @@ describe "Pub/Sub subscriptions sample" do
       listen_for_messages project_id: @project_id, 
                           subscription_name: @pull_subscription_name
     }.to output(/Received message: This is a test message/).to_stdout
+  end
+
+  it "listens for messages with custom attributes" do
+    topic = @pubsub.create_topic @topic_name
+    subscription = topic.subscribe @pull_subscription_name
+
+    topic.publish "This is a test message.",
+                  origin: "ruby-sample"
+
+    expect {
+      listen_for_messages_with_custom_attributes project_id: @project_id,
+                                                 subscription_name: @pull_subscription_name
+    }.to output(/origin: ruby-sample/).to_stdout
   end
 
   it "listens for messages with flow control" do

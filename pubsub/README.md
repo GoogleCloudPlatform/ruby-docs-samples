@@ -74,6 +74,7 @@ Usage:
     publish_messages_with_batch_settings            <project_id> <topic_name>                     Publish messages in batch
     publish_message_async                           <project_id> <topic_name>                     Publish messages asynchronously
     publish_messages_async_with_batch_settings      <project_id> <topic_name>                     Publish messages asynchronously in batch
+    publish_message_async_with_custom_attributes    <project_id> <topic_name>                     Publish messages asynchronously with custom attributes
     publish_messages_async_with_concurrency_control <project_id> <topic_name>                     Publish messages asynchronously with concurrency control
 
 Example:
@@ -98,6 +99,7 @@ Usage:
     set_subscription_policy                      <project_id> <subscription_name>            Set policies of a subscription
     test_subscription_policy                     <project_id> <subscription_name>            Test policies of a subscription
     listen_for_messages                          <project_id> <subscription_name>            Listen for messages
+    listen_for_messages_with_custom_attributes   <project_id> <subscription_name>            Listen for messages with custom attributes
     pull_messages                                <project_id> <subscription_name>            Pull messages
     listen_for_messages_with_error_handler       <project_id> <subscription_name>            Listen for messages with an error handler
     listen_for_messages_with_flow_control        <project_id> <subscription_name>            Listen for messages with flow control
