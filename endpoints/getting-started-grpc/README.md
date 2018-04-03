@@ -47,7 +47,7 @@ Cloud account and [SDK](https://cloud.google.com/sdk/) configured.
     # set your project to make commands easier
     GOOGLE_CLOUD_PROJECT=<Your Project ID>
 
-    # Print out your Config ID again, in case you missed it
+    # Print out your Service name again, in case you missed it
     gcloud endpoints services configs list --service hellogrpc.endpoints.${GOOGLE_CLOUD_PROJECT}.cloud.goog
     ```
 
