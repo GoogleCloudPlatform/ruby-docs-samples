@@ -12,8 +12,28 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-def create_table project_id:, dataset_id:, table_id:
+def create_table_with_schema project_id:, dataset_id:, table_id:
   # [START create_table]
+  # project_id = "Your Google Cloud project ID"
+  # dataset_id = "ID of the dataset to create table in"
+  # table_id   = "ID of the table to create"
+
+  require "google/cloud/bigquery"
+
+  bigquery = Google::Cloud::Bigquery.new project: project_id
+  dataset  = bigquery.dataset dataset_id
+
+  table    = dataset.create_table table_id do |schema|
+    schema.string  "full_name", mode: :required
+    schema.integer "age",       mode: :required
+  end
+
+  puts "Created table: #{table_id}"
+  # [END create_table]
+end
+
+def create_table_without_schema project_id:, dataset_id:, table_id:
+  # [START create_table_without_schema]
   # project_id = "Your Google Cloud project ID"
   # dataset_id = "ID of the dataset to create table in"
   # table_id   = "ID of the table to create"
@@ -26,7 +46,7 @@ def create_table project_id:, dataset_id:, table_id:
   dataset.create_table table_id
 
   puts "Created table: #{table_id}"
-  # [END create_table]
+  # [END bigquery_create_table_without_schema]
 end
 
 def list_tables project_id:, dataset_id:
@@ -331,9 +351,13 @@ if __FILE__ == $PROGRAM_NAME
 
   case command
   when "create"
-    create_table project_id: project_id,
-                 dataset_id: ARGV.shift,
-                 table_id:   ARGV.shift
+    create_table_without_schema project_id: project_id,
+                                dataset_id: ARGV.shift,
+                                table_id:   ARGV.shift
+  when "create_with_schema"
+    create_table_with_schema project_id: project_id,
+                             dataset_id: ARGV.shift,
+                             table_id:   ARGV.shift
   when "list"
     list_tables project_id: project_id, dataset_id: ARGV.shift
   when "delete"
@@ -389,6 +413,7 @@ Usage: ruby tables.rb <command> [arguments]
 
 Commands:
   create                     <dataset_id> <table_id>  Create a new table with the specified ID
+  create_with_schema         <dataset_id> <table_id>  Create a new table with a schema
   list                       <dataset_id>             List all tables in the specified dataset
   delete                     <dataset_id> <table_id>  Delete table with the specified ID
   list_data                  <dataset_id> <table_id>  List data in table with the specified ID
