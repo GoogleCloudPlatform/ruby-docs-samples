@@ -41,14 +41,14 @@ Cloud account and [SDK](https://cloud.google.com/sdk/) configured.
 1. Deploy your service config to Service Management:
 
     ```bash
-    gcloud service-management deploy out.pb api_config.yaml
+    gcloud endpoints services deploy out.pb api_config.yaml
     # The Config ID should be printed out, looks like: 2017-02-01r0, remember this
 
     # set your project to make commands easier
     GOOGLE_CLOUD_PROJECT=<Your Project ID>
 
     # Print out your Config ID again, in case you missed it
-    gcloud service-management configs list --service hellogrpc.endpoints.${GOOGLE_CLOUD_PROJECT}.cloud.goog
+    gcloud endpoints services configs list --service hellogrpc.endpoints.${GOOGLE_CLOUD_PROJECT}.cloud.goog
     ```
 
 1. Also get an API key from the Console's API Manager for use in the
