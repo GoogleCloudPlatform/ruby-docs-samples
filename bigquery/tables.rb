@@ -23,9 +23,9 @@ def create_table_with_schema project_id:, dataset_id:, table_id:
   bigquery = Google::Cloud::Bigquery.new project: project_id
   dataset  = bigquery.dataset dataset_id
 
-  table    = dataset.create_table table_id do |schema|
-    schema.string  "full_name", mode: :required
-    schema.integer "age",       mode: :required
+  table    = dataset.create_table table_id do |updater|
+    updater.string  "full_name", mode: :required
+    updater.integer "age",       mode: :required
   end
 
   puts "Created table: #{table_id}"
@@ -33,7 +33,7 @@ def create_table_with_schema project_id:, dataset_id:, table_id:
 end
 
 def create_table_without_schema project_id:, dataset_id:, table_id:
-  # [START create_table_without_schema]
+  # [START bigquery_create_table_without_schema]
   # project_id = "Your Google Cloud project ID"
   # dataset_id = "ID of the dataset to create table in"
   # table_id   = "ID of the table to create"
