@@ -13,15 +13,13 @@
 # limitations under the License.
 
 def create_bigquery_client project_id:
-  # [START create_bigquery_client]
   require "google/cloud/bigquery"
 
   bigquery = Google::Cloud::Bigquery.new project: project_id
-  # [END create_bigquery_client]
 end
 
 def create_dataset project_id:, dataset_id:
-  # [START create_dataset]
+  # [START bigquery_create_dataset]
   # project_id = "Your Google Cloud project ID"
   # dataset_id = "ID of the dataset to create"
 
@@ -32,11 +30,11 @@ def create_dataset project_id:, dataset_id:
   bigquery.create_dataset dataset_id
 
   puts "Created dataset: #{dataset_id}"
-  # [END create_dataset]
+  # [END bigquery_create_dataset]
 end
 
 def list_datasets project_id:
-  # [START list_datasets]
+  # [START bigquery_list_datasets]
   # project_id = "Your Google Cloud project ID"
 
   require "google/cloud/bigquery"
@@ -46,11 +44,11 @@ def list_datasets project_id:
   bigquery.datasets.each do |dataset|
     puts dataset.dataset_id
   end
-  # [END list_datasets]
+  # [END bigquery_list_datasets]
 end
 
 def delete_dataset project_id:, dataset_id:
-  # [START delete_dataset]
+  # [START bigquery_delete_dataset]
   # project_id = "Your Google Cloud project ID"
   # dataset_id = "ID of the dataset to delete"
 
@@ -62,7 +60,7 @@ def delete_dataset project_id:, dataset_id:
   dataset.delete
 
   puts "Deleted dataset: #{dataset_id}"
-  # [END delete_dataset]
+  # [END bigquery_delete_dataset]
 end
 
 if __FILE__ == $PROGRAM_NAME

@@ -13,7 +13,7 @@
 # limitations under the License.
 
 def create_table_with_schema project_id:, dataset_id:, table_id:
-  # [START create_table]
+  # [START bigquery_create_table_without_schema]
   # project_id = "Your Google Cloud project ID"
   # dataset_id = "ID of the dataset to create table in"
   # table_id   = "ID of the table to create"
@@ -29,7 +29,7 @@ def create_table_with_schema project_id:, dataset_id:, table_id:
   end
 
   puts "Created table: #{table_id}"
-  # [END create_table]
+  # [END bigquery_create_table_without_schema]
 end
 
 def create_table_without_schema project_id:, dataset_id:, table_id:
@@ -50,7 +50,7 @@ def create_table_without_schema project_id:, dataset_id:, table_id:
 end
 
 def list_tables project_id:, dataset_id:
-  # [START list_tables]
+  # [START bigquery_list_tables]
   # project_id = "Your Google Cloud project ID"
   # dataset_id = "ID of the dataset to create table in"
 
@@ -62,11 +62,11 @@ def list_tables project_id:, dataset_id:
   dataset.tables.each do |table|
     puts table.table_id
   end
-  # [END list_tables]
+  # [END bigquery_list_tables]
 end
 
 def delete_table project_id:, dataset_id:, table_id:
-  # [START delete_table]
+  # [START bigquery_delete_table]
   # project_id = "Your Google Cloud project ID"
   # dataset_id = "ID of the dataset delete table from"
   # table_id   = "ID of the table to delete"
@@ -80,11 +80,11 @@ def delete_table project_id:, dataset_id:, table_id:
   table.delete
 
   puts "Deleted table: #{table_id}"
-  # [END delete_table]
+  # [END bigquery_delete_table]
 end
 
 def list_table_data project_id:, dataset_id:, table_id:
-  # [START list_table_data]
+  # [START bigquery_browse_table]
   # project_id = "Your Google Cloud project ID"
   # dataset_id = "ID of the dataset containing table"
   # table_id   = "ID of the table to display data for"
@@ -100,11 +100,11 @@ def list_table_data project_id:, dataset_id:, table_id:
       puts "#{column_name} = #{value}"
     end
   end
-  # [END list_table_data]
+  # [END bigquery_browse_table]
 end
 
 def import_table_data project_id:, dataset_id:, table_id:, row_data:
-  # [START import_table_data]
+  # [START bigquery_table_insert_rows]
   # project_id = "Your Google Cloud project ID"
   # dataset_id = "ID of the dataset containing table"
   # table_id   = "ID of the table to import data into"
@@ -123,12 +123,12 @@ def import_table_data project_id:, dataset_id:, table_id:, row_data:
   else
     puts "Failed to insert #{response.error_rows.count} rows"
   end
-  # [END import_table_data]
+  # [END bigquery_table_insert_rows]
 end
 
 def import_table_data_from_file project_id:, dataset_id:, table_id:,
                                 local_file_path:
-  # [START import_table_data_from_file]
+  # [START bigquery_load_from_file]
   # project_id      = "Your Google Cloud project ID"
   # dataset_id      = "ID of the dataset containing table"
   # table_id        = "ID of the table to import file data into"
@@ -147,12 +147,12 @@ def import_table_data_from_file project_id:, dataset_id:, table_id:,
   load_job.wait_until_done!
 
   puts "Data imported"
-  # [END import_table_data_from_file]
+  # [END bigquery_load_from_file]
 end
 
 def import_table_data_from_cloud_storage project_id:, dataset_id:, table_id:,
                                          storage_path:
-  # [START import_table_data_from_cloud_storage]
+  # [START bigquery_load_table_gcs_csv]
   # project_id   = "Your Google Cloud project ID"
   # dataset_id   = "ID of the dataset containing table"
   # table_id     = "ID of the table to import data into"
@@ -171,12 +171,12 @@ def import_table_data_from_cloud_storage project_id:, dataset_id:, table_id:,
   load_job.wait_until_done!
 
   puts "Data imported"
-  # [END import_table_data_from_cloud_storage]
+  # [END bigquery_load_table_gcs_csv]
 end
 
 def export_table_data_to_cloud_storage project_id:, dataset_id:, table_id:,
                                        storage_path:
-  # [START export_table_data_to_cloud_storage]
+  # [START bigquery_extract_table]
   # project_id   = "Your Google Cloud project ID"
   # dataset_id   = "ID of the dataset containing table"
   # table_id     = "ID of the table to export file data from"
@@ -195,7 +195,7 @@ def export_table_data_to_cloud_storage project_id:, dataset_id:, table_id:,
   extract_job.wait_until_done!
 
   puts "Data exported"
-  # [END export_table_data_to_cloud_storage]
+  # [END bigquery_extract_table]
 end
 
 def import_table_from_gcs_json project_id:, dataset_id:
@@ -301,8 +301,6 @@ def write_truncate_json_data_from_gcs project_id:, dataset_id:, table_id:
 end
 
 def run_query project_id:, query_string:
-# [START run_query]
-  # [START get_query_results]
   # project_id   = "your google cloud project id"
   # query_string = "query string to execute (using bigquery query syntax)"
 
@@ -311,18 +309,14 @@ def run_query project_id:, query_string:
   bigquery = Google::Cloud::Bigquery.new project: project_id
 
   query_results = bigquery.query query_string
-  # [END get_query_results]
 
-  # [START display_query_results]
   query_results.each do |row|
     puts row.inspect
   end
-  # [END display_query_results]
-# [END run_query]
 end
 
 def run_query_as_job project_id:, query_string:
-  # [START run_query_as_job]
+  # [START bigquery_query]
   # project_id   = "your google cloud project id"
   # query_string = "query string to execute (using bigquery query syntax)"
 
@@ -340,7 +334,7 @@ def run_query_as_job project_id:, query_string:
   query_job.query_results.each do |row|
     puts row.inspect
   end
-  # [END run_query_as_job]
+  # [END bigquery_query]
 end
 
 if __FILE__ == $PROGRAM_NAME
