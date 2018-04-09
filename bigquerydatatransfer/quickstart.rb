@@ -16,7 +16,8 @@
 # Imports the Google Cloud client library
 require "google/cloud/bigquery/data_transfer"
 
-project_id = "YOUR_PROJECT_ID"  # TODO: Update to your project ID.
+# Your Google Cloud Platform project ID
+project_id = "YOUR_PROJECT_ID"
 
 # Instantiate a client
 BigQueryDataTransfer = Google::Cloud::Bigquery::DataTransfer # Alias the module
@@ -24,16 +25,17 @@ data_transfer = BigQueryDataTransfer.new
 
 # Get the full path to your project.
 project_path = BigQueryDataTransfer::V1::DataTransferServiceClient.project_path(
-  project_id)
+  project_id
+)
 
 puts "Supported Data Sources:"
 
 # Iterate over all possible data sources.
 data_transfer.list_data_sources(project_path).each do |data_source|
-  puts "#{data_source.display_name}:"
-  puts "\tID: #{data_source.data_source_id}"
-  puts "\tFull path: #{data_source.name}"
-  puts "\tDescription: #{data_source.description}"
+  puts "Data source: #{data_source.display_name}"
+  puts "ID: #{data_source.data_source_id}"
+  puts "Full path: #{data_source.name}"
+  puts "Description: #{data_source.description}"
 end
 # [END bigquerydatatransfer_quickstart]
 

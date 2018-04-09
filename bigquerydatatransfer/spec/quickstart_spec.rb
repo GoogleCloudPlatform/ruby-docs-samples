@@ -30,7 +30,7 @@ describe "BigQuery Data Transfer Quickstart" do
     expect {
       load File.expand_path("../quickstart.rb", __dir__)
     }.to output(
-      /Supported Data Sources:\n/
+      /ID: youtube_channel\n/
     ).to_stdout
    end
 
