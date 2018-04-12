@@ -63,6 +63,7 @@ paths:
       - google_id_token: []
 definitions:
   echoMessage:
+    type: "object"
     properties:
       message:
         type: "string"
