@@ -13,7 +13,7 @@
 # limitations under the License.
 
 def create_table_with_schema project_id:, dataset_id:, table_id:
-  # [START bigquery_create_table_without_schema]
+  # [START bigquery_create_table]
   # project_id = "Your Google Cloud project ID"
   # dataset_id = "ID of the dataset to create table in"
   # table_id   = "ID of the table to create"
@@ -29,7 +29,7 @@ def create_table_with_schema project_id:, dataset_id:, table_id:
   end
 
   puts "Created table: #{table_id}"
-  # [END bigquery_create_table_without_schema]
+  # [END bigquery_create_table]
 end
 
 def create_table_without_schema project_id:, dataset_id:, table_id:
