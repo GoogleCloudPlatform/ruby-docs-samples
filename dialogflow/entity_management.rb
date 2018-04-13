@@ -65,7 +65,9 @@ def delete_entity project_id:, entity_type_id:, entity_value:
   entity_types_client = Google::Cloud::Dialogflow::EntityTypes.new
   entity_type_path = entity_types_client.class.entity_type_path project_id, entity_type_id
 
-  response = entity_types_client.batch_delete_entities entity_type_path, [entity_value]
+  entity_types_client.batch_delete_entities entity_type_path, [entity_value]
+
+  puts "Deleted Entity: #{entity_value}"
   # [END dialogflow_delete_entity]
 end
 

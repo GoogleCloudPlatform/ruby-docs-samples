@@ -25,7 +25,6 @@ def list_intents project_id:
   intents = intents_client.list_intents(parent)
 
   intents.each do |intent|
-    puts "=" * 20
     puts "Intent name:            #{intent.name}"
     puts "Intent display name:    #{intent.display_name}"
     puts "Action:                 #{intent.action}"
@@ -84,7 +83,9 @@ def delete_intent project_id:, intent_id:
   intents_client = Google::Cloud::Dialogflow::Intents.new
   intent_path = intents_client.class.intent_path project_id, intent_id
 
-  response = intents_client.delete_intent intent_path
+  intents_client.delete_intent intent_path
+
+  puts "Deleted Intent: #{intent_id}"
   # [END dialogflow_delete_intent]
 end
 

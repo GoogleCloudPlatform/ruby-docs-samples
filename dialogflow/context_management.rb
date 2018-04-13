@@ -79,7 +79,9 @@ def delete_context project_id:, session_id:, context_id:
   context_path = contexts_client.class.context_path project_id, session_id,
                                                     context_id
 
-  response = contexts_client.delete_context context_path
+  contexts_client.delete_context context_path
+
+  puts "Deleted Context: #{context_id}"
   # [END dialogflow_delete_context]
 end
 

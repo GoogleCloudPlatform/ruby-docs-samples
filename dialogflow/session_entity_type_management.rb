@@ -30,10 +30,9 @@ def list_session_entity_types project_id:, session_id:
   puts "SessionEntityTypes for session #{session_path}:\n"
   session_entity_types.each do |session_entity_type|
     entity_values = session_entity_type.entities.map { |e| e.value }
-    puts "=" * 20
     puts "SessionEntityType name: #{session_entity_type.name}"
     puts "Numer of entities:      #{session_entity_type.entities.size}"
-    puts "SessionEntityType entity values: #{entity_values}"
+    puts "SessionEntityType entity values: #{entity_values}\n"
   end
   # [END dialogflow_list_session_entity_types]
 end
@@ -66,7 +65,6 @@ def create_session_entity_type project_id:, session_id:,
 
   response = session_entity_types_client.create_session_entity_type session_path, session_entity_type
 
-  puts "SessionEntityType created: #{response}"
   puts "SessionEntityType name:    #{response.name}"
   # [END dialogflow_create_session_entity_type]
 end
@@ -84,7 +82,9 @@ def delete_session_entity_type project_id:, session_id:,
   session_entity_types_client = Google::Cloud::Dialogflow::SessionEntityTypes.new
   session_entity_type_name = session_entity_types_client.class.session_entity_type_path project_id, session_id, entity_type_display_name
 
-  response = session_entity_types_client.delete_session_entity_type session_entity_type_name
+  session_entity_types_client.delete_session_entity_type session_entity_type_name
+
+  puts "Deleted Session Entity type: #{session_entity_type_name}"
   # [END dialogflow_delete_session_entity_type]
 end
 

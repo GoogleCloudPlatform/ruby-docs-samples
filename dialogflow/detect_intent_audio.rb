@@ -46,7 +46,6 @@ def detect_intent_audio project_id:, session_id:, audio_file_path:,
   response = session_client.detect_intent session, query_input, input_audio: input_audio
   query_result = response.query_result
 
-  puts "=" * 20
   puts "Query text:        #{query_result.query_text}"
   puts "Intent detected:   #{query_result.intent.display_name}"
   puts "Intent confidence: #{query_result.intent_detection_confidence}"

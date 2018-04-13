@@ -47,8 +47,7 @@ def create_entity_type project_id:, display_name:, kind:
   entity_type = { display_name: display_name, kind: kind }
   response = entity_types_client.create_entity_type parent, entity_type
 
-  puts "Entity type created: #{response}"
-  puts "Display name:        #{response.display_name}"
+  puts "Entity type created with display name: #{response.display_name}"
   # [END dialogflow_create_entity_type]
 end
 
@@ -63,7 +62,9 @@ def delete_entity_type project_id:, entity_type_id:
   entity_types_client = Google::Cloud::Dialogflow::EntityTypes.new
   entity_type_path = entity_types_client.class.entity_type_path project_id, entity_type_id
 
-  response = entity_types_client.delete_entity_type entity_type_path
+  entity_types_client.delete_entity_type entity_type_path
+
+  puts "Deleted Entity type: #{entity_type_id}"
   # [END dialogflow_delete_entity_type]
 end
 

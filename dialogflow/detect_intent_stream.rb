@@ -73,15 +73,14 @@ def detect_intent_stream project_id:, session_id:, audio_file_path:,
   Thread.new do
     session_client.streaming_detect_intent(request_queue.each_item).each do |response|
       if response.recognition_result
-        puts "Intermediate transcript: #{response.recognition_result.transcript}"
+        puts "Intermediate transcript: #{response.recognition_result.transcript}\n"
       else
         # the last response has the actual query result
         query_result = response.query_result
-        puts "=" * 20
         puts "Query text:        #{query_result.query_text}"
         puts "Intent detected:   #{query_result.intent.display_name}"
         puts "Intent confidence: #{query_result.intent_detection_confidence}"
-        puts "Fulfillment text:  #{query_result.fulfillment_text}"
+        puts "Fulfillment text:  #{query_result.fulfillment_text}\n"
       end
     end
     completed = true

@@ -32,11 +32,10 @@ def detect_intent_texts project_id:, session_id:, texts:, language_code:
     response = session_client.detect_intent session, query_input
     query_result = response.query_result
 
-    puts "=" * 20
     puts "Query text:        #{query_result.query_text}"
     puts "Intent detected:   #{query_result.intent.display_name}"
     puts "Intent confidence: #{query_result.intent_detection_confidence}"
-    puts "Fulfillment text:  #{query_result.fulfillment_text}"
+    puts "Fulfillment text:  #{query_result.fulfillment_text}\n"
   end
   # [END dialogflow_detect_intent_texts]
 end
@@ -48,7 +47,7 @@ if __FILE__ == $PROGRAM_NAME
 
   if !texts.empty?
     detect_intent_texts project_id: project_id,
-                        session_id: session_id,
+                        session_id: SecureRandom.uuid,
                         texts: texts,
                         language_code:"en-US"
   else
