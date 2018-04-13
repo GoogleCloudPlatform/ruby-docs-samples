@@ -47,9 +47,14 @@ def create_entity project_id:, entity_type_id:, entity_value:, synonyms:
 
   entity = { value: entity_value, synonyms: synonyms }
 
-  response = entity_types_client.batch_create_entities entity_type_path, [entity]
+  operation = entity_types_client.batch_create_entities entity_type_path, [entity]
 
-  puts "Entity created: #{response}"
+  puts "Waiting for the entity creation operation to complete."
+  while !operation.done?
+    sleep(1)
+  end
+
+  puts "Entity creation completed."
   # [END dialogflow_create_entity]
 end
 
