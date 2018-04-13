@@ -69,26 +69,6 @@ def delete_entity_type project_id:, entity_type_id:
 end
 
 
-# Helper
-def get_entity_type_ids project_id:, display_name:
-  # project_id = "Your Google Cloud project ID"
-  # display_name = "Existing Display Name"
-  
-  require "google/cloud/dialogflow"
-
-  entity_types_client = Google::Cloud::Dialogflow::EntityTypes.new
-  parent = entity_types_client.class.project_agent_path project_id
-
-  entity_types = entity_types_client.list_entity_types parent
-
-  selected_entity_types = entity_types.select { |entity_type| entity_type.display_name == display_name }
-
-  entity_type_ids = selected_entity_types.map { |entity_type| entity_type.name.split("/").last }
-
-  return entity_type_ids
-end
-
-
 if __FILE__ == $PROGRAM_NAME
   project_id = ENV["GOOGLE_CLOUD_PROJECT"]
   case ARGV.shift

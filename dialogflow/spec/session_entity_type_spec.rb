@@ -14,6 +14,7 @@
 
 require "rspec"
 require "google/cloud/dialogflow"
+require "spec_helper"
 
 require_relative "../session_entity_type_management"
 require_relative "../detect_intent_texts"

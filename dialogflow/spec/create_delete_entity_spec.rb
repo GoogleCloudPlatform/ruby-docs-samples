@@ -14,6 +14,7 @@
 
 require "rspec"
 require "google/cloud/dialogflow"
+require "spec_helper"
 
 require_relative "../entity_type_management"
 require_relative "../entity_management"

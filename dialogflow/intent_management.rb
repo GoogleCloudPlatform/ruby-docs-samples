@@ -90,26 +90,6 @@ def delete_intent project_id:, intent_id:
 end
 
 
-# Helper
-def get_intent_ids project_id:, display_name:
-  # project_id = "Your Google Cloud project ID"
-  # display_name = "Existing Display Name"
-  
-  require "google/cloud/dialogflow"
-
-  intents_client = Google::Cloud::Dialogflow::Intents.new
-  parent = intents_client.class.project_agent_path project_id
-
-  intents = intents_client.list_intents parent
-
-  selected_intents = intents.select { |intent| intent.display_name == display_name }
-
-  intent_ids = selected_intents.map { |intent| intent.name.split("/").last }
-
-  return intent_ids
-end
-
-
 if __FILE__ == $PROGRAM_NAME
   project_id = ENV["GOOGLE_CLOUD_PROJECT"]
   case ARGV.shift
