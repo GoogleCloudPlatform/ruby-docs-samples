@@ -17,18 +17,13 @@ require "google/cloud/dialogflow"
 require "spec_helper"
 
 require_relative "../entity_type_management"
-require_relative "../entity_management"
 
-describe "Entity Type and Entity Management" do
+describe "Entity Type Management" do
 
   before do
     @project_id               = ENV["GOOGLE_CLOUD_PROJECT"]
     @entity_type_display_name = "fake_entity_type_for_testing"
     @kind                     = :KIND_MAP
-    @entity_value_1           = "fake_entity_for_testing_1"
-    @entity_value_2           = "fake_entity_for_testing_2"
-    @synonyms                 = ["fake_synonym_for_testing_1", 
-                                 "fake_synonym_for_testing_2"]
   end
 
   example "create entity type" do
@@ -49,41 +44,6 @@ describe "Entity Type and Entity Management" do
       (get_entity_type_ids project_id: @project_id,
                            display_name: @entity_type_display_name).size
     ).to eq(1)
-  end
-
-  example "create entities" do
-    @entity_type_id = (get_entity_type_ids project_id: @project_id,
-                                           display_name: @entity_type_display_name).first
-
-    create_entity project_id: @project_id, entity_type_id: @entity_type_id,
-                  entity_value: @entity_value_1, synonyms: [""]
-    create_entity project_id: @project_id, entity_type_id: @entity_type_id,
-                  entity_value: @entity_value_2, synonyms: @synonyms
-
-    expectation = expect {
-      list_entities project_id: @project_id, entity_type_id: @entity_type_id
-    }
-
-    expectation.to output(/#{@entity_value_1}/).to_stdout
-    expectation.to output(/#{@entity_value_2}/).to_stdout
-    expectation.to output(/#{@synonyms[0]}/).to_stdout
-    expectation.to output(/#{@synonyms[1]}/).to_stdout
-  end
-
-  example "delete entities" do
-    @entity_type_id = (get_entity_type_ids project_id: @project_id,
-                                           display_name: @entity_type_display_name).first
-
-    delete_entity project_id: @project_id, entity_type_id: @entity_type_id,
-                  entity_value: @entity_value_1
-    delete_entity project_id: @project_id, entity_type_id: @entity_type_id,
-                  entity_value: @entity_value_2
-
-    expect {
-      list_entities project_id: @project_id, entity_type_id: @entity_type_id
-    }.to output(
-      ""
-    ).to_stdout
   end
 
   example "delete entity type" do
