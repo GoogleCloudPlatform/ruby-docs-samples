@@ -98,6 +98,7 @@ def detect_intent_stream project_id:, session_id:, audio_file_path:,
       end
   ensure
     audio_file.close
+    # pushing the sentinel session_client to end the streaming queues
     request_queue.push(session_client)
   end
 
