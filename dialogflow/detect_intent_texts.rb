@@ -19,6 +19,7 @@ def detect_intent_texts project_id:, session_id:, texts:, language_code:
   # [START dialogflow_detect_intent_texts]
   # project_id = "Your Google Cloud project ID"
   # session_id = "mysession"
+  # texts = "hello", "book a meeting room"]
   # language_code = "en-US"
   
   require "google/cloud/dialogflow"

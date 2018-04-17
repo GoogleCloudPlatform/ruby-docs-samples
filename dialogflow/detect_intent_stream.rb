@@ -43,6 +43,7 @@ def detect_intent_stream project_id:, session_id:, audio_file_path:,
   # [START dialogflow_detect_intent_stream]
   # project_id = "Your Google Cloud project ID"
   # session_id = "mysession"
+  # audio_file_path = "resources/book_a_room.wav"
   # language_code = "en-US"
   
   require "google/cloud/dialogflow"
