@@ -46,7 +46,7 @@ if __FILE__ == $PROGRAM_NAME
   project_id = ENV["GOOGLE_CLOUD_PROJECT"]
   texts = ARGV
 
-  if !texts.empty?
+  if texts.any?
     detect_intent_texts project_id: project_id,
                         session_id: SecureRandom.uuid,
                         texts: texts,

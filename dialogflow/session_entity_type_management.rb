@@ -30,8 +30,8 @@ def list_session_entity_types project_id:, session_id:
   puts "SessionEntityTypes for session #{session_path}:\n"
   session_entity_types.each do |session_entity_type|
     entity_values = session_entity_type.entities.map { |e| e.value }
-    puts "SessionEntityType name: #{session_entity_type.name}"
-    puts "Numer of entities:      #{session_entity_type.entities.size}"
+    puts "SessionEntityType name:          #{session_entity_type.name}"
+    puts "Number of entities:              #{session_entity_type.entities.size}"
     puts "SessionEntityType entity values: #{entity_values}\n"
   end
   # [END dialogflow_list_session_entity_types]
@@ -65,7 +65,7 @@ def create_session_entity_type project_id:, session_id:,
 
   response = session_entity_types_client.create_session_entity_type session_path, session_entity_type
 
-  puts "SessionEntityType name:    #{response.name}"
+  puts "SessionEntityType name: #{response.name}"
   # [END dialogflow_create_session_entity_type]
 end
 

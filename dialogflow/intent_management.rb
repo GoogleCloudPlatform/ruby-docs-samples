@@ -62,13 +62,14 @@ def create_intent project_id:, display_name:, message_text:,
     display_name: display_name,
     messages: [{ text: { text: [message_text] } }],
     training_phrases: training_phrases_parts.map { |part|
-      { parts: [{ text: part }]} }
+      { parts: [{ text: part }]}
+    }
   }
   response = intents_client.create_intent parent, intent
 
-  puts "Intent created: #{response}"
-  puts "Display name:   #{response.display_name}"
-  puts "Messages:       #{response.messages}"
+  puts "Intent created"
+  puts "Display name: #{response.display_name}"
+  puts "Messages:     #{response.messages}"
   # [END dialogflow_create_intent]
 end
 

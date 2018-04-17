@@ -62,8 +62,7 @@ def create_context project_id:, session_id:, context_id:
 
   response = contexts_client.create_context session_path, context
 
-  puts "Context created: #{response}"
-  puts "Context name:   #{response.name}"
+  puts "Context created: #{response.name}"
   # [END dialogflow_create_context]
 end
 

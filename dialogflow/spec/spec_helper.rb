@@ -13,12 +13,10 @@
 # limitations under the License.
 
 
-def get_entity_type_ids project_id:, display_name:
-  # project_id = "Your Google Cloud project ID"
-  # display_name = "Existing Display Name"
-  
-  require "google/cloud/dialogflow"
+require "google/cloud/dialogflow"
 
+
+def get_entity_type_ids project_id:, display_name:
   entity_types_client = Google::Cloud::Dialogflow::EntityTypes.new
   parent = entity_types_client.class.project_agent_path project_id
 
@@ -28,15 +26,11 @@ def get_entity_type_ids project_id:, display_name:
 
   entity_type_ids = selected_entity_types.map { |entity_type| entity_type.name.split("/").last }
 
-  return entity_type_ids
+  entity_type_ids
 end
 
-def get_intent_ids project_id:, display_name:
-  # project_id = "Your Google Cloud project ID"
-  # display_name = "Existing Display Name"
-  
-  require "google/cloud/dialogflow"
 
+def get_intent_ids project_id:, display_name:
   intents_client = Google::Cloud::Dialogflow::Intents.new
   parent = intents_client.class.project_agent_path project_id
 
@@ -46,5 +40,5 @@ def get_intent_ids project_id:, display_name:
 
   intent_ids = selected_intents.map { |intent| intent.name.split("/").last }
 
-  return intent_ids
+  intent_ids
 end
