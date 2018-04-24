@@ -26,15 +26,21 @@ Commands:
 Usage: ruby tables.rb <command> [arguments]
 
 Commands:
-  create      <dataset_id> <table_id>  Create a new table with the specified ID
-  list        <dataset_id>             List all tables in the specified dataset
-  delete      <dataset_id> <table_id>  Delete table with the specified ID
-  list_data   <dataset_id> <table_id>  List data in table with the specified ID
-  import_file <dataset_id> <table_id> <file_path>
-  import_gcs  <dataset_id> <table_id> <cloud_storage_path>
-  export      <dataset_id> <table_id> <cloud_storage_path>
-  query       <query>
-  query_job   <query>
+  create                     <dataset_id> <table_id>  Create a new table with the specified ID
+  create_with_schema         <dataset_id> <table_id>  Create a new table with a schema
+  list                       <dataset_id>             List all tables in the specified dataset
+  delete                     <dataset_id> <table_id>  Delete table with the specified ID
+  list_data                  <dataset_id> <table_id>  List data in table with the specified ID
+  import_file                <dataset_id> <table_id> <file_path>
+  import_gcs                 <dataset_id> <table_id> <cloud_storage_path>
+  import_gcs_json            <dataset_id>
+  import_gcs_json_autodetect <dataset_id>
+  import_data                <dataset_id> <table_id> "[{ <json row data> }]"
+  append_rows                <dataset_id> <table_id>
+  overwrite_rows             <dataset_id> <table_id>
+  export                     <dataset_id> <table_id> <cloud_storage_path>
+  query                      <query>
+  query_job                  <query>
 ```
 
 ### Stack Overflow
