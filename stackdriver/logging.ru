@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START logging_configure]
+# [START logging_client_configure]
 require "google/cloud/logging"
 
 Google::Cloud.configure do |config|
@@ -20,7 +20,7 @@ Google::Cloud.configure do |config|
   config.logging.project_id = "YOUR-PROJECT-ID"
   config.logging.keyfile    = "/path/to/service-account.json"
 end
-# [END logging_configure]
+# [END logging_client_configure]
 
 # [START logging_middleware]
 require "google/cloud/logging"
