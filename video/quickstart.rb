@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START videointelligence_quickstart]
+# [START video_quickstart]
 require "google/cloud/video_intelligence"
 
 video_client = Google::Cloud::VideoIntelligence.new
@@ -47,4 +47,4 @@ end
 
 puts "Processing video for label annotations:"
 operation.wait_until_done!
-# [END videointelligence_quickstart]
+# [END video_quickstart]

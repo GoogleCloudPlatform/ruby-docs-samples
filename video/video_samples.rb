@@ -13,7 +13,7 @@
 # limitations under the License.
 
 def analyze_labels_gcs path:
-  # [START analyze_labels_gcs]
+  # [START video_analyze_labels_gcs]
   # path = "Path to a video file on Google Cloud Storage: gs://bucket/video.mp4"
 
   require "google/cloud/video_intelligence"
@@ -48,11 +48,11 @@ def analyze_labels_gcs path:
 
   puts "Processing video for label annotations:"
   operation.wait_until_done!
-  # [END analyze_labels_gcs]
+  # [END video_analyze_labels_gcs]
 end
 
 def analyze_labels_local path:
-  # [START analyze_labels_local]
+  # [START video_analyze_labels_local]
   # path = "Path to a local video file: path/to/file.mp4"
 
   require "google/cloud/video_intelligence"
@@ -89,11 +89,11 @@ def analyze_labels_local path:
 
   puts "Processing video for label annotations:"
   operation.wait_until_done!
-  # [END analyze_labels_local]
+  # [END video_analyze_labels_local]
 end
 
 def analyze_shots path:
-  # [START analyze_shots]
+  # [START video_analyze_shots]
   # path = "Path to a video file on Google Cloud Storage: gs://bucket/video.mp4"
 
   require "google/cloud/video_intelligence"
@@ -121,11 +121,11 @@ def analyze_shots path:
 
   puts "Processing video for shot change annotations:"
   operation.wait_until_done!
-  # [END analyze_shots]
+  # [END video_analyze_shots]
 end
 
 def analyze_explicit_content path:
-  # [START analyze_explicit_content_gcs]
+  # [START video_analyze_explicit_content_gcs]
   # path = "Path to a video file on Google Cloud Storage: gs://bucket/video.mp4"
 
   require "google/cloud/video_intelligence"
@@ -149,7 +149,7 @@ def analyze_explicit_content path:
 
   puts "Processing video for label annotations:"
   operation.wait_until_done!
-  # [END analyze_explicit_content_gcs]
+  # [END video_analyze_explicit_content_gcs]
 end
 
 def run_sample arguments
