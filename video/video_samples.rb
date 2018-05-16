@@ -125,7 +125,7 @@ def analyze_shots path:
 end
 
 def analyze_explicit_content path:
-  # [START video_analyze_explicit_content_gcs]
+  # [START video_analyze_explicit_content]
   # path = "Path to a video file on Google Cloud Storage: gs://bucket/video.mp4"
 
   require "google/cloud/video_intelligence"
@@ -149,7 +149,7 @@ def analyze_explicit_content path:
 
   puts "Processing video for label annotations:"
   operation.wait_until_done!
-  # [END video_analyze_explicit_content_gcs]
+  # [END video_analyze_explicit_content]
 end
 
 def run_sample arguments
