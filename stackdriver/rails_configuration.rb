@@ -12,14 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START shared_configure]
+# [START logging_shared_configure]
 # Add this to config/environments/*.rb
 Rails.application.configure do |config|
   # Stackdriver Shared parameters
   config.google_cloud.project_id = "YOUR-PROJECT-ID"
   config.google_cloud.keyfile    = "/path/to/service-account.json"
 end
-# [END shared_configure]
+# [END logging_shared_configure]
 
 # [START debugger_configure]
 # Add this to config/environments/*.rb
