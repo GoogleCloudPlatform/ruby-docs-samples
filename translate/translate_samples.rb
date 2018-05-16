@@ -76,7 +76,7 @@ def list_supported_language_codes project_id:
 end
 
 def list_supported_language_names project_id:, language_code: "en"
-  # [START translate_language_names]
+  # [START translate_list_language_names]
   # project_id = "Your Google Cloud project ID"
 
   # To receive the names of the supported languages, provide the code
@@ -92,7 +92,7 @@ def list_supported_language_names project_id:, language_code: "en"
   languages.each do |language|
     puts "#{language.code} #{language.name}"
   end
-  # [END translate_language_names]
+  # [END translate_list_language_names]
 end
 
 if __FILE__ == $PROGRAM_NAME
