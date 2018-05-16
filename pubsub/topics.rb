@@ -15,7 +15,7 @@
 require "google/cloud/pubsub"
 
 def create_topic project_id:, topic_name:
-  # [START create_topic]
+  # [START pubsub_create_topic]
   # project_id = "Your Google Cloud Project ID"
   # topic_name = "Your Pubsub topic name"
   require "google/cloud/pubsub"
@@ -25,11 +25,11 @@ def create_topic project_id:, topic_name:
   topic  = pubsub.create_topic topic_name
 
   puts "Topic #{topic.name} created."
-  # [END create_topic]
+  # [END pubsub_create_topic]
 end
 
 def list_topics project_id:
-  # [START list_topics]
+  # [START pubsub_list_topics]
   # project_id = "Your Google Cloud Project ID"
   require "google/cloud/pubsub"
 
@@ -41,11 +41,11 @@ def list_topics project_id:
   topics.each do |topic|
     puts topic.name
   end
-  # [END list_topics]
+  # [END pubsub_list_topics]
 end
 
 def list_topic_subscriptions project_id:, topic_name:
-  # [START list_topic_subscriptions]
+  # [START pubsub_list_topic_subscriptions]
   # project_id = "Your Google Cloud Project ID"
   # topic_name = "Your Pubsub topic name"
   require "google/cloud/pubsub"
@@ -59,11 +59,11 @@ def list_topic_subscriptions project_id:, topic_name:
   subscriptions.each do |subscription|
     puts subscription.name
   end
-  # [END list_topic_subscriptions]
+  # [END pubsub_list_topic_subscriptions]
 end
 
 def delete_topic project_id:, topic_name:
-  # [START delete_topic]
+  # [START pubsub_delete_topic]
   # project_id = "Your Google Cloud Project ID"
   # topic_name = "Your Pubsub topic name"
   require "google/cloud/pubsub"
@@ -74,11 +74,11 @@ def delete_topic project_id:, topic_name:
   topic.delete
 
   puts "Topic #{topic_name} deleted."
-  # [END delete_topic]
+  # [END pubsub_delete_topic]
 end
 
 def get_topic_policy project_id:, topic_name:
-  # [START get_topic_policy]
+  # [START pubsub_get_topic_policy]
   # project_id = "Your Google Cloud Project ID"
   # topic_name = "Your Pubsub topic name"
   require "google/cloud/pubsub"
@@ -90,11 +90,11 @@ def get_topic_policy project_id:, topic_name:
 
   puts "Topic policy:"
   puts policy.roles
-  # [END get_topic_policy]
+  # [END pubsub_get_topic_policy]
 end
 
 def set_topic_policy project_id:, topic_name:
-  # [START set_topic_policy]
+  # [START pubsub_set_topic_policy]
   # project_id = "Your Google Cloud Project ID"
   # topic_name = "Your Pubsub topic name"
   require "google/cloud/pubsub"
@@ -103,14 +103,14 @@ def set_topic_policy project_id:, topic_name:
 
   topic = pubsub.topic topic_name
   topic.policy do |policy|
-    policy.add "roles/pubsub.publisher", 
+    policy.add "roles/pubsub.publisher",
       "serviceAccount:account_name@project_name.iam.gserviceaccount.com"
   end
-  # [END set_topic_policy]
+  # [END pubsub_set_topic_policy]
 end
 
 def test_topic_permissions project_id:, topic_name:
-  # [START test_topic_permissions]
+  # [START pubsub_test_topic_permissions]
   # project_id = "Your Google Cloud Project ID"
   # topic_name = "Your Pubsub topic name"
   require "google/cloud/pubsub"
@@ -124,11 +124,11 @@ def test_topic_permissions project_id:, topic_name:
   puts "Permission to attach subscription" if permissions.include? "pubsub.topics.attachSubscription"
   puts "Permission to publish" if permissions.include? "pubsub.topics.publish"
   puts "Permission to update" if permissions.include? "pubsub.topics.update"
-  # [END test_topic_permissions]
+  # [END pubsub_test_topic_permissions]
 end
 
 def create_pull_subscription project_id:, topic_name:, subscription_name:
-  # [START create_pull_subscription]
+  # [START pubsub_create_pull_subscription]
   # project_id        = "Your Google Cloud Project ID"
   # topic_name        = "Your Pubsub topic name"
   # subscription_name = "Your Pubsub subscription name"
@@ -140,11 +140,11 @@ def create_pull_subscription project_id:, topic_name:, subscription_name:
   subscription = topic.subscribe subscription_name
 
   puts "Pull subscription #{subscription_name} created."
-  # [END create_pull_subscription]
+  # [END pubsub_create_pull_subscription]
 end
 
 def create_push_subscription project_id:, topic_name:, subscription_name:, endpoint:
-  # [START create_push_subscription]
+  # [START pubsub_create_push_subscription]
   # project_id        = "Your Google Cloud Project ID"
   # topic_name        = "Your Pubsub topic name"
   # subscription_name = "Your Pubsub subscription name"
@@ -158,11 +158,11 @@ def create_push_subscription project_id:, topic_name:, subscription_name:, endpo
     endpoint: endpoint
 
   puts "Push subscription #{subscription_name} created."
-  # [END create_push_subscription]
+  # [END pubsub_create_push_subscription]
 end
 
 def publish_message project_id:, topic_name:
-  # [START publish_message] 
+  # [START pubsub_quickstart_publisher]
   # project_id = "Your Google Cloud Project ID"
   # topic_name = "Your Pubsub topic name"
   require "google/cloud/pubsub"
@@ -173,11 +173,11 @@ def publish_message project_id:, topic_name:
   topic.publish data: "This is a test message."
 
   puts "Message published."
-  # [END publish_message]
+  # [END pubsub_quickstart_publisher]
 end
 
 def publish_messages_with_batch_settings project_id:, topic_name:
-  # [START publish_messages_with_batch_settings]
+  # [START pubsub_publisher_batch_settings]
   # project_id = "Your Google Cloud Project ID"
   # topic_name = "Your Pubsub topic name"
   require "google/cloud/pubsub"
@@ -192,11 +192,11 @@ def publish_messages_with_batch_settings project_id:, topic_name:
   end
 
   puts "Messages published in batch."
-  # [END publish_messages_with_batch_settings]
+  # [END pubsub_publisher_batch_settings]
 end
 
 def publish_message_async project_id:, topic_name:
-  # [START publish_message_async]
+  # [START pubsub_publish]
   # project_id = "Your Google Cloud Project ID"
   # topic_name = "Your Pubsub topic name"
   require "google/cloud/pubsub"
@@ -214,11 +214,11 @@ def publish_message_async project_id:, topic_name:
 
   # Stop the async_publisher to send all queued messages immediately.
   topic.async_publisher.stop.wait!
-  # [END publish_message_async]
+  # [END pubsub_publish]
 end
 
 def publish_message_async_with_custom_attributes project_id:, topic_name:
-  # [START publish_message_async_with_custom_attributes]
+  # [START pubsub_publish_custom_attributes]
   # project_id = "Your Google Cloud Project ID"
   # topic_name = "Your Pubsub topic name"
   require "google/cloud/pubsub"
@@ -239,11 +239,11 @@ def publish_message_async_with_custom_attributes project_id:, topic_name:
 
   # Stop the async_publisher to send all queued messages immediately.
   topic.async_publisher.stop.wait!
-  # [END publish_message_async_with_custom_attributes]
+  # [END pubsub_publish_custom_attributes]
 end
 
 def publish_messages_async_with_batch_settings project_id:, topic_name:
-  # [START publish_messages_async_with_batch_settings]
+  # [START pubsub_publisher_batch_settings]
   # project_id = "Your Google Cloud Project ID"
   # topic_name = "Your Pubsub topic name"
   require "google/cloud/pubsub"
@@ -263,11 +263,11 @@ def publish_messages_async_with_batch_settings project_id:, topic_name:
   # Stop the async_publisher to send all queued messages immediately.
   topic.async_publisher.stop.wait!
   puts "Messages published asynchronously in batch."
-  # [END publish_messages_async_with_batch_settings]
+  # [END pubsub_publisher_batch_settings]
 end
 
 def publish_messages_async_with_concurrency_control project_id:, topic_name:
-  # [START publish_messages_async_with_concurrency_control]
+  # [START pubsub_publisher_concurrency_control]
   # project_id = "Your Google Cloud Project ID"
   # topic_name = "Your Pubsub topic name"
   require "google/cloud/pubsub"
@@ -292,7 +292,7 @@ def publish_messages_async_with_concurrency_control project_id:, topic_name:
 
   # Stop the async_publisher to send all queued messages immediately.
   topic.async_publisher.stop.wait!
-  # [END publish_messages_async_with_concurrency_control]
+  # [END pubsub_publisher_concurrency_control]
 end
 
 if __FILE__ == $PROGRAM_NAME
@@ -341,7 +341,7 @@ if __FILE__ == $PROGRAM_NAME
     publish_messages_with_batch_settings project_id: ARGV.shift,
                                          topic_name: ARGV.shift
   when "publish_messages_async_with_concurrency_control"
-    publish_messages_async_with_concurrency_control project_id: ARGV.shift, 
+    publish_messages_async_with_concurrency_control project_id: ARGV.shift,
                                                     topic_name: ARGV.shift
   else
     puts <<-usage
@@ -357,7 +357,7 @@ Commands:
   test_topic_permissions                          <project_id> <topic_name>                     Test topic permissions
   create_pull_subscription                        <project_id> <topic_name> <subscription_name> Create a pull subscription
   create_push_subscription                        <project_id> <topic_name> <subscription_name> Create a push subscription
-  publish_message                                 <project_id> <topic_name>                     Publish message 
+  publish_message                                 <project_id> <topic_name>                     Publish message
   publish_messages_with_batch_settings            <project_id> <topic_name>                     Publish messages in batch
   publish_message_async                           <project_id> <topic_name>                     Publish messages asynchronously
   publish_message_async_with_custom_attributes    <project_id> <topic_name>                     Publish messages asynchronously with custom attributes

@@ -15,7 +15,7 @@
 require "google/cloud/pubsub"
 
 def update_push_configuration project_id:, subscription_name:, new_endpoint:
-  # [START update_push_configuration]
+  # [START pubsub_update_push_configuration]
   # project_id        = "Your Google Cloud Project ID"
   # subscription_name = "Your Pubsub subscription name"
   # new_endpoint      = "Endpoint where your app receives messages""
@@ -27,11 +27,11 @@ def update_push_configuration project_id:, subscription_name:, new_endpoint:
   subscription.endpoint = new_endpoint
 
   puts "Push endpoint updated."
-  # [END update_push_configuration]
+  # [END pubsub_update_push_configuration]
 end
 
 def list_subscriptions project_id:
-  # [START list_subscriptions]
+  # [START pubsub_list_subscriptions]
   # project_id = Your Google Cloud Project ID
   require "google/cloud/pubsub"
 
@@ -43,11 +43,11 @@ def list_subscriptions project_id:
   subscriptions.each do |subscription|
     puts subscription.name
   end
-  # [END list_subscriptions]
+  # [END pubsub_list_subscriptions]
 end
 
 def delete_subscription project_id:, subscription_name:
-  # [START delete_subscription]
+  # [START pubsub_delete_subscription]
   # project_id        = "Your Google Cloud Project ID"
   # subscription_name = "Your Pubsub subscription name"
   require "google/cloud/pubsub"
@@ -58,11 +58,11 @@ def delete_subscription project_id:, subscription_name:
   subscription.delete
 
   puts "Subscription #{subscription_name} deleted."
-  # [END delete_subscription]
+  # [END pubsub_delete_subscription]
 end
 
 def get_subscription_policy project_id:, subscription_name:
-  # [START get_subscription_policy]
+  # [START pubsub_get_subscription_policy]
   # project_id        = "Your Google Cloud Project ID"
   # subscription_name = "Your Pubsub subscription name"
   require "google/cloud/pubsub"
@@ -74,11 +74,11 @@ def get_subscription_policy project_id:, subscription_name:
 
   puts "Subscription policy:"
   puts policy.roles
-  # [END get_subscription_policy]
+  # [END pubsub_get_subscription_policy]
 end
 
 def set_subscription_policy project_id:, subscription_name:
-  # [START set_subscription_policy]
+  # [START pubsub_set_subscription_policy]
   # project_id        = "Your Google Cloud Project ID"
   # subscription_name = "Your Pubsub subscription name"
   require "google/cloud/pubsub"
@@ -90,11 +90,11 @@ def set_subscription_policy project_id:, subscription_name:
     policy.add "roles/pubsub.subscriber",
       "serviceAccount:account-name@project-name.iam.gserviceaccount.com"
   end
-  # [END set_subscription_policy]
+  # [END pubsub_set_subscription_policy]
 end
 
 def test_subscription_permissions project_id:, subscription_name:
-  # [START test_subscription_permissions]
+  # [START pubsub_test_subscription_permissions]
   # project_id        = "Your Google Cloud Project ID"
   # subscription_name = "Your Pubsub subscription name"
   require "google/cloud/pubsub"
@@ -107,11 +107,11 @@ def test_subscription_permissions project_id:, subscription_name:
 
   puts "Permission to consume" if permissions.include? "pubsub.subscriptions.consume"
   puts "Permission to update" if permissions.include? "pubsub.subscriptions.update"
-  # [END test_subscription_permissions]
+  # [END pubsub_test_subscription_permissions]
 end
 
 def listen_for_messages project_id:, subscription_name:
-  # [START listen_for_messages]
+  # [START pubsub_quickstart_subscriber]
   # project_id        = "Your Google Cloud Project ID"
   # subscription_name = "Your Pubsub subscription name"
   require "google/cloud/pubsub"
@@ -129,11 +129,11 @@ def listen_for_messages project_id:, subscription_name:
   # messages does not quit
   sleep 60
   subscriber.stop.wait!
-  # [END listen_for_messages]
+  # [END pubsub_quickstart_subscriber]
 end
 
 def listen_for_messages_with_custom_attributes project_id:, subscription_name:
-  # [START listen_for_messages_with_custom_attributes]
+  # [START pubsub_subscriber_sync_pull_custom_attributes]
   # project_id        = "Your Google Cloud Project ID"
   # subscription_name = "Your Pubsub subscription name"
   require "google/cloud/pubsub"
@@ -157,11 +157,11 @@ def listen_for_messages_with_custom_attributes project_id:, subscription_name:
   # messages does not quit
   sleep 60
   subscriber.stop.wait!
-  # [END listen_for_messages_with_custom_attributes]
+  # [END pubsub_subscriber_sync_pull_custom_attributes]
 end
 
 def pull_messages project_id:, subscription_name:
-  # [START pull_messages]
+  # [START pubsub_subscriber_sync_pull]
   # project_id        = "Your Google Cloud Project ID"
   # subscription_name = "Your Pubsub subscription name"
   require "google/cloud/pubsub"
@@ -173,11 +173,11 @@ def pull_messages project_id:, subscription_name:
     puts "Message pulled: #{message.data}"
     message.acknowledge!
   end
-  # [END pull_messages]
+  # [END pubsub_subscriber_sync_pull]
 end
 
 def listen_for_messages_with_error_handler project_id:, subscription_name:
-  # [START listen_for_messages_with_error_handler]
+  # [START pubsub_subscriber_error_listener]
   # project_id        = "Your Google Cloud Project ID"
   # subscription_name = "Your Pubsub subscription name"
   require "google/cloud/pubsub"
@@ -204,11 +204,11 @@ def listen_for_messages_with_error_handler project_id:, subscription_name:
     puts "Exception #{ex.inspect}: #{ex.message}"
     raise "Stopped listening for messages."
   end
-  # [END listen_for_messages_with_error_handler]
+  # [END pubsub_subscriber_error_listener]
 end
 
 def listen_for_messages_with_flow_control project_id:, subscription_name:
-  # [START listen_for_messages_with_flow_control]
+  # [START pubsub_subscriber_flow_settings]
   # project_id        = "Your Google Cloud Project ID"
   # subscription_name = "Your Pubsub subscription name"
   require "google/cloud/pubsub"
@@ -226,11 +226,11 @@ def listen_for_messages_with_flow_control project_id:, subscription_name:
   # messages does not quit
   sleep 60
   subscriber.stop.wait!
-  # [END listen_for_messages_with_flow_control]
+  # [END pubsub_subscriber_flow_settings]
 end
 
 def listen_for_messages_with_concurrency_control project_id:, subscription_name:
-  # [START listen_for_messages_with_concurrency_control]
+  # [START pubsub_subscriber_concurrency_control]
   # project_id        = "Your Google Cloud Project ID"
   # subscription_name = "Your Pubsub subscription name"
   require "google/cloud/pubsub"
@@ -253,22 +253,22 @@ def listen_for_messages_with_concurrency_control project_id:, subscription_name:
   # messages does not quit
   sleep 60
   subscriber.stop.wait!
-  # [END listen_for_messages_with_concurrency_control]
+  # [END pubsub_subscriber_concurrency_control]
 end
 
 if __FILE__ == $PROGRAM_NAME
   case ARGV.shift
   when "update_push_configuration"
-    update_push_configuration project_id: ARGV.shift, 
+    update_push_configuration project_id: ARGV.shift,
                               subscription_name: ARGV.shift,
                               new_endpoint: ARGV.shift
   when "list_subscriptions"
     list_subscriptions project_id: ARGV.shift
   when "delete_subscription"
-    delete_subscription project_id: ARGV.shift, 
+    delete_subscription project_id: ARGV.shift,
                         subscription_name: ARGV.shift
   when "get_subscription_policy"
-    get_subscription_policy project_id: ARGV.shift, 
+    get_subscription_policy project_id: ARGV.shift,
                             subscription_name: ARGV.shift
   when "set_subscription_policy"
     set_subscription_policy project_id: ARGV.shift,
@@ -277,7 +277,7 @@ if __FILE__ == $PROGRAM_NAME
     test_subscription_permissions project_id: ARGV.shift,
                                   subscription_name: ARGV.shift
   when "listen_for_messages"
-    listen_for_messages project_id: ARGV.shift, 
+    listen_for_messages project_id: ARGV.shift,
                         subscription_name: ARGV.shift
   when "listen_for_messages_with_custom_attributes"
     listen_for_messages_with_custom_attributes project_id: ARGV.shift,
