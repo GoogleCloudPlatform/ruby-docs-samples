@@ -54,11 +54,11 @@ end
 if __FILE__ == $0
   case ARGV.shift
   when "delete_doc"
-    delete_doc  project_id:  ENV["GOOGLE_CLOUD_PROJECT"]
+    delete_doc project_id: ENV["GOOGLE_CLOUD_PROJECT"]
   when "delete_field"
-    delete_field  project_id:  ENV["GOOGLE_CLOUD_PROJECT"]
+    delete_field project_id: ENV["GOOGLE_CLOUD_PROJECT"]
   when "delete_collection"
-    delete_collection project_id:  ENV["GOOGLE_CLOUD_PROJECT"]
+    delete_collection project_id: ENV["GOOGLE_CLOUD_PROJECT"]
   else
     puts "Command not found!"
   end
