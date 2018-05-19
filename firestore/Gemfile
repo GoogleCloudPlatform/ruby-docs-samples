@@ -18,5 +18,4 @@ gem "google-cloud-firestore"
 
 group :test do
   gem "rspec"
-  gem "google-cloud-storage"
 end

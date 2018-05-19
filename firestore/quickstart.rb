@@ -74,11 +74,11 @@ if __FILE__ == $0
   when "initialize"
     initialize_firestore_client
   when "add_data_1"
-    add_data_1  project_id:  ENV["GOOGLE_CLOUD_PROJECT"]
+    add_data_1 project_id: ENV["GOOGLE_CLOUD_PROJECT"]
   when "add_data_2"
-    add_data_2  project_id:  ENV["GOOGLE_CLOUD_PROJECT"]
+    add_data_2 project_id: ENV["GOOGLE_CLOUD_PROJECT"]
   when "get_all"
-    get_all project_id:  ENV["GOOGLE_CLOUD_PROJECT"]
+    get_all project_id: ENV["GOOGLE_CLOUD_PROJECT"]
   else
     puts "Command not found!"
   end

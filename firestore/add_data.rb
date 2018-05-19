@@ -15,10 +15,10 @@
 require "google/cloud/firestore"
 require "date"
 
-def add_doc_as_map project_id:
+def set_document project_id:
   # project_id = "Your Google Cloud Project ID"
   firestore = Google::Cloud::Firestore.new(project_id: project_id)
-  # [START fs_doc_as_map]
+  # [START fs_set_document]
   city_ref = firestore.doc "cities/LA"
 
   data = {
@@ -28,7 +28,7 @@ def add_doc_as_map project_id:
   }
 
   city_ref.set(data)
-  # [END fs_doc_as_map]
+  # [END fs_set_document]
   puts "Set data for the LA document in the cities collection."
 end
 
@@ -42,10 +42,10 @@ def update_create_if_missing project_id:
   puts "Merged data into the LA document in the cities collection."
 end
 
-def add_doc_data_types project_id:
+def set_document_data_types project_id:
   # project_id = "Your Google Cloud Project ID"
   firestore = Google::Cloud::Firestore.new(project_id: project_id)
-  # [START fs_add_doc_data_types]
+  # [START fs_set_document_data_types]
   doc_ref = firestore.doc "data/one"
 
   data = {
@@ -62,7 +62,7 @@ def add_doc_data_types project_id:
   }
 
   doc_ref.set(data)
-  # [END fs_add_doc_data_types]
+  # [END fs_set_document_data_types]
   puts "Set multiple data-type data for the one document in the data collection."
 end
 
@@ -148,7 +148,7 @@ def update_nested_fields project_id:
   nested_field_path = Google::Cloud::Firestore::FieldPath.new(
     :favorites, :color
   )
-  frank_ref.update({ age: 13, nested_field_path: "Red" })
+  frank_ref.update({ age: 13, "favorites.color": "Red" })
   # [END fs_update_nested_fields]
   puts "Updated the age and favorite color fields of the frank document in the users collection."
 end
@@ -165,24 +165,24 @@ end
 
 if __FILE__ == $0
   case ARGV.shift
-  when "add_doc_as_map"
-    add_doc_as_map  project_id:  ENV["GOOGLE_CLOUD_PROJECT"]
+  when "set_document"
+    set_document project_id: ENV["GOOGLE_CLOUD_PROJECT"]
   when "update_create_if_missing"
-    update_create_if_missing  project_id: ENV["GOOGLE_CLOUD_PROJECT"]
-  when "add_doc_data_types"
-    add_doc_data_types  project_id:  ENV["GOOGLE_CLOUD_PROJECT"]
+    update_create_if_missing project_id: ENV["GOOGLE_CLOUD_PROJECT"]
+  when "set_document_data_types"
+    set_document_data_types project_id: ENV["GOOGLE_CLOUD_PROJECT"]
   when "set_requires_id"
-    set_requires_id  project_id:  ENV["GOOGLE_CLOUD_PROJECT"]
+    set_requires_id project_id: ENV["GOOGLE_CLOUD_PROJECT"]
   when "add_doc_data_with_auto_id"
-    add_doc_data_with_auto_id  project_id:  ENV["GOOGLE_CLOUD_PROJECT"]
+    add_doc_data_with_auto_id project_id: ENV["GOOGLE_CLOUD_PROJECT"]
   when "add_doc_data_after_auto_id"
-    add_doc_data_after_auto_id  project_id:  ENV["GOOGLE_CLOUD_PROJECT"]
+    add_doc_data_after_auto_id project_id: ENV["GOOGLE_CLOUD_PROJECT"]
   when "update_doc"
-    update_doc  project_id:  ENV["GOOGLE_CLOUD_PROJECT"]
+    update_doc project_id: ENV["GOOGLE_CLOUD_PROJECT"]
   when "update_nested_fields"
-    update_nested_fields  project_id:  ENV["GOOGLE_CLOUD_PROJECT"]
+    update_nested_fields project_id: ENV["GOOGLE_CLOUD_PROJECT"]
   when "update_server_timestamp"
-    update_server_timestamp  project_id:  ENV["GOOGLE_CLOUD_PROJECT"]
+    update_server_timestamp project_id: ENV["GOOGLE_CLOUD_PROJECT"]
   else
     puts "Command not found!"
   end
