@@ -13,14 +13,14 @@
 # limitations under the License.
 
 def create_client project_id
-  # [START build_service]
+  # [START datastore_build_service]
   require "google/cloud/datastore"
 
   @datastore = Google::Cloud::Datastore.new project: project_id
-  # [END build_service]
+  # [END datastore_build_service]
 end
 
-# [START add_entity]
+# [START datastore_add_entity]
 def add_task description
   task = @datastore.entity "Task" do |t|
     t["description"] = description
@@ -35,9 +35,9 @@ def add_task description
 
   task.key.id
 end
-# [END add_entity]
+# [END datastore_add_entity]
 
-# [START update_entity]
+# [START datastore_update_entity]
 def mark_done task_id
   task = @datastore.find "Task", task_id
 
@@ -45,9 +45,9 @@ def mark_done task_id
 
   @datastore.save task
 end
-# [END update_entity]
+# [END datastore_update_entity]
 
-# [START retrieve_entities]
+# [START datastore_retrieve_entities]
 def list_tasks
   query = @datastore.query("Task").order("created")
   tasks = @datastore.run query
@@ -58,15 +58,15 @@ def list_tasks
     puts "  ID: #{t.key.id}"
   end
 end
-# [END retrieve_entities]
+# [END datastore_retrieve_entities]
 
-# [START delete_entity]
+# [START datastore_delete_entity]
 def delete_task task_id
   task = @datastore.find "Task", task_id
 
   @datastore.delete task
 end
-# [END delete_entity]
+# [END datastore_delete_entity]
 
 if __FILE__ == $0
   create_client ENV["GOOGLE_CLOUD_PROJECT"]
