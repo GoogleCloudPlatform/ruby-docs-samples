@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START receive_push_message]
 require "sinatra"
 require "json"
 require "base64"
@@ -23,6 +22,5 @@ post "/push" do
   logger.info "Pushed Message: #{data}"
   response.status = 204
 end
-# [END receive_push_message]
 
 set :port, 8080
