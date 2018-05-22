@@ -99,6 +99,28 @@ def upload_encrypted_file project_id:, bucket_name:, local_file_path:,
   # [END upload_encrypted_file]
 end
 
+def upload_with_kms_key project_id:, bucket_name:, local_file_path:,
+                          storage_file_path: nil, kms_key:
+  # [START storage_upload_with_kms_key]
+  # project_id        = "Your Google Cloud project ID"
+  # bucket_name       = "Your Google Cloud Storage bucket name"
+  # local_file_path   = "Path to local file to upload"
+  # storage_file_path = "Path to store the file in Google Cloud Storage"
+  # kms_key           = "KMS key resource"
+
+  require "google/cloud/storage"
+
+  storage = Google::Cloud::Storage.new project: project_id
+
+  bucket = storage.bucket bucket_name
+
+  file = bucket.create_file local_file_path, storage_file_path,
+                            kms_key: kms_key
+
+  puts "Uploaded #{file.name} and encrypted service side using #{kms_key}"
+  # [END storage_upload_with_kms_key]
+end
+
 def download_file project_id:, bucket_name:, file_name:, local_path:
   # [START download_file]
   # project_id  = "Your Google Cloud project ID"
@@ -377,6 +399,11 @@ def run_sample arguments
                           bucket_name:     arguments.shift,
                           local_file_path: arguments.shift,
                           encryption_key:  Base64.decode64(arguments.shift)
+  when "kms_upload"
+    upload_with_kms_key project_id:      project_id,
+                        bucket_name:     arguments.shift,
+                        local_file_path: arguments.shift,
+                        kms_key:         arguments.shift
   when "download"
     download_file project_id:  project_id,
                   bucket_name: arguments.shift,
@@ -440,6 +467,7 @@ Commands:
   list                 <bucket>                                     List all files in the bucket
   upload               <bucket> <file>                              Upload local file to a bucket
   encrypted_upload     <bucket> <file> <base64_encryption_key>      Upload local file as an encrypted file to a bucket
+  kms_upload           <bucket> <file> <kms_key>                    Upload local file and encrypt service side using a KMS key
   download             <bucket> <file> <path>                       Download a file from a bucket
   download_public_file <bucket> <file> <path>                       Download a publically accessible file from a bucket
   encrypted_download <bucket> <file> <path> <base64_encryption_key> Download an encrypted file from a bucket
