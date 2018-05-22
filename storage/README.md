@@ -99,7 +99,7 @@ Environment variables:
 
 ### Cloud Storage Bucket-level Identity & Access Management
 
-**Usage:** `bundle exec ruby iam.rb [command] [arguments]
+**Usage:** `bundle exec ruby iam.rb [command] [arguments]`
 
 ```
 Usage: bundle exec ruby iam.rb [command] [arguments]

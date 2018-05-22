@@ -32,7 +32,7 @@ describe "Google Cloud Storage buckets sample" do
 
   before :all do
     @bucket_name = ENV["GOOGLE_CLOUD_STORAGE_BUCKET"]
-    @kms_key     = ENV["GOOGLE_CLOUD_KMS_KEY_NAME"]
+    @kms_key     = ENV["GOOGLE_CLOUD_KMS_KEY"]
     @storage     = Google::Cloud::Storage.new
     @project_id  = @storage.project
   end
