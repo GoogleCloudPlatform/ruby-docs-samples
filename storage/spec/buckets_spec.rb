@@ -32,6 +32,7 @@ describe "Google Cloud Storage buckets sample" do
 
   before :all do
     @bucket_name = ENV["GOOGLE_CLOUD_STORAGE_BUCKET"]
+    @kms_key     = ENV["GOOGLE_CLOUD_KMS_KEY_NAME"]
     @storage     = Google::Cloud::Storage.new
     @project_id  = @storage.project
   end
@@ -110,7 +111,6 @@ describe "Google Cloud Storage buckets sample" do
   end
 
   example "enable default kms key" do
-    default_kms_key = ""
     @storage.bucket(@bucket_name).default_kms_key = nil
 
     expect(@storage.bucket(@bucket_name).default_kms_key).to be nil
@@ -118,15 +118,17 @@ describe "Google Cloud Storage buckets sample" do
     expect {
       enable_default_kms_key project_id:      @project_id,
                              bucket_name:     @bucket_name,
-                             default_kms_key: default_kms_key
+                             default_kms_key: @kms_key
 
     }.to output{
-      /Default KMS key for #{bucket_name} was set to #{default_kms_key}/
+      /Default KMS key for #{bucket_name} was set to #{@kms_key}/
     }.to_stdout
 
-    expect(@storage.bucket(@bucket_name).default_kms_key).to eq default_kms_key
-  end
+    expect(@storage.bucket(@bucket_name).default_kms_key).to eq @kms_key
 
+    @storage.bucket(@bucket_name).default_kms_key = nil
+    expect(@storage.bucket(@bucket_name).default_kms_key).to be nil
+  end
 
   example "create bucket" do
     delete_bucket!
