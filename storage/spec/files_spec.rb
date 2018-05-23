@@ -35,6 +35,7 @@ describe "Google Cloud Storage files sample" do
 
   before do
     @bucket_name          = ENV["GOOGLE_CLOUD_STORAGE_BUCKET"]
+    @kms_key              = ENV["GOOGLE_CLOUD_KMS_KEY"]
     @storage              = Google::Cloud::Storage.new
     @project_id           = @storage.project
     @bucket               = @storage.bucket @bucket_name
@@ -178,6 +179,24 @@ describe "Google Cloud Storage files sample" do
     expect(@bucket.file "file.txt").not_to be nil
     expect(storage_file_content "file.txt", encryption_key: @encryption_key).
         to eq "Content of test file.txt\n"
+  end
+
+  it "can upload a local file to a bucket with encryption key" do
+    delete_file "file.txt"
+    expect(@bucket.file "file.txt").to be nil
+
+    expect {
+      upload_with_kms_key project_id:        @project_id,
+                          bucket_name:       @bucket_name,
+                          local_file_path:   @local_file_path,
+                          storage_file_path: "file.txt",
+                          kms_key:           @kms_key
+    }.to output(
+      "Uploaded file.txt and encrypted service side using #{@kms_key}\n"
+    ).to_stdout
+
+    expect(@bucket.file "file.txt").not_to be nil
+    expect(storage_file_content "file.txt").to eq "Content of test file.txt\n"
   end
 
   it "can set custom metadata for a file" do

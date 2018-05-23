@@ -32,6 +32,7 @@ describe "Google Cloud Storage buckets sample" do
 
   before :all do
     @bucket_name = ENV["GOOGLE_CLOUD_STORAGE_BUCKET"]
+    @kms_key     = ENV["GOOGLE_CLOUD_KMS_KEY"]
     @storage     = Google::Cloud::Storage.new
     @project_id  = @storage.project
   end
@@ -107,6 +108,26 @@ describe "Google Cloud Storage buckets sample" do
     }.to output{
       /Requester Pays is enabled for #{@bucket_name}/
     }.to_stdout
+  end
+
+  example "enable default kms key" do
+    @storage.bucket(@bucket_name).default_kms_key = nil
+
+    expect(@storage.bucket(@bucket_name).default_kms_key).to be nil
+
+    expect {
+      enable_default_kms_key project_id:      @project_id,
+                             bucket_name:     @bucket_name,
+                             default_kms_key: @kms_key
+
+    }.to output{
+      /Default KMS key for #{bucket_name} was set to #{@kms_key}/
+    }.to_stdout
+
+    expect(@storage.bucket(@bucket_name).default_kms_key).to eq @kms_key
+
+    @storage.bucket(@bucket_name).default_kms_key = nil
+    expect(@storage.bucket(@bucket_name).default_kms_key).to be nil
   end
 
   example "create bucket" do
