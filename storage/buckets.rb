@@ -235,17 +235,17 @@ if __FILE__ == $0
 Usage: bundle exec ruby buckets.rb [command] [arguments]
 
 Commands:
-  list                                                              List all buckets in the authenticated project
-  enable_requester_pays         <bucket>                            Enable requester pays for a bucket
-  disable_requester_pays        <bucket>                            Disable requester pays for a bucket
-  check_requester_pays          <bucket>                            Check status of requester pays for a bucket
-  enable_default_kms_key        <bucket> <kms_key>                  Enable default KMS encryption for bucket
-  create                        <bucket>                            Create a new bucket with the provided name
-  create_location_storage_class <bucket>                            Create a new bucket with specific storage class and location
-  list_bucket_labels            <bucket>                            List bucket labels
-  add_bucket_label              <bucket> <label_key> <label_value>  Add bucket label
-  delete_bucket_label           <bucket> <label_key>                Delete bucket label
-  delete                        <bucket>                            Delete bucket with the provided name
+  list                                                       List all buckets in the authenticated project
+  enable_requester_pays  <bucket>                            Enable requester pays for a bucket
+  disable_requester_pays <bucket>                            Disable requester pays for a bucket
+  check_requester_pays   <bucket>                            Check status of requester pays for a bucket
+  enable_default_kms_key <bucket> <kms_key>                  Enable default KMS encryption for bucket
+  create                 <bucket>                            Create a new bucket with the provided name
+  create_with            <bucket>                            Create a new bucket with specific storage class and location
+  list_bucket_labels     <bucket>                            List bucket labels
+  add_bucket_label       <bucket> <label_key> <label_value>  Add bucket label
+  delete_bucket_label    <bucket> <label_key>                Delete bucket label
+  delete                 <bucket>                            Delete bucket with the provided name
 
 Environment variables:
   GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
