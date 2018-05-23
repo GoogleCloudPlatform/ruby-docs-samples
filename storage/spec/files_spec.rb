@@ -190,7 +190,7 @@ describe "Google Cloud Storage files sample" do
                           bucket_name:       @bucket_name,
                           local_file_path:   @local_file_path,
                           storage_file_path: "file.txt",
-                          encryption_key:    @kms_key
+                          kms_key:           @kms_key
     }.to output(
       "Uploaded file.txt and encrypted service side using #{@kms_key}\n"
     ).to_stdout
