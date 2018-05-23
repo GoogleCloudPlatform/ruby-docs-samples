@@ -106,7 +106,7 @@ def upload_with_kms_key project_id:, bucket_name:, local_file_path:,
   # bucket_name       = "Your Google Cloud Storage bucket name"
   # local_file_path   = "Path to local file to upload"
   # storage_file_path = "Path to store the file in Google Cloud Storage"
-  # kms_key           = "KMS key resource"
+  # kms_key           = "projects/proj/locations/loc/keyRings/kr/cryptoKeys/key"
 
   require "google/cloud/storage"
 

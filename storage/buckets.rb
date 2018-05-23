@@ -80,7 +80,7 @@ def enable_default_kms_key project_id:, bucket_name:, default_kms_key:
   # [START storage_set_bucket_default_kms_key]
   # project_id      = "Your Google Cloud project ID"
   # bucket_name     = "Name of your Google Cloud Storage bucket"
-  # default_kms_key = "KMS key resource id"
+  # default_kms_key = "projects/proj/locations/loc/keyRings/kr/cryptoKeys/key"
 
   require "google/cloud/storage"
 
