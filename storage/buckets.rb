@@ -89,7 +89,7 @@ def enable_default_kms_key project_id:, bucket_name:, default_kms_key:
 
   bucket.default_kms_key = default_kms_key
 
-  puts "Default KMS key for #{bucket_name} was set to #{default_kms_key}"
+  puts "Default KMS key for #{bucket.name} was set to #{bucket.default_kms_key}"
   # [END storage_set_bucket_default_kms_key]
 end
 
