@@ -117,7 +117,7 @@ def upload_with_kms_key project_id:, bucket_name:, local_file_path:,
   file = bucket.create_file local_file_path, storage_file_path,
                             kms_key: kms_key
 
-  puts "Uploaded #{file.name} and encrypted service side using #{kms_key}"
+  puts "Uploaded #{file.name} and encrypted service side using #{file.kms_key}"
   # [END storage_upload_with_kms_key]
 end
 
