@@ -124,7 +124,7 @@ describe "Google Cloud Storage buckets sample" do
       /Default KMS key for #{bucket_name} was set to #{@kms_key}/
     }.to_stdout
 
-    expect(@storage.bucket(@bucket_name).default_kms_key).to eq @kms_key
+    expect(@storage.bucket(@bucket_name).default_kms_key).to include @kms_key
 
     @storage.bucket(@bucket_name).default_kms_key = nil
     expect(@storage.bucket(@bucket_name).default_kms_key).to be nil

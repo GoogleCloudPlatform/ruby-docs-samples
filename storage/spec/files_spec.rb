@@ -181,7 +181,7 @@ describe "Google Cloud Storage files sample" do
         to eq "Content of test file.txt\n"
   end
 
-  it "can upload a local file to a bucket with encryption key" do
+  it "can upload a local file to a bucket with kms key" do
     delete_file "file.txt"
     expect(@bucket.file "file.txt").to be nil
 
@@ -192,10 +192,11 @@ describe "Google Cloud Storage files sample" do
                           storage_file_path: "file.txt",
                           kms_key:           @kms_key
     }.to output(
-      "Uploaded file.txt and encrypted service side using #{@kms_key}\n"
+      /Uploaded file.txt and encrypted service side using #{@kms_key}/
     ).to_stdout
 
     expect(@bucket.file "file.txt").not_to be nil
+    expect(@bucket.file("file.txt").kms_key).to include @kms_key
     expect(storage_file_content "file.txt").to eq "Content of test file.txt\n"
   end
 
