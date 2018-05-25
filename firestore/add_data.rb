@@ -83,7 +83,7 @@ end
 def add_doc_data_with_auto_id project_id:
   # project_id = "Your Google Cloud Project ID"
   firestore = Google::Cloud::Firestore.new(project_id: project_id)
-  # [START fs_set_requires_id]
+  # [START fs_add_doc_data_with_auto_id]
   data = {
     name: "Tokyo",
     country: "Japan"
@@ -93,7 +93,7 @@ def add_doc_data_with_auto_id project_id:
 
   added_doc_ref = cities_ref.add(data)
   puts "Added document with ID: #{added_doc_ref.document_id}."
-  # [END fs_set_requires_id]
+  # [END fs_add_doc_data_with_auto_id]
 end
 
 def add_doc_data_after_auto_id project_id:
