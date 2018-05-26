@@ -74,8 +74,6 @@ def batch_write project_id:
   puts "Batch write successfully completed."
 end
 
-
-
 if __FILE__ == $0
   case ARGV.shift
   when "run_simple_transaction"

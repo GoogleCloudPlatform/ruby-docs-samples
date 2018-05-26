@@ -111,6 +111,7 @@ def add_doc_data_after_auto_id project_id:
 
   added_doc_ref.set(data)
   # [END fs_add_doc_data_after_auto_id]
+  puts "Added data to the #{added_doc_ref.document_id} document in the cities collection."
 end
 
 def update_doc project_id:
