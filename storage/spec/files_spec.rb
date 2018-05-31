@@ -282,7 +282,7 @@ describe "Google Cloud Storage files sample" do
     end
   end
 
-  it "rename a file in a bucket" do
+  it "can rename a file in a bucket" do
     delete_file "file.txt"
     expect(@bucket.file "file.txt").to be nil
 
@@ -298,7 +298,7 @@ describe "Google Cloud Storage files sample" do
     expect(@bucket.file "rename_file.txt").not_to be nil
   end
 
-  it "it can copy a file from a bucket to a bucket" do
+  it "can copy a file" do
     delete_file "file.txt"
     expect(@bucket.file "file.txt").to be nil
 
