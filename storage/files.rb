@@ -315,7 +315,7 @@ def rename_file project_id:, bucket_name:, file_name:, new_name:
 
   file.delete
 
-  puts "my-file.txt has been renamed to #{renamed_file.name}"
+  puts "#{file_name} has been renamed to #{renamed_file.name}"
   # [END rename_file]
 end
 
@@ -335,10 +335,10 @@ def copy_file project_id:, source_bucket_name:, source_file_name:,
   file    = bucket.file source_file_name
 
   destination_bucket = storage.bucket dest_bucket_name
-  destination_file   = file.copy destination_bucket.name, file.name
+  destination_file   = file.copy destination_bucket.name, dest_file_name
 
   puts "#{file.name} in #{bucket.name} copied to " +
-       "#{copied_file.name} in #{destination_bucket.name}"
+       "#{destination_file.name} in #{destination_bucket.name}"
   # [END copy_file]
 end
 
