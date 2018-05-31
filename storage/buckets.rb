@@ -107,19 +107,23 @@ def create_bucket project_id:, bucket_name:
   # [END create_bucket]
 end
 
-def create_bucket_class_location project_id:, bucket_name:
+def create_bucket_class_location project_id:, bucket_name:, location:,
+  storage_class:
   # [START create_bucket_class_location]
   # project_id    = "Your Google Cloud project ID"
   # bucket_name   = "Name of Google Cloud Storage bucket to create"
+  # location      = "Location of where to create Cloud Storage bucket"
+  # storage_class = "Storage class of Cloud Storage bucket"
 
   require "google/cloud/storage"
 
   storage = Google::Cloud::Storage.new project: project_id
   bucket  = storage.create_bucket bucket_name,
-                                  location:      "ASIA",
-                                  storage_class: "COLDLINE"
+                                  location:      location,
+                                  storage_class: storage_class
 
-  puts "Created bucket #{bucket.name}"
+  puts "Created bucket #{bucket.name} in #{location}" +
+       " with #{storage_class} class"
   # [END create_bucket_class_location]
 end
 
@@ -229,7 +233,9 @@ if __FILE__ == $0
                         label_key:  ARGV.shift
   when "create_with"
     create_bucket_class_location project_id:    ENV["GOOGLE_CLOUD_PROJECT"],
-                                 bucket_name:   ARGV.shift
+                                 bucket_name:   ARGV.shift,
+                                 location:      ARGV.shift,
+                                 storage_class: ARGV.shift
   else
     puts <<-usage
 Usage: bundle exec ruby buckets.rb [command] [arguments]
@@ -240,8 +246,8 @@ Commands:
   disable_requester_pays <bucket>                            Disable requester pays for a bucket
   check_requester_pays   <bucket>                            Check status of requester pays for a bucket
   enable_default_kms_key <bucket> <kms_key>                  Enable default KMS encryption for bucket
-  create                 <bucket>                            Create a new bucket with the provided name
-  create_with            <bucket>                            Create a new bucket with specific storage class and location
+  create_with_default    <bucket>                            Create a new bucket with default storage class and location
+  create                 <bucket> <location> <storage_class> Create a new bucket with specific storage class and location
   list_bucket_labels     <bucket>                            List bucket labels
   add_bucket_label       <bucket> <label_key> <label_value>  Add bucket label
   delete_bucket_label    <bucket> <label_key>                Delete bucket label
