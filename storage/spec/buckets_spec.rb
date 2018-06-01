@@ -150,14 +150,16 @@ describe "Google Cloud Storage buckets sample" do
 
     expect(@storage.bucket @bucket_name).to be nil
 
-    location      = "ASIA"
-    storage_class = "COLDLINE"
+    location      = "US"
+    storage_class = "STANDARD"
 
     expect {
-      create_bucket_class_location project_id:  @project_id,
-                                   bucket_name: @bucket_name
+      create_bucket_class_location project_id:    @project_id,
+                                   bucket_name:   @bucket_name,
+                                   location:      location,
+                                   storage_class: storage_class
     }.to output(
-      "Created bucket #{@bucket_name}\n"
+      "Created bucket #{@bucket_name} in #{location} with #{storage_class} class\n"
     ).to_stdout
 
     bucket = @storage.bucket @bucket_name

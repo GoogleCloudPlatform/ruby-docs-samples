@@ -282,6 +282,42 @@ describe "Google Cloud Storage files sample" do
     end
   end
 
+  it "can rename a file in a bucket" do
+    delete_file "file.txt"
+    expect(@bucket.file "file.txt").to be nil
+
+    upload @local_file_path, "file.txt"
+
+    expect {
+      rename_file project_id:  @project_id,
+                  bucket_name: @bucket_name,
+                  file_name:   "file.txt",
+                  new_name:    "rename_file.txt"
+    }.to output("file.txt has been renamed to rename_file.txt\n").to_stdout
+
+    expect(@bucket.file "rename_file.txt").not_to be nil
+  end
+
+  it "can copy a file" do
+    delete_file "file.txt"
+    expect(@bucket.file "file.txt").to be nil
+
+    upload @local_file_path, "file.txt"
+
+    expect {
+      copy_file project_id:         @project_id,
+                source_bucket_name: @bucket_name,
+                source_file_name:   "file.txt",
+                dest_bucket_name:   @bucket_name,
+                dest_file_name:     "copy_file.txt"
+    }.to output(
+      "file.txt in #{@bucket_name} copied to copy_file.txt in #{@bucket_name}\n"
+    ).to_stdout
+
+    expect(@bucket.file "copy_file.txt").not_to be nil
+    expect(@bucket.file "file.txt").not_to be nil
+  end
+
   it "can download a file from a bucket using requester pays" do
     begin
       @bucket.requester_pays = true
