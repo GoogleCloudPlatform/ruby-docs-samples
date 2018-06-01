@@ -34,7 +34,7 @@ Commands:
   disable_requester_pays <bucket>                            Disable requester pays for a bucket
   check_requester_pays   <bucket>                            Check status of requester pays for a bucket
   enable_default_kms_key <bucket> <kms_key>                  Enable default KMS encryption for bucket
-  create_with_default    <bucket>                            Create a new bucket with default storage class and location
+  create                 <bucket>                            Create a new bucket with default storage class and location
   create                 <bucket> <location> <storage_class> Create a new bucket with specific storage class and location
   list_bucket_labels     <bucket>                            List bucket labels
   add_bucket_label       <bucket> <label_key> <label_value>  Add bucket label
