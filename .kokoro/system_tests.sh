@@ -12,5 +12,7 @@ fi
 echo "Running tests in project $GOOGLE_CLOUD_PROJECT";
 trap "gimmeproj -project cloud-samples-ruby-test-kokoro done $GOOGLE_CLOUD_PROJECT" EXIT
 
+export GOOGLE_CLOUD_STORAGE_BUCKET="$GOOGLE_CLOUD_PROJECT-$GOOGLE_CLOUD_STORAGE_BUCKET"
+
 cd github/ruby-docs-samples/
 ./spec/kokoro-run-all.sh
