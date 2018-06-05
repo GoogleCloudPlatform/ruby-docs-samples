@@ -17,12 +17,14 @@ require "google/cloud/firestore"
 # [START fs_run_simple_transaction]
 def run_simple_transaction project_id:
   # project_id = "Your Google Cloud Project ID"
-  firestore = Google::Cloud::Firestore.new(project_id: project_id)
+
+  firestore = Google::Cloud::Firestore.new project_id: project_id
   city_ref = firestore.doc "cities/SF"
+
   firestore.transaction do |tx|
     new_population = tx.get(city_ref).data[:population] + 1
     puts "New population is #{new_population}."
-    tx.update(city_ref, { population: new_population})
+    tx.update(city_ref, { population: new_population })
   end
   puts "Ran a simple transaction to update the population field in the SF document in the cities collection."
 end
@@ -31,24 +33,22 @@ end
 # [START fs_return_info_transaction]
 def return_info_transaction project_id:
   # project_id = "Your Google Cloud Project ID"
+
   updated = nil
-  firestore = Google::Cloud::Firestore.new(project_id: project_id)
+  firestore = Google::Cloud::Firestore.new project_id: project_id
   city_ref = firestore.doc "cities/SF"
-  firestore.transaction do |tx|
+
+  updated = firestore.transaction do |tx|
     new_population = tx.get(city_ref).data[:population] + 1
     if new_population < 1000000
-      tx.update(city_ref, { population: new_population})
-      updated = true
+      tx.update(city_ref, { population: new_population} )
+      true
     else
-      updated = false
+      false
     end
   end
-  updated
-end
 
-def return_info_transaction_wrapper project_id:
-  result = return_info_transaction project_id: project_id
-  if result
+  if updated
     puts "Population updated!"
   else
     puts "Sorry! Population is too big."
@@ -58,7 +58,8 @@ end
 
 def batch_write project_id:
   # project_id = "Your Google Cloud Project ID"
-  firestore = Google::Cloud::Firestore.new(project_id: project_id)
+
+  firestore = Google::Cloud::Firestore.new project_id: project_id
   # [START fs_batch_write]
   firestore.batch do |b|
     # Set the data for NYC
@@ -74,15 +75,23 @@ def batch_write project_id:
   puts "Batch write successfully completed."
 end
 
-if __FILE__ == $0
+if __FILE__ == $PROGRAM_NAME
+  project = ENV["FIRESTORE_PROJECT_ID"]
   case ARGV.shift
   when "run_simple_transaction"
-    run_simple_transaction project_id: ENV["GOOGLE_CLOUD_PROJECT"]
+    run_simple_transaction project_id: project
   when "return_info_transaction"
-    return_info_transaction_wrapper project_id: ENV["GOOGLE_CLOUD_PROJECT"]
+    return_info_transaction project_id: project
   when "batch_write"
-    batch_write project_id: ENV["GOOGLE_CLOUD_PROJECT"]
+    batch_write project_id: project
   else
-    puts "Command not found!"
+    puts <<-usage
+Usage: bundle exec ruby transactions_and_batched_writes.rb [command]
+
+Commands:
+  run_simple_transaction   Run a simple transaction.
+  return_info_transaction  Run a transaction and get information returned.
+  batch_write              Perform a batch write.
+    usage
   end
 end

@@ -1,12 +1,10 @@
 require_relative "../data_model.rb"
 require "rspec"
-require "google/cloud/firestore"
 
 describe "Google Cloud Firestore API samples - Data Model" do
 
   before do
-    @firestore_project = ENV["GOOGLE_CLOUD_PROJECT"]
-    @firestore = Google::Cloud::Firestore.new
+    @firestore_project = ENV["FIRESTORE_PROJECT_ID"]
   end
 
   # Capture and return STDOUT output by block

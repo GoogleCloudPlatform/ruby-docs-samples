@@ -17,7 +17,8 @@ require "date"
 
 def delete_doc project_id:
   # project_id = "Your Google Cloud Project ID"
-  firestore = Google::Cloud::Firestore.new(project_id: project_id)
+
+  firestore = Google::Cloud::Firestore.new project_id: project_id
   # [START fs_delete_doc]
   city_ref = firestore.doc "cities/DC"
   city_ref.delete
@@ -27,7 +28,8 @@ end
 
 def delete_field project_id:
   # project_id = "Your Google Cloud Project ID"
-  firestore = Google::Cloud::Firestore.new(project_id: project_id)
+
+  firestore = Google::Cloud::Firestore.new project_id: project_id
   # [START fs_delete_field]
   city_ref = firestore.doc "cities/BJ"
   city_ref.update({ capital: firestore.field_delete })
@@ -37,7 +39,8 @@ end
 
 def delete_collection project_id:
   # project_id = "Your Google Cloud Project ID"
-  firestore = Google::Cloud::Firestore.new(project_id: project_id)
+
+  firestore = Google::Cloud::Firestore.new project_id: project_id
   # [START fs_delete_collection]
   cities_ref = firestore.col "cities"
   query = cities_ref
@@ -51,15 +54,23 @@ def delete_collection project_id:
   puts "Finished deleting all documents from the collection."
 end
 
-if __FILE__ == $0
+if __FILE__ == $PROGRAM_NAME
+  project = ENV["FIRESTORE_PROJECT_ID"]
   case ARGV.shift
   when "delete_doc"
-    delete_doc project_id: ENV["GOOGLE_CLOUD_PROJECT"]
+    delete_doc project_id: project
   when "delete_field"
-    delete_field project_id: ENV["GOOGLE_CLOUD_PROJECT"]
+    delete_field project_id: project
   when "delete_collection"
-    delete_collection project_id: ENV["GOOGLE_CLOUD_PROJECT"]
+    delete_collection project_id: project
   else
-    puts "Command not found!"
+    puts <<-usage
+Usage: bundle exec ruby delete_data.rb [command]
+
+Commands:
+  delete_doc         Delete a document.
+  delete_field       Delete a field.
+  delete_collection  Delete an entire collection.
+    usage
   end
 end

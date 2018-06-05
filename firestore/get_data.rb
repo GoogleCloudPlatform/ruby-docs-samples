@@ -16,42 +16,43 @@ require "google/cloud/firestore"
 
 def retrieve_create_examples project_id:
   # project_id = "Your Google Cloud Project ID"
-  firestore = Google::Cloud::Firestore.new(project_id: project_id)
+
+  firestore = Google::Cloud::Firestore.new project_id: project_id
   # [START fs_retrieve_create_examples]
   cities_ref = firestore.col "cities"
   cities_ref.doc("SF").set({
-    name: "San Francisco",
-    state: "CA",
-    country: "USA",
-    capital: false,
+    name:       "San Francisco",
+    state:      "CA",
+    country:    "USA",
+    capital:    false,
     population: 860000
   })
   cities_ref.doc("LA").set({
-    name: "Los Angeles",
-    state: "CA",
-    country: "USA",
-    capital: false,
+    name:       "Los Angeles",
+    state:      "CA",
+    country:    "USA",
+    capital:    false,
     population: 3900000
   })
   cities_ref.doc("DC").set({
-    name: "Washington D.C.",
-    state: nil,
-    country: "USA",
-    capital: true,
+    name:       "Washington D.C.",
+    state:      nil,
+    country:    "USA",
+    capital:    true,
     population: 680000
   })
   cities_ref.doc("TOK").set({
-    name: "Tokyo",
-    state: nil,
-    country: "Japan",
-    capital: true,
+    name:       "Tokyo",
+    state:      nil,
+    country:    "Japan",
+    capital:    true,
     population: 9000000
   })
   cities_ref.doc("BJ").set({
-    name: "Beijing",
-    state: nil,
-    country: "China",
-    capital: true,
+    name:       "Beijing",
+    state:      nil,
+    country:    "China",
+    capital:    true,
     population: 21500000
   })
   # [END fs_retrieve_create_examples]
@@ -60,7 +61,8 @@ end
 
 def get_document project_id:
   # project_id = "Your Google Cloud Project ID"
-  firestore = Google::Cloud::Firestore.new(project_id: project_id)
+
+  firestore = Google::Cloud::Firestore.new project_id: project_id
   # [START fs_get_document]
   doc_ref = firestore.doc "cities/SF"
   snapshot = doc_ref.get
@@ -74,10 +76,11 @@ end
 
 def get_multiple_docs project_id:
   # project_id = "Your Google Cloud Project ID"
-  firestore = Google::Cloud::Firestore.new(project_id: project_id)
+
+  firestore = Google::Cloud::Firestore.new project_id: project_id
   # [START fs_get_multiple_docs]
   cities_ref = firestore.col "cities"
-  query = cities_ref.where("capital", "=", true)
+  query = cities_ref.where "capital", "=", true
   query.get do |city|
     puts "#{city.document_id} data: #{city.data}."
   end
@@ -86,7 +89,8 @@ end
 
 def get_all_docs project_id:
   # project_id = "Your Google Cloud Project ID"
-  firestore = Google::Cloud::Firestore.new(project_id: project_id)
+
+  firestore = Google::Cloud::Firestore.new project_id: project_id
   # [START fs_get_all_docs]
   cities_ref = firestore.col "cities"
   cities_ref.get do |city|
@@ -97,7 +101,8 @@ end
 
 def add_subcollection project_id:
   # project_id = "Your Google Cloud Project ID"
-  firestore = Google::Cloud::Firestore.new(project_id: project_id)
+
+  firestore = Google::Cloud::Firestore.new project_id: project_id
   # [START fs_add_subcollection]
   city_ref = firestore.doc "cities/SF"
   subcollection_ref = city_ref.col "neighborhoods"
@@ -110,7 +115,8 @@ end
 
 def list_subcollections project_id:
   # project_id = "Your Google Cloud Project ID"
-  firestore = Google::Cloud::Firestore.new(project_id: project_id)
+
+  firestore = Google::Cloud::Firestore.new project_id: project_id
   # [START fs_list_subcollections]
   city_ref = firestore.doc "cities/SF"
   city_ref.cols do |col|
@@ -120,21 +126,32 @@ def list_subcollections project_id:
 end
 
 
-if __FILE__ == $0
+if __FILE__ == $PROGRAM_NAME
+  project = ENV["FIRESTORE_PROJECT_ID"]
   case ARGV.shift
   when "retrieve_create_examples"
-    retrieve_create_examples project_id: ENV["GOOGLE_CLOUD_PROJECT"]
+    retrieve_create_examples project_id: project
   when "get_document"
-    get_document project_id: ENV["GOOGLE_CLOUD_PROJECT"]
+    get_document project_id: project
   when "get_multiple_docs"
-    get_multiple_docs project_id: ENV["GOOGLE_CLOUD_PROJECT"]
+    get_multiple_docs project_id: project
   when "get_all_docs"
-    get_all_docs project_id: ENV["GOOGLE_CLOUD_PROJECT"]
+    get_all_docs project_id: project
   when "add_subcollection"
-    add_subcollection project_id: ENV["GOOGLE_CLOUD_PROJECT"]
+    add_subcollection project_id: project
   when "list_subcollections"
-    list_subcollections project_id: ENV["GOOGLE_CLOUD_PROJECT"]
+    list_subcollections project_id: project
   else
-    puts "Command not found!"
+    puts <<-usage
+Usage: bundle exec ruby get_data.rb [command]
+
+Commands:
+  retrieve_create_examples  Create an example collection of documents.
+  get_document              Get a document.
+  get_multiple_docs         Get multiple documents from a collection.
+  get_all_docs              Get all documents from a collection.
+  add_subcollection         Add a document to a subcollection.
+  list_subcollections       List subcollections of a document.
+    usage
   end
 end

@@ -1,21 +1,11 @@
 require_relative "../query_data.rb"
+require_relative "helpers.rb"
 require "rspec"
-require "google/cloud/firestore"
-
-def delete_collection collection_name:
-  firestore = Google::Cloud::Firestore.new(project_id: ENV["GOOGLE_CLOUD_PROJECT"])
-  cities_ref = firestore.col collection_name
-  query = cities_ref
-  query.get do |document_snapshot|
-    document_ref = document_snapshot.ref
-    document_ref.delete
-  end
-end
 
 describe "Google Cloud Firestore API samples - Query Data" do
 
   before do
-    @firestore_project = ENV["GOOGLE_CLOUD_PROJECT"]
+    @firestore_project = ENV["FIRESTORE_PROJECT_ID"]
   end
 
   after do
