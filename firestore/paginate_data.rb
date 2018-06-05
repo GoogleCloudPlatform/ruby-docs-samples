@@ -16,7 +16,8 @@ require "google/cloud/firestore"
 
 def start_at_field_query_cursor project_id:
   # project_id = "Your Google Cloud Project ID"
-  firestore = Google::Cloud::Firestore.new(project_id: project_id)
+
+  firestore = Google::Cloud::Firestore.new project_id: project_id
   cities_ref = firestore.col "cities"
   # [START fs_start_at_field_query_cursor]
   query = cities_ref.order("population").start_at(1000000)
@@ -28,7 +29,8 @@ end
 
 def end_at_field_query_cursor project_id:
   # project_id = "Your Google Cloud Project ID"
-  firestore = Google::Cloud::Firestore.new(project_id: project_id)
+
+  firestore = Google::Cloud::Firestore.new project_id: project_id
   cities_ref = firestore.col "cities"
   # [START fs_end_at_field_query_cursor]
   query = cities_ref.order("population").end_at(1000000)
@@ -40,7 +42,8 @@ end
 
 def paginated_query_cursor project_id:
   # project_id = "Your Google Cloud Project ID"
-  firestore = Google::Cloud::Firestore.new(project_id: project_id)
+
+  firestore = Google::Cloud::Firestore.new project_id: project_id
   # [START fs_paginated_query_cursor]
   cities_ref = firestore.col "cities"
   first_query = cities_ref.order("population").limit(3)
@@ -62,7 +65,8 @@ end
 
 def multiple_cursor_conditions project_id:
   # project_id = "Your Google Cloud Project ID"
-  firestore = Google::Cloud::Firestore.new(project_id: project_id)
+
+  firestore = Google::Cloud::Firestore.new project_id: project_id
   cities_ref = firestore.col "cities"
   # [START fs_multiple_cursor_conditions]
   # Will return all Springfields
@@ -79,17 +83,26 @@ def multiple_cursor_conditions project_id:
   end
 end
 
-if __FILE__ == $0
+if __FILE__ == $PROGRAM_NAME
+  project = ENV["FIRESTORE_PROJECT_ID"]
   case ARGV.shift
   when "start_at_field_query_cursor"
-    start_at_field_query_cursor project_id: ENV["GOOGLE_CLOUD_PROJECT"]
+    start_at_field_query_cursor project_id: project
   when "end_at_field_query_cursor"
-    end_at_field_query_cursor project_id: ENV["GOOGLE_CLOUD_PROJECT"]
+    end_at_field_query_cursor project_id: project
   when "paginated_query_cursor"
-    paginated_query_cursor project_id: ENV["GOOGLE_CLOUD_PROJECT"]
+    paginated_query_cursor project_id: project
   when "multiple_cursor_conditions"
-    multiple_cursor_conditions project_id: ENV["GOOGLE_CLOUD_PROJECT"]
+    multiple_cursor_conditions project_id: project
   else
-    puts "Command not found!"
+    puts <<-usage
+Usage: bundle exec ruby paginate_data.rb [command]
+
+Commands:
+  start_at_field_query_cursor  Define field start point for a query.
+  end_at_field_query_cursor    Define field end point for a query.
+  paginated_query_cursor       Paginate using query cursors.
+  multiple_cursor_conditions   Set multiple cursor conditions.
+    usage
   end
 end

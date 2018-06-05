@@ -17,24 +17,26 @@ require "date"
 
 def set_document project_id:
   # project_id = "Your Google Cloud Project ID"
-  firestore = Google::Cloud::Firestore.new(project_id: project_id)
+
+  firestore = Google::Cloud::Firestore.new project_id: project_id
   # [START fs_set_document]
   city_ref = firestore.doc "cities/LA"
 
   data = {
-    name: "Los Angeles",
-    state: "CA",
+    name:    "Los Angeles",
+    state:   "CA",
     country: "USA"
   }
 
-  city_ref.set(data)
+  city_ref.set data
   # [END fs_set_document]
   puts "Set data for the LA document in the cities collection."
 end
 
 def update_create_if_missing project_id:
   # project_id = "Your Google Cloud Project ID"
-  firestore = Google::Cloud::Firestore.new(project_id: project_id)
+
+  firestore = Google::Cloud::Firestore.new project_id: project_id
   # [START fs_update_create_if_missing]
   city_ref = firestore.doc "cities/LA"
   city_ref.set({ capital: false }, merge: true)
@@ -44,63 +46,67 @@ end
 
 def set_document_data_types project_id:
   # project_id = "Your Google Cloud Project ID"
-  firestore = Google::Cloud::Firestore.new(project_id: project_id)
+
+  firestore = Google::Cloud::Firestore.new project_id: project_id
   # [START fs_set_document_data_types]
   doc_ref = firestore.doc "data/one"
 
   data = {
-    stringExample: "Hello, World!",
+    stringExample:  "Hello, World!",
     booleanExample: true,
-    numberExample: 3.14159265,
-    dateExample: DateTime.now,
-    arrayExample: [5, true, "hello"],
-    nullExample: nil,
+    numberExample:  3.14159265,
+    dateExample:    DateTime.now,
+    arrayExample:   [5, true, "hello"],
+    nullExample:    nil,
     objectExample: {
       a: 5,
       b: true
     }
   }
 
-  doc_ref.set(data)
+  doc_ref.set data
   # [END fs_set_document_data_types]
   puts "Set multiple data-type data for the one document in the data collection."
 end
 
 def set_requires_id project_id:
   # project_id = "Your Google Cloud Project ID"
-  firestore = Google::Cloud::Firestore.new(project_id: project_id)
+
+  firestore = Google::Cloud::Firestore.new project_id: project_id
   data = {
-    name: "Phuket",
+    name:    "Phuket",
     country: "Thailand"
   }
   # [START fs_set_requires_id]
   city_ref = firestore.doc "cities/new-city-id"
-  city_ref.set(data)
+  city_ref.set data
   # [END fs_set_requires_id]
   puts "Added document with ID: new-city-id."
 end
 
 def add_doc_data_with_auto_id project_id:
   # project_id = "Your Google Cloud Project ID"
-  firestore = Google::Cloud::Firestore.new(project_id: project_id)
+
+  firestore = Google::Cloud::Firestore.new project_id: project_id
   # [START fs_add_doc_data_with_auto_id]
   data = {
-    name: "Tokyo",
+    name:    "Tokyo",
     country: "Japan"
   }
 
   cities_ref = firestore.col "cities"
 
-  added_doc_ref = cities_ref.add(data)
+  added_doc_ref = cities_ref.add data
   puts "Added document with ID: #{added_doc_ref.document_id}."
   # [END fs_add_doc_data_with_auto_id]
 end
 
 def add_doc_data_after_auto_id project_id:
   # project_id = "Your Google Cloud Project ID"
-  firestore = Google::Cloud::Firestore.new(project_id: project_id)
+
+  firestore = Google::Cloud::Firestore.new project_id: project_id
   data = {
-    name: "Moscow",
+    name:    "Moscow",
     country: "Russia"
   }
   # [START fs_add_doc_data_after_auto_id]
@@ -109,19 +115,21 @@ def add_doc_data_after_auto_id project_id:
   added_doc_ref = cities_ref.doc
   puts "Added document with ID: #{added_doc_ref.document_id}."
 
-  added_doc_ref.set(data)
+  added_doc_ref.set data
   # [END fs_add_doc_data_after_auto_id]
   puts "Added data to the #{added_doc_ref.document_id} document in the cities collection."
 end
 
 def update_doc project_id:
   # project_id = "Your Google Cloud Project ID"
-  firestore = Google::Cloud::Firestore.new(project_id: project_id)
+
+  firestore = Google::Cloud::Firestore.new project_id: project_id
   doc_ref = firestore.doc "cities/DC"
-  doc_ref.set({
-    name: "Washington D.C.",
+  data = {
+    name:    "Washington D.C.",
     country: "USA"
-  })
+  }
+  doc_ref.set data
   # [START fs_update_doc]
   city_ref = firestore.doc "cities/DC"
   city_ref.update({ capital: true })
@@ -131,24 +139,22 @@ end
 
 def update_nested_fields project_id:
   # project_id = "Your Google Cloud Project ID"
-  firestore = Google::Cloud::Firestore.new(project_id: project_id)
+
+  firestore = Google::Cloud::Firestore.new project_id: project_id
   # [START fs_update_nested_fields]
   # Create an initial document to update
   frank_ref = firestore.doc "users/frank"
   frank_ref.set({
     name: "Frank",
     favorites: {
-      food: "Pizza",
-      color: "Blue",
+      food:    "Pizza",
+      color:   "Blue",
       subject: "Recess"
     },
     age: 12
   })
 
   # Update age and favorite color
-  nested_field_path = Google::Cloud::Firestore::FieldPath.new(
-    :favorites, :color
-  )
   frank_ref.update({ age: 13, "favorites.color": "Red" })
   # [END fs_update_nested_fields]
   puts "Updated the age and favorite color fields of the frank document in the users collection."
@@ -156,7 +162,8 @@ end
 
 def update_server_timestamp project_id:
   # project_id = "Your Google Cloud Project ID"
-  firestore = Google::Cloud::Firestore.new(project_id: project_id)
+
+  firestore = Google::Cloud::Firestore.new project_id: project_id
   # [START fs_update_server_timestamp]
   city_ref = firestore.doc "cities/new-city-id"
   city_ref.update({ timestamp: firestore.field_server_time })
@@ -164,27 +171,41 @@ def update_server_timestamp project_id:
   puts "Updated the timestamp field of the new-city-id document in the cities collection."
 end
 
-if __FILE__ == $0
+if __FILE__ == $PROGRAM_NAME
+  project = ENV["FIRESTORE_PROJECT_ID"]
   case ARGV.shift
   when "set_document"
-    set_document project_id: ENV["GOOGLE_CLOUD_PROJECT"]
+    set_document project_id: project
   when "update_create_if_missing"
-    update_create_if_missing project_id: ENV["GOOGLE_CLOUD_PROJECT"]
+    update_create_if_missing project_id: project
   when "set_document_data_types"
-    set_document_data_types project_id: ENV["GOOGLE_CLOUD_PROJECT"]
+    set_document_data_types project_id: project
   when "set_requires_id"
-    set_requires_id project_id: ENV["GOOGLE_CLOUD_PROJECT"]
+    set_requires_id project_id: project
   when "add_doc_data_with_auto_id"
-    add_doc_data_with_auto_id project_id: ENV["GOOGLE_CLOUD_PROJECT"]
+    add_doc_data_with_auto_id project_id: project
   when "add_doc_data_after_auto_id"
-    add_doc_data_after_auto_id project_id: ENV["GOOGLE_CLOUD_PROJECT"]
+    add_doc_data_after_auto_id project_id: project
   when "update_doc"
-    update_doc project_id: ENV["GOOGLE_CLOUD_PROJECT"]
+    update_doc project_id: project
   when "update_nested_fields"
-    update_nested_fields project_id: ENV["GOOGLE_CLOUD_PROJECT"]
+    update_nested_fields project_id: project
   when "update_server_timestamp"
-    update_server_timestamp project_id: ENV["GOOGLE_CLOUD_PROJECT"]
+    update_server_timestamp project_id: project
   else
-    puts "Command not found!"
+    puts <<-usage
+Usage: bundle exec ruby add_data.rb [command]
+
+Commands:
+  set_document                Set document data.
+  update_create_if_missing    Update a document - create it if it's missing.
+  set_document_data_types     Set document data with multiple data types.
+  set_requires_id             Set document data with a given document id.
+  add_doc_data_with_auto_id   Add document data with autogenerated id.
+  add_doc_data_after_auto_id  Generate id, then add document data.
+  update_doc                  Update a document.
+  update_nested_fields        Update fields in nested data.
+  update_server_timestamp     Update field with server timestamp.
+    usage
   end
 end

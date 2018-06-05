@@ -16,7 +16,8 @@ require "google/cloud/firestore"
 
 def order_by_name_limit_query project_id:
   # project_id = "Your Google Cloud Project ID"
-  firestore = Google::Cloud::Firestore.new(project_id: project_id)
+
+  firestore = Google::Cloud::Firestore.new project_id: project_id
   cities_ref = firestore.col "cities"
   # [START fs_order_by_name_limit_query]
   query = cities_ref.order("name").limit(3)
@@ -28,7 +29,8 @@ end
 
 def order_by_name_desc_limit_query project_id:
   # project_id = "Your Google Cloud Project ID"
-  firestore = Google::Cloud::Firestore.new(project_id: project_id)
+
+  firestore = Google::Cloud::Firestore.new project_id: project_id
   cities_ref = firestore.col "cities"
   # [START fs_order_by_name_desc_limit_query]
   query = cities_ref.order("name", "desc").limit(3)
@@ -40,7 +42,8 @@ end
 
 def order_by_state_and_population_query project_id:
   # project_id = "Your Google Cloud Project ID"
-  firestore = Google::Cloud::Firestore.new(project_id: project_id)
+
+  firestore = Google::Cloud::Firestore.new project_id: project_id
   cities_ref = firestore.col "cities"
   # [START fs_order_by_state_and_population_query]
   query = cities_ref.order("state").order("population", "desc")
@@ -52,7 +55,8 @@ end
 
 def where_order_by_limit_query project_id:
   # project_id = "Your Google Cloud Project ID"
-  firestore = Google::Cloud::Firestore.new(project_id: project_id)
+
+  firestore = Google::Cloud::Firestore.new project_id: project_id
   cities_ref = firestore.col "cities"
   # [START fs_where_order_by_limit_query]
   query = cities_ref.where("population", ">", 2500000).order("population").limit(2)
@@ -64,7 +68,8 @@ end
 
 def range_order_by_query project_id:
   # project_id = "Your Google Cloud Project ID"
-  firestore = Google::Cloud::Firestore.new(project_id: project_id)
+
+  firestore = Google::Cloud::Firestore.new project_id: project_id
   cities_ref = firestore.col "cities"
   # [START fs_range_order_by_query]
   query = cities_ref.where("population", ">", 2500000).order("population")
@@ -76,7 +81,8 @@ end
 
 def invalid_range_order_by_query project_id:
   # project_id = "Your Google Cloud Project ID"
-  firestore = Google::Cloud::Firestore.new(project_id: project_id)
+
+  firestore = Google::Cloud::Firestore.new project_id: project_id
   cities_ref = firestore.col "cities"
   # [START fs_invalid_range_order_by_query]
   query = cities_ref.where("population", ">", 2500000).order("country")
@@ -84,21 +90,32 @@ def invalid_range_order_by_query project_id:
 end
 
 
-if __FILE__ == $0
+if __FILE__ == $PROGRAM_NAME
+  project = ENV["FIRESTORE_PROJECT_ID"]
   case ARGV.shift
   when "order_by_name_limit_query"
-    order_by_name_limit_query project_id: ENV["GOOGLE_CLOUD_PROJECT"]
+    order_by_name_limit_query project_id: project
   when "order_by_name_desc_limit_query"
-    order_by_name_desc_limit_query project_id: ENV["GOOGLE_CLOUD_PROJECT"]
+    order_by_name_desc_limit_query project_id: project
   when "order_by_state_and_population_query"
-    order_by_state_and_population_query project_id: ENV["GOOGLE_CLOUD_PROJECT"]
+    order_by_state_and_population_query project_id: project
   when "where_order_by_limit_query"
-    where_order_by_limit_query project_id: ENV["GOOGLE_CLOUD_PROJECT"]
+    where_order_by_limit_query project_id: project
   when "range_order_by_query"
-    range_order_by_query project_id: ENV["GOOGLE_CLOUD_PROJECT"]
+    range_order_by_query project_id: project
   when "invalid_range_order_by_query"
-    invalid_range_order_by_query project_id: ENV["GOOGLE_CLOUD_PROJECT"]
+    invalid_range_order_by_query project_id: project
   else
-    puts "Command not found!"
+    puts <<-usage
+Usage: bundle exec ruby order_limit_data.rb [command]
+
+Commands:
+  order_by_name_limit_query            Create an order by name with limit query.
+  order_by_name_desc_limit_query       Create an order by name descending with limit query.
+  order_by_state_and_population_query  Create an order by state and descending population query.
+  where_order_by_limit_query           Combine where with order by and limit in a query.
+  range_order_by_query                 Create a range with order by query.
+  invalid_range_order_by_query         An example of an invalid range with order by query.
+    usage
   end
 end

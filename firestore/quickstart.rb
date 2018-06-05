@@ -26,14 +26,15 @@ end
 
 def add_data_1 project_id:
   # project_id = "Your Google Cloud Project ID"
-  firestore = Google::Cloud::Firestore.new(project_id: project_id)
+
+  firestore = Google::Cloud::Firestore.new project_id: project_id
   # [START fs_add_data_1]
   doc_ref = firestore.doc "users/alovelace"
 
   doc_ref.set({
     first: "Ada",
-    last: "Lovelace",
-    born: 1815
+    last:  "Lovelace",
+    born:  1815
   })
 
   puts "Added data to the alovelace document in the users collection."
@@ -42,15 +43,16 @@ end
 
 def add_data_2 project_id:
   # project_id = "Your Google Cloud Project ID"
-  firestore = Google::Cloud::Firestore.new(project_id: project_id)
+
+  firestore = Google::Cloud::Firestore.new project_id: project_id
   # [START fs_add_data_2]
   doc_ref = firestore.doc "users/aturing"
 
   doc_ref.set({
-    first: "Alan",
+    first:  "Alan",
     middle: "Mathison",
-    last: "Turing",
-    born: 1912
+    last:   "Turing",
+    born:   1912
   })
 
   puts "Added data to the aturing document in the users collection."
@@ -59,7 +61,8 @@ end
 
 def get_all project_id:
   # project_id = "Your Google Cloud Project ID"
-  firestore = Google::Cloud::Firestore.new(project_id: project_id)
+
+  firestore = Google::Cloud::Firestore.new project_id: project_id
   # [START fs_get_all]
   users_ref = firestore.col "users"
   users_ref.get do |user|
@@ -69,17 +72,26 @@ def get_all project_id:
 end
 
 
-if __FILE__ == $0
+if __FILE__ == $PROGRAM_NAME
+  project = ENV["FIRESTORE_PROJECT_ID"]
   case ARGV.shift
   when "initialize"
     initialize_firestore_client
   when "add_data_1"
-    add_data_1 project_id: ENV["GOOGLE_CLOUD_PROJECT"]
+    add_data_1 project_id: project
   when "add_data_2"
-    add_data_2 project_id: ENV["GOOGLE_CLOUD_PROJECT"]
+    add_data_2 project_id: project
   when "get_all"
-    get_all project_id: ENV["GOOGLE_CLOUD_PROJECT"]
+    get_all project_id: project
   else
-    puts "Command not found!"
+    puts <<-usage
+Usage: bundle exec ruby quickstart.rb [command]
+
+Commands:
+  initialize  Initialize a Cloud Firestore client.
+  add_data_1  Add a sample document to a collection.
+  add_data_2  Add a sample document.
+  get_all     Retrieve all documents from a collection.
+    usage
   end
 end
