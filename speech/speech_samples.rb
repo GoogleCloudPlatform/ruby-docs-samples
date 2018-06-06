@@ -173,47 +173,6 @@ def speech_async_recognize_gcs_words storage_path: nil
 # [END speech_async_recognize_gcs_words]
 end
 
-def speech_streaming_recognize_sync audio_file_path: nil
-# [START speech_streaming]
-  # audio_file_path = "Path to file on which to perform speech recognition"
-
-  require "google/cloud/speech"
-
-  speech = Google::Cloud::Speech.new
-
-  audio_content = File.binread audio_file_path
-  bytes_total   = audio_content.size
-  bytes_sent    = 0
-  chunk_size    = 32000
-  final_result  = []
-
-  requests = Enumerator.new do |enum|
-    streaming_config = {config:{encoding:                :LINEAR16,
-                                sample_rate_hertz:       16000,
-                                language_code:           "en-US",
-                                enable_word_time_offsets: true     }}
-    enum << {streaming_config: streaming_config}
-
-    while bytes_sent < bytes_total do
-      enum << {audio_content: audio_content[bytes_sent, chunk_size]}
-      bytes_sent += chunk_size
-      sleep 1
-    end
-  end
-
-  responses = speech.streaming_recognize requests
-  responses.each do |response|
-    response.results.each do |result|
-      result.alternatives.each do |alternative|
-        final_result << alternative.transcript if result.is_final
-      end
-    end
-  end
-
-  puts final_result.join " "
-# [END speech_streaming]
-end
-
 def speech_streaming_recognize audio_file_path: nil
 # [START speech_streaming]
   # audio_file_path = "Path to file on which to perform speech recognition"
