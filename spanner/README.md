@@ -49,20 +49,28 @@ environment variable to the path to the key file, for example:
     Usage: bundle exec ruby spanner_samples.rb [command] [arguments]
 
     Commands:
-      create_database              <instance_id> <database_id> Create Database
-      insert_data                  <instance_id> <database_id> Insert Data
-      query_data                   <instance_id> <database_id> Query Data
-      read_data                    <instance_id> <database_id> Read Data
-      create_index                 <instance_id> <database_id> Create Index
-      create_storing_index         <instance_id> <database_id> Create Storing Index
-      add_column                   <instance_id> <database_id> Add Column
-      update_data                  <instance_id> <database_id> Update Data
-      query_data_with_new_column   <instance_id> <database_id> Query Data with New Column
-      read_write_transaction       <instance_id> <database_id> Read-Write Transaction
-      query_data_with_index        <instance_id> <database_id> Query Data with Index
-      read_data_with_index         <instance_id> <database_id> Read Data with Index
-      read_data_with_storing_index <instance_id> <database_id> Read Data with Storing Index
-      read_only_transaction        <instance_id> <database_id> Read-Only Transaction
+      create_database                    <instance_id> <database_id> Create Database
+      create_table_with_timestamp_column <instance_id> <database_id> Create table Performances with commit timestamp column
+      insert_data                        <instance_id> <database_id> Insert Data
+      insert_data_with_timestamp_column  <instance_id> <database_id> Inserts data into Performances table containing the commit timestamp column
+      query_data                         <instance_id> <database_id> Query Data
+      read_data                          <instance_id> <database_id> Read Data
+      read_stale_data                    <instance_id> <database_id> Read Stale Data
+      create_index                       <instance_id> <database_id> Create Index
+      create_storing_index               <instance_id> <database_id> Create Storing Index
+      add_column                         <instance_id> <database_id> Add Column
+      add_timestamp_column               <instance_id> <database_id> Alters existing Albums table, adding a commit timestamp column
+      update_data                        <instance_id> <database_id> Update Data
+      update_data_with_timestamp_column  <instance_id> <database_id> Updates two records in the altered table where the commit timestamp column was added
+      query_data_with_new_column         <instance_id> <database_id> Query Data with New Column
+      query_data_with_timestamp_column   <instance_id> <database_id> Queries data from altered table where the commit timestamp column was added
+      query_data_with_index              <instance_id> <database_id> <start_title> <end_title> Query Data with Index
+      read_write_transaction             <instance_id> <database_id> Read-Write Transaction
+      read_data_with_index               <instance_id> <database_id> Read Data with Index
+      read_data_with_storing_index       <instance_id> <database_id> Read Data with Storing Index
+      read_only_transaction              <instance_id> <database_id> Read-Only Transaction
+      spanner_batch_client               <instance_id> <database_id> Use Spanner batch query with a thread pool
 
     Environment variables:
       GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
+

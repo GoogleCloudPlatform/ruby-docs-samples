@@ -14,8 +14,20 @@
 
 require_relative "../iam"
 require "rspec"
+require "rspec/retry"
 require "google/cloud/storage"
 require "tempfile"
+
+RSpec.configure do |config|
+  # show retry status in spec process
+  config.verbose_retry = true
+  # show exception that triggers a retry if verbose_retry is set to true
+  config.display_try_failure_messages = true
+
+  # set retry count and retry sleep interval to 10 seconds
+  config.default_retry_count = 5
+  config.default_sleep_interval = 10
+end
 
 describe "Google Cloud Storage IAM sample" do
 
@@ -33,7 +45,6 @@ describe "Google Cloud Storage IAM sample" do
       policy.roles[@test_role] = [@test_member]
     end
 
-    @bucket.policy force: true
     expect(@bucket.policy.roles[@test_role]).to include @test_member
 
    expect {
@@ -48,7 +59,6 @@ describe "Google Cloud Storage IAM sample" do
       policy.roles[@test_role] = []
     end
 
-    @bucket.policy force: true
     expect(@bucket.policy.roles[@test_role]).to eq nil
 
     expect {
@@ -60,7 +70,6 @@ describe "Google Cloud Storage IAM sample" do
       /Added #{@test_member} with role #{@test_role}/
     ).to_stdout
 
-    @bucket.policy force: true
     expect(@bucket.policy.roles[@test_role]).to include @test_member
   end
 
@@ -69,7 +78,6 @@ describe "Google Cloud Storage IAM sample" do
       policy.roles[@test_role] = [@test_member]
     end
 
-    @bucket.policy force: true
     expect(@bucket.policy.roles[@test_role]).to include @test_member
 
     expect {
@@ -81,7 +89,6 @@ describe "Google Cloud Storage IAM sample" do
       /Removed #{@test_member} with role #{@test_role}/
     ).to_stdout
 
-    @bucket.policy force: true
     expect(@bucket.policy.roles[@test_role]).to eq nil
   end
 end

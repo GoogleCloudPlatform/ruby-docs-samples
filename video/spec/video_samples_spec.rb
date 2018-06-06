@@ -21,7 +21,6 @@ require "uri"
 describe "Google Cloud Video API sample" do
 
   before do
-    @faces_file       = "demomaker/google_gmail.mp4"
     @labels_file      = "demomaker/cat.mp4"
     @shots_file       = "demomaker/gbikes_dinosaur.mp4"
     @safe_search_file = "demomaker/pizza.mp4"
@@ -31,7 +30,7 @@ describe "Google Cloud Video API sample" do
    expect {
      analyze_labels_gcs path: "gs://#{@labels_file}"
    }.to output(
-     /Label description: Animal/
+     /Label description: animal/
    ).to_stdout
   end
 
@@ -47,7 +46,7 @@ describe "Google Cloud Video API sample" do
       expect {
         analyze_labels_local path: local_tempfile.path
       }.to output(
-        /Label description: Animal/
+        /Label description: animal/
       ).to_stdout
     ensure
       local_tempfile.close
@@ -55,19 +54,11 @@ describe "Google Cloud Video API sample" do
     end
   end
 
-  it "can analyze faces from a gcs file" do
+  it "can analyze explicit content from a gcs file" do
     expect {
-      analyze_faces path: "gs://#{@labels_file}"
+      analyze_explicit_content path: "gs://#{@safe_search_file}"
     }.to output(
-      /Thumbnail size:/
-    ).to_stdout
-  end
-
-  it "can analyze safe search from a gcs file" do
-    expect {
-      analyze_safe_search path: "gs://#{@safe_search_file}"
-    }.to output(
-      /adult:   VERY_UNLIKELY/
+      /pornography: VERY_UNLIKELY/
     ).to_stdout
   end
 
@@ -75,7 +66,7 @@ describe "Google Cloud Video API sample" do
     expect {
       analyze_shots path: "gs://#{@shots_file}"
     }.to output(
-      /0.0 through 5/
+      /0.0 to 5/
     ).to_stdout
   end
 end

@@ -1,4 +1,4 @@
-# Copyright 2017 Google Inc.
+# Copyright 2015 Google Inc. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,40 +15,42 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: grpc-hello
+  name: esp-echo
 spec:
   ports:
   - port: 80
-    targetPort: 9000
+    targetPort: 8081
     protocol: TCP
     name: http
   selector:
-    app: grpc-hello
+    app: esp-echo
   type: LoadBalancer
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: grpc-hello
+  name: esp-echo
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        app: grpc-hello
+        app: esp-echo
     spec:
       containers:
+      # [START esp]
       - name: esp
         image: gcr.io/endpoints-release/endpoints-runtime:1
         args: [
-          "-P", "9000",
-          "-a", "grpc://127.0.0.1:50051",
-          "-s", "SERVICE_NAME",
-          "-v", "SERVICE_CONFIG_ID",
+          "--http_port", "8081",
+          "--backend", "127.0.0.1:8080",
+          "--service", "SERVICE_NAME",
+          "--rollout_strategy", "managed",
         ]
+      # [END esp]
         ports:
-          - containerPort: 9000
-      - name: ruby-grpc-hello
-        image: gcr.io/GOOGLE_CLOUD_PROJECT/ruby-grpc-hello:1.0
+          - containerPort: 8081
+      - name: echo
+        image: gcr.io/google-samples/echo-ruby:1.0
         ports:
-          - containerPort: 50051
+          - containerPort: 8080

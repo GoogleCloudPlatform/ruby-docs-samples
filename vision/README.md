@@ -148,4 +148,4 @@ set in the
     Usage: ruby draw_box_around_faces.rb [input-file] [output-file]
 
     Example:
-      ruby draw_box_around_faces.rb images/face.png output-image.png
+      ruby draw_box_around_faces.rb images/face_no_surprise.png output-image.png

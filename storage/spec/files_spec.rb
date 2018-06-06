@@ -14,15 +14,28 @@
 
 require_relative "../files"
 require "rspec"
+require "rspec/retry"
 require "google/cloud/storage"
 require "tempfile"
 require "net/http"
 require "uri"
 
+RSpec.configure do |config|
+  # show retry status in spec process
+  config.verbose_retry = true
+  # show exception that triggers a retry if verbose_retry is set to true
+  config.display_try_failure_messages = true
+
+  # set retry count and retry sleep interval to 10 seconds
+  config.default_retry_count = 5
+  config.default_sleep_interval = 10
+end
+
 describe "Google Cloud Storage files sample" do
 
   before do
     @bucket_name          = ENV["GOOGLE_CLOUD_STORAGE_BUCKET"]
+    @kms_key              = ENV["GOOGLE_CLOUD_KMS_KEY"]
     @storage              = Google::Cloud::Storage.new
     @project_id           = @storage.project
     @bucket               = @storage.bucket @bucket_name
@@ -168,6 +181,52 @@ describe "Google Cloud Storage files sample" do
         to eq "Content of test file.txt\n"
   end
 
+  it "can upload a local file to a bucket with kms key" do
+    delete_file "file.txt"
+    expect(@bucket.file "file.txt").to be nil
+
+    expect {
+      upload_with_kms_key project_id:        @project_id,
+                          bucket_name:       @bucket_name,
+                          local_file_path:   @local_file_path,
+                          storage_file_path: "file.txt",
+                          kms_key:           @kms_key
+    }.to output(
+      /Uploaded file.txt and encrypted service side using #{@kms_key}/
+    ).to_stdout
+
+    expect(@bucket.file "file.txt").not_to be nil
+    expect(@bucket.file("file.txt").kms_key).to include @kms_key
+    expect(storage_file_content "file.txt").to eq "Content of test file.txt\n"
+  end
+
+  it "can set custom metadata for a file" do
+    metadata_key   = "test-metadata-key"
+    metadata_value = "test-metadata-value"
+    content_type   = "text/plain"
+
+    delete_file "file.txt"
+    expect(@bucket.file "file.txt").to be nil
+
+    upload @local_file_path, "file.txt"
+
+    expect {
+      set_metadata project_id:     @project_id,
+                   bucket_name:    @bucket_name,
+                   file_name:      "file.txt",
+                   content_type:   content_type,
+                   metadata_key:   metadata_key,
+                   metadata_value: metadata_value
+    }.to output(
+      "Metadata for file.txt has been updated.\n"
+    ).to_stdout
+
+    file = @bucket.file "file.txt"
+    expect(file).not_to be nil
+    expect(file.content_type).to eq content_type
+    expect(file.metadata[metadata_key]).to eq metadata_value
+  end
+
   it "can download a file from a bucket" do
     begin
       delete_file "file.txt"
@@ -195,6 +254,68 @@ describe "Google Cloud Storage files sample" do
       local_file.close
       local_file.unlink
     end
+  end
+
+  it "can download a public readable file from a bucket" do
+    begin
+      delete_file "file.txt"
+      expect(@bucket.file "file.txt").to be nil
+
+      upload @local_file_path, "file.txt"
+
+      local_file = Tempfile.new "cloud-storage-tests"
+      expect(File.size local_file.path).to eq 0
+
+      expect {
+        download_public_file bucket_name: @bucket_name,
+                             file_name:   "file.txt",
+                             local_path:  local_file.path
+      }.to output("Downloaded file.txt\n").to_stdout
+
+      expect(File.size local_file.path).to be > 0
+      expect(File.read local_file.path).to eq(
+        "Content of test file.txt\n"
+      )
+    ensure
+      local_file.close
+      local_file.unlink
+    end
+  end
+
+  it "can rename a file in a bucket" do
+    delete_file "file.txt"
+    expect(@bucket.file "file.txt").to be nil
+
+    upload @local_file_path, "file.txt"
+
+    expect {
+      rename_file project_id:  @project_id,
+                  bucket_name: @bucket_name,
+                  file_name:   "file.txt",
+                  new_name:    "rename_file.txt"
+    }.to output("file.txt has been renamed to rename_file.txt\n").to_stdout
+
+    expect(@bucket.file "rename_file.txt").not_to be nil
+  end
+
+  it "can copy a file" do
+    delete_file "file.txt"
+    expect(@bucket.file "file.txt").to be nil
+
+    upload @local_file_path, "file.txt"
+
+    expect {
+      copy_file project_id:         @project_id,
+                source_bucket_name: @bucket_name,
+                source_file_name:   "file.txt",
+                dest_bucket_name:   @bucket_name,
+                dest_file_name:     "copy_file.txt"
+    }.to output(
+      "file.txt in #{@bucket_name} copied to copy_file.txt in #{@bucket_name}\n"
+    ).to_stdout
+
+    expect(@bucket.file "copy_file.txt").not_to be nil
+    expect(@bucket.file "file.txt").not_to be nil
   end
 
   it "can download a file from a bucket using requester pays" do

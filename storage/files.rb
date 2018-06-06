@@ -99,12 +99,34 @@ def upload_encrypted_file project_id:, bucket_name:, local_file_path:,
   # [END upload_encrypted_file]
 end
 
+def upload_with_kms_key project_id:, bucket_name:, local_file_path:,
+                          storage_file_path: nil, kms_key:
+  # [START storage_upload_with_kms_key]
+  # project_id        = "Your Google Cloud project ID"
+  # bucket_name       = "Your Google Cloud Storage bucket name"
+  # local_file_path   = "Path to local file to upload"
+  # storage_file_path = "Path to store the file in Google Cloud Storage"
+  # kms_key           = "KMS key resource id"
+
+  require "google/cloud/storage"
+
+  storage = Google::Cloud::Storage.new project: project_id
+
+  bucket = storage.bucket bucket_name
+
+  file = bucket.create_file local_file_path, storage_file_path,
+                            kms_key: kms_key
+
+  puts "Uploaded #{file.name} and encrypted service side using #{file.kms_key}"
+  # [END storage_upload_with_kms_key]
+end
+
 def download_file project_id:, bucket_name:, file_name:, local_path:
   # [START download_file]
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
   # file_name   = "Name of file in Google Cloud Storage to download locally"
-  # local_path  = "Path to local file to save"
+  # local_path  = "Destination path for downloaded file"
 
   require "google/cloud/storage"
 
@@ -118,12 +140,30 @@ def download_file project_id:, bucket_name:, file_name:, local_path:
   # [END download_file]
 end
 
+def download_public_file bucket_name:, file_name:, local_path:
+  # [START download_public_file]
+  # bucket_name = "A public Google Cloud Storage bucket name"
+  # file_name   = "Name of a file in the Cloud Storage bucket"
+  # local_path  = "Destination path for downloaded file"
+
+  require "google/cloud/storage"
+
+  storage = Google::Cloud::Storage.anonymous
+  bucket  = storage.bucket bucket_name, skip_lookup: true
+  file    = bucket.file file_name
+
+  file.download local_path
+
+  puts "Downloaded #{file.name}"
+  # [END download_public_file]
+end
+
 def download_file_requester_pays project_id:, bucket_name:, file_name:, local_path:
   # [START download_file_requester_pays]
   # project_id  = "Your Google Cloud billable project ID"
   # bucket_name = "A Google Cloud Storage bucket name"
   # file_name   = "Name of file in Google Cloud Storage to download locally"
-  # local_path  = "Path to local file to save"
+  # local_path  = "Destination path for downloaded file"
 
   require "google/cloud/storage"
 
@@ -143,7 +183,7 @@ def download_encrypted_file project_id:, bucket_name:, storage_file_path:,
   # project_id     = "Your Google Cloud project ID"
   # bucket_name    = "Your Google Cloud Storage bucket name"
   # file_name      = "Name of file in Google Cloud Storage to download locally"
-  # local_path     = "Path to local file to save"
+  # local_path     = "Destination path for downloaded file"
   # encryption_key = "AES-256 encryption key"
 
   require "google/cloud/storage"
@@ -214,6 +254,32 @@ def list_file_details project_id:, bucket_name:, file_name:
   # [END list_file_details]
 end
 
+def set_metadata project_id:, bucket_name:, file_name:, content_type:, metadata_key:, metadata_value:
+  # [START set_metadata]
+  # project_id     = "Your Google Cloud project ID"
+  # bucket_name    = "Your Google Cloud Storage bucket name"
+  # file_name      = "Name of file in Google Cloud Storage"
+  # content_type   = "file Content-Type"
+  # metadata_key   = "Custom metadata key"
+  # metadata_value = "Custom metadata value"
+  require "google/cloud/storage"
+
+  storage = Google::Cloud::Storage.new project: project_id
+  bucket  = storage.bucket bucket_name
+  file    = bucket.file file_name
+
+  file.update do |file|
+    # Fixed key file metadata
+    file.content_type = content_type
+
+    # Custom file metadata
+    file.metadata[metadata_key] = metadata_value
+  end
+
+  puts "Metadata for #{file_name} has been updated."
+  # [END set_metadata]
+end
+
 def make_file_public project_id:, bucket_name:, file_name:
   # [START make_file_public]
   # project_id  = "Your Google Cloud project ID"
@@ -249,7 +315,7 @@ def rename_file project_id:, bucket_name:, file_name:, new_name:
 
   file.delete
 
-  puts "my-file.txt has been renamed to #{renamed_file.name}"
+  puts "#{file_name} has been renamed to #{renamed_file.name}"
   # [END rename_file]
 end
 
@@ -269,10 +335,10 @@ def copy_file project_id:, source_bucket_name:, source_file_name:,
   file    = bucket.file source_file_name
 
   destination_bucket = storage.bucket dest_bucket_name
-  destination_file   = file.copy destination_bucket.name, file.name
+  destination_file   = file.copy destination_bucket.name, dest_file_name
 
   puts "#{file.name} in #{bucket.name} copied to " +
-       "#{copied_file.name} in #{destination_bucket.name}"
+       "#{destination_file.name} in #{destination_bucket.name}"
   # [END copy_file]
 end
 
@@ -325,19 +391,31 @@ def run_sample arguments
     list_bucket_contents project_id:  project_id,
                          bucket_name: arguments.shift
   when "upload"
-    upload_file project_id:      project_id,
-                bucket_name:     arguments.shift,
-                local_file_path: arguments.shift
+    upload_file project_id:        project_id,
+                bucket_name:       arguments.shift,
+                local_file_path:   arguments.shift,
+                storage_file_path: arguments.shift
   when "encrypted_upload"
-    upload_encrypted_file project_id:      project_id,
-                          bucket_name:     arguments.shift,
-                          local_file_path: arguments.shift,
-                          encryption_key:  Base64.decode64(arguments.shift)
+    upload_encrypted_file project_id:        project_id,
+                          bucket_name:       arguments.shift,
+                          local_file_path:   arguments.shift,
+                          storage_file_path: arguments.shift,
+                          encryption_key:    Base64.decode64(arguments.shift)
+  when "kms_upload"
+    upload_with_kms_key project_id:        project_id,
+                        bucket_name:       arguments.shift,
+                        local_file_path:   arguments.shift,
+                        storage_file_path: arguments.shift,
+                        kms_key:           arguments.shift
   when "download"
     download_file project_id:  project_id,
                   bucket_name: arguments.shift,
                   file_name:   arguments.shift,
                   local_path:  arguments.shift
+  when "download_public_file"
+    download_public_file bucket_name: arguments.shift,
+                         file_name:   arguments.shift,
+                         local_path:  arguments.shift
   when "encrypted_download"
     download_file project_id:    project_id,
                   bucket_name:   arguments.shift,
@@ -389,11 +467,13 @@ def run_sample arguments
 Usage: bundle exec ruby files.rb [command] [arguments]
 
 Commands:
-  list              <bucket>                                        List all files in the bucket
-  upload            <bucket> <file>                                 Upload local file to a bucket
-  encrypted_upload  <bucket> <file> <base64_encryption_key>         Upload local file as an encrypted file to a bucket
-  download           <bucket> <file> <path>                         Download a file from a bucket
-  encrypted_download <bucket> <file> <path> <base64_encryption_key> Download an encrypted file from a bucket
+  list                 <bucket>                                     List all files in the bucket
+  upload               <bucket> <file> <dest_path>                  Upload local file to a bucket
+  encrypted_upload     <bucket> <file> <dest_path> <encryption_key> Upload local file as an encrypted file to a bucket
+  kms_upload           <bucket> <file> <dest_path> <kms_key>        Upload local file and encrypt service side using a KMS key
+  download             <bucket> <file> <path>                       Download a file from a bucket
+  download_public_file <bucket> <file> <path>                       Download a publically accessible file from a bucket
+  encrypted_download <bucket> <file> <path> <encryption_key>        Download an encrypted file from a bucket
   download_with_requester_pays <project> <bucket> <file> <path>     Download a file from a requester pays enabled bucket
   rotate_encryption_key <bucket> <file> <base64_current_encryption_key> <base64_new_encryption_key> Update encryption key of an encrypted file.
   generate_encryption_key                                           Generate a sample encryption key

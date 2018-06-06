@@ -13,168 +13,95 @@
 # limitations under the License.
 
 def analyze_labels_gcs path:
-  # [START analyze_labels_gcs]
+  # [START video_analyze_labels_gcs]
   # path = "Path to a video file on Google Cloud Storage: gs://bucket/video.mp4"
 
-  require "google/cloud/video_intelligence/v1beta1"
+  require "google/cloud/video_intelligence"
 
-  video_client = Google::Cloud::VideoIntelligence::V1beta1::VideoIntelligenceServiceClient.new
-  features     = [:LABEL_DETECTION]
+  video = Google::Cloud::VideoIntelligence.new
 
   # Register a callback during the method call
-  operation = video_client.annotate_video path, features do |operation|
+  operation = video.annotate_video input_uri: path, features: [:LABEL_DETECTION] do |operation|
     raise operation.results.message? if operation.error?
     puts "Finished Processing."
 
-    # first result is retrieved because a single video was processed
-    annotation_result = operation.results.annotation_results.first
+    labels = operation.results.annotation_results.first.segment_label_annotations
 
-    annotation_result.label_annotations.each do |label_annotation|
-      puts "Label description: #{label_annotation.description}"
-      puts "Locations:"
+    labels.each do |label|
+      puts "Label description: #{label.entity.description}"
 
-      label_annotation.locations.each do |location|
-        if location.level == :VIDEO_LEVEL
-          puts "Entire video"
-        else
-          segment          = location.segment
-          start_in_seconds = segment.start_time_offset / 1000000.0
-          end_in_seconds   = segment.end_time_offset / 1000000.0
+      label.category_entities.each do |category_entity|
+        puts "Label category description: #{category_entity.description}"
+      end
 
-          puts "#{start_in_seconds} through #{end_in_seconds}"
-        end
+      label.segments.each do |segment|
+        start_time = ( segment.segment.start_time_offset.seconds +
+                       segment.segment.start_time_offset.nanos / 1e9 )
+        end_time =   ( segment.segment.end_time_offset.seconds +
+                       segment.segment.end_time_offset.nanos / 1e9 )
+
+        puts "Segment: #{start_time} to #{end_time}"
+        puts "Confidence: #{segment.confidence}"
       end
     end
   end
 
   puts "Processing video for label annotations:"
   operation.wait_until_done!
-  # [END analyze_labels_gcs]
+  # [END video_analyze_labels_gcs]
 end
 
 def analyze_labels_local path:
-  # [START analyze_labels_local]
+  # [START video_analyze_labels_local]
   # path = "Path to a local video file: path/to/file.mp4"
 
-  require "base64"
-  require "google/cloud/video_intelligence/v1beta1"
+  require "google/cloud/video_intelligence"
 
-  video_client  = Google::Cloud::VideoIntelligence::V1beta1::VideoIntelligenceServiceClient.new
-  features      = [:LABEL_DETECTION]
-  video_file    = File.read path
-  encoded_video = Base64.encode64 video_file
+  video = Google::Cloud::VideoIntelligence.new
+
+  video_contents = File.binread path
 
   # Register a callback during the method call
-  operation = video_client.annotate_video nil, features, input_content: encoded_video do |operation|
+  operation = video.annotate_video input_content: video_contents, features: [:LABEL_DETECTION] do |operation|
     raise operation.results.message? if operation.error?
-    puts "Finished processing."
+    puts "Finished Processing."
 
-    # first result is retrieved because a single video was processed
-    annotation_result = operation.results.annotation_results.first
+    labels = operation.results.annotation_results.first.segment_label_annotations
 
-    annotation_result.label_annotations.each do |label_annotation|
-      puts "Label description: #{label_annotation.description}"
-      puts "Locations:"
+    labels.each do |label|
+      puts "Label description: #{label.entity.description}"
 
-      label_annotation.locations.each do |location|
-        if location.level == :VIDEO_LEVEL
-          puts "Entire video"
-        else
-          segment          = location.segment
-          start_in_seconds = segment.start_time_offset / 1000000.0
-          end_in_seconds   = segment.end_time_offset / 1000000.0
+      label.category_entities.each do |category_entity|
+        puts "Label category description: #{category_entity.description}"
+      end
 
-          puts "#{start_in_seconds} through #{end_in_seconds}"
-        end
+      label.segments.each do |segment|
+        start_time = ( segment.segment.start_time_offset.seconds +
+                       segment.segment.start_time_offset.nanos / 1e9 )
+        end_time =   ( segment.segment.end_time_offset.seconds +
+                       segment.segment.end_time_offset.nanos / 1e9 )
+
+        puts "Segment: #{start_time} to #{end_time}"
+        puts "Confidence: #{segment.confidence}"
       end
     end
   end
 
   puts "Processing video for label annotations:"
   operation.wait_until_done!
-  # [END analyze_labels_local]
-end
-
-def analyze_faces path:
-  # [START analyze_faces]
-  # path = "Path to a video file on Google Cloud Storage: gs://bucket/video.mp4"
-
-  require "google/cloud/video_intelligence/v1beta1"
-
-  video_client = Google::Cloud::VideoIntelligence::V1beta1::VideoIntelligenceServiceClient.new
-  features     = [:FACE_DETECTION]
-
-  # Register a callback during the method call
-  operation = video_client.annotate_video path, features do |operation|
-    raise operation.results.message? if operation.error?
-    puts "Finished processing."
-
-    # first result is retrieved because a single video was processed
-    annotation_result = operation.results.annotation_results.first
-
-    annotation_result.face_annotations.each do |face_annotation|
-      puts "Thumbnail size: #{face_annotation.thumbnail.length}"
-      puts "Locations:"
-
-      face_annotation.segments.each do |segment|
-        start_in_seconds = segment.start_time_offset / 1000000.0
-        end_in_seconds   = segment.end_time_offset / 1000000.0
-
-        puts "#{start_in_seconds} through #{end_in_seconds}"
-      end
-    end
-  end
-
-  puts "Processing video for face annotations:"
-  operation.wait_until_done!
-  # [END analyze_faces]
-end
-
-def analyze_safe_search path:
-  # [START analyze_safe_search]
-  # path = "Path to a video file on Google Cloud Storage: gs://bucket/video.mp4"
-
-  require "google/cloud/video_intelligence/v1beta1"
-
-  video_client = Google::Cloud::VideoIntelligence::V1beta1::VideoIntelligenceServiceClient.new
-  features     = [:SAFE_SEARCH_DETECTION]
-
-  # Register a callback during the method call
-  operation = video_client.annotate_video path, features do |operation|
-    raise operation.results.message? if operation.error?
-    puts "Finished processing."
-
-    # first result is retrieved because a single video was processed
-    annotation_result = operation.results.annotation_results.first
-
-    annotation_result.safe_search_annotations.each do |safe_search_annotation|
-      time_in_seconds = safe_search_annotation.time_offset / 1000000.0
-
-      puts "Time:    #{time_in_seconds}"
-      puts "adult:   #{safe_search_annotation.adult}"
-      puts "spoof:   #{safe_search_annotation.spoof}"
-      puts "medical: #{safe_search_annotation.medical}"
-      puts "racy:    #{safe_search_annotation.racy}"
-      puts "violent: #{safe_search_annotation.violent}"
-    end
-  end
-
-  puts "Processing video for face annotations:"
-  operation.wait_until_done!
-  # [END analyze_safe_search]
+  # [END video_analyze_labels_local]
 end
 
 def analyze_shots path:
-  # [START analyze_shots]
+  # [START video_analyze_shots]
   # path = "Path to a video file on Google Cloud Storage: gs://bucket/video.mp4"
 
-  require "google/cloud/video_intelligence/v1beta1"
+  require "google/cloud/video_intelligence"
 
-  video_client = Google::Cloud::VideoIntelligence::V1beta1::VideoIntelligenceServiceClient.new
-  features     = [:SHOT_CHANGE_DETECTION]
+  video = Google::Cloud::VideoIntelligence.new
 
   # Register a callback during the method call
-  operation = video_client.annotate_video path, features do |operation|
+  operation = video.annotate_video input_uri: path, features: [:SHOT_CHANGE_DETECTION] do |operation|
     raise operation.results.message? if operation.error?
     puts "Finished processing."
 
@@ -183,16 +110,46 @@ def analyze_shots path:
     puts "Scenes:"
 
     annotation_result.shot_annotations.each do |shot_annotation|
-      start_in_seconds = shot_annotation.start_time_offset / 1000000.0
-      end_in_seconds   = shot_annotation.end_time_offset / 1000000.0
+      start_time = ( shot_annotation.start_time_offset.seconds +
+                     shot_annotation.start_time_offset.nanos / 1e9 )
+      end_time =   ( shot_annotation.end_time_offset.seconds +
+                     shot_annotation.end_time_offset.nanos / 1e9 )
 
-      puts "#{start_in_seconds} through #{end_in_seconds}"
+      puts "#{start_time} to #{end_time}"
     end
   end
 
   puts "Processing video for shot change annotations:"
   operation.wait_until_done!
-  # [END analyze_shots]
+  # [END video_analyze_shots]
+end
+
+def analyze_explicit_content path:
+  # [START video_analyze_explicit_content]
+  # path = "Path to a video file on Google Cloud Storage: gs://bucket/video.mp4"
+
+  require "google/cloud/video_intelligence"
+
+  video = Google::Cloud::VideoIntelligence.new
+
+  # Register a callback during the method call
+  operation = video.annotate_video input_uri: path, features: [:EXPLICIT_CONTENT_DETECTION] do |operation|
+    raise operation.results.message? if operation.error?
+    puts "Finished Processing."
+
+    explicit_annotation = operation.results.annotation_results.first.explicit_annotation
+
+    explicit_annotation.frames.each do |frame|
+      frame_time = frame.time_offset.seconds + frame.time_offset.nanos / 1e9
+
+      puts "Time: #{frame_time}"
+      puts "pornography: #{frame.pornography_likelihood}"
+    end
+  end
+
+  puts "Processing video for label annotations:"
+  operation.wait_until_done!
+  # [END video_analyze_explicit_content]
 end
 
 def run_sample arguments
@@ -203,22 +160,19 @@ def run_sample arguments
     analyze_labels_gcs path: arguments.shift
   when "analyze_labels_local"
     analyze_labels_local path: arguments.shift
-  when "analyze_faces"
-    analyze_faces path: arguments.shift
-  when "analyze_safe_search"
-    analyze_safe_search path: arguments.shift
   when "analyze_shots"
     analyze_shots path: arguments.shift
+  when "analyze_explicit_content"
+    analyze_explicit_content path: arguments.shift
   else
     puts <<-usage
 Usage: bundle exec ruby video_samples.rb [command] [arguments]
 
 Commands:
-  analyze_labels       <gcs_path>   Detects labels given a GCS path.
-  analyze_labels_local <local_path> Detects labels given file path.
-  analyze_faces        <gcs_path>   Detects faces given a GCS path.
-  analyze_safe_search  <gcs_path>   Detects safe search features the GCS path to a video.
-  analyze_shots        <gcs_path>   Detects camera shot changes.
+  analyze_labels           <gcs_path>   Detects labels given a GCS path.
+  analyze_labels_local     <local_path> Detects labels given file path.
+  analyze_shots            <gcs_path>   Detects camera shot changes given a GCS path.
+  analyze_explicit_content <gcs_path>   Detects explicit content given a GCS path.
     usage
   end
 end

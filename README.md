@@ -28,7 +28,11 @@ scaffolding for other frameworks and use cases.
 
 ## Contributing changes
 
-* See [CONTRIBUTING.md](CONTRIBUTING.md)
+Contributions to this sample repository are always welcome and highly encouraged.
+
+See [CONTRIBUTING](CONTRIBUTING.md) for more information on how to get started.
+
+Please note that this project is released with a Contributor Code of Conduct. By participating in this project you agree to abide by its terms. See [Code of Conduct](CODE_OF_CONDUCT.md) for more information.
 
 ## Licensing
 

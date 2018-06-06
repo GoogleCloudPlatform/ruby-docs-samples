@@ -15,9 +15,21 @@
 require_relative "../datasets"
 require_relative "../tables"
 require "rspec"
+require "rspec/retry"
 require "google/cloud/bigquery"
 require "google/cloud/storage"
 require "csv"
+
+RSpec.configure do |config|
+  # show retry status in spec process
+  config.verbose_retry = true
+  # show exception that triggers a retry if verbose_retry is set to true
+  config.display_try_failure_messages = true
+
+  # set retry count and retry sleep interval to 10 seconds
+  config.default_retry_count = 5
+  config.default_sleep_interval = 10
+end
 
 describe "Google Cloud BigQuery samples" do
 
@@ -148,19 +160,43 @@ describe "Google Cloud BigQuery samples" do
 
   describe "Managing Tables" do
 
-    example "create table" do
-      @table.delete
-      expect(@dataset.table @table_name).to be nil
+    example "create table with schema" do
+      new_table_id = "create_table_with_schema"
+      expect(@dataset.table new_table_id).to be nil
 
       expect {
-        create_table project_id: @project_id,
-                     dataset_id: @dataset_name,
-                     table_id:   @table_name
+        create_table_with_schema project_id: @project_id,
+                                 dataset_id: @dataset_name,
+                                 table_id:   new_table_id
       }.to output(
-        "Created table: #{@table_name}\n"
+        "Created table: #{new_table_id}\n"
       ).to_stdout
 
-      expect(@dataset.table @table_name).not_to be nil
+      table = @dataset.table new_table_id
+      expect(table).not_to be nil
+
+      expect(table.schema.fields[0].name).to eq "full_name"
+      expect(table.schema.fields[0].type).to eq "STRING"
+      expect(table.schema.fields[0].mode).to eq "REQUIRED"
+
+      expect(table.schema.fields[1].name).to eq "age"
+      expect(table.schema.fields[1].type).to eq "INTEGER"
+      expect(table.schema.fields[1].mode).to eq "REQUIRED"
+    end
+
+    example "create table without schema" do
+      new_table_id = "create_table_without_schema"
+      expect(@dataset.table new_table_id).to be nil
+
+      expect {
+        create_table_with_schema project_id: @project_id,
+                                 dataset_id: @dataset_name,
+                                 table_id:   new_table_id
+      }.to output(
+        "Created table: #{new_table_id}\n"
+      ).to_stdout
+
+      expect(@dataset.table new_table_id).not_to be nil
     end
 
     example "list tables" do
@@ -192,15 +228,16 @@ describe "Google Cloud BigQuery samples" do
         csv << [ "Bob",   10 ]
       end
 
-      @table.load(csv_file.path).wait_until_done!
+      @table.load csv_file.path
 
-      expect {
+      capture {
         list_table_data project_id: @project_id,
                         dataset_id: @dataset_name,
                         table_id:   @table_name
-      }.to output(
-        "name = Alice\nvalue = 5\nname = Bob\nvalue = 10\n"
-      ).to_stdout
+      }
+
+      expect(captured_output).to include "name = Bob\nvalue = 10"
+      expect(captured_output).to include "name = Alice\nvalue = 5"
     end
 
     example "list table data with pagination"
@@ -226,17 +263,15 @@ describe "Google Cloud BigQuery samples" do
       expect(captured_output).to include(
         "Importing data from file: #{csv_file.path}\n"
       )
-      expect(captured_output).to match(
-        /Waiting for load job to complete: job/
-      )
+      expect(captured_output).to include "Waiting for load job to complete: job"
       expect(captured_output).to include "Data imported"
 
       loaded_data = @table.data
 
       expect(loaded_data).not_to be_empty
       expect(loaded_data.count).to eq 2
-      expect(loaded_data).to include({ "name" => "Alice", "value" => 5  })
-      expect(loaded_data).to include({ "name" => "Bob",   "value" => 10 })
+      expect(loaded_data).to include({ name: "Alice", value: 5  })
+      expect(loaded_data).to include({ name: "Bob",   value: 10 })
     end
 
     example "import data from Cloud Storage" do
@@ -262,17 +297,125 @@ describe "Google Cloud BigQuery samples" do
         "Importing data from Cloud Storage file: " +
         "gs://#{@bucket.name}/#{@file_name}.csv"
       )
-      expect(captured_output).to match(
-        /Waiting for load job to complete: job/
-      )
+      expect(captured_output).to include "Waiting for load job to complete: job"
       expect(captured_output).to include "Data imported"
 
       loaded_data = @table.data
 
       expect(loaded_data).not_to be_empty
       expect(loaded_data.count).to eq 2
-      expect(loaded_data).to include({ "name" => "Alice", "value" => 5  })
-      expect(loaded_data).to include({ "name" => "Bob",   "value" => 10 })
+      expect(loaded_data).to include({ name: "Alice", value: 5  })
+      expect(loaded_data).to include({ name: "Bob",   value: 10 })
+    end
+
+    example "import json data from GCS as new table" do
+      expect(@dataset.table "us_states").to be nil
+
+      capture do
+        import_table_from_gcs_json(
+          project_id: @project_id,
+          dataset_id: @dataset.dataset_id
+        )
+      end
+
+      expect(captured_output).to include(
+        "Importing data from Cloud Storage file: " +
+        "gs://cloud-samples-data/bigquery/us-states/us-states.json"
+      )
+      expect(captured_output).to include "Waiting for load job to complete: job"
+      expect(captured_output).to include "Data imported"
+
+      loaded_data = @dataset.table("us_states").data
+
+      expect(loaded_data).not_to be_empty
+      expect(loaded_data.count).to eq 50
+    end
+
+    example "import json data from GCS as new table with autodetect" do
+      expect(@dataset.table "us_states").to be nil
+
+      capture do
+        import_table_from_gcs_json_autodetect(
+          project_id: @project_id,
+          dataset_id: @dataset.dataset_id
+        )
+      end
+
+      expect(captured_output).to include(
+        "Importing data from Cloud Storage file: " +
+        "gs://cloud-samples-data/bigquery/us-states/us-states.json"
+      )
+      expect(captured_output).to include "Waiting for load job to complete: job"
+      expect(captured_output).to include "Data imported"
+
+      loaded_data = @dataset.table("us_states").data
+
+      expect(loaded_data).not_to be_empty
+      expect(loaded_data.count).to eq 50
+    end
+
+    example "append json data from GCS" do
+      expect(@table.data).to be_empty
+
+      @table.schema do |schema|
+        schema.string "name"
+        schema.string "post_abbr"
+      end
+
+      @table.insert [{"name": "New Statington", "post_abbr": "NS"}]
+      expect(@table.data.count).to eq 1
+
+      capture do
+        append_json_data_from_gcs(
+          project_id: @project_id,
+          dataset_id: @dataset.dataset_id,
+          table_id:   @table.table_id
+        )
+      end
+
+      expect(captured_output).to include(
+        "Importing data from Cloud Storage file: " +
+        "gs://cloud-samples-data/bigquery/us-states/us-states.json"
+      )
+      expect(captured_output).to include "Waiting for load job to complete: job"
+      expect(captured_output).to include "Data imported"
+
+      loaded_data = @table.data
+
+      expect(loaded_data).not_to be_empty
+      expect(loaded_data.count).to eq 51
+    end
+
+    example "write truncate json data from GCS" do
+      expect(@table.data).to be_empty
+
+      @table.schema do |schema|
+        schema.string "name"
+        schema.string "post_abbr"
+      end
+
+      @table.insert [{"name": "New Statington", "post_abbr": "NS"}]
+      expect(@table.data.count).to eq 1
+
+      capture do
+        write_truncate_json_data_from_gcs(
+          project_id: @project_id,
+          dataset_id: @dataset.dataset_id,
+          table_id:   @table.table_id
+        )
+      end
+
+      expect(captured_output).to include(
+        "Importing data from Cloud Storage file: " +
+        "gs://cloud-samples-data/bigquery/us-states/us-states.json"
+      )
+      expect(captured_output).to include "Waiting for load job to complete: job"
+      expect(captured_output).to include "Data imported"
+
+      loaded_data = @table.data
+
+      expect(loaded_data).not_to be_empty
+      expect(loaded_data.count).to eq 50
     end
 
     example "stream data import" do
@@ -301,8 +444,8 @@ describe "Google Cloud BigQuery samples" do
 
       expect(loaded_data).not_to be_empty
       expect(loaded_data.count).to eq 2
-      expect(loaded_data).to include({ "name" => "Alice", "value" => 5  })
-      expect(loaded_data).to include({ "name" => "Bob",   "value" => 10 })
+      expect(loaded_data).to include({ name: "Alice", value: 5  })
+      expect(loaded_data).to include({ name: "Bob",   value: 10 })
     end
   end
 
@@ -313,7 +456,7 @@ describe "Google Cloud BigQuery samples" do
         csv << [ "Bob",   10 ]
       end
 
-      @table.load(csv_file.path).wait_until_done!
+      @table.load csv_file.path
 
       expect(@bucket.file "#{@file_name}.csv").to be nil
 
@@ -330,9 +473,7 @@ describe "Google Cloud BigQuery samples" do
         "Exporting data to Cloud Storage file: " +
         "gs://#{@bucket.name}/#{@file_name}.csv"
       )
-      expect(captured_output).to match(
-        /Waiting for extract job to complete: job/
-      )
+      expect(captured_output).to include "Waiting for extract job to complete: job"
       expect(captured_output).to include "Data exported"
 
       expect(@bucket.file "#{@file_name}.csv").not_to be nil
@@ -342,9 +483,9 @@ describe "Google Cloud BigQuery samples" do
 
       csv = CSV.read local_file.path
 
-      expect(csv[0]).to eq %w[ name value ]
-      expect(csv[1]).to eq %w[ Alice 5    ]
-      expect(csv[2]).to eq %w[ Bob   10   ]
+      expect(csv).to include %w[ name value ]
+      expect(csv).to include %w[ Alice 5    ]
+      expect(csv).to include %w[ Bob   10   ]
     end
   end
 
@@ -353,27 +494,27 @@ describe "Google Cloud BigQuery samples" do
       capture do
         run_query(
           project_id:   @project_id,
-          query_string: "SELECT TOP(word, 50) as word, COUNT(*) as count " +
-                        "FROM publicdata:samples.shakespeare"
+          query_string: "SELECT APPROX_TOP_COUNT(word, 50) as word, COUNT(*) as count " +
+                        "FROM `publicdata.samples.shakespeare`"
         )
       end
 
-      expect(captured_output).to include '{"word"=>"you", "count"=>42}'
+      expect(captured_output).to include '{:value=>"you", :count=>42}'
     end
 
     example "run query as job" do
       capture do
         run_query_as_job(
           project_id:   @project_id,
-          query_string: "SELECT TOP(word, 50) as word, COUNT(*) as count " +
-                        "FROM publicdata:samples.shakespeare"
+          query_string: "SELECT APPROX_TOP_COUNT(word, 50) as word, COUNT(*) as count " +
+                        "FROM `publicdata.samples.shakespeare`"
         )
       end
 
       expect(captured_output).to include "Running query"
       expect(captured_output).to include "Waiting for query to complete"
       expect(captured_output).to include "Query results:"
-      expect(captured_output).to include '{"word"=>"you", "count"=>42}'
+      expect(captured_output).to include '{:value=>"you", :count=>42}'
     end
   end
 end

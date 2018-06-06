@@ -13,7 +13,7 @@
 # limitations under the License.
 
 def create_database project_id:, instance_id:, database_id:
-  # [START create_database]
+  # [START spanner_create_database]
   # project_id  = "Your Google Cloud project ID"
   # instance_id = "Your Spanner instance ID"
   # database_id = "Your Spanner database ID"
@@ -44,11 +44,41 @@ def create_database project_id:, instance_id:, database_id:
   job.wait_until_done!
 
   puts "Created database #{database_id} on instance #{instance_id}"
-  # [END create_database]
+  # [END spanner_create_database]
+end
+
+def create_table_with_timestamp_column project_id:, instance_id:, database_id:
+  # [START spanner_create_table_with_timestamp_column]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+
+  spanner = Google::Cloud::Spanner.new project: project_id
+  client  = spanner.database instance_id, database_id
+
+  job = client.update statements: [
+    "CREATE TABLE Performances (
+      SingerId     INT64 NOT NULL,
+      VenueId      INT64 NOT NULL,
+      EventDate    Date,
+      Revenue      INT64,
+      LastUpdateTime TIMESTAMP NOT NULL OPTIONS (allow_commit_timestamp=true)
+     ) PRIMARY KEY (SingerId, VenueId, EventDate),
+     INTERLEAVE IN PARENT Singers ON DELETE CASCADE"
+  ]
+
+  puts "Waiting for update database operation to complete"
+
+  job.wait_until_done!
+
+  puts "Created table Performances in #{database_id}"
+  # [END spanner_create_table_with_timestamp_column]
 end
 
 def insert_data project_id:, instance_id:, database_id:
-  # [START insert_data]
+  # [START spanner_insert_data]
   # project_id  = "Your Google Cloud project ID"
   # instance_id = "Your Spanner instance ID"
   # database_id = "Your Spanner database ID"
@@ -76,11 +106,37 @@ def insert_data project_id:, instance_id:, database_id:
   end
 
   puts "Inserted data"
-  # [END insert_data]
+  # [END spanner_insert_data]
+end
+
+def insert_data_with_timestamp_column project_id:, instance_id:, database_id:
+  # [START spanner_insert_data_with_timestamp_column]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+
+  spanner = Google::Cloud::Spanner.new project: project_id
+  client  = spanner.client instance_id, database_id
+
+  # Get commit_timestamp
+  commit_timestamp = client.commit_timestamp
+
+  client.commit do |c|
+    c.insert "Performances", [
+      { SingerId: 1, VenueId:  4, EventDate: "2017-10-05", Revenue: 11000, LastUpdateTime: commit_timestamp },
+      { SingerId: 1, VenueId: 19, EventDate: "2017-11-02", Revenue: 15000, LastUpdateTime: commit_timestamp },
+      { SingerId: 2, VenueId: 42, EventDate: "2017-12-23", Revenue: 7000 , LastUpdateTime: commit_timestamp }
+    ]
+  end
+
+  puts "Inserted data"
+  # [END spanner_insert_data_with_timestamp_column]
 end
 
 def query_data project_id:, instance_id:, database_id:
-  # [START query_data]
+  # [START spanner_query_data]
   # project_id  = "Your Google Cloud project ID"
   # instance_id = "Your Spanner instance ID"
   # database_id = "Your Spanner database ID"
@@ -93,11 +149,29 @@ def query_data project_id:, instance_id:, database_id:
   client.execute("SELECT SingerId, AlbumId, AlbumTitle FROM Albums").rows.each do |row|
     puts "#{row[:SingerId]} #{row[:AlbumId]} #{row[:AlbumTitle]}"
   end
-  # [END query_data]
+  # [END spanner_query_data]
+end
+
+def query_data_with_timestamp_column project_id:, instance_id:, database_id:
+  # [START spanner_query_data_with_timestamp_column]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+
+  spanner = Google::Cloud::Spanner.new project: project_id
+  client  = spanner.client instance_id, database_id
+
+  client.execute("SELECT SingerId, AlbumId, MarketingBudget, LastUpdateTime
+                  FROM Albums ORDER BY LastUpdateTime DESC").rows.each do |row|
+    puts "#{row[:SingerId]} #{row[:AlbumId]} #{row[:MarketingBudget]} #{row[:LastUpdateTime]}"
+  end
+  # [END spanner_query_data_with_timestamp_column]
 end
 
 def read_data project_id:, instance_id:, database_id:
-  # [START read_data]
+  # [START spanner_read_data]
   # project_id  = "Your Google Cloud project ID"
   # instance_id = "Your Spanner instance ID"
   # database_id = "Your Spanner database ID"
@@ -110,11 +184,30 @@ def read_data project_id:, instance_id:, database_id:
   client.read("Albums", [:SingerId, :AlbumId, :AlbumTitle]).rows.each do |row|
     puts "#{row[:SingerId]} #{row[:AlbumId]} #{row[:AlbumTitle]}"
   end
-  # [END read_data]
+  # [END spanner_read_data]
+end
+
+def read_stale_data project_id:, instance_id:, database_id:
+  # [START spanner_read_stale_data]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+  require "google/cloud/spanner"
+
+  spanner = Google::Cloud::Spanner.new project: project_id
+  client  = spanner.client instance_id, database_id
+
+  # Perform a read with a data staleness of 15 seconds
+  client.snapshot staleness: 15 do |snapshot|
+    snapshot.read("Albums", [:SingerId, :AlbumId, :AlbumTitle]).rows.each do |row|
+      puts "#{row[:SingerId]} #{row[:AlbumId]} #{row[:AlbumTitle]}"
+    end
+  end
+  # [END spanner_read_stale_data]
 end
 
 def create_index project_id:, instance_id:, database_id:
-  # [START create_index]
+  # [START spanner_create_index]
   # project_id  = "Your Google Cloud project ID"
   # instance_id = "Your Spanner instance ID"
   # database_id = "Your Spanner database ID"
@@ -134,11 +227,11 @@ def create_index project_id:, instance_id:, database_id:
   job.wait_until_done!
 
   puts "Added the AlbumsByAlbumTitle index"
-  # [END create_index]
+  # [END spanner_create_index]
 end
 
 def create_storing_index project_id:, instance_id:, database_id:
-  # [START create_storing_index]
+  # [START spanner_create_storing_index]
   # project_id  = "Your Google Cloud project ID"
   # instance_id = "Your Spanner instance ID"
   # database_id = "Your Spanner database ID"
@@ -159,11 +252,11 @@ def create_storing_index project_id:, instance_id:, database_id:
   job.wait_until_done!
 
   puts "Added the AlbumsByAlbumTitle2 storing index"
-  # [END create_storing_index]
+  # [END spanner_create_storing_index]
 end
 
 def add_column project_id:, instance_id:, database_id:
-  # [START add_column]
+  # [START spanner_add_column]
   # project_id  = "Your Google Cloud project ID"
   # instance_id = "Your Spanner instance ID"
   # database_id = "Your Spanner database ID"
@@ -183,11 +276,36 @@ def add_column project_id:, instance_id:, database_id:
   job.wait_until_done!
 
   puts "Added the MarketingBudget column"
-  # [END add_column]
+  # [END spanner_add_column]
+end
+
+def add_timestamp_column project_id:, instance_id:, database_id:
+  # [START spanner_add_timestamp_column]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+
+  spanner  = Google::Cloud::Spanner.new project: project_id
+  instance = spanner.instance instance_id
+  database = instance.database database_id
+
+  job = database.update statements: [
+    "ALTER TABLE Albums ADD COLUMN LastUpdateTime TIMESTAMP
+     OPTIONS (allow_commit_timestamp=true)"
+  ]
+
+  puts "Waiting for database update to complete"
+
+  job.wait_until_done!
+
+  puts "Added the LastUpdateTime as a commit timestamp column in Albums table"
+  # [END spanner_add_timestamp_column]
 end
 
 def update_data project_id:, instance_id:, database_id:
-  # [START update_data]
+  # [START spanner_update_data]
   # project_id  = "Your Google Cloud project ID"
   # instance_id = "Your Spanner instance ID"
   # database_id = "Your Spanner database ID"
@@ -205,11 +323,35 @@ def update_data project_id:, instance_id:, database_id:
   end
 
   puts "Updated data"
-  # [END update_data]
+  # [END spanner_update_data]
+end
+
+def update_data_with_timestamp_column project_id:, instance_id:, database_id:
+  # [START spanner_update_data_with_timestamp_column]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+
+  spanner = Google::Cloud::Spanner.new project: project_id
+  client  = spanner.client instance_id, database_id
+
+  commit_timestamp = client.commit_timestamp
+
+  client.commit do |c|
+    c.update "Albums", [
+      { SingerId: 1, AlbumId: 1, MarketingBudget: 100_000, LastUpdateTime: commit_timestamp },
+      { SingerId: 2, AlbumId: 2, MarketingBudget: 750_000, LastUpdateTime: commit_timestamp }
+    ]
+  end
+
+  puts "Updated data"
+  # [END spanner_update_data_with_timestamp_column]
 end
 
 def query_data_with_new_column project_id:, instance_id:, database_id:
-  # [START query_data_with_new_column]
+  # [START spanner_query_data_with_new_column]
   # project_id  = "Your Google Cloud project ID"
   # instance_id = "Your Spanner instance ID"
   # database_id = "Your Spanner database ID"
@@ -222,11 +364,11 @@ def query_data_with_new_column project_id:, instance_id:, database_id:
   client.execute("SELECT SingerId, AlbumId, MarketingBudget FROM Albums").rows.each do |row|
     puts "#{row[:SingerId]} #{row[:AlbumId]} #{row[:MarketingBudget]}"
   end
-  # [END query_data_with_new_column]
+  # [END spanner_query_data_with_new_column]
 end
 
 def read_write_transaction project_id:, instance_id:, database_id:
-  # [START read_write_transaction]
+  # [START spanner_read_write_transaction]
   # project_id  = "Your Google Cloud project ID"
   # instance_id = "Your Spanner instance ID"
   # database_id = "Your Spanner database ID"
@@ -254,32 +396,37 @@ def read_write_transaction project_id:, instance_id:, database_id:
   end
 
   puts "Transaction complete"
-  # [END read_write_transaction]
+  # [END spanner_read_write_transaction]
 end
 
-def query_data_with_index project_id:, instance_id:, database_id:
-  # [START query_data_with_index]
+def query_data_with_index project_id:, instance_id:, database_id:, start_title: "Ardvark", end_title: "Goo"
+  # [START spanner_query_data_with_index]
   # project_id  = "Your Google Cloud project ID"
   # instance_id = "Your Spanner instance ID"
   # database_id = "Your Spanner database ID"
+  # start_title = "An album title to start with such as 'Ardvark'"
+  # end_title   = "An album title to end with such as 'Goo'"
 
   require "google/cloud/spanner"
 
   spanner = Google::Cloud::Spanner.new project: project_id
   client  = spanner.client instance_id, database_id
 
-  sql_query = 'SELECT AlbumId, AlbumTitle, MarketingBudget
+  sql_query = "SELECT AlbumId, AlbumTitle, MarketingBudget
                FROM Albums@{FORCE_INDEX=AlbumsByAlbumTitle}
-               WHERE AlbumTitle >= "Aardvark" AND AlbumTitle < "Goo"'
+               WHERE AlbumTitle >= @start_title AND AlbumTitle < @end_title"
 
-  client.execute(sql_query).rows.each do |row|
+  params      = { start_title: start_title, end_title: end_title }
+  param_types = { start_title: :STRING,     end_title: :STRING }
+
+  client.execute(sql_query, params: params, types: param_types).rows.each do |row|
     puts "#{row[:AlbumId]} #{row[:AlbumTitle]} #{row[:MarketingBudget]}"
   end
-  # [END query_data_with_index]
+  # [END spanner_query_data_with_index]
 end
 
 def read_data_with_index project_id:, instance_id:, database_id:
-  # [START read_data_with_index]
+  # [START spanner_read_data_with_index]
   # project_id  = "Your Google Cloud project ID"
   # instance_id = "Your Spanner instance ID"
   # database_id = "Your Spanner database ID"
@@ -295,11 +442,11 @@ def read_data_with_index project_id:, instance_id:, database_id:
   result.rows.each do |row|
     puts "#{row[:AlbumId]} #{row[:AlbumTitle]}"
   end
-  # [END read_data_with_index]
+  # [END spanner_read_data_with_index]
 end
 
 def read_data_with_storing_index project_id:, instance_id:, database_id:
-  # [START read_data_with_storing_index]
+  # [START spanner_read_data_with_storing_index]
   # project_id  = "Your Google Cloud project ID"
   # instance_id = "Your Spanner instance ID"
   # database_id = "Your Spanner database ID"
@@ -315,11 +462,11 @@ def read_data_with_storing_index project_id:, instance_id:, database_id:
   result.rows.each do |row|
     puts "#{row[:AlbumId]} #{row[:AlbumTitle]} #{row[:MarketingBudget]}"
   end
-  # [END read_data_with_storing_index]
+  # [END spanner_read_data_with_storing_index]
 end
 
 def read_only_transaction project_id:, instance_id:, database_id:
-  # [START read_only_transaction]
+  # [START spanner_read_only_transaction]
   # project_id  = "Your Google Cloud project ID"
   # instance_id = "Your Spanner instance ID"
   # database_id = "Your Spanner database ID"
@@ -340,7 +487,117 @@ def read_only_transaction project_id:, instance_id:, database_id:
       puts "#{row[:AlbumId]} #{row[:AlbumTitle]} #{row[:SingerId]}"
     end
   end
-  # [END read_only_transaction]
+  # [END spanner_read_only_transaction]
+end
+
+def spanner_batch_client project_id:, instance_id:, database_id:
+  # [START spanner_batch_client]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+
+  # Prepare a thread pool with number of processors
+  processor_count  = Concurrent.processor_count
+  thread_pool      = Concurrent::FixedThreadPool.new processor_count
+
+  # Prepare AtomicFixnum to count total records using multiple threads
+  total_records = Concurrent::AtomicFixnum.new
+
+  # Create a new Spanner batch client
+  spanner        = Google::Cloud::Spanner.new project: project_id
+  batch_client   = spanner.batch_client instance_id, database_id
+
+  # Get a strong timestamp bound batch_snapshot
+  batch_snapshot = batch_client.batch_snapshot strong: true
+
+  # Get partitions for specified query
+  partitions       = batch_snapshot.partition_query "SELECT SingerId, FirstName, LastName FROM Singers"
+  total_partitions = partitions.size
+
+  # Enqueue a new thread pool job
+  partitions.each_with_index do |partition, partition_index|
+    thread_pool.post do
+      # Increment total_records per new row
+      batch_snapshot.execute_partition(partition).rows.each do |row|
+        total_records.increment
+      end
+    end
+  end
+
+  # Wait for queued jobs to complete
+  thread_pool.shutdown
+  thread_pool.wait_for_termination
+
+  # Close the client connection and release resources.
+  batch_snapshot.close
+
+  # Collect statistics for batch query
+  average_records_per_partition = 0.0
+  if total_partitions != 0
+    average_records_per_partition = total_records.value.to_f / total_partitions.to_f
+  end
+
+  puts "Total Partitions: #{total_partitions}"
+  puts "Total Records: #{total_records.value}"
+  puts "Average records per Partition: #{average_records_per_partition}"
+  # [END spanner_batch_client]
+end
+
+def spanner_batch_client project_id:, instance_id:, database_id:
+  # [START spanner_batch_client]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+
+  # Prepare a thread pool with number of processors
+  processor_count  = Concurrent.processor_count
+  thread_pool      = Concurrent::FixedThreadPool.new processor_count
+
+  # Prepare AtomicFixnum to count total records using multiple threads
+  total_records = Concurrent::AtomicFixnum.new
+
+  # Create a new Spanner batch client
+  spanner        = Google::Cloud::Spanner.new project: project_id
+  batch_client   = spanner.batch_client instance_id, database_id
+
+  # Get a strong timestamp bound batch_snapshot
+  batch_snapshot = batch_client.batch_snapshot strong: true
+
+  # Get partitions for specified query
+  partitions       = batch_snapshot.partition_query "SELECT SingerId, FirstName, LastName FROM Singers"
+  total_partitions = partitions.size
+
+  # Enqueue a new thread pool job
+  partitions.each_with_index do |partition, partition_index|
+    thread_pool.post do
+      # Increment total_records per new row
+      batch_snapshot.execute_partition(partition).rows.each do |row|
+        total_records.increment
+      end
+    end
+  end
+
+  # Wait for queued jobs to complete
+  thread_pool.shutdown
+  thread_pool.wait_for_termination
+
+  # Close the client connection and release resources.
+  batch_snapshot.close
+
+  # Collect statistics for batch query
+  average_records_per_partition = 0.0
+  if total_partitions != 0
+    average_records_per_partition = total_records.value.to_f / total_partitions.to_f
+  end
+
+  puts "Total Partitions: #{total_partitions}"
+  puts "Total Records: #{total_records.value}"
+  puts "Average records per Partition: #{average_records_per_partition}"
+  # [END spanner_batch_client]
 end
 
 def usage
@@ -348,20 +605,27 @@ def usage
 Usage: bundle exec ruby spanner_samples.rb [command] [arguments]
 
 Commands:
-  create_database              <instance_id> <database_id> Create Database
-  insert_data                  <instance_id> <database_id> Insert Data
-  query_data                   <instance_id> <database_id> Query Data
-  read_data                    <instance_id> <database_id> Read Data
-  create_index                 <instance_id> <database_id> Create Index
-  create_storing_index         <instance_id> <database_id> Create Storing Index
-  add_column                   <instance_id> <database_id> Add Column
-  update_data                  <instance_id> <database_id> Update Data
-  query_data_with_new_column   <instance_id> <database_id> Query Data with New Column
-  read_write_transaction       <instance_id> <database_id> Read-Write Transaction
-  query_data_with_index        <instance_id> <database_id> Query Data with Index
-  read_data_with_index         <instance_id> <database_id> Read Data with Index
-  read_data_with_storing_index <instance_id> <database_id> Read Data with Storing Index
-  read_only_transaction        <instance_id> <database_id> Read-Only Transaction
+  create_database                    <instance_id> <database_id> Create Database
+  create_table_with_timestamp_column <instance_id> <database_id> Create table Performances with commit timestamp column
+  insert_data                        <instance_id> <database_id> Insert Data
+  insert_data_with_timestamp_column  <instance_id> <database_id> Inserts data into Performances table containing the commit timestamp column
+  query_data                         <instance_id> <database_id> Query Data
+  read_data                          <instance_id> <database_id> Read Data
+  read_stale_data                    <instance_id> <database_id> Read Stale Data
+  create_index                       <instance_id> <database_id> Create Index
+  create_storing_index               <instance_id> <database_id> Create Storing Index
+  add_column                         <instance_id> <database_id> Add Column
+  add_timestamp_column               <instance_id> <database_id> Alters existing Albums table, adding a commit timestamp column
+  update_data                        <instance_id> <database_id> Update Data
+  update_data_with_timestamp_column  <instance_id> <database_id> Updates two records in the altered table where the commit timestamp column was added
+  query_data_with_new_column         <instance_id> <database_id> Query Data with New Column
+  query_data_with_timestamp_column   <instance_id> <database_id> Queries data from altered table where the commit timestamp column was added
+  query_data_with_index              <instance_id> <database_id> <start_title> <end_title> Query Data with Index
+  read_write_transaction             <instance_id> <database_id> Read-Write Transaction
+  read_data_with_index               <instance_id> <database_id> Read Data with Index
+  read_data_with_storing_index       <instance_id> <database_id> Read Data with Storing Index
+  read_only_transaction              <instance_id> <database_id> Read-Only Transaction
+  spanner_batch_client               <instance_id> <database_id> Use Spanner batch query with a thread pool
 
 Environment variables:
   GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
@@ -375,13 +639,24 @@ def run_sample arguments
   project_id  = ENV["GOOGLE_CLOUD_PROJECT"]
 
   commands = [
-    "create_database", "insert_data", "query_data", "read_data", "create_index",
-    "create_storing_index", "add_column", "update_data", "query_data_with_new_column",
-    "read_write_transaction", "query_data_with_index", "read_data_with_index",
+    "create_database", "create_table_with_timestamp_column", "insert_data",
+    "insert_data_with_timestamp_column", "query_data",
+    "query_data_with_timestamp_column","read_data", "read_stale_data",
+    "create_index", "create_storing_index", "add_column", "add_timestamp_column",
+    "update_data", "query_data_with_new_column",
+    "update_data_with_timestamp_column", "read_write_transaction",
+    "query_data_with_index", "read_data_with_index",
     "read_data_with_storing_index", "read_only_transaction",
+    "spanner_batch_client"
   ]
 
-  if commands.include?(command) && instance_id && database_id
+  if command.eql?("query_data_with_index") && instance_id && database_id && arguments.size >= 2
+    query_data_with_index project_id:  project_id,
+                          instance_id: instance_id,
+                          database_id: database_id,
+                          start_title: arguments.shift,
+                          end_title:   arguments.shift
+  elsif commands.include?(command) && instance_id && database_id
     send command, project_id:  project_id,
                   instance_id: instance_id,
                   database_id: database_id

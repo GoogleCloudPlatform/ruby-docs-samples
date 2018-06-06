@@ -16,6 +16,6 @@ source "https://rubygems.org"
 
 gem "sinatra"
 
-# [START stackdriver_gem]
+# [START logging_stackdriver_gem]
 gem "stackdriver"
-# [END stackdriver_gem]
+# [END logging_stackdriver_gem]

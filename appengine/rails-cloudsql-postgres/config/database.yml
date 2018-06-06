@@ -37,7 +37,7 @@ test:
 # [START production]
 production:
   adapter: postgresql
-  encoding: postgresql
+  encoding: unicode
   pool: 5
   timeout: 5000
   username: "[YOUR_POSTGRES_USERNAME]"
