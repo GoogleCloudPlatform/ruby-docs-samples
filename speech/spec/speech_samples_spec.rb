@@ -107,7 +107,6 @@ describe "Google Cloud Speech API samples" do
   end
 
   example "streaming operation to transcribe audio file" do
-      speech_streaming_recognize audio_file_path: @audio_file_path
     expect {
       speech_streaming_recognize audio_file_path: @audio_file_path
     }.to output(

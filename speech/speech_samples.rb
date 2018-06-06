@@ -214,34 +214,11 @@ def speech_streaming_recognize_sync audio_file_path: nil
 # [END speech_streaming]
 end
 
-class EnumeratorQueue
-  extend Forwardable
-  def_delegators :@q, :push
-
-  # @private
-  def initialize sentinel
-    @q = Queue.new
-    @sentinel = sentinel
-  end
-
-  # @private
-  def each_item
-    return enum_for(:each_item) unless block_given?
-    loop do
-      r = @q.pop
-      break if r.equal? @sentinel
-      fail r if r.is_a? Exception
-      yield r
-    end
-  end
-end
-
 def speech_streaming_recognize audio_file_path: nil
 # [START speech_streaming]
   # audio_file_path = "Path to file on which to perform speech recognition"
 
   require "google/cloud/speech"
-  require "monitor"
 
   speech = Google::Cloud::Speech.new
 
@@ -251,49 +228,32 @@ def speech_streaming_recognize audio_file_path: nil
   chunk_size     = 32000
   final_results  = []
 
-
   streaming_config = {config: {encoding:                :LINEAR16,
                                sample_rate_hertz:       16000,
                                language_code:           "en-US",
                                enable_word_time_offsets: true     },
                       interim_results: true}
 
-  completed      = false
-  request_queue  = EnumeratorQueue.new(speech)
-  request_queue.push({streaming_config: streaming_config})
-
-  # Thread waits for responses from a request
-  Thread.new do
-    # Errors are ignored in this sample
-    speech.streaming_recognize(request_queue.each_item).each do |response|
-      response.results.each do |result|
-        result.alternatives.each do |alternative|
-          # print interim results and save the final result
-          puts alternative.transcript
-          final_results << alternative if result.is_final
-        end
-      end
-    end
-
-    completed = true
+  stream = speech.streaming_recognize streaming_config
+  stream.on_interim do |final_result, interim_results|
+    interim_result = interim_results.first
+    interim_alternative = interim_result.alternatives.first
+    puts "Interim transcript: #{interim_alternative.transcript}"
+    puts "Interim confidence: #{interim_alternative.confidence}"
+    puts "Interim stability: #{interim_result.stability}"
   end
 
   while bytes_sent < bytes_total do
-    request_queue.push({audio_content: audio_content[bytes_sent, chunk_size]})
+    stream.send audio_content[bytes_sent, chunk_size]
     bytes_sent += chunk_size
     sleep 1
   end
 
-  # Equivalent to done in veneer
   puts "Stopped passing"
-  request_queue.push(speech)
+  stream.stop
+  stream.wait_until_complete!
 
-  # Equivalent to wait_until_complete!
-  loop do
-    break if completed
-    sleep 1
-  end
-
+  final_results = stream.results.first.alternatives
   final_results.each do |result|
     puts "Transcript: #{result.transcript}"
   end
