@@ -64,7 +64,7 @@ def get_document project_id:
 
   firestore = Google::Cloud::Firestore.new project_id: project_id
   # [START fs_get_document]
-  doc_ref = firestore.doc "cities/SF"
+  doc_ref  = firestore.doc "cities/SF"
   snapshot = doc_ref.get
   if snapshot.exists? then
     puts "#{snapshot.document_id} data: #{snapshot.data}."
@@ -80,7 +80,9 @@ def get_multiple_docs project_id:
   firestore = Google::Cloud::Firestore.new project_id: project_id
   # [START fs_get_multiple_docs]
   cities_ref = firestore.col "cities"
+
   query = cities_ref.where "capital", "=", true
+
   query.get do |city|
     puts "#{city.document_id} data: #{city.data}."
   end
@@ -105,10 +107,10 @@ def add_subcollection project_id:
   firestore = Google::Cloud::Firestore.new project_id: project_id
   # [START fs_add_subcollection]
   city_ref = firestore.doc "cities/SF"
+
   subcollection_ref = city_ref.col "neighborhoods"
-  added_doc_ref = subcollection_ref.add({
-    name: "Marina"
-  })
+
+  added_doc_ref = subcollection_ref.add({ name: "Marina" })
   puts "Added document with ID: #{added_doc_ref.document_id}."
   # [END fs_add_subcollection]
 end

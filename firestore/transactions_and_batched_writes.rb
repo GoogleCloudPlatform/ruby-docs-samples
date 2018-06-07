@@ -19,6 +19,7 @@ def run_simple_transaction project_id:
   # project_id = "Your Google Cloud Project ID"
 
   firestore = Google::Cloud::Firestore.new project_id: project_id
+
   city_ref = firestore.doc "cities/SF"
 
   firestore.transaction do |tx|
@@ -34,15 +35,14 @@ end
 def return_info_transaction project_id:
   # project_id = "Your Google Cloud Project ID"
 
-  updated = nil
   firestore = Google::Cloud::Firestore.new project_id: project_id
+
   city_ref = firestore.doc "cities/SF"
 
   updated = firestore.transaction do |tx|
     new_population = tx.get(city_ref).data[:population] + 1
     if new_population < 1000000
       tx.update(city_ref, { population: new_population} )
-      true
     else
       false
     end

@@ -14,13 +14,13 @@
 
 require "google/cloud/firestore"
 
-def initialize_firestore_client
+def initialize_firestore_client project_id:
   # [START fs_initialize]
   require "google/cloud/firestore"
 
-  firestore = Google::Cloud::Firestore.new
+  firestore = Google::Cloud::Firestore.new project_id: project_id
 
-  puts "Created Cloud Firestore client with default project ID."
+  puts "Created Cloud Firestore client with given project ID."
   # [END fs_initialize]
 end
 
@@ -76,7 +76,7 @@ if __FILE__ == $PROGRAM_NAME
   project = ENV["FIRESTORE_PROJECT_ID"]
   case ARGV.shift
   when "initialize"
-    initialize_firestore_client
+    initialize_firestore_client project_id: project
   when "add_data_1"
     add_data_1 project_id: project
   when "add_data_2"

@@ -73,6 +73,7 @@ def set_requires_id project_id:
   # project_id = "Your Google Cloud Project ID"
 
   firestore = Google::Cloud::Firestore.new project_id: project_id
+
   data = {
     name:    "Phuket",
     country: "Thailand"
@@ -105,6 +106,7 @@ def add_doc_data_after_auto_id project_id:
   # project_id = "Your Google Cloud Project ID"
 
   firestore = Google::Cloud::Firestore.new project_id: project_id
+
   data = {
     name:    "Moscow",
     country: "Russia"
@@ -124,7 +126,9 @@ def update_doc project_id:
   # project_id = "Your Google Cloud Project ID"
 
   firestore = Google::Cloud::Firestore.new project_id: project_id
+
   doc_ref = firestore.doc "cities/DC"
+
   data = {
     name:    "Washington D.C.",
     country: "USA"

@@ -43,7 +43,7 @@ def delete_collection project_id:
   firestore = Google::Cloud::Firestore.new project_id: project_id
   # [START fs_delete_collection]
   cities_ref = firestore.col "cities"
-  query = cities_ref
+  query      = cities_ref
 
   query.get do |document_snapshot|
     puts "Deleting document #{document_snapshot.document_id}."
