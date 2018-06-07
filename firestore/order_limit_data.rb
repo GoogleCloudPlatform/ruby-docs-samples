@@ -18,6 +18,7 @@ def order_by_name_limit_query project_id:
   # project_id = "Your Google Cloud Project ID"
 
   firestore = Google::Cloud::Firestore.new project_id: project_id
+
   cities_ref = firestore.col "cities"
   # [START fs_order_by_name_limit_query]
   query = cities_ref.order("name").limit(3)
@@ -31,6 +32,7 @@ def order_by_name_desc_limit_query project_id:
   # project_id = "Your Google Cloud Project ID"
 
   firestore = Google::Cloud::Firestore.new project_id: project_id
+
   cities_ref = firestore.col "cities"
   # [START fs_order_by_name_desc_limit_query]
   query = cities_ref.order("name", "desc").limit(3)
@@ -44,6 +46,7 @@ def order_by_state_and_population_query project_id:
   # project_id = "Your Google Cloud Project ID"
 
   firestore = Google::Cloud::Firestore.new project_id: project_id
+
   cities_ref = firestore.col "cities"
   # [START fs_order_by_state_and_population_query]
   query = cities_ref.order("state").order("population", "desc")
@@ -57,6 +60,7 @@ def where_order_by_limit_query project_id:
   # project_id = "Your Google Cloud Project ID"
 
   firestore = Google::Cloud::Firestore.new project_id: project_id
+
   cities_ref = firestore.col "cities"
   # [START fs_where_order_by_limit_query]
   query = cities_ref.where("population", ">", 2500000).order("population").limit(2)
@@ -70,6 +74,7 @@ def range_order_by_query project_id:
   # project_id = "Your Google Cloud Project ID"
 
   firestore = Google::Cloud::Firestore.new project_id: project_id
+
   cities_ref = firestore.col "cities"
   # [START fs_range_order_by_query]
   query = cities_ref.where("population", ">", 2500000).order("population")
@@ -83,6 +88,7 @@ def invalid_range_order_by_query project_id:
   # project_id = "Your Google Cloud Project ID"
 
   firestore = Google::Cloud::Firestore.new project_id: project_id
+
   cities_ref = firestore.col "cities"
   # [START fs_invalid_range_order_by_query]
   query = cities_ref.where("population", ">", 2500000).order("country")

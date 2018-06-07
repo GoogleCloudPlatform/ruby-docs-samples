@@ -24,9 +24,9 @@ describe "Google Cloud Firestore API samples - Quickstart" do
 
   example "initialize_firestore_client" do
     output = capture {
-      initialize_firestore_client
+      initialize_firestore_client project_id: @firestore_project
     }
-    expect(output).to include "Created Cloud Firestore client with default project ID."
+    expect(output).to include "Created Cloud Firestore client with given project ID."
   end
 
   example "add_data_1" do
