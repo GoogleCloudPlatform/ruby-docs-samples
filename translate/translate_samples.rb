@@ -13,7 +13,7 @@
 # limitations under the License.
 
 def translate_text project_id:, text:, language_code:
-  # [START translate_text]
+  # [START translate_translate_text]
   # project_id    = "Your Google Cloud project ID"
   # text          = "The text you would like to translate"
   # language_code = "The ISO 639-1 code of language to translate to, eg. 'en'"
@@ -25,7 +25,7 @@ def translate_text project_id:, text:, language_code:
 
   puts "Translated '#{text}' to '#{translation.text.inspect}'"
   puts "Original language: #{translation.from} translated to: #{translation.to}"
-  # [END translate_text]
+  # [END translate_translate_text]
 end
 
 def translate_text_with_model project_id:, text:, language_code:
@@ -45,7 +45,7 @@ def translate_text_with_model project_id:, text:, language_code:
 end
 
 def detect_language project_id:, text:
-  # [START detect_language]
+  # [START translate_detect_language]
   # project_id = "Your Google Cloud project ID"
   # text       = "The text you would like to detect the language of"
 
@@ -56,11 +56,11 @@ def detect_language project_id:, text:
 
   puts "'#{text}' detected as language: #{detection.language}"
   puts "Confidence: #{detection.confidence}"
-  # [END detect_language]
+  # [END translate_detect_language]
 end
 
 def list_supported_language_codes project_id:
-  # [START list_supported_language_codes]
+  # [START translate_list_codes]
   # project_id = "Your Google Cloud project ID"
 
   require "google/cloud/translate"
@@ -72,11 +72,11 @@ def list_supported_language_codes project_id:
   languages.each do |language|
     puts language.code
   end
-  # [END list_supported_language_codes]
+  # [END translate_list_codes]
 end
 
 def list_supported_language_names project_id:, language_code: "en"
-  # [START list_supported_language_names]
+  # [START translate_list_language_names]
   # project_id = "Your Google Cloud project ID"
 
   # To receive the names of the supported languages, provide the code
@@ -92,7 +92,7 @@ def list_supported_language_names project_id:, language_code: "en"
   languages.each do |language|
     puts "#{language.code} #{language.name}"
   end
-  # [END list_supported_language_names]
+  # [END translate_list_language_names]
 end
 
 if __FILE__ == $PROGRAM_NAME

@@ -76,6 +76,23 @@ def get_requester_pays_status project_id:, bucket_name:
   # [END get_requester_pays_status]
 end
 
+def enable_default_kms_key project_id:, bucket_name:, default_kms_key:
+  # [START storage_set_bucket_default_kms_key]
+  # project_id      = "Your Google Cloud project ID"
+  # bucket_name     = "Name of your Google Cloud Storage bucket"
+  # default_kms_key = "KMS key resource id"
+
+  require "google/cloud/storage"
+
+  storage = Google::Cloud::Storage.new project: project_id
+  bucket  = storage.bucket bucket_name
+
+  bucket.default_kms_key = default_kms_key
+
+  puts "Default KMS key for #{bucket.name} was set to #{bucket.default_kms_key}"
+  # [END storage_set_bucket_default_kms_key]
+end
+
 def create_bucket project_id:, bucket_name:
   # [START create_bucket]
   # project_id  = "Your Google Cloud project ID"
@@ -90,19 +107,23 @@ def create_bucket project_id:, bucket_name:
   # [END create_bucket]
 end
 
-def create_bucket_class_location project_id:, bucket_name:
+def create_bucket_class_location project_id:, bucket_name:, location:,
+  storage_class:
   # [START create_bucket_class_location]
   # project_id    = "Your Google Cloud project ID"
   # bucket_name   = "Name of Google Cloud Storage bucket to create"
+  # location      = "Location of where to create Cloud Storage bucket"
+  # storage_class = "Storage class of Cloud Storage bucket"
 
   require "google/cloud/storage"
 
   storage = Google::Cloud::Storage.new project: project_id
   bucket  = storage.create_bucket bucket_name,
-                                  location:      "ASIA",
-                                  storage_class: "COLDLINE"
+                                  location:      location,
+                                  storage_class: storage_class
 
-  puts "Created bucket #{bucket.name}"
+  puts "Created bucket #{bucket.name} in #{location}" +
+       " with #{storage_class} class"
   # [END create_bucket_class_location]
 end
 
@@ -179,51 +200,62 @@ def delete_bucket project_id:, bucket_name:
 end
 
 if __FILE__ == $0
+  project_id = ENV["GOOGLE_CLOUD_PROJECT"]
+
   case ARGV.shift
   when "list"
-    list_buckets project_id: ENV["GOOGLE_CLOUD_PROJECT"]
+    list_buckets project_id: project_id
   when "create"
-    create_bucket project_id:  ENV["GOOGLE_CLOUD_PROJECT"],
-                  bucket_name: ARGV.shift
+    if ARGV.size == 1
+      create_bucket project_id:  project_id,
+                    bucket_name: ARGV.shift
+    elsif ARGV.size == 3
+      create_bucket_class_location project_id:    project_id,
+                                   bucket_name:   ARGV.shift,
+                                   location:      ARGV.shift,
+                                   storage_class: ARGV.shift
+    end
   when "delete"
-    delete_bucket project_id:  ENV["GOOGLE_CLOUD_PROJECT"],
+    delete_bucket project_id:  project_id,
                   bucket_name: ARGV.shift
   when "enable_requester_pays"
-    enable_requester_pays project_id:  ENV["GOOGLE_CLOUD_PROJECT"],
+    enable_requester_pays project_id:  project_id,
                           bucket_name: ARGV.shift
   when "disable_requester_pays"
-    disable_requester_pays project_id:  ENV["GOOGLE_CLOUD_PROJECT"],
+    disable_requester_pays project_id:  project_id,
                            bucket_name: ARGV.shift
+  when "enable_default_kms_key"
+    enable_default_kms_key project_id:      project_id,
+                           bucket_name:     ARGV.shift,
+                           default_kms_key: ARGV.shift
   when "check_requester_pays"
-    check_requester_pays project_id:  ENV["GOOGLE_CLOUD_PROJECT"],
+    check_requester_pays project_id:  project_id,
                          bucket_name: ARGV.shift
   when "list_bucket_labels"
-    list_bucket_labels project_id: ENV["GOOGLE_CLOUD_PROJECT"]
+    list_bucket_labels project_id: project_id
   when "add_bucket_label"
-    add_bucket_label project_id:  ENV["GOOGLE_CLOUD_PROJECT"],
+    add_bucket_label project_id:  project_id,
                      label_key:   ARGV.shift,
                      label_value: ARGV.shift
   when "delete_bucket_label"
-    delete_bucket_label project_id: ENV["GOOGLE_CLOUD_PROJECT"],
+    delete_bucket_label project_id: project_id,
                         label_key:  ARGV.shift
-  when "create_with"
-    create_bucket_class_location project_id:    ENV["GOOGLE_CLOUD_PROJECT"],
-                                 bucket_name:   ARGV.shift
   else
     puts <<-usage
 Usage: bundle exec ruby buckets.rb [command] [arguments]
 
 Commands:
-  list                                                              List all buckets in the authenticated project
-  enable_requester_pays         <bucket>                            Enable requester pays for a bucket
-  disable_requester_pays        <bucket>                            Disable requester pays for a bucket
-  check_requester_pays          <bucket>                            Check status of requester pays for a bucket
-  create                        <bucket>                            Create a new bucket with the provided name
-  create_location_storage_class <bucket>                            Create a new bucket with specific storage class and location
-  list_bucket_labels            <bucket>                            List bucket labels
-  add_bucket_label              <bucket> <label_key> <label_value>  Add bucket label
-  delete_bucket_label           <bucket> <label_key>                Delete bucket label
-  delete                        <bucket>                            Delete bucket with the provided name
+  list                                                       List all buckets in the authenticated project
+  enable_requester_pays  <bucket>                            Enable requester pays for a bucket
+  disable_requester_pays <bucket>                            Disable requester pays for a bucket
+  check_requester_pays   <bucket>                            Check status of requester pays for a bucket
+  enable_default_kms_key <bucket> <kms_key>                  Enable default KMS encryption for bucket
+  create                 <bucket>                            Create a new bucket with default storage class and location
+  create                 <bucket> <location> <storage_class> Create a new bucket with specific storage class and location
+  list_bucket_labels     <bucket>                            List bucket labels
+  add_bucket_label       <bucket> <label_key> <label_value>  Add bucket label
+  delete_bucket_label    <bucket> <label_key>                Delete bucket label
+  delete                 <bucket>                            Delete bucket with the provided name
 
 Environment variables:
   GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID

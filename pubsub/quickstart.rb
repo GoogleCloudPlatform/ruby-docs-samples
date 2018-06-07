@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START pubsub_quickstart]
+# [START pubsub_quickstart_create_topic]
 # Imports the Google Cloud client library
 require "google/cloud/pubsub"
 
@@ -29,5 +29,5 @@ topic_name = "my-new-topic"
 topic = pubsub.create_topic topic_name
 
 puts "Topic #{topic.name} created."
-# [END pubsub_quickstart]
+# [END pubsub_quickstart_create_topic]
 

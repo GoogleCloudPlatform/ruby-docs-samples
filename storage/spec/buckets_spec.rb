@@ -32,6 +32,7 @@ describe "Google Cloud Storage buckets sample" do
 
   before :all do
     @bucket_name = ENV["GOOGLE_CLOUD_STORAGE_BUCKET"]
+    @kms_key     = ENV["GOOGLE_CLOUD_KMS_KEY"]
     @storage     = Google::Cloud::Storage.new
     @project_id  = @storage.project
   end
@@ -109,6 +110,26 @@ describe "Google Cloud Storage buckets sample" do
     }.to_stdout
   end
 
+  example "enable default kms key" do
+    @storage.bucket(@bucket_name).default_kms_key = nil
+
+    expect(@storage.bucket(@bucket_name).default_kms_key).to be nil
+
+    expect {
+      enable_default_kms_key project_id:      @project_id,
+                             bucket_name:     @bucket_name,
+                             default_kms_key: @kms_key
+
+    }.to output{
+      /Default KMS key for #{bucket_name} was set to #{@kms_key}/
+    }.to_stdout
+
+    expect(@storage.bucket(@bucket_name).default_kms_key).to include @kms_key
+
+    @storage.bucket(@bucket_name).default_kms_key = nil
+    expect(@storage.bucket(@bucket_name).default_kms_key).to be nil
+  end
+
   example "create bucket" do
     delete_bucket!
 
@@ -129,14 +150,16 @@ describe "Google Cloud Storage buckets sample" do
 
     expect(@storage.bucket @bucket_name).to be nil
 
-    location      = "ASIA"
-    storage_class = "COLDLINE"
+    location      = "US"
+    storage_class = "STANDARD"
 
     expect {
-      create_bucket_class_location project_id:  @project_id,
-                                   bucket_name: @bucket_name
+      create_bucket_class_location project_id:    @project_id,
+                                   bucket_name:   @bucket_name,
+                                   location:      location,
+                                   storage_class: storage_class
     }.to output(
-      "Created bucket #{@bucket_name}\n"
+      "Created bucket #{@bucket_name} in #{location} with #{storage_class} class\n"
     ).to_stdout
 
     bucket = @storage.bucket @bucket_name

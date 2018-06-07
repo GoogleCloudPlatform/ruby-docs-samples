@@ -1,4 +1,4 @@
-# [START shared_configure]
+# [START logging_shared_configure]
 require "stackdriver"
 
 Google::Cloud.configure do |config|
@@ -6,7 +6,7 @@ Google::Cloud.configure do |config|
   config.project_id = "YOUR-PROJECT-ID"
   config.keyfile    = "/path/to/service-account.json"
 end
-# [END shared_configure]
+# [END logging_shared_configure]
 
 use Google::Cloud::Debugger::Middleware
 use Google::Cloud::Logging::Middleware
