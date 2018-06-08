@@ -28,8 +28,9 @@ def speech_sync_recognize audio_file_path: nil
 
   response = speech.recognize config, audio
 
-  alternatives = response.results.first.alternatives
+  results = operation.response.results
 
+  alternatives = results.first.alternatives
   alternatives.each do |alternative|
     puts "Transcription: #{alternative.transcript}"
   end
@@ -54,8 +55,9 @@ def speech_sync_recognize_words audio_file_path: nil
 
   response = speech.recognize config, audio
 
-  alternatives = response.results.first.alternatives
+  results = operation.response.results
 
+  alternatives = results.first.alternatives
   alternatives.each do |alternative|
     puts "Transcription: #{alternative.transcript}"
 
@@ -86,8 +88,9 @@ def speech_sync_recognize_gcs storage_path: nil
 
   response = speech.recognize config, audio
 
-  alternatives = response.results.first.alternatives
+  results = response.results
 
+  alternatives = results.first.alternatives
   alternatives.each do |alternative|
     puts "Transcription: #{alternative.transcript}"
   end
@@ -117,9 +120,10 @@ def speech_async_recognize audio_file_path: nil
 
   raise operation.results.message if operation.error?
 
-  alternatives = operation.response.results.first.alternatives
+  results = operation.response.results
   # [END speech_async_request]
 
+  alternatives = results.first.alternatives
   alternatives.each do |alternative|
     puts "Transcription: #{alternative.transcript}"
   end
@@ -147,8 +151,9 @@ def speech_async_recognize_gcs storage_path: nil
 
   raise operation.results.message if operation.error?
 
-  alternatives = operation.response.results.first.alternatives
+  results = operation.response.results
 
+  alternatives = results.first.alternatives
   alternatives.each do |alternative|
     puts "Transcription: #{alternative.transcript}"
   end
@@ -177,8 +182,9 @@ def speech_async_recognize_gcs_words storage_path: nil
 
   raise operation.results.message if operation.error?
 
-  alternatives = operation.response.results.first.alternatives
+  results = operation.response.results
 
+  alternatives = results.first.alternatives
   alternatives.each do |alternative|
     puts "Transcription: #{alternative.transcript}"
 
@@ -224,9 +230,11 @@ def speech_streaming_recognize audio_file_path: nil
   stream.stop
   stream.wait_until_complete!
 
-  final_results = stream.results.first.alternatives
+  results = stream.results
   # [END speech_streaming_request]
-  final_results.each do |result|
+
+  alternatives = results.first.alternatives
+  alternatives.each do |result|
     puts "Transcript: #{result.transcript}"
   end
 # [END speech_streaming]
