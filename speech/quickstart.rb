@@ -40,7 +40,7 @@ audio  = { content: audio_file }
 
 # Detects speech in the audio file
 response = speech.recognize config, audio
-# [START speech_request]
+# [END speech_request]
 
 # Get first result because we only processed a single audio file
 alternatives = response.results.first.alternatives
