@@ -102,6 +102,7 @@ def speech_async_recognize audio_file_path: nil
 
   speech = Google::Cloud::Speech.new
 
+  # [START speech_async_request]
   audio_file = File.binread audio_file_path
   config     = { encoding:          :LINEAR16,
                  sample_rate_hertz: 16000,
@@ -117,6 +118,7 @@ def speech_async_recognize audio_file_path: nil
   raise operation.results.message if operation.error?
 
   alternatives = operation.response.results.first.alternatives
+  # [END speech_async_request]
 
   alternatives.each do |alternative|
     puts "Transcription: #{alternative.transcript}"
@@ -198,11 +200,11 @@ def speech_streaming_recognize audio_file_path: nil
 
   speech = Google::Cloud::Speech.new
 
+  # [START speech_streaming_request]
   audio_content  = File.binread audio_file_path
   bytes_total    = audio_content.size
   bytes_sent     = 0
   chunk_size     = 32000
-  final_results  = []
 
   streaming_config = {config: {encoding:                :LINEAR16,
                                sample_rate_hertz:       16000,
@@ -211,13 +213,6 @@ def speech_streaming_recognize audio_file_path: nil
                       interim_results: true}
 
   stream = speech.streaming_recognize streaming_config
-  stream.on_interim do |final_result, interim_results|
-    interim_result = interim_results.first
-    interim_alternative = interim_result.alternatives.first
-    puts "Interim transcript: #{interim_alternative.transcript}"
-    puts "Interim confidence: #{interim_alternative.confidence}"
-    puts "Interim stability: #{interim_result.stability}"
-  end
 
   while bytes_sent < bytes_total do
     stream.send audio_content[bytes_sent, chunk_size]
@@ -230,13 +225,12 @@ def speech_streaming_recognize audio_file_path: nil
   stream.wait_until_complete!
 
   final_results = stream.results.first.alternatives
+  # [END speech_streaming_request]
   final_results.each do |result|
     puts "Transcript: #{result.transcript}"
   end
-  # [END speech_streaming]
+# [END speech_streaming]
 end
-
-require "google/cloud/speech"
 
 if __FILE__ == $PROGRAM_NAME
   command    = ARGV.shift
