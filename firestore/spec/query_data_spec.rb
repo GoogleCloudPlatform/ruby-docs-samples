@@ -9,7 +9,7 @@ describe "Google Cloud Firestore API samples - Query Data" do
   end
 
   after do
-    delete_collection collection_name: "cities"
+    delete_collection_test collection_name: "cities", project_id: ENV["FIRESTORE_PROJECT_ID"]
   end
 
   # Capture and return STDOUT output by block
