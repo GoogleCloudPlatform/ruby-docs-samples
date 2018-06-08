@@ -14,10 +14,14 @@
 
 # [START speech_quickstart]
 # Imports the Google Cloud client library
+# [START speech_require]
 require "google/cloud/speech"
+# [END speech_require]
 
 # Instantiates a client
+# [START speech_create]
 speech = Google::Cloud::Speech.new
+# [END speech_create]
 
 # The name of the audio file to transcribe
 file_name = "./audio_files/audio.raw"
