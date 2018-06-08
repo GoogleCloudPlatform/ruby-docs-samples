@@ -26,6 +26,7 @@ speech = Google::Cloud::Speech.new
 # The name of the audio file to transcribe
 file_name = "./audio_files/audio.raw"
 
+# [START speech_request]
 # [START speech_config]
 # The raw audio
 audio_file = File.binread file_name
@@ -39,6 +40,7 @@ audio  = { content: audio_file }
 
 # Detects speech in the audio file
 response = speech.recognize config, audio
+# [START speech_request]
 
 # Get first result because we only processed a single audio file
 alternatives = response.results.first.alternatives

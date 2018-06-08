@@ -21,7 +21,9 @@ def speech_sync_recognize audio_file_path: nil
   speech = Google::Cloud::Speech.new
 
   audio_file = File.binread audio_file_path
-  config     = { encoding: :LINEAR16, sample_rate_hertz: 16000, language_code: "en-US" }
+  config     = { encoding:          :LINEAR16,
+                 sample_rate_hertz: 16000,
+                 language_code:     "en-US"   }
   audio      = { content: audio_file }
 
   response = speech.recognize config, audio
@@ -43,8 +45,12 @@ def speech_sync_recognize_words audio_file_path: nil
   speech = Google::Cloud::Speech.new
 
   audio_file = File.binread audio_file_path
-  config     = { encoding: :LINEAR16, sample_rate_hertz: 16000, language_code: "en-US", enable_word_time_offsets: true }
-  audio      = { content: audio_file }
+
+  config = { encoding:                 :LINEAR16,
+             sample_rate_hertz:        16000,
+             language_code:            "en-US",
+             enable_word_time_offsets: true }
+  audio  = { content: audio_file }
 
   response = speech.recognize config, audio
 
@@ -71,10 +77,16 @@ def speech_sync_recognize_gcs storage_path: nil
 
   speech = Google::Cloud::Speech.new
 
-  config = { encoding: :LINEAR16, sample_rate_hertz: 16000, language_code: "en-US" }
+  # [START speech_storage_uri_request]
+  # [START speech_storage_uri_config]
+  config = { encoding:          :LINEAR16,
+             sample_rate_hertz: 16000,
+             language_code:     "en-US"   }
   audio  = { uri: storage_path }
+  # [END speech_storage_uri_config]
 
   response = speech.recognize config, audio
+  # [END speech_storage_uri_request]
 
   alternatives = response.results.first.alternatives
 
@@ -93,7 +105,9 @@ def speech_async_recognize audio_file_path: nil
   speech = Google::Cloud::Speech.new
 
   audio_file = File.binread audio_file_path
-  config     = { encoding: :LINEAR16, sample_rate_hertz: 16000, language_code: "en-US" }
+  config     = { encoding:          :LINEAR16,
+                 sample_rate_hertz: 16000,
+                 language_code:     "en-US"   }
   audio      = { content: audio_file }
 
   operation = speech.long_running_recognize config, audio
@@ -120,7 +134,9 @@ def speech_async_recognize_gcs storage_path: nil
 
   speech = Google::Cloud::Speech.new
 
-  config = { encoding: :LINEAR16, sample_rate_hertz: 16000, language_code: "en-US" }
+  config     = { encoding:          :LINEAR16,
+                 sample_rate_hertz: 16000,
+                 language_code:     "en-US"   }
   audio  = { uri: storage_path }
 
   operation = speech.long_running_recognize config, audio
@@ -147,7 +163,10 @@ def speech_async_recognize_gcs_words storage_path: nil
 
   speech = Google::Cloud::Speech.new
 
-  config = { encoding: :LINEAR16, sample_rate_hertz: 16000, language_code: "en-US", enable_word_time_offsets: true }
+  config = { encoding:                 :LINEAR16,
+             sample_rate_hertz:        16000,
+             language_code:            "en-US",
+             enable_word_time_offsets: true }
   audio  = { uri: storage_path }
 
   operation = speech.long_running_recognize config, audio
