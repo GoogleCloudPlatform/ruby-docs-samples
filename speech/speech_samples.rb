@@ -77,7 +77,6 @@ def speech_sync_recognize_gcs storage_path: nil
 
   speech = Google::Cloud::Speech.new
 
-  # [START speech_storage_uri_request]
   # [START speech_storage_uri_config]
   config = { encoding:          :LINEAR16,
              sample_rate_hertz: 16000,
@@ -86,7 +85,6 @@ def speech_sync_recognize_gcs storage_path: nil
   # [END speech_storage_uri_config]
 
   response = speech.recognize config, audio
-  # [END speech_storage_uri_request]
 
   alternatives = response.results.first.alternatives
 
