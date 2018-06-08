@@ -41,12 +41,12 @@ audio  = { content: audio_file }
 # Detects speech in the audio file
 response = speech.recognize config, audio
 
-# Get first result because we only processed a single audio file
-results = response.results.first
+results = response.results
 # [END speech_request]
 
+# Get first result because we only processed a single audio file
 # Each result represents a consecutive portion of the audio
-results.alternatives.each do |alternatives|
+results.first.alternatives.each do |alternatives|
   puts "Transcription: #{alternatives.transcript}"
 end
 # [END speech_quickstart]
