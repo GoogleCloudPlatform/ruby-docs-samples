@@ -26,12 +26,16 @@ speech = Google::Cloud::Speech.new
 # The name of the audio file to transcribe
 file_name = "./audio_files/audio.raw"
 
+# [START speech_config]
 # The raw audio
 audio_file = File.binread file_name
 
 # The audio file's encoding and sample rate
-config = { encoding: :LINEAR16, sample_rate_hertz: 16000, language_code: "en-US" }
+config = { encoding:          :LINEAR16,
+           sample_rate_hertz: 16000,
+           language_code:     "en-US"   }
 audio  = { content: audio_file }
+# [END speech_config]
 
 # Detects speech in the audio file
 response = speech.recognize config, audio
