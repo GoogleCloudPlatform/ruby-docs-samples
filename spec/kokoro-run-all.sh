@@ -32,7 +32,9 @@ ruby --version
 # leave this until all tests are added
 for product in \
   auth \
+  bigquery \
   cdn \
+  datastore \
   kms \
   iot \
   pubsub \
