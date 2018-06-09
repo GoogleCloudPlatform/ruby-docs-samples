@@ -7,6 +7,7 @@ describe "Google Cloud Firestore API samples - Delete Data" do
 
   before do
     @firestore_project = ENV["FIRESTORE_PROJECT_ID"]
+    retrieve_create_examples project_id: @firestore_project
   end
 
   after do
@@ -24,7 +25,6 @@ describe "Google Cloud Firestore API samples - Delete Data" do
   end
 
   example "delete_doc" do
-    retrieve_create_examples project_id: @firestore_project
     output = capture {
       delete_doc project_id: @firestore_project
     }
@@ -32,7 +32,6 @@ describe "Google Cloud Firestore API samples - Delete Data" do
   end
 
   example "delete_field" do
-    retrieve_create_examples project_id: @firestore_project
     output = capture {
       delete_field project_id: @firestore_project
     }
@@ -40,7 +39,6 @@ describe "Google Cloud Firestore API samples - Delete Data" do
   end
 
   example "delete_collection" do
-    retrieve_create_examples project_id: @firestore_project
     output = capture {
       delete_collection project_id: @firestore_project
     }

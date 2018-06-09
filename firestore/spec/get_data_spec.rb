@@ -6,6 +6,7 @@ describe "Google Cloud Firestore API samples - Get Data" do
 
   before do
     @firestore_project = ENV["FIRESTORE_PROJECT_ID"]
+    retrieve_create_examples project_id: @firestore_project
   end
 
   after do
@@ -31,7 +32,6 @@ describe "Google Cloud Firestore API samples - Get Data" do
   end
 
   example "get_document" do
-    retrieve_create_examples project_id: @firestore_project
     output = capture {
       get_document project_id: @firestore_project
     }
@@ -44,7 +44,6 @@ describe "Google Cloud Firestore API samples - Get Data" do
   end
 
   example "get_multiple_docs" do
-    retrieve_create_examples project_id: @firestore_project
     output = capture {
       get_multiple_docs project_id: @firestore_project
     }
@@ -61,7 +60,6 @@ describe "Google Cloud Firestore API samples - Get Data" do
   end
 
   example "get_all_docs" do
-    retrieve_create_examples project_id: @firestore_project
     output = capture {
       get_all_docs project_id: @firestore_project
     }
@@ -78,7 +76,6 @@ describe "Google Cloud Firestore API samples - Get Data" do
   end
 
   example "add_subcollection" do
-    retrieve_create_examples project_id: @firestore_project
     output = capture {
       add_subcollection project_id: @firestore_project
     }
@@ -86,7 +83,6 @@ describe "Google Cloud Firestore API samples - Get Data" do
   end
 
   example "list_subcollections" do
-    retrieve_create_examples project_id: @firestore_project
     add_subcollection project_id: @firestore_project
     output = capture {
       list_subcollections project_id: @firestore_project

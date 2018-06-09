@@ -6,6 +6,7 @@ describe "Google Cloud Firestore API samples - Query Data" do
 
   before do
     @firestore_project = ENV["FIRESTORE_PROJECT_ID"]
+    query_create_examples project_id: @firestore_project
   end
 
   after do
@@ -30,7 +31,6 @@ describe "Google Cloud Firestore API samples - Query Data" do
   end
 
   example "create_query_state" do
-    query_create_examples project_id: @firestore_project
     output = capture {
       create_query_state project_id: @firestore_project
     }
@@ -42,7 +42,6 @@ describe "Google Cloud Firestore API samples - Query Data" do
   end
 
   example "create_query_capital" do
-    query_create_examples project_id: @firestore_project
     output = capture {
       create_query_capital project_id: @firestore_project
     }
@@ -54,7 +53,6 @@ describe "Google Cloud Firestore API samples - Query Data" do
   end
 
   example "simple_queries" do
-    query_create_examples project_id: @firestore_project
     output = capture {
       simple_queries project_id: @firestore_project
     }
@@ -76,7 +74,6 @@ describe "Google Cloud Firestore API samples - Query Data" do
   end
 
   example "chained_query" do
-    query_create_examples project_id: @firestore_project
     output = capture {
       chained_query project_id: @firestore_project
     }
@@ -88,7 +85,6 @@ describe "Google Cloud Firestore API samples - Query Data" do
   end
 
   example "composite_index_chained_query" do
-    query_create_examples project_id: @firestore_project
     output = capture {
       composite_index_chained_query project_id: @firestore_project
     }
@@ -100,7 +96,6 @@ describe "Google Cloud Firestore API samples - Query Data" do
   end
 
   example "range_query" do
-    query_create_examples project_id: @firestore_project
     output = capture {
       range_query project_id: @firestore_project
     }
@@ -112,7 +107,6 @@ describe "Google Cloud Firestore API samples - Query Data" do
   end
 
   example "invalid_range_query" do
-    query_create_examples project_id: @firestore_project
     invalid_range_query project_id: @firestore_project
   end
 end
