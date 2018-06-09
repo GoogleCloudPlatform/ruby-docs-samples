@@ -7,6 +7,7 @@ describe "Google Cloud Firestore API samples - Order Limit Data" do
 
   before do
     @firestore_project = ENV["FIRESTORE_PROJECT_ID"]
+    retrieve_create_examples project_id: @firestore_project
   end
 
   after do
@@ -24,7 +25,6 @@ describe "Google Cloud Firestore API samples - Order Limit Data" do
   end
 
   example "order_by_name_limit_query" do
-    retrieve_create_examples project_id: @firestore_project
     output = capture {
       order_by_name_limit_query project_id: @firestore_project
     }
@@ -36,7 +36,6 @@ describe "Google Cloud Firestore API samples - Order Limit Data" do
   end
 
   example "order_by_name_desc_limit_query" do
-    retrieve_create_examples project_id: @firestore_project
     output = capture {
       order_by_name_desc_limit_query project_id: @firestore_project
     }
@@ -48,7 +47,6 @@ describe "Google Cloud Firestore API samples - Order Limit Data" do
   end
 
   example "order_by_state_and_population_query" do
-    retrieve_create_examples project_id: @firestore_project
     output = capture {
       order_by_state_and_population_query project_id: @firestore_project
     }
@@ -60,7 +58,6 @@ describe "Google Cloud Firestore API samples - Order Limit Data" do
   end
 
   example "where_order_by_limit_query" do
-    retrieve_create_examples project_id: @firestore_project
     output = capture {
       where_order_by_limit_query project_id: @firestore_project
     }
@@ -72,7 +69,6 @@ describe "Google Cloud Firestore API samples - Order Limit Data" do
   end
 
   example "range_order_by_query" do
-    retrieve_create_examples project_id: @firestore_project
     output = capture {
       range_order_by_query project_id: @firestore_project
     }
@@ -84,7 +80,6 @@ describe "Google Cloud Firestore API samples - Order Limit Data" do
   end
 
   example "invalid_range_order_by_query" do
-    retrieve_create_examples project_id: @firestore_project
     invalid_range_order_by_query project_id: @firestore_project
   end
 end

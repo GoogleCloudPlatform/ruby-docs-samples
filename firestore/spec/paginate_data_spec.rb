@@ -7,6 +7,7 @@ describe "Google Cloud Firestore API samples - Paginate Data" do
 
   before do
     @firestore_project = ENV["FIRESTORE_PROJECT_ID"]
+    retrieve_create_examples project_id: @firestore_project
   end
 
   after do
@@ -24,7 +25,6 @@ describe "Google Cloud Firestore API samples - Paginate Data" do
   end
 
   example "start_at_field_query_cursor" do
-    retrieve_create_examples project_id: @firestore_project
     output = capture {
       start_at_field_query_cursor project_id: @firestore_project
     }
@@ -36,7 +36,6 @@ describe "Google Cloud Firestore API samples - Paginate Data" do
   end
 
   example "end_at_field_query_cursor" do
-    retrieve_create_examples project_id: @firestore_project
     output = capture {
       end_at_field_query_cursor project_id: @firestore_project
     }
@@ -48,7 +47,6 @@ describe "Google Cloud Firestore API samples - Paginate Data" do
   end
 
   example "paginated_query_cursor" do
-    retrieve_create_examples project_id: @firestore_project
     output = capture {
       paginated_query_cursor project_id: @firestore_project
     }
@@ -60,7 +58,6 @@ describe "Google Cloud Firestore API samples - Paginate Data" do
   end
 
   example "multiple_cursor_conditions" do
-    retrieve_create_examples project_id: @firestore_project
     output = capture {
       multiple_cursor_conditions project_id: @firestore_project
     }

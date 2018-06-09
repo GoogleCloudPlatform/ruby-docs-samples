@@ -7,6 +7,7 @@ describe "Google Cloud Firestore API samples - Transactions and Batched Writes" 
 
   before do
     @firestore_project = ENV["FIRESTORE_PROJECT_ID"]
+    query_create_examples project_id: @firestore_project
   end
 
   after do
@@ -24,7 +25,6 @@ describe "Google Cloud Firestore API samples - Transactions and Batched Writes" 
   end
 
   example "run_simple_transaction" do
-    query_create_examples project_id: @firestore_project
     output = capture {
       run_simple_transaction project_id: @firestore_project
     }
@@ -33,7 +33,6 @@ describe "Google Cloud Firestore API samples - Transactions and Batched Writes" 
   end
 
   example "return_info_transaction" do
-    query_create_examples project_id: @firestore_project
     output = capture {
       return_info_transaction project_id: @firestore_project
     }
@@ -41,7 +40,6 @@ describe "Google Cloud Firestore API samples - Transactions and Batched Writes" 
   end
 
   example "batch_write" do
-    query_create_examples project_id: @firestore_project
     output = capture {
       batch_write project_id: @firestore_project
     }
