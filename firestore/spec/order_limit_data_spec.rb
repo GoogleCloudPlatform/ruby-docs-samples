@@ -8,6 +8,7 @@ describe "Google Cloud Firestore API samples - Order Limit Data" do
   before do
     @firestore_project = ENV["FIRESTORE_PROJECT_ID"]
     retrieve_create_examples project_id: @firestore_project
+    sleep(1)
   end
 
   after do
