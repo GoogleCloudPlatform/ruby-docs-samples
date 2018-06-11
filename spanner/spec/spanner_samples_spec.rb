@@ -19,18 +19,25 @@ require "google/cloud/spanner"
 describe "Google Cloud Spanner API samples" do
 
   before do
-    @spanner    = Google::Cloud::Spanner.new
-    @project_id = @spanner.project_id
-    @instance   = @spanner.instance ENV["GOOGLE_CLOUD_SPANNER_TEST_INSTANCE"]
+    if ENV["GOOGLE_CLOUD_SPANNER_TEST_INSTANCE"].nil? || ENV["GOOGLE_CLOUD_SPANNER_PROJECT"].nil?
+      skip "GOOGLE_CLOUD_SPANNER_TEST_INSTANCE and/or GOOGLE_CLOUD_SPANNER_PROJECT not defined"
+    end
+
+    @project_id  = ENV["GOOGLE_CLOUD_SPANNER_PROJECT"]
+    @instance_id = ENV["GOOGLE_CLOUD_SPANNER_TEST_INSTANCE"]
+    @seed        = SecureRandom.hex(8)
+    @database_id = "test_db_#{@seed}"
+    @spanner     = Google::Cloud::Spanner.new project: @project_id
+    @instance    = @spanner.instance @instance_id
   end
 
   before :each do
-    @test_database = @instance.database "db_for_all_tests"
+    @test_database = @instance.database @database_id
     @test_database.drop if @test_database
   end
 
   after do
-    @test_database = @instance.database "db_for_all_tests"
+    @test_database = @instance.database @database_id
     @test_database.drop if @test_database
   end
 
@@ -38,13 +45,11 @@ describe "Google Cloud Spanner API samples" do
   # (re-uses create_database to create database with Albums/Singers schema)
   def create_singers_albums_database
     capture do
-      database_id = "db_for_all_tests"
-
       create_database project_id:  @project_id,
                       instance_id: @instance.instance_id,
-                      database_id: database_id
+                      database_id: @database_id
 
-      @test_database = @instance.database database_id
+      @test_database = @instance.database @database_id
     end
 
     @test_database
@@ -52,11 +57,9 @@ describe "Google Cloud Spanner API samples" do
 
   def create_performances_table
     capture do
-      database_id = "db_for_all_tests"
-
       create_table_with_timestamp_column project_id:  @project_id,
                                          instance_id: @instance.instance_id,
-                                         database_id: database_id
+                                         database_id: @database_id
     end
   end
 
@@ -72,8 +75,6 @@ describe "Google Cloud Spanner API samples" do
   attr_reader :captured_output
 
   example "create_database" do
-    @database_id = "db_for_all_tests"
-
     expect(@instance.databases.map(&:database_id)).not_to include @database_id
 
     capture do
@@ -99,7 +100,6 @@ describe "Google Cloud Spanner API samples" do
   end
 
   example "create table with timestamp column" do
-    @database_id = "db_for_all_tests"
     database     = create_singers_albums_database
 
     expect(@instance.databases.map(&:database_id)).to include @database_id
