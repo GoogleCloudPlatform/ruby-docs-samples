@@ -33,15 +33,21 @@ ruby --version
 for product in \
   auth \
   bigquery \
+  bigquerydatatransfer \
   cdn \
   datastore \
+  # dialogflow \
+  dlp \
+  endpoints/getting-started \
   firestore \
-  kms \
   iot \
-  pubsub \
+  kms \
   language \
-  translate \
+  # logging \
+  pubsub \
+  spanner \
   speech \
+  translate \
   video \
   vision
 do
