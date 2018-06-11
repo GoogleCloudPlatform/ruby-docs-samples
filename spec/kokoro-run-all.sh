@@ -39,6 +39,7 @@ for product in \
   # dialogflow \
   dlp \
   endpoints/getting-started \
+<<<<<<< HEAD
   firestore \
   iot \
   kms \
@@ -46,6 +47,12 @@ for product in \
   # logging \
   pubsub \
   spanner \
+=======
+  iot \
+  kms \
+  language \
+  pubsub \
+>>>>>>> kokoro: enable endpoints tests
   speech \
   translate \
   video \
