@@ -19,16 +19,21 @@ require "google/cloud/spanner"
 describe "Spanner Quickstart" do
 
   it "outputs a 1" do
-    @spanner     = Google::Cloud::Spanner.new
-    @project_id  = @spanner.project_id
+    if ENV["GOOGLE_CLOUD_SPANNER_TEST_INSTANCE"].nil? || ENV["GOOGLE_CLOUD_SPANNER_PROJECT"].nil?
+      skip "GOOGLE_CLOUD_SPANNER_TEST_INSTANCE and/or GOOGLE_CLOUD_SPANNER_PROJECT not defined"
+    end
+
+    @project_id  = ENV["GOOGLE_CLOUD_SPANNER_PROJECT"]
     @instance_id = ENV["GOOGLE_CLOUD_SPANNER_TEST_INSTANCE"]
-    @database_id = "db_for_all_tests"
+    @seed        = SecureRandom.hex(8)
+    @database_id = "test_db_#{@seed}"
+    @spanner     = Google::Cloud::Spanner.new project: @project_id
     @instance    = @spanner.instance @instance_id
 
     unless @instance.database @database_id
       real_stdout = $stdout
       $stdout = StringIO.new
-      create_database project_id:     @project_id,
+      create_database project_id:  @project_id,
                       instance_id: @instance_id,
                       database_id: @database_id
       $stdout = real_stdout
