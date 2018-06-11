@@ -45,7 +45,10 @@ describe "Logging sample" do
     @project_id = @logging.project
     @storage    = Google::Cloud::Storage.new
     @bucket     = @storage.bucket ENV["GOOGLE_CLOUD_STORAGE_BUCKET"]
-    @alt_bucket = @storage.bucket ENV["ALTERNATE_GOOGLE_CLOUD_STORAGE_BUCKET"]
+
+    @alt_bucket_name = ENV["ALTERNATE_GOOGLE_CLOUD_STORAGE_BUCKET"]
+    @storage.create_bucket @alt_bucket_name unless @storage.bucket @alt_bucket_name
+    @alt_bucket = @storage.bucket @alt_bucket_name
 
     # Cloud Logging needs owner permissions on the buckets used
     @bucket.acl.add_owner "group-cloud-logs@google.com"
