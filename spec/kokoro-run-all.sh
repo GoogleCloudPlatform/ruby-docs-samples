@@ -34,7 +34,6 @@ for product in \
   auth \
   bigquery \
   cdn \
-  firestore \
   datastore \
   firestore \
   kms \
