@@ -20,6 +20,7 @@ def speech_sync_recognize audio_file_path: nil
 
   speech = Google::Cloud::Speech.new
 
+  # [START speech_sync_response]
   audio_file = File.binread audio_file_path
   config     = { encoding:          :LINEAR16,
                  sample_rate_hertz: 16000,
@@ -34,6 +35,7 @@ def speech_sync_recognize audio_file_path: nil
   alternatives.each do |alternative|
     puts "Transcription: #{alternative.transcript}"
   end
+  # [END speech_sync_response]
 # [END speech_sync_recognize]
 end
 
@@ -105,6 +107,7 @@ def speech_async_recognize audio_file_path: nil
 
   speech = Google::Cloud::Speech.new
 
+  # [START speech_async_response]
   # [START speech_async_request]
   audio_file = File.binread audio_file_path
   config     = { encoding:          :LINEAR16,
@@ -127,6 +130,7 @@ def speech_async_recognize audio_file_path: nil
   alternatives.each do |alternative|
     puts "Transcription: #{alternative.transcript}"
   end
+  # [END speech_async_response]
 # [END speech_async_recognize]
 end
 
@@ -206,6 +210,7 @@ def speech_streaming_recognize audio_file_path: nil
 
   speech = Google::Cloud::Speech.new
 
+  # [START speech_streaming_response]
   # [START speech_streaming_request]
   audio_content  = File.binread audio_file_path
   bytes_total    = audio_content.size
@@ -237,6 +242,7 @@ def speech_streaming_recognize audio_file_path: nil
   alternatives.each do |result|
     puts "Transcript: #{result.transcript}"
   end
+  # [END speech_streaming_response]
 # [END speech_streaming]
 end
 
