@@ -129,3 +129,7 @@ Usage: ruby session_entity_type_management.rb [commang] [arguments]
       delete  <sessino_id> <session_entity_type_id>
       Delete a session entity type
 
+## Run tests
+
+1. Follow https://cloud.google.com/dialogflow-enterprise/docs/quickstart-client-libraries (including importing the zip).
+2. `bundle install && bundle exec rspec --format documentation`
