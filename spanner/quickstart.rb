@@ -40,3 +40,4 @@ database_client.transaction do |transaction|
   end
 end
 # [END spanner_quickstart]
+
