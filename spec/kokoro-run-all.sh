@@ -30,12 +30,6 @@ function set_failed_status {
 # Print out Ruby version
 ruby --version
 
-# Run Spanner tests if RUN_ALL_TESTS is set.
-if [[ -n ${RUN_ALL_TESTS:-} ]]; then
-  export GOOGLE_CLOUD_SPANNER_TEST_INSTANCE=ruby-test-instance
-  export GOOGLE_CLOUD_SPANNER_PROJECT=cloud-samples-ruby-test-0
-fi
-
 # leave this until all tests are added
 for product in \
   auth \
