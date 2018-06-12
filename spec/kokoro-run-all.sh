@@ -35,6 +35,7 @@ for product in \
   bigquery \
   cdn \
   datastore \
+  firestore \
   kms \
   iot \
   pubsub \
