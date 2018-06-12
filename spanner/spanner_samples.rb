@@ -304,6 +304,131 @@ def add_timestamp_column project_id:, instance_id:, database_id:
   # [END spanner_add_timestamp_column]
 end
 
+def write_struct_data project_id:, instance_id:, database_id:
+  # [START spanner_write_data_for_struct_queries]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+
+  spanner = Google::Cloud::Spanner.new project: project_id
+  client  = spanner.client instance_id, database_id
+
+  client.commit do |c|
+    c.insert "Singers", [
+      { SingerId: 6, FirstName: "Elena",    LastName: "Campbell" },
+      { SingerId: 7, FirstName: "Gabriel",  LastName: "Wright"    },
+      { SingerId: 8, FirstName: "Benjamin", LastName: "Martinez"  },
+      { SingerId: 9, FirstName: "Hannah",   LastName: "Harris"   }
+    ]
+  end
+  puts "Inserted Data for Struct queries"
+  # [END spanner_write_data_for_struct_queries]
+end
+
+def query_with_struct project_id:, instance_id:, database_id:
+
+  # [START spanner_create_struct_with_data]
+  name_struct = { FirstName: "Elena", LastName: "Campbell" }
+  # [END spanner_create_struct_with_data]
+
+  # [START spanner_query_data_with_struct]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+
+  spanner = Google::Cloud::Spanner.new project: project_id
+  client  = spanner.client instance_id, database_id
+  client.execute("SELECT SingerId FROM Singers WHERE " +
+    "(FirstName, LastName) = @name",
+    params: { name: name_struct }).rows.each do |row|
+      puts "#{row[:SingerId]}"
+    end
+  # [END spanner_query_data_with_struct]
+end
+
+def query_with_array_of_struct project_id:, instance_id:, database_id:
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+
+  spanner = Google::Cloud::Spanner.new project: project_id
+  client  = spanner.client instance_id, database_id
+
+  # [START spanner_create_user_defined_struct]
+  name_type = client.fields(FirstName: :STRING, LastName: :STRING)
+  # [END spanner_create_user_defined_struct]
+
+  # [START spanner_create_array_of_struct_with_data]
+  band_members = [name_type.struct(["Elena", "Campbell"]),
+                  name_type.struct(["Gabriel", "Wright"]),
+                  name_type.struct(["Benjamin", "Martinez"])];
+  # [END spanner_create_array_of_struct_with_data]
+
+  # [START spanner_query_data_with_array_of_struct]
+  client.execute(
+    "SELECT SingerId FROM Singers WHERE " +
+    "STRUCT<FirstName STRING, LastName STRING>(FirstName, LastName) IN UNNEST(@names)",
+    params: { names: band_members }).rows.each do |row|
+      puts "#{row[:SingerId]}"
+  end
+  # [END spanner_query_data_with_array_of_struct]
+end
+
+def query_struct_field project_id:, instance_id:, database_id:
+  # [START spanner_field_access_on_struct_parameters]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+
+  spanner = Google::Cloud::Spanner.new project: project_id
+  client  = spanner.client instance_id, database_id
+
+  name_struct = {FirstName: "Elena", LastName: "Campbell"}
+  client.execute(
+    "SELECT SingerId FROM Singers WHERE FirstName = @name.FirstName",
+    params: { name: name_struct }
+    ).rows.each do |row|
+      puts "#{row[:SingerId]}"
+  end
+  # [END spanner_field_access_on_struct_parameters]
+end
+
+def query_nested_struct_field project_id:, instance_id:, database_id:
+  # [START spanner_field_access_on_nested_struct_parameters]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+
+  spanner = Google::Cloud::Spanner.new project: project_id
+  client  = spanner.client instance_id, database_id
+
+  name_type = client.fields FirstName: :STRING, LastName: :STRING
+
+  song_info_struct = {
+    SongName:    "Imagination",
+    ArtistNames: [name_type.struct(["Elena", "Campbell"]), name_type.struct(["Hannah", "Harris"])]
+  }
+
+  client.execute(
+    "SELECT SingerId, @song_info.SongName " +
+    "FROM Singers WHERE STRUCT<FirstName STRING, LastName STRING>(FirstName, LastName) " +
+    "IN UNNEST(@song_info.ArtistNames)",
+    params: {song_info: song_info_struct }).rows.each do |row|
+      puts "#{row[:SingerId]}", "#{row[:SongName]}"
+  end
+  # [END spanner_field_access_on_nested_struct_parameters]
+end
+
 def update_data project_id:, instance_id:, database_id:
   # [START spanner_update_data]
   # project_id  = "Your Google Cloud project ID"
@@ -620,6 +745,11 @@ Commands:
   update_data_with_timestamp_column  <instance_id> <database_id> Updates two records in the altered table where the commit timestamp column was added
   query_data_with_new_column         <instance_id> <database_id> Query Data with New Column
   query_data_with_timestamp_column   <instance_id> <database_id> Queries data from altered table where the commit timestamp column was added
+  write_struct_data                  <instance_id> <database_id> Inserts sample data that can be used for STRUCT queries
+  query_with_struct                  <instance_id> <database_id> Queries data using a STRUCT paramater
+  query_with_array_of_struct         <instance_id> <database_id> Queries data using an array of STRUCT values as parameter
+  query_struct_field                 <instance_id> <database_id> Queries data by accessing field from a STRUCT parameter
+  query_nested_struct_field          <instance_id> <database_id> Queries data by accessing field from nested STRUCT parameters
   query_data_with_index              <instance_id> <database_id> <start_title> <end_title> Query Data with Index
   read_write_transaction             <instance_id> <database_id> Read-Write Transaction
   read_data_with_index               <instance_id> <database_id> Read Data with Index
@@ -647,9 +777,9 @@ def run_sample arguments
     "update_data_with_timestamp_column", "read_write_transaction",
     "query_data_with_index", "read_data_with_index",
     "read_data_with_storing_index", "read_only_transaction",
-    "spanner_batch_client"
+    "spanner_batch_client", "write_struct_data", "query_with_struct",
+    "query_with_array_of_struct", "query_struct_field", "query_nested_struct_field"
   ]
-
   if command.eql?("query_data_with_index") && instance_id && database_id && arguments.size >= 2
     query_data_with_index project_id:  project_id,
                           instance_id: instance_id,
