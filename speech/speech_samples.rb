@@ -225,6 +225,8 @@ def speech_streaming_recognize audio_file_path: nil
 
   stream = speech.streaming_recognize streaming_config
 
+  # Simulated streaming from a microphone
+  # Stream bytes...
   while bytes_sent < bytes_total do
     stream.send audio_content[bytes_sent, chunk_size]
     bytes_sent += chunk_size
@@ -233,6 +235,8 @@ def speech_streaming_recognize audio_file_path: nil
 
   puts "Stopped passing"
   stream.stop
+
+  # Wait until processing is complete...
   stream.wait_until_complete!
 
   results = stream.results
