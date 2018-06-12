@@ -194,6 +194,78 @@ describe "Google Cloud Spanner API samples" do
     expect(captured_output).to include "2 3 Terrified"
   end
 
+  example "query with struct" do
+    database = create_singers_albums_database
+    client = @spanner.client @instance.instance_id, database.database_id
+
+    capture do
+      write_struct_data project_id:  @project_id,
+                        instance_id: @instance.instance_id,
+                        database_id: database.database_id
+    end
+
+    capture do
+      query_with_struct project_id:  @project_id,
+                        instance_id: @instance.instance_id,
+                        database_id: database.database_id
+    end
+    expect(captured_output).to match /6/
+  end
+
+  example "query with array of struct" do
+    database = create_singers_albums_database
+    client = @spanner.client @instance.instance_id, database.database_id
+
+    capture do
+      write_struct_data project_id:  @project_id,
+                        instance_id: @instance.instance_id,
+                        database_id: database.database_id
+    end
+
+    capture do
+      query_with_array_of_struct project_id:  @project_id,
+                        instance_id: @instance.instance_id,
+                        database_id: database.database_id
+    end
+    expect(captured_output).to match /6\n7/
+  end
+
+  example "query struct field" do
+    database = create_singers_albums_database
+    client = @spanner.client @instance.instance_id, database.database_id
+
+    capture do
+      write_struct_data project_id:  @project_id,
+                        instance_id: @instance.instance_id,
+                        database_id: database.database_id
+    end
+
+    capture do
+      query_struct_field project_id:  @project_id,
+                        instance_id: @instance.instance_id,
+                        database_id: database.database_id
+    end
+    expect(captured_output).to match /6/
+  end
+
+  example "query nested struct field" do
+    database = create_singers_albums_database
+    client = @spanner.client @instance.instance_id, database.database_id
+
+    capture do
+      write_struct_data project_id:  @project_id,
+                        instance_id: @instance.instance_id,
+                        database_id: database.database_id
+    end
+
+    capture do
+      query_nested_struct_field project_id:  @project_id,
+                                instance_id: @instance.instance_id,
+                                database_id: database.database_id
+    end
+    expect(captured_output).to match /6\nImagination\n9\nImagination/
+  end
+
   example "query data_with_timestamp_column" do
     database = create_singers_albums_database
     client   = @spanner.client @instance.instance_id, database.database_id
