@@ -38,7 +38,7 @@ def add_data_1 project_id:
   })
 
   puts "Added data to the alovelace document in the users collection."
-  # [END fs_data_1]
+  # [END fs_add_data_1]
 end
 
 def add_data_2 project_id:
@@ -56,7 +56,7 @@ def add_data_2 project_id:
   })
 
   puts "Added data to the aturing document in the users collection."
-  # [END fs_data_2]
+  # [END fs_add_data_2]
 end
 
 def get_all project_id:

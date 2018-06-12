@@ -40,7 +40,7 @@ def update_create_if_missing project_id:
   # [START fs_update_create_if_missing]
   city_ref = firestore.doc "cities/LA"
   city_ref.set({ capital: false }, merge: true)
-  # [END fs_update_create_if_mising]
+  # [END fs_update_create_if_missing]
   puts "Merged data into the LA document in the cities collection."
 end
 
