@@ -3,6 +3,7 @@
 source $KOKORO_GFILE_DIR/secrets.sh
 
 # Get a project from the project pool.
+# See https://github.com/GoogleCloudPlatform/golang-samples/tree/master/testing/gimmeproj.
 curl https://storage.googleapis.com/gimme-proj/linux_amd64/gimmeproj > /bin/gimmeproj && chmod +x /bin/gimmeproj;
 gimmeproj version;
 export GOOGLE_CLOUD_PROJECT=$(gimmeproj -project cloud-samples-ruby-test-kokoro lease 30m);
