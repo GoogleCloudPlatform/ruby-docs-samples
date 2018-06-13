@@ -37,14 +37,12 @@ for product in \
   bigquerydatatransfer \
   cdn \
   datastore \
-  # dialogflow \
   dlp \
   endpoints/getting-started \
   firestore \
   iot \
   kms \
   language \
-  # logging \
   pubsub \
   spanner \
   speech \
