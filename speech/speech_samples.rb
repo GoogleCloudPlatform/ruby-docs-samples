@@ -86,9 +86,9 @@ def speech_sync_recognize_gcs storage_path: nil
              sample_rate_hertz: 16000,
              language_code:     "en-US"   }
   audio  = { uri: storage_path }
-  # [END speech_storage_uri_config]
 
   response = speech.recognize config, audio
+  # [END speech_storage_uri_config]
 
   results = response.results
 

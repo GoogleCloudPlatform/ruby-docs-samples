@@ -36,10 +36,10 @@ config = { encoding:          :LINEAR16,
            sample_rate_hertz: 16000,
            language_code:     "en-US"   }
 audio  = { content: audio_file }
-# [END speech_config]
 
 # Detects speech in the audio file
 response = speech.recognize config, audio
+# [END speech_config]
 
 results = response.results
 # [END speech_request]
