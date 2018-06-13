@@ -19,7 +19,7 @@ require "google/cloud/logging"
 describe "Logging Quickstart" do
 
   def wait_until &condition
-    1.upto(5) do |n|
+    1.upto(7) do |n|
       return if condition.call
       sleep 2**n
     end
