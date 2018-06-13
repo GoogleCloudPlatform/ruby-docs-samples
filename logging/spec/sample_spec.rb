@@ -18,6 +18,17 @@ require "rspec/retry"
 require "google/cloud/logging"
 require "google/cloud/storage"
 
+RSpec.configure do |config|
+  # show retry status in spec process
+  config.verbose_retry = true
+  # show exception that triggers a retry if verbose_retry is set to true
+  config.display_try_failure_messages = true
+
+  # set retry count and retry sleep interval to 10 seconds
+  config.default_retry_count = 5
+  config.default_sleep_interval = 10
+end
+
 describe "Logging sample" do
 
   def wait_until &condition
