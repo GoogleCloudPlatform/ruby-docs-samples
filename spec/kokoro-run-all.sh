@@ -37,6 +37,7 @@ for product in \
   bigquerydatatransfer \
   cdn \
   datastore \
+  dialogflow \
   dlp \
   endpoints/getting-started \
   firestore \
