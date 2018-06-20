@@ -44,6 +44,7 @@ for product in \
   iot \
   kms \
   language \
+  logging \
   pubsub \
   spanner \
   speech \
