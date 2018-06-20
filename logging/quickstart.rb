@@ -26,7 +26,15 @@ logging = Google::Cloud::Logging.new project: project_id
 
 # Prepares a log entry
 entry = logging.entry
-# The data to log
+# The data to log. You can log strings, protobufs and JSON. To log JSON you just need
+# to pass a Hash to entry.payload. For Protobuf, object must belong to "Google::Protobuf::Any" class.
+# (1) Case JSON:
+#entry.payload = { "foo" => "bar JSON example" } # a Hash is converted to JSON
+# (2) Case Protobuf
+# require "google/protobuf"
+# myproto = ... # something of type  Google::Protobuf
+#entry.payload = myproto
+# (3) Case String: just pass a string
 entry.payload = "Hello, world!"
 # The name of the log to write to
 entry.log_name = "my-log"
