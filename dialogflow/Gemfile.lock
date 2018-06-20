@@ -84,6 +84,8 @@ GEM
     rspec-mocks (3.7.0)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.7.0)
+    rspec-retry (0.6.1)
+      rspec-core (> 3.3)
     rspec-support (3.7.1)
     signet (0.8.1)
       addressable (~> 2.3)
@@ -99,6 +101,7 @@ DEPENDENCIES
   google-cloud-dialogflow
   google-cloud-storage
   rspec
+  rspec-retry
 
 BUNDLED WITH
    1.16.2
