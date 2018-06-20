@@ -305,22 +305,11 @@ describe "Datastore sample" do
     expect(percent_completes.first).to eq(10.0)
   end
 
-  it "supports keys_only_query run_keys_only_query" do
+  it "supports keys_only_query" do
     keys = keys_only_query
 
     expect(keys.empty?).to be(false)
     expect(keys.first.kind).to eq("Task")
-  end
-
-  it "supports distinct_query" do
-    query = distinct_on_query
-    tasks = datastore.run query
-
-    expect(tasks.empty?).to be(false)
-    expect(tasks.first.key.kind).to eq("Task")
-    expect(tasks.first["category"]).to eq("Personal")
-    expect(tasks.first["priority"]).to eq(4)
-    expect(tasks.first.properties.to_h.size).to eq(2)
   end
 
   it "supports distinct_on_query" do
@@ -527,46 +516,6 @@ describe "Datastore sample" do
     expect(properties_by_kind.empty?).to be(false)
     expect(properties_by_kind["Task"]).to include "priority"
     expect(properties_by_kind["Task"]).to include "tag"
-  end
-
-  it "supports gql_run_query" do
-    tasks = gql_run_query
-
-    expect(tasks.empty?).to be(false)
-    tasks.each { |t| expect_basic_task t }
-  end
-
-  it "supports gql_named_binding_query" do
-    gql_query = gql_named_binding_query
-    tasks = datastore.run gql_query
-
-    expect(tasks.empty?).to be(false)
-    tasks.each do |t|
-      expect_basic_task t
-      expect(t["priority"]).to eq(4)
-    end
-  end
-
-  it "supports gql_positional_binding_query" do
-    gql_query = gql_positional_binding_query
-    tasks = datastore.run gql_query
-
-    expect(tasks.empty?).to be(false)
-    tasks.each do |t|
-      expect_basic_task t
-      expect(t["priority"]).to eq(4)
-    end
-  end
-
-  it "supports gql_literal_query" do
-    gql_query = gql_literal_query
-    tasks = datastore.run gql_query
-
-    expect(tasks.empty?).to be(false)
-    tasks.each do |t|
-      expect_basic_task t
-      expect(t["priority"]).to eq(4)
-    end
   end
 
   def expect_basic_task task
