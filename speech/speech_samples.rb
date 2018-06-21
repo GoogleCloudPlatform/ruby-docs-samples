@@ -29,7 +29,7 @@ def speech_sync_recognize audio_file_path: nil
 
   response = speech.recognize config, audio
 
-  results = operation.response.results
+  results = response.results
 
   alternatives = results.first.alternatives
   alternatives.each do |alternative|
@@ -57,7 +57,7 @@ def speech_sync_recognize_words audio_file_path: nil
 
   response = speech.recognize config, audio
 
-  results = operation.response.results
+  results = response.results
 
   alternatives = results.first.alternatives
   alternatives.each do |alternative|
