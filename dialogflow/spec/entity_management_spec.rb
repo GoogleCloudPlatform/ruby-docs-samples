@@ -42,6 +42,15 @@ describe "Entity Management" do
     @synonyms                 = ["fake_synonym_for_testing_1", 
                                  "fake_synonym_for_testing_2"]
 
+    # clean up entity type
+    entity_type_ids = get_entity_type_ids project_id: @project_id,
+                                          display_name: @entity_type_display_name
+    entity_type_ids.each do |entity_type_id|
+      puts entity_type_id
+      delete_entity_type project_id: @project_id,
+                         entity_type_id: entity_type_id
+    end
+
     create_entity_type project_id: @project_id,
                        display_name: @entity_type_display_name,
                        kind: @kind

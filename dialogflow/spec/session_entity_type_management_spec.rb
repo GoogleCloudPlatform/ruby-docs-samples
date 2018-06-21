@@ -30,6 +30,13 @@ describe "Session Entity Type Management" do
   end
 
   example "create session_entity_type" do
+    # clean up entity type
+    entity_type_ids = get_entity_type_ids project_id: @project_id,
+                                          display_name: @entity_type_display_name
+    entity_type_ids.each do |entity_type_id|
+      delete_entity_type project_id: @project_id,
+                         entity_type_id: entity_type_id
+    end
     # create an entity type to be overridden
     create_entity_type project_id: @project_id,
                        display_name: @entity_type_display_name,
