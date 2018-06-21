@@ -46,7 +46,7 @@ describe "Context Management" do
   end
 
   example "delete context" do
-    capture do
+    hide do
       create_context project_id: @project_id,
                      session_id: @session_id,
                      context_id: @context_id

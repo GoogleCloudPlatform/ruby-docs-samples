@@ -30,7 +30,7 @@ describe "Session Entity Type Management" do
   end
 
   example "create session_entity_type" do
-    capture do
+    hide do
       # clean up entity type
       entity_type_ids = get_entity_type_ids project_id: @project_id,
                                             display_name: @entity_type_display_name
@@ -65,7 +65,7 @@ describe "Session Entity Type Management" do
   end
 
   example "delete session_entity_type" do
-    capture do
+    hide do
       delete_session_entity_type project_id: @project_id,
                      session_id: @session_id,
                      entity_type_display_name: @entity_type_display_name
@@ -78,7 +78,7 @@ describe "Session Entity Type Management" do
     expectation.not_to output(/#{@entity_values[0]}/).to_stdout
     expectation.not_to output(/#{@entity_values[1]}/).to_stdout
 
-    capture do
+    hide do
       # clean up entity type
       entity_type_ids = get_entity_type_ids project_id: @project_id,
                                             display_name: @entity_type_display_name

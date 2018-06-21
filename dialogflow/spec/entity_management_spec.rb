@@ -42,7 +42,7 @@ describe "Entity Management" do
     @synonyms                 = ["fake_synonym_for_testing_1",
                                  "fake_synonym_for_testing_2"]
 
-    capture do
+    hide do
       # clean up entity type
       entity_type_ids = get_entity_type_ids project_id: @project_id,
                                             display_name: @entity_type_display_name
@@ -61,7 +61,7 @@ describe "Entity Management" do
   end
 
   example "create entities" do
-    capture do
+    hide do
       create_entity project_id: @project_id, entity_type_id: @entity_type_id,
                     entity_value: @entity_value_1, synonyms: [""]
       create_entity project_id: @project_id, entity_type_id: @entity_type_id,
@@ -79,7 +79,7 @@ describe "Entity Management" do
   end
 
   example "delete entities" do
-    capture do
+    hide do
       delete_entity project_id: @project_id, entity_type_id: @entity_type_id,
                     entity_value: @entity_value_1
       delete_entity project_id: @project_id, entity_type_id: @entity_type_id,
@@ -93,7 +93,7 @@ describe "Entity Management" do
   end
 
   after do
-    capture do
+    hide do
       delete_entity_type project_id: @project_id,
                          entity_type_id: @entity_type_id
     end

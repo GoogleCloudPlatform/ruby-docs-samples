@@ -50,7 +50,7 @@ describe "Intent Management" do
   end
 
   example "delete intent" do
-    capture do
+    hide do
       intent_ids = get_intent_ids project_id: @project_id,
                                   display_name: @intent_display_name
 

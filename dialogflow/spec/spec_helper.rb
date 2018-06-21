@@ -44,13 +44,11 @@ def get_intent_ids project_id:, display_name:
 end
 
 # Capture and return STDOUT output by block
-def capture &block
+def hide &block
   real_stdout = $stdout
   $stdout = StringIO.new
   block.call
-  @captured_output = $stdout.string
 ensure
   $stdout = real_stdout
 end
-attr_reader :captured_output
 

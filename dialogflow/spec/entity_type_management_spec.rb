@@ -47,7 +47,7 @@ describe "Entity Type Management" do
   end
 
   example "delete entity type" do
-    capture do
+    hide do
       entity_type_ids = get_entity_type_ids project_id: @project_id,
                                             display_name: @entity_type_display_name
       entity_type_ids.each do |entity_type_id|
