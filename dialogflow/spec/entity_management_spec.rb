@@ -39,16 +39,17 @@ describe "Entity Management" do
     @kind                     = :KIND_MAP
     @entity_value_1           = "fake_entity_for_testing_1"
     @entity_value_2           = "fake_entity_for_testing_2"
-    @synonyms                 = ["fake_synonym_for_testing_1", 
+    @synonyms                 = ["fake_synonym_for_testing_1",
                                  "fake_synonym_for_testing_2"]
 
-    # clean up entity type
-    entity_type_ids = get_entity_type_ids project_id: @project_id,
-                                          display_name: @entity_type_display_name
-    entity_type_ids.each do |entity_type_id|
-      puts entity_type_id
-      delete_entity_type project_id: @project_id,
-                         entity_type_id: entity_type_id
+    capture do
+      # clean up entity type
+      entity_type_ids = get_entity_type_ids project_id: @project_id,
+                                            display_name: @entity_type_display_name
+      entity_type_ids.each do |entity_type_id|
+        puts entity_type_id
+        delete_entity_type project_id: @project_id,
+                           entity_type_id: entity_type_id
     end
 
     create_entity_type project_id: @project_id,
@@ -56,13 +57,16 @@ describe "Entity Management" do
                        kind: @kind
     @entity_type_id = (get_entity_type_ids project_id: @project_id,
                                            display_name: @entity_type_display_name).first
+    end
   end
 
   example "create entities" do
-    create_entity project_id: @project_id, entity_type_id: @entity_type_id,
-                  entity_value: @entity_value_1, synonyms: [""]
-    create_entity project_id: @project_id, entity_type_id: @entity_type_id,
-                  entity_value: @entity_value_2, synonyms: @synonyms
+    capture do
+      create_entity project_id: @project_id, entity_type_id: @entity_type_id,
+                    entity_value: @entity_value_1, synonyms: [""]
+      create_entity project_id: @project_id, entity_type_id: @entity_type_id,
+                    entity_value: @entity_value_2, synonyms: @synonyms
+    end
 
     expectation = expect {
       list_entities project_id: @project_id, entity_type_id: @entity_type_id
@@ -75,11 +79,12 @@ describe "Entity Management" do
   end
 
   example "delete entities" do
-    delete_entity project_id: @project_id, entity_type_id: @entity_type_id,
-                  entity_value: @entity_value_1
-    delete_entity project_id: @project_id, entity_type_id: @entity_type_id,
-                  entity_value: @entity_value_2
-
+    capture do
+      delete_entity project_id: @project_id, entity_type_id: @entity_type_id,
+                    entity_value: @entity_value_1
+      delete_entity project_id: @project_id, entity_type_id: @entity_type_id,
+                    entity_value: @entity_value_2
+    end
     expect {
       list_entities project_id: @project_id, entity_type_id: @entity_type_id
     }.not_to output(
@@ -88,7 +93,9 @@ describe "Entity Management" do
   end
 
   after do
-    delete_entity_type project_id: @project_id,
-                       entity_type_id: @entity_type_id
+    capture do
+      delete_entity_type project_id: @project_id,
+                         entity_type_id: @entity_type_id
+    end
   end
 end

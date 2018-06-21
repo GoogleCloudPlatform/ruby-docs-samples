@@ -50,14 +50,15 @@ describe "Intent Management" do
   end
 
   example "delete intent" do
-    intent_ids = get_intent_ids project_id: @project_id,
-                                display_name: @intent_display_name
+    capture do
+      intent_ids = get_intent_ids project_id: @project_id,
+                                  display_name: @intent_display_name
 
-    intent_ids.each do |intent_id|
-      delete_intent project_id: @project_id,
-                    intent_id: intent_id
+      intent_ids.each do |intent_id|
+        delete_intent project_id: @project_id,
+                      intent_id: intent_id
+      end
     end
-
     expect(
       (get_intent_ids project_id: @project_id,
                       display_name: @intent_display_name).size

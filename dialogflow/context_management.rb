@@ -19,7 +19,7 @@ def list_contexts project_id:, session_id:
   # [START dialogflow_list_contexts]
   # project_id = "Your Google Cloud project ID"
   # session_id = "Existing Session ID"
-  
+
   require "google/cloud/dialogflow"
 
   contexts_client = Google::Cloud::Dialogflow::Contexts.new
@@ -49,7 +49,7 @@ def create_context project_id:, session_id:, context_id:
   # project_id = "Your Google Cloud project ID"
   # session_id = "Existing Session ID"
   # context_id = "New Context ID"
-  
+
   require "google/cloud/dialogflow"
 
   contexts_client = Google::Cloud::Dialogflow::Contexts.new
@@ -71,7 +71,7 @@ def delete_context project_id:, session_id:, context_id:
   # [START dialogflow_delete_context]
   # project_id = "Your Google Cloud project ID"
   # context_id = "Existing Context ID"
-  
+
   require "google/cloud/dialogflow"
 
   contexts_client = Google::Cloud::Dialogflow::Contexts.new

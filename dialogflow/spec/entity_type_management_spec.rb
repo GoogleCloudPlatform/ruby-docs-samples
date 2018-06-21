@@ -28,8 +28,8 @@ describe "Entity Type Management" do
 
   example "create entity type" do
     expect(
-      (get_entity_type_ids project_id: @project_id,
-                           display_name: @entity_type_display_name).size
+      get_entity_type_ids(project_id: @project_id,
+                          display_name: @entity_type_display_name).size
     ).to eq(0)
 
     expect {
@@ -47,13 +47,14 @@ describe "Entity Type Management" do
   end
 
   example "delete entity type" do
-    entity_type_ids = get_entity_type_ids project_id: @project_id,
-                                          display_name: @entity_type_display_name
-    entity_type_ids.each do |entity_type_id|
-      delete_entity_type project_id: @project_id,
-                         entity_type_id: entity_type_id
+    capture do
+      entity_type_ids = get_entity_type_ids project_id: @project_id,
+                                            display_name: @entity_type_display_name
+      entity_type_ids.each do |entity_type_id|
+        delete_entity_type project_id: @project_id,
+                           entity_type_id: entity_type_id
+      end
     end
-
     expect(
       (get_entity_type_ids project_id: @project_id,
                            display_name: @entity_type_display_name).size
