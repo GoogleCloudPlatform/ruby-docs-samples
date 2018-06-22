@@ -42,3 +42,13 @@ def get_intent_ids project_id:, display_name:
 
   intent_ids
 end
+
+# Capture and return STDOUT output by block
+def hide &block
+  real_stdout = $stdout
+  $stdout = StringIO.new
+  block.call
+ensure
+  $stdout = real_stdout
+end
+

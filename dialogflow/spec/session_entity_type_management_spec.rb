@@ -30,22 +30,30 @@ describe "Session Entity Type Management" do
   end
 
   example "create session_entity_type" do
-    # create an entity type to be overridden
-    create_entity_type project_id: @project_id,
-                       display_name: @entity_type_display_name,
-                       kind: :KIND_MAP
+    hide do
+      # clean up entity type
+      entity_type_ids = get_entity_type_ids project_id: @project_id,
+                                            display_name: @entity_type_display_name
+      entity_type_ids.each do |entity_type_id|
+        delete_entity_type project_id: @project_id,
+                           entity_type_id: entity_type_id
+      end
+      # create an entity type to be overridden
+      create_entity_type project_id: @project_id,
+                         display_name: @entity_type_display_name,
+                         kind: :KIND_MAP
 
-    # create a session
-    detect_intent_texts project_id:    @project_id,
-                        session_id:    @session_id,
-                        texts:         ["hi"],
-                        language_code: "en-US" 
+      # create a session
+      detect_intent_texts project_id:    @project_id,
+                          session_id:    @session_id,
+                          texts:         ["hi"],
+                          language_code: "en-US"
 
-    create_session_entity_type project_id: @project_id,
-                               session_id: @session_id,
-                               entity_type_display_name: @entity_type_display_name,
-                               entity_values: @entity_values
-
+      create_session_entity_type project_id: @project_id,
+                                 session_id: @session_id,
+                                 entity_type_display_name: @entity_type_display_name,
+                                 entity_values: @entity_values
+    end
     expectation = expect {
       list_session_entity_types project_id: @project_id, session_id: @session_id
     }
@@ -57,10 +65,11 @@ describe "Session Entity Type Management" do
   end
 
   example "delete session_entity_type" do
-    delete_session_entity_type project_id: @project_id,
-                   session_id: @session_id,
-                   entity_type_display_name: @entity_type_display_name
-
+    hide do
+      delete_session_entity_type project_id: @project_id,
+                     session_id: @session_id,
+                     entity_type_display_name: @entity_type_display_name
+    end
     expectation = expect {
       list_session_entity_types project_id: @project_id, session_id: @session_id
     }
@@ -69,12 +78,14 @@ describe "Session Entity Type Management" do
     expectation.not_to output(/#{@entity_values[0]}/).to_stdout
     expectation.not_to output(/#{@entity_values[1]}/).to_stdout
 
-    # clean up entity type
-    entity_type_ids = get_entity_type_ids project_id: @project_id,
-                                          display_name: @entity_type_display_name
-    entity_type_ids.each do |entity_type_id|
-      delete_entity_type project_id: @project_id,
-                         entity_type_id: entity_type_id
+    hide do
+      # clean up entity type
+      entity_type_ids = get_entity_type_ids project_id: @project_id,
+                                            display_name: @entity_type_display_name
+      entity_type_ids.each do |entity_type_id|
+        delete_entity_type project_id: @project_id,
+                           entity_type_id: entity_type_id
+      end
     end
   end
 end

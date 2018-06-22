@@ -21,7 +21,6 @@ describe "Speech Quickstart" do
     speech = Google::Cloud::Speech.new
 
     expect(Google::Cloud::Speech).to receive(:new).
-                                     with(project: "YOUR_PROJECT_ID").
                                      and_return(speech)
 
     expect {

@@ -364,21 +364,7 @@ def keys_only_query
           select("__key__")
   # [END datastore_keys_only_query]
 
-  # [START datastore_run_keys_only_query]
   keys = datastore.run(query).map(&:key)
-  # [END datastore_run_keys_only_query]
-end
-
-def distinct_query
-  datastore = Google::Cloud::Datastore.new
-
-  # [START datastore_distinct_query]
-  query = datastore.query("Task").
-          select("category", "priority").
-          distinct_on("category", "priority").
-          order("category").
-          order("priority")
-  # [END datastore_distinct_query]
 end
 
 def distinct_on_query
@@ -672,45 +658,4 @@ def property_filtering_run_query
     memo[kind] << prop
   end
   # [END datastore_property_filtering_run_query]
-end
-
-def gql_run_query
-  # [START datastore_gql_run_query]
-  gql_query = Google::Cloud::Datastore::GqlQuery.new
-  gql_query.query_string = "SELECT * FROM Task ORDER BY created ASC"
-  tasks = datastore.run gql_query
-  # [END datastore_gql_run_query]
-end
-
-def gql_named_binding_query
-  # [START datastore_gql_named_binding_query]
-  gql_query = Google::Cloud::Datastore::GqlQuery.new
-  gql_query.query_string = "SELECT * FROM Task " \
-                           "WHERE done = @done AND priority = @priority"
-  gql_query.named_bindings = { done: false, priority: 4 }
-  # [END datastore_gql_named_binding_query]
-
-  gql_query
-end
-
-def gql_positional_binding_query
-  # [START datastore_gql_positional_binding_query]
-  gql_query = Google::Cloud::Datastore::GqlQuery.new
-  gql_query.query_string = "SELECT * FROM Task " \
-                           "WHERE done = @1 AND priority = @2"
-  gql_query.positional_bindings = [false, 4]
-  # [END datastore_gql_positional_binding_query]
-
-  gql_query
-end
-
-def gql_literal_query
-  # [START datastore_gql_literal_query]
-  gql_query = Google::Cloud::Datastore::GqlQuery.new
-  gql_query.query_string = "SELECT * FROM Task " \
-                           "WHERE done = false AND priority = 4"
-  gql_query.allow_literals = true
-  # [END datastore_gql_literal_query]
-
-  gql_query
 end
