@@ -45,7 +45,7 @@ def detect_intent_stream project_id:, session_id:, audio_file_path:,
   # session_id = "mysession"
   # audio_file_path = "resources/book_a_room.wav"
   # language_code = "en-US"
-  
+
   require "google/cloud/dialogflow"
   require "monitor"
 
@@ -53,7 +53,7 @@ def detect_intent_stream project_id:, session_id:, audio_file_path:,
   session = session_client.class.session_path project_id, session_id
   puts "Session path: #{session}"
 
-  audio_config = { 
+  audio_config = {
     audio_encoding: :AUDIO_ENCODING_LINEAR_16,
     sample_rate_hertz: 16000,
     language_code: language_code

@@ -22,7 +22,7 @@ def detect_intent_audio project_id:, session_id:, audio_file_path:,
   # session_id = "mysession"
   # audio_file_path = "resources/book_a_room.wav"
   # language_code = "en-US"
-  
+
   require "google/cloud/dialogflow"
 
   session_client = Google::Cloud::Dialogflow::Sessions.new
@@ -36,7 +36,7 @@ def detect_intent_audio project_id:, session_id:, audio_file_path:,
     audio_file.close
   end
 
-  audio_config = { 
+  audio_config = {
     audio_encoding: :AUDIO_ENCODING_LINEAR_16,
     sample_rate_hertz: 16000,
     language_code: language_code
