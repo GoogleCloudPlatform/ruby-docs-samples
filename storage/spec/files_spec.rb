@@ -45,6 +45,9 @@ describe "Google Cloud Storage files sample" do
     @local_file_path      = File.expand_path "resources/file.txt", __dir__
     @encryption_key       = generate_encryption_key
 
+    if @bucket.nil?
+      @storage.create_bucket @bucket_name
+    end
     @bucket.policy do |policy|
       policy.add "roles/storage.objectViewer", "allUsers"
     end

@@ -62,6 +62,7 @@ if [[ $RUN_ALL_TESTS = "1" ]]; then
     pubsub \
     spanner \
     speech \
+    storage \
     translate \
     video \
     vision

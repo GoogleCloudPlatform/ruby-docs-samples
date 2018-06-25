@@ -38,6 +38,10 @@ describe "Google Cloud Storage ACL sample" do
     @bucket          = @storage.bucket @bucket_name
     @local_file_path = File.expand_path "resources/file.txt", __dir__
     @test_email      = "user-test@test.com"
+
+    if @bucket.nil?
+      @storage.create_bucket @bucket_name
+    end
   end
 
   # Delete given file in Cloud Storage test bucket if it exists

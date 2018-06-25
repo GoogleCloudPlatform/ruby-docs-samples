@@ -38,6 +38,10 @@ describe "Google Cloud Storage IAM sample" do
     @bucket      = @storage.bucket @bucket_name
     @test_role   = "roles/storage.admin"
     @test_member = "user:test@test.com"
+
+    if @bucket.nil?
+      @storage.create_bucket @bucket_name
+    end
   end
 
   it "can view bucket IAM members" do
