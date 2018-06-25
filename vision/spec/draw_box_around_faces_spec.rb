@@ -25,7 +25,7 @@ describe "Draw box around faces sample" do
 
   # Returns full path to sample image included in repository for testing
   def image_path filename
-    File.expand_path "../images/#{filename}", __dir__
+    File.expand_path "../resources/#{filename}", __dir__
   end
 
   # Capture and return STDOUT output by block
