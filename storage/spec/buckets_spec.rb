@@ -13,6 +13,7 @@
 # limitations under the License.
 
 require_relative "../buckets"
+require_relative "helpers.rb"
 require "rspec"
 require "rspec/retry"
 require "google/cloud/storage"
@@ -32,9 +33,9 @@ describe "Google Cloud Storage buckets sample" do
 
   before :all do
     @bucket_name = ENV["GOOGLE_CLOUD_STORAGE_BUCKET"]
-    @kms_key     = ENV["GOOGLE_CLOUD_KMS_KEY"]
     @storage     = Google::Cloud::Storage.new
     @project_id  = @storage.project
+    @kms_key     = create_kms_key @project_id
   end
 
   before do
