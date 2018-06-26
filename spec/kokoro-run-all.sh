@@ -11,7 +11,11 @@ for required_variable in                   \
   GOOGLE_APPLICATION_CREDENTIALS           \
   GOOGLE_CLOUD_STORAGE_BUCKET              \
   ALTERNATE_GOOGLE_CLOUD_STORAGE_BUCKET    \
-; do
+  GOOGLE_CLOUD_PROJECT_SECONDARY           \
+  GOOGLE_APPLICATION_CREDENTIALS_SECONDARY \
+  GOOGLE_CLOUD_KMS_KEY_NAME                \
+  GOOGLE_CLOUD_KMS_KEY_RING
+do
   if [[ -z "${!required_variable}" ]]; then
     echo "Must set $required_variable"
     exit 1
