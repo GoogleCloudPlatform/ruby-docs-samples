@@ -47,12 +47,12 @@ class E2E
       version = "#{test_name}-#{build_id}"
 
       # read in our credentials file
-      key_path = File.expand_path("../../../service-account.json", __FILE__)
+      key_path = File.expand_path(ENV["GOOGLE_APPLICATION_CREDENTIALS"], __FILE__)
       key_file = File.read(key_path)
       key_json = JSON.parse(key_file)
 
       account_name = key_json['client_email'];
-      project_id = key_json['project_id'] || ENV["GOOGLE_CLOUD_PROJECT"];
+      project_id = ENV["GOOGLE_CLOUD_PROJECT"];
 
       # authenticate with gcloud using our credentials file
       self.exec "gcloud config set project #{project_id}"
@@ -107,7 +107,7 @@ class E2E
 
     def versionize(name)
       version_name = name.tr('^A-Za-z0-9', '-')
-      name_length  = 10
+      name_length  = 11
 
       version_name[-name_length, name_length] || version_name
     end

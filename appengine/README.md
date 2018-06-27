@@ -49,3 +49,18 @@ create a project/app id. (App id and project id are identical.)
         gcloud app deploy
 
 1. Awesome! Your application is now live at `your-app-id.appspot.com`.
+
+## Testing
+
+You must install/configure `gcloud` (above) and set the following environment
+variables to run most tests in this directory:
+
+  * `E2E`: Enable end-to-end testing.
+  * `TEST_DIR`: This is the relative path of the directory you're testing (e.g. `appengine/analytics`).
+  * `BUILD_ID`: A unique ID for deployments.
+
+Then run:
+
+```bash
+bundle install && bundle exec rspec --format documentation
+```
