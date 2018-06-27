@@ -1,12 +1,25 @@
 #!/bin/bash
 
+# This file runs tests for nightly builds and PRs.
+# There are a few rules for what tests are run:
+#  * Only the latest Ruby version runs E2E and Spanner tests (for nightly and PR builds).
+#    - This is indicated by setting RUN_ALL_TESTS before starting this script.
+#  * PRs only run tests in modified directories, unless the `spec` or `.kokoro` directories
+#    are modified, in which case all tests will be run.
+#  * Nightly runs will run all tests.
+
 set -x -e -u -o pipefail
+
+# Print out Ruby version
+ruby --version
+
+source $KOKORO_GFILE_DIR/secrets.sh
 
 # Temporary workaround for a known bundler+docker issue:
 # https://github.com/bundler/bundler/issues/6154
 export BUNDLE_GEMFILE=
 
-for required_variable in                   \
+for REQUIRED_VARIABLE in                   \
   GOOGLE_CLOUD_PROJECT                     \
   GOOGLE_APPLICATION_CREDENTIALS           \
   GOOGLE_CLOUD_STORAGE_BUCKET              \
@@ -16,41 +29,100 @@ for required_variable in                   \
   GOOGLE_CLOUD_KMS_KEY_NAME                \
   GOOGLE_CLOUD_KMS_KEY_RING
 do
-  if [[ -z "${!required_variable}" ]]; then
-    echo "Must set $required_variable"
+  if [[ -z "${REQUIRED_VARIABLE:-}" ]]; then
+    echo "Must set $REQUIRED_VARIABLE"
     exit 1
   fi
 done
 
-script_directory="$(dirname "$(realpath "$0")")"
-repo_directory="$(dirname "$script_directory")"
+SCRIPT_DIRECTORY="$(dirname "$(realpath "$0")")"
+REPO_DIRECTORY="$(dirname "$SCRIPT_DIRECTORY")"
 
-# Capture failures
-exit_status=0 # everything passed
-function set_failed_status {
-  exit_status=1
-}
-
-# Print out Ruby version
-ruby --version
-
-RUN_ALL_TESTS="0"
-# If this is a nightly test (not a PR), run all tests.
-if [ -z ${KOKORO_GITHUB_PULL_REQUEST_NUMBER:-} ]; then
-  RUN_ALL_TESTS="1"
+# Get a project from the project pool.
+# See https://github.com/GoogleCloudPlatform/golang-samples/tree/master/testing/gimmeproj.
+curl https://storage.googleapis.com/gimme-proj/linux_amd64/gimmeproj > /bin/gimmeproj
+chmod +x /bin/gimmeproj
+gimmeproj version;
+export GOOGLE_CLOUD_PROJECT=$(gimmeproj -project cloud-samples-ruby-test-kokoro lease 60m);
+if [ -z "$GOOGLE_CLOUD_PROJECT" ]; then
+  echo "Lease failed."
+  exit 1
 fi
+echo "Running tests in project $GOOGLE_CLOUD_PROJECT";
+trap "gimmeproj -project cloud-samples-ruby-test-kokoro done $GOOGLE_CLOUD_PROJECT" EXIT
+
+export FIRESTORE_PROJECT_ID=ruby-firestore
+
+# Use a project-specific bucket to avoid race conditions.
+export GOOGLE_CLOUD_STORAGE_BUCKET="$GOOGLE_CLOUD_PROJECT-cloud-samples-ruby-bucket"
+export ALTERNATE_GOOGLE_CLOUD_STORAGE_BUCKET="$GOOGLE_CLOUD_STORAGE_BUCKET-alt"
+
+# Run Spanner tests if RUN_ALL_TESTS is set.
+if [[ -n ${RUN_ALL_TESTS:-} ]]; then
+  export GOOGLE_CLOUD_SPANNER_TEST_INSTANCE=ruby-test-instance
+  export GOOGLE_CLOUD_SPANNER_PROJECT=cloud-samples-ruby-test-0
+fi
+
+export E2E="false"
+
+# If we're running nightly tests (not a PR) and RUN_ALL_TESTS is set, run E2E tests.
+if [[ $KOKORO_BUILD_ARTIFACTS_SUBDIR = *"system_tests"* && -n ${RUN_ALL_TESTS:-} ]]; then
+  export E2E="true"
+fi
+
+cd github/ruby-docs-samples/
 
 # CHANGED_DIRS is the list of top-level directories that changed. CHANGED_DIRS will be empty when run on master.
 CHANGED_DIRS=$(git --no-pager diff --name-only HEAD $(git merge-base HEAD master) | grep "/" | cut -d/ -f1 | sort | uniq || true)
-# If test configuration is changed, run all tests.
+
+# Most tests in the appengine directory are E2E.
+if [[ $CHANGED_DIRS =~ "appengine" && -n ${RUN_ALL_TESTS:-} ]]; then
+  E2E="true"
+fi
+
+# RUN_ALL_TESTS after this point is used to indicate if we should run tests in every directory,
+# rather than only tests in modified directories.
+RUN_ALL_TESTS="0"
+# If this is a nightly test (not a PR), run all tests (rather than only tests in modified directories).
+if [ $KOKORO_BUILD_ARTIFACTS_SUBDIR = *"system_tests"* ]; then
+  RUN_ALL_TESTS="1"
+fi
+
+# If the test configuration changed, run all tests.
 if [[ $CHANGED_DIRS =~ "spec" || $CHANGED_DIRS =~ ".kokoro" ]]; then
   RUN_ALL_TESTS="1"
 fi
 
+
+if [[ $E2E = "true" ]]; then
+  echo "This test run will run end-to-end tests."
+
+  export PATH="$PATH:/tmp/google-cloud-sdk/bin"
+  export BUILD_ID=${KOKORO_BUILD_ID: -10}
+
+  ./.kokoro/configure_gcloud.sh
+
+  # Download Cloud SQL Proxy.
+  wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64
+  mv cloud_sql_proxy.linux.amd64 $HOME/cloud_sql_proxy
+  chmod +x $HOME/cloud_sql_proxy
+  mkdir /cloudsql && chmod 0777 /cloudsql
+
+  # Start Cloud SQL Proxy.
+  $HOME/cloud_sql_proxy -dir=/cloudsql -credential_file=$GOOGLE_APPLICATION_CREDENTIALS &
+fi
+
+# Capture failures
+EXIT_STATUS=0 # everything passed
+function set_failed_status {
+  EXIT_STATUS=1
+}
+
 if [[ $RUN_ALL_TESTS = "1" ]]; then
   echo "Running all tests"
   # leave this until all tests are added
-  for product in \
+  for PRODUCT in \
+    appengine/analytics \
     auth \
     bigquery \
     bigquerydatatransfer \
@@ -72,8 +144,9 @@ if [[ $RUN_ALL_TESTS = "1" ]]; then
     vision
   do
     # Run Tests
-    echo "[$product]"
-    pushd "$repo_directory/$product/"
+    echo "[$PRODUCT]"
+    export TEST_DIR="$PRODUCT"
+    pushd "$REPO_DIRECTORY/$PRODUCT/"
 
     (bundle install && bundle exec rspec --format documentation) || set_failed_status
     popd
@@ -81,15 +154,16 @@ if [[ $RUN_ALL_TESTS = "1" ]]; then
 else
   SPEC_DIRS=$(find $CHANGED_DIRS -type d -name 'spec' -path "*/*" -not -path "*vendor/*" -exec dirname {} \; | sort | uniq)
   echo "Running tests in modified directories: $SPEC_DIRS"
-  for product in $SPEC_DIRS
+  for PRODUCT in $SPEC_DIRS
   do
     # Run Tests
-    echo "[$product]"
-    pushd "$repo_directory/$product/"
+    echo "[$PRODUCT]"
+    export TEST_DIR="$PRODUCT"
+    pushd "$REPO_DIRECTORY/$PRODUCT/"
 
     (bundle install && bundle exec rspec --format documentation) || set_failed_status
     popd
   done
 fi
 
-exit $exit_status
+exit $EXIT_STATUS
