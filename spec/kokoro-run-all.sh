@@ -84,7 +84,7 @@ fi
 # rather than only tests in modified directories.
 RUN_ALL_TESTS="0"
 # If this is a nightly test (not a PR), run all tests (rather than only tests in modified directories).
-if [ $KOKORO_BUILD_ARTIFACTS_SUBDIR = *"system-tests"* ]; then
+if [[ $KOKORO_BUILD_ARTIFACTS_SUBDIR =~ "system-tests" ]]; then
   RUN_ALL_TESTS="1"
 fi
 
