@@ -66,7 +66,7 @@ fi
 export E2E="false"
 
 # If we're running nightly tests (not a PR) and RUN_ALL_TESTS is set, run E2E tests.
-if [[ $KOKORO_BUILD_ARTIFACTS_SUBDIR = *"system_tests"* && -n ${RUN_ALL_TESTS:-} ]]; then
+if [[ $KOKORO_BUILD_ARTIFACTS_SUBDIR =~ "system-tests" && -n ${RUN_ALL_TESTS:-} ]]; then
   export E2E="true"
 fi
 
