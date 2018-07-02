@@ -12,11 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-source "https://rubygems.org"
+require "rspec"
 
-gem "google-cloud-text-to-speech"
+require_relative "../list_voices"
 
-group :test do
-  gem "rspec"
-  gem "rack-test"
+describe "List Voices" do
+
+  example "lists voices" do
+    result = expect { list_voices }
+    result.to output(/en-US/).to_stdout
+    result.to output(/SSML Voice Gender: MALE/).to_stdout
+    result.to output(/SSML Voice Gender: FEMALE/).to_stdout
+  end
+
 end

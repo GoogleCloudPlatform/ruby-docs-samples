@@ -60,16 +60,16 @@ set in the
 
 ### Synthesize Text
 
-    Usage: ruby synthesize_text.rb [-h] (--text TEXT | --ssml SSML)
+    Usage: ruby synthesize_text.rb (--text TEXT | --ssml SSML)
 
     Example:
-      ruby synthesize_text.rb "hello"
-      ruby synthesize_text.rb "<speak>Hello there.</speak>"
+    ruby synthesize_text.rb --text "hello"
+    ruby synthesize_text.rb --ssml "<speak>Hello there.</speak>"
 
 ### Synthesize File
 
-    Usage: ruby synthesize_file.rb [-h] (--text TEXT | --ssml SSML)
+    Usage: ruby synthesize_file.rb (--text TEXT | --ssml SSML)
 
-    Example:
-      ruby synthesize_file.rb resources/hello.txt
-      ruby synthesize_file.rb resources/hello.ssml
+    Example usage:
+        ruby synthesize_file.rb --text resources/hello.txt
+        ruby synthesize_file.rb --ssml resources/hello.ssml
