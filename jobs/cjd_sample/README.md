@@ -19,28 +19,26 @@ These samples show how to use the [Google Cloud Job Discovery API]
 ## Build and Run
 1.  **Enable APIs** - [Enable the Cloud Job Discovery API](https://console.cloud.google.com/flows/enableapi?apiid=jobs.googleapis.com)
     and create a new project or select an existing project.
-1.  **Install and Initialize Cloud SDK**
-    Follow instructions from the available [quickstarts](https://cloud.google.com/sdk/docs/quickstarts)
-1.  **Clone the repo** and cd into this directory
+2.  **Clone the repo** and cd into this directory
 
 ```
     $ git clone https://github.com/GoogleCloudPlatform/ruby-docs-samples
     $ cd ruby-docs-samples/jobs/cjd_sample
 ```
 
-1. **Install Dependencies** via [Bundler](https://bundler.io).
+3. **Install Dependencies** via [Bundler](https://bundler.io).
 
 ```
     $ bundle install
 ```
 
-1. **Set Environment Variables**
+4. **Set Environment Variables**
 
 ```
     $ export GOOGLE_APPLICATION_CREDENTIALS=/PATH/TO/YOUR/key.json
 ```
 
-1. **Run samples**
+5. **Run samples**
 
 ```
 ruby quickstart.rb
