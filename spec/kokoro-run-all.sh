@@ -123,6 +123,7 @@ if [[ $RUN_ALL_TESTS = "1" ]]; then
   # leave this until all tests are added
   for PRODUCT in \
     appengine/analytics \
+    appengine/endpoints \
     auth \
     bigquery \
     bigquerydatatransfer \
