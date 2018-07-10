@@ -75,6 +75,12 @@ cd github/ruby-docs-samples/
 # CHANGED_DIRS is the list of top-level directories that changed. CHANGED_DIRS will be empty when run on master.
 CHANGED_DIRS=$(git --no-pager diff --name-only HEAD $(git merge-base HEAD master) | grep "/" | cut -d/ -f1 | sort | uniq || true)
 
+# The appengine directory has many subdirectories. Only test the modified ones.
+if [[ $CHANGED_DIRS =~ "appengine" ]]; then
+  AE_CHANGED_DIRS=$(git --no-pager diff --name-only HEAD $(git merge-base HEAD master) | grep "appengine/" | cut -d/ -f1,2 | sort | uniq || true)
+  CHANGED_DIRS="${CHANGED_DIRS/appengine/} $AE_CHANGED_DIRS"
+fi
+
 # Most tests in the appengine directory are E2E.
 if [[ $CHANGED_DIRS =~ "appengine" && -n ${RUN_ALL_TESTS:-} ]]; then
   E2E="true"
