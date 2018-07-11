@@ -18,7 +18,7 @@ def synthesize_text_file text_file:
 
   client = Google::Cloud::TextToSpeech.new
 
-  text       = File.open(text_file, "r") { |file| file.read }
+  text       = File.read text_file
   input_text = { text: text }
 
   # Note: the voice can also be specified by name.
@@ -48,7 +48,7 @@ def synthesize_ssml_file ssml_file:
 
   client = Google::Cloud::TextToSpeech.new
 
-  ssml       = File.open(ssml_file, "r") { |file| file.read }
+  ssml       = File.read ssml_file
   input_text = { ssml: ssml }
 
   # Note: the voice can also be specified by name.
