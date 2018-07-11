@@ -226,9 +226,12 @@ def lock_retention_policy project_id:, bucket_name:
   storage = Google::Cloud::Storage.new project: project_id
   bucket  = storage.bucket bucket_name
 
+  # Warning: Once a retention policy is locked it cannot be unlocked
+  # and retention period can only be increased.
   bucket.lock_retention_period!
 
   puts "Retention policy for #{bucket_name} is now locked"
+  puts "Retention policy Effective as of #{bucket.retention_effective_at}"
   # [END storage_lock_retention_policy]
 end
 
