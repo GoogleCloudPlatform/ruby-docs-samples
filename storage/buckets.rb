@@ -199,6 +199,86 @@ def delete_bucket project_id:, bucket_name:
   # [END delete_bucket]
 end
 
+def set_retention_policy project_id:, bucket_name:, retention_period:
+  # [START storage_set_retention_policy]
+  # project_id       = "Your Google Cloud project ID"
+  # bucket_name      = "Name of your Google Cloud Storage bucket to delete"
+  # retention_period = "Object retention period defined in seconds"
+
+  require "google/cloud/storage"
+
+  storage = Google::Cloud::Storage.new project: project_id
+  bucket  = storage.bucket bucket_name
+
+  bucket.retention_period = retention_period
+
+  puts "Retention period for #{bucket_name} is now #{retention_period} seconds"
+  # [END storage_set_retention_policy]
+end
+
+def lock_retention_policy project_id:, bucket_name:
+  # [START storage_lock_retention_policy]
+  # project_id  = "Your Google Cloud project ID"
+  # bucket_name = "Name of your Google Cloud Storage bucket to delete"
+
+  require "google/cloud/storage"
+
+  storage = Google::Cloud::Storage.new project: project_id
+  bucket  = storage.bucket bucket_name
+
+  bucket.lock_retention_period!
+
+  puts "Retention policy for #{bucket_name} is now locked"
+  # [END storage_lock_retention_policy]
+end
+
+def remove_retention_policy project_id:, bucket_name:
+  # [START storage_remove_retention_policy]
+  # project_id  = "Your Google Cloud project ID"
+  # bucket_name = "Name of your Google Cloud Storage bucket to delete"
+
+  require "google/cloud/storage"
+
+  storage = Google::Cloud::Storage.new project: project_id
+  bucket  = storage.bucket bucket_name
+
+  bucket.retention_period = nil
+  # TODO: Add conditional to verify cleared retention policy worked.
+  # [END storage_remove_retention_policy]
+end
+
+def set_default_event_based_hold project_id:, bucket_name:
+  # [START storage_set_default_event_based_hold]
+  # project_id  = "Your Google Cloud project ID"
+  # bucket_name = "Name of your Google Cloud Storage bucket to delete"
+
+  require "google/cloud/storage"
+
+  storage = Google::Cloud::Storage.new project: project_id
+  bucket  = storage.bucket bucket_name
+
+  bucket.set_default_event_based_hold!
+
+  puts "Default event based hold was set for #{bucket_name}"
+  # [END storage_set_default_event_based_hold]
+end
+
+def release_default_event_based_hold project_id:, bucket_name:
+  # [START storage_release_default_event_based_hold]
+  # project_id  = "Your Google Cloud project ID"
+  # bucket_name = "Name of your Google Cloud Storage bucket to delete"
+
+  require "google/cloud/storage"
+
+  storage = Google::Cloud::Storage.new project: project_id
+  bucket  = storage.bucket bucket_name
+
+  bucket.set_default_event_based_hold!
+
+  puts "Default event based hold was released for #{bucket_name}"
+  # [END storage_release_default_event_based_hold]
+end
+
 if __FILE__ == $0
   project_id = ENV["GOOGLE_CLOUD_PROJECT"]
 
