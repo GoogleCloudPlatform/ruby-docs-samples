@@ -76,17 +76,17 @@ if __FILE__ == $PROGRAM_NAME
   command   = ARGV.shift
   file_path = ARGV.shift
 
-  if command == "--text"
+  if command == "text"
     synthesize_text_file text_file: file_path
-  elsif command == "--ssml"
+  elsif command == "ssml"
     synthesize_ssml_file ssml_file: file_path
   else
     puts <<-usage
 Usage: ruby synthesize_file.rb [file path]
 
 Example:
-  ruby synthesize_file.rb --text resources/hello.txt
-  ruby synthesize_file.rb --ssml resources/hello.ssml
+  ruby synthesize_file.rb text resources/hello.txt
+  ruby synthesize_file.rb ssml resources/hello.ssml
     usage
   end
 end

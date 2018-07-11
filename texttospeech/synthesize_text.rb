@@ -74,17 +74,17 @@ if __FILE__ == $PROGRAM_NAME
   command = ARGV.shift
   text    = ARGV.shift
 
-  if command == "--text"
+  if command == "text"
     synthesize_ssml ssml: text
-  elsif command == "--ssml"
+  elsif command == "ssml"
     synthesize_text ssml: text
   else
     puts <<-usage
-Usage: ruby synthesize_text.rb (--text TEXT | --ssml SSML)
+Usage: ruby synthesize_text.rb (text TEXT | ssml SSML)
 
 Example:
-  ruby synthesize_text.rb --text "hello"
-  ruby synthesize_text.rb --ssml "<speak>Hello there.</speak>"
+  ruby synthesize_text.rb text "hello"
+  ruby synthesize_text.rb ssml "<speak>Hello there.</speak>"
     usage
   end
 end
