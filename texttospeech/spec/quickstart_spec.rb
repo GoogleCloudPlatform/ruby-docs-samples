@@ -14,12 +14,12 @@
 
 require "rspec"
 
-require_relative "../quickstart"
-
 describe "Quickstart" do
 
   example "quickstart" do
-    expect { run_quickstart }.to output(
+    expect {
+      load File.expand_path("../quickstart.rb", __dir__)
+    }.to output(
       /Audio content written to file 'output.mp3'/
     ).to_stdout
 
