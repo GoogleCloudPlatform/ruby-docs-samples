@@ -400,8 +400,8 @@ def set_event_based_hold project_id:, bucket_name:, file_name:
   # [END storage_set_event_based_hold]
 end
 
-def set_event_based_hold project_id:, bucket_name:, file_name:
-  # [START storage_set_event_based_hold]
+def release_event_based_hold project_id:, bucket_name:, file_name:
+  # [START storage_release_event_based_hold]
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
   # file_name   = "Name of a file in the Cloud Storage bucket"
@@ -412,10 +412,10 @@ def set_event_based_hold project_id:, bucket_name:, file_name:
   bucket  = storage.bucket bucket_name
   file    = bucket.file file_name
 
-  file.set_event_based_hold!
+  file.release_event_based_hold!
 
-  puts "Event based hold was set for #{file_name}"
-  # [END storage_set_event_based_hold]
+  puts "Event based hold was released for #{file_name}"
+  # [END storage_release_event_based_hold]
 end
 
 def set_temporary_hold project_id:, bucket_name:, file_name:
