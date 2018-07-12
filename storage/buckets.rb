@@ -250,8 +250,8 @@ def remove_retention_policy project_id:, bucket_name:
   # [END storage_remove_retention_policy]
 end
 
-def set_default_event_based_hold project_id:, bucket_name:
-  # [START storage_set_default_event_based_hold]
+def enable_default_event_based_hold project_id:, bucket_name:
+  # [START storage_enable_default_event_based_hold]
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Name of your Google Cloud Storage bucket to delete"
 
@@ -260,14 +260,16 @@ def set_default_event_based_hold project_id:, bucket_name:
   storage = Google::Cloud::Storage.new project: project_id
   bucket  = storage.bucket bucket_name
 
-  bucket.set_default_event_based_hold!
+  bucket.update do |b|
+    b.default_event_based_hold = true
+  end
 
-  puts "Default event based hold was set for #{bucket_name}"
-  # [END storage_set_default_event_based_hold]
+  puts "Default event based hold was enabled for #{bucket_name}"
+  # [END storage_enable_default_event_based_hold]
 end
 
-def release_default_event_based_hold project_id:, bucket_name:
-  # [START storage_release_default_event_based_hold]
+def disable_default_event_based_hold project_id:, bucket_name:
+  # [START storage_disable_default_event_based_hold]
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Name of your Google Cloud Storage bucket to delete"
 
@@ -276,10 +278,12 @@ def release_default_event_based_hold project_id:, bucket_name:
   storage = Google::Cloud::Storage.new project: project_id
   bucket  = storage.bucket bucket_name
 
-  bucket.set_default_event_based_hold!
+  bucket.update do |b|
+    b.default_event_based_hold = false
+  end
 
-  puts "Default event based hold was released for #{bucket_name}"
-  # [END storage_release_default_event_based_hold]
+  puts "Default event based hold was disabled for #{bucket_name}"
+  # [END storage_disable_default_event_based_hold]
 end
 
 if __FILE__ == $0
