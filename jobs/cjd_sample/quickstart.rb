@@ -27,6 +27,9 @@ jobs_client.authorization = Google::Auth.get_application_default(
 # Request list of companies
 response = jobs_client.list_companies 
 
+# Print the request id
+puts "Request id : " + response.metadata.request_id
+
 # List all companies for your project
 puts "Companies: "
 if response.companies
