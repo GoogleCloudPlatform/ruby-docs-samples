@@ -140,6 +140,7 @@ if [[ $RUN_ALL_TESTS = "1" ]]; then
     endpoints/getting-started \
     firestore \
     iot \
+    jobs \
     kms \
     language \
     pubsub \

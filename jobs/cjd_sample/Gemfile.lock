@@ -68,7 +68,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  google-api-client (~> 0.23.2)
+  google-api-client (~> 0.23)
   rspec
   rspec-retry
 
