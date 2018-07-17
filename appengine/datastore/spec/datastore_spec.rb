@@ -28,6 +28,6 @@ describe "Datastore E2E test" do
     response = Net::HTTP.get(uri)
     expect(response).to include("Last 10 visits:")
     expect(response).to include("Time:")
-    expect(response).to include("UTC Addr:")
+    expect(response).to include("Addr:")
   end
 end
