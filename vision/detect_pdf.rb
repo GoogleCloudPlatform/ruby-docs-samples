@@ -21,7 +21,7 @@ def detect_pdf_gcs gcs_source_uri:, gcs_destination_uri:, project_id:
   require "google/cloud/vision"
   require "google/cloud/storage"
 
-  vision_client = Google::Cloud::Vision::V1.new
+  vision = Google::Cloud::Vision.new
 
   # Supported mime_types are: 'application/pdf' and 'image/tiff'
   input_config = {
@@ -40,17 +40,17 @@ def detect_pdf_gcs gcs_source_uri:, gcs_destination_uri:, project_id:
     output_config: output_config
   }
 
-  operation = vision_client.async_batch_annotate_files [async_request]
+  operation = vision.async_batch_annotate_files [async_request]
 
   puts "Waiting for the operation to finish."
   operation.wait_until_done!
 
   # Once the request has completed and the output has been
   # written to GCS, we can list all the output files.
-  storage_client = Google::Cloud::Storage.new
+  storage = Google::Cloud::Storage.new
 
   bucket_name, prefix = gcs_destination_uri.match("gs://([^/]+)/(.+)").captures
-  bucket = storage_client.bucket bucket_name
+  bucket              = storage.bucket bucket_name
 
   # List objects with the given prefix.
   puts "Output files:"
@@ -62,13 +62,13 @@ def detect_pdf_gcs gcs_source_uri:, gcs_destination_uri:, project_id:
   # Process the first output file from GCS.
   # Since we specified a batch_size of 2, the first response contains
   # the first two pages of the input file.
-  output = blob_list[0]
+  output      = blob_list[0]
   json_string = output.download
-  response = JSON.parse(json_string.string)
+  response    = JSON.parse(json_string.string)
 
   # The actual response for the first page of the input file.
   first_page_response = response["responses"][0]
-  annotation = first_page_response["fullTextAnnotation"]
+  annotation          = first_page_response["fullTextAnnotation"]
 
   # Here we print the full text from the first page.
   # The response contains more information:
