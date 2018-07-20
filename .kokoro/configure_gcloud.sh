@@ -25,7 +25,7 @@ gcloud -q components update
 
 # Set config.
 gcloud config set disable_prompts True
-gcloud config set project $GOOGLE_CLOUD_PROJECT
+gcloud config set project $E2E_GOOGLE_CLOUD_PROJECT
 gcloud config set app/promote_by_default false
 gcloud auth activate-service-account --key-file "$GOOGLE_APPLICATION_CREDENTIALS"
 

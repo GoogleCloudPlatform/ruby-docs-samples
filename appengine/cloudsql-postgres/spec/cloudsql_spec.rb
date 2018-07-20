@@ -12,9 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require_relative "../app.rb"
 require "rspec"
 require "rack/test"
+require "sequel"
 
 describe "Cloud SQL sample", type: :feature do
   include Rack::Test::Methods
@@ -26,7 +26,11 @@ describe "Cloud SQL sample", type: :feature do
   before do
     @database = Sequel.sqlite database: ":memory:"
 
-    expect(Sequel).to receive(:postgres).and_return @database
+    expect(Sequel).to receive(:postgres).at_least(:once).and_return @database
+
+    # Require app.rb after setting up Sequel so Cloud SQL Proxy doesn't need to
+    # be running.
+    require_relative "../app.rb"
   end
 
   it "can create database schema by running create_tables.rb" do

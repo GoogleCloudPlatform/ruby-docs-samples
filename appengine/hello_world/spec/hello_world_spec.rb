@@ -16,7 +16,7 @@ require_relative "../app.rb"
 require "rspec"
 require "rack/test"
 
-describe "Hello World E2E test" do
+describe "Hello World" do
   include Rack::Test::Methods
 
   def app

@@ -52,6 +52,9 @@ echo "Running tests in project $GOOGLE_CLOUD_PROJECT";
 trap "gimmeproj -project cloud-samples-ruby-test-kokoro done $GOOGLE_CLOUD_PROJECT" EXIT
 
 export FIRESTORE_PROJECT_ID=ruby-firestore
+export E2E_GOOGLE_CLOUD_PROJECT=cloud-samples-ruby-test-kokoro
+export MYSQL_DATABASE=${GOOGLE_CLOUD_PROJECT//-/_}
+export POSTGRES_DATABASE=${GOOGLE_CLOUD_PROJECT//-/_}
 
 # Use a project-specific bucket to avoid race conditions.
 export GOOGLE_CLOUD_STORAGE_BUCKET="$GOOGLE_CLOUD_PROJECT-cloud-samples-ruby-bucket"
@@ -112,12 +115,14 @@ if [[ $E2E = "true" ]]; then
 
   # Download Cloud SQL Proxy.
   wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64
-  mv cloud_sql_proxy.linux.amd64 $HOME/cloud_sql_proxy
-  chmod +x $HOME/cloud_sql_proxy
+  mv cloud_sql_proxy.linux.amd64 /cloud_sql_proxy
+  chmod +x /cloud_sql_proxy
   mkdir /cloudsql && chmod 0777 /cloudsql
 
   # Start Cloud SQL Proxy.
-  $HOME/cloud_sql_proxy -dir=/cloudsql -credential_file=$GOOGLE_APPLICATION_CREDENTIALS &
+  /cloud_sql_proxy -dir=/cloudsql -credential_file=$GOOGLE_APPLICATION_CREDENTIALS &
+  export CLOUD_SQL_PROXY_PROCESS_ID=$!
+  trap "kill $CLOUD_SQL_PROXY_PROCESS_ID" EXIT
 fi
 
 # Capture failures
@@ -128,51 +133,19 @@ function set_failed_status {
 
 if [[ $RUN_ALL_TESTS = "1" ]]; then
   echo "Running all tests"
-  # leave this until all tests are added
-  for PRODUCT in \
-    appengine/analytics \
-    appengine/datastore \
-    appengine/endpoints \
-    appengine/hello_world \
-    appengine/mailgun \
-    appengine/memcache \
-    appengine/pubsub \
-    appengine/rails-cloudsql-mysql \
-    appengine/rails-cloudsql-postgres \
-    appengine/rails-cloudsql-postgres \
-    appengine/rails-hello_world \
-    appengine/static_files/rails \
-    appengine/static_files/sinatra \
-    appengine/sendgrid \
-    appengine/storage \
-    appengine/twilio \
-    auth \
-    bigquery \
-    bigquerydatatransfer \
-    cdn \
-    datastore \
-    dialogflow \
-    dlp \
-    endpoints/getting-started \
-    firestore \
-    iot \
-    jobs \
-    kms \
-    language \
-    pubsub \
-    spanner \
-    speech \
-    storage \
-    translate \
-    video \
-    vision
-  do
+  SPEC_DIRS=$(find * -type d -name 'spec' -path "*/*" -not -path "*vendor/*" -exec dirname {} \; | sort | uniq)
+  for PRODUCT in $SPEC_DIRS; do
     # Run Tests
     echo "[$PRODUCT]"
     export TEST_DIR="$PRODUCT"
     pushd "$REPO_DIRECTORY/$PRODUCT/"
 
     (bundle install && bundle exec rspec --format documentation) || set_failed_status
+
+    if [[ $E2E = "true" ]]; then
+      # Clean up deployed version
+      bundle exec ruby "$REPO_DIRECTORY/spec/e2e_cleanup.rb" "$TEST_DIR" "$BUILD_ID"
+    fi
     popd
   done
 else
@@ -186,6 +159,11 @@ else
     pushd "$REPO_DIRECTORY/$PRODUCT/"
 
     (bundle install && bundle exec rspec --format documentation) || set_failed_status
+
+    if [[ $E2E = "true" ]]; then
+      # Clean up deployed version
+      bundle exec ruby "$REPO_DIRECTORY/spec/e2e_cleanup.rb" "$TEST_DIR" "$BUILD_ID"
+    fi
     popd
   done
 fi

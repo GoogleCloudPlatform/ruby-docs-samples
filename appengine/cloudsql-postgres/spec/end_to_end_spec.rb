@@ -1,4 +1,4 @@
-# Copyright 2016 Google, Inc
+# Copyright 2018 Google, Inc
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,19 +17,19 @@ require "rspec"
 require "capybara/rspec"
 require "capybara/poltergeist"
 
-Capybara.current_driver = :poltergeist
+Capybara.default_driver = :poltergeist
 
-describe "Cloud SQL on Google App Engine", type: :feature do
+describe "Cloud SQL Postgres on Google App Engine", type: :feature do
   before :all do
     skip "End-to-end tests skipped" unless E2E.run?
 
     app_yaml = File.expand_path("../../app.yaml", __FILE__)
 
     configuration = File.read(app_yaml)
-    configuration.sub! "[YOUR_USER]",        ENV["MYSQL_USER"]
-    configuration.sub! "[YOUR_PASSWORD]",    ENV["MYSQL_PASSWORD"]
-    configuration.sub! "[YOUR_DATABASE]",    ENV["MYSQL_DATABASE"]
-    configuration.sub! "[YOUR_SOCKET_PATH]", ENV["MYSQL_SOCKET_PATH"]
+    configuration.gsub! "[YOUR_USER]",                     ENV["POSTGRES_USER"]
+    configuration.gsub! "[YOUR_PASSWORD]",                 ENV["POSTGRES_PASSWORD"]
+    configuration.gsub! "[YOUR_DATABASE]",                 ENV["POSTGRES_DATABASE"]
+    configuration.gsub! "[YOUR_INSTANCE_CONNECTION_NAME]", ENV["POSTGRES_INSTANCE_CONNECTION_NAME"]
 
     File.write(app_yaml, configuration)
 

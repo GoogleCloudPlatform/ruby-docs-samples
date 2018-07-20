@@ -52,7 +52,7 @@ class E2E
       key_json = JSON.parse(key_file)
 
       account_name = key_json['client_email'];
-      project_id = ENV["GOOGLE_CLOUD_PROJECT"];
+      project_id = ENV["E2E_GOOGLE_CLOUD_PROJECT"];
 
       # authenticate with gcloud using our credentials file
       self.exec "gcloud config set project #{project_id}"
@@ -72,8 +72,8 @@ class E2E
         return $?.to_i
       end
 
-      # sleeping 1 to ensure URL is callable
-      sleep 1
+      # sleeping 10 to ensure URL is callable
+      sleep 10
 
       # run the specs for the step, but use the remote URL
       @url = "https://#{version}-dot-#{project_id}.appspot.com"

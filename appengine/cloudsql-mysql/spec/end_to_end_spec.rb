@@ -17,7 +17,7 @@ require "rspec"
 require "capybara/rspec"
 require "capybara/poltergeist"
 
-Capybara.current_driver = :poltergeist
+Capybara.default_driver = :poltergeist
 
 describe "Cloud SQL on Google App Engine", type: :feature do
   before :all do
@@ -26,10 +26,10 @@ describe "Cloud SQL on Google App Engine", type: :feature do
     app_yaml = File.expand_path("../../app.yaml", __FILE__)
 
     configuration = File.read(app_yaml)
-    configuration.sub! "[YOUR_USER]",        ENV["MYSQL_USER"]
-    configuration.sub! "[YOUR_PASSWORD]",    ENV["MYSQL_PASSWORD"]
-    configuration.sub! "[YOUR_DATABASE]",    ENV["MYSQL_DATABASE"]
-    configuration.sub! "[YOUR_SOCKET_PATH]", ENV["MYSQL_SOCKET_PATH"]
+    configuration.gsub! "[YOUR_USER]",                     ENV["MYSQL_USER"]
+    configuration.gsub! "[YOUR_PASSWORD]",                 ENV["MYSQL_PASSWORD"]
+    configuration.gsub! "[YOUR_DATABASE]",                 ENV["MYSQL_DATABASE"]
+    configuration.gsub! "[YOUR_INSTANCE_CONNECTION_NAME]", ENV["MYSQL_INSTANCE_CONNECTION_NAME"]
 
     File.write(app_yaml, configuration)
 
