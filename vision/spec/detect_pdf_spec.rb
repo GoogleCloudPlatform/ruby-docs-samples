@@ -15,9 +15,9 @@
 require "rspec"
 require "google/cloud/storage"
 
-require_relative "../detect_safe_search"
+require_relative "../detect_pdf"
 
-describe "Detect Safe Search Properties" do
+describe "Detect Document Text from PDF" do
 
   before do
     @storage    = Google::Cloud::Storage.new
@@ -25,29 +25,21 @@ describe "Detect Safe Search Properties" do
     @project_id = ENV["GOOGLE_CLOUD_PROJECT"]
   end
 
-  # Returns full path to sample image included in repository for testing
-  def image_path filename
+  # Returns full path to sample pdf included in repository for testing
+  def document_path filename
     File.expand_path "../resources/#{filename}", __dir__
   end
 
-  example "detect safe search properties from local image file" do
-    expect {
-      detect_safe_search project_id: @project_id,
-                         image_path: image_path("otter_crossing.jpg")
-    }.to output(
-      /Violence: false/
-    ).to_stdout
-  end
-
-  example "detect safe search properties from image file in Google Cloud Storage" do
-    storage_file = @bucket.upload_file image_path("otter_crossing.jpg"),
-                                       "otter_crossing.jpg"
+  example "detect document text from pdf file in Google Cloud Storage" do
+    storage_file = @bucket.upload_file document_path("pdf_ocr.pdf"),
+                                       "pdf_ocr.pdf"
 
     expect {
-      detect_safe_search_gcs project_id: @project_id,
-                             image_path: storage_file.to_gs_url
+      detect_pdf_gcs project_id:          @project_id,
+                     gcs_source_uri:      storage_file.to_gs_url,
+                     gcs_destination_uri: "gs://#{@bucket.name}/prefix_"
     }.to output(
-      /Violence: false/
+      /A Simple PDF File/
     ).to_stdout
   end
 end

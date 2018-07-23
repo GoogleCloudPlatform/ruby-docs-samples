@@ -27,7 +27,7 @@ describe "Detect Crop Hints" do
 
   # Returns full path to sample image included in repository for testing
   def image_path filename
-    File.expand_path "../images/#{filename}", __dir__
+    File.expand_path "../resources/#{filename}", __dir__
   end
 
   example "detect crop hints from local image file" do
