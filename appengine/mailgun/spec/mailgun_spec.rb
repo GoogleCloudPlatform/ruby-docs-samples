@@ -12,23 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require File.expand_path("../../../../spec/e2e", __FILE__)
+ENV["MAILGUN_DOMAIN_NAME"] = "example.com"
+
+require_relative "../app.rb"
 require "rspec"
 require "capybara/rspec"
-require "capybara/poltergeist"
-
-Capybara.current_driver = :poltergeist
 
 describe "MailGun on Google App Engine", type: :feature do
-  before :all do
-    skip "End-to-end tests skipped" unless E2E.run?
-
-    @url = E2E.url
-  end
+  Capybara.app = Sinatra::Application
 
   it "can send email" do
-    visit @url
-
+    visit "/"
     within "#plaintext" do
       fill_in "recipient", with: "recipient@example.com"
       click_button "Send email"

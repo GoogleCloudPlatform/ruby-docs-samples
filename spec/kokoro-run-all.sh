@@ -130,6 +130,7 @@ if [[ $RUN_ALL_TESTS = "1" ]]; then
   for PRODUCT in \
     appengine/analytics \
     appengine/endpoints \
+    appengine/mailgun \
     appengine/sendgrid \
     appengine/storage \
     auth \
