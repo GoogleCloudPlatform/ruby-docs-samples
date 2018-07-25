@@ -21,4 +21,5 @@ gem "google-cloud-datastore"
 
 group :test do
   gem "rspec"
+  gem "capybara"
 end
