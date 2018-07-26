@@ -12,22 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require File.expand_path("../../../../spec/e2e", __FILE__)
+require_relative "../app.rb"
 require "rspec"
 require "capybara/rspec"
-require "capybara/poltergeist"
 
-Capybara.current_driver = :poltergeist
-
-describe "SendGrid on Google App Engine", type: :feature do
-  before :all do
-    skip "End-to-end tests skipped" unless E2E.run?
-
-    @url = E2E.url
-  end
-
+describe "SendGrid", type: :feature do
   it "can send email" do
-    visit @url
+    Capybara.app = Sinatra::Application
+
+    visit "/"
 
     fill_in "recipient", with: "recipient@example.com"
     click_button "Send email"

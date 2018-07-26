@@ -22,5 +22,4 @@ gem "sendgrid-ruby"
 group :test do
   gem "rspec"
   gem "capybara"
-  gem "poltergeist"
 end
