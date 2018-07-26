@@ -12,22 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require File.expand_path("../../../../spec/e2e", __FILE__)
+require_relative "../app.rb"
 require "rspec"
-require "net/http"
+require "capybara/rspec"
 
-describe "Datastore E2E test" do
-  before do
-    skip "End-to-end tests skipped" unless E2E.run?
-
-    @url = E2E.url
-  end
-
+describe "Datastore test", type: :feature do
   it "returns what we expect" do
-    uri = URI.parse(@url)
-    response = Net::HTTP.get(uri)
-    expect(response).to include("Last 10 visits:")
-    expect(response).to include("Time:")
-    expect(response).to include("UTC Addr:")
+    Capybara.app = Sinatra::Application
+
+    visit "/"
+
+    expect(page).to have_content "Last 10 visits:"
+    expect(page).to have_content "Time:"
+    expect(page).to have_content "UTC Addr:"
   end
 end
