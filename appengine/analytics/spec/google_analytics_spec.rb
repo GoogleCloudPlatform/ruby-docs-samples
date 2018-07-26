@@ -12,22 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require File.expand_path("../../../../spec/e2e", __FILE__)
+require_relative "../app.rb"
 require "rspec"
 require "capybara/rspec"
-require "capybara/poltergeist"
 
-Capybara.current_driver = :poltergeist
-
-describe "Google Analytics on Google App Engine", type: :feature do
-  before :all do
-    skip "End-to-end tests skipped" unless E2E.run?
-
-    @url = E2E.url
-  end
-
+describe "Google Analytics", type: :feature do
+  Capybara.app = Sinatra::Application
+  
   it "can track visit event" do
-    visit @url
+    visit "/"
 
     expect(page).to have_content "Event tracked"
   end
