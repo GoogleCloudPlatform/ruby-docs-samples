@@ -26,6 +26,20 @@ describe "Entity Type Management" do
     @kind                     = :KIND_MAP
   end
 
+  before :each do
+    hide do
+      clean_entity_types project_id: @project_id,
+                         display_name: @entity_type_display_name
+    end
+  end
+
+  after :each do
+    hide do
+      clean_entity_types project_id: @project_id,
+                         display_name: @entity_type_display_name
+    end
+  end
+
   example "create entity type" do
     expect(
       get_entity_type_ids(project_id: @project_id,
@@ -48,6 +62,9 @@ describe "Entity Type Management" do
 
   example "delete entity type" do
     hide do
+      create_entity_type project_id: @project_id,
+                         display_name: @entity_type_display_name,
+                         kind: @kind
       entity_type_ids = get_entity_type_ids project_id: @project_id,
                                             display_name: @entity_type_display_name
       entity_type_ids.each do |entity_type_id|
