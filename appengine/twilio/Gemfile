@@ -22,4 +22,5 @@ gem "twilio-ruby"
 group :test do
   gem "rspec"
   gem "rest-client"
+  gem "rack-test"
 end
