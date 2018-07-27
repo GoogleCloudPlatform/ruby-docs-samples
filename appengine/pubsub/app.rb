@@ -40,7 +40,7 @@ end
 post "/publish" do
   topic.publish params[:payload]
 
-  redirect "/"
+  redirect "/", 303
 end
 # [END index]
 
