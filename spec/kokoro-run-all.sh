@@ -134,6 +134,7 @@ if [[ $RUN_ALL_TESTS = "1" ]]; then
     appengine/mailgun \
     appengine/sendgrid \
     appengine/storage \
+    appengine/twilio \
     auth \
     bigquery \
     bigquerydatatransfer \

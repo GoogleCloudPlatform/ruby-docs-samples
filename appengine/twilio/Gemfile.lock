@@ -16,11 +16,13 @@ GEM
     multipart-post (2.0.0)
     mustermann (1.0.2)
     netrc (0.11.0)
-    nokogiri (1.8.3)
+    nokogiri (1.8.4)
       mini_portile2 (~> 2.3.0)
     rack (2.0.5)
     rack-protection (2.0.3)
       rack
+    rack-test (1.1.0)
+      rack (>= 1.0, < 3)
     rest-client (2.0.2)
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 4.0)
@@ -44,7 +46,7 @@ GEM
       rack-protection (= 2.0.3)
       tilt (~> 2.0)
     tilt (2.0.8)
-    twilio-ruby (5.10.5)
+    twilio-ruby (5.11.2)
       faraday (~> 0.9)
       jwt (>= 1.5, <= 2.5)
       nokogiri (>= 1.6, < 2.0)
@@ -56,6 +58,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  rack-test
   rest-client
   rspec
   sinatra

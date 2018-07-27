@@ -31,11 +31,11 @@ end
 post "/call/receive" do
   content_type :xml
 
-  response = Twilio::TwiML::Response.new do |r|
-    r.Say "Hello from Twilio!"
+  response = Twilio::TwiML::VoiceResponse.new do |r|
+    r.say(message: "Hello from Twilio!")
   end
 
-  response.text
+  response.to_s
 end
 # [END receive_call]
 
@@ -59,10 +59,10 @@ post "/sms/receive" do
   sender  = params[:From]
   message = params[:Body]
 
-  response = Twilio::TwiML::Response.new do |r|
-    r.Message "Hello #{sender}, you said #{message}"
+  response = Twilio::TwiML::MessagingResponse.new do |r|
+    r.message body: "Hello #{sender}, you said #{message}"
   end
 
-  response.text
+  response.to_s
 end
 # [END receive_sms]
