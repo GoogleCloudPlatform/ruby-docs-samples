@@ -12,42 +12,41 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require File.expand_path("../../../../spec/e2e", __FILE__)
 require "rspec"
-require "net/http"
 require "google/cloud/pubsub"
+require "rack/test"
 
-describe "PubSub E2E test" do
+describe "PubSub", type: :feature do
+  include Rack::Test::Methods
+
+  def app
+    Sinatra::Application
+  end
+
   before :all do
-    @topic_name = "flexible-topic"
+    ENV["PUBSUB_TOPIC"] = "flexible-topic" unless ENV["PUBSUB_TOPIC"]
+    @topic_name = ENV["PUBSUB_TOPIC"]
     @pubsub = Google::Cloud::Pubsub.new
 
-    skip "End-to-end tests skipped" unless E2E.run?
-
     topic = @pubsub.topic @topic_name
-    @pubsub.create_topic @topic_name unless topic
-
-    app_yaml = File.expand_path("../../app.yaml", __FILE__)
-    configuration = File.read(app_yaml)
-                        .sub("<your-topic-name>", @topic_name)
-                        .sub("<your-token>", "asdf1234")
-    File.write(app_yaml, configuration)
-
-    @url = E2E.url
+    if topic.nil?
+      @pubsub.create_topic @topic_name
+    end
+    require_relative "../app.rb"
   end
 
   it "returns what we expect" do
-    uri = URI.parse(@url)
-    response = Net::HTTP.get(uri)
+    get "/"
 
-    expect(response).to include("Messages received by this instance:")
+    expect(last_response.body).to include(
+      "Messages received by this instance:"
+    )
   end
 
   it "accepts a publish" do
-    uri = URI.parse(@url + "/publish")
-    response = Net::HTTP.post_form(uri, "payload" => "A Message")
+    post "/publish", payload: "A Message"
 
-    expect(response.code).to eq("303")
+    expect(last_response.status).to eq 303
   end
 
   after :all do

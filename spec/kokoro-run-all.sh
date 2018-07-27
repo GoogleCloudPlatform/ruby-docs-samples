@@ -132,6 +132,7 @@ if [[ $RUN_ALL_TESTS = "1" ]]; then
     appengine/datastore \
     appengine/endpoints \
     appengine/mailgun \
+    appengine/pubsub \
     appengine/static_files/rails \
     appengine/static_files/sinatra \
     appengine/sendgrid \
