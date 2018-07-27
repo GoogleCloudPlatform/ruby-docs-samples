@@ -14,22 +14,17 @@
 require "spec_helper"
 
 Capybara.default_driver = :poltergeist
+Capybara.server = :puma, { Silent: true }
 
 feature "Serving static files" do
-  before :all do
-    skip "End-to-end tests skipped" unless E2E.run?
-
-    @url = E2E.url
-  end
-
   scenario "compiling stylesheets" do
-    visit "#{@url}/"
+    visit "/"
 
     expect(page).to have_selector "#hide_me", visible: false
   end
 
   scenario "compiling javascript" do
-    visit "#{@url}/"
+    visit "/"
 
     expect(page).not_to have_content "Hello from JavaScript"
 
@@ -39,7 +34,7 @@ feature "Serving static files" do
   end
 
   scenario "serving static html" do
-    visit "#{@url}/static_page.html"
+    visit "/static_page.html"
 
     expect(page).to have_content "This is a static file serving example."
   end
