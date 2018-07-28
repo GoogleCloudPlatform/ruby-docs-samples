@@ -68,7 +68,7 @@ set in the
 
 ### Synthesize File
 
-    Usage: ruby synthesize_file.rb (text TEXT | ssml SSML)
+    Usage: ruby synthesize_file.rb (text FILEPATH | ssml FILEPATH)
 
     Example usage:
         ruby synthesize_file.rb text resources/hello.txt
