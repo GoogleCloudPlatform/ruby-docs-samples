@@ -99,6 +99,8 @@ if [[ $CHANGED_DIRS =~ "spec" || $CHANGED_DIRS =~ ".kokoro" ]]; then
   RUN_ALL_TESTS="1"
 fi
 
+# Start memcached (for appengine/memcache).
+service memcached start
 
 if [[ $E2E = "true" ]]; then
   echo "This test run will run end-to-end tests."
@@ -132,6 +134,7 @@ if [[ $RUN_ALL_TESTS = "1" ]]; then
     appengine/datastore \
     appengine/endpoints \
     appengine/mailgun \
+    appengine/memcache \
     appengine/pubsub \
     appengine/static_files/rails \
     appengine/static_files/sinatra \
