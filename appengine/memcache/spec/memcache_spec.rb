@@ -12,26 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require File.expand_path("../../../../spec/e2e", __FILE__)
+require_relative "../app.rb"
 require "rspec"
 require "capybara/rspec"
-require "capybara/poltergeist"
 
-Capybara.current_driver = :poltergeist
-
-describe "Memcached on Google App Engine", type: :feature do
-  before :all do
-    skip "End-to-end tests skipped" unless E2E.run?
-
-    @url = E2E.url
-  end
+describe "Memcached", type: :feature do
+  Capybara.app = Sinatra::Application
 
   it "visits increment counter" do
-    visit @url
+    visit "/"
     expect(page).to have_content "Counter value is"
     initial_value = page.body.match(/Counter value is (\d+)/)[1].to_i
 
-    visit @url
+    visit "/"
     second_value = page.body.match(/Counter value is (\d+)/)[1].to_i
     expect(second_value).to be > initial_value
   end
