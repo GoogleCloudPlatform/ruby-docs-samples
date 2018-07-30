@@ -131,6 +131,7 @@ if [[ $RUN_ALL_TESTS = "1" ]]; then
     appengine/analytics \
     appengine/datastore \
     appengine/endpoints \
+    appengine/hello_world \
     appengine/mailgun \
     appengine/pubsub \
     appengine/static_files/rails \
