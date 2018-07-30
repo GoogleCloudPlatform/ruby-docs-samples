@@ -82,7 +82,7 @@ if __FILE__ == $PROGRAM_NAME
     synthesize_ssml_file ssml_file: file_path
   else
     puts <<-usage
-Usage: ruby synthesize_file.rb [file path]
+Usage: ruby synthesize_file.rb (text FILEPATH | ssml FILEPATH)
 
 Example:
   ruby synthesize_file.rb text resources/hello.txt
