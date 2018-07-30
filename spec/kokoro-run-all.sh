@@ -134,6 +134,10 @@ if [[ $RUN_ALL_TESTS = "1" ]]; then
     appengine/hello_world \
     appengine/mailgun \
     appengine/pubsub \
+    appengine/rails-cloudsql-mysql \
+    appengine/rails-cloudsql-postgres \
+    appengine/rails-cloudsql-postgres \
+    appengine/rails-hello_world \
     appengine/static_files/rails \
     appengine/static_files/sinatra \
     appengine/sendgrid \
