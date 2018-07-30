@@ -12,20 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require File.expand_path("../../../../spec/e2e", __FILE__)
+require_relative "../app.rb"
 require "rspec"
-require "net/http"
+require "rack/test"
 
 describe "Hello World E2E test" do
-  before do
-    skip "End-to-end tests skipped" unless E2E.run?
+  include Rack::Test::Methods
 
-    @url = E2E.url
+  def app
+    Sinatra::Application
   end
 
   it "displays hello world text" do
-    uri = URI.parse(@url)
-    response = Net::HTTP.get(uri)
-    expect(response).to eq("Hello world!")
+    get "/"
+    expect(last_response.body).to eq("Hello world!")
   end
 end
