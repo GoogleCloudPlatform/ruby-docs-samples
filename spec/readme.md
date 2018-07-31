@@ -23,3 +23,21 @@ To set up an account:
     ```
 1. The storage service account needs KMS permissions. Follow
    https://cloud.google.com/storage/docs/encryption/using-customer-managed-keys.
+1. Create the `appengine/cloudsql-mysql` and `appengine/cloudsql-postgres` tables.
+   `cloud-samples-ruby-test-kokoro` has one Mysql instance, one Postgres instance,
+   and tables `cloud_samples_ruby_test_{0..9}`. This way, we can save costs by
+   only running CloudSQL in a single project, but keep project data independent.
+   First, set the variables referenced in the `create_tables.rb` files, then run:
+   
+    ```bash
+    cd appengine/cloudsql-mysql
+    for i in {0..9}; do
+        export MYSQL_DATABASE=cloud_samples_ruby_test_$i
+        bundle exec ruby create_tables.rb
+    end
+    cd ../appengine/cloudsql-postgres
+    for i in {0..9}; do
+        export POSTGRES_DATABASE=cloud_samples_ruby_test_$i
+        bundle exec ruby create_tables.rb
+    end
+    ```
