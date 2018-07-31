@@ -1,7 +1,5 @@
 ## Ruby docs samples
 
-CircleCI: [![CircleCI](https://circleci.com/gh/GoogleCloudPlatform/ruby-docs-samples/tree/master.svg?style=svg)](https://circleci.com/gh/GoogleCloudPlatform/ruby-docs-samples/tree/master)
-
 Kokoro: [![Kokoro](https://storage.googleapis.com/cloud-devrel-kokoro-resources/ruby/ruby-docs-samples/system_tests-ubuntu.png)](https://fusion.corp.google.com/projectanalysis/current/KOKORO/prod:cloud-devrel%2Fruby%2Fruby-docs-samples%2Fsystem_tests)
 
 This repository holds samples used in the ruby documentation on
