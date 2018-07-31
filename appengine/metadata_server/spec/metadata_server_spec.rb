@@ -17,7 +17,7 @@ require "rspec"
 require "capybara/rspec"
 require "capybara/poltergeist"
 
-Capybara.current_driver = :poltergeist
+Capybara.default_driver = :poltergeist
 
 describe "Metadata server on Google App Engine", type: :feature do
   before :all do
