@@ -27,7 +27,6 @@ Usage: ruby tables.rb <command> [arguments]
 
 Commands:
   create                     <dataset_id> <table_id>  Create a new table with the specified ID
-  create_with_schema         <dataset_id> <table_id>  Create a new table with a schema
   list                       <dataset_id>             List all tables in the specified dataset
   delete                     <dataset_id> <table_id>  Delete table with the specified ID
   list_data                  <dataset_id> <table_id>  List data in table with the specified ID

@@ -160,14 +160,14 @@ describe "Google Cloud BigQuery samples" do
 
   describe "Managing Tables" do
 
-    example "create table with schema" do
-      new_table_id = "create_table_with_schema"
+    example "create table" do
+      new_table_id = "create_table"
       expect(@dataset.table new_table_id).to be nil
 
       expect {
-        create_table_with_schema project_id: @project_id,
-                                 dataset_id: @dataset_name,
-                                 table_id:   new_table_id
+        create_table project_id: @project_id,
+                     dataset_id: @dataset_name,
+                     table_id:   new_table_id
       }.to output(
         "Created table: #{new_table_id}\n"
       ).to_stdout
@@ -182,21 +182,6 @@ describe "Google Cloud BigQuery samples" do
       expect(table.schema.fields[1].name).to eq "age"
       expect(table.schema.fields[1].type).to eq "INTEGER"
       expect(table.schema.fields[1].mode).to eq "REQUIRED"
-    end
-
-    example "create table without schema" do
-      new_table_id = "create_table_without_schema"
-      expect(@dataset.table new_table_id).to be nil
-
-      expect {
-        create_table_with_schema project_id: @project_id,
-                                 dataset_id: @dataset_name,
-                                 table_id:   new_table_id
-      }.to output(
-        "Created table: #{new_table_id}\n"
-      ).to_stdout
-
-      expect(@dataset.table new_table_id).not_to be nil
     end
 
     example "list tables" do
