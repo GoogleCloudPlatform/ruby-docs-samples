@@ -1,3 +1,5 @@
 .ruby-version
 client_secrets.json
-
+.bundle/
+vendor/
+.vscode/

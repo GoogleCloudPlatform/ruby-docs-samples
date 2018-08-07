@@ -19,3 +19,7 @@ gem "sinatra"
 # [START logging_stackdriver_gem]
 gem "stackdriver"
 # [END logging_stackdriver_gem]
+gem "google-cloud-monitoring"
+group :test do
+    gem "rspec"
+end
