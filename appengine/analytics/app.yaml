@@ -12,11 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START app_yaml]
+# [START gae_flex_analytics_env_variables]
 runtime: ruby
 env: flex
 entrypoint: bundle exec ruby app.rb
 
 env_variables:
   GA_TRACKING_ID: <your-tracking-id>
-# [END app_yaml]
+# [END gae_flex_analytics_env_variables]

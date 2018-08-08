@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START all]
+# [START gae_flex_analytics_track_event]
 require "sinatra"
 require "net/http"
 
@@ -42,4 +42,4 @@ get "/" do
 
   "Event tracked."
 end
-# [END all]
+# [END gae_flex_analytics_track_event]
