@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START all]
 # [START import_client_library]
 require "google/cloud/vision"
 # [END import_client_library]
@@ -20,7 +19,6 @@ require "google/cloud/vision"
 require "rmagick"
 # [END import_rmagick]
 
-# [START detect_faces]
 def draw_box_around_faces path_to_image_file:, path_to_output_file:,
                           project_id:
   # [START get_vision_service]
@@ -79,5 +77,3 @@ Example:
   end
 end
 # [END main]
-# [END detect_faces]
-# [END all]
