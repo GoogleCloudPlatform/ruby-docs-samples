@@ -21,7 +21,7 @@ def detect_pdf_gcs gcs_source_uri:, gcs_destination_uri:, project_id:
   require "google/cloud/vision"
   require "google/cloud/storage"
 
-  vision = Google::Cloud::Vision.new project: project_id
+  vision = Google::Cloud::Vision.new
 
   # Supported mime_types are: 'application/pdf' and 'image/tiff'
   input_config = {
@@ -47,7 +47,7 @@ def detect_pdf_gcs gcs_source_uri:, gcs_destination_uri:, project_id:
 
   # Once the request has completed and the output has been
   # written to GCS, we can list all the output files.
-  storage = Google::Cloud::Storage.new
+  storage = Google::Cloud::Storage.new project: project_id
 
   bucket_name, prefix = gcs_destination_uri.match("gs://([^/]+)/(.+)").captures
   bucket              = storage.bucket bucket_name
