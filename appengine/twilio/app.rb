@@ -15,7 +15,6 @@
 require "sinatra"
 require "twilio-ruby"
 
-# [START configuration]
 TWILIO_ACCOUNT_SID = ENV["TWILIO_ACCOUNT_SID"]
 TWILIO_AUTH_TOKEN  = ENV["TWILIO_AUTH_TOKEN"]
 TWILIO_NUMBER      = ENV["TWILIO_NUMBER"]
@@ -24,9 +23,8 @@ Twilio.configure do |config|
   config.account_sid = TWILIO_ACCOUNT_SID
   config.auth_token  = TWILIO_AUTH_TOKEN
 end
-# [END configuration]
 
-# [START receive_call]
+# [START gae_flex_twilio_receive_call]
 # Answers a call and replies with a simple greeting.
 post "/call/receive" do
   content_type :xml
@@ -37,9 +35,9 @@ post "/call/receive" do
 
   response.to_s
 end
-# [END receive_call]
+# [END gae_flex_twilio_receive_call]
 
-# [START send_sms]
+# [START gae_flex_twilio_send_sms]
 # Sends a simple SMS message.
 get "/sms/send" do
   client = Twilio::REST::Client.new
@@ -50,9 +48,9 @@ get "/sms/send" do
     body: "Hello from Google App Engine"
   )
 end
-# [END send_sms]
+# [END gae_flex_twilio_send_sms]
 
-# [START receive_sms]
+# [START gae_flex_twilio_receive_sms]
 post "/sms/receive" do
   content_type :xml
 
@@ -65,4 +63,4 @@ post "/sms/receive" do
 
   response.to_s
 end
-# [END receive_sms]
+# [END gae_flex_twilio_receive_sms]
