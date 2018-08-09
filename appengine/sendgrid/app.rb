@@ -12,12 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START config]
 SENDGRID_API_KEY = ENV["SENDGRID_API_KEY"]
 SENDGRID_SENDER  = ENV["SENDGRID_SENDER"]
-# [END config]
 
-# [START all]
+# [START gae_flex_sendgrid]
 require "sinatra"
 require "sendgrid-ruby"
 
@@ -53,4 +51,4 @@ post "/send/email" do
     "An error occurred: #{ex.message}"
   end
 end
-# [END all]
+# [END gae_flex_sendgrid]
