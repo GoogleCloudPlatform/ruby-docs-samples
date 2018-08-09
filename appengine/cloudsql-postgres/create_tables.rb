@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START all]
 require "sequel"
 
 DB = Sequel.postgres user:     ENV["POSTGRES_USER"],
@@ -25,4 +24,3 @@ DB.create_table :visits do
   String      :user_ip
   Time        :timestamp
 end
-# [END all]

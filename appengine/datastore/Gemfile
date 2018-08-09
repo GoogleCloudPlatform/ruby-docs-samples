@@ -12,12 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START dependencies]
+# [START gae_flex_datastore_config]
 source "https://rubygems.org"
 
 gem "sinatra"
 gem "google-cloud-datastore"
-# [END dependencies]
+# [END gae_flex_datastore_config]
 
 group :test do
   gem "rspec"
