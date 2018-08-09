@@ -12,10 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START gae_flex_ruby_request_example]
+# [START gae_flex_quickstart]
 require "sinatra"
 
 get "/" do
   "Hello world!"
 end
-# [END gae_flex_ruby_request_example]
+# [END gae_flex_quickstart]
