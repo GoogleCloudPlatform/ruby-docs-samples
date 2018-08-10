@@ -12,25 +12,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START import_client_library]
+# [START vision_face_detection_tutorial_client]
 require "google/cloud/vision"
-# [END import_client_library]
-# [START import_rmagick]
+# [END vision_face_detection_tutorial_client]
+# [START vision_face_detection_process_response]
 require "rmagick"
-# [END import_rmagick]
+# [END vision_face_detection_process_response]
 
 def draw_box_around_faces path_to_image_file:, path_to_output_file:,
                           project_id:
-  # [START get_vision_service]
+  # [START vision_face_detection_tutorial_client]
   vision = Google::Cloud::Vision.new project: project_id
-  # [END get_vision_service]
+  # [END vision_face_detection_tutorial_client]
 
-  # [START detect_face]
+  # [START vision_face_detection_send_request]
   image = vision.image path_to_image_file
   faces = image.faces
-  # [END detect_face]
+  # [END vision_face_detection_send_request]
 
-  # [START highlight_faces]
+  # [START vision_face_detection_process_response]
   image = Magick::Image.read(path_to_image_file).first
 
   faces.each do |face|
@@ -56,10 +56,10 @@ def draw_box_around_faces path_to_image_file:, path_to_output_file:,
   image.write path_to_output_file
 
   puts "Output file: #{path_to_output_file}"
-  # [END highlight_faces]
+  # [END vision_face_detection_process_response]
 end
 
-# [START main]
+# [START vision_face_detection_run_application]
 if __FILE__ == $PROGRAM_NAME
   project_id = ENV["GOOGLE_CLOUD_PROJECT"]
 
@@ -76,4 +76,4 @@ Example:
     usage
   end
 end
-# [END main]
+# [END vision_face_detection_run_application]
