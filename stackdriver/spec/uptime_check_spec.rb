@@ -23,6 +23,11 @@ describe "Stackdriver uptime check" do
     if @project_id.nil? then
       raise "Set the environment variable GOOGLE_CLOUD_PROJECT."
     end
+    # Stackdriver projects are not 1-1 with Google cloud projects.  All the 
+    # ruby test Google cloud projects use the same Stackdriver project.
+    if /cloud-samples-ruby-test-\d/.match(@project_id)
+      @project_id = "cloud-samples-ruby-test-1"
+    end
     @configs = [create_uptime_check_config(project_id:@project_id),
       create_uptime_check_config(project_id:@project_id)]
   end
