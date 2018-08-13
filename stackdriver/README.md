@@ -35,6 +35,11 @@ The following list provides samples used per Stackdriver product.
 - `error_reporting.ru`
 - `sinatra_error_reporting.rb`
 
+### Uptime Checks
+
+- `uptime_check.rb`
+
+
 ### Shared Configuration
 
 The following file shows an example of using shared configuration in a Rack app,
