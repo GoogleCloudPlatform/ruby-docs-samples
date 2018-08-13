@@ -13,7 +13,7 @@
 # limitations under the License.
 
 def detect_pdf_gcs gcs_source_uri:, gcs_destination_uri:, project_id:
-  # [START vision_async_detect_document_ocr]
+  # [START vision_text_detection_pdf_gcs]
   # project_id = "Your Google Cloud project ID"
   # gcs_source_uri = "Google Cloud Storage URI, eg. 'gs://my-bucket/example.pdf'"
   # gcs_destination_uri = "Google Cloud Storage URI, eg. 'gs://my-bucket/prefix_'"
@@ -75,7 +75,7 @@ def detect_pdf_gcs gcs_source_uri:, gcs_destination_uri:, project_id:
   # annotation/pages/blocks/paragraphs/words/symbols
   # including confidence scores and bounding boxes
   puts "Full text:\n#{annotation['text']}"
-  # [END vision_async_detect_document_ocr]
+  # [END vision_text_detection_pdf_gcs]
 end
 
 if __FILE__ == $PROGRAM_NAME
