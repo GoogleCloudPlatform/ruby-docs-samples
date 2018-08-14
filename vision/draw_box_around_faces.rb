@@ -15,9 +15,9 @@
 # [START vision_face_detection_tutorial_client]
 require "google/cloud/vision"
 # [END vision_face_detection_tutorial_client]
-# [START vision_face_detection_process_response]
+# [START vision_face_detection_tutorial_process_response]
 require "rmagick"
-# [END vision_face_detection_process_response]
+# [END vision_face_detection_tutorial_process_response]
 
 def draw_box_around_faces path_to_image_file:, path_to_output_file:,
                           project_id:
@@ -25,12 +25,12 @@ def draw_box_around_faces path_to_image_file:, path_to_output_file:,
   vision = Google::Cloud::Vision.new project: project_id
   # [END vision_face_detection_tutorial_client]
 
-  # [START vision_face_detection_send_request]
+  # [START vision_face_detection_tutorial_send_request]
   image = vision.image path_to_image_file
   faces = image.faces
-  # [END vision_face_detection_send_request]
+  # [END vision_face_detection_tutorial_send_request]
 
-  # [START vision_face_detection_process_response]
+  # [START vision_face_detection_tutorial_process_response]
   image = Magick::Image.read(path_to_image_file).first
 
   faces.each do |face|
@@ -56,10 +56,10 @@ def draw_box_around_faces path_to_image_file:, path_to_output_file:,
   image.write path_to_output_file
 
   puts "Output file: #{path_to_output_file}"
-  # [END vision_face_detection_process_response]
+  # [END vision_face_detection_tutorial_process_response]
 end
 
-# [START vision_face_detection_run_application]
+# [START vision_face_detection_tutorial_run_application]
 if __FILE__ == $PROGRAM_NAME
   project_id = ENV["GOOGLE_CLOUD_PROJECT"]
 
@@ -76,4 +76,4 @@ Example:
     usage
   end
 end
-# [END vision_face_detection_run_application]
+# [END vision_face_detection_tutorial_run_application]
