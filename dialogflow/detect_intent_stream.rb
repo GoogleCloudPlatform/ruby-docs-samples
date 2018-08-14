@@ -40,7 +40,7 @@ end
 
 def detect_intent_stream project_id:, session_id:, audio_file_path:,
                         language_code:
-  # [START dialogflow_detect_intent_stream]
+  # [START dialogflow_detect_intent_streaming]
   # project_id = "Your Google Cloud project ID"
   # session_id = "mysession"
   # audio_file_path = "resources/book_a_room.wav"
@@ -106,7 +106,7 @@ def detect_intent_stream project_id:, session_id:, audio_file_path:,
   while not completed
     sleep 1
   end
-  # [END dialogflow_detect_intent_stream]
+  # [END dialogflow_detect_intent_streaming]
 end
 
 

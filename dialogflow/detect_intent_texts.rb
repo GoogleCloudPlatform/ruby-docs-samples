@@ -16,7 +16,7 @@
 require "securerandom"
 
 def detect_intent_texts project_id:, session_id:, texts:, language_code:
-  # [START dialogflow_detect_intent_texts]
+  # [START dialogflow_detect_intent_text]
   # project_id = "Your Google Cloud project ID"
   # session_id = "mysession"
   # texts = "hello", "book a meeting room"]
@@ -38,7 +38,7 @@ def detect_intent_texts project_id:, session_id:, texts:, language_code:
     puts "Intent confidence: #{query_result.intent_detection_confidence}"
     puts "Fulfillment text:  #{query_result.fulfillment_text}\n"
   end
-  # [END dialogflow_detect_intent_texts]
+  # [END dialogflow_detect_intent_text]
 end
 
 
