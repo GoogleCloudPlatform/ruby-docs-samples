@@ -12,9 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START vision_face_detection_tutorial_client]
+# [START vision_face_detection_tutorial_imports]
 require "google/cloud/vision"
-# [END vision_face_detection_tutorial_client]
+# [END vision_face_detection_tutorial_imports]
 # [START vision_face_detection_tutorial_process_response]
 require "rmagick"
 # [END vision_face_detection_tutorial_process_response]
