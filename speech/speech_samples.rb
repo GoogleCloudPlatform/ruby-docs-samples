@@ -135,7 +135,7 @@ def speech_async_recognize audio_file_path: nil
 end
 
 def speech_async_recognize_gcs storage_path: nil
-# [START speech_async_recognize_gcs]
+# [START speech_transcribe_async_gcs]
   # storage_path = "Path to file in Cloud Storage, eg. gs://bucket/audio.raw"
 
   require "google/cloud/speech"
@@ -161,7 +161,7 @@ def speech_async_recognize_gcs storage_path: nil
   alternatives.each do |alternative|
     puts "Transcription: #{alternative.transcript}"
   end
-# [END speech_async_recognize_gcs]
+# [END speech_transcribe_async_gcs]
 end
 
 def speech_async_recognize_gcs_words storage_path: nil
