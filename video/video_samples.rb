@@ -52,7 +52,7 @@ def analyze_labels_gcs path:
 end
 
 def analyze_labels_local path:
-  # [START video_analyze_labels_local]
+  # [START video_analyze_labels]
   # path = "Path to a local video file: path/to/file.mp4"
 
   require "google/cloud/video_intelligence"
@@ -89,7 +89,7 @@ def analyze_labels_local path:
 
   puts "Processing video for label annotations:"
   operation.wait_until_done!
-  # [END video_analyze_labels_local]
+  # [END video_analyze_labels]
 end
 
 def analyze_shots path:
