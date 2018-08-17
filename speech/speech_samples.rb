@@ -165,7 +165,7 @@ def speech_async_recognize_gcs storage_path: nil
 end
 
 def speech_async_recognize_gcs_words storage_path: nil
-# [START speech_async_recognize_gcs_words]
+# [START speech_transcribe_async_time_offsets_gcs]
   # storage_path = "Path to file in Cloud Storage, eg. gs://bucket/audio.raw"
 
   require "google/cloud/speech"
@@ -199,7 +199,7 @@ def speech_async_recognize_gcs_words storage_path: nil
       puts "Word: #{word.word} #{start_time} #{end_time}"
     end
   end
-# [END speech_async_recognize_gcs_words]
+# [END speech_transcribe_async_time_offsets_gcs]
 end
 
 def speech_streaming_recognize audio_file_path: nil
