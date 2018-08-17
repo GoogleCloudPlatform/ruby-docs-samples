@@ -13,7 +13,7 @@
 # limitations under the License.
 
 def speech_sync_recognize audio_file_path: nil
-# [START speech_sync_recognize]
+# [START speech_transcribe_sync]
   # audio_file_path = "Path to file on which to perform speech recognition"
 
   require "google/cloud/speech"
@@ -36,7 +36,7 @@ def speech_sync_recognize audio_file_path: nil
     puts "Transcription: #{alternative.transcript}"
   end
   # [END speech_sync_response]
-# [END speech_sync_recognize]
+# [END speech_transcribe_sync]
 end
 
 def speech_sync_recognize_words audio_file_path: nil
@@ -74,7 +74,7 @@ def speech_sync_recognize_words audio_file_path: nil
 end
 
 def speech_sync_recognize_gcs storage_path: nil
-# [START speech_sync_recognize_gcs]
+# [START speech_transcribe_sync_gcs]
   # storage_path = "Path to file in Cloud Storage, eg. gs://bucket/audio.raw"
 
   require "google/cloud/speech"
@@ -96,7 +96,7 @@ def speech_sync_recognize_gcs storage_path: nil
   alternatives.each do |alternative|
     puts "Transcription: #{alternative.transcript}"
   end
-# [END speech_sync_recognize_gcs]
+# [END speech_transcribe_sync_gcs]
 end
 
 def speech_async_recognize audio_file_path: nil
