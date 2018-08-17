@@ -20,7 +20,7 @@ def speech_sync_recognize audio_file_path: nil
 
   speech = Google::Cloud::Speech.new
 
-  # [START speech_sync_response]
+  # [START speech_ruby_migration_sync_response]
   audio_file = File.binread audio_file_path
   config     = { encoding:          :LINEAR16,
                  sample_rate_hertz: 16000,
@@ -35,7 +35,7 @@ def speech_sync_recognize audio_file_path: nil
   alternatives.each do |alternative|
     puts "Transcription: #{alternative.transcript}"
   end
-  # [END speech_sync_response]
+  # [END speech_ruby_migration_sync_response]
 # [END speech_transcribe_sync]
 end
 
@@ -81,14 +81,14 @@ def speech_sync_recognize_gcs storage_path: nil
 
   speech = Google::Cloud::Speech.new
 
-  # [START speech_storage_uri_config]
+  # [START speech_ruby_migration_config_gcs]
   config = { encoding:          :LINEAR16,
              sample_rate_hertz: 16000,
              language_code:     "en-US"   }
   audio  = { uri: storage_path }
 
   response = speech.recognize config, audio
-  # [END speech_storage_uri_config]
+  # [END speech_ruby_migration_config_gcs]
 
   results = response.results
 
@@ -100,15 +100,15 @@ def speech_sync_recognize_gcs storage_path: nil
 end
 
 def speech_async_recognize audio_file_path: nil
-# [START speech_async_recognize]
+# [START speech_transcribe_async]
   # audio_file_path = "Path to file on which to perform speech recognition"
 
   require "google/cloud/speech"
 
   speech = Google::Cloud::Speech.new
 
-  # [START speech_async_response]
-  # [START speech_async_request]
+  # [START speech_ruby_migration_async_response]
+  # [START speech_ruby_migration_async_request]
   audio_file = File.binread audio_file_path
   config     = { encoding:          :LINEAR16,
                  sample_rate_hertz: 16000,
@@ -124,14 +124,14 @@ def speech_async_recognize audio_file_path: nil
   raise operation.results.message if operation.error?
 
   results = operation.response.results
-  # [END speech_async_request]
+  # [END speech_ruby_migration_async_request]
 
   alternatives = results.first.alternatives
   alternatives.each do |alternative|
     puts "Transcription: #{alternative.transcript}"
   end
-  # [END speech_async_response]
-# [END speech_async_recognize]
+  # [END speech_ruby_migration_async_response]
+# [END speech_transcribe_async]
 end
 
 def speech_async_recognize_gcs storage_path: nil
@@ -210,8 +210,8 @@ def speech_streaming_recognize audio_file_path: nil
 
   speech = Google::Cloud::Speech.new
 
-  # [START speech_streaming_response]
-  # [START speech_streaming_request]
+  # [START speech_ruby_migration_streaming_response]
+  # [START speech_ruby_migration_streaming_request]
   audio_content  = File.binread audio_file_path
   bytes_total    = audio_content.size
   bytes_sent     = 0
@@ -240,13 +240,13 @@ def speech_streaming_recognize audio_file_path: nil
   stream.wait_until_complete!
 
   results = stream.results
-  # [END speech_streaming_request]
+  # [END speech_ruby_migration_streaming_request]
 
   alternatives = results.first.alternatives
   alternatives.each do |result|
     puts "Transcript: #{result.transcript}"
   end
-  # [END speech_streaming_response]
+  # [END speech_ruby_migration_streaming_response]
 # [END speech_transcribe_streaming]
 end
 
