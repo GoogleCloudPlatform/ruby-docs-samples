@@ -203,7 +203,7 @@ def speech_async_recognize_gcs_words storage_path: nil
 end
 
 def speech_streaming_recognize audio_file_path: nil
-# [START speech_streaming]
+# [START speech_transcribe_streaming]
   # audio_file_path = "Path to file on which to perform speech recognition"
 
   require "google/cloud/speech"
@@ -247,7 +247,7 @@ def speech_streaming_recognize audio_file_path: nil
     puts "Transcript: #{result.transcript}"
   end
   # [END speech_streaming_response]
-# [END speech_streaming]
+# [END speech_transcribe_streaming]
 end
 
 if __FILE__ == $PROGRAM_NAME
