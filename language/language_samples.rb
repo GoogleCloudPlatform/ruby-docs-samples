@@ -39,7 +39,7 @@ def sentiment_from_text text_content:
 end
 
 def sentiment_from_cloud_storage_file storage_path:
-  # [START sentiment_from_cloud_storage_file]
+  # [START language_sentiment_file_gcs]
   # [START language_ruby_migration_sentiment_gcs]
   # storage_path = "Path to file in Google Cloud Storage, eg. gs://bucket/file"
 
@@ -61,7 +61,7 @@ def sentiment_from_cloud_storage_file storage_path:
     sentiment = sentence.sentiment
     puts "#{sentence.text.content}: (#{sentiment.score})"
   end
-  # [END sentiment_from_cloud_storage_file]
+  # [END language_sentiment_file_gcs]
 end
 
 def entities_from_text text_content:
