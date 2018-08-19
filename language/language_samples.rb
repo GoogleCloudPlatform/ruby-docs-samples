@@ -129,7 +129,7 @@ def syntax_from_text text_content:
 end
 
 def syntax_from_cloud_storage_file storage_path:
-  # [START syntax_from_cloud_storage_file]
+  # [START language_syntax_file_gcs]
   # storage_path = "Path to file in Google Cloud Storage, eg. gs://bucket/file"
 
   require "google/cloud/language"
@@ -146,7 +146,7 @@ def syntax_from_cloud_storage_file storage_path:
   tokens.each do |token|
     puts "#{token.part_of_speech.tag} #{token.text.content}"
   end
-  # [END syntax_from_cloud_storage_file]
+  # [END language_syntax_file_gcs]
 end
 
 def classify_text text_content:
