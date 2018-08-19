@@ -150,7 +150,7 @@ def syntax_from_cloud_storage_file storage_path:
 end
 
 def classify_text text_content:
-  # [START language_classify_string]
+  # [START language_classify_text]
   # text_content = "Text to classify"
 
   require "google/cloud/language"
@@ -163,11 +163,11 @@ def classify_text text_content:
   categories.each do |category|
     puts "Name: #{category.name} Confidence: #{category.confidence}"
   end
-  # [END language_classify_string]
+  # [END language_classify_text]
 end
 
 def classify_text_from_cloud_storage_file storage_path:
-  # [START language_classify_file]
+  # [START language_classify_file_gcs]
   # storage_path = "Path to file in Google Cloud Storage, eg. gs://bucket/file"
 
   require "google/cloud/language"
@@ -180,7 +180,7 @@ def classify_text_from_cloud_storage_file storage_path:
   categories.each do |category|
     puts "Name: #{category.name} Confidence: #{category.confidence}"
   end
-  # [END language_classify_file]
+  # [END language_classify_file_gcs]
 end
 
 
