@@ -14,7 +14,7 @@
 
 def sentiment_from_text text_content:
   # [START sentiment_from_text]
-  # [START migration_sentiment]
+  # [START language_ruby_migration_sentiment]
   # text_content = "Text to run sentiment analysis on"
 
   require "google/cloud/language"
@@ -24,7 +24,7 @@ def sentiment_from_text text_content:
   response = language.analyze_sentiment content: text_content, type: :PLAIN_TEXT
 
   sentiment = response.document_sentiment
-  # [END migration_sentiment]
+  # [END language_ruby_migration_sentiment]
 
   puts "Overall document sentiment: (#{sentiment.score})"
   puts "Sentence level sentiment:"
@@ -40,7 +40,7 @@ end
 
 def sentiment_from_cloud_storage_file storage_path:
   # [START sentiment_from_cloud_storage_file]
-  # [START migration_sentiment_gcs]
+  # [START language_ruby_migration_sentiment_gcs]
   # storage_path = "Path to file in Google Cloud Storage, eg. gs://bucket/file"
 
   require "google/cloud/language"
@@ -50,7 +50,7 @@ def sentiment_from_cloud_storage_file storage_path:
   response = language.analyze_sentiment gcs_content_uri: storage_path, type: :PLAIN_TEXT
 
   sentiment = response.document_sentiment
-  # [END migration_sentiment_gcs]
+  # [END language_ruby_migration_sentiment_gcs]
 
   puts "Overall document sentiment: (#{sentiment.score})"
   puts "Sentence level sentiment:"
@@ -87,7 +87,7 @@ def entities_from_text text_content:
 end
 
 def entities_from_cloud_storage_file storage_path:
-  # [START entities_from_cloud_storage_file]
+  # [START language_entities_file_gcs]
   # storage_path = "Path to file in Google Cloud Storage, eg. gs://bucket/file"
 
   require "google/cloud/language"
@@ -104,7 +104,7 @@ def entities_from_cloud_storage_file storage_path:
       puts "URL: #{entity.metadata['wikipedia_url']}"
     end
   end
-  # [END entities_from_cloud_storage_file]
+  # [END language_entities_file_gcs]
 end
 
 def syntax_from_text text_content:
