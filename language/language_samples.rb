@@ -13,8 +13,8 @@
 # limitations under the License.
 
 def sentiment_from_text text_content:
-  # [START sentiment_from_text]
-  # [START language_ruby_migration_sentiment]
+  # [START language_sentiment_text]
+  # [START language_ruby_migration_sentiment_text]
   # text_content = "Text to run sentiment analysis on"
 
   require "google/cloud/language"
@@ -24,7 +24,7 @@ def sentiment_from_text text_content:
   response = language.analyze_sentiment content: text_content, type: :PLAIN_TEXT
 
   sentiment = response.document_sentiment
-  # [END language_ruby_migration_sentiment]
+  # [END language_ruby_migration_sentiment_text]
 
   puts "Overall document sentiment: (#{sentiment.score})"
   puts "Sentence level sentiment:"
@@ -35,12 +35,12 @@ def sentiment_from_text text_content:
     sentiment = sentence.sentiment
     puts "#{sentence.text.content}: (#{sentiment.score})"
   end
-  # [END sentiment_from_text]
+  # [END language_sentiment_text]
 end
 
 def sentiment_from_cloud_storage_file storage_path:
   # [START language_sentiment_file_gcs]
-  # [START language_ruby_migration_sentiment_gcs]
+  # [START language_ruby_migration_sentiment_file_gcs]
   # storage_path = "Path to file in Google Cloud Storage, eg. gs://bucket/file"
 
   require "google/cloud/language"
@@ -50,7 +50,7 @@ def sentiment_from_cloud_storage_file storage_path:
   response = language.analyze_sentiment gcs_content_uri: storage_path, type: :PLAIN_TEXT
 
   sentiment = response.document_sentiment
-  # [END language_ruby_migration_sentiment_gcs]
+  # [END language_ruby_migration_sentiment_file_gcs]
 
   puts "Overall document sentiment: (#{sentiment.score})"
   puts "Sentence level sentiment:"
@@ -65,7 +65,7 @@ def sentiment_from_cloud_storage_file storage_path:
 end
 
 def entities_from_text text_content:
-  # [START entities_from_text]
+  # [START language_entities_text]
   # text_content = "Text to extract entities from"
 
   require "google/cloud/language"
@@ -83,7 +83,7 @@ def entities_from_text text_content:
       puts "URL: #{entity.metadata['wikipedia_url']}"
     end
   end
-  # [END entities_from_text]
+  # [END language_entities_text]
 end
 
 def entities_from_cloud_storage_file storage_path:
@@ -108,7 +108,7 @@ def entities_from_cloud_storage_file storage_path:
 end
 
 def syntax_from_text text_content:
-  # [START syntax_from_text]
+  # [START language_syntax_text]
   # text_content = "Text to analyze syntax of"
 
   require "google/cloud/language"
@@ -125,7 +125,7 @@ def syntax_from_text text_content:
   tokens.each do |token|
     puts "#{token.part_of_speech.tag} #{token.text.content}"
   end
-  # [END syntax_from_text]
+  # [END language_syntax_text]
 end
 
 def syntax_from_cloud_storage_file storage_path:
