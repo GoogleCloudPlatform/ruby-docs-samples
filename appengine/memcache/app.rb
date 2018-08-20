@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START all]
+# [START gae_flex_redislabs_memcache]
 require "sinatra"
 require "memcache"
 
@@ -29,4 +29,4 @@ get "/" do
 
   "Counter value is #{value}"
 end
-# [END all]
+# [END gae_flex_redislabs_memcache]

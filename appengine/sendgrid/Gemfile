@@ -12,12 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START dependencies]
+# [START gae_flex_sendgrid_dependencies]
 source "https://rubygems.org"
 
 gem "sinatra"
 gem "sendgrid-ruby"
-# [END dependencies]
+# [END gae_flex_sendgrid_dependencies]
 
 group :test do
   gem "rspec"

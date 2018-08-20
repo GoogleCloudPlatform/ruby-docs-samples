@@ -12,8 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#[START all]
 runtime: ruby
 env: flex
 entrypoint: bundle exec ruby app.rb
-#[END all]

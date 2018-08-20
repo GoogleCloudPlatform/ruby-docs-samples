@@ -20,17 +20,17 @@ require "google/cloud/pubsub"
 
 pubsub = Google::Cloud::Pubsub.new
 
-# [START envvars]
+# [START gae_flex_pubsub_env]
 topic  = pubsub.topic ENV["PUBSUB_TOPIC"]
 PUBSUB_VERIFICATION_TOKEN = ENV["PUBSUB_VERIFICATION_TOKEN"]
-# [END envvars]
+# [END gae_flex_pubsub_env]
 
-# [START messages]
+# [START gae_flex_pubsub_messages]
 # List of all messages received by this instance
 messages = []
-# [END messages]
+# [END gae_flex_pubsub_messages]
 
-# [START index]
+# [START gae_flex_pubsub_index]
 get "/" do
   @messages = messages
 
@@ -42,9 +42,9 @@ post "/publish" do
 
   redirect "/", 303
 end
-# [END index]
+# [END gae_flex_pubsub_index]
 
-# [START push]
+# [START gae_flex_pubsub_push]
 post "/pubsub/push" do
   halt 400 if params[:token] != PUBSUB_VERIFICATION_TOKEN
 
@@ -53,7 +53,7 @@ post "/pubsub/push" do
 
   messages.push payload
 end
-# [END push]
+# [END gae_flex_pubsub_push]
 
 __END__
 
@@ -72,8 +72,6 @@ html
         | Note: because your application is likely running multiple instances,
         | each instance will have a different list of messages.
 
-    / [START form]
     form method="post" action="publish"
       textarea name="payload" placeholder="Enter message here."
       input type="submit" value="Send"
-    / [END form]

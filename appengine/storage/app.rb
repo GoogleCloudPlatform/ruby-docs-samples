@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START all]
+# [START gae_flex_storage_app]
 require "sinatra"
 require "google/cloud/storage"
 
@@ -39,4 +39,4 @@ post "/upload" do
   # The public URL can be used to directly access the uploaded file via HTTP
   file.public_url
 end
-# [END all]
+# [END gae_flex_storage_app]
