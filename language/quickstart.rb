@@ -14,14 +14,14 @@
 
 # [START language_quickstart]
 # Imports the Google Cloud client library
-# [START language_require]
+# [START language_ruby_migration_import]
 require "google/cloud/language"
-# [END language_require]
+# [END language_ruby_migration_import]
 
 # Instantiates a client
-# [START language_create]
+# [START language_ruby_migration_client]
 language = Google::Cloud::Language.new
-# [END language_create]
+# [END language_ruby_migration_client]
 
 # The text to analyze
 text = "Hello, world!"
