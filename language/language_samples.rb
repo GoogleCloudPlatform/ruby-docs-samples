@@ -39,8 +39,8 @@ def sentiment_from_text text_content:
 end
 
 def sentiment_from_cloud_storage_file storage_path:
-  # [START language_sentiment_file_gcs]
-  # [START language_ruby_migration_sentiment_file_gcs]
+  # [START language_sentiment_gcs]
+  # [START language_ruby_migration_sentiment_gcs]
   # storage_path = "Path to file in Google Cloud Storage, eg. gs://bucket/file"
 
   require "google/cloud/language"
@@ -50,7 +50,7 @@ def sentiment_from_cloud_storage_file storage_path:
   response = language.analyze_sentiment gcs_content_uri: storage_path, type: :PLAIN_TEXT
 
   sentiment = response.document_sentiment
-  # [END language_ruby_migration_sentiment_file_gcs]
+  # [END language_ruby_migration_sentiment_gcs]
 
   puts "Overall document sentiment: (#{sentiment.score})"
   puts "Sentence level sentiment:"
@@ -61,7 +61,7 @@ def sentiment_from_cloud_storage_file storage_path:
     sentiment = sentence.sentiment
     puts "#{sentence.text.content}: (#{sentiment.score})"
   end
-  # [END language_sentiment_file_gcs]
+  # [END language_sentiment_gcs]
 end
 
 def entities_from_text text_content:
@@ -87,7 +87,7 @@ def entities_from_text text_content:
 end
 
 def entities_from_cloud_storage_file storage_path:
-  # [START language_entities_file_gcs]
+  # [START language_entities_gcs]
   # storage_path = "Path to file in Google Cloud Storage, eg. gs://bucket/file"
 
   require "google/cloud/language"
@@ -104,7 +104,7 @@ def entities_from_cloud_storage_file storage_path:
       puts "URL: #{entity.metadata['wikipedia_url']}"
     end
   end
-  # [END language_entities_file_gcs]
+  # [END language_entities_gcs]
 end
 
 def syntax_from_text text_content:
@@ -129,7 +129,7 @@ def syntax_from_text text_content:
 end
 
 def syntax_from_cloud_storage_file storage_path:
-  # [START language_syntax_file_gcs]
+  # [START language_syntax_gcs]
   # storage_path = "Path to file in Google Cloud Storage, eg. gs://bucket/file"
 
   require "google/cloud/language"
@@ -146,7 +146,7 @@ def syntax_from_cloud_storage_file storage_path:
   tokens.each do |token|
     puts "#{token.part_of_speech.tag} #{token.text.content}"
   end
-  # [END language_syntax_file_gcs]
+  # [END language_syntax_gcs]
 end
 
 def classify_text text_content:
@@ -167,7 +167,7 @@ def classify_text text_content:
 end
 
 def classify_text_from_cloud_storage_file storage_path:
-  # [START language_classify_file_gcs]
+  # [START language_classify_gcs]
   # storage_path = "Path to file in Google Cloud Storage, eg. gs://bucket/file"
 
   require "google/cloud/language"
@@ -180,7 +180,7 @@ def classify_text_from_cloud_storage_file storage_path:
   categories.each do |category|
     puts "Name: #{category.name} Confidence: #{category.confidence}"
   end
-  # [END language_classify_file_gcs]
+  # [END language_classify_gcs]
 end
 
 
