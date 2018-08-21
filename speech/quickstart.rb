@@ -14,20 +14,20 @@
 
 # [START speech_quickstart]
 # Imports the Google Cloud client library
-# [START speech_require]
+# [START speech_ruby_migration_import]
 require "google/cloud/speech"
-# [END speech_require]
+# [END speech_ruby_migration_import]
 
 # Instantiates a client
-# [START speech_create]
+# [START speech_ruby_migration_client]
 speech = Google::Cloud::Speech.new
-# [END speech_create]
+# [END speech_ruby_migration_client]
 
 # The name of the audio file to transcribe
 file_name = "./audio_files/audio.raw"
 
-# [START speech_request]
-# [START speech_config]
+# [START speech_ruby_migration_sync_request]
+# [START speech_ruby_migration_config]
 # The raw audio
 audio_file = File.binread file_name
 
@@ -39,10 +39,10 @@ audio  = { content: audio_file }
 
 # Detects speech in the audio file
 response = speech.recognize config, audio
-# [END speech_config]
+# [END speech_ruby_migration_config]
 
 results = response.results
-# [END speech_request]
+# [END speech_ruby_migration_sync_request]
 
 # Get first result because we only processed a single audio file
 # Each result represents a consecutive portion of the audio
