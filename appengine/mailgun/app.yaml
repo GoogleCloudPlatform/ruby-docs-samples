@@ -16,8 +16,6 @@ runtime: ruby
 env: flex
 entrypoint: bundle exec ruby app.rb
 
-# [START env_variables]
 env_variables:
   MAILGUN_API_KEY: <your-mailgun-api-key>
   MAILGUN_DOMAIN_NAME: <your-mailgun-domain-name>
-# [END env_variables]
