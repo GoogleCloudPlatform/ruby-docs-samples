@@ -12,10 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START config]
 MAILGUN_API_KEY = ENV["MAILGUN_API_KEY"]
 MAILGUN_DOMAIN_NAME = ENV["MAILGUN_DOMAIN_NAME"]
-# [END config]
 
 require "sinatra"
 require "mailgun"
@@ -36,7 +34,7 @@ get "/" do
   '
 end
 
-# [START plaintext_email]
+# [START gae_flex_mailgun_simple_message]
 # Send simple plaintext email message
 post "/send/plaintext_email" do
   mailgun = Mailgun::Client.new MAILGUN_API_KEY
@@ -49,9 +47,9 @@ post "/send/plaintext_email" do
 
   "Email sent."
 end
-# [END plaintext_email]
+# [END gae_flex_mailgun_simple_message]
 
-# [START complex_email]
+# [START gae_flex_mailgun_complex_message]
 # Send HTML email message with attachment
 post "/send/complex_email" do
   mailgun = Mailgun::Client.new MAILGUN_API_KEY
@@ -68,7 +66,7 @@ post "/send/complex_email" do
 
   "Email sent."
 end
-# [END complex_email]
+# [END gae_flex_mailgun_complex_message]
 
 error do
   if env["sinatra.error"].is_a? Mailgun::CommunicationError

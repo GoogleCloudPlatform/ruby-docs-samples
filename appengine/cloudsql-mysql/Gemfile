@@ -12,12 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START dependencies]
+# [START gae_flex_mysql_dependencies]
 source "https://rubygems.org"
 
 gem "mysql2"
 gem "sequel"
-# [END dependencies]
+# [END gae_flex_mysql_dependencies]
 
 gem "sinatra"
 
