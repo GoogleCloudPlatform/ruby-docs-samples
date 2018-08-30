@@ -25,7 +25,7 @@ describe "Session Entity Type Management" do
   before do
     @project_id = ENV["GOOGLE_CLOUD_PROJECT"]
     @session_id = "fake_session_for_testing"
-    @entity_type_display_name = "fake_display_name_for_testing_session_entity_types"
+    @entity_type_display_name = "fake_display_name"
     @entity_values = ["fake_entity_value_1", "fake_entity_value_2"]
   end
 
