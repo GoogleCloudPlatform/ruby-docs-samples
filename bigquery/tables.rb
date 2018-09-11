@@ -283,6 +283,56 @@ def write_truncate_json_data_from_gcs project_id:, dataset_id:, table_id:
   # [END bigquery_load_table_gcs_json_truncate]
 end
 
+def import_table_from_gcs_orc project_id:, dataset_id:
+  # [START bigquery_load_table_gcs_orc]
+  # project_id = "Your Google Cloud project ID"
+  # dataset_id = "ID of the dataset to create table in"
+
+  require "google/cloud/bigquery"
+
+  bigquery     = Google::Cloud::Bigquery.new project: project_id
+  dataset      = bigquery.dataset dataset_id
+  table_id     = "us_states"
+  storage_path = "gs://cloud-samples-data/bigquery/us-states/us-states.orc"
+
+  puts "Importing data from Cloud Storage file: #{storage_path}"
+  load_job = dataset.load_job table_id,
+                              storage_path,
+                              format: "orc"
+
+  puts "Waiting for load job to complete: #{load_job.job_id}"
+  load_job.wait_until_done!
+
+  puts "Data imported"
+  # [END bigquery_load_table_gcs_orc_autodetect]
+end
+
+def write_truncate_orc_data_from_gcs project_id:, dataset_id:, table_id:
+  # [START bigquery_load_table_gcs_orc_truncate]
+  # project_id = "Your Google Cloud project ID"
+  # dataset_id = "ID of the dataset containing table"
+  # table_id   = "ID of the table to append data into"
+
+  require "google/cloud/bigquery"
+
+  bigquery = Google::Cloud::Bigquery.new project: project_id
+  dataset  = bigquery.dataset dataset_id
+  table    = dataset.table table_id
+
+  storage_path = "gs://cloud-samples-data/bigquery/us-states/us-states.orc"
+
+  puts "Importing data from Cloud Storage file: #{storage_path}"
+  load_job = table.load_job storage_path,
+                            format: "orc",
+                            write: "WRITE_TRUNCATE"
+
+  puts "Waiting for load job to complete: #{load_job.job_id}"
+  load_job.wait_until_done!
+
+  puts "Data imported"
+  # [END bigquery_load_table_gcs_orc_truncate]
+end
+
 def run_query project_id:, query_string:
   # project_id   = "your google cloud project id"
   # query_string = "query string to execute (using bigquery query syntax)"
@@ -355,6 +405,9 @@ if __FILE__ == $PROGRAM_NAME
   when "import_gcs_json"
     import_table_from_gcs_json project_id: project_id,
                                dataset_id: ARGV.shift
+  when "import_gcs_orc"
+    import_table_from_gcs_orc project_id: project_id,
+                              dataset_id: ARGV.shift
   when "import_gcs_json_autodetect"
    import_table_from_gcs_json_autodetect project_id: project_id,
                                          dataset_id: ARGV.shift

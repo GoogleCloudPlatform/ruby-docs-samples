@@ -340,21 +340,22 @@ describe "Google Cloud BigQuery samples" do
     end
 
     example "append json data from GCS" do
-      expect(@table.data).to be_empty
+      table_id = "us_states"
+      expect(@dataset.table table_id).to be nil
 
-      @table.schema do |schema|
+      table = @dataset.create_table table_id do |schema|
         schema.string "name"
         schema.string "post_abbr"
       end
 
-      @table.insert [{"name": "New Statington", "post_abbr": "NS"}]
-      expect(@table.data.count).to eq 1
+      table.insert [{"name": "New Statington", "post_abbr": "NS"}]
+      expect(table.data.count).to eq 1
 
       capture do
         append_json_data_from_gcs(
           project_id: @project_id,
           dataset_id: @dataset.dataset_id,
-          table_id:   @table.table_id
+          table_id:   table_id
         )
       end
 
@@ -365,28 +366,29 @@ describe "Google Cloud BigQuery samples" do
       expect(captured_output).to include "Waiting for load job to complete: job"
       expect(captured_output).to include "Data imported"
 
-      loaded_data = @table.data
+      loaded_data = table.data
 
       expect(loaded_data).not_to be_empty
       expect(loaded_data.count).to eq 51
     end
 
     example "write truncate json data from GCS" do
-      expect(@table.data).to be_empty
+      table_id = "us_states"
+      expect(@dataset.table table_id).to be nil
 
-      @table.schema do |schema|
+      table = @dataset.create_table table_id do |schema|
         schema.string "name"
         schema.string "post_abbr"
       end
 
-      @table.insert [{"name": "New Statington", "post_abbr": "NS"}]
-      expect(@table.data.count).to eq 1
+      table.insert [{"name": "New Statington", "post_abbr": "NS"}]
+      expect(table.data.count).to eq 1
 
       capture do
         write_truncate_json_data_from_gcs(
           project_id: @project_id,
           dataset_id: @dataset.dataset_id,
-          table_id:   @table.table_id
+          table_id:   table_id
         )
       end
 
@@ -397,7 +399,63 @@ describe "Google Cloud BigQuery samples" do
       expect(captured_output).to include "Waiting for load job to complete: job"
       expect(captured_output).to include "Data imported"
 
-      loaded_data = @table.data
+      loaded_data = table.data
+
+      expect(loaded_data).not_to be_empty
+      expect(loaded_data.count).to eq 50
+    end
+
+    example "import orc data from GCS as new table" do
+      expect(@dataset.table "us_states").to be nil
+
+      capture do
+        import_table_from_gcs_orc(
+          project_id: @project_id,
+          dataset_id: @dataset.dataset_id
+        )
+      end
+
+      expect(captured_output).to include(
+        "Importing data from Cloud Storage file: " +
+        "gs://cloud-samples-data/bigquery/us-states/us-states.orc"
+      )
+      expect(captured_output).to include "Waiting for load job to complete: job"
+      expect(captured_output).to include "Data imported"
+
+      loaded_data = @dataset.table("us_states").data
+
+      expect(loaded_data).not_to be_empty
+      expect(loaded_data.count).to eq 50
+    end
+
+    example "write truncate orc data from GCS" do
+      table_id = "us_states"
+      expect(@dataset.table table_id).to be nil
+
+      table = @dataset.create_table table_id do |schema|
+        schema.string "name"
+        schema.string "post_abbr"
+      end
+
+      table.insert [{"name": "New Statington", "post_abbr": "NS"}]
+      expect(table.data.count).to eq 1
+
+      capture do
+        write_truncate_orc_data_from_gcs(
+          project_id: @project_id,
+          dataset_id: @dataset.dataset_id,
+          table_id:   table_id
+        )
+      end
+
+      expect(captured_output).to include(
+        "Importing data from Cloud Storage file: " +
+        "gs://cloud-samples-data/bigquery/us-states/us-states.orc"
+      )
+      expect(captured_output).to include "Waiting for load job to complete: job"
+      expect(captured_output).to include "Data imported"
+
+      loaded_data = table.data
 
       expect(loaded_data).not_to be_empty
       expect(loaded_data.count).to eq 50
