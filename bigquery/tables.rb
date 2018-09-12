@@ -304,7 +304,7 @@ def import_table_from_gcs_orc project_id:, dataset_id:
   load_job.wait_until_done!
 
   puts "Data imported"
-  # [END bigquery_load_table_gcs_orc_autodetect]
+  # [END bigquery_load_table_gcs_orc]
 end
 
 def write_truncate_orc_data_from_gcs project_id:, dataset_id:, table_id:
