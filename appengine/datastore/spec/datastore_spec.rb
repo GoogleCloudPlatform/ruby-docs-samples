@@ -24,6 +24,6 @@ describe "Datastore test", type: :feature do
 
     expect(page).to have_content "Last 10 visits:"
     expect(page).to have_content "Time:"
-    expect(page).to have_content "UTC Addr:"
+    expect(page).to have_content "Addr:"
   end
 end
