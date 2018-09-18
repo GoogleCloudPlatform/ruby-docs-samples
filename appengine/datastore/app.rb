@@ -18,14 +18,15 @@ require "sinatra"
 require "google/cloud/datastore"
 
 get "/" do
+  datastore = Google::Cloud::Datastore.new
+
   # Save visit in Datastore
-  visit = dataset.entity "Visit"
+  visit = datastore.entity "Visit"
   visit["user_ip"]   = Digest::SHA256.hexdigest request.ip
   visit["timestamp"] = Time.now
-  dataset.save visit
+  datastore.save visit
 
   # Query the last 10 visits from the Datastore
-  datastore = Google::Cloud::Datastore.new
   query     = datastore.query("Visit").order("timestamp", :desc).limit(10)
   visits    = datastore.run query
 
