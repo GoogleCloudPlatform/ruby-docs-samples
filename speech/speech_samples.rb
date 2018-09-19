@@ -252,6 +252,7 @@ end
 
 def speech_transcribe_auto_punctuation audio_file_path: nil
   # [START speech_transcribe_auto_punctuation]
+  # audio_file_path = "path/to/audio.wav"
   require "google/cloud/speech"
 
   speech = Google::Cloud::Speech.new
@@ -263,7 +264,6 @@ def speech_transcribe_auto_punctuation audio_file_path: nil
     enable_automatic_punctuation: true
   }
 
-  # audio_file_path = "path/to/audio.wav"
   audio_file = File.binread audio_file_path
   audio      = { content: audio_file }
 
@@ -288,6 +288,8 @@ end
 
 def speech_transcribe_enhanced_model audio_file_path: nil
   # [START speech_transcribe_enhanced_model]
+  # audio_file_path = "path/to/audio.wav"
+
   require "google/cloud/speech"
 
   speech = Google::Cloud::Speech.new
@@ -300,7 +302,6 @@ def speech_transcribe_enhanced_model audio_file_path: nil
     model:             'phone_call'
   }
 
-  # audio_file_path = "path/to/audio.wav"
   audio_file = File.binread audio_file_path
   audio      = { content: audio_file }
 
@@ -325,6 +326,8 @@ end
 
 def speech_transcribe_model_selection file_path: nil, model: nil
   # [START speech_transcribe_model_selection]
+  # file_path = "path/to/audio.wav"
+
   require "google/cloud/speech"
 
   speech = Google::Cloud::Speech.new
@@ -336,7 +339,6 @@ def speech_transcribe_model_selection file_path: nil, model: nil
     model:             model
   }
 
-  # file_path = "path/to/audio.wav"
   file  = File.binread file_path
   audio = { content: file }
 
