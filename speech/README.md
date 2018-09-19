@@ -53,6 +53,7 @@ Usage: ruby speech_samples.rb <command> [arguments]
       async_recognize_gcs       <gcsUri>   Creates a job to detect speech in an audio file located in a Google Cloud Storage bucket, and waits for the job to complete.
       async_recognize_gcs_words <gcsUri>   Creates a job to detect speech with wordsoffsets in an audio file located in a Google Cloud Storage bucket, and waits for the job to complete.
       stream_recognize          <filename> Detects speech in a local audio file by streaming it to the Speech API.
+      auto_punctuation          <filename> Detects speech in a local audio file, including automatic punctuation in the transcript.
 
 Examples:
 

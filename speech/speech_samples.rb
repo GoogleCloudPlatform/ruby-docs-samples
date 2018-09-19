@@ -250,6 +250,42 @@ def speech_streaming_recognize audio_file_path: nil
 # [END speech_transcribe_streaming]
 end
 
+def speech_transcribe_auto_punctuation audio_file_path: nil
+  # [START speech_transcribe_auto_punctuation]
+  require "google/cloud/speech"
+
+  speech = Google::Cloud::Speech.new
+
+  config = {
+    encoding:                     :LINEAR16,
+    sample_rate_hertz:            8000,
+    language_code:                "en-US",
+    enable_automatic_punctuation: true
+  }
+
+  # audio_file_path = "path/to/audio.wav"
+  audio_file = File.binread audio_file_path
+  audio      = { content: audio_file }
+
+  operation = speech.long_running_recognize config, audio
+
+  puts "Operation started"
+
+  operation.wait_until_done!
+
+  raise operation.results.message if operation.error?
+
+  results = operation.response.results
+
+  results.each_with_index do |result, i|
+    alternative = result.alternatives.first
+    puts "-" * 20
+    puts "First alternative of result #{i}"
+    puts "Transcript: #{alternative.transcript}"
+  end
+  # [END speech_transcribe_auto_punctuation]
+end
+
 if __FILE__ == $PROGRAM_NAME
   command    = ARGV.shift
 
@@ -268,6 +304,8 @@ if __FILE__ == $PROGRAM_NAME
     speech_async_recognize_gcs_words storage_path: ARGV.first
   when "stream_recognize"
     speech_streaming_recognize audio_file_path: ARGV.first
+  when "auto_punctuation"
+    speech_transcribe_auto_punctuation audio_file_path: ARGV.first
   else
     puts <<-usage
 Usage: ruby speech_samples.rb <command> [arguments]
@@ -280,6 +318,7 @@ Commands:
   async_recognize_gcs       <gcsUri>   Creates a job to detect speech in an audio file located in a Google Cloud Storage bucket, and waits for the job to complete.
   async_recognize_gcs_words <gcsUri>   Creates a job to detect speech with wordsoffsets in an audio file located in a Google Cloud Storage bucket, and waits for the job to complete.
   stream_recognize          <filename> Detects speech in a local audio file by streaming it to the Speech API.
+  auto_punctuation          <filename> Detects speech in a local audio file, including automatic punctuation in the transcript.
     usage
   end
 end

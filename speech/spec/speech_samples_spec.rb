@@ -113,4 +113,11 @@ describe "Google Cloud Speech API samples" do
       /how old is the Brooklyn Bridge/
     ).to_stdout
   end
+
+  example "transcribe audio file with automatic punctuation" do
+    audio_file_path = File.expand_path "../audio_files/commercial_mono.wav", __dir__
+    expect {
+      speech_transcribe_auto_punctuation audio_file_path: audio_file_path
+    }.to output(/Okay. Sure./).to_stdout
+  end
 end
