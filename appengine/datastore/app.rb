@@ -21,9 +21,10 @@ get "/" do
   datastore = Google::Cloud::Datastore.new
 
   # Save visit in Datastore
-  visit = datastore.entity "Visit"
-  visit["user_ip"]   = Digest::SHA256.hexdigest request.ip
-  visit["timestamp"] = Time.now
+  visit = datastore.entity "Visit" do |v|
+    v["user_ip"]   = Digest::SHA256.hexdigest request.ip
+    v["timestamp"] = Time.now
+  end
   datastore.save visit
 
   # Query the last 10 visits from the Datastore
