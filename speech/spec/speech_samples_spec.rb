@@ -27,7 +27,7 @@ describe "Google Cloud Speech API samples" do
     @storage.create_bucket @bucket_name unless @storage.bucket @bucket_name
 
     # Path to RAW audio file with sample rate of 16000 using LINEAR16 encoding
-    @audio_file_path = File.expand_path "../audio_files/audio.raw", __dir__
+    @audio_file_path = File.expand_path "../resources/audio.raw", __dir__
 
     # Expected transcript of spoken English recorded in the audio.raw file
     @audio_file_transcript = "how old is the Brooklyn Bridge"
@@ -112,5 +112,26 @@ describe "Google Cloud Speech API samples" do
     }.to output(
       /how old is the Brooklyn Bridge/
     ).to_stdout
+  end
+
+  example "transcribe audio file with automatic punctuation" do
+    audio_file_path = File.expand_path "../resources/commercial_mono.wav", __dir__
+    expect {
+      speech_transcribe_auto_punctuation audio_file_path: audio_file_path
+    }.to output(/Okay. Sure./).to_stdout
+  end
+
+  example "transcribe audio file with enhanced phone call model" do
+    audio_file_path = File.expand_path "../resources/commercial_mono.wav", __dir__
+    expect {
+      speech_transcribe_enhanced_model audio_file_path: audio_file_path
+    }.to output(/Chrome/).to_stdout
+  end
+
+  example "transcribe audio file with enhanced video model" do
+    video_file_path = File.expand_path "../resources/Google_Gnome.wav", __dir__
+    expect {
+      speech_transcribe_model_selection file_path: video_file_path, model: "video"
+    }.to output(/the weather outside is sunny/).to_stdout
   end
 end
