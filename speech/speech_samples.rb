@@ -253,6 +253,7 @@ end
 def speech_transcribe_auto_punctuation audio_file_path: nil
   # [START speech_transcribe_auto_punctuation]
   # audio_file_path = "path/to/audio.wav"
+
   require "google/cloud/speech"
 
   speech = Google::Cloud::Speech.new
