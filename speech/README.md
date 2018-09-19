@@ -54,9 +54,10 @@ Usage: ruby speech_samples.rb <command> [arguments]
       async_recognize_gcs_words <gcsUri>   Creates a job to detect speech with wordsoffsets in an audio file located in a Google Cloud Storage bucket, and waits for the job to complete.
       stream_recognize          <filename> Detects speech in a local audio file by streaming it to the Speech API.
       auto_punctuation          <filename> Detects speech in a local audio file, including automatic punctuation in the transcript.
-      enhanced_model            <filename> Detects speech in a local audio file, using a model enhanced for phone call audio
+      enhanced_model            <filename> Detects speech in a local audio file, using a model enhanced for phone call audio.
+      model_selection           <filename> Detects speech in a local file, using a specific model.
 
 Examples:
 
-    $ bundle exec ruby speech_samples.rb recognize audio_files/audio.raw
+    $ bundle exec ruby speech_samples.rb recognize resources/audio.raw
     Text: how old is the Brooklyn Bridge

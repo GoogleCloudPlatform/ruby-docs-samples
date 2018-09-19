@@ -24,7 +24,7 @@ speech = Google::Cloud::Speech.new
 # [END speech_ruby_migration_client]
 
 # The name of the audio file to transcribe
-file_name = "./audio_files/audio.raw"
+file_name = "./resources/audio.raw"
 
 # [START speech_ruby_migration_sync_request]
 # [START speech_ruby_migration_config]

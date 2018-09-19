@@ -323,6 +323,42 @@ def speech_transcribe_enhanced_model audio_file_path: nil
   # [END speech_transcribe_enhanced_model]
 end
 
+def speech_transcribe_model_selection file_path: nil, model: nil
+  # [START speech_transcribe_model_selection]
+  require "google/cloud/speech"
+
+  speech = Google::Cloud::Speech.new
+
+  config = {
+    encoding:          :LINEAR16,
+    sample_rate_hertz: 16000,
+    language_code:     "en-US",
+    model:             model
+  }
+
+  # file_path = "path/to/audio.wav"
+  file  = File.binread file_path
+  audio = { content: file }
+
+  operation = speech.long_running_recognize config, audio
+
+  puts "Operation started"
+
+  operation.wait_until_done!
+
+  raise operation.results.message if operation.error?
+
+  results = operation.response.results
+
+  results.each_with_index do |result, i|
+    alternative = result.alternatives.first
+    puts "-" * 20
+    puts "First alternative of result #{i}"
+    puts "Transcript: #{alternative.transcript}"
+  end
+  # [END speech_transcribe_model_selection]
+end
+
 if __FILE__ == $PROGRAM_NAME
   command    = ARGV.shift
 
@@ -345,6 +381,8 @@ if __FILE__ == $PROGRAM_NAME
     speech_transcribe_auto_punctuation audio_file_path: ARGV.first
   when "enhanced_model"
     speech_transcribe_enhanced_model audio_file_path: ARGV.first
+  when "model_selection"
+    speech_transcribe_model_selection file_path: ARGV.first, model: ARGV[1]
   else
     puts <<-usage
 Usage: ruby speech_samples.rb <command> [arguments]
@@ -359,6 +397,7 @@ Commands:
   stream_recognize          <filename> Detects speech in a local audio file by streaming it to the Speech API.
   auto_punctuation          <filename> Detects speech in a local audio file, including automatic punctuation in the transcript.
   enhanced_model            <filename> Detects speech in a local audio file, using a model enhanced for phone call audio.
+  model_selection           <filename> Detects speech in a local file, using a specific model.
     usage
   end
 end
