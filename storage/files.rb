@@ -247,6 +247,10 @@ def list_file_details project_id:, bucket_name:, file_name:
   puts "Content-disposition: #{file.content_disposition}"
   puts "Content-encoding: #{file.content_encoding}"
   puts "Content-language: #{file.content_language}"
+  puts "KmsKeyName: #{file.kms_key}"
+  puts "Event-based hold enabled?: #{file.event_based_hold?}"
+  puts "Temporary hold enaled?: #{file.temporary_hold?}"
+  puts "Retention Expiration: #{file.retention_expires_at}"
   puts "Metadata:"
   file.metadata.each do |key, value|
     puts " - #{key} = #{value}"
@@ -534,6 +538,22 @@ def run_sample arguments
     generate_signed_url project_id:  project_id,
                         bucket_name: arguments.shift,
                         file_name:   arguments.shift
+  when "set_event_based_hold"
+    set_event_based_hold project_id:  project_id,
+                         bucket_name: arguments.shift,
+                         file_name:   arguments.shift
+  when "release_event_based_hold"
+    release_event_based_hold project_id:  project_id,
+                             bucket_name: arguments.shift,
+                             file_name:   arguments.shift
+  when "set_temporary_hold"
+    set_temporary_hold project_id:  project_id,
+                       bucket_name: arguments.shift,
+                       file_name:   arguments.shift
+  when "release_temporary_hold"
+    release_temporary_hold project_id:  project_id,
+                           bucket_name: arguments.shift,
+                           file_name:   arguments.shift
   else
     puts <<-usage
 Usage: bundle exec ruby files.rb [command] [arguments]
@@ -555,6 +575,10 @@ Commands:
   rename       <bucket> <file> <new>                                Rename a file in a bucket
   copy <srcBucket> <srcFile> <destBucket> <destFile>                Copy file to other bucket
   generate_signed_url <bucket> <file>                               Generate a signed url for a file
+  set_event_based_hold     <bucket> <file>                          Set an event-based hold on a file
+  release_event_based_hold <bucket> <file>                          Relase an event-based hold on a file
+  set_temporary_hold       <bucket> <file>                          Set a temporary hold on a file
+  release_temporary_hold   <bucket> <file>                          Release a temporary hold on a file
 
 Environment variables:
   GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
