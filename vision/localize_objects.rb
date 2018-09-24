@@ -20,15 +20,15 @@ def localize_objects image_path:
 
   vision = Google::Cloud::Vision::V1.new
 
-  image_content = IO.read image_path, mode: 'rb'
-  image = Google::Cloud::Vision::V1::Image.new content: image_content
+  request = {
+    features: [{ type: :OBJECT_LOCALIZATION }],
+    image: {
+      content: File.binread(image_path)
+    }
+  }
 
-  feature = Google::Cloud::Vision::V1::Feature.new type: :OBJECT_LOCALIZATION
-
-  request = Google::Cloud::Vision::V1::AnnotateImageRequest.new image: image, features: [feature]
-
-  response = (vision.batch_annotate_images [request]).responses.first
-
+  result = vision.batch_annotate_images [request]
+  response = result.responses.first
   objects = response.localized_object_annotations
 
   objects.each do |object|
@@ -49,15 +49,15 @@ def localize_objects_uri image_path:
 
   vision = Google::Cloud::Vision::V1.new
 
-  image_source = Google::Cloud::Vision::V1::ImageSource.new image_uri: image_path
-  image = Google::Cloud::Vision::V1::Image.new source: image_source
+  request = {
+    features: [{ type: :OBJECT_LOCALIZATION }],
+    image: {
+      source: { image_uri: image_path }
+    }
+  }
 
-  feature = Google::Cloud::Vision::V1::Feature.new type: :OBJECT_LOCALIZATION
-
-  request = Google::Cloud::Vision::V1::AnnotateImageRequest.new image: image, features: [feature]
-
-  response = (vision.batch_annotate_images [request]).responses.first
-
+  result = vision.batch_annotate_images [request]
+  response = result.responses.first
   objects = response.localized_object_annotations
 
   objects.each do |object|
