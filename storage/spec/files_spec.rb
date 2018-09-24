@@ -487,4 +487,88 @@ describe "Google Cloud Storage files sample" do
 
     expect(file_contents).to include "Content of test file.txt"
   end
+
+  it "can set an event-based hold" do
+    event_based_hold_file = "event-based-file.txt"
+    delete_file event_based_hold_file
+    expect(@bucket.file event_based_hold_file).to be nil
+
+    upload @local_file_path, event_based_hold_file
+
+    expect {
+      set_event_based_hold project_id:  @project_id,
+                           bucket_name: @bucket_name,
+                           file_name:   event_based_hold_file
+    }.to output(
+      /Event-based hold was set for event-based-file.txt/
+    ).to_stdout
+
+    expect(@bucket.file(event_based_hold_file).event_based_hold?).to be true
+    @bucket.file(event_based_hold_file).release_event_based_hold!
+    expect(@bucket.file(event_based_hold_file).event_based_hold?).to be false
+    delete_file event_based_hold_file
+  end
+
+  it "can release an event-based hold" do
+    event_based_hold_file = "event-based-file.txt"
+    delete_file event_based_hold_file
+    expect(@bucket.file event_based_hold_file).to be nil
+
+    upload @local_file_path, event_based_hold_file
+    @bucket.file(event_based_hold_file).set_event_based_hold!
+    expect(@bucket.file(event_based_hold_file).event_based_hold?).to be true
+
+    expect {
+      release_event_based_hold project_id:  @project_id,
+                               bucket_name: @bucket_name,
+                               file_name:   event_based_hold_file
+    }.to output(
+      /Event-based hold was released for #{event_based_hold_file}/
+    ).to_stdout
+
+    expect(@bucket.file(event_based_hold_file).event_based_hold?).to be false
+    delete_file event_based_hold_file
+  end
+
+  it "can set a temporary hold" do
+    temporary_hold_file = "temporary-hold-file.txt"
+    delete_file temporary_hold_file
+    expect(@bucket.file temporary_hold_file).to be nil
+
+    upload @local_file_path, temporary_hold_file
+
+    expect {
+      set_temporary_hold project_id:  @project_id,
+                         bucket_name: @bucket_name,
+                         file_name:   temporary_hold_file
+    }.to output(
+      /Temporary hold was set for temporary-hold-file.txt/
+    ).to_stdout
+
+    expect(@bucket.file(temporary_hold_file).temporary_hold?).to be true
+    @bucket.file(temporary_hold_file).release_temporary_hold!
+    expect(@bucket.file(temporary_hold_file).temporary_hold?).to be false
+    delete_file temporary_hold_file
+  end
+
+  it "can release an temporary hold" do
+    temporary_hold_file = "temporary-hold-file.txt"
+    delete_file temporary_hold_file
+    expect(@bucket.file temporary_hold_file).to be nil
+
+    upload @local_file_path, temporary_hold_file
+    @bucket.file(temporary_hold_file).set_temporary_hold!
+    expect(@bucket.file(temporary_hold_file).temporary_hold?).to be true
+
+    expect {
+      release_temporary_hold project_id:  @project_id,
+                             bucket_name: @bucket_name,
+                             file_name:   temporary_hold_file
+    }.to output(
+      /Temporary hold was released for #{temporary_hold_file}/
+    ).to_stdout
+
+    expect(@bucket.file(temporary_hold_file).temporary_hold?).to be false
+    delete_file temporary_hold_file
+  end
 end

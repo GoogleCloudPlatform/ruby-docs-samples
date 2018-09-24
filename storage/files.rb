@@ -400,7 +400,7 @@ def set_event_based_hold project_id:, bucket_name:, file_name:
 
   file.set_event_based_hold!
 
-  puts "Event based hold was set for #{file_name}"
+  puts "Event-based hold was set for #{file_name}"
   # [END storage_set_event_based_hold]
 end
 
@@ -418,7 +418,7 @@ def release_event_based_hold project_id:, bucket_name:, file_name:
 
   file.release_event_based_hold!
 
-  puts "Event based hold was released for #{file_name}"
+  puts "Event-based hold was released for #{file_name}"
   # [END storage_release_event_based_hold]
 end
 
@@ -454,7 +454,7 @@ def release_temporary_hold project_id:, bucket_name:, file_name:
 
   file.release_temporary_hold!
 
-  puts "Temporary hold was release for #{file_name}"
+  puts "Temporary hold was released for #{file_name}"
   # [END storage_release_temporary_hold]
 end
 

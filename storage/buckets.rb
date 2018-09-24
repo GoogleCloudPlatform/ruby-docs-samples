@@ -229,7 +229,7 @@ def lock_retention_policy project_id:, bucket_name:
   # Warning: Once a retention policy is locked it cannot be unlocked
   # and retention period can only be increased.
   # Uses bucket.metageneration as a precondition
-  bucket.lock_retention_period!
+  bucket.lock_retention_policy!
 
   puts "Retention policy for #{bucket_name} is now locked"
   puts "Retention policy effective as of #{bucket.retention_effective_at}"
@@ -250,7 +250,7 @@ def remove_retention_policy project_id:, bucket_name:
     bucket.retention_period = nil
     puts "Retention period for #{bucket_name} has been removed."
   else
-    puts "Policy is locked and retention periodcan't be removed."
+    puts "Policy is locked and retention period can't be removed."
   end
   # [END storage_remove_retention_policy]
 end
@@ -268,7 +268,7 @@ def get_retention_policy project_id:, bucket_name:
   puts "Retention policy:"
   puts "period: #{bucket.retention_period}"
   puts "effective time: #{bucket.retention_effective_at}"
-  puts "policy locked: #{bucket.is_locked}"
+  puts "policy locked: #{bucket.retention_policy_locked?}"
   # [END storage_get_retention_policy]
 end
 
@@ -286,7 +286,7 @@ def enable_default_event_based_hold project_id:, bucket_name:
     b.default_event_based_hold = true
   end
 
-  puts "Default event based hold was enabled for #{bucket_name}"
+  puts "Default event-based hold was enabled for #{bucket_name}"
   # [END storage_enable_default_event_based_hold]
 end
 
@@ -304,7 +304,7 @@ def disable_default_event_based_hold project_id:, bucket_name:
     b.default_event_based_hold = false
   end
 
-  puts "Default event based hold was disabled for #{bucket_name}"
+  puts "Default event-based hold was disabled for #{bucket_name}"
   # [END storage_disable_default_event_based_hold]
 end
 
@@ -319,9 +319,9 @@ def get_default_event_based_hold project_id:, bucket_name:
   bucket  = storage.bucket bucket_name
 
   if bucket.default_event_based_hold?
-    puts "Default event based hold is enabled for {bucket_name}"
+    puts "Default event-based hold is enabled for {bucket_name}"
   else
-    puts "Default event based hold is not enabled for {bucket_name}"
+    puts "Default event-based hold is not enabled for {bucket_name}"
   end
   # [END storage_get_default_event_based_hold]
 end
