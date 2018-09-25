@@ -339,39 +339,6 @@ describe "Google Cloud BigQuery samples" do
       expect(loaded_data.count).to eq 50
     end
 
-    example "append json data from GCS" do
-      table_id = "us_states"
-      expect(@dataset.table table_id).to be nil
-
-      table = @dataset.create_table table_id do |schema|
-        schema.string "name"
-        schema.string "post_abbr"
-      end
-
-      table.insert [{"name": "New Statington", "post_abbr": "NS"}]
-      expect(table.data.count).to eq 1
-
-      capture do
-        append_json_data_from_gcs(
-          project_id: @project_id,
-          dataset_id: @dataset.dataset_id,
-          table_id:   table_id
-        )
-      end
-
-      expect(captured_output).to include(
-        "Importing data from Cloud Storage file: " +
-        "gs://cloud-samples-data/bigquery/us-states/us-states.json"
-      )
-      expect(captured_output).to include "Waiting for load job to complete: job"
-      expect(captured_output).to include "Data imported"
-
-      loaded_data = table.data
-
-      expect(loaded_data).not_to be_empty
-      expect(loaded_data.count).to eq 51
-    end
-
     example "write truncate json data from GCS" do
       table_id = "us_states"
       expect(@dataset.table table_id).to be nil
