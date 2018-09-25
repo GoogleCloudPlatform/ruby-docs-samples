@@ -35,7 +35,6 @@ Commands:
   import_gcs_json            <dataset_id>
   import_gcs_json_autodetect <dataset_id>
   import_data                <dataset_id> <table_id> "[{ <json row data> }]"
-  append_rows                <dataset_id> <table_id>
   overwrite_rows             <dataset_id> <table_id>
   export                     <dataset_id> <table_id> <cloud_storage_path>
   query                      <query>
