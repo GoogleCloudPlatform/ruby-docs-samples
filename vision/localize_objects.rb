@@ -18,52 +18,35 @@ def localize_objects image_path:
 
   require "google/cloud/vision"
 
-  vision = Google::Cloud::Vision::V1.new
+  vision = Google::Cloud::Vision.new
+  image  = vision.image image_path
 
-  request = {
-    features: [{ type: :OBJECT_LOCALIZATION }],
-    image: {
-      content: File.binread(image_path)
-    }
-  }
-
-  result = vision.batch_annotate_images [request]
-  response = result.responses.first
-  objects = response.localized_object_annotations
-
-  objects.each do |object|
+  image.object_localizations.each do |object|
     puts "#{object.name} (confidence: #{object.score})"
     puts "Normalized bounding polygon vertices:"
-    object.bounding_poly.normalized_vertices.each do |vertex|
+    object.bounds.each do |vertex|
       puts " - (#{vertex.x}, #{vertex.y})"
     end
   end
   # [END vision_localize_objects]
 end
 
+# This method is a duplicate of the above method, but with a different
+# description of the 'image_path' variable, demonstrating the gs://bucket/file
+# GCS storage URI format.
 def localize_objects_uri image_path:
   # [START vision_localize_objects_gcs]
   # image_path = "Google Cloud Storage URI, eg. 'gs://my-bucket/image.png'"
 
   require "google/cloud/vision"
 
-  vision = Google::Cloud::Vision::V1.new
+  vision = Google::Cloud::Vision.new
+  image  = vision.image image_path
 
-  request = {
-    features: [{ type: :OBJECT_LOCALIZATION }],
-    image: {
-      source: { image_uri: image_path }
-    }
-  }
-
-  result = vision.batch_annotate_images [request]
-  response = result.responses.first
-  objects = response.localized_object_annotations
-
-  objects.each do |object|
+  image.object_localizations.each do |object|
     puts "#{object.name} (confidence: #{object.score})"
     puts "Normalized bounding polygon vertices:"
-    object.bounding_poly.normalized_vertices.each do |vertex|
+    object.bounds.each do |vertex|
       puts " - (#{vertex.x}, #{vertex.y})"
     end
   end
