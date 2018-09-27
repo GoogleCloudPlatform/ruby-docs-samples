@@ -42,7 +42,7 @@ describe "Google Cloud Storage files sample" do
                                            key_ring: ENV["GOOGLE_CLOUD_KMS_KEY_RING"],
                                            key_name: ENV["GOOGLE_CLOUD_KMS_KEY_NAME"]
     @bucket               = @storage.bucket @bucket_name
-    @storage_secondary    = Google::Cloud::Storage.new project: ENV["GOOGLE_CLOUD_PROJECT_SECONDARY"],
+    @storage_secondary    = Google::Cloud::Storage.new project_id: ENV["GOOGLE_CLOUD_PROJECT_SECONDARY"],
                                                        keyfile: ENV["GOOGLE_APPLICATION_CREDENTIALS_SECONDARY"]
     @project_id_secondary = @storage_secondary.project
     @local_file_path      = File.expand_path "resources/file.txt", __dir__

@@ -18,7 +18,7 @@ def list_buckets project_id:
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project: project_id
+  storage = Google::Cloud::Storage.new project_id: project_id
 
   storage.buckets.each do |bucket|
     puts bucket.name
@@ -33,7 +33,7 @@ def disable_requester_pays project_id:, bucket_name:
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project: project_id
+  storage = Google::Cloud::Storage.new project_id: project_id
   bucket  = storage.bucket bucket_name
 
   bucket.requester_pays = false
@@ -49,7 +49,7 @@ def enable_requester_pays project_id:, bucket_name:
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project: project_id
+  storage = Google::Cloud::Storage.new project_id: project_id
   bucket  = storage.bucket bucket_name
 
   bucket.requester_pays = true
@@ -65,7 +65,7 @@ def get_requester_pays_status project_id:, bucket_name:
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project: project_id
+  storage = Google::Cloud::Storage.new project_id: project_id
   bucket  = storage.bucket bucket_name
 
   if bucket.requester_pays
@@ -84,7 +84,7 @@ def enable_default_kms_key project_id:, bucket_name:, default_kms_key:
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project: project_id
+  storage = Google::Cloud::Storage.new project_id: project_id
   bucket  = storage.bucket bucket_name
 
   bucket.default_kms_key = default_kms_key
@@ -100,7 +100,7 @@ def create_bucket project_id:, bucket_name:
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project: project_id
+  storage = Google::Cloud::Storage.new project_id: project_id
   bucket  = storage.create_bucket bucket_name
 
   puts "Created bucket: #{bucket.name}"
@@ -117,7 +117,7 @@ def create_bucket_class_location project_id:, bucket_name:, location:,
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project: project_id
+  storage = Google::Cloud::Storage.new project_id: project_id
   bucket  = storage.create_bucket bucket_name,
                                   location:      location,
                                   storage_class: storage_class
@@ -134,7 +134,7 @@ def list_bucket_labels project_id:, bucket_name:
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project: project_id
+  storage = Google::Cloud::Storage.new project_id: project_id
   bucket  = storage.bucket bucket_name
 
   puts "Labels for #{bucket_name}"
@@ -153,7 +153,7 @@ def add_bucket_label project_id:, bucket_name:, label_key:, label_value:
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project: project_id
+  storage = Google::Cloud::Storage.new project_id: project_id
   bucket  = storage.bucket bucket_name
 
   bucket.update do |bucket|
@@ -172,7 +172,7 @@ def delete_bucket_label project_id:, bucket_name:, label_key:
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project: project_id
+  storage = Google::Cloud::Storage.new project_id: project_id
   bucket  = storage.bucket bucket_name
 
   bucket.update do |bucket|
@@ -190,7 +190,7 @@ def delete_bucket project_id:, bucket_name:
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project: project_id
+  storage = Google::Cloud::Storage.new project_id: project_id
   bucket  = storage.bucket bucket_name
 
   bucket.delete
@@ -207,7 +207,7 @@ def set_retention_policy project_id:, bucket_name:, retention_period:
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project: project_id
+  storage = Google::Cloud::Storage.new project_id: project_id
   bucket  = storage.bucket bucket_name
 
   bucket.retention_period = retention_period
@@ -223,7 +223,7 @@ def lock_retention_policy project_id:, bucket_name:
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project: project_id
+  storage = Google::Cloud::Storage.new project_id: project_id
   bucket  = storage.bucket bucket_name
 
   # Warning: Once a retention policy is locked it cannot be unlocked
@@ -243,7 +243,7 @@ def remove_retention_policy project_id:, bucket_name:
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project: project_id
+  storage = Google::Cloud::Storage.new project_id: project_id
   bucket  = storage.bucket bucket_name
 
   if !bucket.retention_policy_locked?
@@ -262,7 +262,7 @@ def get_retention_policy project_id:, bucket_name:
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project: project_id
+  storage = Google::Cloud::Storage.new project_id: project_id
   bucket  = storage.bucket bucket_name
 
   puts "Retention policy:"
@@ -279,7 +279,7 @@ def enable_default_event_based_hold project_id:, bucket_name:
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project: project_id
+  storage = Google::Cloud::Storage.new project_id: project_id
   bucket  = storage.bucket bucket_name
 
   bucket.update do |b|
@@ -297,7 +297,7 @@ def disable_default_event_based_hold project_id:, bucket_name:
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project: project_id
+  storage = Google::Cloud::Storage.new project_id: project_id
   bucket  = storage.bucket bucket_name
 
   bucket.update do |b|
@@ -315,7 +315,7 @@ def get_default_event_based_hold project_id:, bucket_name:
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project: project_id
+  storage = Google::Cloud::Storage.new project_id: project_id
   bucket  = storage.bucket bucket_name
 
   if bucket.default_event_based_hold?
