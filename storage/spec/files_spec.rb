@@ -339,7 +339,7 @@ describe "Google Cloud Storage files sample" do
       expect(File.size local_file.path).to eq 0
 
       expect(Google::Cloud::Storage).to receive(:new).
-                                        with(project: @project_id_secondary).
+                                        with(project_id: @project_id_secondary).
                                         and_return @storage_secondary
 
       expect {
@@ -375,7 +375,7 @@ describe "Google Cloud Storage files sample" do
       expect(File.size local_file.path).to eq 0
 
       expect(Google::Cloud::Storage).to receive(:new).
-                                        with(project: @project_id_secondary).
+                                        with(project_id: @project_id_secondary).
                                         and_return @storage_secondary
 
       expect {
