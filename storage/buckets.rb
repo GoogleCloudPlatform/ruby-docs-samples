@@ -212,7 +212,7 @@ def set_retention_policy project_id:, bucket_name:, retention_period:
 
   bucket.retention_period = retention_period
 
-  puts "Retention period for #{bucket_name} is now #{bucket.retention_period} seconds"
+  puts "Retention period for #{bucket_name} is now #{bucket.retention_period} seconds."
   # [END storage_set_retention_policy]
 end
 
