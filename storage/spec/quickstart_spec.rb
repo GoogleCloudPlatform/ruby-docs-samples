@@ -41,7 +41,7 @@ describe "Storage Quickstart" do
 
     expect(storage.bucket bucket_name).to be nil
     expect(Google::Cloud::Storage).to receive(:new).
-                                      with(project: "YOUR_PROJECT_ID").
+                                      with(project_id: "YOUR_PROJECT_ID").
                                       and_return(storage)
 
     bucket = storage.create_bucket bucket_name

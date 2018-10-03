@@ -19,7 +19,7 @@ def print_bucket_acl project_id:, bucket_name:
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project: project_id
+  storage = Google::Cloud::Storage.new project_id: project_id
   bucket  = storage.bucket bucket_name
 
   puts "ACL for #{bucket_name}:"
@@ -46,7 +46,7 @@ def print_bucket_acl_for_user project_id:, bucket_name:, email:
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project: project_id
+  storage = Google::Cloud::Storage.new project_id: project_id
   bucket  = storage.bucket bucket_name
 
   puts "Permissions for #{email}:"
@@ -64,7 +64,7 @@ def add_bucket_owner project_id:, bucket_name:, email:
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project: project_id
+  storage = Google::Cloud::Storage.new project_id: project_id
   bucket  = storage.bucket bucket_name
 
   bucket.acl.add_owner email
@@ -81,7 +81,7 @@ def remove_bucket_acl project_id:, bucket_name:, email:
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project: project_id
+  storage = Google::Cloud::Storage.new project_id: project_id
   bucket  = storage.bucket bucket_name
 
   bucket.acl.delete email
@@ -98,7 +98,7 @@ def add_bucket_default_owner project_id:, bucket_name:, email:
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project: project_id
+  storage = Google::Cloud::Storage.new project_id: project_id
   bucket  = storage.bucket bucket_name
 
   bucket.default_acl.add_owner email
@@ -115,7 +115,7 @@ def remove_bucket_default_acl project_id:, bucket_name:, email:
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project: project_id
+  storage = Google::Cloud::Storage.new project_id: project_id
   bucket  = storage.bucket bucket_name
 
   bucket.default_acl.delete email
@@ -133,7 +133,7 @@ def print_file_acl project_id:, bucket_name:, file_name:
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project: project_id
+  storage = Google::Cloud::Storage.new project_id: project_id
   bucket  = storage.bucket bucket_name
   file    = bucket.file file_name
 
@@ -158,7 +158,7 @@ def print_file_acl_for_user project_id:, bucket_name:, file_name:, email:
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project: project_id
+  storage = Google::Cloud::Storage.new project_id: project_id
   bucket  = storage.bucket bucket_name
   file    = bucket.file file_name
 
@@ -177,7 +177,7 @@ def add_file_owner project_id:, bucket_name:, file_name:, email:
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project: project_id
+  storage = Google::Cloud::Storage.new project_id: project_id
   bucket  = storage.bucket bucket_name
   file    = bucket.file file_name
 
@@ -196,7 +196,7 @@ def remove_file_acl project_id:, bucket_name:, file_name:, email:
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project: project_id
+  storage = Google::Cloud::Storage.new project_id: project_id
   bucket  = storage.bucket bucket_name
   file    = bucket.file file_name
 

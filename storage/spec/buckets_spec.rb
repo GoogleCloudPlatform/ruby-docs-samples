@@ -124,13 +124,111 @@ describe "Google Cloud Storage buckets sample" do
                              default_kms_key: @kms_key
 
     }.to output{
-      /Default KMS key for #{bucket_name} was set to #{@kms_key}/
+      /Default KMS key for #{@bucket_name} was set to #{@kms_key}/
     }.to_stdout
 
     expect(@storage.bucket(@bucket_name).default_kms_key).to include @kms_key
 
     @storage.bucket(@bucket_name).default_kms_key = nil
     expect(@storage.bucket(@bucket_name).default_kms_key).to be nil
+  end
+
+  example "set and get a retention policy" do
+    @storage.bucket(@bucket_name).retention_period = nil
+    expect(@storage.bucket(@bucket_name).retention_period).to be nil
+
+    retention_period = 5 # seconds.
+    expect {
+      set_retention_policy project_id:       @project_id,
+                           bucket_name:      @bucket_name,
+                           retention_period: retention_period
+    }.to output{
+      /Retention period for #{@bucket_name} is now #{retention_period} seconds/
+    }.to_stdout
+
+    expect {
+      get_retention_policy project_id:  @project_id,
+                           bucket_name: @bucket_name
+    }.to output{
+      /period: #{retention_period}/
+    }.to_stdout
+
+    expect(@storage.bucket(@bucket_name).retention_period).to eq retention_period
+    expect(@storage.bucket(@bucket_name).retention_effective_at).not_to be nil
+    expect(@storage.bucket(@bucket_name).retention_policy_locked?).to be false
+
+    @storage.bucket(@bucket_name).retention_period = nil
+    expect(@storage.bucket(@bucket_name).retention_period).to be nil
+  end
+
+  example "remove retention policy" do
+    retention_period = 5 # seconds.
+    @storage.bucket(@bucket_name).retention_period = retention_period
+    expect(@storage.bucket(@bucket_name).retention_period).to be retention_period
+
+    expect {
+      remove_retention_policy project_id:  @project_id,
+                              bucket_name: @bucket_name
+    }.to output(
+      /Retention policy for #{@bucket_name} has been removed/
+    ).to_stdout
+
+    expect(@storage.bucket(@bucket_name).retention_period).to be nil
+    expect(@storage.bucket(@bucket_name).retention_effective_at).to be nil
+  end
+
+  example "enable default event-based hold" do
+    @storage.bucket(@bucket_name).update do |b|
+      b.default_event_based_hold = false
+    end
+    expect(@storage.bucket(@bucket_name).default_event_based_hold?).to be false
+
+    expect {
+      enable_default_event_based_hold project_id:  @project_id,
+                                      bucket_name: @bucket_name
+    }.to output(
+      /Default event-based hold was enabled for #{@bucket_name}/
+    ).to_stdout
+
+    expect(@storage.bucket(@bucket_name).default_event_based_hold?).to be true
+    @storage.bucket(@bucket_name).update do |b|
+      b.default_event_based_hold = false
+    end
+    expect(@storage.bucket(@bucket_name).default_event_based_hold?).to be false
+  end
+
+  example "disable default event-based hold" do
+    @storage.bucket(@bucket_name).update do |b|
+      b.default_event_based_hold = true
+    end
+    expect(@storage.bucket(@bucket_name).default_event_based_hold?).to be true
+
+    expect {
+      disable_default_event_based_hold project_id:  @project_id,
+                                       bucket_name: @bucket_name
+    }.to output(
+      /Default event-based hold was disabled for #{@bucket_name}/
+    ).to_stdout
+
+    expect(@storage.bucket(@bucket_name).default_event_based_hold?).to be false
+  end
+
+  example "lock retention policy" do
+    expect(@storage.bucket(@bucket_name).retention_policy_locked?).to be false
+    @storage.bucket(@bucket_name).retention_period = 1
+
+    expect {
+      lock_retention_policy project_id:  @project_id,
+                            bucket_name: @bucket_name
+    }.to output(
+      /Retention policy for #{@bucket_name} is now locked/
+    ).to_stdout
+
+    expect(@storage.bucket(@bucket_name).retention_policy_locked?).to be true
+
+    # After locking a bucket retention policy it can't be unlocked.
+    delete_bucket!
+    @storage.create_bucket @bucket_name
   end
 
   example "create bucket" do

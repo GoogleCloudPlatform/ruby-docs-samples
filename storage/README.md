@@ -40,6 +40,13 @@ Commands:
   add_bucket_label       <bucket> <label_key> <label_value>  Add bucket label
   delete_bucket_label    <bucket> <label_key>                Delete bucket label
   delete                 <bucket>                            Delete bucket with the provided name
+  set_retention_policy    <bucket> <retention_period>        Set a retention policy on bucket with a retention period determined in seconds
+  remove_retention_policy <bucket>                           Remove a retention policy from a bucket if policy is not locked
+  lock_retention_policy   <bucket>                           Lock retention policy
+  get_retention_policy    <bucket>                           Get retention policy for a bucket
+  enable_default_event_based_hold  <bucket>                  Enable event-based hold for a bucket
+  disable_default_event_based_hold <bucket>                  Disable event-based hold for a bucket
+  get_default_event_based_hold     <bucket>                  Get state of event-based hold for a bucket
 
 Environment variables:
   GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
@@ -69,6 +76,10 @@ Commands:
   rename       <bucket> <file> <new>                                Rename a file in a bucket
   copy <srcBucket> <srcFile> <destBucket> <destFile>                Copy file to other bucket
   generate_signed_url <bucket> <file>                               Generate a signed url for a file
+  set_event_based_hold     <bucket> <file>                          Set an event-based hold on a file
+  release_event_based_hold <bucket> <file>                          Relase an event-based hold on a file
+  set_temporary_hold       <bucket> <file>                          Set a temporary hold on a file
+  release_temporary_hold   <bucket> <file>                          Release a temporary hold on a file
 
 Environment variables:
   GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
