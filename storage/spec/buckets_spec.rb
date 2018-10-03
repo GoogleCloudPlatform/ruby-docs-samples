@@ -170,7 +170,7 @@ describe "Google Cloud Storage buckets sample" do
       remove_retention_policy project_id:  @project_id,
                               bucket_name: @bucket_name
     }.to output(
-      /Retention period for #{@bucket_name} has been removed/
+      /Retention policy for #{@bucket_name} has been removed/
     ).to_stdout
 
     expect(@storage.bucket(@bucket_name).retention_period).to be nil
