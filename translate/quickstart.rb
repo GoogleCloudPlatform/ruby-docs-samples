@@ -16,11 +16,8 @@
 # Imports the Google Cloud client library
 require "google/cloud/translate"
 
-# TODO(developer): Replace the value below with your Project ID.
-project_id = "your-project-id"
-
 # Instantiates a client
-translate = Google::Cloud::Translate.new project: project_id
+translate = Google::Cloud::Translate.new
 
 text   = "Hello, world!"  # The text to translate
 target = "ru"             # The target language

@@ -16,10 +16,6 @@ require "rspec"
 
 describe "Google Translate API samples" do
 
-  before do
-    @project_id = Google::Cloud::Translate.new.project
-  end
-
   # Capture and return STDOUT output by block
   def capture &block
     real_stdout = $stdout
@@ -32,15 +28,11 @@ describe "Google Translate API samples" do
   attr_reader :captured_output
 
   example "translate text" do
-    project_id = @project_id
     capture do
       # [START translate_translate_text]
-      # TODO(developer): Uncomment this line and replace with your Project ID.
-      # project_id = "your-project-id"
-
       require "google/cloud/translate"
 
-      translate     = Google::Cloud::Translate.new project: project_id
+      translate     = Google::Cloud::Translate.new
       text          = "Alice and Bob are kind"
       language_code = "fr"  # The ISO 639-1 code of language to translate to
       translation   = translate.translate text, to: language_code
@@ -57,15 +49,11 @@ describe "Google Translate API samples" do
   end
 
   example "translate text with model" do
-    project_id = @project_id
     capture do
       # [START translate_text_with_model]
-      # TODO(developer): Uncomment this line and replace with your Project ID.
-      # project_id = "your-project-id"
-
       require "google/cloud/translate"
 
-      translate     = Google::Cloud::Translate.new project: project_id
+      translate     = Google::Cloud::Translate.new
       text          = "Alice and Bob are kind"
       language_code = "fr"  # The ISO 639-1 code of language to translate to
       translation   = translate.translate text, to: language_code, model: "nmt"
@@ -82,15 +70,11 @@ describe "Google Translate API samples" do
   end
 
   example "detect language" do
-    project_id = @project_id
     expect {
       # [START translate_detect_language]
-      # TODO(developer): Uncomment this line and replace with your Project ID.
-      # project_id = "your-project-id"
-
       require "google/cloud/translate"
 
-      translate = Google::Cloud::Translate.new project: project_id
+      translate = Google::Cloud::Translate.new
       text      = "Sample text written in English"
       detection = translate.detect text
 
@@ -103,15 +87,11 @@ describe "Google Translate API samples" do
   end
 
   example "list supported language codes" do
-    project_id = @project_id
     capture do
       # [START translate_list_codes]
-      # TODO(developer): Uncomment this line and replace with your Project ID.
-      # project_id = "your-project-id"
-
       require "google/cloud/translate"
 
-      translate = Google::Cloud::Translate.new project: project_id
+      translate = Google::Cloud::Translate.new
       languages = translate.languages
 
       puts "Supported language codes:"
@@ -130,15 +110,11 @@ describe "Google Translate API samples" do
   end
 
   example "list supported language names" do
-    project_id = @project_id
     capture do
       # [START translate_list_language_names]
-      # TODO(developer): Uncomment this line and replace with your Project ID.
-      # project_id = "your-project-id"
-
       require "google/cloud/translate"
 
-      translate = Google::Cloud::Translate.new project: project_id
+      translate = Google::Cloud::Translate.new
 
       # To receive the names of the supported languages, provide the code
       # for the language in which you wish to receive the names

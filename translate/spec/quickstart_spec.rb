@@ -20,7 +20,6 @@ describe "Translate Quickstart" do
   it "translates Hello, world! to Russian" do
     translate = Google::Cloud::Translate.new
     expect(Google::Cloud::Translate).to receive(:new).
-                                        with(project: "your-project-id").
                                         and_return(translate)
 
     expect {
