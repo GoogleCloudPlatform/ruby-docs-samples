@@ -35,9 +35,7 @@ describe "Google Translate API samples" do
 
   example "translate text" do
     capture do
-      translate_text project_id:    @project_id,
-                     language_code: "fr",
-                     text:          "Alice and Bob are kind"
+      translate_text project_id: @project_id
     end
 
     expect(captured_output).to include "Original language: en translated to: fr"
@@ -48,9 +46,7 @@ describe "Google Translate API samples" do
 
   example "translate text with model" do
     capture do
-      translate_text_with_model project_id:    @project_id,
-                                language_code: "fr",
-                                text:          "Alice and Bob are kind"
+      translate_text_with_model project_id: @project_id
     end
 
     expect(captured_output).to include "Original language: en translated to: fr"
@@ -61,7 +57,7 @@ describe "Google Translate API samples" do
 
   example "detect language" do
     expect {
-      detect_language project_id: @project_id, text: "Sample text written in English"
+      detect_language project_id: @project_id
     }.to output(
       /'Sample text written in English' detected as language: en/
     ).to_stdout
@@ -80,7 +76,7 @@ describe "Google Translate API samples" do
 
   example "list supported language names" do
     capture do
-      list_supported_language_names project_id: @project_id, language_code: "en"
+      list_supported_language_names project_id: @project_id
     end
 
     # Check for a few supported language codes (first sorted alphabetically)
