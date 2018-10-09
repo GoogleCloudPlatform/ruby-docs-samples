@@ -779,4 +779,304 @@ describe "Google Cloud Spanner API samples" do
 
     expect(captured_output).to include "Total Records: 5"
   end
+
+  example "insert data using dml" do
+    database = create_singers_albums_database
+    # Ignore the following capture block
+    capture do
+      # Insert Singers and Albums (re-use insert_data sample to populate)
+      insert_data project_id:  @project_id,
+                  instance_id: @instance.instance_id,
+                  database_id: database.database_id
+    end
+
+    client = @spanner.client @instance.instance_id, database.database_id
+
+    expect(client.execute("SELECT * FROM Singers").rows.count).to eq 5
+
+    expect {
+      insert_using_dml project_id:  @project_id,
+                       instance_id: @instance.instance_id,
+                       database_id: database.database_id
+    }.to output("1 record inserted.\n").to_stdout
+
+    singers = client.execute("SELECT * FROM Singers").rows.to_a
+    expect(singers.count).to eq 6
+    expect(singers.find {|s| s[:FirstName] == "Virginia" }).not_to be nil
+  end
+
+  example "update using dml" do
+    database = create_singers_albums_database
+    client   = @spanner.client @instance.instance_id, database.database_id
+
+    # Ignore the following capture block
+    capture do
+      # Insert Singers and Albums (re-use insert_data sample to populate)
+      insert_data project_id:  @project_id,
+                  instance_id: @instance.instance_id,
+                  database_id: database.database_id
+
+      # Add MarketingBudget column (re-use add_column to add)
+      add_column project_id:  @project_id,
+                 instance_id: @instance.instance_id,
+                 database_id: database.database_id
+
+      # First Album(1, 1) set MarketingBudget to $300,000
+      client.commit do |c|
+        c.update "Albums", [
+          { SingerId: 1, AlbumId: 1, MarketingBudget: 300_000 }
+        ]
+      end
+    end
+
+    capture do
+      update_using_dml project_id:  @project_id,
+                       instance_id: @instance.instance_id,
+                       database_id: database.database_id
+    end
+
+    expect(captured_output).to include "1 record updated."
+
+    first_album  = client.read("Albums", [:MarketingBudget], keys: [[1,1]]).rows.first
+
+    expect(first_album[:MarketingBudget]).to eq 600_000
+  end
+
+  example "delete data using dml" do
+    database = create_singers_albums_database
+    # Ignore the following capture block
+    capture do
+      # Insert Singers and Albums (re-use insert_data sample to populate)
+      insert_data project_id:  @project_id,
+                  instance_id: @instance.instance_id,
+                  database_id: database.database_id
+    end
+
+    client = @spanner.client @instance.instance_id, database.database_id
+
+    expect(client.execute("SELECT * FROM Singers").rows.count).to eq 5
+
+    expect {
+      delete_using_dml project_id:  @project_id,
+                       instance_id: @instance.instance_id,
+                       database_id: database.database_id
+    }.to output("1 record deleted.\n").to_stdout
+
+    singers = client.execute("SELECT * FROM Singers").rows.to_a
+    expect(singers.count).to eq 4
+    expect(singers.find {|s| s[:FirstName] == "Alice" }).to be_nil
+  end
+
+  example "update data using dml with timestamp column" do
+    database = create_singers_albums_database
+    client   = @spanner.client @instance.instance_id, database.database_id
+
+    # Ignore the following capture block
+    capture do
+      # Insert Singers and Albums (re-use insert_data sample to populate)
+      insert_data project_id:  @project_id,
+                  instance_id: @instance.instance_id,
+                  database_id: database.database_id
+
+      # Add MarketingBudget column (re-use add_column to add)
+      add_column project_id:  @project_id,
+                 instance_id: @instance.instance_id,
+                 database_id: database.database_id
+
+      # Add Timestamp column
+      add_timestamp_column project_id:  @project_id,
+                           instance_id: @instance.instance_id,
+                           database_id: database.database_id
+    end
+
+    original_timestamp  = client.read("Albums", [:LastUpdateTime], keys: [[1,1]]).rows.first
+    capture do
+      update_using_dml_with_timestamp project_id:  @project_id,
+                                      instance_id: @instance.instance_id,
+                                      database_id: database.database_id
+    end
+    expect(captured_output).to include "2 records updated."
+    updated_timestamp  = client.read("Albums", [:LastUpdateTime], keys: [[1,1]]).rows.first
+    expect(Time.at(original_timestamp) < Time.at(updated_timestamp)).to be true
+  end
+
+  example "write and read data using dml" do
+    database = create_singers_albums_database
+    # Ignore the following capture block
+    capture do
+      # Insert Singers and Albums (re-use insert_data sample to populate)
+      insert_data project_id:  @project_id,
+                  instance_id: @instance.instance_id,
+                  database_id: database.database_id
+    end
+
+    client = @spanner.client @instance.instance_id, database.database_id
+
+    expect(client.execute("SELECT * FROM Singers").rows.count).to eq 5
+
+    expect {
+      write_and_read_using_dml project_id:  @project_id,
+                               instance_id: @instance.instance_id,
+                               database_id: database.database_id
+    }.to output("1 record updated.\nTimothy Campbell\n").to_stdout
+
+    singers = client.execute("SELECT * FROM Singers").rows.to_a
+    expect(singers.count).to eq 6
+  end
+
+  example "update data using dml with struct" do
+    database = create_singers_albums_database
+    # Ignore the following capture block
+    capture do
+      # Insert Singers and Albums (re-use insert_data sample to populate)
+      insert_data project_id:  @project_id,
+                  instance_id: @instance.instance_id,
+                  database_id: database.database_id
+
+      # Insert single Singer record to be updated
+      write_and_read_using_dml project_id:  @project_id,
+                          instance_id: @instance.instance_id,
+                          database_id: database.database_id
+    end
+
+    client = @spanner.client @instance.instance_id, database.database_id
+
+    expect(client.execute("SELECT * FROM Singers").rows.count).to eq 6
+
+    expect {
+      update_using_dml_with_struct project_id:  @project_id,
+                       instance_id: @instance.instance_id,
+                       database_id: database.database_id
+    }.to output("1 record updated.\n").to_stdout
+
+    singers = client.execute("SELECT * FROM Singers").rows.to_a
+    expect(singers.count).to eq 6
+    expect(singers.find {|s| s[:LastName] == "Grant" }).not_to be nil
+  end
+
+  example "insert multiple records using dml" do
+    database = create_singers_albums_database
+    # Ignore the following capture block
+    capture do
+      # Insert Singers and Albums (re-use insert_data sample to populate)
+      insert_data project_id:  @project_id,
+                  instance_id: @instance.instance_id,
+                  database_id: database.database_id
+    end
+
+    client = @spanner.client @instance.instance_id, database.database_id
+
+    expect(client.execute("SELECT * FROM Singers").rows.count).to eq 5
+
+    expect {
+      write_using_dml project_id:  @project_id,
+                      instance_id: @instance.instance_id,
+                      database_id: database.database_id
+    }.to output("4 records inserted.\n").to_stdout
+
+    singers = client.execute("SELECT * FROM Singers").rows.to_a
+    expect(singers.count).to eq 9
+    expect(singers.find {|s| s[:FirstName] == "Dylan" }).not_to be nil
+  end
+
+  example "write with transaction using dml (successful transfer)" do
+    database = create_singers_albums_database
+    client   = @spanner.client @instance.instance_id, database.database_id
+
+    # Ignore the following capture block
+    capture do
+      # Insert Singers and Albums (re-use insert_data sample to populate)
+      insert_data project_id:  @project_id,
+                  instance_id: @instance.instance_id,
+                  database_id: database.database_id
+
+      # Add MarketingBudget column (re-use add_column to add)
+      add_column project_id:  @project_id,
+                 instance_id: @instance.instance_id,
+                 database_id: database.database_id
+
+      # First Album(1, 1) needs at least $300,000 to transfer successfully
+      # to Album(2, 2). This should transfer successfully.
+      client.commit do |c|
+        c.update "Albums", [
+          { SingerId: 1, AlbumId: 1, MarketingBudget: 300_000 },
+          { SingerId: 2, AlbumId: 2, MarketingBudget: 100_000 }
+        ]
+      end
+    end
+
+    capture do
+      write_with_transaction_using_dml project_id:  @project_id,
+                                       instance_id: @instance.instance_id,
+                                       database_id: database.database_id
+    end
+
+    first_album  = client.read("Albums", [:MarketingBudget], keys: [[1,1]]).rows.first
+    second_album = client.read("Albums", [:MarketingBudget], keys: [[2,2]]).rows.first
+
+    expect(first_album[:MarketingBudget]).to  eq 100_000
+    expect(second_album[:MarketingBudget]).to eq 300_000
+  end
+
+  example "update data using partiioned dml" do
+    database = create_singers_albums_database
+    client   = @spanner.client @instance.instance_id, database.database_id
+
+    # Ignore the following capture block
+    capture do
+      # Insert Singers and Albums (re-use insert_data sample to populate)
+      insert_data project_id:  @project_id,
+                  instance_id: @instance.instance_id,
+                  database_id: database.database_id
+
+      # Add MarketingBudget column (re-use add_column to add)
+      add_column project_id:  @project_id,
+                 instance_id: @instance.instance_id,
+                 database_id: database.database_id
+    end
+
+    capture do
+      update_using_partitioned_dml project_id:  @project_id,
+                                   instance_id: @instance.instance_id,
+                                   database_id: database.database_id
+    end
+
+    first_album  = client.read("Albums", [:MarketingBudget], keys: [[2,1]]).rows.first
+    second_album = client.read("Albums", [:MarketingBudget], keys: [[2,2]]).rows.first
+    third_album = client.read("Albums", [:MarketingBudget], keys: [[2,3]]).rows.first
+
+    expect(first_album[:MarketingBudget]).to  eq 100_000
+    expect(second_album[:MarketingBudget]).to eq 100_000
+    expect(third_album[:MarketingBudget]).to eq 100_000
+  end
+
+  example "delete multiple records using dml" do
+    database = create_singers_albums_database
+    # Ignore the following capture block
+    capture do
+      # Insert Singers and Albums (re-use insert_data sample to populate)
+      insert_data project_id:  @project_id,
+                  instance_id: @instance.instance_id,
+                  database_id: database.database_id
+
+      # Insert additinal multiple records into Singers table
+      write_using_dml project_id:  @project_id,
+                      instance_id: @instance.instance_id,
+                      database_id: database.database_id
+    end
+
+    client = @spanner.client @instance.instance_id, database.database_id
+
+    expect(client.execute("SELECT * FROM Singers").rows.count).to eq 9
+
+    expect {
+      delete_using_partitioned_dml project_id:  @project_id,
+                                   instance_id: @instance.instance_id,
+                                   database_id: database.database_id
+    }.to output("4 records deleted.\n").to_stdout
+
+    singers = client.execute("SELECT * FROM Singers").rows.to_a
+    expect(singers.count).to eq 5
+    expect(singers.find {|s| s[:FirstName] == "Melissa" }).to be_nil
+  end
 end
