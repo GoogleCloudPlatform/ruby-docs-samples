@@ -75,6 +75,16 @@ environment variable to the path to the key file, for example:
       read_data_with_storing_index       <instance_id> <database_id> Read Data with Storing Index
       read_only_transaction              <instance_id> <database_id> Read-Only Transaction
       spanner_batch_client               <instance_id> <database_id> Use Spanner batch query with a thread pool
+      insert_using_dml                   <instance_id> <database_id> Insert Data using a DML statement.
+      update_using_dml                   <instance_id> <database_id> Update Data using a DML statement.
+      delete_using_dml                   <instance_id> <database_id> Delete Data using a DML statement.
+      update_using_dml_with_timestamp    <instance_id> <database_id> Update the timestamp value of specifc records using a DML statement.
+      write_and_read_using_dml           <instance_id> <database_id> Insert data using a DML statement and then read the inserted data.
+      update_using_dml_with_struct       <instance_id> <database_id> Update data using a DML statement combined with a Spanner struct.
+      write_using_dml                    <instance_id> <database_id> Insert multiple records using a DML statement.
+      write_with_transaction_using_dml   <instance_id> <database_id> Update data using a DML statement within a read-write transaction.
+      update_using_partitioned_dml       <instance_id> <database_id> Update multiple records using a partitioned DML statement.
+      delete_using_partitioned_dml       <instance_id> <database_id> Delete multiple records using a partitioned DML statement.
 
     Environment variables:
       GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID

@@ -725,6 +725,249 @@ def spanner_batch_client project_id:, instance_id:, database_id:
   # [END spanner_batch_client]
 end
 
+def insert_using_dml project_id:, instance_id:, database_id:
+  # [START spanner_dml_standard_insert]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+
+  spanner   = Google::Cloud::Spanner.new project: project_id
+  client    = spanner.client instance_id, database_id
+  row_count = 0
+
+  client.transaction do |transaction|
+    row_count = transaction.execute_update(
+      "INSERT INTO Singers (SingerId, FirstName, LastName) VALUES (10, 'Virginia', 'Watson')"
+    )
+  end
+
+  puts "#{row_count} record inserted."
+  # [END spanner_dml_standard_insert]
+end
+
+def update_using_dml project_id:, instance_id:, database_id:
+  # [START spanner_dml_standard_update]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+
+  spanner = Google::Cloud::Spanner.new project: project_id
+  client  = spanner.client instance_id, database_id
+  row_count = 0
+
+  client.transaction do |transaction|
+    row_count = transaction.execute_update(
+      "UPDATE Albums
+       SET MarketingBudget = MarketingBudget * 2
+       WHERE SingerId = 1 and AlbumId = 1"
+    )
+  end
+
+  puts "#{row_count} record updated."
+  # [END spanner_dml_standard_update]
+end
+
+def delete_using_dml project_id:, instance_id:, database_id:
+  # [START spanner_dml_standard_delete]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+
+  spanner = Google::Cloud::Spanner.new project: project_id
+  client  = spanner.client instance_id, database_id
+  row_count = 0
+
+  client.transaction do |transaction|
+    row_count = transaction.execute_update(
+      "DELETE FROM Singers WHERE FirstName = 'Alice'"
+    )
+  end
+
+  puts "#{row_count} record deleted."
+  # [END spanner_dml_standard_delete]
+end
+
+def update_using_dml_with_timestamp project_id:, instance_id:, database_id:
+  # [START spanner_dml_standard_update_with_timestamp]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+
+  spanner = Google::Cloud::Spanner.new project: project_id
+  client  = spanner.client instance_id, database_id
+  row_count = 0
+
+  client.transaction do |transaction|
+    row_count = transaction.execute_update(
+      "UPDATE Albums SET LastUpdateTime = PENDING_COMMIT_TIMESTAMP() WHERE SingerId = 1"
+    )
+  end
+
+  puts "#{row_count} records updated."
+  # [END spanner_dml_standard_update_with_timestamp]
+end
+
+def write_and_read_using_dml project_id:, instance_id:, database_id:
+  # [START spanner_dml_write_then_read]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+
+  spanner = Google::Cloud::Spanner.new project: project_id
+  client  = spanner.client instance_id, database_id
+  row_count = 0
+
+  client.transaction do |transaction|
+    row_count = transaction.execute_update(
+      "INSERT INTO Singers (SingerId, FirstName, LastName) VALUES (11, 'Timothy', 'Campbell')"
+    )
+    puts "#{row_count} record updated."
+    transaction.execute("SELECT FirstName, LastName FROM Singers WHERE SingerId = 11").rows.each do |row|
+      puts "#{row[:FirstName]} #{row[:LastName]}"
+    end
+  end
+  # [END spanner_dml_write_then_read]
+end
+
+def update_using_dml_with_struct project_id:, instance_id:, database_id:
+  # [START spanner_dml_structs]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+
+  spanner = Google::Cloud::Spanner.new project: project_id
+  client  = spanner.client instance_id, database_id
+  row_count = 0
+  name_struct = { FirstName: "Timothy", LastName: "Campbell" }
+
+  client.transaction do |transaction|
+    row_count = transaction.execute_update(
+      "UPDATE Singers SET LastName = 'Grant'
+       WHERE STRUCT<FirstName STRING, LastName STRING>(FirstName, LastName) = @name",
+      params: { name: name_struct }
+    )
+  end
+
+  puts "#{row_count} record updated."
+  # [END spanner_dml_structs]
+end
+
+def write_using_dml project_id:, instance_id:, database_id:
+  # [START spanner_dml_getting_started_insert]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+
+  spanner = Google::Cloud::Spanner.new project: project_id
+  client  = spanner.client instance_id, database_id
+  row_count = 0
+
+  client.transaction do |transaction|
+    row_count = transaction.execute_update(
+      "INSERT INTO Singers (SingerId, FirstName, LastName) VALUES
+       (12, 'Melissa', 'Garcia'),
+       (13, 'Russell', 'Morales'),
+       (14, 'Jacqueline', 'Long'),
+       (15, 'Dylan', 'Shaw')"
+    )
+  end
+
+  puts "#{row_count} records inserted."
+  # [END spanner_dml_getting_started_insert]
+end
+
+def write_with_transaction_using_dml project_id:, instance_id:, database_id:
+  # [START spanner_dml_getting_started_update]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+
+  spanner = Google::Cloud::Spanner.new project: project_id
+  client  = spanner.client instance_id, database_id
+
+  client.transaction do |transaction|
+    first_album = transaction.execute(
+      "SELECT MarketingBudget from Albums
+       WHERE SingerId = 1 and AlbumId = 1").rows.first
+    second_album = transaction.execute(
+      "SELECT MarketingBudget from Albums
+      WHERE SingerId = 2 and AlbumId = 2").rows.first
+    if first_album[:MarketingBudget] < 300_000
+      raise "The first album does not have enough funds to transfer"
+    end
+
+    new_second_album_budget = second_album[:MarketingBudget] + 200_000
+    new_first_album_budget  = first_album[:MarketingBudget] - 200_000
+
+    transaction.execute_update(
+      "UPDATE Albums SET MarketingBudget = @albumBudget WHERE SingerId = 1 and AlbumId = 1",
+      params: { albumBudget: new_first_album_budget }
+    )
+    transaction.execute_update(
+      "UPDATE Albums SET MarketingBudget = @albumBudget WHERE SingerId = 2 and AlbumId = 2",
+      params: { albumBudget: new_second_album_budget }
+    )
+  end
+
+  puts "Transaction complete"
+  # [END spanner_dml_getting_started_update]
+
+end
+
+def update_using_partitioned_dml project_id:, instance_id:, database_id:
+  # [START spanner_dml_partitioned_update]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+
+  spanner = Google::Cloud::Spanner.new project: project_id
+  client  = spanner.client instance_id, database_id
+
+  row_count = client.execute_partitioned_update(
+    "UPDATE Albums SET MarketingBudget = 100000 WHERE SingerId > 1"
+  )
+
+  puts "#{row_count} records updated."
+  # [END spanner_dml_partitioned_update]
+end
+
+def delete_using_partitioned_dml project_id:, instance_id:, database_id:
+  # [START spanner_dml_partitioned_delete]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+
+  spanner = Google::Cloud::Spanner.new project: project_id
+  client  = spanner.client instance_id, database_id
+
+  row_count = client.execute_partitioned_update(
+    "DELETE FROM Singers WHERE SingerId > 10"
+  )
+
+  puts "#{row_count} records deleted."
+  # [END spanner_dml_partitioned_delete]
+end
+
 def usage
     puts <<-usage
 Usage: bundle exec ruby spanner_samples.rb [command] [arguments]
@@ -756,6 +999,16 @@ Commands:
   read_data_with_storing_index       <instance_id> <database_id> Read Data with Storing Index
   read_only_transaction              <instance_id> <database_id> Read-Only Transaction
   spanner_batch_client               <instance_id> <database_id> Use Spanner batch query with a thread pool
+  insert_using_dml                   <instance_id> <database_id> Insert Data using a DML statement.
+  update_using_dml                   <instance_id> <database_id> Update Data using a DML statement.
+  delete_using_dml                   <instance_id> <database_id> Delete Data using a DML statement.
+  update_using_dml_with_timestamp    <instance_id> <database_id> Update the timestamp value of specifc records using a DML statement.
+  write_and_read_using_dml           <instance_id> <database_id> Insert data using a DML statement and then read the inserted data.
+  update_using_dml_with_struct       <instance_id> <database_id> Update data using a DML statement combined with a Spanner struct.
+  write_using_dml                    <instance_id> <database_id> Insert multiple records using a DML statement.
+  write_with_transaction_using_dml   <instance_id> <database_id> Update data using a DML statement within a read-write transaction.
+  update_using_partitioned_dml       <instance_id> <database_id> Update multiple records using a partitioned DML statement.
+  delete_using_partitioned_dml       <instance_id> <database_id> Delete multiple records using a partitioned DML statement.
 
 Environment variables:
   GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
@@ -778,7 +1031,11 @@ def run_sample arguments
     "query_data_with_index", "read_data_with_index",
     "read_data_with_storing_index", "read_only_transaction",
     "spanner_batch_client", "write_struct_data", "query_with_struct",
-    "query_with_array_of_struct", "query_struct_field", "query_nested_struct_field"
+    "query_with_array_of_struct", "query_struct_field", "query_nested_struct_field",
+    "insert_using_dml", "update_using_dml", "delete_using_dml",
+    "update_using_dml_with_timestamp", "write_and_read_using_dml",
+    "update_using_dml_with_struct", "write_using_dml", "write_with_transaction_using_dml",
+    "update_using_partitioned_dml", "delete_using_partitioned_dml"
   ]
   if command.eql?("query_data_with_index") && instance_id && database_id && arguments.size >= 2
     query_data_with_index project_id:  project_id,
