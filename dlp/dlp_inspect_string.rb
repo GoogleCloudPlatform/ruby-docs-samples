@@ -19,7 +19,7 @@ require "google/cloud/dlp"
 # Inspects the provided text for sensitive data.
 #
 # @param [String] project_id Your Google Cloud Project ID.
-# @param [String] text_to_inspect
+# @param [String] text_to_inspect The text to inspect.
 def inspect_string(
     project_id      = "YOUR_PROJECT_ID",
     text_to_inspect = "My name is Gary and my email is gary@example.com"
