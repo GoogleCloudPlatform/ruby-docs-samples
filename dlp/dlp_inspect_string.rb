@@ -71,3 +71,5 @@ def inspect_string(
   findings
   # [END dlp_inspect_string]
 end
+
+inspect_string *ARGV if $0 == __FILE__
