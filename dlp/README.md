@@ -33,11 +33,7 @@ These samples show how to use the [Google Cloud DLP API](https://cloud.google.co
 
 1. **Run samples**
     ```
-    Usage: ruby sample.rb <command> [arguments]
-
-    Commands:
-      inspect_string <content> <max_findings> Inspect a string.
-      inspect_file <filename> <max_findings> Inspect a local file.
+    Usage: ruby filename.rb [arguments]
 
     Environment variables:
       GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
