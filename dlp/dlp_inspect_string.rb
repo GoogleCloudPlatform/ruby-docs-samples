@@ -28,18 +28,20 @@ def inspect_string (
   inspect_config = {
     # The infoTypes of information to match
     info_types: [
-      {name: "PHONE_NUMBER"},
-      {name: "EMAIL_ADDRESS"},
-      {name: "CREDIT_CARD_NUMBER"}
+      { name: "PHONE_NUMBER" },
+      { name: "EMAIL_ADDRESS" },
+      { name: "CREDIT_CARD_NUMBER" }
     ],
     # Whether to include the matching string
     include_quote: true
   }
 
   # Run request
-  response = dlp.inspect_content parent,
+  response = dlp.inspect_content(
+    parent,
     inspect_config: inspect_config,
     item:           item
+  )
 
   # Print the results
   if response.result.findings.empty?
