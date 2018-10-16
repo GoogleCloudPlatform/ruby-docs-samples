@@ -23,7 +23,7 @@ def inspect_image_file (
   dlp = Google::Cloud::Dlp.new
 
   # Get the bytes of the file
-  file_bytes = File.open(filepath, "rb").read()
+  file_bytes = File.binread filepath
 
   # Construct request
   parent         = "projects/#{project_id}"

@@ -23,11 +23,11 @@ def inspect_text_file (
   dlp = Google::Cloud::Dlp.new
 
   # Get the bytes of the file
-  file = File.open filepath, "rb"
+  file_bytes = File.binread filepath
 
   # Construct request
   parent         = "projects/#{project_id}"
-  item           = { byte_item: { type: :TEXT_UTF8, data: file.read } }
+  item           = { byte_item: { type: :TEXT_UTF8, data: file_bytes } }
   inspect_config = {
     # The infoTypes of information to match
     info_types: [
