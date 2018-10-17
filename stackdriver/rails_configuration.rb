@@ -78,9 +78,9 @@ Rails.application.configure do |config|
 end
 # [END logging_rails_client_configure]
 
-# [START logging_configure_development]
+# [START logging_rails_client_configure_development]
 # Add this to config/environments/development.rb
 Rails.application.configure do |config|
   config.google_cloud.use_logging = true
 end
-# [END logging_configure_development]
+# [END logging_rails_client_configure_development]
