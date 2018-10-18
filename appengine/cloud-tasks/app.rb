@@ -13,7 +13,7 @@
 # limitations under the License.
 # [START cloud_tasks_appengine_quickstart]
 require "sinatra"
-require "JSON"
+require "json"
 
 get "/" do
   # Basic index to verify app is serving
