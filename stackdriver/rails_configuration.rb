@@ -30,6 +30,13 @@ Rails.application.configure do |config|
 end
 # [END debugger_configure]
 
+# [START debugger_configure_development]
+# Add this to config/environments/development.rb
+Rails.application.configure do |config|
+  config.google_cloud.use_debugger = true
+end
+# [END debugger_configure_development]
+
 # [START trace_configure]
 # Add this to config/environments/*.rb
 Rails.application.configure do |config|
@@ -38,6 +45,13 @@ Rails.application.configure do |config|
   config.google_cloud.trace.keyfile    = "/path/to/service-account.json"
 end
 # [END trace_configure]
+
+# [START trace_configure_development]
+# Add this to config/environments/development.rb
+Rails.application.configure do |config|
+  config.google_cloud.use_trace = true
+end
+# [END trace_configure_development]
 
 # [START error_reporting_configure]
 # Add this to config/environments/*.rb
@@ -48,6 +62,13 @@ Rails.application.configure do |config|
 end
 # [END error_reporting_configure]
 
+# [START error_reporting_configure_development]
+# Add this to config/environments/development.rb
+Rails.application.configure do |config|
+  config.google_cloud.use_error_reporting = true
+end
+# [END error_reporting_configure_development]
+
 # [START logging_rails_client_configure]
 # Add this to config/environments/*.rb
 Rails.application.configure do |config|
@@ -56,3 +77,10 @@ Rails.application.configure do |config|
   config.google_cloud.logging.keyfile    = "/path/to/service-account.json"
 end
 # [END logging_rails_client_configure]
+
+# [START logging_rails_client_configure_development]
+# Add this to config/environments/development.rb
+Rails.application.configure do |config|
+  config.google_cloud.use_logging = true
+end
+# [END logging_rails_client_configure_development]
