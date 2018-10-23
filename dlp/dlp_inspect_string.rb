@@ -14,11 +14,11 @@
 # [START dlp_inspect_string]
 require "google/cloud/dlp"
 
-def inspect_string (
-    project_id      = "YOUR_PROJECT_ID",
-    text_to_inspect = "My name is Gary Smith and my email is gary@somedomain.com"
-  )
-
+# Inspects the provided text.
+#
+# @param [String] project_id Your Google Cloud Project ID.
+# @param [String] text_to_inspect The text to inspect.
+def inspect_string project_id, text_to_inspect
   # Instantiate a client
   dlp = Google::Cloud::Dlp.new
 

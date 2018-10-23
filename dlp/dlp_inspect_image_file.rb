@@ -14,11 +14,11 @@
 # [START dlp_inspect_image_file]
 require "google/cloud/dlp"
 
-def inspect_image_file (
-    project_id = "YOUR_PROJECT_ID",
-    filepath   = "path/to/image.png"
-  )
-
+# Inspects the specified image file.
+#
+# @param [String] project_id Your Google Cloud Project ID.
+# @param [String] filepath The path to the image file to inspect.
+def inspect_image_file project_id, filepath
   # Instantiate a client
   dlp = Google::Cloud::Dlp.new
 

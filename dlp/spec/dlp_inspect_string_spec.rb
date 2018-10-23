@@ -18,11 +18,12 @@ describe "DLP inspect string sample" do
 
   it "can inspect name and email address in a string" do
     project_id = ENV["GOOGLE_CLOUD_PROJECT"]
+    text_to_inspect   = "My name is Gary Smith and my email is gary@somedomain.com"
     current_directory = File.expand_path(File.dirname(__FILE__))
     snippet_filepath  = File.join current_directory, "..",
                                   "dlp_inspect_string.rb"
 
-    output = `ruby #{snippet_filepath} #{project_id}`
+    output = `ruby #{snippet_filepath} #{project_id} "#{text_to_inspect}"`
 
     expect(output).to include "EMAIL_ADDRESS"
     expect(output).to include "gary@somedomain.com"
