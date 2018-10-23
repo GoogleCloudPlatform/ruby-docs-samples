@@ -59,4 +59,4 @@ def inspect_image_file project_id, filepath
 end
 # [END dlp_inspect_image_file]
 
-inspect_image_file *ARGV if $0 == __FILE__
+inspect_image_file *ARGV if $PROGRAM_NAME == __FILE__

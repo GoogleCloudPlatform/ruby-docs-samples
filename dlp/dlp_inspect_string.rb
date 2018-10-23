@@ -56,4 +56,4 @@ def inspect_string project_id, text_to_inspect
 end
 # [END dlp_inspect_string]
 
-inspect_string *ARGV if $0 == __FILE__
+inspect_string *ARGV if $PROGRAM_NAME == __FILE__
