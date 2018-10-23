@@ -35,6 +35,11 @@ These samples show how to use the [Google Cloud DLP API](https://cloud.google.co
     ```
     Usage: ruby filename.rb [arguments]
 
+    Commands:
+      ruby dlp_inspect_image_file.rb <project_id> <filepath>
+      ruby dlp_inspect_string.rb <project_id> <string>
+      ruby dlp_inspect_text_file.rb <project_id> <filepath>
+
     Environment variables:
       GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
       GOOGLE_APPLICATION_CREDENTIALS set to the path to your JSON credentials
