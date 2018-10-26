@@ -21,7 +21,7 @@ get "/" do
 end
 
 post "/log_payload" do
-  data = JSON.parse request.body.read
+  data = request.body.read
   # Log the request payload
   puts "Received task with payload: #{data}"
   "Printed task payload: #{data}"
