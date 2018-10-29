@@ -128,7 +128,6 @@ end
 # [END vision_migration_labels_storage_new]
 
 # [START vision_migration_asynchronous]
-image_annotator_client = Google::Cloud::Vision.new
 storage_uri = "gs://bucket_name/document_name.pdf"
 gcs_source = { uri: storage_uri }
 input_config = { gcs_source: gcs_source, mime_type: "application/pdf" }
@@ -166,6 +165,6 @@ request = { input_config: input_config, features: features, output_config: outpu
 #             }
 
 requests = [request]
-response = image_annotator_client.async_batch_annotate_files(requests)
+response = vision.async_batch_annotate_files(requests)
 response.wait_until_done!
 # [END vision_migration_asynchronous]
