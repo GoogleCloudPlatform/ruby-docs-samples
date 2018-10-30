@@ -230,7 +230,7 @@ if __FILE__ == $PROGRAM_NAME
     get_metric_descriptor metric_name: ARGV.shift
   else
     puts <<-usage
-Usage: bundle exec ruby snippets.rb [command] [arguments]
+Usage: bundle exec ruby metrics.rb [command] [arguments]
 
 Commands:
   create_metric_descriptor                     <project_id>
