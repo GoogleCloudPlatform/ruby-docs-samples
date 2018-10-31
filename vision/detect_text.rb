@@ -79,7 +79,7 @@ def detect_text_gcs image_path:
   # [END vision_text_detection_gcs]
 end
 
-if $PROGRAM_NAME == __FILE__
+if __FILE__ == $PROGRAM_NAME
   require "uri"
 
   image_path = ARGV.shift

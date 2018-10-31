@@ -77,7 +77,7 @@ def detect_pdf_gcs gcs_source_uri:, gcs_destination_uri:
   # [END vision_text_detection_pdf_gcs]
 end
 
-if $PROGRAM_NAME == __FILE__
+if __FILE__ == $PROGRAM_NAME
   if ARGV.size == 2
     detect_pdf_gcs gcs_source_uri:      ARGV.shift,
                    gcs_destination_uri: ARGV.shift

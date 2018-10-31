@@ -127,7 +127,7 @@ def localize_objects_uri image_path:
   # [END vision_localize_objects_gcs]
 end
 
-if $PROGRAM_NAME == __FILE__
+if __FILE__ == $PROGRAM_NAME
   require "uri"
 
   image_path = ARGV.shift

@@ -149,7 +149,7 @@ def uri? string
   string
 end
 
-if $PROGRAM_NAME == __FILE__
+if __FILE__ == $PROGRAM_NAME
   require "uri"
 
   args = {

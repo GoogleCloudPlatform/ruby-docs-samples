@@ -85,7 +85,7 @@ def detect_safe_search_gcs image_path:
   # [END vision_safe_search_detection_gcs]
 end
 
-if $PROGRAM_NAME == __FILE__
+if __FILE__ == $PROGRAM_NAME
   require "uri"
 
   image_path = ARGV.shift

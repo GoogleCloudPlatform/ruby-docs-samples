@@ -70,7 +70,7 @@ def draw_box_around_faces path_to_image_file:, path_to_output_file:
 end
 
 # [START vision_face_detection_tutorial_run_application]
-if $PROGRAM_NAME == __FILE__
+if __FILE__ == $PROGRAM_NAME
   if ARGV.size == 2
     draw_box_around_faces path_to_image_file:  ARGV.shift,
                           path_to_output_file: ARGV.shift
