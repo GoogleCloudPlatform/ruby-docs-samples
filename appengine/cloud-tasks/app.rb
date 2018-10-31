@@ -11,8 +11,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# $stdout.sync = true
+
 STDOUT.sync = true
+
 # [START cloud_tasks_appengine_quickstart]
 require "sinatra"
 require "json"
