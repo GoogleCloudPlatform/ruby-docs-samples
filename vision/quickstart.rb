@@ -26,7 +26,7 @@ file_name = "./resources/cat.jpg"
 content = File.binread file_name
 image = { content: content }
 type = :LABEL_DETECTION
-feature = { type: type, max_results: max_results }
+feature = { type: type }
 request = { image: image, features: [feature] }
 # request == {
 #   image: {
@@ -42,6 +42,7 @@ request = { image: image, features: [feature] }
 # Performs label detection on the image file
 response = vision.batch_annotate_images([request])
 response.responses.each do |res|
+  puts "Labels:"
   res.label_annotations.each do |label|
     puts label.description
   end

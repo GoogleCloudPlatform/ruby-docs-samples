@@ -44,12 +44,11 @@ describe "Draw box around faces sample" do
         draw_box_around_faces path_to_image_file:  image_path("face_no_surprise.png"),
                               path_to_output_file: output_image_file.path
       end
-
       expect(captured_output).to include "Face bounds:"
-      expect(captured_output).to include "(154, 33)"
-      expect(captured_output).to include "(301, 33)"
-      expect(captured_output).to include "(301, 180)"
-      expect(captured_output).to include "(154, 180)"
+      expect(captured_output).to include "(126, 0)"
+      expect(captured_output).to include "(338, 0)"
+      expect(captured_output).to include "(338, 202)"
+      expect(captured_output).to include "(126, 202)"
       expect(File.size output_image_file.path).to be > 0
     ensure
       output_image_file.close

@@ -46,6 +46,11 @@ def draw_box_around_faces path_to_image_file:, path_to_output_file:
   # [START vision_face_detection_tutorial_process_response]
   response.responses.each do |res|
     res.face_annotations.each do |annotation|
+      puts "Face bounds:"
+      annotation.bounding_poly.vertices.each do |vertex|
+        puts "(#{vertex.x}, #{vertex.y})"
+      end
+
       x1 = annotation.bounding_poly.vertices[0].x.to_i
       y1 = annotation.bounding_poly.vertices[0].y.to_i
       x2 = annotation.bounding_poly.vertices[2].x.to_i
@@ -62,8 +67,6 @@ def draw_box_around_faces path_to_image_file:, path_to_output_file:
       photo.write path_to_output_file
     end
   end
-
-  image.write path_to_output_file
 
   puts "Output file: #{path_to_output_file}"
   # [END vision_face_detection_tutorial_process_response]

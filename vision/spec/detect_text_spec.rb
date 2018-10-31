@@ -33,7 +33,7 @@ describe "Detect Text" do
     expect {
       detect_text image_path: image_path("otter_crossing.jpg")
     }.to output(
-      "CAUTION\nOtters crossing\nfor next 6 miles\n"
+      /CAUTION\nOtters crossing\nfor next 6 miles\n/
     ).to_stdout
   end
 
@@ -44,7 +44,7 @@ describe "Detect Text" do
     expect {
       detect_text_gcs image_path: storage_file.to_gs_url
     }.to output(
-      "CAUTION\nOtters crossing\nfor next 6 miles\n"
+      /CAUTION\nOtters crossing\nfor next 6 miles\n/
     ).to_stdout
   end
 end

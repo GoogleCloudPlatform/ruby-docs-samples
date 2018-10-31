@@ -66,7 +66,7 @@ def detect_document_text_gcs image_path:
   type = :DOCUMENT_TEXT_DETECTION
   feature = { type: type }
 
-  request = { image: image, features: features }
+  request = { image: image, features: [feature] }
   # request == {
   #   image: {
   #     source: {

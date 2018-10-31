@@ -33,7 +33,7 @@ describe "Detect Faces" do
     expect {
       detect_faces image_path: image_path("face_no_surprise.png")
     }.to output(
-      /Surprise: false/
+      /Surprise: VERY_UNLIKELY/
     ).to_stdout
   end
 
@@ -44,7 +44,7 @@ describe "Detect Faces" do
     expect {
       detect_faces_gcs image_path: storage_file.to_gs_url
     }.to output(
-      /Surprise: true/
+      /Surprise: LIKELY/
     ).to_stdout
   end
 end

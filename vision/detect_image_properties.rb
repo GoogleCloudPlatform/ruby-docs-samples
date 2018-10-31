@@ -53,7 +53,7 @@ def detect_image_properties_gcs image_path:
   require "google/cloud/vision"
 
   vision = Google::Cloud::Vision.new
-  source = { gcs_image_uri: iamge_path }
+  source = { gcs_image_uri: image_path }
   image = { source: source }
   type = :IMAGE_PROPERTIES
   feature = { type: type }

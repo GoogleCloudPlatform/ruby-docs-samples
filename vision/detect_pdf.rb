@@ -46,7 +46,7 @@ def detect_pdf_gcs gcs_source_uri:, gcs_destination_uri:
 
   # Once the request has completed and the output has been
   # written to GCS, we can list all the output files.
-  storage = Google::Cloud::Storage.new project: project_id
+  storage = Google::Cloud::Storage.new
 
   bucket_name, prefix = gcs_destination_uri.match("gs://([^/]+)/(.+)").captures
   bucket              = storage.bucket bucket_name

@@ -22,7 +22,7 @@ def detect_text image_path:
   content = File.binread image_path
   image = { content: content }
   type = :TEXT_DETECTION
-  feature = { type: type }
+  feature = { type: type, max_results: 1 }
   request = { image: image, features: [feature] }
   # request == {
   #   image: {
@@ -56,7 +56,7 @@ def detect_text_gcs image_path:
   source = { gcs_image_uri: image_path }
   image = { source: source }
   type = :TEXT_DETECTION
-  feature = { type: type }
+  feature = { type: type, max_results: 1 }
   request = { image: image, features: [feature] }
   # request == {
   #   image: {
