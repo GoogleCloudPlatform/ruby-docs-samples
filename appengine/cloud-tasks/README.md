@@ -59,7 +59,7 @@ Set environment variables:
 First, your project ID:
 
 ```
-export PROJECT_ID=my-project-id
+export GOOGLE_CLOUD_PROJECT=my-project-id
 ```
 
 Then the queue ID, as specified at queue creation time. Queue IDs already
@@ -79,7 +79,7 @@ location is "us-central1").
 export LOCATION_ID=us-central1
 ```
 
-Create a task, targeted at the `log_payload` endpoint, with a payload specified:
+Create a task, targeted at the `/log_payload` endpoint, with a payload specified:
 
 ```
 ruby create_task.rb hello
@@ -92,10 +92,10 @@ HTTP POST request and logs it. The log output can be viewed with:
     gcloud app logs read
 
 Create a task that will be scheduled for a time in the future using the
-`--in_seconds` flag:
+a second argument:
 
 ```
-ruby create_task.rb hello --in_seconds=30
+ruby create_task.rb hello 30
 ```
 
 [appengine-flex]: https://cloud.google.com/appengine/docs/flexible/nodejs

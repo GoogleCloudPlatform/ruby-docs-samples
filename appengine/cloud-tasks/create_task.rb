@@ -11,21 +11,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-def create_task project, location, queue, payload: nil, seconds: nil
-  # [START cloud_tasks_appengine_create_task]
-  require "google/cloud/tasks"
-  require "base64"
+# [START cloud_tasks_appengine_create_task]
+require "google/cloud/tasks"
+
+# Create an App Engine Task
+#
+# @param [String] project_id Your Google Cloud Project ID.
+# @param [String] location_id Your Google Cloud Project Location ID.
+# @param [String] queue_id Your Google Cloud App Engine Queue ID.
+# @param [String] payload The request body of your task.
+# @param [Integer] seconds The delay, in seconds, to process your task.
+def create_task project_id, location_id, queue_id, payload: nil, seconds: nil
 
   # Instantiates a client.
   cloud_tasks = Google::Cloud::Tasks.new
-  # TODO(developer): Uncomment these lines and replace with your values.
-  # project = "my-project-id"
-  # queue = "my-appengine-queue"
-  # location = "us-central1"
-  # payload = "hello"
 
   # Construct the fully qualified queue name.
-  parent = "projects/#{project}/locations/#{location}/queues/#{queue}"
+  parent = "projects/#{project_id}/locations/#{location_id}/queues/#{queue_id}"
 
   # Construct task.
   task = {
@@ -35,10 +37,12 @@ def create_task project, location, queue, payload: nil, seconds: nil
     }
   }
 
+  # Add payload to task body.
   if payload
-    task[:app_engine_http_request][:body] = payload;
+    task[:app_engine_http_request][:body] = payload
   end
 
+  # Add scheduled time to task.
   if seconds
     timestamp = Google::Protobuf::Timestamp.new
     timestamp.seconds = Time.now.to_i + seconds.to_i
@@ -52,8 +56,8 @@ def create_task project, location, queue, payload: nil, seconds: nil
   if response.name
     puts "Created task #{response.name}"
   end
-  # [END cloud_tasks_appengine_create_task]
 end
+# [END cloud_tasks_appengine_create_task]
 
 if __FILE__ == $PROGRAM_NAME
   project_id  = ENV["GOOGLE_CLOUD_PROJECT"]
