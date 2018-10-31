@@ -16,20 +16,34 @@
 # Imports the Google Cloud client library
 require "google/cloud/vision"
 
-# Your Google Cloud Platform project ID
-project_id = "YOUR_PROJECT_ID"
-
 # Instantiates a client
-vision = Google::Cloud::Vision.new project: project_id
+vision = Google::Cloud::Vision.new
 
 # The name of the image file to annotate
 file_name = "./resources/cat.jpg"
 
-# Performs label detection on the image file
-labels = vision.image(file_name).labels
+# Build the request body
+content = File.binread file_name
+image = { content: content }
+type = :LABEL_DETECTION
+feature = { type: type, max_results: max_results }
+request = { image: image, features: [feature] }
+# request == {
+#   image: {
+#     content: (File.binread file_name)
+#   },
+#   features: [
+#     {
+#       type: :LABEL_DETECTION
+#     }
+#   ]
+# }
 
-puts "Labels:"
-labels.each do |label|
-  puts label.description
+# Performs label detection on the image file
+response = vision.batch_annotate_images([request])
+response.responses.each do |res|
+  res.label_annotations.each do |label|
+    puts label.description
+  end
 end
 # [END vision_quickstart]

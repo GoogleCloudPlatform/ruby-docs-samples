@@ -12,9 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-def detect_pdf_gcs gcs_source_uri:, gcs_destination_uri:, project_id:
+def detect_pdf_gcs gcs_source_uri:, gcs_destination_uri:
   # [START vision_text_detection_pdf_gcs]
-  # project_id = "Your Google Cloud project ID"
   # gcs_source_uri = "Google Cloud Storage URI, eg. 'gs://my-bucket/example.pdf'"
   # gcs_destination_uri = "Google Cloud Storage URI, eg. 'gs://my-bucket/prefix_'"
 
@@ -31,12 +30,12 @@ def detect_pdf_gcs gcs_source_uri:, gcs_destination_uri:, project_id:
 
   output_config = {
     gcs_destination: { uri: gcs_destination_uri },
-    batch_size:      2  # number of pages to group per json output file
+    batch_size:      2 # number of pages to group per json output file
   }
 
   async_request = {
     input_config:  input_config,
-    features:      [{ type: "DOCUMENT_TEXT_DETECTION" }],
+    features:      [{ type: :DOCUMENT_TEXT_DETECTION }],
     output_config: output_config
   }
 
@@ -78,19 +77,16 @@ def detect_pdf_gcs gcs_source_uri:, gcs_destination_uri:, project_id:
   # [END vision_text_detection_pdf_gcs]
 end
 
-if __FILE__ == $PROGRAM_NAME
-  project_id = ENV["GOOGLE_CLOUD_PROJECT"]
-
+if $PROGRAM_NAME == __FILE__
   if ARGV.size == 2
     detect_pdf_gcs gcs_source_uri:      ARGV.shift,
-                   gcs_destination_uri: ARGV.shift,
-                   project_id:          project_id
+                   gcs_destination_uri: ARGV.shift
   else
-    puts <<-usage
-Usage: ruby detect_pdf.rb [document gcs file path] [output gcs file path]
+    puts <<-USAGE
+      Usage: ruby detect_pdf.rb [document gcs file path] [output gcs file path]
 
-Example:
-  ruby detect_pdf.rb gs://my-bucket/example.pdf gs://my-bucket/prefix_
-    usage
+      Example:
+        ruby detect_pdf.rb gs://my-bucket/example.pdf gs://my-bucket/prefix_
+    USAGE
   end
 end

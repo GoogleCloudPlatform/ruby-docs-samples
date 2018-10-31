@@ -12,55 +12,165 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-def detect_document_text project_id:, image_path:
+def detect_document_text image_path:
   # [START vision_fulltext_detection]
-  # project_id = "Your Google Cloud project ID"
   # image_path = "Path to local image file, eg. './image.png'"
-  
+
   require "google/cloud/vision"
 
-  vision = Google::Cloud::Vision.new project: project_id
-  image  = vision.image image_path
+  vision = Google::Cloud::Vision.new
+  image_content = File.binread image_path
+  image = { content: image_content }
 
-  document = image.document
+  type = :DOCUMENT_TEXT_DETECTION
+  feature = { type: type }
 
-  puts document.text
+  request = { image: image, features: [feature] }
+  # request == {
+  #   image: {
+  #     content: (File.binread image_path)
+  #   },
+  #   features: [
+  #     {
+  #       type: :LABEL_DETECTION
+  #     }
+  #   ]
+  # }
+
+  requests = [request]
+  response = vision.batch_annotate_images(requests)
+  text = ""
+  response.responses.each do |res|
+    res.text_annotations.each do |annotation|
+      text << annotation.description
+    end
+  end
+
+  puts text
   # [END vision_fulltext_detection]
 end
 
 # This method is a duplicate of the above method, but with a different
 # description of the 'image_path' variable, demonstrating the gs://bucket/file
 # GCS storage URI format.
-def detect_document_text_gcs project_id:, image_path:
+def detect_document_text_gcs image_path:
   # [START vision_fulltext_detection_gcs]
-  # project_id = "Your Google Cloud project ID"
   # image_path = "Google Cloud Storage URI, eg. 'gs://my-bucket/image.png'"
-  
+
   require "google/cloud/vision"
 
-  vision = Google::Cloud::Vision.new project: project_id
-  image  = vision.image image_path
+  vision = Google::Cloud::Vision.new
+  source = { gcs_image_uri: image_path }
+  image = { source: source }
 
-  document = image.document
+  type = :DOCUMENT_TEXT_DETECTION
+  feature = { type: type }
 
-  puts document.text
+  request = { image: image, features: features }
+  # request == {
+  #   image: {
+  #     source: {
+  #       gcs_image_uri: "gs://gapic-toolkit/President_Barack_Obama.jpg"
+  #     }
+  #   },
+  #   features: [
+  #     {
+  #       type: :LABEL_DETECTION
+  #     }
+  #   ]
+  # }
+
+  requests = [request]
+  response = vision.batch_annotate_images(requests)
+  text = ""
+  response.responses.each do |res|
+    res.text_annotations.each do |annotation|
+      text << annotation.description
+    end
+  end
+
+  puts text
   # [END vision_fulltext_detection_gcs]
 end
 
-if __FILE__ == $PROGRAM_NAME
-  image_path = ARGV.shift
-  project_id = ENV["GOOGLE_CLOUD_PROJECT"]
+def detect_document_text_async image_path:, output_path:
+  # [START vision_fulltext_detection_asynchronous]
+  # image_path = "Google Cloud Storage URI, eg. 'gs://my-bucket/document.pdf'"
+  # output_path = "Google Cloud Storage URI, eg. 'gs://my-bucket/prefix'"
 
-  if image_path
-    detect_document_text image_path: image_path, project_id: project_id
-  else
-    puts <<-usage
-Usage: ruby detect_document_text.rb [image file path]
+  require "google/cloud/vision"
 
-Example:
-  ruby detect_document_text.rb image.png
-  ruby detect_document_text.rb https://public-url/image.png
-  ruby detect_document_text.rb gs://my-bucket/image.png
-    usage
+  vision = Google::Cloud::Vision.new
+  gcs_source = { uri: image_path }
+  input_config = { gcs_source: gcs_source, mime_type: "application/pdf" }
+  type = :DOCUMENT_TEXT_DETECTION
+  max_results = 15 # optional, defaults to 10
+  feature = { type: type, max_results: max_results }
+  destination = { uri: output_path }
+
+  # number of pages per output file
+  batch_size = 1 # optional, defaults to 20
+  output_config = { gcs_destination: destination, batch_size: batch_size }
+  request = {
+    input_config: input_config,
+    features: [feature],
+    output_config: output_config
+  }
+  # request == {
+  #   input_config: {
+  #     gcs_source: {
+  #       uri: image_path
+  #     },
+  #     mime_type: "application/pdf"
+  #   },
+  #   output_config: {
+  #     gcs_destination: {
+  #       uri: output_path
+  #     },
+  #     batch_size: 1
+  #   },
+  #   features: [
+  #     {
+  #       type: :DOCUMENT_TEXT_DETECTION,
+  #       max_results: 15
+  #     }
+  #   ]
+  # }
+
+  requests = [request]
+  response = vision.async_batch_annotate_files(requests)
+  response.wait_until_done!
+  # results will be stored in Google Cloud Storage formatted like
+  # "#{output_path}output-#{start_page}-to-#{end_page}.json"
+  # [END vision_fulltext_detection_asynchronous]
+end
+
+def uri? string
+  string
+end
+
+if $PROGRAM_NAME == __FILE__
+  require "uri"
+
+  args = {
+    image_path: ARGV.shift,
+    output_path: ARGV.shift
+  }
+
+  if args[:image_path].nil?
+    return puts <<-USAGE
+    Usage: ruby detect_document_text.rb [image file path]
+
+    Example:
+      ruby detect_document_text.rb image.png
+      ruby detect_document_text.rb https://public-url/image.png
+      ruby detect_document_text.rb gs://my-bucket/image.png
+    USAGE
   end
+  unless args[:image_path] =~ URI::DEFAULT_PARSER.new.make_regexp
+    return detect_document_text args
+  end
+
+  detect_document_text_gcs args
+  detect_document_text_async args if args[:output_path]
 end

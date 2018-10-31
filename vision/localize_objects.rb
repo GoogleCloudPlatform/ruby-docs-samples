@@ -19,13 +19,29 @@ def localize_objects image_path:
   require "google/cloud/vision"
 
   vision = Google::Cloud::Vision.new
-  image  = vision.image image_path
-
-  image.object_localizations.each do |object|
-    puts "#{object.name} (confidence: #{object.score})"
-    puts "Normalized bounding polygon vertices:"
-    object.bounds.each do |vertex|
-      puts " - (#{vertex.x}, #{vertex.y})"
+  content = File.binread image_path
+  image = { content: content }
+  type = :OBJECT_LOCALIZATION
+  feature = { type: type }
+  request = { image: image, features: [feature] }
+  # request == {
+  #   image: {
+  #     content: (File.binread image_path)
+  #   },
+  #   features: [
+  #     {
+  #       type: :OBJECT_LOCALIZATION
+  #     }
+  #   ]
+  # }
+  response = vision.batch_annotate_images([request])
+  response.responses.each do |res|
+    res.localized_object_annotations.each do |object|
+      puts "#{object.name} (confidence: #{object.score})"
+      puts "Normalized bounding polygon vertices:"
+      object.bounding_poly.normalized_vertices.each do |vertex|
+        puts " - (#{vertex.x}, #{vertex.y})"
+      end
     end
   end
   # [END vision_localize_objects]
@@ -34,41 +50,104 @@ end
 # This method is a duplicate of the above method, but with a different
 # description of the 'image_path' variable, demonstrating the gs://bucket/file
 # GCS storage URI format.
-def localize_objects_uri image_path:
+def localize_objects_gs image_path:
   # [START vision_localize_objects_gcs]
   # image_path = "Google Cloud Storage URI, eg. 'gs://my-bucket/image.png'"
 
   require "google/cloud/vision"
 
   vision = Google::Cloud::Vision.new
-  image  = vision.image image_path
-
-  image.object_localizations.each do |object|
-    puts "#{object.name} (confidence: #{object.score})"
-    puts "Normalized bounding polygon vertices:"
-    object.bounds.each do |vertex|
-      puts " - (#{vertex.x}, #{vertex.y})"
+  source = { gcs_image_uri: image_path }
+  image = { source: source }
+  type = :OBJECT_LOCALIZATION
+  feature = { type: type }
+  request = { image: image, features: [feature] }
+  # request == {
+  #   image: {
+  #     source: {
+  #       gcs_image_uri: image_path
+  #     }
+  #   },
+  #   features: [
+  #     {
+  #       type: :OBJECT_LOCALIZATION
+  #     }
+  #   ]
+  # }
+  response = vision.batch_annotate_images([request])
+  response.responses.each do |res|
+    res.localized_object_annotations.each do |object|
+      puts "#{object.name} (confidence: #{object.score})"
+      puts "Normalized bounding polygon vertices:"
+      object.bounding_poly.normalized_vertices.each do |vertex|
+        puts " - (#{vertex.x}, #{vertex.y})"
+      end
     end
   end
   # [END vision_localize_objects_gcs]
 end
 
-if __FILE__ == $PROGRAM_NAME
-  location = ARGV.shift
+# This method is a duplicate of the above method, but with a different
+# description of the 'image_path' variable, demonstrating the https://site.tld/image.png
+# URI format.
+def localize_objects_uri image_path:
+  # [START vision_localize_objects_gcs]
+  # image_path = "URI, eg. 'https://site.tld/image.png'"
+
+  require "google/cloud/vision"
+
+  vision = Google::Cloud::Vision.new
+  source = { image_uri: image_path }
+  image = { source: source }
+  type = :OBJECT_LOCALIZATION
+  feature = { type: type }
+  request = { image: image, features: [feature] }
+  # request == {
+  #   image: {
+  #     source: {
+  #       image_uri: image_path
+  #     }
+  #   },
+  #   features: [
+  #     {
+  #       type: :OBJECT_LOCALIZATION
+  #     }
+  #   ]
+  # }
+  response = vision.batch_annotate_images([request])
+  response.responses.each do |res|
+    res.localized_object_annotations.each do |object|
+      puts "#{object.name} (confidence: #{object.score})"
+      puts "Normalized bounding polygon vertices:"
+      object.bounding_poly.normalized_vertices.each do |vertex|
+        puts " - (#{vertex.x}, #{vertex.y})"
+      end
+    end
+  end
+  # [END vision_localize_objects_gcs]
+end
+
+if $PROGRAM_NAME == __FILE__
+  require "uri"
+
   image_path = ARGV.shift
 
-  if location == 'file'
-    localize_objects image_path: image_path
-  elsif location == 'uri'
-    localize_objects_gcs image_path: image_path
-  else
-    puts <<-usage
-Usage: ruby localize_objects.rb {file,uri} [image file path]
+  unless image_path
+    return puts <<-USAGE
+    Usage: ruby localize_objects.rb [image file path]
 
-Example:
-  ruby localize_objects.rb file image.png
-  ruby localize_objects.rb uri https://public-url/image.png
-  ruby localize_objects.rb uri gs://my-bucket/image.png
-    usage
+    Example:
+      ruby localize_objects.rb image.png
+      ruby localize_objects.rb https://public-url/image.png
+      ruby localize_objects.rb gs://my-bucket/image.png
+    USAGE
   end
+  if image_path =~ URI::DEFAULT_PARSER.new.make_regexp
+    image_uri = URI(image_path)
+    return localize_objects_gs image_path: image_path if image_uri.scheme == "gs"
+
+    return localize_object_uri image_path: image_path
+  end
+
+  localize_objects image_path: image_path
 end

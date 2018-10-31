@@ -19,38 +19,48 @@ require "google/cloud/vision"
 require "rmagick"
 # [END vision_face_detection_tutorial_process_response]
 
-def draw_box_around_faces path_to_image_file:, path_to_output_file:,
-                          project_id:
+def draw_box_around_faces path_to_image_file:, path_to_output_file:
   # [START vision_face_detection_tutorial_client]
-  vision = Google::Cloud::Vision.new project: project_id
+  vision = Google::Cloud::Vision.new
   # [END vision_face_detection_tutorial_client]
 
   # [START vision_face_detection_tutorial_send_request]
-  image = vision.image path_to_image_file
-  faces = image.faces
+  content = File.binread path_to_image_file
+  image = { content: content }
+  type = :FACE_DETECTION
+  feature = { type: type }
+  request = { image: image, features: [feature] }
+  # request == {
+  #   image: {
+  #     content: (File.binread path_to_image_file)
+  #   },
+  #   features: [
+  #     {
+  #       type: :FACE_DETECTION
+  #     }
+  #   ]
+  # }
+  response = vision.batch_annotate_images([request])
   # [END vision_face_detection_tutorial_send_request]
 
   # [START vision_face_detection_tutorial_process_response]
-  image = Magick::Image.read(path_to_image_file).first
+  response.responses.each do |res|
+    res.face_annotations.each do |annotation|
+      x1 = annotation.bounding_poly.vertices[0].x.to_i
+      y1 = annotation.bounding_poly.vertices[0].y.to_i
+      x2 = annotation.bounding_poly.vertices[2].x.to_i
+      y2 = annotation.bounding_poly.vertices[2].y.to_i
 
-  faces.each do |face|
-    puts "Face bounds:"
-    face.bounds.face.each do |vector|
-      puts "(#{vector.x}, #{vector.y})"
+      photo = Magick::Image.read(path_to_image_file).first
+      draw = Magick::Draw.new
+      draw.stroke = "green"
+      draw.stroke_width 5
+      draw.fill_opacity 0
+      draw.rectangle x1, y1, x2, y2
+      draw.draw photo
+
+      photo.write path_to_output_file
     end
-
-    draw = Magick::Draw.new
-    draw.stroke = "green"
-    draw.stroke_width 5
-    draw.fill_opacity 0
-
-    x1 = face.bounds.face[0].x.to_i
-    y1 = face.bounds.face[0].y.to_i
-    x2 = face.bounds.face[2].x.to_i
-    y2 = face.bounds.face[2].y.to_i
-
-    draw.rectangle x1, y1, x2, y2
-    draw.draw image
   end
 
   image.write path_to_output_file
@@ -60,20 +70,17 @@ def draw_box_around_faces path_to_image_file:, path_to_output_file:,
 end
 
 # [START vision_face_detection_tutorial_run_application]
-if __FILE__ == $PROGRAM_NAME
-  project_id = ENV["GOOGLE_CLOUD_PROJECT"]
-
+if $PROGRAM_NAME == __FILE__
   if ARGV.size == 2
     draw_box_around_faces path_to_image_file:  ARGV.shift,
-                          path_to_output_file: ARGV.shift,
-                          project_id:          project_id
+                          path_to_output_file: ARGV.shift
   else
-    puts <<-usage
-Usage: ruby draw_box_around_faces.rb [input-file] [output-file]
+    puts <<-USAGE
+    Usage: ruby draw_box_around_faces.rb [input-file] [output-file]
 
-Example:
-  ruby draw_box_around_faces.rb images/face.png output-image.png
-    usage
+    Example:
+      ruby draw_box_around_faces.rb images/face.png output-image.png
+    USAGE
   end
 end
 # [END vision_face_detection_tutorial_run_application]
