@@ -47,15 +47,14 @@ end
 # [END vision_migration_labels_local_old]
 
 # [START vision_migration_labels_local_new]
-image_annotator_client = Google::Cloud::Vision.new
+vision = Google::Cloud::Vision.new
 file_name = "./resources/cat.jpg"
-image_content = File.binread file_name
-image = { content: image_content }
+content = File.binread file_name
+image = { content: content }
 type = :LABEL_DETECTION
 max_results = 15 # optional, defaults to 10
-features_element = { type: type, max_results: max_results }
-features = [features_element]
-request = { image: image, features: features }
+feature = { type: type, max_results: max_results }
+request = { image: image, features: [feature] }
 # request == {
 #               image: {
 #                 content: (File.binread "./resources/cat.jpg")
@@ -68,8 +67,7 @@ request = { image: image, features: features }
 #               ]
 #             }
 
-requests = [request]
-response = image_annotator_client.batch_annotate_images(requests)
+response = vision.batch_annotate_images([request])
 
 puts "Labels:"
 response.responses.each do |res|
