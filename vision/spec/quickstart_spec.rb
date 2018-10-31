@@ -20,7 +20,7 @@ describe "Vision Quickstart" do
   it "performs label detection on a sample image file" do
     vision = Google::Cloud::Vision.new
     expect(Google::Cloud::Vision).to receive(:new).
-                                     with(project: "YOUR_PROJECT_ID").
+                                     with(no_args).
                                      and_return(vision)
 
     expect {
