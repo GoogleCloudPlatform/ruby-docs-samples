@@ -11,9 +11,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-require_relative "../app.rb"
+
+require_relative "../app"
 require "rspec"
-require "google/cloud/tasks"
 require "rack/test"
 
 describe "CloudTasks", type: :feature do
@@ -36,9 +36,13 @@ describe "CloudTasks", type: :feature do
   it "can create a task" do
     current_directory = File.expand_path(File.dirname(__FILE__))
     snippet_filepath  = File.join current_directory, "..", "create_task.rb"
-    payload = "Hello"
 
-    output = `ruby #{snippet_filepath} #{payload}`
+    GOOGLE_CLOUD_PROJECT = ENV["GOOGLE_CLOUD_PROJECT"]
+    LOCATION_ID          = "us-central1"
+    QUEUE_ID             = "my-appengine-queue"
+    payload              = "Hello"
+
+    output = `ruby #{snippet_filepath} #{GOOGLE_CLOUD_PROJECT} #{LOCATION_ID} #{QUEUE_ID} #{payload}`
 
     expect(output).to include "Created task"
 

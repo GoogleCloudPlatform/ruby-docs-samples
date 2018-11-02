@@ -82,7 +82,7 @@ export LOCATION_ID=us-central1
 Create a task, targeted at the `/log_payload` endpoint, with a payload specified:
 
 ```
-ruby create_task.rb hello
+ruby create_task.rb $GOOGLE_CLOUD_PROJECT $LOCATION_ID $QUEUE_ID hello
 ```
 
 The App Engine app serves as a target for the push requests. It has an
@@ -95,7 +95,7 @@ Create a task that will be scheduled for a time in the future using the
 a second argument:
 
 ```
-ruby create_task.rb hello 30
+ruby create_task.rb $GOOGLE_CLOUD_PROJECT $LOCATION_ID $QUEUE_ID hello 30
 ```
 
 [appengine-flex]: https://cloud.google.com/appengine/docs/flexible/nodejs
