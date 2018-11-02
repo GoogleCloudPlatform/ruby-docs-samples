@@ -38,7 +38,7 @@ describe "CloudTasks", type: :feature do
     snippet_filepath  = File.join current_directory, "..", "create_task.rb"
 
     GOOGLE_CLOUD_PROJECT = ENV["GOOGLE_CLOUD_PROJECT"]
-    LOCATION_ID          = "us-central1"
+    LOCATION_ID          = "us-east4"
     QUEUE_ID             = "my-appengine-queue"
     payload              = "Hello"
 
