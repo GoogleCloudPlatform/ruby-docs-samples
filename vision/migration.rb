@@ -20,22 +20,22 @@ require "google/cloud/vision"
 # [START vision_migration_client_old]
 # Instantiates a client
 project_id = "YOUR_PROJECT_ID"
-vision = Google::Cloud::Vision.new project: project_id
+vision = Google::Cloud::Vision::ImageAnnotator.new project: project_id
 # [END vision_migration_client_old]
 
 # [START vision_migration_client_new]
 # Instantiates a client
-vision = Google::Cloud::Vision.new
+vision = Google::Cloud::Vision::ImageAnnotator.new
 # [END vision_migration_client_new]
 
 # [START vision_migration_client_version]
 # Instantiates a client with a specified version
-vision = Google::Cloud::Vision.new version: :v1
+vision = Google::Cloud::Vision::ImageAnnotator.new version: :v1
 # [END vision_migration_client_version]
 
 # [START vision_migration_labels_local_old]
 project_id = "YOUR_PROJECT_ID"
-vision = Google::Cloud::Vision.new project: project_id
+vision = Google::Cloud::Vision::ImageAnnotator.new project: project_id
 file_name = "./resources/cat.jpg"
 max_results = 15 # optional, defaults to 100
 labels = vision.image(file_name).labels max_results
@@ -47,7 +47,7 @@ end
 # [END vision_migration_labels_local_old]
 
 # [START vision_migration_labels_local_new]
-vision = Google::Cloud::Vision.new
+vision = Google::Cloud::Vision::ImageAnnotator.new
 file_name = "./resources/cat.jpg"
 content = File.binread file_name
 image = { content: content }
@@ -79,7 +79,7 @@ end
 
 # [START vision_migration_labels_storage_old]
 project_id = "YOUR_PROJECT_ID"
-vision = Google::Cloud::Vision.new project: project_id
+vision = Google::Cloud::Vision::ImageAnnotator.new project: project_id
 storage_uri = "gs://gapic-toolkit/President_Barack_Obama.jpg"
 max_results = 15 # optional, defaults to 100
 labels = vision.image(storage_uri).labels max_results
@@ -91,7 +91,7 @@ end
 # [END vision_migration_labels_storage_old]
 
 # [START vision_migration_labels_storage_new]
-image_annotator_client = Google::Cloud::Vision.new
+image_annotator_client = Google::Cloud::Vision::ImageAnnotator.new
 storage_uri = "gs://gapic-toolkit/President_Barack_Obama.jpg"
 source = { gcs_image_uri: storage_uri }
 image = { source: source }

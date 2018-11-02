@@ -18,7 +18,7 @@ def detect_document_text image_path:
 
   require "google/cloud/vision"
 
-  vision = Google::Cloud::Vision.new
+  vision = Google::Cloud::Vision::ImageAnnotator.new
   image_content = File.binread image_path
   image = { content: image_content }
 
@@ -59,7 +59,7 @@ def detect_document_text_gcs image_path:
 
   require "google/cloud/vision"
 
-  vision = Google::Cloud::Vision.new
+  vision = Google::Cloud::Vision::ImageAnnotator.new
   source = { gcs_image_uri: image_path }
   image = { source: source }
 
@@ -100,7 +100,7 @@ def detect_document_text_async image_path:, output_path:
 
   require "google/cloud/vision"
 
-  vision = Google::Cloud::Vision.new
+  vision = Google::Cloud::Vision::ImageAnnotator.new
   gcs_source = { uri: image_path }
   input_config = { gcs_source: gcs_source, mime_type: "application/pdf" }
   type = :DOCUMENT_TEXT_DETECTION

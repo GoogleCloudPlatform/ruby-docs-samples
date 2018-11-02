@@ -17,7 +17,7 @@
 require "google/cloud/vision"
 
 # Instantiates a client
-vision = Google::Cloud::Vision.new
+vision = Google::Cloud::Vision::ImageAnnotator.new
 
 # The name of the image file to annotate
 file_name = "./resources/cat.jpg"

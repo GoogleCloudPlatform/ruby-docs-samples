@@ -18,7 +18,7 @@ def detect_labels image_path:
 
   require "google/cloud/vision"
 
-  vision = Google::Cloud::Vision.new
+  vision = Google::Cloud::Vision::ImageAnnotator.new
   content = File.binread image_path
   image = { content: content }
   type = :LABEL_DETECTION
@@ -54,7 +54,7 @@ def detect_labels_gcs image_path:
 
   require "google/cloud/vision"
 
-  vision = Google::Cloud::Vision.new
+  vision = Google::Cloud::Vision::ImageAnnotator.new
   source = { gcs_image_uri: image_path }
   image = { source: source }
   type = :LABEL_DETECTION

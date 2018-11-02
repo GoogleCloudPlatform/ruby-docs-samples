@@ -18,7 +18,7 @@ def detect_web image_path:
 
   require "google/cloud/vision"
 
-  vision = Google::Cloud::Vision.new
+  vision = Google::Cloud::Vision::ImageAnnotator.new
   content = File.binread image_path
   image = { content: content }
   type = :WEB_DETECTION
@@ -58,7 +58,7 @@ def detect_web_gcs image_path:
 
   require "google/cloud/vision"
 
-  vision = Google::Cloud::Vision.new
+  vision = Google::Cloud::Vision::ImageAnnotator.new
   source = { gcs_image_uri: image_path }
   image = { source: source }
   type = :WEB_DETECTION

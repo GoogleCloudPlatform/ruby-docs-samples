@@ -18,7 +18,7 @@ def localize_objects image_path:
 
   require "google/cloud/vision"
 
-  vision = Google::Cloud::Vision.new
+  vision = Google::Cloud::Vision::ImageAnnotator.new
   content = File.binread image_path
   image = { content: content }
   type = :OBJECT_LOCALIZATION
@@ -56,7 +56,7 @@ def localize_objects_gs image_path:
 
   require "google/cloud/vision"
 
-  vision = Google::Cloud::Vision.new
+  vision = Google::Cloud::Vision::ImageAnnotator.new
   source = { gcs_image_uri: image_path }
   image = { source: source }
   type = :OBJECT_LOCALIZATION
@@ -96,7 +96,7 @@ def localize_objects_uri image_path:
 
   require "google/cloud/vision"
 
-  vision = Google::Cloud::Vision.new
+  vision = Google::Cloud::Vision::ImageAnnotator.new
   source = { image_uri: image_path }
   image = { source: source }
   type = :OBJECT_LOCALIZATION

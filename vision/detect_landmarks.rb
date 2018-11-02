@@ -18,7 +18,7 @@ def detect_landmarks image_path:
 
   require "google/cloud/vision"
 
-  vision = Google::Cloud::Vision.new
+  vision = Google::Cloud::Vision::ImageAnnotator.new
   content = File.binread image_path
   image = { content: content }
   type = :LANDMARK_DETECTION
@@ -56,7 +56,7 @@ def detect_landmarks_gcs image_path:
 
   require "google/cloud/vision"
 
-  vision = Google::Cloud::Vision.new
+  vision = Google::Cloud::Vision::ImageAnnotator.new
   source = { gcs_image_uri: image_path }
   image = { source: source }
   type = :LANDMARK_DETECTION

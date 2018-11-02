@@ -18,7 +18,7 @@ def detect_logos image_path:
 
   require "google/cloud/vision"
 
-  vision = Google::Cloud::Vision.new
+  vision = Google::Cloud::Vision::ImageAnnotator.new
   content = File.binread image_path
   image = { content: content }
   type = :LOGO_DETECTION
@@ -52,7 +52,7 @@ def detect_logos_gcs image_path:
 
   require "google/cloud/vision"
 
-  vision = Google::Cloud::Vision.new
+  vision = Google::Cloud::Vision::ImageAnnotator.new
   source = { gcs_image_uri: image_path }
   image = { source: source }
   type = :LOGO_DETECTION

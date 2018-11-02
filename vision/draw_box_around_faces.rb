@@ -21,7 +21,7 @@ require "rmagick"
 
 def draw_box_around_faces path_to_image_file:, path_to_output_file:
   # [START vision_face_detection_tutorial_client]
-  vision = Google::Cloud::Vision.new
+  vision = Google::Cloud::Vision::ImageAnnotator.new
   # [END vision_face_detection_tutorial_client]
 
   # [START vision_face_detection_tutorial_send_request]
