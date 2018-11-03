@@ -1,31 +1,30 @@
 require "google/cloud/monitoring"
 
-# Avoid collisions with other runs
-RANDOM_SUFFIX = Time.now.to_i.to_s
-
 def create_metric_descriptor project_id:
   # [START monitoring_create_metric]
   client = Google::Cloud::Monitoring::Metric.new
-  project_name = Google::Cloud::Monitoring::V3::MetricServiceClient.project_path(project_id)
+  project_name = Google::Cloud::Monitoring::V3::MetricServiceClient.project_path project_id
 
-  descriptor = Google::Api::MetricDescriptor.new({
-    type: "custom.googleapis.com/my_metric#{RANDOM_SUFFIX}",
+  # Random suffix for metric type to avoid collisions with other runs
+  random_suffix = rand(36**10).to_s(36)
+
+  descriptor = Google::Api::MetricDescriptor.new(
+    type: "custom.googleapis.com/my_metric#{random_suffix}",
     metric_kind: Google::Api::MetricDescriptor::MetricKind::GAUGE,
     value_type: Google::Api::MetricDescriptor::ValueType::DOUBLE,
-    description: "This is a simple example of a custom metric.",
-  })
+    description: "This is a simple example of a custom metric."
+  )
 
-  result = client.create_metric_descriptor(project_name, descriptor)
+  result = client.create_metric_descriptor project_name, descriptor
   p "Created #{result.name}"
   p result
-
   # [END monitoring_create_metric]
 end
 
 def delete_metric_descriptor descriptor_name:
   # [START monitoring_delete_metric]
   client = Google::Cloud::Monitoring::Metric.new
-  result = client.delete_metric_descriptor(descriptor_name)
+  client.delete_metric_descriptor descriptor_name
   p "Deleted metric descriptor #{descriptor_name}."
   # [END monitoring_delete_metric]
 end
@@ -33,25 +32,28 @@ end
 def write_time_series project_id:
   # [START monitoring_write_timeseries]
   client = Google::Cloud::Monitoring::Metric.new
-  project_name = Google::Cloud::Monitoring::V3::MetricServiceClient.project_path(project_id)
+  project_name = Google::Cloud::Monitoring::V3::MetricServiceClient.project_path project_id
+
+  # Random suffix for metric type to avoid collisions with other runs
+  random_suffix = rand(36**10).to_s(36)
 
   series = Google::Monitoring::V3::TimeSeries.new
-  metric = Google::Api::Metric.new(type: "custom.googleapis.com/my_metric#{RANDOM_SUFFIX}")
+  metric = Google::Api::Metric.new type: "custom.googleapis.com/my_metric#{random_suffix}"
   series.metric = metric
 
-  resource = Google::Api::MonitoredResource.new(type: "gce_instance")
+  resource = Google::Api::MonitoredResource.new type: "gce_instance"
   resource.labels["instance_id"] = "1234567890123456789"
   resource.labels["zone"] = "us-central1-f"
   series.resource = resource
 
   point = Google::Monitoring::V3::Point.new
-  point.value = Google::Monitoring::V3::TypedValue.new(double_value: 3.14)
-  now =  Time.now
-  end_time = Google::Protobuf::Timestamp.new(seconds: now.to_i, nanos: now.usec)
-  point.interval = Google::Monitoring::V3::TimeInterval.new(end_time: end_time)
+  point.value = Google::Monitoring::V3::TypedValue.new double_value: 3.14
+  now = Time.now
+  end_time = Google::Protobuf::Timestamp.new seconds: now.to_i, nanos: now.usec
+  point.interval = Google::Monitoring::V3::TimeInterval.new end_time: end_time
   series.points << point
 
-  client.create_time_series(project_name, [series])
+  client.create_time_series project_name, [series]
   p "Time series created : #{metric.type}"
   # [END monitoring_write_timeseries]
 end
@@ -59,12 +61,12 @@ end
 def list_time_series project_id:
   # [START monitoring_read_timeseries_simple]
   client = Google::Cloud::Monitoring::Metric.new
-  project_name = Google::Cloud::Monitoring::V3::MetricServiceClient.project_path(project_id)
+  project_name = Google::Cloud::Monitoring::V3::MetricServiceClient.project_path project_id
 
   interval = Google::Monitoring::V3::TimeInterval.new
   now = Time.now
-  interval.end_time = Google::Protobuf::Timestamp.new(seconds: now.to_i, nanos: now.usec)
-  interval.start_time = Google::Protobuf::Timestamp.new(seconds: now.to_i - 300, nanos: now.usec)
+  interval.end_time = Google::Protobuf::Timestamp.new seconds: now.to_i, nanos: now.usec
+  interval.start_time = Google::Protobuf::Timestamp.new seconds: now.to_i - 300, nanos: now.usec
 
   results = client.list_time_series(
     project_name,
@@ -81,12 +83,12 @@ end
 def list_time_series_header project_id:
   # [START monitoring_read_timeseries_fields]
   client = Google::Cloud::Monitoring::Metric.new
-  project_name = Google::Cloud::Monitoring::V3::MetricServiceClient.project_path(project_id)
+  project_name = Google::Cloud::Monitoring::V3::MetricServiceClient.project_path project_id
 
   interval = Google::Monitoring::V3::TimeInterval.new
   now = Time.now
-  interval.end_time = Google::Protobuf::Timestamp.new(seconds: now.to_i, nanos: now.usec)
-  interval.start_time = Google::Protobuf::Timestamp.new(seconds: now.to_i - 300, nanos: now.usec)
+  interval.end_time = Google::Protobuf::Timestamp.new seconds: now.to_i, nanos: now.usec
+  interval.start_time = Google::Protobuf::Timestamp.new seconds: now.to_i - 300, nanos: now.usec
 
   results = client.list_time_series(
     project_name,
@@ -103,12 +105,12 @@ end
 def list_time_series_aggregate project_id:
   # [START monitoring_read_timeseries_align]
   client = Google::Cloud::Monitoring::Metric.new
-  project_name = Google::Cloud::Monitoring::V3::MetricServiceClient.project_path(project_id)
+  project_name = Google::Cloud::Monitoring::V3::MetricServiceClient.project_path project_id
 
   interval = Google::Monitoring::V3::TimeInterval.new
   now = Time.now
-  interval.end_time = Google::Protobuf::Timestamp.new(seconds: now.to_i, nanos: now.usec)
-  interval.start_time = Google::Protobuf::Timestamp.new(seconds: now.to_i - 300, nanos: now.usec)
+  interval.end_time = Google::Protobuf::Timestamp.new seconds: now.to_i, nanos: now.usec
+  interval.start_time = Google::Protobuf::Timestamp.new seconds: now.to_i - 300, nanos: now.usec
 
   aggregation = Google::Monitoring::V3::Aggregation.new(
     alignment_period: { seconds: 300 },
@@ -132,12 +134,12 @@ end
 def list_time_series_reduce project_id:
   # [START monitoring_read_timeseries_reduce]
   client = Google::Cloud::Monitoring::Metric.new
-  project_name = Google::Cloud::Monitoring::V3::MetricServiceClient.project_path(project_id)
+  project_name = Google::Cloud::Monitoring::V3::MetricServiceClient.project_path project_id
 
   interval = Google::Monitoring::V3::TimeInterval.new
   now = Time.now
-  interval.end_time = Google::Protobuf::Timestamp.new(seconds: now.to_i, nanos: now.usec)
-  interval.start_time = Google::Protobuf::Timestamp.new(seconds: now.to_i - 300, nanos: now.usec)
+  interval.end_time = Google::Protobuf::Timestamp.new seconds: now.to_i, nanos: now.usec
+  interval.start_time = Google::Protobuf::Timestamp.new seconds: now.to_i - 300, nanos: now.usec
 
   aggregation = Google::Monitoring::V3::Aggregation.new(
     alignment_period: { seconds: 300 },
@@ -163,8 +165,8 @@ end
 def list_metric_descriptors project_id:
   # [START monitoring_list_descriptors]
   client = Google::Cloud::Monitoring::Metric.new
-  project_name = Google::Cloud::Monitoring::V3::MetricServiceClient.project_path(project_id)
-  results = client.list_metric_descriptors(project_name)
+  project_name = Google::Cloud::Monitoring::V3::MetricServiceClient.project_path project_id
+  results = client.list_metric_descriptors project_name
   results.each do |descriptor|
     p descriptor.type
   end
@@ -174,8 +176,8 @@ end
 def list_monitored_resources project_id:
   # [START monitoring_list_resources]
   client = Google::Cloud::Monitoring::Metric.new
-  project_name = Google::Cloud::Monitoring::V3::MetricServiceClient.project_path(project_id)
-  results = client.list_monitored_resource_descriptors(project_name)
+  project_name = Google::Cloud::Monitoring::V3::MetricServiceClient.project_path project_id
+  results = client.list_monitored_resource_descriptors project_name
   results.each do |descriptor|
     p descriptor.type
   end
@@ -190,16 +192,15 @@ def get_monitored_resource_descriptor project_id:, resource_type:
     resource_type
   )
 
- result = client.get_monitored_resource_descriptor(resource_path)
- p result
-
- # [END monitoring_get_resource]
+  result = client.get_monitored_resource_descriptor resource_path
+  p result
+  # [END monitoring_get_resource]
 end
 
 def get_metric_descriptor metric_name:
   # [START monitoring_get_descriptor]
   client = Google::Cloud::Monitoring::Metric.new
-  descriptor = client.get_metric_descriptor(metric_name)
+  descriptor = client.get_metric_descriptor metric_name
   p descriptor
   # [END monitoring_get_descriptor]
 end
@@ -229,21 +230,21 @@ if __FILE__ == $PROGRAM_NAME
   when "get_metric_descriptor"
     get_metric_descriptor metric_name: ARGV.shift
   else
-    puts <<-usage
-Usage: bundle exec ruby metrics.rb [command] [arguments]
+    puts <<~USAGE
+      Usage: bundle exec ruby metrics.rb [command] [arguments]
 
-Commands:
-  create_metric_descriptor                     <project_id>
-  delete_metric_descriptor                     <descriptor_name>
-  write_time_series                            <project_id>
-  list_time_series                             <project_id>
-  list_time_series_header                      <project_id>
-  list_time_series_aggregate                   <project_id>
-  list_time_series_reduce                      <project_id>
-  list_metric_descriptors                      <project_id>
-  list_monitored_resources                     <project_id>
-  get_monitored_resource_descriptor            <project_id> <resource_type>
-  get_metric_descriptor                        <metric_name>
-    usage
+      Commands:
+        create_metric_descriptor                     <project_id>
+        delete_metric_descriptor                     <descriptor_name>
+        write_time_series                            <project_id>
+        list_time_series                             <project_id>
+        list_time_series_header                      <project_id>
+        list_time_series_aggregate                   <project_id>
+        list_time_series_reduce                      <project_id>
+        list_metric_descriptors                      <project_id>
+        list_monitored_resources                     <project_id>
+        get_monitored_resource_descriptor            <project_id> <resource_type>
+        get_metric_descriptor                        <metric_name>
+    USAGE
   end
 end
