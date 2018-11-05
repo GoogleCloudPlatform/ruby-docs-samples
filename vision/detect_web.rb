@@ -18,7 +18,7 @@ def detect_web image_path:
 
   require "google/cloud/vision"
 
-  vision = Google::Cloud::Vision::ImageAnnotator.new
+  image_annotator = Google::Cloud::Vision::ImageAnnotator.new
 
   content = File.binread image_path
   image = { content: content }
@@ -26,7 +26,7 @@ def detect_web image_path:
   feature = { type: :WEB_DETECTION, max_results: max_results }
   request = { image: image, features: [feature] }
 
-  response = vision.batch_annotate_images([request])
+  response = image_annotator.batch_annotate_images([request])
   response.responses.each do |res|
     res.web_detection.web_entities.each do |entity|
       puts entity.description
@@ -48,7 +48,7 @@ def detect_web_gcs image_path:
 
   require "google/cloud/vision"
 
-  vision = Google::Cloud::Vision::ImageAnnotator.new
+  image_annotator = Google::Cloud::Vision::ImageAnnotator.new
 
   source = { gcs_image_uri: image_path }
   image = { source: source }
@@ -56,7 +56,7 @@ def detect_web_gcs image_path:
   feature = { type: :WEB_DETECTION, max_results: max_results }
   request = { image: image, features: [feature] }
 
-  response = vision.batch_annotate_images([request])
+  response = image_annotator.batch_annotate_images([request])
   response.responses.each do |res|
     res.web_detection.web_entities.each do |entity|
       puts entity.description

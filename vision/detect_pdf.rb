@@ -20,7 +20,7 @@ def detect_pdf_gcs gcs_source_uri:, gcs_destination_uri:
   require "google/cloud/vision"
   require "google/cloud/storage"
 
-  vision = Google::Cloud::Vision::ImageAnnotator.new
+  image_annotator = Google::Cloud::Vision::ImageAnnotator.new
 
   # Supported mime_types are: 'application/pdf' and 'image/tiff'
   input_config = {
@@ -39,7 +39,7 @@ def detect_pdf_gcs gcs_source_uri:, gcs_destination_uri:
     output_config: output_config
   }
 
-  operation = vision.async_batch_annotate_files [async_request]
+  operation = image_annotator.async_batch_annotate_files [async_request]
 
   puts "Waiting for the operation to finish."
   operation.wait_until_done!

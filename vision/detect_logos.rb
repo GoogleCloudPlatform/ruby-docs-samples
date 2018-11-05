@@ -18,14 +18,14 @@ def detect_logos image_path:
 
   require "google/cloud/vision"
 
-  vision = Google::Cloud::Vision::ImageAnnotator.new
+  image_annotator = Google::Cloud::Vision::ImageAnnotator.new
 
   content = File.binread image_path
   image = { content: content }
   feature = { type: :LOGO_DETECTION }
   request = { image: image, features: [feature] }
 
-  response = vision.batch_annotate_images([request])
+  response = image_annotator.batch_annotate_images([request])
   response.responses.each do |res|
     res.logo_annotations.each do |logo|
       puts logo.description
@@ -43,14 +43,14 @@ def detect_logos_gcs image_path:
 
   require "google/cloud/vision"
 
-  vision = Google::Cloud::Vision::ImageAnnotator.new
+  image_annotator = Google::Cloud::Vision::ImageAnnotator.new
 
   source = { gcs_image_uri: image_path }
   image = { source: source }
   feature = { type: :LOGO_DETECTION }
   request = { image: image, features: [feature] }
 
-  response = vision.batch_annotate_images([request])
+  response = image_annotator.batch_annotate_images([request])
   response.responses.each do |res|
     res.logo_annotations.each do |logo|
       puts logo.description

@@ -18,7 +18,7 @@ require "google/cloud/vision"
 describe "Vision Quickstart" do
 
   it "performs label detection on a sample image file" do
-    vision = Google::Cloud::Vision::ImageAnnotator.new
+    image_annotator = Google::Cloud::Vision::ImageAnnotator.new
     expect(Google::Cloud::Vision::ImageAnnotator).to receive(:new).
                                      with(no_args).
                                      and_return(vision)

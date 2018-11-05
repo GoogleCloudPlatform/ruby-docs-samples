@@ -18,14 +18,14 @@ def detect_document_text image_path:
 
   require "google/cloud/vision"
 
-  vision = Google::Cloud::Vision::ImageAnnotator.new
+  image_annotator = Google::Cloud::Vision::ImageAnnotator.new
 
   image_content = File.binread image_path
   image = { content: image_content }
   feature = { type: :DOCUMENT_TEXT_DETECTION }
   request = { image: image, features: [feature] }
 
-  response = vision.batch_annotate_images([request])
+  response = image_annotator.batch_annotate_images([request])
   text = ""
   response.responses.each do |res|
     res.text_annotations.each do |annotation|
@@ -46,14 +46,14 @@ def detect_document_text_gcs image_path:
 
   require "google/cloud/vision"
 
-  vision = Google::Cloud::Vision::ImageAnnotator.new
+  image_annotator = Google::Cloud::Vision::ImageAnnotator.new
 
   source = { gcs_image_uri: image_path }
   image = { source: source }
   feature = { type: :DOCUMENT_TEXT_DETECTION }
   request = { image: image, features: [feature] }
 
-  response = vision.batch_annotate_images([request])
+  response = image_annotator.batch_annotate_images([request])
   text = ""
   response.responses.each do |res|
     res.text_annotations.each do |annotation|
@@ -72,7 +72,7 @@ def detect_document_text_async image_path:, output_path:
 
   require "google/cloud/vision"
 
-  vision = Google::Cloud::Vision::ImageAnnotator.new
+  image_annotator = Google::Cloud::Vision::ImageAnnotator.new
 
   gcs_source = { uri: image_path }
   input_config = { gcs_source: gcs_source, mime_type: "application/pdf" }
@@ -90,7 +90,7 @@ def detect_document_text_async image_path:, output_path:
   }
 
   requests = [request]
-  response = vision.async_batch_annotate_files(requests)
+  response = image_annotator.async_batch_annotate_files(requests)
   response.wait_until_done!
   # results will be stored in Google Cloud Storage formatted like
   # "#{output_path}output-#{start_page}-to-#{end_page}.json"

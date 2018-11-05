@@ -20,25 +20,25 @@ require "google/cloud/vision"
 # [START vision_migration_client_old]
 # Instantiates a client
 project_id = "YOUR_PROJECT_ID"
-vision = Google::Cloud::Vision::ImageAnnotator.new project: project_id
+image_annotator = Google::Cloud::Vision::ImageAnnotator.new project: project_id
 # [END vision_migration_client_old]
 
 # [START vision_migration_client_new]
 # Instantiates a client
-vision = Google::Cloud::Vision::ImageAnnotator.new
+image_annotator = Google::Cloud::Vision::ImageAnnotator.new
 # [END vision_migration_client_new]
 
 # [START vision_migration_client_version]
 # Instantiates a client with a specified version
-vision = Google::Cloud::Vision::ImageAnnotator.new version: :v1
+image_annotator = Google::Cloud::Vision::ImageAnnotator.new version: :v1
 # [END vision_migration_client_version]
 
 # [START vision_migration_labels_local_old]
 project_id = "YOUR_PROJECT_ID"
-vision = Google::Cloud::Vision::ImageAnnotator.new project: project_id
+image_annotator = Google::Cloud::Vision::ImageAnnotator.new project: project_id
 file_name = "./resources/cat.jpg"
 max_results = 15 # optional, defaults to 100
-labels = vision.image(file_name).labels max_results
+labels = image_annotator.image(file_name).labels max_results
 
 puts "Labels:"
 labels.each do |label|
@@ -47,7 +47,7 @@ end
 # [END vision_migration_labels_local_old]
 
 # [START vision_migration_labels_local_new]
-vision = Google::Cloud::Vision::ImageAnnotator.new
+image_annotator = Google::Cloud::Vision::ImageAnnotator.new
 file_name = "./resources/cat.jpg"
 content = File.binread file_name
 image = { content: content }
@@ -55,7 +55,7 @@ max_results = 15 # optional, defaults to 10
 feature = { type: :LABEL_DETECTION, max_results: max_results }
 request = { image: image, features: [feature] }
 
-response = vision.batch_annotate_images([request])
+response = image_annotator.batch_annotate_images([request])
 
 puts "Labels:"
 response.responses.each do |res|
@@ -67,10 +67,10 @@ end
 
 # [START vision_migration_labels_storage_old]
 project_id = "YOUR_PROJECT_ID"
-vision = Google::Cloud::Vision::ImageAnnotator.new project: project_id
+image_annotator = Google::Cloud::Vision::ImageAnnotator.new project: project_id
 storage_uri = "gs://gapic-toolkit/President_Barack_Obama.jpg"
 max_results = 15 # optional, defaults to 100
-labels = vision.image(storage_uri).labels max_results
+labels = image_annotator.image(storage_uri).labels max_results
 
 puts "Labels:"
 labels.each do |label|
@@ -111,6 +111,6 @@ batch_size = 1 # optional, defaults to 20
 output_config = { gcs_destination: destination, batch_size: batch_size }
 request = { input_config: input_config, features: [feature], output_config: output_config }
 
-operation = vision.async_batch_annotate_files([request])
+operation = image_annotator.async_batch_annotate_files([request])
 operation.wait_until_done!
 # [END vision_migration_asynchronous]
