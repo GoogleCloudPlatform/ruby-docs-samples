@@ -19,21 +19,12 @@ def detect_text image_path:
   require "google/cloud/vision"
 
   vision = Google::Cloud::Vision::ImageAnnotator.new
+
   content = File.binread image_path
   image = { content: content }
-  type = :TEXT_DETECTION
-  feature = { type: type, max_results: 1 }
+  feature = { type: :TEXT_DETECTION, max_results: 1 }
   request = { image: image, features: [feature] }
-  # request == {
-  #   image: {
-  #     content: (File.binread image_path)
-  #   },
-  #   features: [
-  #     {
-  #       type: :TEXT_DETECTION
-  #     }
-  #   ]
-  # }
+
   response = vision.batch_annotate_images([request])
   response.responses.each do |res|
     res.text_annotations.each do |text|
@@ -53,23 +44,12 @@ def detect_text_gcs image_path:
   require "google/cloud/vision"
 
   vision = Google::Cloud::Vision::ImageAnnotator.new
+
   source = { gcs_image_uri: image_path }
   image = { source: source }
-  type = :TEXT_DETECTION
-  feature = { type: type, max_results: 1 }
+  feature = { type: :TEXT_DETECTION, max_results: 1 }
   request = { image: image, features: [feature] }
-  # request == {
-  #   image: {
-  #     source: {
-  #       gcs_image_uri: image_path
-  #     }
-  #   },
-  #   features: [
-  #     {
-  #       type: :TEXT_DETECTION
-  #     }
-  #   ]
-  # }
+
   response = vision.batch_annotate_images([request])
   response.responses.each do |res|
     res.text_annotations.each do |text|

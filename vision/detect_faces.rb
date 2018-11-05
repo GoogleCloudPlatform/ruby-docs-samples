@@ -19,21 +19,12 @@ def detect_faces image_path:
   require "google/cloud/vision"
 
   vision = Google::Cloud::Vision::ImageAnnotator.new
+
   content = File.binread image_path
   image = { content: content }
-  type = :FACE_DETECTION
-  feature = { type: type }
+  feature = { type: :FACE_DETECTION }
   request = { image: image, features: [feature] }
-  # request == {
-  #   image: {
-  #     content: (File.binread image_path)
-  #   },
-  #   features: [
-  #     {
-  #       type: :FACE_DETECTION
-  #     }
-  #   ]
-  # }
+
   response = vision.batch_annotate_images([request])
   response.responses.each do |res|
     res.face_annotations.each do |face|
@@ -56,23 +47,12 @@ def detect_faces_gcs image_path:
   require "google/cloud/vision"
 
   vision = Google::Cloud::Vision::ImageAnnotator.new
+
   source = { gcs_image_uri: image_path }
   image = { source: source }
-  type = :FACE_DETECTION
-  feature = { type: type }
+  feature = { type: :FACE_DETECTION }
   request = { image: image, features: [feature] }
-  # request == {
-  #   image: {
-  #     source: {
-  #       gcs_image_uri: image_path
-  #     }
-  #   },
-  #   features: [
-  #     {
-  #       type: :FACE_DETECTION
-  #     }
-  #   ]
-  # }
+
   response = vision.batch_annotate_images([request])
   response.responses.each do |res|
     res.face_annotations.each do |face|

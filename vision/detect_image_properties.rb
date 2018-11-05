@@ -19,21 +19,12 @@ def detect_image_properties image_path:
   require "google/cloud/vision"
 
   vision = Google::Cloud::Vision::ImageAnnotator.new
+
   content = File.binread image_path
   image = { content: content }
-  type = :IMAGE_PROPERTIES
-  feature = { type: type }
+  feature = { type: :IMAGE_PROPERTIES }
   request = { image: image, features: [feature] }
-  # request == {
-  #   image: {
-  #     content: (File.binread image_path)
-  #   },
-  #   features: [
-  #     {
-  #       type: :IMAGE_PROPERTIES
-  #     }
-  #   ]
-  # }
+
   response = vision.batch_annotate_images([request])
   response.responses.each do |res|
     res.image_properties_annotation.dominant_colors.colors.each do |color|
@@ -53,23 +44,12 @@ def detect_image_properties_gcs image_path:
   require "google/cloud/vision"
 
   vision = Google::Cloud::Vision::ImageAnnotator.new
+
   source = { gcs_image_uri: image_path }
   image = { source: source }
-  type = :IMAGE_PROPERTIES
-  feature = { type: type }
+  feature = { type: :IMAGE_PROPERTIES }
   request = { image: image, features: [feature] }
-  # request == {
-  #   image: {
-  #     source: {
-  #       gcs_image_uri: image_path
-  #     }
-  #   },
-  #   features: [
-  #     {
-  #       type: :IMAGE_PROPERTIES
-  #     }
-  #   ]
-  # }
+
   response = vision.batch_annotate_images([request])
   response.responses.each do |res|
     res.image_properties_annotation.dominant_colors.colors.each do |color|

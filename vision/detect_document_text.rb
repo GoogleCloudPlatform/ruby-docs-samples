@@ -19,26 +19,13 @@ def detect_document_text image_path:
   require "google/cloud/vision"
 
   vision = Google::Cloud::Vision::ImageAnnotator.new
+
   image_content = File.binread image_path
   image = { content: image_content }
-
-  type = :DOCUMENT_TEXT_DETECTION
-  feature = { type: type }
-
+  feature = { type: :DOCUMENT_TEXT_DETECTION }
   request = { image: image, features: [feature] }
-  # request == {
-  #   image: {
-  #     content: (File.binread image_path)
-  #   },
-  #   features: [
-  #     {
-  #       type: :LABEL_DETECTION
-  #     }
-  #   ]
-  # }
 
-  requests = [request]
-  response = vision.batch_annotate_images(requests)
+  response = vision.batch_annotate_images([request])
   text = ""
   response.responses.each do |res|
     res.text_annotations.each do |annotation|
@@ -60,28 +47,13 @@ def detect_document_text_gcs image_path:
   require "google/cloud/vision"
 
   vision = Google::Cloud::Vision::ImageAnnotator.new
+
   source = { gcs_image_uri: image_path }
   image = { source: source }
-
-  type = :DOCUMENT_TEXT_DETECTION
-  feature = { type: type }
-
+  feature = { type: :DOCUMENT_TEXT_DETECTION }
   request = { image: image, features: [feature] }
-  # request == {
-  #   image: {
-  #     source: {
-  #       gcs_image_uri: "gs://gapic-toolkit/President_Barack_Obama.jpg"
-  #     }
-  #   },
-  #   features: [
-  #     {
-  #       type: :LABEL_DETECTION
-  #     }
-  #   ]
-  # }
 
-  requests = [request]
-  response = vision.batch_annotate_images(requests)
+  response = vision.batch_annotate_images([request])
   text = ""
   response.responses.each do |res|
     res.text_annotations.each do |annotation|
@@ -101,11 +73,11 @@ def detect_document_text_async image_path:, output_path:
   require "google/cloud/vision"
 
   vision = Google::Cloud::Vision::ImageAnnotator.new
+
   gcs_source = { uri: image_path }
   input_config = { gcs_source: gcs_source, mime_type: "application/pdf" }
-  type = :DOCUMENT_TEXT_DETECTION
   max_results = 15 # optional, defaults to 10
-  feature = { type: type, max_results: max_results }
+  feature = { type: :DOCUMENT_TEXT_DETECTION, max_results: max_results }
   destination = { uri: output_path }
 
   # number of pages per output file
@@ -116,26 +88,6 @@ def detect_document_text_async image_path:, output_path:
     features: [feature],
     output_config: output_config
   }
-  # request == {
-  #   input_config: {
-  #     gcs_source: {
-  #       uri: image_path
-  #     },
-  #     mime_type: "application/pdf"
-  #   },
-  #   output_config: {
-  #     gcs_destination: {
-  #       uri: output_path
-  #     },
-  #     batch_size: 1
-  #   },
-  #   features: [
-  #     {
-  #       type: :DOCUMENT_TEXT_DETECTION,
-  #       max_results: 15
-  #     }
-  #   ]
-  # }
 
   requests = [request]
   response = vision.async_batch_annotate_files(requests)

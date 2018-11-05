@@ -19,21 +19,12 @@ def localize_objects image_path:
   require "google/cloud/vision"
 
   vision = Google::Cloud::Vision::ImageAnnotator.new
+
   content = File.binread image_path
   image = { content: content }
-  type = :OBJECT_LOCALIZATION
-  feature = { type: type }
+  feature = { type: :OBJECT_LOCALIZATION }
   request = { image: image, features: [feature] }
-  # request == {
-  #   image: {
-  #     content: (File.binread image_path)
-  #   },
-  #   features: [
-  #     {
-  #       type: :OBJECT_LOCALIZATION
-  #     }
-  #   ]
-  # }
+
   response = vision.batch_annotate_images([request])
   response.responses.each do |res|
     res.localized_object_annotations.each do |object|
@@ -57,23 +48,12 @@ def localize_objects_gs image_path:
   require "google/cloud/vision"
 
   vision = Google::Cloud::Vision::ImageAnnotator.new
+
   source = { gcs_image_uri: image_path }
   image = { source: source }
-  type = :OBJECT_LOCALIZATION
-  feature = { type: type }
+  feature = { type: :OBJECT_LOCALIZATION }
   request = { image: image, features: [feature] }
-  # request == {
-  #   image: {
-  #     source: {
-  #       gcs_image_uri: image_path
-  #     }
-  #   },
-  #   features: [
-  #     {
-  #       type: :OBJECT_LOCALIZATION
-  #     }
-  #   ]
-  # }
+
   response = vision.batch_annotate_images([request])
   response.responses.each do |res|
     res.localized_object_annotations.each do |object|
@@ -97,23 +77,12 @@ def localize_objects_uri image_path:
   require "google/cloud/vision"
 
   vision = Google::Cloud::Vision::ImageAnnotator.new
+
   source = { image_uri: image_path }
   image = { source: source }
-  type = :OBJECT_LOCALIZATION
-  feature = { type: type }
+  feature = { type: :OBJECT_LOCALIZATION }
   request = { image: image, features: [feature] }
-  # request == {
-  #   image: {
-  #     source: {
-  #       image_uri: image_path
-  #     }
-  #   },
-  #   features: [
-  #     {
-  #       type: :OBJECT_LOCALIZATION
-  #     }
-  #   ]
-  # }
+
   response = vision.batch_annotate_images([request])
   response.responses.each do |res|
     res.localized_object_annotations.each do |object|

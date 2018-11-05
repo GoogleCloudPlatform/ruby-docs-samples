@@ -19,23 +19,13 @@ def detect_labels image_path:
   require "google/cloud/vision"
 
   vision = Google::Cloud::Vision::ImageAnnotator.new
+
   content = File.binread image_path
   image = { content: content }
-  type = :LABEL_DETECTION
   max_results = 15 # optional, defaults to 10
-  feature = { type: type, max_results: max_results }
+  feature = { type: :LABEL_DETECTION, max_results: max_results }
   request = { image: image, features: [feature] }
-  # request == {
-  #   image: {
-  #     content: (File.binread image_path)
-  #   },
-  #   features: [
-  #     {
-  #       type: :LABEL_DETECTION,
-  #       max_results: 15
-  #     }
-  #   ]
-  # }
+
   response = vision.batch_annotate_images([request])
   response.responses.each do |res|
     res.label_annotations.each do |label|
@@ -55,25 +45,13 @@ def detect_labels_gcs image_path:
   require "google/cloud/vision"
 
   vision = Google::Cloud::Vision::ImageAnnotator.new
+
   source = { gcs_image_uri: image_path }
   image = { source: source }
-  type = :LABEL_DETECTION
   max_results = 15 # optional, defaults to 10
-  feature = { type: type, max_results: max_results }
+  feature = { type: :LABEL_DETECTION, max_results: max_results }
   request = { image: image, features: [feature] }
-  # request == {
-  #   image: {
-  #     source: {
-  #       gcs_image_uri: image_path
-  #     }
-  #   },
-  #   features: [
-  #     {
-  #       type: :LABEL_DETECTION,
-  #       max_results: 15
-  #     }
-  #   ]
-  # }
+
   response = vision.batch_annotate_images([request])
   response.responses.each do |res|
     res.label_annotations.each do |label|

@@ -51,21 +51,9 @@ vision = Google::Cloud::Vision::ImageAnnotator.new
 file_name = "./resources/cat.jpg"
 content = File.binread file_name
 image = { content: content }
-type = :LABEL_DETECTION
 max_results = 15 # optional, defaults to 10
-feature = { type: type, max_results: max_results }
+feature = { type: :LABEL_DETECTION, max_results: max_results }
 request = { image: image, features: [feature] }
-# request == {
-#               image: {
-#                 content: (File.binread "./resources/cat.jpg")
-#               },
-#               features: [
-#                 {
-#                   type: :LABEL_DETECTION,
-#                   max_results: 15
-#                 }
-#               ]
-#             }
 
 response = vision.batch_annotate_images([request])
 
@@ -92,27 +80,13 @@ end
 
 # [START vision_migration_labels_storage_new]
 image_annotator_client = Google::Cloud::Vision::ImageAnnotator.new
+
 storage_uri = "gs://gapic-toolkit/President_Barack_Obama.jpg"
 source = { gcs_image_uri: storage_uri }
 image = { source: source }
-type = :LABEL_DETECTION
 max_results = 15 # optional, defaults to 10
-features_element = { type: type, max_results: max_results }
-features = [features_element]
-request = { image: image, features: features }
-# request == {
-#               image: {
-#                 source: {
-#                   gcs_image_uri: "gs://gapic-toolkit/President_Barack_Obama.jpg"
-#                 }
-#               },
-#               features: [
-#                 {
-#                   type: :LABEL_DETECTION,
-#                   max_results: 15
-#                 }
-#               ]
-#             }
+feature = { type: :LABEL_DETECTION, max_results: max_results }
+request = { image: image, features: [feature] }
 
 requests = [request]
 response = image_annotator_client.batch_annotate_images(requests)
@@ -126,42 +100,17 @@ end
 # [END vision_migration_labels_storage_new]
 
 # [START vision_migration_asynchronous]
-storage_uri = "gs://my-bucket/document-name.pdf"
-gcs_source = { uri: storage_uri }
+gcs_source = { uri: "gs://my-bucket/document-name.pdf" }
 input_config = { gcs_source: gcs_source, mime_type: "application/pdf" }
-type = :DOCUMENT_TEXT_DETECTION
 max_results = 15 # optional, defaults to 10
-features_element = { type: type, max_results: max_results }
-features = [features_element]
-destination_uri = "gs://my-bucket/prefix"
-destination = { uri: destination_uri }
+feature = { type: :DOCUMENT_TEXT_DETECTION, max_results: max_results }
+destination = { uri: "gs://my-bucket/prefix" }
 
 # number of response protos per output file
 batch_size = 1 # optional, defaults to 20
 output_config = { gcs_destination: destination, batch_size: batch_size }
-request = { input_config: input_config, features: features, output_config: output_config }
-# request == {
-#               input_config: {
-#                 gcs_source: {
-#                   uri: "gs://my-bucket/document-name.pdf"
-#                 },
-#                 mime_type: "application/pdf"
-#               },
-#               output_config: {
-#                 gcs_destination: {
-#                   uri: "gs://my-bucket/prefix"
-#                 },
-#                 batch_size: 1
-#               }
-#               features: [
-#                 {
-#                   type: :DOCUMENT_TEXT_DETECTION,
-#                   max_results: 15
-#                 }
-#               ]
-#             }
+request = { input_config: input_config, features: [feature], output_config: output_config }
 
-requests = [request]
-operation = vision.async_batch_annotate_files(requests)
+operation = vision.async_batch_annotate_files([request])
 operation.wait_until_done!
 # [END vision_migration_asynchronous]

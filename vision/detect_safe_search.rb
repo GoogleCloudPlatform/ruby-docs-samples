@@ -19,21 +19,12 @@ def detect_safe_search image_path:
   require "google/cloud/vision"
 
   vision = Google::Cloud::Vision::ImageAnnotator.new
+
   content = File.binread image_path
   image = { content: content }
-  type = :SAFE_SEARCH_DETECTION
-  feature = { type: type }
+  feature = { type: :SAFE_SEARCH_DETECTION }
   request = { image: image, features: [feature] }
-  # request == {
-  #   image: {
-  #     content: (File.binread image_path)
-  #   },
-  #   features: [
-  #     {
-  #       type: :SAFE_SEARCH_DETECTION
-  #     }
-  #   ]
-  # }
+
   response = vision.batch_annotate_images([request])
   response.responses.each do |res|
     safe_search = res.safe_search_annotation
@@ -56,23 +47,12 @@ def detect_safe_search_gcs image_path:
   require "google/cloud/vision"
 
   vision = Google::Cloud::Vision::ImageAnnotator.new
+
   source = { gcs_image_uri: image_path }
   image = { source: source }
-  type = :SAFE_SEARCH_DETECTION
-  feature = { type: type }
+  feature = { type: :SAFE_SEARCH_DETECTION }
   request = { image: image, features: [feature] }
-  # request == {
-  #   image: {
-  #     source: {
-  #       gcs_image_uri: image_path
-  #     }
-  #   },
-  #   features: [
-  #     {
-  #       type: :SAFE_SEARCH_DETECTION
-  #     }
-  #   ]
-  # }
+
   response = vision.batch_annotate_images([request])
   response.responses.each do |res|
     safe_search = res.safe_search_annotation
