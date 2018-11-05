@@ -21,7 +21,7 @@ describe "Vision Quickstart" do
     image_annotator = Google::Cloud::Vision::ImageAnnotator.new
     expect(Google::Cloud::Vision::ImageAnnotator).to receive(:new).
                                      with(no_args).
-                                     and_return(vision)
+                                     and_return(image_annotator)
 
     expect {
       load File.expand_path("../quickstart.rb", __dir__)
