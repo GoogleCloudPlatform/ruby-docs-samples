@@ -17,12 +17,6 @@
 require "google/cloud/vision"
 # [END vision_migration_require]
 
-# [START vision_migration_client_old]
-# Instantiates a client
-project_id = "YOUR_PROJECT_ID"
-image_annotator = Google::Cloud::Vision::ImageAnnotator.new project: project_id
-# [END vision_migration_client_old]
-
 # [START vision_migration_client_new]
 # Instantiates a client
 image_annotator = Google::Cloud::Vision::ImageAnnotator.new
@@ -33,18 +27,6 @@ image_annotator = Google::Cloud::Vision::ImageAnnotator.new
 image_annotator = Google::Cloud::Vision::ImageAnnotator.new version: :v1
 # [END vision_migration_client_version]
 
-# [START vision_migration_labels_local_old]
-project_id = "YOUR_PROJECT_ID"
-image_annotator = Google::Cloud::Vision::ImageAnnotator.new project: project_id
-file_name = "./resources/cat.jpg"
-max_results = 15 # optional, defaults to 100
-labels = image_annotator.image(file_name).labels max_results
-
-puts "Labels:"
-labels.each do |label|
-  puts label.description
-end
-# [END vision_migration_labels_local_old]
 
 # [START vision_migration_labels_local_new]
 image_annotator = Google::Cloud::Vision::ImageAnnotator.new
@@ -65,18 +47,6 @@ response.responses.each do |res|
 end
 # [END vision_migration_labels_local_new]
 
-# [START vision_migration_labels_storage_old]
-project_id = "YOUR_PROJECT_ID"
-image_annotator = Google::Cloud::Vision::ImageAnnotator.new project: project_id
-storage_uri = "gs://gapic-toolkit/President_Barack_Obama.jpg"
-max_results = 15 # optional, defaults to 100
-labels = image_annotator.image(storage_uri).labels max_results
-
-puts "Labels:"
-labels.each do |label|
-  puts label.description
-end
-# [END vision_migration_labels_storage_old]
 
 # [START vision_migration_labels_storage_new]
 image_annotator_client = Google::Cloud::Vision::ImageAnnotator.new
