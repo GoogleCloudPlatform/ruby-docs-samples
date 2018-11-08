@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+require "uri"
+
 def detect_document_text image_path:
   # [START vision_fulltext_detection]
   # image_path = "Path to local image file, eg. './image.png'"
@@ -97,13 +99,7 @@ def detect_document_text_async image_path:, output_path:
   # [END vision_fulltext_detection_asynchronous]
 end
 
-def uri? string
-  string
-end
-
 if __FILE__ == $PROGRAM_NAME
-  require "uri"
-
   args = {
     image_path: ARGV.shift,
     output_path: ARGV.shift
@@ -119,7 +115,7 @@ if __FILE__ == $PROGRAM_NAME
       ruby detect_document_text.rb gs://my-bucket/image.png
     USAGE
   end
-  unless args[:image_path] =~ URI::DEFAULT_PARSER.new.make_regexp
+  unless args[:image_path] =~ URI::DEFAULT_PARSER.make_regexp
     return detect_document_text args
   end
 

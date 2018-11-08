@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+require "uri"
+
 def detect_crop_hints image_path:
   # [START vision_crop_hint_detection]
   # image_path = "Path to local image file, eg. './image.png'"
@@ -66,8 +68,6 @@ def detect_crop_hints_gcs image_path:
 end
 
 if __FILE__ == $PROGRAM_NAME
-  require "uri"
-
   image_path = ARGV.shift
 
   unless image_path
@@ -80,7 +80,7 @@ if __FILE__ == $PROGRAM_NAME
       ruby detect_crop_hints.rb gs://my-bucket/image.png
     USAGE
   end
-  if image_path =~ URI::DEFAULT_PARSER.new.make_regexp
+  if image_path =~ URI::DEFAULT_PARSER.make_regexp
     return detect_crop_hints_gcs image_path: image_path
   end
 

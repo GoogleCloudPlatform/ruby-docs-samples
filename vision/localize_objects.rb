@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+require "uri"
+
 def localize_objects image_path:
   # [START vision_localize_objects]
   # image_path = "Path to local image file, eg. './image.png'"
@@ -97,8 +99,6 @@ def localize_objects_uri image_path:
 end
 
 if __FILE__ == $PROGRAM_NAME
-  require "uri"
-
   image_path = ARGV.shift
 
   unless image_path
@@ -111,7 +111,7 @@ if __FILE__ == $PROGRAM_NAME
       ruby localize_objects.rb gs://my-bucket/image.png
     USAGE
   end
-  if image_path =~ URI::DEFAULT_PARSER.new.make_regexp
+  if image_path =~ URI::DEFAULT_PARSER.make_regexp
     image_uri = URI(image_path)
     return localize_objects_gs image_path: image_path if image_uri.scheme == "gs"
 
