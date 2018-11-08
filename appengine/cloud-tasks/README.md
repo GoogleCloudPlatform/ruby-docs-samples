@@ -98,5 +98,4 @@ a second argument:
 ruby create_task.rb $GOOGLE_CLOUD_PROJECT $LOCATION_ID $QUEUE_ID hello 30
 ```
 
-[appengine-flex]: https://cloud.google.com/appengine/docs/flexible/nodejs
-[appengine-std]: https://cloud.google.com/appengine/docs/standard/nodejs
+[appengine-flex]: https://cloud.google.com/appengine/docs/flexible/ruby
