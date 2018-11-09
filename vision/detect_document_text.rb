@@ -73,9 +73,9 @@ def detect_document_text_async image_path:, output_path:
   # output_path = "Google Cloud Storage URI, eg. 'gs://my-bucket/prefix'"
 
   require "google/cloud/vision"
-  # [START image_annotator_asynchronous_migration]
-  image_annotator = Google::Cloud::Vision::ImageAnnotator.new
 
+  image_annotator = Google::Cloud::Vision::ImageAnnotator.new
+  # [START image_annotator_asynchronous_migration]
   gcs_source = { uri: image_path }
   input_config = { gcs_source: gcs_source, mime_type: "application/pdf" }
   max_results = 15 # optional, defaults to 10
