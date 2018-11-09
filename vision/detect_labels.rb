@@ -63,6 +63,30 @@ def detect_labels_gcs image_path:
   # [END vision_label_detection_gcs]
 end
 
+def detect_labels_gcs_migration
+  require "google/cloud/vision"
+  # [START image_annotator_labels_migration]
+  image_annotator_client = Google::Cloud::Vision::ImageAnnotator.new
+
+  storage_uri = "gs://gapic-toolkit/President_Barack_Obama.jpg"
+  source = { gcs_image_uri: storage_uri }
+  image = { source: source }
+  max_results = 15 # optional, defaults to 10
+  feature = { type: :LABEL_DETECTION, max_results: max_results }
+  request = { image: image, features: [feature] }
+
+  requests = [request]
+  response = image_annotator_client.batch_annotate_images(requests)
+
+  puts "Labels:"
+  response.responses.each do |res|
+    res.label_annotations.each do |label|
+      puts label.description
+    end
+  end
+  # [END image_annotator_labels_migration]
+end
+
 if __FILE__ == $PROGRAM_NAME
   image_path = ARGV.shift
 

@@ -46,5 +46,9 @@ describe "Detect Labels" do
     }.to output(
       /traffic sign/
     ).to_stdout
+
+    expect {
+      detect_labels_gcs_migration
+    }.to output(/suit/).to_stdout
   end
 end

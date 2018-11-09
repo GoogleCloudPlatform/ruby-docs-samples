@@ -13,11 +13,16 @@
 # limitations under the License.
 
 # [START vision_quickstart]
+# [START vision_require]
 # Imports the Google Cloud client library
 require "google/cloud/vision"
+# [END vision_require]
 
 # Instantiates a client
+# [START image_annotator_client_new]
+# [START image_annotator_labels]
 image_annotator = Google::Cloud::Vision::ImageAnnotator.new
+# [END image_annotator_client_new]
 
 # The name of the image file to annotate
 file_name = "./resources/cat.jpg"
@@ -37,3 +42,9 @@ response.responses.each do |res|
   end
 end
 # [END vision_quickstart]
+# [END image_annotator_labels]
+
+# [START image_annotator_client_version]
+# Instantiates a client with a specified version
+image_annotator = Google::Cloud::Vision::ImageAnnotator.new version: :v1
+# [END image_annotator_client_version]
