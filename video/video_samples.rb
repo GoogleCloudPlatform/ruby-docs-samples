@@ -152,6 +152,48 @@ def analyze_explicit_content path:
   # [END video_analyze_explicit_content]
 end
 
+def transcribe_speech_gcs path:
+  # [START video_speech_transcription_gcs]
+  # path = "Path to a video file on Google Cloud Storage: gs://bucket/video.mp4"
+
+  require "google/cloud/video_intelligence"
+
+  video = Google::Cloud::VideoIntelligence.new
+
+  context = {speech_transcription_config: {language_code: "en-US", enable_automatic_punctuation: true}}
+
+  # Register a callback during the method call
+  operation = video.annotate_video input_uri: path, features: [:SPEECH_TRANSCRIPTION], video_context: context do |operation|
+    raise operation.results.message? if operation.error?
+    puts "Finished Processing."
+
+    transcriptions = operation.results.annotation_results.first.speech_transcriptions
+
+    transcriptions.each do |transcription|
+      transcription.alternatives.each do |alternative|
+        puts "Alternative level information:"
+
+        puts "Transcript: #{alternative.transcript}"
+        puts "Confidence: #{alternative.confidence}"
+
+        puts "Word level information:"
+        alternative.words.each do |word_info|
+          start_time = ( word_info.start_time.seconds +
+                         word_info.start_time.nanos / 1e9 )
+          end_time =   ( word_info.end_time.seconds +
+                         word_info.end_time.nanos / 1e9 )
+
+          puts "#{word_info.word}: #{start_time} to #{end_time}"
+        end
+      end
+    end
+  end
+
+  puts "Processing video for speech transcriptions:"
+  operation.wait_until_done!
+  # [END video_speech_transcription_gcs]
+end
+
 def run_sample arguments
   command = arguments.shift
 
@@ -164,6 +206,8 @@ def run_sample arguments
     analyze_shots path: arguments.shift
   when "analyze_explicit_content"
     analyze_explicit_content path: arguments.shift
+  when "transcribe_speech"
+    transcribe_speech_gcs path: arguments.shift
   else
     puts <<-usage
 Usage: bundle exec ruby video_samples.rb [command] [arguments]
@@ -173,6 +217,7 @@ Commands:
   analyze_labels_local     <local_path> Detects labels given file path.
   analyze_shots            <gcs_path>   Detects camera shot changes given a GCS path.
   analyze_explicit_content <gcs_path>   Detects explicit content given a GCS path.
+  transcribe_speech <gcs_path>          Transcribes speech given a GCS path.
     usage
   end
 end
