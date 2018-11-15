@@ -38,7 +38,6 @@ RSpec.configure do |config|
   config.default_sleep_interval = 10
 end
 
-# Global variable to catch the printed outputs
 $stdout = StringIO.new
 
 # Start verifying
@@ -47,18 +46,18 @@ describe "Cloud Job Discovery Samples" do
 # verify basic_company_sample.rb
   it "basic_company_sample" do
     begin
-      load File.expand_path("../V3/basic_company_sample.rb", __dir__);
-      printed = $stdout.string
-      expect(printed).to include("Company created");
-      expect(printed).to include("Got exception while creating company");
-      expect(printed).to include("Company got");
-      expect(printed).to include("Company updated");
-      expect(printed).to include("Got exception while updating company");
-      expect(printed).to include("Invalid companyName format");
-      expect(printed).to include("company doesn't exist");
-      expect(printed).to include("Company updated with filedMask DisplayName");
-      expect(printed).to include("Got exception while deleting company");
-      expect(printed).to include("Company deleted");
+      company_generated_test = generate_company();
+      company_created_test = create_company(company_generated_test);
+      get_company(company_created_test.name);
+      update_company(company_created_test.name, company_created_test);
+      update_company_with_field_mask(company_created_test.name, "DisplayName", company_created_test);
+      delete_company(company_created_test.name);
+      capture = $stdout.string
+      expect(capture).to include("Company created");
+      expect(capture).to include("Company got");
+      expect(capture).to include("Company updated");
+      expect(capture).to include("Company updated with filedMask DisplayName");
+      expect(capture).to include("Company deleted");
     rescue
       puts "basic_company_sample not all succeeded"
     ensure
@@ -68,127 +67,130 @@ describe "Cloud Job Discovery Samples" do
 # verify basic_job_sample.rb
   it "basic_job_sample" do
     begin
-      load File.expand_path("../V3/basic_job_sample.rb", __dir__);
-      printed = $stdout.string
-      expect(printed).to include("Job created");
-      expect(printed).to include("Got exception while getting job");
-      expect(printed).to include("Invalid jobName format");
-      expect(printed).to include("Job got");
-      expect(printed).to include("Job updated");
-      expect(printed).to include("Got exception while updating job");
-      expect(printed).to include("Invalid jobName format");
-      expect(printed).to include("job doesn't exist");
-      expect(printed).to include("Job updated with filedMask title");
-      expect(printed).to include("Got exception while deleting job");
-      expect(printed).to include("Job deleted");
+      company_created_test = create_company(generate_company());
+      job_generated_test = generate_job(company_created_test.name);
+      job_created_test = create_job(job_generated_test);
+      get_job(job_created_test.name);
+      job_created_test.description = "Updated description";
+      update_job(job_created_test.name, job_created_test);
+      job_created_test.title = "Updated title software Engineer";
+      update_job_with_field_mask(job_created_test.name, "title", job_created_test);
+      delete_job(job_created_test.name);
+      delete_company(company_created_test.name);
+      capture = $stdout.string
+      expect(capture).to include("Job created");
+      expect(capture).to include("Job got");
+      expect(capture).to include("Job updated");
+      expect(capture).to include("Job updated with filedMask title");
+      expect(capture).to include("Job deleted");
     rescue
       puts "basic_job_sample not all succeeded"
     ensure
       $stdout = StringIO.new
     end
   end
-# verify auto_complete_sample.rb
-  it "auto_complete_sample" do
-    begin
-      load File.expand_path("../V3/auto_complete_sample.rb", __dir__);
-      printed = $stdout.string
-      expect(printed).to include("Job title auto complete result");
-      expect(printed).to include("suggestion");
-      expect(printed).to include("Default auto complete result");
-    rescue
-      puts "auto_complete_sample not all succeeded"
-    ensure
-      $stdout = StringIO.new
-    end
-  end
-# verify batch_operation_sample.rb
-  it "batch_operation_sample" do
-    begin
-      load File.expand_path("../V3/batch_operation_sample.rb", __dir__);
-      printed = $stdout.string
-      expect(printed).to include("Batch job created");
-      expect(printed).to include("Batch job updated with Mask");
-      expect(printed).to include("Batch job updated");
-      expect(printed).to include("Batch job deleted");
-    rescue
-      puts "batch_operation_sample not all succeeded"
-    ensure
-      $stdout = StringIO.new
-    end
-  end
-# verify commute_search_sample.rb
-  it "commute_search_sample" do
-    begin
-      load File.expand_path("../V3/commute_search_sample.rb", __dir__);
-      printed = $stdout.string
-      expect(printed).to include("matchingJobs");
-    rescue
-      puts "commute_search_sample not all succeeded"
-    ensure
-      $stdout = StringIO.new
-    end
-  end
-# verify custom_attribute_sample.rb
-  it "custom_attribute_sample" do
-    begin
-      load File.expand_path("../V3/custom_attribute_sample.rb", __dir__);
-      printed = $stdout.string
-      expect(printed).to include(/matchingJobs\.matchingJobs\.matchingJobs/);
-    rescue
-      puts "custom_attribute_sample not all succeeded"
-    ensure
-      $stdout = StringIO.new
-    end
-  end
-# verify featured_job_sample.rb
-  it "featured_job_sample" do
-    begin
-      load File.expand_path("../V3/featured_job_sample.rb", __dir__);
-      printed = $stdout.string
-      expect(printed).to include("promotionValue");
-      expect(printed).to include("matchingJobs");
-    rescue
-      puts "featured_job_sample not all succeeded"
-    ensure
-      $stdout = StringIO.new
-    end
-  end
-# verify filter_search_sample.rb
-  it "filter_search_sample" do
-    begin
-      load File.expand_path("../V3/filter_search_sample.rb", __dir__);
-      printed = $stdout.string
-      expect(printed).to include(/matchingJobs\.matchingJobs\.matchingJobs\.matchingJobs\.matchingJobs\.matchingJobs\.matchingJobs/);
-    rescue
-      puts "featured_job_sample not all succeeded"
-    ensure
-      $stdout = StringIO.new
-    end
-  end
-# verify histogram_sample.rb
-  it "histogram_sample" do
-    begin
-      load File.expand_path("../V3/histogram_sample.rb", __dir__);
-      printed = $stdout.string
-      expect(printed).to include(/histogramResults\.matchingJobs/);
-    rescue
-      puts "histogram_sample not all succeeded"
-    ensure
-      $stdout = StringIO.new
-    end
-  end
-# verify location_search_sample.rb
-  it "location_search_sample" do
-    begin
-      load File.expand_path("../V3/location_search_sample.rb", __dir__);
-      printed = $stdout.string
-      expect(printed).to include(/locationFilters\.matchingJobs\.locationFilters\.matchingJobs\.locationFilters\.matchingJobs/);
-      expect(printed).to include(/"totalSize":2\.locationFilters\.matchingJobs/);
-    rescue
-      puts "location_search_sample not all succeeded"
-    ensure
-      $stdout = StringIO.new
-    end
-  end
+# # verify auto_complete_sample.rb
+#   it "auto_complete_sample" do
+#     begin
+#       load File.expand_path("../V3/auto_complete_sample.rb", __dir__);
+#       capture = $stdout.string
+#       expect(capture).to include("Job title auto complete result");
+#       expect(capture).to include("suggestion");
+#       expect(capture).to include("Default auto complete result");
+#     rescue
+#       puts "auto_complete_sample not all succeeded"
+#     ensure
+#       $stdout = StringIO.new
+#     end
+#   end
+# # verify batch_operation_sample.rb
+#   it "batch_operation_sample" do
+#     begin
+#       load File.expand_path("../V3/batch_operation_sample.rb", __dir__);
+#       capture = $stdout.string
+#       expect(capture).to include("Batch job created");
+#       expect(capture).to include("Batch job updated with Mask");
+#       expect(capture).to include("Batch job updated");
+#       expect(capture).to include("Batch job deleted");
+#     rescue
+#       puts "batch_operation_sample not all succeeded"
+#     ensure
+#       $stdout = StringIO.new
+#     end
+#   end
+# # verify commute_search_sample.rb
+#   it "commute_search_sample" do
+#     begin
+#       load File.expand_path("../V3/commute_search_sample.rb", __dir__);
+#       capture = $stdout.string
+#       expect(capture).to include("matchingJobs");
+#     rescue
+#       puts "commute_search_sample not all succeeded"
+#     ensure
+#       $stdout = StringIO.new
+#     end
+#   end
+# # verify custom_attribute_sample.rb
+#   it "custom_attribute_sample" do
+#     begin
+#       load File.expand_path("../V3/custom_attribute_sample.rb", __dir__);
+#       capture = $stdout.string
+#       expect(capture).to include(/matchingJobs\.matchingJobs\.matchingJobs/);
+#     rescue
+#       puts "custom_attribute_sample not all succeeded"
+#     ensure
+#       $stdout = StringIO.new
+#     end
+#   end
+# # verify featured_job_sample.rb
+#   it "featured_job_sample" do
+#     begin
+#       load File.expand_path("../V3/featured_job_sample.rb", __dir__);
+#       capture = $stdout.string
+#       expect(capture).to include("promotionValue");
+#       expect(capture).to include("matchingJobs");
+#     rescue
+#       puts "featured_job_sample not all succeeded"
+#     ensure
+#       $stdout = StringIO.new
+#     end
+#   end
+# # verify filter_search_sample.rb
+#   it "filter_search_sample" do
+#     begin
+#       load File.expand_path("../V3/filter_search_sample.rb", __dir__);
+#       capture = $stdout.string
+#       expect(capture).to include(/matchingJobs\.matchingJobs\.matchingJobs\.matchingJobs\.matchingJobs\.matchingJobs\.matchingJobs/);
+#     rescue
+#       puts "featured_job_sample not all succeeded"
+#     ensure
+#       $stdout = StringIO.new
+#     end
+#   end
+# # verify histogram_sample.rb
+#   it "histogram_sample" do
+#     begin
+#       load File.expand_path("../V3/histogram_sample.rb", __dir__);
+#       capture = $stdout.string
+#       expect(capture).to include(/histogramResults\.matchingJobs/);
+#     rescue
+#       puts "histogram_sample not all succeeded"
+#     ensure
+#       $stdout = StringIO.new
+#     end
+#   end
+# # verify location_search_sample.rb
+#   it "location_search_sample" do
+#     begin
+#       load File.expand_path("../V3/location_search_sample.rb", __dir__);
+#       capture = $stdout.string
+#       expect(capture).to include(/locationFilters\.matchingJobs\.locationFilters\.matchingJobs\.locationFilters\.matchingJobs/);
+#       expect(capture).to include(/"totalSize":2\.locationFilters\.matchingJobs/);
+#     rescue
+#       puts "location_search_sample not all succeeded"
+#     ensure
+#       $stdout = StringIO.new
+#     end
+#   end
 end
 

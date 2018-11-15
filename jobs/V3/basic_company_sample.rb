@@ -12,192 +12,197 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "google/apis/jobs_v3"
-require "rails"
-require 'securerandom'
+def generate_company
+	# [START generate_company]
+	require "google/apis/jobs_v3"
+	require "securerandom"
 
-=begin
-	This file contains the basic knowledge about company and job, including:
-	- Construct a company with required fields
-	- Create a company
-	- Get a company
-	- Update a company
-	- Update a company with field mask
-	- Delete a company
-=end
+	jobs = Google::Apis::JobsV3
+	company_name = "companyName:"+ SecureRandom.hex;
+	company_generated = jobs::Company.new;
+	company_generated.display_name = "Google";
+	company_generated.headquarters_address= "1600 Amphitheatre Parkway Mountain View, CA 94043";
+	company_generated.external_id = company_name;
+	puts "Company generated: " + company_generated.to_json;
+	return company_generated;
+	# [END generate company]
+end
 
+def create_company(company_to_be_created)
+	# [START create_company]
+	require "google/apis/jobs_v3"
 
-class BasicCompanySample
-	# Instantiate the client
-	@@Jobs   = Google::Apis::JobsV3
-	@@DEFAULT_PROJECT_ID = "projects/" + ENV["GOOGLE_CLOUD_PROJECT"];
-		
-	@@talentSolution_client = @@Jobs::CloudTalentSolutionService.new
+	jobs = Google::Apis::JobsV3
+	default_project_id = "projects/" + ENV["GOOGLE_CLOUD_PROJECT"];
+	talentSolution_client = jobs::CloudTalentSolutionService.new
 	# @see https://developers.google.com/identity/protocols/application-default-credentials#callingruby
-	@@talentSolution_client.authorization = Google::Auth.get_application_default(
+	talentSolution_client.authorization = Google::Auth.get_application_default(
 		"https://www.googleapis.com/auth/jobs"
 	)
 
-# [START generate_company]
-=begin 
-		Generate a company for testing purpose
-=end
-	def generateCompany()
-		companyName = "companyName:"+ SecureRandom.hex;
-		companyGenerated = @@Jobs::Company.new;
-		companyGenerated.display_name = "Google";
-		companyGenerated.headquarters_address= "1600 Amphitheatre Parkway Mountain View, CA 94043";
-		companyGenerated.external_id = companyName;
-		puts "Company generated: " + companyGenerated.to_json;
-		return companyGenerated;
+	begin
+		create_company_request = jobs::CreateCompanyRequest.new;
+		create_company_request.company = company_to_be_created;
+		company_created = talentSolution_client.create_company(default_project_id, create_company_request);
+		puts "Company created: " + company_created.to_json;
+		return company_created;
+	rescue
+		puts "Got exception while creating company"
 	end
-# [END basic company]
-
-# [START create_company]
-=begin 
-		Create a company
-=end
-	def createCompany(companyToBeCreated)
-		begin
-			createCompanyRequest = @@Jobs::CreateCompanyRequest.new;
-			createCompanyRequest.company = companyToBeCreated;
-			companyCreated = @@talentSolution_client.create_company(@@DEFAULT_PROJECT_ID, createCompanyRequest);
-			puts "Company created: " + companyCreated.to_json;
-			return companyCreated;
-		rescue
-			puts "Got exception while creating company"
-		end
-		
-	end
-# [END create_company]
-
-# [START get_company]
-=begin 
-		Get a company
-=end
-	def getCompany(companyName)
-		begin
-			companyGot = @@talentSolution_client.get_project_company(companyName);
-			puts "Company got: " + companyGot.to_json;
-			return companyGot;
-		rescue
-			puts "Got exception while getting company"
-			splitted_name = companyName.split('/');
-			if splitted_name[0] != "projects" || splitted_name[2] != "companies" || splitted_name[1].empty? || splitted_name[3].empty?
-				puts "Invalid companyName format";
-			end
-		end
-	end
-# [END get_company]
-
-# [START update_company]
-=begin 
-		Update a company
-=end
-	def updateCompany(companyName, companyToBeUpdated)
-		begin
-			updateCompanyRequest = @@Jobs::UpdateCompanyRequest.new;
-			updateCompanyRequest.company = companyToBeUpdated;
-			companyUpdated= @@talentSolution_client.patch_project_company(companyName, updateCompanyRequest);
-			puts "Company updated: " + companyUpdated.to_json;
-			return companyUpdated;
-		rescue
-			puts "Got exception while updating company"
-			splitted_name = companyName.split('/');
-			if splitted_name[0] != "projects" || splitted_name[2] != "companies" || splitted_name[1].empty? || splitted_name[3].empty?
-				puts "Invalid companyName format";
-			elsif getCompany(companyName).nil?
-				puts "company doesn't exist";
-			end
-		end
-	end
-# [END update_company]
-
-# [START update_company_with_field_mask]
-=begin 
-		Update a company with field mask
-=end
-	def updateCompanyWithFieldMask(companyName, fieldMask, companyToBeUpdated)
-		begin
-			updateCompanyRequest = @@Jobs::UpdateCompanyRequest.new;
-			updateCompanyRequest.company = companyToBeUpdated;
-			updateCompanyRequest.update_mask = fieldMask;
-			companyUpdated= @@talentSolution_client.patch_project_company(companyName, updateCompanyRequest);
-			puts "Company updated with filedMask " + updateCompanyRequest.update_mask + ". Updated company: " + companyUpdated.to_json;
-			return companyUpdated;
-		rescue
-			puts "Got exception while updating company with fieldMask"
-			splitted_name = companyName.split('/');
-			if splitted_name[0] != "projects" || splitted_name[2] != "companies" || splitted_name[1].empty? || splitted_name[3].empty?
-				puts "Invalid companyName format";
-			elsif getCompany(companyName).nil?
-				puts "company doesn't exist";
-			end
-		end
-	end
-# [END update_company_with_field_mask]
-
-# [START delete_company]
-=begin 
-		Delete a company
-=end
-	def deleteCompany(companyName)
-		begin
-			@@talentSolution_client.delete_project_company(companyName);
-			puts "Company deleted. CompanyName: " + companyName;
-		rescue
-			puts "Got exception while deleting company"
-			splitted_name = companyName.split('/');
-			if splitted_name[0] != "projects" || splitted_name[2] != "companies" || splitted_name[1].empty? || splitted_name[3].empty?
-				puts "Invalid companyName format";
-			elsif getCompany(companyName).nil?
-				puts "company doesn't exist";
-			end
-		end
-	end
-# [END delete_company]
+	# [END create_company]
 end
 
+def get_company(company_name)
+	# [START get_company]
+	require "google/apis/jobs_v3"
 
-# Test main. Run only if file is being executed directly or being called by ../spec/samples_spec.rb
-if (ARGV.include? File.basename(__FILE__)) || 
-	((File.basename(caller[0]).include? "samples_spec.rb") && (File.basename(caller[0]).include? "load"))
+	jobs = Google::Apis::JobsV3
+	talentSolution_client = jobs::CloudTalentSolutionService.new
+	# @see https://developers.google.com/identity/protocols/application-default-credentials#callingruby
+	talentSolution_client.authorization = Google::Auth.get_application_default(
+		"https://www.googleapis.com/auth/jobs"
+	)
 
-	# Test base object
-	company_test = BasicCompanySample.new
+	begin
+		company_got = talentSolution_client.get_project_company(company_name);
+		puts "Company got: " + company_got.to_json;
+		return company_got;
+	rescue
+		puts "Got exception while getting company"
+		splitted_name = company_name.split('/');
+		if splitted_name[0] != "projects" || splitted_name[2] != "companies" || splitted_name[1].empty? || splitted_name[3].empty?
+		puts "Invalid companyName format";
+		end
+	end
+	# [END get_company]
+end
 
-	# createCompany
-	### positive test
-	company_generated_test = company_test.generateCompany();
-	company_created_test = company_test.createCompany(company_generated_test);
-	### negtive test --create duplicated company
-	company_test.createCompany(company_generated_test);
+def update_company(company_name, company_to_be_updated)
+	# [START update_company]
+	require "google/apis/jobs_v3"
 
-	# getCompany 
-	### negtive test -- get company with invalid name
-	company_test.getCompany("projects\\companies\\"+company_created_test.external_id);
-	### positive test
-	company_test.getCompany(company_created_test.name);
+	jobs = Google::Apis::JobsV3
+	talentSolution_client = jobs::CloudTalentSolutionService.new
+	# @see https://developers.google.com/identity/protocols/application-default-credentials#callingruby
+	talentSolution_client.authorization = Google::Auth.get_application_default(
+		"https://www.googleapis.com/auth/jobs"
+	)
 
-	# updateCompany
-	### positive test
-	company_created_test.display_name = "Updated name Google";
-	company_test.updateCompany(company_created_test.name, company_created_test);
-	### negtive test -- update company with invalid name
-	company_test.updateCompany("projects\\companies\\"+company_created_test.external_id, company_created_test);
-	### negtive test -- update nonexisted company
-	company_test.updateCompany(company_created_test.name+"aa", company_created_test);
+	begin
+		update_company_request = jobs::UpdateCompanyRequest.new;
+		update_company_request.company = company_to_be_updated;
+		company_updated= talentSolution_client.patch_project_company(company_name, update_company_request);
+		puts "Company updated: " + company_updated.to_json;
+		return company_updated;
+	rescue
+		puts "Got exception while updating company"
+		splitted_name = company_name.split('/');
+		if splitted_name[0] != "projects" || splitted_name[2] != "companies" || splitted_name[1].empty? || splitted_name[3].empty?
+		puts "Invalid companyName format";
+		elsif get_company(company_name).nil?
+		puts "company doesn't exist";
+		end
+	end
+	# [END update_company]
+end
 
+def update_company_with_field_mask(company_name, field_mask, company_to_be_updated)
+	# [START update_company_with_field_mask]
+	require "google/apis/jobs_v3"
 
-	# updateCompanyWithFieldMask
-	### positive test
-	company_created_test.display_name = "Updated name with fieldMask Google";
-	company_test.updateCompanyWithFieldMask(company_created_test.name, "DisplayName", company_created_test);
+	jobs = Google::Apis::JobsV3
+	talentSolution_client = jobs::CloudTalentSolutionService.new
+	# @see https://developers.google.com/identity/protocols/application-default-credentials#callingruby
+	talentSolution_client.authorization = Google::Auth.get_application_default(
+		"https://www.googleapis.com/auth/jobs"
+	)
 
-	#deleteCompany
-	### negtive test
-	company_test.deleteCompany(company_created_test.name+"aa");
-	company_test.deleteCompany("projects\\companies\\"+company_created_test.external_id);
-	### positive test
-	company_test.deleteCompany(company_created_test.name);
+	begin
+		update_company_request = jobs::UpdateCompanyRequest.new;
+		update_company_request.company = company_to_be_updated;
+		update_company_request.update_mask = field_mask;
+		company_updated= talentSolution_client.patch_project_company(company_name, update_company_request);
+		puts "Company updated with filedMask " + update_company_request.update_mask + ". Updated company: " + company_updated.to_json;
+		return company_updated;
+	rescue
+		puts "Got exception while updating company with fieldMask"
+		splitted_name = company_name.split('/');
+		if splitted_name[0] != "projects" || splitted_name[2] != "companies" || splitted_name[1].empty? || splitted_name[3].empty?
+		puts "Invalid companyName format";
+		elsif get_company(company_name).nil?
+		puts "company doesn't exist";
+		end
+	end
+	# [END update_company_with_field_mask]
+end
+
+def delete_company(company_name)
+	# [START delete_company]
+	require "google/apis/jobs_v3"
+
+	jobs = Google::Apis::JobsV3
+	talentSolution_client = jobs::CloudTalentSolutionService.new
+	# @see https://developers.google.com/identity/protocols/application-default-credentials#callingruby
+	talentSolution_client.authorization = Google::Auth.get_application_default(
+		"https://www.googleapis.com/auth/jobs"
+	)
+
+	begin
+		talentSolution_client.delete_project_company(company_name);
+		puts "Company deleted. CompanyName: " + company_name;
+	rescue
+		puts "Got exception while deleting company"
+		splitted_name = company_name.split('/');
+		if splitted_name[0] != "projects" || splitted_name[2] != "companies" || splitted_name[1].empty? || splitted_name[3].empty?
+		puts "Invalid companyName format";
+		elsif get_company(company_name).nil?
+		puts "company doesn't exist";
+		end
+	end
+	# [END delete_company]
+end
+
+def run_basic_company_sample arguments
+	command = arguments.shift
+	default_project_id = "projects/" + ENV["GOOGLE_CLOUD_PROJECT"];
+
+	case command
+	when "create_company", "delete_company"
+		company_generated_test = generate_company();
+		company_created_test = create_company(company_generated_test)
+		delete_company(company_created_test.name);
+	when "get_company"
+		company_generated_test = generate_company();
+		company_created_test = create_company(company_generated_test)
+		get_company(company_created_test.name)
+		delete_company(company_created_test.name);
+	when "update_company"
+		company_generated_test = generate_company();
+		company_created_test = create_company(company_generated_test)
+		company_created_test.display_name = "Updated name Google";
+		update_company(company_created_test.name, company_created_test)
+		delete_company(company_created_test.name);
+	when "update_company_with_field_mask"
+		company_generated_test = generate_company();
+		company_created_test = create_company(company_generated_test)
+		company_created_test.display_name = "Updated name Google";
+		update_company_with_field_mask(company_created_test.name, "DisplayName", company_created_test)
+		delete_company(company_created_test.name);
+	else
+	puts <<-usage
+Usage: bundle exec ruby basic_company_sample.rb [command] [arguments]
+Commands:
+  create_company                  Create a company
+  get_company                     Get company
+  update_company                  Update a company
+  update_company_with_field_mask  Update a company with field mask
+  delete_company                  Delete a company
+Environment variables:
+  GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
+    usage
+	end
+end
+
+if __FILE__ == $PROGRAM_NAME
+  run_basic_company_sample ARGV
 end
