@@ -58,6 +58,6 @@ describe 'Asset Quickstart' do
 
   it 'batch get assets history' do
     project_id = ENV['GCLOUD_PROJECT']
-    batch_get_assets_history(project_id: project_id)
+    batch_get_history(project_id: project_id, bucket_name: @bucket_name)
   end
 end

@@ -45,7 +45,7 @@ def export_assets(project_id:, dump_file_path:)
   # [END asset_quickstart_exportassets]
 end
 
-def batch_get_assets_history(project_id:)
+def batch_get_history(project_id:, bucket_name:)
   # [START asset_quickstart_batchgetassetshistory]
   require 'google/cloud/asset'
 
@@ -54,13 +54,14 @@ def batch_get_assets_history(project_id:)
     Google::Cloud::Asset::V1beta1::AssetServiceClient.project_path(project_id)
 
   content_type = :RESOURCE
+  asset_names = ["//storage.googleapis.com/#{bucket_name}"]
   read_time_window = Google::Cloud::Asset::V1beta1::TimeWindow.new(
     start_time: Google::Protobuf::Timestamp.new(seconds: Time.now.getutc.to_i)
   )
 
   asset_service_client = Google::Cloud::Asset.new(version: :v1beta1)
   response = asset_service_client.batch_get_assets_history(
-    formatted_parent, content_type, read_time_window
+    formatted_parent, content_type, read_time_window, asset_names: asset_names
   )
   # Do things with the response
   puts response
