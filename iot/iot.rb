@@ -626,6 +626,38 @@ $send_device_config = -> (project_id:, location_id:, registry_id:, device_id:, d
   # [END iot_set_device_config]
 end
 
+$send_device_command = -> (project_id:, location_id:, registry_id:, device_id:, data:) do
+  # [START iot_send_command]
+  # project_id  = "Your Google Cloud project ID"
+  # location_id = "The Cloud region the registry is located in"
+  # registry_id = "The registry to get a device from"
+  # device_id   = "The identifier of the device to set configurations on"
+  # data        = "The command, e.g. {move: forward} to send to the device"
+
+  require "google/apis/cloudiot_v1"
+
+  # Initialize the client and authenticate with the specified scope
+  Cloudiot   = Google::Apis::CloudiotV1
+  iot_client = Cloudiot::CloudIotService.new
+  iot_client.authorization = Google::Auth.get_application_default(
+    "https://www.googleapis.com/auth/cloud-platform"
+  )
+
+  # The resource name of the location associated with the project
+  parent   = "projects/#{project_id}/locations/#{location_id}"
+  resource = "#{parent}/registries/#{registry_id}/devices/#{device_id}"
+
+  commandReq = Cloudiot::SendCommandToDeviceRequest.new
+  commandReq.binary_data = data
+
+  # Set configuration for the provided device
+  res = iot_client.send_project_location_registry_group_device_command_to_device resource, commandReq
+
+  puts "Command sent!"
+  # [END iot_send_command]
+end
+
+
 def run_sample arguments
   command    = arguments.shift
   project_id = ENV["GOOGLE_CLOUD_PROJECT"]
@@ -745,6 +777,14 @@ def run_sample arguments
       device_id:   arguments.shift,
       cert_path:   arguments.shift,
     )
+  when "send_command"
+    $send_device_command.call(
+      project_id:  project_id,
+      location_id: arguments.shift,
+      registry_id: arguments.shift,
+      device_id:   arguments.shift,
+      data:        arguments.shift,
+    )
   when "send_configuration"
     $send_device_config.call(
       project_id:  project_id,
@@ -776,6 +816,7 @@ Device Management Commands:
   list_devices <location> <registry_id> List the devices in the provided registry.
   patch_es_device <location> <registry_id> <device_id> <public_key_path> Patch a device with an ES256 credential
   patch_rsa_device <location> <registry_id> <device_id> <public_key_path> Patch a device with an RSA credential
+  send_command <location> <registry_id> <device_id> <data> Send a command to a device.
   send_configuration <location> <registry_id> <device_id> <data> Set a device configuration.
 
 Environment variables:
