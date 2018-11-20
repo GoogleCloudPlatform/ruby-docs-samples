@@ -1,4 +1,4 @@
-# Copyright 2016 Google, Inc
+# Copyright 2018 Google, LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,22 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START bigquery_quickstart]
-# Imports the Google Cloud client library
-require "google/cloud/bigquery"
+require_relative "../list_datasets"
+require "spec_helper"
 
-# Your Google Cloud Platform project ID
-project_id = "YOUR_PROJECT_ID"
 
-# Instantiates a client
-bigquery = Google::Cloud::Bigquery.new project: project_id
+describe "List datasets" do
 
-# The name for the new dataset
-dataset_name = "my_new_dataset"
+  example "list datasets in a project" do
+    dataset1 = @bigquery.create_dataset "test_dataset1_#{Time.now.to_i}"
+    dataset2 = @bigquery.create_dataset "test_dataset2_#{Time.now.to_i}"
+    @temp_datasets.push(dataset1, dataset2)
 
-# Creates the new dataset
-dataset = bigquery.create_dataset dataset_name
+    output = capture { list_datasets @bigquery.name }
+    expect(output).to include(dataset1.dataset_id)
+    expect(output).to include(dataset2.dataset_id)
+  end
 
-puts "Dataset #{dataset.dataset_id} created."
-# [END bigquery_quickstart]
-
+end

@@ -1,4 +1,4 @@
-# Copyright 2017 Google LCC
+# Copyright 2018 Google, LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,17 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "rspec"
+require_relative "../load_table_gcs_json_autodetect"
+require "spec_helper"
 
-describe "BigQuery Stack Overflow" do
 
-  it "queries stackoverflow dataset" do
-    expect {
-      load File.expand_path("../stackoverflow.rb", __dir__)
-    }.to output(
-      /stackoverflow\.com.*views/
-    ).to_stdout
-   end
+describe "Load table from JSON file on GCS with auto-detected schema" do
+
+  before do
+    @dataset = create_temp_dataset
+  end
+
+  example "Load a new table from a JSON file on GCS with auto-detected schema" do
+    output = capture { load_table_gcs_json_autodetect @dataset.dataset_id }
+
+    table = @dataset.tables.first
+    expect(output).to include(table.table_id)
+    expect(output).to include("50 rows")
+  end
 
 end
-
