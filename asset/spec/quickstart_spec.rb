@@ -58,6 +58,7 @@ describe 'Asset Quickstart' do
 
   it 'batch get assets history' do
     project_id = ENV['GOOGLE_CLOUD_PROJECT']
-    batch_get_history(project_id: project_id, bucket_name: @bucket_name)
+    asset_names = ["//storage.googleapis.com/#{@bucket_name}"]
+    batch_get_history(project_id: project_id, asset_names: asset_names)
   end
 end

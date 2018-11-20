@@ -45,16 +45,17 @@ def export_assets(project_id:, dump_file_path:)
   # [END asset_quickstart_exportassets]
 end
 
-def batch_get_history(project_id:, bucket_name:)
+def batch_get_history(project_id:, asset_names:)
   # [START asset_quickstart_batchgetassetshistory]
   require 'google/cloud/asset'
 
   # project_id = 'YOUR_PROJECT_ID'
+  # asset names, e.g.: //storage.googleapis.com/[YOUR_BUCKET_NAME]
+  # asset_names = [ASSET_NAMES, COMMMA_DELIMTTED]
   formatted_parent =
     Google::Cloud::Asset::V1beta1::AssetServiceClient.project_path(project_id)
 
   content_type = :RESOURCE
-  asset_names = ["//storage.googleapis.com/#{bucket_name}"]
   read_time_window = Google::Cloud::Asset::V1beta1::TimeWindow.new(
     start_time: Google::Protobuf::Timestamp.new(seconds: Time.now.getutc.to_i)
   )
