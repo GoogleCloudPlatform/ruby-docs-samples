@@ -1,6 +1,6 @@
 # Copyright 2018 Google, Inc
 #
-# Licensed under the Apache License, Version 2.0 (the "License");
+# Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -46,57 +46,65 @@ describe "Cloud Job Discovery Samples" do
 # verify basic_company_sample.rb
   it "basic_company_sample" do
     begin
-      company_generated_test = generate_company();
-      company_created_test = create_company(company_generated_test);
-      get_company(company_created_test.name);
-      update_company(company_created_test.name, company_created_test);
-      update_company_with_field_mask(company_created_test.name, "DisplayName", company_created_test);
-      delete_company(company_created_test.name);
+      company_generated_test = job_discovery_generate_company display_name: "Google", 
+                                                              headquarters_address: "1600 Amphitheatre Parkway Mountain View, CA 94043"
+      company_created_test = job_discovery_create_company company_to_be_created: company_generated_test
+      job_discovery_get_company company_name: company_created_test.name
+      company_created_test.display_name = "Updated name Google"
+      job_discovery_update_company company_name: company_created_test.name, 
+                                   company_updated: company_created_test
+      company_created_test.display_name = "Updated name with field mask Google"
+      job_discovery_update_company_with_field_mask company_name: company_created_test.name, 
+                                                   field_mask: "DisplayName", 
+                                                   company_updated: company_created_test
+      job_discovery_delete_company company_name:company_created_test.name
       capture = $stdout.string
-      expect(capture).to include("Company created");
-      expect(capture).to include("Company got");
-      expect(capture).to include("Company updated");
-      expect(capture).to include("Company updated with filedMask DisplayName");
-      expect(capture).to include("Company deleted");
+      expect(capture).to include("Company created")
+      expect(capture).to include("Company got")
+      expect(capture).to include("Company updated")
+      expect(capture).to include("Updated name Google")
+      expect(capture).to include("Company updated with filedMask DisplayName")
+      expect(capture).to include("Updated name with field mask Google")
+      expect(capture).to include("Company deleted")
     rescue
       puts "basic_company_sample not all succeeded"
     ensure
       $stdout = StringIO.new
     end
   end
-# verify basic_job_sample.rb
-  it "basic_job_sample" do
-    begin
-      company_created_test = create_company(generate_company());
-      job_generated_test = generate_job(company_created_test.name);
-      job_created_test = create_job(job_generated_test);
-      get_job(job_created_test.name);
-      job_created_test.description = "Updated description";
-      update_job(job_created_test.name, job_created_test);
-      job_created_test.title = "Updated title software Engineer";
-      update_job_with_field_mask(job_created_test.name, "title", job_created_test);
-      delete_job(job_created_test.name);
-      delete_company(company_created_test.name);
-      capture = $stdout.string
-      expect(capture).to include("Job created");
-      expect(capture).to include("Job got");
-      expect(capture).to include("Job updated");
-      expect(capture).to include("Job updated with filedMask title");
-      expect(capture).to include("Job deleted");
-    rescue
-      puts "basic_job_sample not all succeeded"
-    ensure
-      $stdout = StringIO.new
-    end
-  end
+# # verify basic_job_sample.rb
+#   it "basic_job_sample" do
+#     begin
+#       company_created_test = job_discovery_create_company job_discovery_generate_company
+#       job_generated_test = job_discovery_generate_job company_created_test.name
+#       job_created_test = job_discovery_create_job job_generated_test
+#       job_discovery_get_job job_created_test.name
+#       job_created_test.description = "Updated description"
+#       job_discovery_update_job job_created_test.name, job_created_test
+#       job_created_test.title = "Updated title software Engineer"
+#       job_discovery_update_job_with_field_mask job_created_test.name, "title", job_created_test
+#       job_discovery_delete_job job_created_test.name
+#       job_discovery_delete_company company_created_test.name
+#       capture = $stdout.string
+#       expect(capture).to include("Job created")
+#       expect(capture).to include("Job got")
+#       expect(capture).to include("Job updated")
+#       expect(capture).to include("Job updated with filedMask title")
+#       expect(capture).to include("Job deleted")
+#     rescue
+#       puts "basic_job_sample not all succeeded"
+#     ensure
+#       $stdout = StringIO.new
+#     end
+# end
 # # verify auto_complete_sample.rb
 #   it "auto_complete_sample" do
 #     begin
-#       load File.expand_path("../V3/auto_complete_sample.rb", __dir__);
+#       load File.expand_path("../V3/auto_complete_sample.rb", __dir__)
 #       capture = $stdout.string
-#       expect(capture).to include("Job title auto complete result");
-#       expect(capture).to include("suggestion");
-#       expect(capture).to include("Default auto complete result");
+#       expect(capture).to include("Job title auto complete result")
+#       expect(capture).to include("suggestion")
+#       expect(capture).to include("Default auto complete result")
 #     rescue
 #       puts "auto_complete_sample not all succeeded"
 #     ensure
@@ -106,12 +114,12 @@ describe "Cloud Job Discovery Samples" do
 # # verify batch_operation_sample.rb
 #   it "batch_operation_sample" do
 #     begin
-#       load File.expand_path("../V3/batch_operation_sample.rb", __dir__);
+#       load File.expand_path("../V3/batch_operation_sample.rb", __dir__)
 #       capture = $stdout.string
-#       expect(capture).to include("Batch job created");
-#       expect(capture).to include("Batch job updated with Mask");
-#       expect(capture).to include("Batch job updated");
-#       expect(capture).to include("Batch job deleted");
+#       expect(capture).to include("Batch job created")
+#       expect(capture).to include("Batch job updated with Mask")
+#       expect(capture).to include("Batch job updated")
+#       expect(capture).to include("Batch job deleted")
 #     rescue
 #       puts "batch_operation_sample not all succeeded"
 #     ensure
@@ -121,9 +129,9 @@ describe "Cloud Job Discovery Samples" do
 # # verify commute_search_sample.rb
 #   it "commute_search_sample" do
 #     begin
-#       load File.expand_path("../V3/commute_search_sample.rb", __dir__);
+#       load File.expand_path("../V3/commute_search_sample.rb", __dir__)
 #       capture = $stdout.string
-#       expect(capture).to include("matchingJobs");
+#       expect(capture).to include("matchingJobs")
 #     rescue
 #       puts "commute_search_sample not all succeeded"
 #     ensure
@@ -133,9 +141,9 @@ describe "Cloud Job Discovery Samples" do
 # # verify custom_attribute_sample.rb
 #   it "custom_attribute_sample" do
 #     begin
-#       load File.expand_path("../V3/custom_attribute_sample.rb", __dir__);
+#       load File.expand_path("../V3/custom_attribute_sample.rb", __dir__)
 #       capture = $stdout.string
-#       expect(capture).to include(/matchingJobs\.matchingJobs\.matchingJobs/);
+#       expect(capture).to include(/matchingJobs\.matchingJobs\.matchingJobs/)
 #     rescue
 #       puts "custom_attribute_sample not all succeeded"
 #     ensure
@@ -145,10 +153,10 @@ describe "Cloud Job Discovery Samples" do
 # # verify featured_job_sample.rb
 #   it "featured_job_sample" do
 #     begin
-#       load File.expand_path("../V3/featured_job_sample.rb", __dir__);
+#       load File.expand_path("../V3/featured_job_sample.rb", __dir__)
 #       capture = $stdout.string
-#       expect(capture).to include("promotionValue");
-#       expect(capture).to include("matchingJobs");
+#       expect(capture).to include("promotionValue")
+#       expect(capture).to include("matchingJobs")
 #     rescue
 #       puts "featured_job_sample not all succeeded"
 #     ensure
@@ -158,9 +166,9 @@ describe "Cloud Job Discovery Samples" do
 # # verify filter_search_sample.rb
 #   it "filter_search_sample" do
 #     begin
-#       load File.expand_path("../V3/filter_search_sample.rb", __dir__);
+#       load File.expand_path("../V3/filter_search_sample.rb", __dir__)
 #       capture = $stdout.string
-#       expect(capture).to include(/matchingJobs\.matchingJobs\.matchingJobs\.matchingJobs\.matchingJobs\.matchingJobs\.matchingJobs/);
+#       expect(capture).to include(/matchingJobs\.matchingJobs\.matchingJobs\.matchingJobs\.matchingJobs\.matchingJobs\.matchingJobs/)
 #     rescue
 #       puts "featured_job_sample not all succeeded"
 #     ensure
@@ -170,9 +178,9 @@ describe "Cloud Job Discovery Samples" do
 # # verify histogram_sample.rb
 #   it "histogram_sample" do
 #     begin
-#       load File.expand_path("../V3/histogram_sample.rb", __dir__);
+#       load File.expand_path("../V3/histogram_sample.rb", __dir__)
 #       capture = $stdout.string
-#       expect(capture).to include(/histogramResults\.matchingJobs/);
+#       expect(capture).to include(/histogramResults\.matchingJobs/)
 #     rescue
 #       puts "histogram_sample not all succeeded"
 #     ensure
@@ -182,10 +190,10 @@ describe "Cloud Job Discovery Samples" do
 # # verify location_search_sample.rb
 #   it "location_search_sample" do
 #     begin
-#       load File.expand_path("../V3/location_search_sample.rb", __dir__);
+#       load File.expand_path("../V3/location_search_sample.rb", __dir__)
 #       capture = $stdout.string
-#       expect(capture).to include(/locationFilters\.matchingJobs\.locationFilters\.matchingJobs\.locationFilters\.matchingJobs/);
-#       expect(capture).to include(/"totalSize":2\.locationFilters\.matchingJobs/);
+#       expect(capture).to include(/locationFilters\.matchingJobs\.locationFilters\.matchingJobs\.locationFilters\.matchingJobs/)
+#       expect(capture).to include(/"totalSize":2\.locationFilters\.matchingJobs/)
 #     rescue
 #       puts "location_search_sample not all succeeded"
 #     ensure
