@@ -630,8 +630,8 @@ $send_device_command = -> (project_id:, location_id:, registry_id:, device_id:, 
   # [START iot_send_command]
   # project_id  = "Your Google Cloud project ID"
   # location_id = "The Cloud region the registry is located in"
-  # registry_id = "The registry to get a device from"
-  # device_id   = "The identifier of the device to set configurations on"
+  # registry_id = "The registry containing the device to send commands to"
+  # device_id   = "The identifier of the device to send commands to"
   # data        = "The command, e.g. {move: forward} to send to the device"
 
   require "google/apis/cloudiot_v1"
