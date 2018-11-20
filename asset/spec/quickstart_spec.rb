@@ -50,14 +50,14 @@ describe 'Asset Quickstart' do
 
   it 'export assets' do
     dump_file_path = "gs://#{@bucket_name}/#{@dump_file_name}"
-    project_id = ENV['GCLOUD_PROJECT']
+    project_id = ENV['GOOGLE_CLOUD_PROJECT']
     export_assets(project_id: project_id, dump_file_path: dump_file_path)
     file = @bucket.file @dump_file_name
     expect(file).not_to be nil
   end
 
   it 'batch get assets history' do
-    project_id = ENV['GCLOUD_PROJECT']
+    project_id = ENV['GOOGLE_CLOUD_PROJECT']
     batch_get_history(project_id: project_id, bucket_name: @bucket_name)
   end
 end
