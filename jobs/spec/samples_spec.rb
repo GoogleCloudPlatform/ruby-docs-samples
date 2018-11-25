@@ -72,31 +72,36 @@ describe "Cloud Job Discovery Samples" do
       $stdout = StringIO.new
     end
   end
-# # verify basic_job_sample.rb
-#   it "basic_job_sample" do
-#     begin
-#       company_created_test = job_discovery_create_company job_discovery_generate_company
-#       job_generated_test = job_discovery_generate_job company_created_test.name
-#       job_created_test = job_discovery_create_job job_generated_test
-#       job_discovery_get_job job_created_test.name
-#       job_created_test.description = "Updated description"
-#       job_discovery_update_job job_created_test.name, job_created_test
-#       job_created_test.title = "Updated title software Engineer"
-#       job_discovery_update_job_with_field_mask job_created_test.name, "title", job_created_test
-#       job_discovery_delete_job job_created_test.name
-#       job_discovery_delete_company company_created_test.name
-#       capture = $stdout.string
-#       expect(capture).to include("Job created")
-#       expect(capture).to include("Job got")
-#       expect(capture).to include("Job updated")
-#       expect(capture).to include("Job updated with filedMask title")
-#       expect(capture).to include("Job deleted")
-#     rescue
-#       puts "basic_job_sample not all succeeded"
-#     ensure
-#       $stdout = StringIO.new
-#     end
-# end
+# verify basic_job_sample.rb
+  it "basic_job_sample" do
+    begin
+      company_generated_test = job_discovery_generate_company display_name: "Google", 
+                                                              headquarters_address: "1600 Amphitheatre Parkway Mountain View, CA 94043"
+      company_created_test = job_discovery_create_company company_to_be_created: company_generated_test
+      job_generated_test = job_discovery_generate_job company_name: company_created_test.name
+      job_created_test = job_discovery_create_job job_to_be_created: job_generated_test
+      job_discovery_get_job job_name: job_created_test.name
+      job_created_test.description = "Updated description"
+      job_discovery_update_job job_name: job_created_test.name, 
+                               job_to_be_updated: job_created_test
+      job_created_test.title = "Updated title software Engineer"
+      job_discovery_update_job_with_field_mask job_name: job_created_test.name,
+                                               field_mask: "title", 
+                                               job_to_be_updated: job_created_test
+      job_discovery_delete_job job_name: job_created_test.name
+      job_discovery_delete_company company_name: company_created_test.name
+      capture = $stdout.string
+      expect(capture).to include("Job created")
+      expect(capture).to include("Job got")
+      expect(capture).to include("Job updated")
+      expect(capture).to include("Job updated with filedMask title")
+      expect(capture).to include("Job deleted")
+    rescue
+      puts "basic_job_sample not all succeeded"
+    ensure
+      $stdout = StringIO.new
+    end
+end
 # # verify auto_complete_sample.rb
 #   it "auto_complete_sample" do
 #     begin
