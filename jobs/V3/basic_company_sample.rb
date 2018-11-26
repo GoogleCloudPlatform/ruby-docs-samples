@@ -22,23 +22,21 @@ def job_discovery_generate_company display_name:, headquarters_address:
 
 	jobs = Google::Apis::JobsV3
 	company_name = "companyName: #{display_name}" + SecureRandom.hex
-	company_generated = jobs::Company.new
-	company_generated.display_name = display_name
-	company_generated.headquarters_address= headquarters_address
-	company_generated.external_id = company_name
+	company_generated = jobs::Company.new :display_name => display_name,
+										  :headquarters_address => headquarters_address,
+										  :external_id => company_name
 	puts "Company generated: #{company_generated.to_json}"
 	return company_generated
 	# [END generate_company]
 end
 
-def job_discovery_create_company company_to_be_created:
+def job_discovery_create_company company_to_be_created:, default_project_id:
 	# [START create_company]
-	# display_name  = "Company to be created"
+	# company_to_be_created  = "Company to be created"
 
 	require "google/apis/jobs_v3"
 
 	jobs = Google::Apis::JobsV3
-	default_project_id = "projects/#{ENV["GOOGLE_CLOUD_PROJECT"]}"
 	talent_solution_client = jobs::CloudTalentSolutionService.new
 	# @see https://developers.google.com/identity/protocols/application-default-credentials#callingruby
 	talent_solution_client.authorization = Google::Auth.get_application_default(
@@ -46,8 +44,7 @@ def job_discovery_create_company company_to_be_created:
 	)
 
 	begin
-		create_company_request = jobs::CreateCompanyRequest.new
-		create_company_request.company = company_to_be_created
+		create_company_request = jobs::CreateCompanyRequest.new :company => company_to_be_created
 		company_created = talent_solution_client.create_company(default_project_id, create_company_request)
 		puts "Company created: #{company_created.to_json}"
 		return company_created
@@ -186,7 +183,8 @@ def run_basic_company_sample arguments
 	when "create_company"
 		company_generated_test = job_discovery_generate_company display_name: arguments.shift, 
 																headquarters_address: arguments.shift
-		company_created_test = job_discovery_create_company company_to_be_created:company_generated_test
+		company_created_test = job_discovery_create_company company_to_be_created:company_generated_test,
+															default_project_id: default_project_id
 	when "get_company"
 		job_discovery_get_company company_name: arguments.shift
 	when "update_company"
@@ -199,7 +197,7 @@ def run_basic_company_sample arguments
 		company_name = arguments.shift
 		company_to_be_updated = job_discovery_get_company company_name: company_name
 		company_to_be_updated.display_name = "Updated name Google"
-		job_discovery_update_company company_name:company_name, 
+		job_discovery_update_company_with_field_mask company_name:company_name, 
 									 field_mask:"DisplayName", 
 									 company_updated:company_to_be_updated
 	when "delete_company"
@@ -209,10 +207,10 @@ def run_basic_company_sample arguments
 Usage: bundle exec ruby basic_company_sample.rb [command] [arguments]
 Commands:
   create_company                  <display_name> <headquarters_address>        Create a company with display name and headquaters address
-  get_company                     <company_name>                               Get company with name
-  update_company                  <company_name>                               Update a company
-  update_company_with_field_mask  <company_name>                               Update a company with field mask
-  delete_company                  <company_name>                               Delete a company
+  get_company                     <company_name>                               Get company with name. Name foName format "projects/`project_id`/companies/`company_id`"
+  update_company                  <company_name>                               Update a company. Name format "projects/`project_id`/companies/`company_id`"
+  update_company_with_field_mask  <company_name>                               Update a company with field mask. Name format "projects/`project_id`/companies/`company_id`"
+  delete_company                  <company_name>                               Delete a company. Name format "projects/`project_id`/companies/`company_id`"
 Environment variables:
   GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
     usage

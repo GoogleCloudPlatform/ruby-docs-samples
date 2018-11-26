@@ -14,33 +14,28 @@
 
 def job_discovery_generate_job company_name:
 	# [START generate_job]
+	# company_name  = "The company's name which has the job you want to create"
 	require "google/apis/jobs_v3"
 	require "securerandom"
 
 	jobs   = Google::Apis::JobsV3
 
 	requisition_id = "jobWithRequiredFields:" + SecureRandom.hex
-	application_info = jobs::ApplicationInfo.new
-	application_info.uris = Array["http://careers.google.com"]
-	job_generated = jobs::Job.new
-	job_generated.requisition_id = requisition_id
-	job_generated.title = " Lab Technician"
-	job_generated.company_name = company_name
-	job_generated.employment_types = Array["FULL_TIME"]
-	job_generated.language_code = "en-US"
-	job_generated.application_info = application_info
-	job_generated.description = "Design, develop, test, deploy, maintain and improve software."
+	application_info = jobs::ApplicationInfo.new :uris => Array["http://careers.google.com"]
+	job_generated = jobs::Job.new :requisition_id => requisition_id,
+								  :title => " Lab Technician",
+								  :company_name => company_name,
+								  :employment_types => Array["FULL_TIME"],
+								  :language_code => "en-US",
+								  :application_info => application_info,
+								  :description => "Design, develop, test, deploy, maintain and improve software."
 	
 	# set compensation to 12 USD/hour
-	compensation_info = jobs::CompensationInfo.new
-	compensation_entry = jobs::CompensationEntry.new
-	compensation_amount = jobs::Money.new
-	compensation_amount.currency_code = "USD"
-	compensation_amount.units = 12
-	compensation_entry.type = "BASE"
-	compensation_entry.unit = "HOURLY"
-	compensation_entry.amount = compensation_amount
-	compensation_info.entries = Array[compensation_entry]
+	compensation_entry = jobs::CompensationEntry.new :type => "BASE",
+													 :unit => "HOURLY",
+													 :amount => (jobs::Money.new :currency_code => "USD",
+										  										 :units => 12)
+	compensation_info = jobs::CompensationInfo.new :entries => Array[compensation_entry]
 
 	job_generated.compensation_info = compensation_info
 	puts "Job generated: #{job_generated.to_json}"
@@ -48,12 +43,12 @@ def job_discovery_generate_job company_name:
 	# [END generate basic job]
 end
 
-def job_discovery_create_job job_to_be_created:
+def job_discovery_create_job job_to_be_created:, default_project_id:
 	# [START create_job]
+	# job_to_be_created  = "Job to be created"
 	require "google/apis/jobs_v3"
 
 	jobs   = Google::Apis::JobsV3
-	default_project_id = "projects/#{ENV["GOOGLE_CLOUD_PROJECT"]}"
 
 	talentSolution_client = jobs::CloudTalentSolutionService.new
 	talentSolution_client.authorization = Google::Auth.get_application_default(
@@ -61,8 +56,7 @@ def job_discovery_create_job job_to_be_created:
 	)
 
 	begin
-		create_job_request = jobs::CreateJobRequest.new
-		create_job_request.job = job_to_be_created
+		create_job_request = jobs::CreateJobRequest.new :job => job_to_be_created
 		job_created = talentSolution_client.create_job(default_project_id, create_job_request)
 		puts "Job created: #{job_created.to_json}"
 		return job_created
@@ -74,6 +68,7 @@ end
 
 def job_discovery_get_job job_name:
 	# [START get_job]
+	# job_name  = "The name of the job you want to get"
 	require "google/apis/jobs_v3"
 
 	jobs   = Google::Apis::JobsV3
@@ -99,6 +94,8 @@ end
 
 def job_discovery_update_job job_name:, job_to_be_updated:
 	# [START update_job]
+	# job_name  = "The name of the job you want to update"
+	# job_updated  = "The new job object to be updated"
 	require "google/apis/jobs_v3"
 
 	jobs   = Google::Apis::JobsV3
@@ -109,8 +106,7 @@ def job_discovery_update_job job_name:, job_to_be_updated:
 	)
 
 	begin
-		update_job_request = jobs::UpdateJobRequest.new
-		update_job_request.job = job_to_be_updated
+		update_job_request = jobs::UpdateJobRequest.new :job => job_to_be_updated
 		job_updated= talentSolution_client.patch_project_job(job_name, update_job_request)
 		puts "Job updated: #{job_updated.to_json}"
 		return job_updated
@@ -128,6 +124,10 @@ end
 
 def job_discovery_update_job_with_field_mask job_name:, field_mask:, job_to_be_updated:
 	# [START update_job_with_field_mask]
+	# job_name  = "The name of the job you want to update"
+	# field_mask  = "The field mask you want to update"
+	# job_updated  = "The new job object to be updated"
+
 	require "google/apis/jobs_v3"
 
 	jobs   = Google::Apis::JobsV3
@@ -138,9 +138,8 @@ def job_discovery_update_job_with_field_mask job_name:, field_mask:, job_to_be_u
 	)
 
 	begin
-		update_job_request = jobs::UpdateJobRequest.new
-		update_job_request.job = job_to_be_updated
-		update_job_request.update_mask = field_mask
+		update_job_request = jobs::UpdateJobRequest.new :job => job_to_be_updated,
+													    :update_mask => field_mask
 		job_updated= talentSolution_client.patch_project_job(job_name, update_job_request)
 		puts "Job updated with filedMask #{update_job_request.update_mask}. Updated job: #{job_updated.to_json}"
 		return job_updated
@@ -158,6 +157,8 @@ end
 
 def job_discovery_delete_job job_name:
 	# [START delete_job]
+	# job_name  = "The name of the job you want to delete"
+
 	require "google/apis/jobs_v3"
 
 	jobs   = Google::Apis::JobsV3
@@ -193,7 +194,8 @@ def run_basic_job_sample arguments
 	when "create_job"
 		company_got_test = job_discovery_get_company company_name: arguments.shift
 		job_generated_test = job_discovery_generate_job company_name: company_got_test.name
-		job_created_test = job_discovery_create_job job_to_be_created: job_generated_test
+		job_created_test = job_discovery_create_job job_to_be_created: job_generated_test,
+													default_project_id: default_project_id
 	when "get_job"
 		job_discovery_get_job job_name: arguments.shift
 	when "update_job"
@@ -213,11 +215,11 @@ def run_basic_job_sample arguments
 	puts <<-usage
 Usage: bundle exec ruby basic_job_sample.rb [command] [arguments]
 Commands:
-  create_job                  <company_name>   Create a job under a company
-  get_job                     <job_name>       Get a job by name
-  update_job                  <job_name>       Update a job
-  update_job_with_field_mask  <job_name>       Update a job with field mask
-  delete_job                  <job_name>       Delete a job
+  create_job                  <company_name>   Create a job under a company. Name format "projects/`project_id`/companies/`company_id`"
+  get_job                     <job_name>       Get a job by name. Name format "projects/`project_id`/jobs/`job_id`"
+  update_job                  <job_name>       Update a job. Name format "projects/`project_id`/jobs/`job_id`"
+  update_job_with_field_mask  <job_name>       Update a job with field mask. Name format "projects/`project_id`/jobs/`job_id`"
+  delete_job                  <job_name>       Delete a job. Name format "projects/`project_id`/jobs/`job_id`"
 Environment variables:
   GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
     usage
