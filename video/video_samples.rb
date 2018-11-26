@@ -160,7 +160,12 @@ def transcribe_speech_gcs path:
 
   video = Google::Cloud::VideoIntelligence.new
 
-  context = {speech_transcription_config: {language_code: "en-US", enable_automatic_punctuation: true}}
+  context = {
+    speech_transcription_config: {
+      language_code: "en-US",
+      enable_automatic_punctuation: true
+    }
+  }
 
   # Register a callback during the method call
   operation = video.annotate_video input_uri: path, features: [:SPEECH_TRANSCRIPTION], video_context: context do |operation|
