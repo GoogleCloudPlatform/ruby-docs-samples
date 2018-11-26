@@ -25,12 +25,9 @@ def draw_box_around_faces path_to_image_file:, path_to_output_file:
   # [END vision_face_detection_tutorial_client]
 
   # [START vision_face_detection_tutorial_send_request]
-  content = File.binread path_to_image_file
-  image = { content: content }
-  feature = { type: :FACE_DETECTION }
-  request = { image: image, features: [feature] }
-
-  response = image_annotator.batch_annotate_images([request])
+  response = image_annotator.face_detection(
+    image: path_to_image_file
+  )
   # [END vision_face_detection_tutorial_send_request]
 
   # [START vision_face_detection_tutorial_process_response]

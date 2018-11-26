@@ -22,13 +22,11 @@ def detect_labels image_path:
 
   image_annotator = Google::Cloud::Vision::ImageAnnotator.new
 
-  content = File.binread image_path
-  image = { content: content }
-  max_results = 15 # optional, defaults to 10
-  feature = { type: :LABEL_DETECTION, max_results: max_results }
-  request = { image: image, features: [feature] }
+  response = image_annotator.label_detection(
+    image: image_path,
+    max_results: 15 # optional, defaults to 10
+  )
 
-  response = image_annotator.batch_annotate_images([request])
   response.responses.each do |res|
     res.label_annotations.each do |label|
       puts label.description
@@ -48,13 +46,11 @@ def detect_labels_gcs image_path:
 
   image_annotator = Google::Cloud::Vision::ImageAnnotator.new
 
-  source = { gcs_image_uri: image_path }
-  image = { source: source }
-  max_results = 15 # optional, defaults to 10
-  feature = { type: :LABEL_DETECTION, max_results: max_results }
-  request = { image: image, features: [feature] }
+  response = image_annotator.label_detection(
+    image: image_path,
+    max_results: 15 # optional, defaults to 10
+  )
 
-  response = image_annotator.batch_annotate_images([request])
   response.responses.each do |res|
     res.label_annotations.each do |label|
       puts label.description

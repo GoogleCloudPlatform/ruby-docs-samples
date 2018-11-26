@@ -22,12 +22,10 @@ def localize_objects image_path:
 
   image_annotator = Google::Cloud::Vision::ImageAnnotator.new
 
-  content = File.binread image_path
-  image = { content: content }
-  feature = { type: :OBJECT_LOCALIZATION }
-  request = { image: image, features: [feature] }
+  response = image_annotator.object_localization_detection(
+    image: image_path
+  )
 
-  response = image_annotator.batch_annotate_images([request])
   response.responses.each do |res|
     res.localized_object_annotations.each do |object|
       puts "#{object.name} (confidence: #{object.score})"
@@ -51,12 +49,10 @@ def localize_objects_gs image_path:
 
   image_annotator = Google::Cloud::Vision::ImageAnnotator.new
 
-  source = { gcs_image_uri: image_path }
-  image = { source: source }
-  feature = { type: :OBJECT_LOCALIZATION }
-  request = { image: image, features: [feature] }
+  response = image_annotator.object_localization_detection(
+    image: image_path
+  )
 
-  response = image_annotator.batch_annotate_images([request])
   response.responses.each do |res|
     res.localized_object_annotations.each do |object|
       puts "#{object.name} (confidence: #{object.score})"
@@ -80,12 +76,10 @@ def localize_objects_uri image_path:
 
   image_annotator = Google::Cloud::Vision::ImageAnnotator.new
 
-  source = { image_uri: image_path }
-  image = { source: source }
-  feature = { type: :OBJECT_LOCALIZATION }
-  request = { image: image, features: [feature] }
+  response = image_annotator.object_localization_detection(
+    image: image_path
+  )
 
-  response = image_annotator.batch_annotate_images([request])
   response.responses.each do |res|
     res.localized_object_annotations.each do |object|
       puts "#{object.name} (confidence: #{object.score})"

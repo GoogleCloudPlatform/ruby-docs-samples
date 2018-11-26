@@ -27,14 +27,10 @@ image_annotator = Google::Cloud::Vision::ImageAnnotator.new
 # The name of the image file to annotate
 file_name = "./resources/cat.jpg"
 
-# Build the request body
-content = File.binread file_name
-image = { content: content }
-feature = { type: :LABEL_DETECTION }
-request = { image: image, features: [feature] }
-
 # Performs label detection on the image file
-response = image_annotator.batch_annotate_images([request])
+response = image_annotator.label_detection(
+  image: file_name
+)
 response.responses.each do |res|
   puts "Labels:"
   res.label_annotations.each do |label|

@@ -22,12 +22,10 @@ def detect_faces image_path:
 
   image_annotator = Google::Cloud::Vision::ImageAnnotator.new
 
-  content = File.binread image_path
-  image = { content: content }
-  feature = { type: :FACE_DETECTION }
-  request = { image: image, features: [feature] }
+  response = image_annotator.face_detection(
+    image: image_path
+  )
 
-  response = image_annotator.batch_annotate_images([request])
   response.responses.each do |res|
     res.face_annotations.each do |face|
       puts "Joy:      #{face.joy_likelihood}"
@@ -50,12 +48,10 @@ def detect_faces_gcs image_path:
 
   image_annotator = Google::Cloud::Vision::ImageAnnotator.new
 
-  source = { gcs_image_uri: image_path }
-  image = { source: source }
-  feature = { type: :FACE_DETECTION }
-  request = { image: image, features: [feature] }
+  response = image_annotator.face_detection(
+    image: image_path
+  )
 
-  response = image_annotator.batch_annotate_images([request])
   response.responses.each do |res|
     res.face_annotations.each do |face|
       puts "Joy:      #{face.joy_likelihood}"

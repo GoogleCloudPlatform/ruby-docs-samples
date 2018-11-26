@@ -22,22 +22,13 @@ def detect_pdf_gcs gcs_source_uri:, gcs_destination_uri:
 
   image_annotator = Google::Cloud::Vision::ImageAnnotator.new
 
-  # Supported mime_types are: 'application/pdf' and 'image/tiff'
-  input_config = {
-    gcs_source: { uri: gcs_source_uri },
-    mime_type:  "application/pdf"
-  }
-
-  output_config = {
-    gcs_destination: { uri: gcs_destination_uri },
-    batch_size:      2 # number of pages to group per json output file
-  }
-
-  async_request = {
-    input_config:  input_config,
-    features:      [{ type: :DOCUMENT_TEXT_DETECTION }],
-    output_config: output_config
-  }
+  operation = image_annotator.document_text_detection(
+    image: gcs_source_uri,
+    mime_type: "application/pdf",
+    batch_size: 2,
+    destination: gcs_destination_uri,
+    async: true
+  )
 
   operation = image_annotator.async_batch_annotate_files [async_request]
 

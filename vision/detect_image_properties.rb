@@ -22,12 +22,10 @@ def detect_image_properties image_path:
 
   image_annotator = Google::Cloud::Vision::ImageAnnotator.new
 
-  content = File.binread image_path
-  image = { content: content }
-  feature = { type: :IMAGE_PROPERTIES }
-  request = { image: image, features: [feature] }
+  response = image_annotator.image_properties_detection(
+    image: image_path
+  )
 
-  response = image_annotator.batch_annotate_images([request])
   response.responses.each do |res|
     res.image_properties_annotation.dominant_colors.colors.each do |color|
       puts "Color #{color.color.red}, #{color.color.green}, #{color.color.blue}"
@@ -47,12 +45,10 @@ def detect_image_properties_gcs image_path:
 
   image_annotator = Google::Cloud::Vision::ImageAnnotator.new
 
-  source = { gcs_image_uri: image_path }
-  image = { source: source }
-  feature = { type: :IMAGE_PROPERTIES }
-  request = { image: image, features: [feature] }
+  response = image_annotator.image_properties_detection(
+    image: image_path
+  )
 
-  response = image_annotator.batch_annotate_images([request])
   response.responses.each do |res|
     res.image_properties_annotation.dominant_colors.colors.each do |color|
       puts "Color #{color.color.red}, #{color.color.green}, #{color.color.blue}"

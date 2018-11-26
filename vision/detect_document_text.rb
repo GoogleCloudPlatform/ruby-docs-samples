@@ -22,10 +22,9 @@ def detect_document_text image_path:
 
   image_annotator = Google::Cloud::Vision::ImageAnnotator.new
 
-  image_content = File.binread image_path
-  image = { content: image_content }
-  feature = { type: :DOCUMENT_TEXT_DETECTION }
-  request = { image: image, features: [feature] }
+  response = image_annotator.document_text_detection(
+    image: image_path
+  )
 
   response = image_annotator.batch_annotate_images([request])
   text = ""
@@ -50,10 +49,9 @@ def detect_document_text_gcs image_path:
 
   image_annotator = Google::Cloud::Vision::ImageAnnotator.new
 
-  source = { gcs_image_uri: image_path }
-  image = { source: source }
-  feature = { type: :DOCUMENT_TEXT_DETECTION }
-  request = { image: image, features: [feature] }
+  response = image_annotator.document_text_detection(
+    image: image_path
+  )
 
   response = image_annotator.batch_annotate_images([request])
   text = ""
@@ -76,24 +74,17 @@ def detect_document_text_async image_path:, output_path:
 
   image_annotator = Google::Cloud::Vision::ImageAnnotator.new
   # [START image_annotator_asynchronous_migration]
-  gcs_source = { uri: image_path }
-  input_config = { gcs_source: gcs_source, mime_type: "application/pdf" }
-  max_results = 15 # optional, defaults to 10
-  feature = { type: :DOCUMENT_TEXT_DETECTION, max_results: max_results }
-  destination = { uri: output_path }
 
-  # number of pages per output file
-  batch_size = 1 # optional, defaults to 20
-  output_config = { gcs_destination: destination, batch_size: batch_size }
-  request = {
-    input_config: input_config,
-    features: [feature],
-    output_config: output_config
-  }
+  operation = image_annotator.document_text_detection(
+    image: image_path,
+    async: true,
+    max_results: 15, # optional, defaults to 10
+    destination: output_path,
+    batch_size: 1, # optional, defaults to 20.
+    mime_type: "application/pdf"
+  )
 
-  requests = [request]
-  response = image_annotator.async_batch_annotate_files(requests)
-  response.wait_until_done!
+  operation.wait_until_done!
   # results will be stored in Google Cloud Storage formatted like
   # "#{output_path}output-#{start_page}-to-#{end_page}.json"
   # [END image_annotator_asynchronous_migration]
