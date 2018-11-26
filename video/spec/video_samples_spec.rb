@@ -21,9 +21,10 @@ require "uri"
 describe "Google Cloud Video API sample" do
 
   before do
-    @labels_file      = "demomaker/cat.mp4"
-    @shots_file       = "demomaker/gbikes_dinosaur.mp4"
-    @safe_search_file = "demomaker/pizza.mp4"
+    @labels_file        = "cloud-samples-data/video/cat.mp4"
+    @shots_file         = "cloud-samples-data/video/gbikes_dinosaur.mp4"
+    @safe_search_file   = "cloud-samples-data/video/pizza.mp4"
+    @transcription_file = "cloud-samples-data/video/googlework_short.mp4"
   end
 
   it "can analyze labels from a gcs file" do
@@ -67,6 +68,14 @@ describe "Google Cloud Video API sample" do
       analyze_shots path: "gs://#{@shots_file}"
     }.to output(
       /0.0 to 5/
+    ).to_stdout
+  end
+
+  it "can transcribe speech from a gcs file" do
+    expect {
+      transcribe_speech_gcs path: "gs://#{@transcription_file}"
+    }.to output(
+      /cultural/
     ).to_stdout
   end
 end
