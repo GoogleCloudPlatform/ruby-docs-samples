@@ -80,7 +80,7 @@ def detect_document_text_async image_path:, output_path:
     async: true,
     max_results: 15, # optional, defaults to 10
     destination: output_path,
-    batch_size: 1, # optional, defaults to 20.
+    batch_size: 1, # optional, defaults to 10.
     mime_type: "application/pdf"
   )
 
