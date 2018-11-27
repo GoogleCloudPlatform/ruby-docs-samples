@@ -483,7 +483,7 @@ describe "Cloud IoT Core" do
       cert_path:   resource("rsa_cert.pem")
     )
 
-    # Without a ruby-based device lient, it's difficult to test positive; test
+    # Without a ruby-based device client, it's difficult to test positive; test
     # that we see the expected error condition for sending a command to a
     # non-connected device
     expect{
