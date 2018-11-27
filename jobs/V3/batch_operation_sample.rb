@@ -1,6 +1,6 @@
 # Copyright 2018 Google, Inc
 #
-# Licensed under the Apache License, Version 2.0 (the "License");
+# Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -12,183 +12,193 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "google/apis/jobs_v3"
-require "rails"
-require 'securerandom'
-require_relative 'basic_company_sample'
+def job_discovery_batch_create_jobs company_name:, project_id:
+	# [START batch_create_jobs]
+	# company_name  = "The company's name which has the job you want to create"
+	# project_id = "Id of the project"
 
-=begin
-	This file introduce how to do batch operation in CJD. Including:
-	- Create job within batch
-	- Update job within batch
-	- Delete job within batch
-	For simplicity, the samples always use the same kind of requests in each batch. In a real case ,
-    you might put different kinds of request in one batch.
-=end
+	require "google/apis/jobs_v3"
 
-class BatchOperationSample
-	# Instantiate the client
-	@@Jobs   = Google::Apis::JobsV3
-	@@DEFAULT_PROJECT_ID = "projects/" + ENV["GOOGLE_CLOUD_PROJECT"];
-		
-	@@talentSolution_client = @@Jobs::CloudTalentSolutionService.new
+	jobs   = Google::Apis::JobsV3
+	talent_solution_client = jobs::CloudTalentSolutionService.new
 	# @see https://developers.google.com/identity/protocols/application-default-credentials#callingruby
-	@@talentSolution_client.authorization = Google::Auth.get_application_default(
+	talent_solution_client.authorization = Google::Auth.get_application_default(
 		"https://www.googleapis.com/auth/jobs"
 	)
 
+	jobs_created = Array.new
+	callback = lambda { |job, err| 
+			if err.nil?
+				jobs_created.push job
+			else
+				puts "Batch job create error message: #{err.message}"
+			end
+			  }
+	
+	job_generated1 = jobs::Job.new :requisition_id => "jobWithRequiredFields: " + SecureRandom.hex,
+					  :title => " Lab Technician",
+					  :company_name => company_name,
+					  :employment_types => Array["FULL_TIME"],
+					  :language_code => "en-US",
+					  :application_info => (jobs::ApplicationInfo.new :uris => Array["http://careers.google.com"]),
+					  :description => "Design and improve software."
+	job_generated2 = jobs::Job.new :requisition_id => "jobWithRequiredFields: " + SecureRandom.hex,
+					  :title => "Systems Administrator",
+					  :company_name => company_name,
+					  :employment_types => Array["FULL_TIME"],
+					  :language_code => "en-US",
+					  :application_info => (jobs::ApplicationInfo.new :uris => Array["http://careers.google.com"]),
+					  :description => "System Administrator for software."
 
-# [START batch_create_jobs]
-=begin 
-		Batch create a few jobs
-=end
-	def batchCreateJobs(companyName)
-		jobsCreated = Array.new;
-		callback = lambda { |job, err| 
-						if err.nil?
-							jobsCreated.push job;
-						else
-							puts "Batch job create error message: " + err.message;
-						end
-					  }
-		
-		applicationInfo = @@Jobs::ApplicationInfo.new;
-		applicationInfo.uris = Array["http://careers.google.com"];
-		
-		requisitionId1 = "jobWithRequiredFields:" + SecureRandom.hex;
-		jobGenerated1 = @@Jobs::Job.new;
-		jobGenerated1.requisition_id = requisitionId1;
-		jobGenerated1.title = " Lab Technician";
-		jobGenerated1.company_name = companyName;
-		jobGenerated1.employment_types = Array["FULL_TIME"];
-		jobGenerated1.language_code = "en-US";
-		jobGenerated1.application_info = applicationInfo;
-		jobGenerated1.description = "Design and improve software.";
+	create_job_request1 = jobs::CreateJobRequest.new :job => job_generated1
+	create_job_request2 = jobs::CreateJobRequest.new :job => job_generated2
 
-		requisitionId2 = "jobWithRequiredFields:" + SecureRandom.hex;
-		jobGenerated2 = @@Jobs::Job.new;
-		jobGenerated2.requisition_id = requisitionId2;
-		jobGenerated2.title = "Systems Administrator";
-		jobGenerated2.company_name = companyName;
-		jobGenerated2.employment_types = Array["FULL_TIME"];
-		jobGenerated2.language_code = "en-US";
-		jobGenerated2.application_info = applicationInfo;
-		jobGenerated2.description = "System Administrator for software.";
-
-		createJobRequest1 = @@Jobs::CreateJobRequest.new;
-		createJobRequest1.job = jobGenerated1;
-		createJobRequest2 = @@Jobs::CreateJobRequest.new;
-		createJobRequest2.job = jobGenerated2;
-
-		@@talentSolution_client.batch do |s|
-			s.create_job(@@DEFAULT_PROJECT_ID, createJobRequest1, &callback);
-			s.create_job(@@DEFAULT_PROJECT_ID, createJobRequest2, &callback);
-		end
-		# jobCreated = batchCreate.create_job(@@DEFAULT_PROJECT_ID, createJobRequest1);
-		puts "Batch job created: " + jobsCreated.to_json;
-		return jobsCreated;
+	talent_solution_client.batch do |s|
+		s.create_job(project_id, create_job_request1, &callback)
+		s.create_job(project_id, create_job_request2, &callback)
 	end
-# [END batch_create_jobs]
-
-# [START batch_update_jobs]
-=begin 
-		Batch update a few jobs
-=end
-	def batchUpdateJobs(jobToBeUpdated)
-		jobsUpdated = Array.new;
-		callback = lambda { |job, err| 
-						if err.nil?
-							jobsUpdated.push job;
-						else
-							puts "Batch job updated error message: " + err.message;
-						end
-					  }
-
-
-		updateJobWithMaskRequests = Array.new;
-		jobToBeUpdated.each{ |job|
-			request = @@Jobs::UpdateJobRequest.new;
-			request.job = job;
-			request.update_mask = "title";
-			updateJobWithMaskRequests.push request;
-		}
-		
-		@@talentSolution_client.batch do |s|
-			updateJobWithMaskRequests.each{ |updateJobWithMaskRequest|
-				s.patch_project_job(updateJobWithMaskRequest.job.name, updateJobWithMaskRequest, &callback);
-			}
-		end
-		puts "Batch job updated with Mask: " + jobsUpdated.to_json;
-
-		jobsUpdated.clear;
-		updateJobRequests = Array.new;
-		jobToBeUpdated.each{ |job|
-			request = @@Jobs::UpdateJobRequest.new;
-			request.job = job;
-			updateJobRequests.push request;
-		}
-		
-		@@talentSolution_client.batch do |s|
-			updateJobRequests.each{ |updateJobRequest|
-				s.patch_project_job(updateJobRequest.job.name, updateJobRequest, &callback);
-			}
-		end
-		# jobCreated = batchCreate.create_job(@@DEFAULT_PROJECT_ID, createJobRequest1);
-		puts "Batch job updated: " + jobsUpdated.to_json;
-
-		return jobsUpdated;
-	end
-# [END batch_create_jobs]
-
-# [START batch_delete_jobs]
-=begin 
-		Batch delete a few jobs
-=end
-	def batchDeleteJobs(jobToBeDeleted)
-		jobsDeleted = 0;
-		callback = lambda { |job, err| 
-						if err.nil?
-							jobsDeleted += 1;
-						else
-							puts "Updated error message: " + err.message;
-						end
-					  }
-
-		@@talentSolution_client.batch do |s|
-			jobToBeDeleted.each{ |jobName|
-				s.delete_project_job(jobName, &callback);
-			}
-		end
-		# jobCreated = batchCreate.create_job(@@DEFAULT_PROJECT_ID, createJobRequest1);
-		puts "Batch job deleted.";
-
-		return jobsDeleted;
-	end
-# [END batch_delete_jobs]
-
+	# jobCreated = batchCreate.create_job(project_id, create_job_request1)
+	puts "Batch job created: #{jobs_created.to_json}"
+	return jobs_created
+	# [END batch_create_jobs]
 end
 
-# Test main. Run only if file is being executed directly or being called by ../spec/samples_spec.rb
-if (ARGV.include? File.basename(__FILE__)) || 
-	((File.basename(caller[0]).include? "samples_spec.rb") && (File.basename(caller[0]).include? "load"))
-	# test
-	company = BasicCompanySample.new
-	batchJob = BatchOperationSample.new
-	# createCompany
-	### positive test
-	company_created_test = company.createCompany(company.generateCompany());
-	jobs_created_test = batchJob.batchCreateJobs(company_created_test.name);
 
-	jobs_created_test.each{ |job|
-		job.title = job.title + " updated";
-		job.description = job.description + " updated";
+def job_discovery_batch_update_jobs job_to_be_updated:
+	# [START batch_update_jobs]
+	# job_to_be_updated = "Updated job objects"
+
+	require "google/apis/jobs_v3"
+
+	jobs   = Google::Apis::JobsV3
+	talent_solution_client = jobs::CloudTalentSolutionService.new
+	# @see https://developers.google.com/identity/protocols/application-default-credentials#callingruby
+	talent_solution_client.authorization = Google::Auth.get_application_default(
+		"https://www.googleapis.com/auth/jobs"
+	)
+
+	jobs_updated = Array.new
+	callback = lambda { |job, err| 
+			if err.nil?
+				jobs_updated.push job
+			else
+				puts "Batch job updated error message: #{err.message}"
+			end
+			  }
+
+
+	update_job_with_mask_requests = Array.new
+	job_to_be_updated.each{ |job|
+		request = jobs::UpdateJobRequest.new
+		request.job = job
+		request.update_mask = "title"
+		update_job_with_mask_requests.push request
 	}
+	
+	talent_solution_client.batch do |s|
+		update_job_with_mask_requests.each{ |update_job_with_mask_request|
+			s.patch_project_job(update_job_with_mask_request.job.name, update_job_with_mask_request, &callback)
+		}
+	end
+	puts "Batch job updated with Mask: #{jobs_updated.to_json}"
 
-	jobs_updated_test = batchJob.batchUpdateJobs(jobs_created_test);
-
-	jobNames = Array.new;
-	jobs_updated_test.each{ |job|
-		jobNames.push job.name;
+	jobs_updated.clear
+	update_job_requests = Array.new
+	job_to_be_updated.each{ |job|
+		request = jobs::UpdateJobRequest.new
+		request.job = job
+		update_job_requests.push request
 	}
-	batchJob.batchDeleteJobs(jobNames);
+	
+	talent_solution_client.batch do |s|
+		update_job_requests.each{ |update_job_request|
+			s.patch_project_job(update_job_request.job.name, update_job_request, &callback)
+		}
+	end
+	# jobCreated = batchCreate.create_job(project_id, create_job_request1)
+	puts "Batch job updated: #{jobs_updated.to_json}"
+
+	return jobs_updated
+	# [END batch_update_jobs]
+end
+
+def job_discovery_batch_delete_jobs job_to_be_deleted:
+	# [START batch_delete_jobs]
+	# job_to_be_deleted = "Name of the jobs to be deleted"
+	require "google/apis/jobs_v3"
+
+	jobs   = Google::Apis::JobsV3
+	talent_solution_client = jobs::CloudTalentSolutionService.new
+	# @see https://developers.google.com/identity/protocols/application-default-credentials#callingruby
+	talent_solution_client.authorization = Google::Auth.get_application_default(
+		"https://www.googleapis.com/auth/jobs"
+	)
+
+	jobs_deleted = 0
+	callback = lambda { |job, err| 
+			if err.nil?
+				jobs_deleted += 1
+			else
+				puts "Batch job deleted error message: #{err.message}"
+			end
+			  }
+
+	talent_solution_client.batch do |s|
+		job_to_be_deleted.each{ |job_name|
+			s.delete_project_job(job_name, &callback)
+		}
+	end
+	puts "Batch job deleted."
+
+	return jobs_deleted
+	# [END batch_delete_jobs]
+end
+
+def run_batch_operation_sample arguments
+	command = arguments.shift
+	default_project_id = "projects/#{ENV["GOOGLE_CLOUD_PROJECT"]}"
+	jobs_created = Array.new
+	job_names = Array.new
+	case command
+	when "batch_create_jobs"
+		jobs_created = job_discovery_batch_create_jobs company_name: arguments.shift,
+													   project_id: default_project_id
+		jobs_created.each{ |job|
+			job_names.push job.name
+		}
+		job_discovery_batch_delete_jobs job_to_be_deleted: job_names
+	when "batch_update_jobs"
+		jobs_created = job_discovery_batch_create_jobs company_name: arguments.shift,
+													   project_id: default_project_id
+		jobs_created.each{ |job|
+			job.title = job.title + " updated"
+			job.description = job.description + " updated"
+		}
+		job_discovery_batch_update_jobs job_to_be_updated: jobs_created
+		jobs_created.each{ |job|
+			job_names.push job.name
+		}
+		job_discovery_batch_delete_jobs job_to_be_deleted: job_names
+	when "batch_delete_jobs"
+		jobs_created = job_discovery_batch_create_jobs company_name: arguments.shift,
+													   project_id: default_project_id
+		jobs_created.each{ |job|
+			job_names.push job.name
+		}
+		job_discovery_batch_delete_jobs job_to_be_deleted: job_names
+	else
+	puts <<-usage
+Usage: bundle exec ruby batch_operation_sample.rb [command] [arguments]
+Commands:
+  batch_create_jobs      <company_name>     Batch create jobs under provided company. Name foName format "projects/`project_id`/companies/`company_id`"
+  batch_update_jobs      <company_name>     Batch update jobs.
+  batch_delete_jobs      <company_name>     Batch delete jobs.
+Environment variables:
+  GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
+    usage
+	end
+end
+
+if __FILE__ == $PROGRAM_NAME
+  run_batch_operation_sample ARGV
 end

@@ -43,9 +43,11 @@ def job_discovery_generate_job company_name:
 	# [END generate basic job]
 end
 
-def job_discovery_create_job job_to_be_created:, default_project_id:
+def job_discovery_create_job job_to_be_created:, project_id:
 	# [START create_job]
 	# job_to_be_created  = "Job to be created"
+	# project_id = "Id of the project"
+
 	require "google/apis/jobs_v3"
 
 	jobs   = Google::Apis::JobsV3
@@ -57,7 +59,7 @@ def job_discovery_create_job job_to_be_created:, default_project_id:
 
 	begin
 		create_job_request = jobs::CreateJobRequest.new :job => job_to_be_created
-		job_created = talentSolution_client.create_job(default_project_id, create_job_request)
+		job_created = talentSolution_client.create_job(project_id, create_job_request)
 		puts "Job created: #{job_created.to_json}"
 		return job_created
 	rescue
@@ -195,7 +197,7 @@ def run_basic_job_sample arguments
 		company_got_test = job_discovery_get_company company_name: arguments.shift
 		job_generated_test = job_discovery_generate_job company_name: company_got_test.name
 		job_created_test = job_discovery_create_job job_to_be_created: job_generated_test,
-													default_project_id: default_project_id
+													project_id: default_project_id
 	when "get_job"
 		job_discovery_get_job job_name: arguments.shift
 	when "update_job"

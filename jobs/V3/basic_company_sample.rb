@@ -30,9 +30,10 @@ def job_discovery_generate_company display_name:, headquarters_address:
 	# [END generate_company]
 end
 
-def job_discovery_create_company company_to_be_created:, default_project_id:
+def job_discovery_create_company company_to_be_created:, project_id:
 	# [START create_company]
 	# company_to_be_created  = "Company to be created"
+	# project_id = "Id of the project"
 
 	require "google/apis/jobs_v3"
 
@@ -45,7 +46,7 @@ def job_discovery_create_company company_to_be_created:, default_project_id:
 
 	begin
 		create_company_request = jobs::CreateCompanyRequest.new :company => company_to_be_created
-		company_created = talent_solution_client.create_company(default_project_id, create_company_request)
+		company_created = talent_solution_client.create_company(project_id, create_company_request)
 		puts "Company created: #{company_created.to_json}"
 		return company_created
 	rescue
@@ -184,7 +185,7 @@ def run_basic_company_sample arguments
 		company_generated_test = job_discovery_generate_company display_name: arguments.shift, 
 																headquarters_address: arguments.shift
 		company_created_test = job_discovery_create_company company_to_be_created:company_generated_test,
-															default_project_id: default_project_id
+															project_id: default_project_id
 	when "get_company"
 		job_discovery_get_company company_name: arguments.shift
 	when "update_company"

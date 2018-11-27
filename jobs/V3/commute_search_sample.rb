@@ -1,6 +1,6 @@
 # Copyright 2018 Google, Inc
 #
-# Licensed under the Apache License, Version 2.0 (the "License");
+# Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -12,91 +12,59 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "google/apis/jobs_v3"
-require "rails"
-require 'securerandom'
-require_relative 'basic_company_sample'
-require_relative 'basic_job_sample'
+def job_discovery_commute_search location_str:, project_id:
+	# [START commute_search]
+	require "google/apis/jobs_v3"
 
-=begin
-	The samples in this file introduce how to do a commute search.
-	Note: Commute Search is different from location search. It only take latitude and longitude as
-	the start location.
-=end
-
-class CommuteSearchSample
-	# Instantiate the client
-	@@Jobs   = Google::Apis::JobsV3
-	@@DEFAULT_PROJECT_ID = "projects/" + ENV["GOOGLE_CLOUD_PROJECT"];
-		
-	@@talentSolution_client = @@Jobs::CloudTalentSolutionService.new
+	jobs   = Google::Apis::JobsV3	
+	talent_solution_client = jobs::CloudTalentSolutionService.new
 	# @see https://developers.google.com/identity/protocols/application-default-credentials#callingruby
-	@@talentSolution_client.authorization = Google::Auth.get_application_default(
+	talent_solution_client.authorization = Google::Auth.get_application_default(
 		"https://www.googleapis.com/auth/jobs"
 	)
 
-# [START commute_search]
-=begin 
-		Search based on commute info.
-=end
-	def commuteSearch(companyName, location)
-		# Make sure to set the requestMetadata the same as the associated search request
-		requestMetadata = @@Jobs::RequestMetadata.new;
-		# Make sure to hash your userID
-		requestMetadata.user_id = "HashedUserId";
-		# Make sure to hash the sessionID
-		requestMetadata.session_id = "HashedSessionId";
-		# Domain of the website where the search is conducted
-		requestMetadata.domain = "www.google.com";
-
-		# Set location filter
-		commuteFilter = @@Jobs::CommuteFilter.new;
-		commuteFilter.road_traffic = "TRAFFIC_FREE";
-		commuteFilter.commute_method = "TRANSIT";
-		commuteFilter.travel_duration = "1000s";
-		commuteFilter.start_coordinates = location;
-		# Perform a search for analyst  related jobs
-		jobQuery = @@Jobs::JobQuery.new;
-		jobQuery.commute_filter = commuteFilter;
-		if !companyName.nil?
-			jobQuery.company_names = Array[companyName];
-		end
-
-		searchJobsRequest = @@Jobs::SearchJobsRequest.new;
-		searchJobsRequest.request_metadata = requestMetadata;
-		# Set the actual search term as defined in the jobQurey
-		searchJobsRequest.job_query = jobQuery;
-		# Set the search mode to a regular search
-		searchJobsRequest.job_view = "JOB_VIEW_FULL"
-		searchJobsRequest.require_precise_result_size = true;
-
-		searchJobsResponse = @@talentSolution_client.search_jobs(@@DEFAULT_PROJECT_ID, searchJobsRequest);
-
-		puts searchJobsResponse.to_json;
-	end
-# [END basic_location_search]
+	# Make sure to set the request_metadata the same as the associated search request
+	request_metadata = jobs::RequestMetadata.new :user_id => "HashedUserId",
+							 :session_id => "HashedSessionId",
+							 :domain => "www.google.com"
+	
+	location_arr = location_str.split(',')
+	location = Google::Apis::JobsV3::LatLng.new :latitude => location_arr[0].to_f,
+												:longitude => location_arr[1].to_f
+	# Set location filter
+	commute_filter = jobs::CommuteFilter.new :road_traffic => "TRAFFIC_FREE",
+						 :commute_method => "TRANSIT",
+						 :travel_duration => "1000s",
+						 :start_coordinates => location
+	# Perform a search for analyst  related jobs
+	search_jobs_request = jobs::SearchJobsRequest.new :request_metadata => request_metadata,
+							:job_query => (jobs::JobQuery.new :commute_filter => commute_filter),
+							:job_view => "JOB_VIEW_FULL",
+							:require_precise_result_size => true
+	search_jobs_response = talent_solution_client.search_jobs(project_id, search_jobs_request)
+	puts search_jobs_response.to_json
+	# [END commute_search]
 end
 
-# Test main. Run only if file is being executed directly or being called by ../spec/samples_spec.rb
-if (ARGV.include? File.basename(__FILE__)) || 
-	((File.basename(caller[0]).include? "samples_spec.rb") && (File.basename(caller[0]).include? "load"))
-	# test
-	company = BasicCompanySample.new;
-	job = BasicJobSample.new;
-	search = CommuteSearchSample.new;
+def run_commute_search_sample arguments
+	command = arguments.shift
+	default_project_id = "projects/#{ENV["GOOGLE_CLOUD_PROJECT"]}"
 
-	company_created_test = company.createCompany(company.generateCompany());
-	job_generated_test = job.generateJob(company_created_test.name);
-	job_generated_test.addresses = Array["1600 Amphitheatre Parkway, Mountain View, CA 94043"];
-	job_created_test = job.createJob(job_generated_test);
+	case command
+	when "commute_search"
+		job_discovery_commute_search location_str: arguments.shift, 
+									 project_id: default_project_id
+	else
+	puts <<-usage
+Usage: bundle exec ruby commute_search_sample.rb [command] [arguments]
+Commands:
+  commute_search        <location>     Search a job based on commute details from given location. Location format "latitude,longtitude"
+  Environment variables:
+  GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
+    usage
+	end
+end
 
-	sleep(10);
-
-	location = Google::Apis::JobsV3::LatLng.new;
-	location.latitude = 37.422408;
-	location.longitude = -122.085609;
-	search.commuteSearch(job_created_test.company_name, location);
-
-	job.deleteJob(job_created_test.name);
-	company.deleteCompany(company_created_test.name);
+if __FILE__ == $PROGRAM_NAME
+  run_commute_search_sample ARGV
 end

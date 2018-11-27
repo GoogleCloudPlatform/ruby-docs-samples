@@ -38,17 +38,21 @@ RSpec.configure do |config|
   config.default_sleep_interval = 10
 end
 
-$stdout = StringIO.new
-
 # Start verifying
 describe "Cloud Job Discovery Samples" do
+
+  before do
+    $stdout = StringIO.new
+    @default_project_id = "projects/#{ENV["GOOGLE_CLOUD_PROJECT"]}"
+  end
 
 # verify basic_company_sample.rb
   it "basic_company_sample" do
     begin
       company_generated_test = job_discovery_generate_company display_name: "Google", 
                                                               headquarters_address: "1600 Amphitheatre Parkway Mountain View, CA 94043"
-      company_created_test = job_discovery_create_company company_to_be_created: company_generated_test
+      company_created_test = job_discovery_create_company company_to_be_created: company_generated_test,
+                                                          project_id: @default_project_id
       job_discovery_get_company company_name: company_created_test.name
       company_created_test.display_name = "Updated name Google"
       job_discovery_update_company company_name: company_created_test.name, 
@@ -77,9 +81,11 @@ describe "Cloud Job Discovery Samples" do
     begin
       company_generated_test = job_discovery_generate_company display_name: "Google", 
                                                               headquarters_address: "1600 Amphitheatre Parkway Mountain View, CA 94043"
-      company_created_test = job_discovery_create_company company_to_be_created: company_generated_test
+      company_created_test = job_discovery_create_company company_to_be_created: company_generated_test,
+                                                          project_id: @default_project_id
       job_generated_test = job_discovery_generate_job company_name: company_created_test.name
-      job_created_test = job_discovery_create_job job_to_be_created: job_generated_test
+      job_created_test = job_discovery_create_job job_to_be_created: job_generated_test,
+                                                  project_id: @default_project_id
       job_discovery_get_job job_name: job_created_test.name
       job_created_test.description = "Updated description"
       job_discovery_update_job job_name: job_created_test.name, 
@@ -101,48 +107,83 @@ describe "Cloud Job Discovery Samples" do
     ensure
       $stdout = StringIO.new
     end
-end
-# # verify auto_complete_sample.rb
-#   it "auto_complete_sample" do
-#     begin
-#       load File.expand_path("../V3/auto_complete_sample.rb", __dir__)
-#       capture = $stdout.string
-#       expect(capture).to include("Job title auto complete result")
-#       expect(capture).to include("suggestion")
-#       expect(capture).to include("Default auto complete result")
-#     rescue
-#       puts "auto_complete_sample not all succeeded"
-#     ensure
-#       $stdout = StringIO.new
-#     end
-#   end
-# # verify batch_operation_sample.rb
-#   it "batch_operation_sample" do
-#     begin
-#       load File.expand_path("../V3/batch_operation_sample.rb", __dir__)
-#       capture = $stdout.string
-#       expect(capture).to include("Batch job created")
-#       expect(capture).to include("Batch job updated with Mask")
-#       expect(capture).to include("Batch job updated")
-#       expect(capture).to include("Batch job deleted")
-#     rescue
-#       puts "batch_operation_sample not all succeeded"
-#     ensure
-#       $stdout = StringIO.new
-#     end
-#   end
-# # verify commute_search_sample.rb
-#   it "commute_search_sample" do
-#     begin
-#       load File.expand_path("../V3/commute_search_sample.rb", __dir__)
-#       capture = $stdout.string
-#       expect(capture).to include("matchingJobs")
-#     rescue
-#       puts "commute_search_sample not all succeeded"
-#     ensure
-#       $stdout = StringIO.new
-#     end
-#   end
+  end
+# verify auto_complete_sample.rb
+  it "auto_complete_sample" do
+    begin
+      company_generated_test = job_discovery_generate_company display_name: "Google", 
+                                                              headquarters_address: "1600 Amphitheatre Parkway Mountain View, CA 94043"
+      company_created_test = job_discovery_create_company company_to_be_created: company_generated_test,
+                                                          project_id: @default_project_id
+      job_generated_test = job_discovery_generate_job company_name: company_created_test.name
+      job_generated_test.title = "software enginner"
+      job_created_test = job_discovery_create_job job_to_be_created: job_generated_test,
+                                                  project_id: @default_project_id
+      job_discovery_job_title_auto_complete company_name: company_created_test.name, 
+                                            query: "sof", 
+                                            project_id: default_project_id
+      job_discovery_default_auto_complete company_name: company_created_test.name, 
+                                          query: "sof", 
+                                          project_id: default_project_id
+      capture = $stdout.string
+      expect(capture).to include("Job title auto complete result")
+      expect(capture).to include("suggestion")
+      expect(capture).to include("Default auto complete result")
+    rescue
+      puts "auto_complete_sample not all succeeded"
+    ensure
+      $stdout = StringIO.new
+    end
+  end
+# verify batch_operation_sample.rb
+  it "batch_operation_sample" do
+    begin
+      company_generated_test = job_discovery_generate_company display_name: "Google", 
+                                                              headquarters_address: "1600 Amphitheatre Parkway Mountain View, CA 94043"
+      company_created_test = job_discovery_create_company company_to_be_created: company_generated_test,
+                                                          project_id: @default_project_id
+      jobs_created = job_discovery_batch_create_jobs company_name: company_created_test.name,
+                                                     project_id: @default_project_id
+      jobs_created.each{ |job|
+        job.title = job.title + " updated"
+        job.description = job.description + " updated"
+      }
+      job_discovery_batch_update_jobs job_to_be_updated: jobs_created
+      jobs_created.each{ |job|
+        job_names.push job.name
+      }
+      job_discovery_batch_delete_jobs job_to_be_deleted: job_names
+      capture = $stdout.string
+      expect(capture).to include("Batch job created")
+      expect(capture).to include("Batch job updated with Mask")
+      expect(capture).to include("Batch job updated")
+      expect(capture).to include("Batch job deleted")
+    rescue
+      puts "batch_operation_sample not all succeeded"
+    ensure
+      $stdout = StringIO.new
+    end
+  end
+# verify commute_search_sample.rb
+  it "commute_search_sample" do
+    begin
+      company_generated_test = job_discovery_generate_company display_name: "Google", 
+                                                              headquarters_address: "1600 Amphitheatre Parkway Mountain View, CA 94043"
+      company_created_test = job_discovery_create_company company_to_be_created: company_generated_test,
+                                                          project_id: @default_project_id
+      job_generated_test = job_discovery_generate_job company_name: company_created_test.name
+      job_created_test = job_discovery_create_job job_to_be_created: job_generated_test,
+                                                  project_id: @default_project_id
+      job_discovery_commute_search location_str: "37.422408,-122.085609", 
+                                   project_id: @default_project_id
+      capture = $stdout.string
+      expect(capture).to include("matchingJobs")
+    rescue
+      puts "commute_search_sample not all succeeded"
+    ensure
+      $stdout = StringIO.new
+    end
+  end
 # # verify custom_attribute_sample.rb
 #   it "custom_attribute_sample" do
 #     begin
