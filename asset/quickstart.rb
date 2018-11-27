@@ -16,7 +16,7 @@
 require 'google/cloud/asset'
 
 def export_assets(project_id:, dump_file_path:)
-  # [START asset_quickstart_exportassets]
+  # [START asset_quickstart_export_assets]
   require 'google/cloud/asset'
 
   asset_service_client = Google::Cloud::Asset.new(version: :v1beta1)
@@ -42,11 +42,11 @@ def export_assets(project_id:, dump_file_path:)
 
   operation.wait_until_done!
   # Do things with the result
-  # [END asset_quickstart_exportassets]
+  # [END asset_quickstart_export_assets]
 end
 
 def batch_get_history(project_id:, asset_names:)
-  # [START asset_quickstart_batchgetassetshistory]
+  # [START asset_quickstart_batch_get_assets_history]
   require 'google/cloud/asset'
 
   # project_id = 'YOUR_PROJECT_ID'
@@ -66,5 +66,5 @@ def batch_get_history(project_id:, asset_names:)
   )
   # Do things with the response
   puts response
-  # [END asset_quickstart_batchgetassetshistory]
+  # [END asset_quickstart_batch_get_assets_history]
 end
