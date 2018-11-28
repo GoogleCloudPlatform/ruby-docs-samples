@@ -70,10 +70,10 @@ def detect_document_text_async image_path:, output_path:
   # image_path = "Google Cloud Storage URI, eg. 'gs://my-bucket/document.pdf'"
   # output_path = "Google Cloud Storage URI, eg. 'gs://my-bucket/prefix'"
 
+  # [START image_annotator_asynchronous_migration]
   require "google/cloud/vision"
 
   image_annotator = Google::Cloud::Vision::ImageAnnotator.new
-  # [START image_annotator_asynchronous_migration]
 
   operation = image_annotator.document_text_detection(
     image: image_path,
@@ -85,9 +85,9 @@ def detect_document_text_async image_path:, output_path:
   )
 
   operation.wait_until_done!
+  # [END image_annotator_asynchronous_migration]
   # results will be stored in Google Cloud Storage formatted like
   # "#{output_path}output-#{start_page}-to-#{end_page}.json"
-  # [END image_annotator_asynchronous_migration]
   # [END vision_fulltext_detection_asynchronous]
 end
 
