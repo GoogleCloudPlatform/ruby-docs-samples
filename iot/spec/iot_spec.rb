@@ -462,4 +462,51 @@ describe "Cloud IoT Core" do
       registry_id: registry_name
     )
   end
+
+  example "Send command to device" do
+    # Setup scenario
+    topic_name    = "A#{@seed}-iot_command"
+    registry_name = "A#{@seed}create_delete_test_command"
+    topic         = create_pubsub_topic topic_name
+    $create_registry.call(
+      project_id:   @project_id,
+      location_id:  @region,
+      registry_id:  registry_name,
+      pubsub_topic: topic.name
+    )
+    device_id = "command_device"
+    $create_rsa_device.call(
+      project_id:  @project_id,
+      location_id: @region,
+      registry_id: registry_name,
+      device_id:   device_id,
+      cert_path:   resource("rsa_cert.pem")
+    )
+
+    # Without a ruby-based device client, it's difficult to test positive; test
+    # that we see the expected error condition for sending a command to a
+    # non-connected device
+    expect{
+      $send_device_command.call(
+        project_id:  @project_id,
+        location_id: @region,
+        registry_id: registry_name,
+        device_id:   device_id,
+        data:  "test"
+      )
+    }.to raise_error(/not subscribed to the commands topic/m)
+
+    # Clean up resources
+    $delete_device.call(
+      project_id:  @project_id,
+      location_id: @region,
+      registry_id: registry_name,
+      device_id:   device_id
+    )
+    $delete_registry.call(
+      project_id:  @project_id,
+      location_id: @region,
+      registry_id: registry_name
+    )
+  end
 end

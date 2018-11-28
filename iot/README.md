@@ -60,6 +60,7 @@ Device Management Commands:
   list_devices <location> <registry_id> List the devices in the provided registry.
   patch_es_device <location> <registry_id> <device_id> <public_key_path> Patch a device with an ES256 credential
   patch_rsa_device <location> <registry_id> <device_id> <public_key_path> Patch a device with an RSA credential
+  send_command <location> <registry_id> <device_id> <data> Send a command to a device.
   send_configuration <location> <registry_id> <device_id> <data> Set a device configuration.
 
 Environment variables:
