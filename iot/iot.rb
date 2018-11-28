@@ -203,13 +203,13 @@ $set_iam_policy = -> (project_id:, location_id:, registry_id:, member:, role:) d
   request.policy  = policy
 
   # List the devices in the provided region
-  res = iot_client.set_registry_iam_policy(
+  result = iot_client.set_registry_iam_policy(
     resource, request
   )
 
-  if res.bindings
+  if result.bindings
     puts "Binding set:"
-    res.bindings.each do |binding|
+    result.bindings.each do |binding|
       puts "\tRole: #{binding.role} Member: #{binding.members[0]}"
     end
   else
@@ -355,7 +355,7 @@ $delete_device = -> (project_id:, location_id:, registry_id:, device_id:) do
   device_path = "#{parent}/registries/#{registry_id}/devices/#{device_id}"
 
   # Create the device
-  res = iot_client.delete_project_location_registry_device(
+  result = iot_client.delete_project_location_registry_device(
     device_path
   )
 
@@ -485,11 +485,11 @@ $get_device_states = -> (project_id:, location_id:, registry_id:, device_id:) do
   resource = "#{parent}/registries/#{registry_id}/devices/#{device_id}"
 
   # List the configurations for the provided device
-  res = iot_client.list_project_location_registry_device_states(
+  result = iot_client.list_project_location_registry_device_states(
     resource
   )
-  if res.device_states
-    res.device_states.each do |state|
+  if result.device_states
+    result.device_states.each do |state|
       puts "#{state.update_time}: #{state.binary_data}"
     end
   else
