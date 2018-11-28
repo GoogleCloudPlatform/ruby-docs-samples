@@ -24,7 +24,7 @@ def detect_text image_path:
 
   response = image_annotator.text_detection(
     image: image_path,
-    max_results: 1
+    max_results: 1 # optional, defaults to 10
   )
 
   response.responses.each do |res|
@@ -48,7 +48,7 @@ def detect_text_gcs image_path:
 
   response = image_annotator.text_detection(
     image: image_path,
-    max_results: 1
+    max_results: 1 # optional, defaults to 10
   )
 
   response.responses.each do |res|
