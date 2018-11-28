@@ -647,11 +647,11 @@ $send_device_command = -> (project_id:, location_id:, registry_id:, device_id:, 
   parent   = "projects/#{project_id}/locations/#{location_id}"
   resource = "#{parent}/registries/#{registry_id}/devices/#{device_id}"
 
-  commandReq = Cloudiot::SendCommandToDeviceRequest.new
-  commandReq.binary_data = data
+  command_req = Cloudiot::SendCommandToDeviceRequest.new
+  command_req.binary_data = data
 
   # Set configuration for the provided device
-  res = iot_client.send_project_location_registry_group_device_command_to_device resource, commandReq
+  iot_client.send_project_location_registry_group_device_command_to_device resource, command_req
 
   puts "Command sent!"
   # [END iot_send_command]
