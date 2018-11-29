@@ -64,6 +64,7 @@ end
 def detect_labels_gcs_migration
   require "google/cloud/vision"
   # [START image_annotator_labels_gcs_migration]
+
   image_annotator_client = Google::Cloud::Vision::ImageAnnotator.new
 
   response = image_annotator.label_detection(
