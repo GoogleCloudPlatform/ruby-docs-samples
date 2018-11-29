@@ -12,11 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START storage_dependencies]
+# [START asset_dependencies]
 source 'https://rubygems.org'
 
 gem 'google-cloud-asset'
-# [END storage_dependencies]
+# [END asset_dependencies]
 
 group :test do
   gem 'google-cloud-storage'
