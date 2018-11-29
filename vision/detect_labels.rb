@@ -64,15 +64,10 @@ def detect_labels_gcs_migration
   # [START image_annotator_labels_migration]
   image_annotator_client = Google::Cloud::Vision::ImageAnnotator.new
 
-  storage_uri = "gs://gapic-toolkit/President_Barack_Obama.jpg"
-  source = { gcs_image_uri: storage_uri }
-  image = { source: source }
-  max_results = 15 # optional, defaults to 10
-  feature = { type: :LABEL_DETECTION, max_results: max_results }
-  request = { image: image, features: [feature] }
-
-  requests = [request]
-  response = image_annotator_client.batch_annotate_images(requests)
+  response = image_annotator.label_detection(
+    image: "gs://gapic-toolkit/President_Barack_Obama.jpg",
+    max_results: 15 # optional, defaults to 10
+  )
 
   puts "Labels:"
   response.responses.each do |res|

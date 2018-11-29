@@ -22,11 +22,8 @@ def detect_document_text image_path:
 
   image_annotator = Google::Cloud::Vision::ImageAnnotator.new
 
-  response = image_annotator.document_text_detection(
-    image: image_path
-  )
+  response = image_annotator.document_text_detection image: image_path
 
-  response = image_annotator.batch_annotate_images([request])
   text = ""
   response.responses.each do |res|
     res.text_annotations.each do |annotation|
@@ -49,11 +46,8 @@ def detect_document_text_gcs image_path:
 
   image_annotator = Google::Cloud::Vision::ImageAnnotator.new
 
-  response = image_annotator.document_text_detection(
-    image: image_path
-  )
+  response = image_annotator.document_text_detection image: image_path
 
-  response = image_annotator.batch_annotate_images([request])
   text = ""
   response.responses.each do |res|
     res.text_annotations.each do |annotation|

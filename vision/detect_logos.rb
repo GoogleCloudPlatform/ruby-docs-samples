@@ -22,9 +22,7 @@ def detect_logos image_path:
 
   image_annotator = Google::Cloud::Vision::ImageAnnotator.new
 
-  response = image_annotator.logo_detection(
-    image: image_path,
-  )
+  response = image_annotator.logo_detection image: image_path
 
   response.responses.each do |res|
     res.logo_annotations.each do |logo|
@@ -45,9 +43,7 @@ def detect_logos_gcs image_path:
 
   image_annotator = Google::Cloud::Vision::ImageAnnotator.new
 
-  response = image_annotator.logo_detection(
-    image: image_path,
-  )
+  response = image_annotator.logo_detection image: image_path
 
   response.responses.each do |res|
     res.logo_annotations.each do |logo|

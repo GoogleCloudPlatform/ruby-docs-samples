@@ -22,9 +22,7 @@ def detect_faces image_path:
 
   image_annotator = Google::Cloud::Vision::ImageAnnotator.new
 
-  response = image_annotator.face_detection(
-    image: image_path
-  )
+  response = image_annotator.face_detection image: image_path
 
   response.responses.each do |res|
     res.face_annotations.each do |face|
@@ -48,9 +46,7 @@ def detect_faces_gcs image_path:
 
   image_annotator = Google::Cloud::Vision::ImageAnnotator.new
 
-  response = image_annotator.face_detection(
-    image: image_path
-  )
+  response = image_annotator.face_detection image: image_path
 
   response.responses.each do |res|
     res.face_annotations.each do |face|

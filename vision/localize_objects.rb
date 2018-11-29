@@ -22,9 +22,7 @@ def localize_objects image_path:
 
   image_annotator = Google::Cloud::Vision::ImageAnnotator.new
 
-  response = image_annotator.object_localization_detection(
-    image: image_path
-  )
+  response = image_annotator.object_localization_detection image: image_path
 
   response.responses.each do |res|
     res.localized_object_annotations.each do |object|
@@ -49,9 +47,7 @@ def localize_objects_gs image_path:
 
   image_annotator = Google::Cloud::Vision::ImageAnnotator.new
 
-  response = image_annotator.object_localization_detection(
-    image: image_path
-  )
+  response = image_annotator.object_localization_detection image: image_path
 
   response.responses.each do |res|
     res.localized_object_annotations.each do |object|
@@ -76,9 +72,7 @@ def localize_objects_uri image_path:
 
   image_annotator = Google::Cloud::Vision::ImageAnnotator.new
 
-  response = image_annotator.object_localization_detection(
-    image: image_path
-  )
+  response = image_annotator.object_localization_detection image: image_path
 
   response.responses.each do |res|
     res.localized_object_annotations.each do |object|

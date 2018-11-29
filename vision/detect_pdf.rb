@@ -30,8 +30,6 @@ def detect_pdf_gcs gcs_source_uri:, gcs_destination_uri:
     async: true
   )
 
-  operation = image_annotator.async_batch_annotate_files [async_request]
-
   puts "Waiting for the operation to finish."
   operation.wait_until_done!
 

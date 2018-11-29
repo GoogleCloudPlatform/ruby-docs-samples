@@ -22,9 +22,7 @@ def detect_image_properties image_path:
 
   image_annotator = Google::Cloud::Vision::ImageAnnotator.new
 
-  response = image_annotator.image_properties_detection(
-    image: image_path
-  )
+  response = image_annotator.image_properties_detection image: image_path
 
   response.responses.each do |res|
     res.image_properties_annotation.dominant_colors.colors.each do |color|
@@ -45,9 +43,7 @@ def detect_image_properties_gcs image_path:
 
   image_annotator = Google::Cloud::Vision::ImageAnnotator.new
 
-  response = image_annotator.image_properties_detection(
-    image: image_path
-  )
+  response = image_annotator.image_properties_detection image: image_path
 
   response.responses.each do |res|
     res.image_properties_annotation.dominant_colors.colors.each do |color|

@@ -22,9 +22,7 @@ def detect_crop_hints image_path:
 
   image_annotator = Google::Cloud::Vision::ImageAnnotator.new
 
-  response = image_annotator.crop_hints_detection(
-    image: image_path
-  )
+  response = image_annotator.crop_hints_detection image: image_path
 
   response.responses.each do |res|
     puts "Crop hint bounds:"
@@ -48,9 +46,7 @@ def detect_crop_hints_gcs image_path:
 
   image_annotator = Google::Cloud::Vision::ImageAnnotator.new
 
-  response = image_annotator.crop_hints_detection(
-    image: image_path
-  )
+  response = image_annotator.crop_hints_detection image: image_path
 
   response.responses.each do |res|
     puts "Crop hint bounds:"

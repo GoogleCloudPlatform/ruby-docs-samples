@@ -23,9 +23,7 @@ def detect_safe_search image_path:
   image_annotator = Google::Cloud::Vision::ImageAnnotator.new
 
 
-  response = image_annotator.safe_search_detection(
-    image: image_path,
-  )
+  response = image_annotator.safe_search_detection image: image_path
 
   response.responses.each do |res|
     safe_search = res.safe_search_annotation
@@ -49,9 +47,7 @@ def detect_safe_search_gcs image_path:
 
   image_annotator = Google::Cloud::Vision::ImageAnnotator.new
 
-  response = image_annotator.safe_search_detection(
-    image: image_path,
-  )
+  response = image_annotator.safe_search_detection image: image_path
 
   response.responses.each do |res|
     safe_search = res.safe_search_annotation

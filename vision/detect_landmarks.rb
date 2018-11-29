@@ -22,9 +22,7 @@ def detect_landmarks image_path:
 
   image_annotator = Google::Cloud::Vision::ImageAnnotator.new
 
-  response = image_annotator.landmark_detection(
-    image: image_path,
-  )
+  response = image_annotator.landmark_detection image: image_path
 
   response.responses.each do |res|
     res.landmark_annotations.each do |landmark|
@@ -49,9 +47,7 @@ def detect_landmarks_gcs image_path:
 
   image_annotator = Google::Cloud::Vision::ImageAnnotator.new
 
-  response = image_annotator.landmark_detection(
-    image: image_path,
-  )
+  response = image_annotator.landmark_detection image: image_path
 
   response.responses.each do |res|
     res.landmark_annotations.each do |landmark|
