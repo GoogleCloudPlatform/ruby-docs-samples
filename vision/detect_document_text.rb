@@ -92,7 +92,7 @@ if __FILE__ == $PROGRAM_NAME
   }
 
   if args[:image_path].nil?
-    return puts <<-USAGE
+    return puts <<~USAGE
     Usage: ruby detect_document_text.rb [image file path]
 
     Example:

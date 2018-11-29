@@ -63,7 +63,7 @@ if __FILE__ == $PROGRAM_NAME
     draw_box_around_faces path_to_image_file:  ARGV.shift,
                           path_to_output_file: ARGV.shift
   else
-    puts <<-USAGE
+    puts <<~USAGE
     Usage: ruby draw_box_around_faces.rb [input-file] [output-file]
 
     Example:

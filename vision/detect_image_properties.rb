@@ -25,8 +25,9 @@ def detect_image_properties image_path:
   response = image_annotator.image_properties_detection image: image_path
 
   response.responses.each do |res|
-    res.image_properties_annotation.dominant_colors.colors.each do |color|
-      puts "Color #{color.color.red}, #{color.color.green}, #{color.color.blue}"
+    res.image_properties_annotation.dominant_colors.colors.each do |color_info|
+      color = color_info.color
+      puts "Color #{color.red}, #{color.green}, #{color.blue}"
     end
   end
   # [END vision_image_property_detection]
@@ -46,8 +47,9 @@ def detect_image_properties_gcs image_path:
   response = image_annotator.image_properties_detection image: image_path
 
   response.responses.each do |res|
-    res.image_properties_annotation.dominant_colors.colors.each do |color|
-      puts "Color #{color.color.red}, #{color.color.green}, #{color.color.blue}"
+    res.image_properties_annotation.dominant_colors.colors.each do |color_info|
+      color = color_info.color
+      puts "Color #{color.red}, #{color.green}, #{color.blue}"
     end
   end
   # [END vision_image_property_detection_gcs]
@@ -57,7 +59,7 @@ if __FILE__ == $PROGRAM_NAME
   image_path = ARGV.shift
 
   unless image_path
-    return puts <<-USAGE
+    return puts <<~USAGE
     Usage: ruby detect_image_properties.rb [image file path]
 
     Example:

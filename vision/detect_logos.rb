@@ -57,7 +57,7 @@ if __FILE__ == $PROGRAM_NAME
   image_path = ARGV.shift
 
   unless image_path
-    return puts <<-USAGE
+    return puts <<~USAGE
     Usage: ruby detect_logos.rb [image file path]
 
     Example:

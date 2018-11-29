@@ -71,7 +71,7 @@ if __FILE__ == $PROGRAM_NAME
     detect_pdf_gcs gcs_source_uri:      ARGV.shift,
                    gcs_destination_uri: ARGV.shift
   else
-    puts <<-USAGE
+    puts <<~USAGE
       Usage: ruby detect_pdf.rb [document gcs file path] [output gcs file path]
 
       Example:
