@@ -22,6 +22,7 @@ def detect_labels image_path:
 
   image_annotator = Google::Cloud::Vision::ImageAnnotator.new
 
+  # [START vision_label_detection_migration]
   response = image_annotator.label_detection(
     image: image_path,
     max_results: 15 # optional, defaults to 10
@@ -32,6 +33,7 @@ def detect_labels image_path:
       puts label.description
     end
   end
+  # [END vision_label_detection_migration]
   # [END vision_label_detection]
 end
 
@@ -61,7 +63,7 @@ end
 
 def detect_labels_gcs_migration
   require "google/cloud/vision"
-  # [START image_annotator_labels_migration]
+  # [START image_annotator_labels_gcs_migration]
   image_annotator_client = Google::Cloud::Vision::ImageAnnotator.new
 
   response = image_annotator.label_detection(
@@ -75,7 +77,7 @@ def detect_labels_gcs_migration
       puts label.description
     end
   end
-  # [END image_annotator_labels_migration]
+  # [END image_annotator_labels_gcs_migration]
 end
 
 if __FILE__ == $PROGRAM_NAME

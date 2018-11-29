@@ -22,6 +22,7 @@ def detect_logos image_path:
 
   image_annotator = Google::Cloud::Vision::ImageAnnotator.new
 
+  # [START vision_logo_detection_migration]
   response = image_annotator.logo_detection image: image_path
 
   response.responses.each do |res|
@@ -29,6 +30,7 @@ def detect_logos image_path:
       puts logo.description
     end
   end
+  # [END vision_logo_detection_migration]
   # [END vision_logo_detection]
 end
 

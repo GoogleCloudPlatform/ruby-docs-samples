@@ -22,6 +22,7 @@ def detect_crop_hints image_path:
 
   image_annotator = Google::Cloud::Vision::ImageAnnotator.new
 
+  # [START vision_crop_hint_detection_migration]
   response = image_annotator.crop_hints_detection image: image_path
 
   response.responses.each do |res|
@@ -32,6 +33,7 @@ def detect_crop_hints image_path:
       end
     end
   end
+  # [END vision_crop_hint_detection_migration]
   # [END vision_crop_hint_detection]
 end
 

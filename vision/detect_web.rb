@@ -22,6 +22,7 @@ def detect_web image_path:
 
   image_annotator = Google::Cloud::Vision::ImageAnnotator.new
 
+  # [START vision_web_detection_migration]
   response = image_annotator.web_detection(
     image: image_path,
     max_results: 15 # optional, defaults to 10
@@ -36,6 +37,7 @@ def detect_web image_path:
       puts match.url
     end
   end
+  # [END vision_web_detection_migration]
   # [END vision_web_detection]
 end
 

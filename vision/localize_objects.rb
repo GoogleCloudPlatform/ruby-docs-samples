@@ -22,6 +22,7 @@ def localize_objects image_path:
 
   image_annotator = Google::Cloud::Vision::ImageAnnotator.new
 
+  # [START vision_localize_objects_migration]
   response = image_annotator.object_localization_detection image: image_path
 
   response.responses.each do |res|
@@ -33,6 +34,7 @@ def localize_objects image_path:
       end
     end
   end
+  # [END vision_localize_objects_migration]
   # [END vision_localize_objects]
 end
 

@@ -22,6 +22,7 @@ def detect_document_text image_path:
 
   image_annotator = Google::Cloud::Vision::ImageAnnotator.new
 
+  # [START vision_fulltext_detection_migration]
   response = image_annotator.document_text_detection image: image_path
 
   text = ""
@@ -32,6 +33,7 @@ def detect_document_text image_path:
   end
 
   puts text
+  # [END vision_fulltext_detection_migration]
   # [END vision_fulltext_detection]
 end
 

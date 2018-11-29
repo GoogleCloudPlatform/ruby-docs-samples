@@ -22,6 +22,7 @@ def detect_text image_path:
 
   image_annotator = Google::Cloud::Vision::ImageAnnotator.new
 
+  # [START vision_text_detection_migration]
   response = image_annotator.text_detection(
     image: image_path,
     max_results: 1 # optional, defaults to 10
@@ -32,6 +33,7 @@ def detect_text image_path:
       puts text.description
     end
   end
+  # [END vision_text_detection_migration]
   # [END vision_text_detection]
 end
 

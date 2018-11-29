@@ -22,7 +22,7 @@ def detect_safe_search image_path:
 
   image_annotator = Google::Cloud::Vision::ImageAnnotator.new
 
-
+  # [START vision_safe_search_detection_migration]
   response = image_annotator.safe_search_detection image: image_path
 
   response.responses.each do |res|
@@ -33,6 +33,7 @@ def detect_safe_search image_path:
     puts "Medical:  #{safe_search.medical}"
     puts "Violence: #{safe_search.violence}"
   end
+  # [END vision_safe_search_detection_migration]
   # [END vision_safe_search_detection]
 end
 

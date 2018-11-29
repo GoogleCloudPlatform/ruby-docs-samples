@@ -22,6 +22,7 @@ def detect_image_properties image_path:
 
   image_annotator = Google::Cloud::Vision::ImageAnnotator.new
 
+  # [START vision_image_property_detection_migration]
   response = image_annotator.image_properties_detection image: image_path
 
   response.responses.each do |res|
@@ -30,6 +31,7 @@ def detect_image_properties image_path:
       puts "Color #{color.red}, #{color.green}, #{color.blue}"
     end
   end
+  # [END vision_image_property_detection_migration]
   # [END vision_image_property_detection]
 end
 

@@ -22,6 +22,7 @@ def detect_faces image_path:
 
   image_annotator = Google::Cloud::Vision::ImageAnnotator.new
 
+  # [START vision_face_detection_migration]
   response = image_annotator.face_detection image: image_path
 
   response.responses.each do |res|
@@ -32,6 +33,7 @@ def detect_faces image_path:
       puts "Surprise: #{face.surprise_likelihood}"
     end
   end
+  # [END vision_face_detection_migration]
   # [END vision_face_detection]
 end
 
