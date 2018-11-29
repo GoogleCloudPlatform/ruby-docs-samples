@@ -58,8 +58,8 @@ end
 if __FILE__ == $PROGRAM_NAME
   image_path = ARGV.shift
 
-  unless image_path
-    return puts <<~USAGE
+  if !image_path
+    puts <<~USAGE
     Usage: ruby detect_logos.rb [image file path]
 
     Example:
@@ -67,10 +67,9 @@ if __FILE__ == $PROGRAM_NAME
       ruby detect_logos.rb https://public-url/image.png
       ruby detect_logos.rb gs://my-bucket/image.png
     USAGE
+  elsif image_path =~ URI::DEFAULT_PARSER.make_regexp
+    detect_logos_gs image_path: image_path
+  else
+    detect_logos image_path: image_path
   end
-  if image_path =~ URI::DEFAULT_PARSER.make_regexp
-    return detect_logos_gs image_path: image_path
-  end
-
-  detect_logos image_path: image_path
 end

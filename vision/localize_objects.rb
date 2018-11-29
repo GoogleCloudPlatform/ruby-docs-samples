@@ -91,8 +91,8 @@ end
 if __FILE__ == $PROGRAM_NAME
   image_path = ARGV.shift
 
-  unless image_path
-    return puts <<~USAGE
+  if !image_path
+    puts <<~USAGE
     Usage: ruby localize_objects.rb [image file path]
 
     Example:
@@ -100,13 +100,14 @@ if __FILE__ == $PROGRAM_NAME
       ruby localize_objects.rb https://public-url/image.png
       ruby localize_objects.rb gs://my-bucket/image.png
     USAGE
-  end
-  if image_path =~ URI::DEFAULT_PARSER.make_regexp
+  elsif image_path =~ URI::DEFAULT_PARSER.make_regexp
     image_uri = URI(image_path)
-    return localize_objects_gs image_path: image_path if image_uri.scheme == "gs"
-
-    return localize_object_uri image_path: image_path
+    if image_uri.scheme == "gs"
+      localize_objects_gs image_path: image_path 
+    else
+      localize_object_uri image_path: image_path
+    end
+  else
+    localize_objects image_path: image_path
   end
-
-  localize_objects image_path: image_path
 end

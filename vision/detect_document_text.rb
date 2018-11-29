@@ -94,7 +94,7 @@ if __FILE__ == $PROGRAM_NAME
   }
 
   if args[:image_path].nil?
-    return puts <<~USAGE
+    puts <<~USAGE
     Usage: ruby detect_document_text.rb [image file path]
 
     Example:
@@ -102,11 +102,10 @@ if __FILE__ == $PROGRAM_NAME
       ruby detect_document_text.rb https://public-url/image.png
       ruby detect_document_text.rb gs://my-bucket/image.png
     USAGE
+  elsif args[:image_path] =~ URI::DEFAULT_PARSER.make_regexp
+    detect_document_text_gcs args unless args[:output_path]
+    detect_document_text_async args if args[:output_path]
+  else
+    detect_document_text args
   end
-  unless args[:image_path] =~ URI::DEFAULT_PARSER.make_regexp
-    return detect_document_text args
-  end
-
-  detect_document_text_gcs args
-  detect_document_text_async args if args[:output_path]
 end

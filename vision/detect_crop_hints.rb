@@ -64,8 +64,8 @@ end
 if __FILE__ == $PROGRAM_NAME
   image_path = ARGV.shift
 
-  unless image_path
-    return puts <<~USAGE
+  if !image_path
+    puts <<~USAGE
     Usage: ruby detect_crop_hints.rb [image file path]
 
     Example:
@@ -73,10 +73,9 @@ if __FILE__ == $PROGRAM_NAME
       ruby detect_crop_hints.rb https://public-url/image.png
       ruby detect_crop_hints.rb gs://my-bucket/image.png
     USAGE
+  elsif image_path =~ URI::DEFAULT_PARSER.make_regexp
+    detect_crop_hints_gcs image_path: image_path
+  else
+    detect_crop_hints image_path: image_path
   end
-  if image_path =~ URI::DEFAULT_PARSER.make_regexp
-    return detect_crop_hints_gcs image_path: image_path
-  end
-
-  detect_crop_hints image_path: image_path
 end
