@@ -22,7 +22,6 @@ describe "Localize Objects" do
   before do
     @storage    = Google::Cloud::Storage.new
     @bucket     = @storage.bucket ENV["GOOGLE_CLOUD_STORAGE_BUCKET"]
-    @project_id = ENV["GOOGLE_CLOUD_PROJECT"]
   end
 
   # Returns full path to sample image included in repository for testing
@@ -43,7 +42,7 @@ describe "Localize Objects" do
                                        "puppies.jpg"
 
     expect {
-      localize_objects_uri image_path: storage_file.to_gs_url
+      localize_objects_gs image_path: storage_file.to_gs_url
     }.to output(
       /Dog/
     ).to_stdout

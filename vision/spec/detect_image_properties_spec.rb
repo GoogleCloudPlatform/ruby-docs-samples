@@ -22,7 +22,6 @@ describe "Detect Image Properties" do
   before do
     @storage    = Google::Cloud::Storage.new
     @bucket     = @storage.bucket ENV["GOOGLE_CLOUD_STORAGE_BUCKET"]
-    @project_id = ENV["GOOGLE_CLOUD_PROJECT"]
   end
 
   # Returns full path to sample image included in repository for testing
@@ -32,8 +31,7 @@ describe "Detect Image Properties" do
 
   example "detect image properties from local image file" do
     expect {
-      detect_image_properties project_id: @project_id,
-                              image_path: image_path("otter_crossing.jpg")
+      detect_image_properties image_path: image_path("otter_crossing.jpg")
     }.to output(
       /Color 104.0, 17.0, 32.0/
     ).to_stdout
@@ -44,8 +42,7 @@ describe "Detect Image Properties" do
                                        "otter_crossing.jpg"
 
     expect {
-      detect_image_properties_gcs project_id: @project_id,
-                                  image_path: storage_file.to_gs_url
+      detect_image_properties_gcs image_path: storage_file.to_gs_url
     }.to output(
       /Color 104.0, 17.0, 32.0/
     ).to_stdout

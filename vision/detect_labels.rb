@@ -12,55 +12,90 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-def detect_labels project_id:, image_path:
+require "uri"
+
+def detect_labels image_path:
   # [START vision_label_detection]
-  # project_id = "Your Google Cloud project ID"
   # image_path = "Path to local image file, eg. './image.png'"
-  
+
   require "google/cloud/vision"
 
-  vision = Google::Cloud::Vision.new project: project_id
-  image  = vision.image image_path
+  image_annotator = Google::Cloud::Vision::ImageAnnotator.new
 
-  image.labels.each do |label|
-    puts label.description
+  # [START vision_label_detection_migration]
+  response = image_annotator.label_detection(
+    image: image_path,
+    max_results: 15 # optional, defaults to 10
+  )
+
+  response.responses.each do |res|
+    res.label_annotations.each do |label|
+      puts label.description
+    end
   end
+  # [END vision_label_detection_migration]
   # [END vision_label_detection]
 end
 
 # This method is a duplicate of the above method, but with a different
 # description of the 'image_path' variable, demonstrating the gs://bucket/file
 # GCS storage URI format.
-def detect_labels_gcs project_id:, image_path:
+def detect_labels_gcs image_path:
   # [START vision_label_detection_gcs]
-  # project_id = "Your Google Cloud project ID"
   # image_path = "Google Cloud Storage URI, eg. 'gs://my-bucket/image.png'"
-  
+
   require "google/cloud/vision"
 
-  vision = Google::Cloud::Vision.new project: project_id
-  image  = vision.image image_path
+  image_annotator = Google::Cloud::Vision::ImageAnnotator.new
 
-  image.labels.each do |label|
-    puts label.description
+  response = image_annotator.label_detection(
+    image: image_path,
+    max_results: 15 # optional, defaults to 10
+  )
+
+  response.responses.each do |res|
+    res.label_annotations.each do |label|
+      puts label.description
+    end
   end
   # [END vision_label_detection_gcs]
 end
 
+def detect_labels_gcs_migration
+  require "google/cloud/vision"
+  # [START image_annotator_labels_gcs_migration]
+
+  image_annotator_client = Google::Cloud::Vision::ImageAnnotator.new
+
+  response = image_annotator.label_detection(
+    image: "gs://gapic-toolkit/President_Barack_Obama.jpg",
+    max_results: 15 # optional, defaults to 10
+  )
+
+  puts "Labels:"
+  response.responses.each do |res|
+    res.label_annotations.each do |label|
+      puts label.description
+    end
+  end
+  # [END image_annotator_labels_gcs_migration]
+end
+
 if __FILE__ == $PROGRAM_NAME
   image_path = ARGV.shift
-  project_id = ENV["GOOGLE_CLOUD_PROJECT"]
 
-  if image_path
-    detect_labels image_path: image_path, project_id: project_id
+  if !image_path
+    puts <<~USAGE
+    Usage: ruby detect_labels.rb [image file path]
+
+    Example:
+      ruby detect_labels.rb image.png
+      ruby detect_labels.rb https://public-url/image.png
+      ruby detect_labels.rb gs://my-bucket/image.png
+    USAGE
+  elsif image_path =~ URI::DEFAULT_PARSER.make_regexp
+    detect_labels_gs image_path: image_path
   else
-    puts <<-usage
-Usage: ruby detect_labels.rb [image file path]
-
-Example:
-  ruby detect_labels.rb image.png
-  ruby detect_labels.rb https://public-url/image.png
-  ruby detect_labels.rb gs://my-bucket/image.png
-    usage
+    detect_labels image_path: image_path
   end
 end
