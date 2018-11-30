@@ -14,6 +14,7 @@
 
 def detect_pdf_gcs gcs_source_uri:, gcs_destination_uri:
   # [START vision_text_detection_pdf_gcs]
+  # [START vision_text_detection_pdf_gcs_migration]
   # gcs_source_uri = "Google Cloud Storage URI, eg. 'gs://my-bucket/example.pdf'"
   # gcs_destination_uri = "Google Cloud Storage URI, eg. 'gs://my-bucket/prefix_'"
 
@@ -32,6 +33,7 @@ def detect_pdf_gcs gcs_source_uri:, gcs_destination_uri:
 
   puts "Waiting for the operation to finish."
   operation.wait_until_done!
+  # [END vision_text_detection_pdf_gcs_migration]
 
   # Once the request has completed and the output has been
   # written to GCS, we can list all the output files.
