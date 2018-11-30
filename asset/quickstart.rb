@@ -12,9 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Imports the Google Cloud client library
-require 'google/cloud/asset'
-
 def export_assets(project_id:, dump_file_path:)
   # [START asset_quickstart_export_assets]
   require 'google/cloud/asset'
