@@ -1,4 +1,4 @@
-# Copyright 2016 Google, Inc
+# Copyright 2018 Google, LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,12 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-source "https://rubygems.org"
+require_relative "../list_datasets"
+require "spec_helper"
 
-gem "google-cloud-bigquery"
 
-group :test do
-  gem "rspec"
-  gem "rspec-retry"
-  gem "google-cloud-storage"
+describe "List datasets" do
+
+  example "list datasets in a project" do
+    dataset1 = @bigquery.create_dataset "test_dataset1_#{Time.now.to_i}"
+    dataset2 = @bigquery.create_dataset "test_dataset2_#{Time.now.to_i}"
+    @temp_datasets.push(dataset1, dataset2)
+
+    output = capture { list_datasets @bigquery.name }
+    expect(output).to include(dataset1.dataset_id)
+    expect(output).to include(dataset2.dataset_id)
+  end
+
 end
