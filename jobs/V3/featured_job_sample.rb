@@ -12,105 +12,99 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "google/apis/jobs_v3"
-require "rails"
-require 'securerandom'
-require_relative 'basic_company_sample'
-require_relative 'basic_job_sample'
+def job_discovery_generate_featured_job company_name:
+	# [START generate_featured_job]
 
-=begin
-	The sample in this file introduce featured job, including:
-	- Construct a featured job
-	- Search featured job
-=end
-
-class FeaturedJobSample
-
+	require "google/apis/jobs_v3"
+	require "securerandom"
 	# Instantiate the client
-	@@Jobs   = Google::Apis::JobsV3
-	# ProjectId to get company list
-	@@DEFAULT_PROJECT_ID = "projects/" + ENV["GOOGLE_CLOUD_PROJECT"];
-
-
-	@@talentSolution_client = @@Jobs::CloudTalentSolutionService.new
-	# @see https://developers.google.com/identity/protocols/application-default-credentials#callingruby
-	@@talentSolution_client.authorization = Google::Auth.get_application_default(
+	jobs = Google::Apis::JobsV3
+	
+	talent_solution_client = jobs::CloudTalentSolutionService.new
+	# @see 
+	# https://developers.google.com/identity/protocols/application-default-credentials#callingruby
+	talent_solution_client.authorization = Google::Auth.get_application_default(
 		"https://www.googleapis.com/auth/jobs"
 	)
-
-# [START generate_featured_job]
-=begin 
-		Generate a featured job with given company name for testing purpose
-=end
-	def generateFeaturedJob(companyName)
-		requisitionId = "jobWithRequiredFields:" + SecureRandom.hex;
-		applicationInfo = @@Jobs::ApplicationInfo.new;
-		applicationInfo.uris = Array["http://careers.google.com"];
-		jobGenerated = @@Jobs::Job.new;
-		jobGenerated.requisition_id = requisitionId;
-		jobGenerated.title = " Lab Technician";
-		jobGenerated.company_name = companyName;
-		jobGenerated.application_info = applicationInfo;
-		jobGenerated.description = "Design, develop, test, deploy, maintain and improve software.";
-		# Featured job is the job with positive promotion value
-		jobGenerated.promotion_value = 2;
-		puts "Featured Job generated: " + jobGenerated.to_json;
-		return jobGenerated;
-	end
-# [END generate_featured_job]
-
-# [START search_featured_job]
-=begin 
-		Simple search featured jobs with keyword.
-=end
-	def featuredJobsSearch(companyName, query)
-		# Make sure to set the requestMetadata the same as the associated search request
-		requestMetadata = @@Jobs::RequestMetadata.new;
-		# Make sure to hash your userID
-		requestMetadata.user_id = "HashedUserId";
-		# Make sure to hash the sessionID
-		requestMetadata.session_id = "HashedSessionId";
-		# Domain of the website where the search is conducted
-		requestMetadata.domain = "www.google.com";
-
-		# Perform a search for analyst  related jobs
-		jobQuery = @@Jobs::JobQuery.new;
-		jobQuery.query = query;
-		if !companyName.nil?
-			jobQuery.company_names = Array[companyName];
-		end
-
-		searchJobsRequest = @@Jobs::SearchJobsRequest.new;
-		searchJobsRequest.request_metadata = requestMetadata;
-		# Set the actual search term as defined in the jobQurey
-		searchJobsRequest.job_query = jobQuery;
-		# Set the search mode to a regular search
-		searchJobsRequest.search_mode = "FEATURED_JOB_SEARCH"
-
-		searchJobsResponse = @@talentSolution_client.search_jobs(@@DEFAULT_PROJECT_ID, searchJobsRequest);
-
-		puts searchJobsResponse.to_json;
-	end
-# [END basic_keyword_search]
-
+ 
+	application_info = jobs::ApplicationInfo.new uris: ["http://careers.google.com"]
+	job_generated = jobs::Job.new requisition_id: "jobWithRequiredFields: #{SecureRandom.hex}",
+								  title: " Lab Technician",
+								  company_name: company_name,
+								  application_info: application_info,
+								  description: "Design, develop, test, deploy, "\
+								 		       "maintain and improve software."
+	# Featured job is the job with positive promotion value
+	job_generated.promotion_value = 2
+	puts "Featured Job generated: #{job_generated.to_json}"
+	return job_generated
+	# [END generate_featured_job]
 end
 
-# Test main. Run only if file is being executed directly or being called by ../spec/samples_spec.rb
-if (ARGV.include? File.basename(__FILE__)) || 
-	((File.basename(caller[0]).include? "samples_spec.rb") && (File.basename(caller[0]).include? "load"))
-	# test
-	company = BasicCompanySample.new;
-	job = BasicJobSample.new;
-	featured_job = FeaturedJobSample.new;
-	
-	company_created_test = company.createCompany(company.generateCompany());
-	job_generated_test = featured_job.generateFeaturedJob(company_created_test.name);
-	job_created_test = job.createJob(job_generated_test);
+def job_discovery_featured_jobs_search company_name:, query:, project_id:
+	# [START search_featured_job]
 
-	sleep(10);
+	require "google/apis/jobs_v3"
+	# Instantiate the client
+	jobs = Google::Apis::JobsV3
 	
-	featured_job.featuredJobsSearch(job_created_test.company_name, job_created_test.title);
+	talent_solution_client = jobs::CloudTalentSolutionService.new
+	# @see 
+	# https://developers.google.com/identity/protocols/application-default-credentials#callingruby
+	talent_solution_client.authorization = Google::Auth.get_application_default(
+		"https://www.googleapis.com/auth/jobs"
+	)
+ 
+	# Make sure to set the request_metadata the same as the associated search request
+	request_metadata = jobs::RequestMetadata.new user_id: "HashedUserId",
+												 session_id: "HashedSessionId",
+											 	 domain: "www.google.com"
 
-	job.deleteJob(job_created_test.name);
-	company.deleteCompany(company_created_test.name);
+	# Perform a search for analyst  related jobs
+	job_query = jobs::JobQuery.new query: query
+	if !company_name.nil?
+		job_query.company_names = [company_name]
+	end
+
+	search_jobs_request = jobs::SearchJobsRequest.new request_metadata: request_metadata,
+													  job_query: job_query,
+													  search_mode: "FEATURED_JOB_SEARCH"
+
+	search_jobs_response = talent_solution_client.search_jobs(project_id, search_jobs_request)
+
+	puts search_jobs_response.to_json
+	# [END search_featured_job]
+end
+
+def run_featured_job_sample arguments
+
+	require_relative "basic_company_sample"
+	require_relative "basic_job_sample"
+
+	command = arguments.shift
+	default_project_id = "projects/#{ENV["GOOGLE_CLOUD_PROJECT"]}"
+	company_name = "#{default_project_id}/companies/#{arguments.shift}"
+
+	case command
+	when "featured_jobs_search"
+		company_got_test = job_discovery_get_company company_name: company_name
+		job_generated_test = job_discovery_generate_featured_job company_name: company_name
+		job_created_test = job_discovery_create_job job_to_be_created: job_generated_test,
+													project_id: default_project_id
+		job_discovery_featured_jobs_search company_name:company_name,
+										   query:arguments.shift, 
+										   project_id: default_project_id
+	else
+	puts <<-usage
+Usage: bundle exec ruby featured_job_sample.rb [command] [arguments]
+Commands:
+  featured_jobs_search       <company_id><query>    Query a featured job under a provided company.
+Environment variables:
+  GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
+usage
+	end
+end
+
+if __FILE__ == $PROGRAM_NAME
+  run_featured_job_sample ARGV
 end

@@ -12,82 +12,66 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "google/apis/jobs_v3"
-require "rails"
-require 'securerandom'
-require_relative 'basic_company_sample'
-require_relative 'basic_job_sample'
+def job_discovery_histogram_search company_name:, project_id:
+	# [START histogram_search]
+	# company_name = "The company name which has the job we want to search"
+	require "google/apis/jobs_v3"
 
-=begin
-	The sample in this file introduce how to do a histogram search.
-=end
-
-class HistogramSearchSample
 	# Instantiate the client
-	@@Jobs   = Google::Apis::JobsV3
-	@@DEFAULT_PROJECT_ID = "projects/" + ENV["GOOGLE_CLOUD_PROJECT"];
-		
-	@@talentSolution_client = @@Jobs::CloudTalentSolutionService.new
-	# @see https://developers.google.com/identity/protocols/application-default-credentials#callingruby
-	@@talentSolution_client.authorization = Google::Auth.get_application_default(
+	jobs   = Google::Apis::JobsV3
+	talent_solution_client = jobs::CloudTalentSolutionService.new
+	# @see 
+	# https://developers.google.com/identity/protocols/application-default-credentials#callingruby
+	talent_solution_client.authorization = Google::Auth.get_application_default(
 		"https://www.googleapis.com/auth/jobs"
 	)
 
-# [START histogram_search]
-=begin 
-		Simple search jobs with keyword.
-=end
-	def histogramSearch(companyName)
-		# Make sure to set the requestMetadata the same as the associated search request
-		requestMetadata = @@Jobs::RequestMetadata.new;
-		# Make sure to hash your userID
-		requestMetadata.user_id = "HashedUserId";
-		# Make sure to hash the sessionID
-		requestMetadata.session_id = "HashedSessionId";
-		# Domain of the website where the search is conducted
-		requestMetadata.domain = "www.google.com";
+	# Make sure to set the request_metadata the same as the associated search request
+	request_metadata = jobs::RequestMetadata.new user_id: "HashedUserId",
+												 session_id: "HashedSessionId",
+												 domain: "http://careers.google.com"
 
-		customAttributeHistogramRequest = @@Jobs::CustomAttributeHistogramRequest.new;
-		customAttributeHistogramRequest.key = "someFieldName1";
-		customAttributeHistogramRequest.string_value_histogram = true;
-		histogramFacets = @@Jobs::HistogramFacets.new;
-		histogramFacets.simple_histogram_facets = Array["COMPANY_ID"];
-		histogramFacets.custom_attribute_histogram_facets = Array[customAttributeHistogramRequest];
-		# Perform a search for analyst  related jobs
-		jobQuery = @@Jobs::JobQuery.new;
-		if !companyName.nil?
-			jobQuery.company_names = Array[companyName];
-		end
+	custom_attribute_histogram_request = 
+		jobs::CustomAttributeHistogramRequest.new key: "someFieldName1",
+												  string_value_histogram: true
+	histogram_facets = 
+		jobs::HistogramFacets.new simple_histogram_facets: ["COMPANY_ID"],
+								  custom_attribute_histogram_facets: [custom_attribute_histogram_request]
+	# Perform a search for analyst  related jobs
+	job_query = jobs::JobQuery.new company_names: [company_name]
 
-		searchJobsRequest = @@Jobs::SearchJobsRequest.new;
-		searchJobsRequest.request_metadata = requestMetadata;
-		# Set the actual search term as defined in the jobQurey
-		searchJobsRequest.job_query = jobQuery;
-		searchJobsRequest.histogram_facets = histogramFacets;
+	search_jobs_request = jobs::SearchJobsRequest.new request_metadata: request_metadata,
+													  job_query: job_query,
+													  histogram_facets: histogram_facets
+	search_jobs_response = talent_solution_client.search_jobs(project_id, search_jobs_request)
 
-		searchJobsResponse = @@talentSolution_client.search_jobs(@@DEFAULT_PROJECT_ID, searchJobsRequest);
-
-		puts searchJobsResponse.to_json;
-	end
+	puts search_jobs_response.to_json
+end
 # [END histogram_search]
+
+def run_histogram_sample arguments
+
+	require_relative "basic_company_sample"
+
+	command = arguments.shift
+	default_project_id = "projects/#{ENV["GOOGLE_CLOUD_PROJECT"]}"
+	company_name = "#{default_project_id}/companies/#{arguments.shift}"
+	
+	case command
+	when "histogram_search"
+		job_discovery_histogram_search company_name: company_name,
+									   project_id: default_project_id
+	else
+	puts <<-usage
+Usage: bundle exec ruby histogram_sample.rb [command] [arguments]
+Commands:
+  histogram_search      <company_id>   Search by histogram facets under given company.
+Environment variables:
+  GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
+usage
+	end
 end
 
-# Test main. Run only if file is being executed directly or being called by ../spec/samples_spec.rb
-if (ARGV.include? File.basename(__FILE__)) || 
-	((File.basename(caller[0]).include? "samples_spec.rb") && (File.basename(caller[0]).include? "load"))
-	# test
-	company = BasicCompanySample.new;
-	job = BasicJobSample.new;
-	search = HistogramSearchSample.new;
-	
-	company_created_test = company.createCompany(company.generateCompany());
-	job_generated_test = job.generateJob(company_created_test.name);
-	job_created_test = job.createJob(job_generated_test);
-
-	sleep(10);
-	
-	search.histogramSearch(job_created_test.company_name);
-
-	job.deleteJob(job_created_test.name);
-	company.deleteCompany(company_created_test.name);
+if __FILE__ == $PROGRAM_NAME
+  run_histogram_sample ARGV
 end
