@@ -12,12 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START gae_flex_storage_depedencies]
+# [START gae_flex_storage_dependencies]
 source "https://rubygems.org"
 
 gem "sinatra"
 gem "google-cloud-storage"
-# [END gae_flex_storage_depedencies]
+# [END gae_flex_storage_dependencies]
 
 group :test do
   gem "rspec"
