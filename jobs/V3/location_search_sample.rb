@@ -13,225 +13,225 @@
 # limitations under the License.
 
 def job_discovery_basic_location_search company_name:, location:, distance:, project_id:
-	# [START basic_location_search]
-	# company_name = "The company name which has the job we want to search."
-	# location     = "Location of the center where the search is based on."
-	# distance     = "Radius of the searching area."
-	# project_id   = "Id of the project."
-	require "google/apis/jobs_v3"
-	# Instantiate the client
-	jobs   = Google::Apis::JobsV3
-	talent_solution_client = jobs::CloudTalentSolutionService.new
-	# @see 
-	# https://developers.google.com/identity/protocols/application-default-credentials#callingruby
-	talent_solution_client.authorization = Google::Auth.get_application_default(
-	"https://www.googleapis.com/auth/jobs"
-	)
-	# Make sure to set the requestMetadata the same as the associated search request
-	request_metadata = jobs::RequestMetadata.new user_id: "HashedUserId",
-												 session_id: "HashedSessionId",
-												 domain: "www.google.com"
-	# Set location filter
-	location_filter = jobs::LocationFilter.new address: location,
-											   distance_in_miles: distance
-	# Perform a search for analyst  related jobs
-	job_query = jobs::JobQuery.new location_filters: [location_filter], 
-								   company_names: [company_name]
+  # [START basic_location_search]
+  # company_name = "The company name which has the job we want to search."
+  # location     = "Location of the center where the search is based on."
+  # distance     = "Radius of the searching area."
+  # project_id   = "Id of the project."
+  require "google/apis/jobs_v3"
+  # Instantiate the client
+  jobs   = Google::Apis::JobsV3
+  talent_solution_client = jobs::CloudTalentSolutionService.new
+  # @see
+  # https://developers.google.com/identity/protocols/application-default-credentials#callingruby
+  talent_solution_client.authorization = Google::Auth.get_application_default(
+  "https://www.googleapis.com/auth/jobs"
+  )
+  # Make sure to set the requestMetadata the same as the associated search request
+  request_metadata = jobs::RequestMetadata.new user_id: "HashedUserId",
+					                           session_id: "HashedSessionId",
+					                           domain: "www.google.com"
+  # Set location filter
+  location_filter = jobs::LocationFilter.new address: location,
+                         					 distance_in_miles: distance
+  # Perform a search for analyst  related jobs
+  job_query = jobs::JobQuery.new location_filters: [location_filter],
+                   				 company_names: [company_name]
 
-	search_jobs_request = jobs::SearchJobsRequest.new request_metadata: request_metadata,
-													  job_query: job_query,
-													  search_mode: "JOB_SEARCH"
+  search_jobs_request = jobs::SearchJobsRequest.new request_metadata: request_metadata,
+						                            job_query: job_query,
+						                            search_mode: "JOB_SEARCH"
 
-	search_jobs_response = talent_solution_client.search_jobs(project_id, search_jobs_request)
+  search_jobs_response = talent_solution_client.search_jobs(project_id, search_jobs_request)
 
-	puts search_jobs_response.to_json
-	# [END basic_location_search]
+  puts search_jobs_response.to_json
+  # [END basic_location_search]
 end
 
 def job_discovery_keyword_location_search company_name:, location:, distance:, keyword:, project_id:
-	# [START keyword_location_search]
-	# company_name = "The company name which has the job we want to search."
-	# location     = "Location of the center where the search is based on."
-	# distance     = "Radius of the searching area."
-	# keyword      = "Keyword of the search."
-	# project_id   = "Id of the project."
-	require "google/apis/jobs_v3"
-	# Instantiate the client
-	jobs   = Google::Apis::JobsV3
-	talent_solution_client = jobs::CloudTalentSolutionService.new
-	# @see 
-	# https://developers.google.com/identity/protocols/application-default-credentials#callingruby
-	talent_solution_client.authorization = Google::Auth.get_application_default(
-	"https://www.googleapis.com/auth/jobs"
-	)
-	# Make sure to set the requestMetadata the same as the associated search request
-	request_metadata = jobs::RequestMetadata.new user_id: "HashedUserId",
-												 session_id: "HashedSessionId",
-												 domain: "www.google.com"
-	# Set location filter
-	location_filter = jobs::LocationFilter.new address: location,
-											   distance_in_miles: distance
-	# Perform a search for analyst  related jobs
-	job_query = jobs::JobQuery.new location_filters: [location_filter],
-								   query: keyword,
-								   company_names: [company_name]
+  # [START keyword_location_search]
+  # company_name = "The company name which has the job we want to search."
+  # location     = "Location of the center where the search is based on."
+  # distance     = "Radius of the searching area."
+  # keyword      = "Keyword of the search."
+  # project_id   = "Id of the project."
+  require "google/apis/jobs_v3"
+  # Instantiate the client
+  jobs   = Google::Apis::JobsV3
+  talent_solution_client = jobs::CloudTalentSolutionService.new
+  # @see
+  # https://developers.google.com/identity/protocols/application-default-credentials#callingruby
+  talent_solution_client.authorization = Google::Auth.get_application_default(
+  "https://www.googleapis.com/auth/jobs"
+  )
+  # Make sure to set the requestMetadata the same as the associated search request
+  request_metadata = jobs::RequestMetadata.new user_id: "HashedUserId",
+					                           session_id: "HashedSessionId",
+					                           domain: "www.google.com"
+  # Set location filter
+  location_filter = jobs::LocationFilter.new address: location,
+                         					 distance_in_miles: distance
+  # Perform a search for analyst  related jobs
+  job_query = jobs::JobQuery.new location_filters: [location_filter],
+		                         query: keyword,
+		                         company_names: [company_name]
 
-	search_jobs_request = jobs::SearchJobsRequest.new request_metadata: request_metadata,
-													  job_query: job_query,
-													  search_mode: "JOB_SEARCH"
+  search_jobs_request = jobs::SearchJobsRequest.new request_metadata: request_metadata,
+						                            job_query: job_query,
+						                            search_mode: "JOB_SEARCH"
 
-	search_jobs_response = talent_solution_client.search_jobs(project_id, search_jobs_request)
+  search_jobs_response = talent_solution_client.search_jobs(project_id, search_jobs_request)
 
-	puts search_jobs_response.to_json
-	# [END keyword_location_search]
+  puts search_jobs_response.to_json
+  # [END keyword_location_search]
 end
 
 def job_discovery_city_location_search company_name:, city:, project_id:
-	# [START city_location_search]
-	# company_name = "The company name which has the job we want to search."
-	# city         = "Name of the city where we want to do the job search."
-	# project_id   = "Id of the project."
-	require "google/apis/jobs_v3"
-	# Instantiate the client
-	jobs   = Google::Apis::JobsV3
-	talent_solution_client = jobs::CloudTalentSolutionService.new
-	# @see 
-	# https://developers.google.com/identity/protocols/application-default-credentials#callingruby
-	talent_solution_client.authorization = Google::Auth.get_application_default(
-	"https://www.googleapis.com/auth/jobs"
-	)
-	# Make sure to set the requestMetadata the same as the associated search request
-	request_metadata = jobs::RequestMetadata.new user_id: "HashedUserId",
-												 session_id: "HashedSessionId",
-												 domain: "www.google.com"
-	# Set location filter
-	location_filter = jobs::LocationFilter.new address: city
-	# Perform a search for analyst  related jobs
-	job_query = jobs::JobQuery.new location_filters: [location_filter],
-								   company_names: [company_name]
+  # [START city_location_search]
+  # company_name = "The company name which has the job we want to search."
+  # city         = "Name of the city where we want to do the job search."
+  # project_id   = "Id of the project."
+  require "google/apis/jobs_v3"
+  # Instantiate the client
+  jobs   = Google::Apis::JobsV3
+  talent_solution_client = jobs::CloudTalentSolutionService.new
+  # @see
+  # https://developers.google.com/identity/protocols/application-default-credentials#callingruby
+  talent_solution_client.authorization = Google::Auth.get_application_default(
+  "https://www.googleapis.com/auth/jobs"
+  )
+  # Make sure to set the requestMetadata the same as the associated search request
+  request_metadata = jobs::RequestMetadata.new user_id: "HashedUserId",
+					                           session_id: "HashedSessionId",
+					                           domain: "www.google.com"
+  # Set location filter
+  location_filter = jobs::LocationFilter.new address: city
+  # Perform a search for analyst  related jobs
+  job_query = jobs::JobQuery.new location_filters: [location_filter],
+                   				 company_names: [company_name]
 
-	search_jobs_request = jobs::SearchJobsRequest.new request_metadata: request_metadata,
-													  job_query: job_query,
-													  search_mode: "JOB_SEARCH"
+  search_jobs_request = jobs::SearchJobsRequest.new request_metadata: request_metadata,
+						                            job_query: job_query,
+						                            search_mode: "JOB_SEARCH"
 
-	search_jobs_response = talent_solution_client.search_jobs(project_id, search_jobs_request)
+  search_jobs_response = talent_solution_client.search_jobs(project_id, search_jobs_request)
 
-	puts search_jobs_response.to_json
-	# [END keyword_location_search]
+  puts search_jobs_response.to_json
+  # [END keyword_location_search]
 end
 
 def job_discovery_multi_location_search company_name:, location1:, distance1:, city2:, project_id:
-	# [START multi_location_search]
-	# company_name = "The company name which has the job we want to search."
-	# location1    = "Location of the center where the first search is based on"
-	# distance1    = "Radius of the first searching area."
-	# city         = "Name of the city where we want to do the second search."
-	# project_id   = "Id of the project."
-	require "google/apis/jobs_v3"
-	# Instantiate the client
-	jobs   = Google::Apis::JobsV3
-	talent_solution_client = jobs::CloudTalentSolutionService.new
-	# @see 
-	# https://developers.google.com/identity/protocols/application-default-credentials#callingruby
-	talent_solution_client.authorization = Google::Auth.get_application_default(
-	"https://www.googleapis.com/auth/jobs"
-	)
-	# Make sure to set the requestMetadata the same as the associated search request
-	request_metadata = jobs::RequestMetadata.new user_id: "HashedUserId",
-												 session_id: "HashedSessionId",
-												 domain: "www.google.com"
+  # [START multi_location_search]
+  # company_name = "The company name which has the job we want to search."
+  # location1    = "Location of the center where the first search is based on"
+  # distance1    = "Radius of the first searching area."
+  # city         = "Name of the city where we want to do the second search."
+  # project_id   = "Id of the project."
+  require "google/apis/jobs_v3"
+  # Instantiate the client
+  jobs   = Google::Apis::JobsV3
+  talent_solution_client = jobs::CloudTalentSolutionService.new
+  # @see
+  # https://developers.google.com/identity/protocols/application-default-credentials#callingruby
+  talent_solution_client.authorization = Google::Auth.get_application_default(
+  "https://www.googleapis.com/auth/jobs"
+  )
+  # Make sure to set the requestMetadata the same as the associated search request
+  request_metadata = jobs::RequestMetadata.new user_id: "HashedUserId",
+					                           session_id: "HashedSessionId",
+					                           domain: "www.google.com"
 
-	# Set location filter
-	location_filter1 = jobs::LocationFilter.new address: location1,
-												distance_in_miles: distance1
-	location_filter2 = jobs::LocationFilter.new address: city2
-	# Perform a search for analyst  related jobs
-	job_query = jobs::JobQuery.new location_filters: [location_filter1, location_filter2],
-								   company_names: [company_name]
+  # Set location filter
+  location_filter1 = jobs::LocationFilter.new address: location1,
+                        					  distance_in_miles: distance1
+  location_filter2 = jobs::LocationFilter.new address: city2
+  # Perform a search for analyst  related jobs
+  job_query = jobs::JobQuery.new location_filters: [location_filter1, location_filter2],
+                   				 company_names: [company_name]
 
-	search_jobs_request = jobs::SearchJobsRequest.new request_metadata: request_metadata,
-													  job_query: job_query,
-													  search_mode: "JOB_SEARCH"
+  search_jobs_request = jobs::SearchJobsRequest.new request_metadata: request_metadata,
+						                            job_query: job_query,
+						                            search_mode: "JOB_SEARCH"
 
-	search_jobs_response = talent_solution_client.search_jobs(project_id, search_jobs_request)
+  search_jobs_response = talent_solution_client.search_jobs(project_id, search_jobs_request)
 
-	puts search_jobs_response.to_json
-	# [END multi_location_search]
+  puts search_jobs_response.to_json
+  # [END multi_location_search]
 end
 
 def job_discovery_broadening_location_search company_name:, city:, project_id:
-	# [START broadening_location_search]
-	# company_name = "The company name which has the job we want to search."
-	# city         = "Name of the city where we want to do the job search."
-	# project_id   = "Id of the project."
-	require "google/apis/jobs_v3"
-	# Instantiate the client
-	jobs   = Google::Apis::JobsV3
-	talent_solution_client = jobs::CloudTalentSolutionService.new
-	# @see 
-	# https://developers.google.com/identity/protocols/application-default-credentials#callingruby
-	talent_solution_client.authorization = Google::Auth.get_application_default(
-	"https://www.googleapis.com/auth/jobs"
-	)
-	# Make sure to set the requestMetadata the same as the associated search request
-	request_metadata = jobs::RequestMetadata.new user_id: "HashedUserId",
-												 session_id: "HashedSessionId",
-												 domain: "www.google.com"
+  # [START broadening_location_search]
+  # company_name = "The company name which has the job we want to search."
+  # city         = "Name of the city where we want to do the job search."
+  # project_id   = "Id of the project."
+  require "google/apis/jobs_v3"
+  # Instantiate the client
+  jobs   = Google::Apis::JobsV3
+  talent_solution_client = jobs::CloudTalentSolutionService.new
+  # @see
+  # https://developers.google.com/identity/protocols/application-default-credentials#callingruby
+  talent_solution_client.authorization = Google::Auth.get_application_default(
+  "https://www.googleapis.com/auth/jobs"
+  )
+  # Make sure to set the requestMetadata the same as the associated search request
+  request_metadata = jobs::RequestMetadata.new user_id: "HashedUserId",
+					                           session_id: "HashedSessionId",
+					                           domain: "www.google.com"
 
-	# Set location filter
-	location_filter = jobs::LocationFilter.new address: city
-	# Perform a search for analyst  related jobs
-	job_query = jobs::JobQuery.new location_filters: [location_filter],
-								   company_names: [company_name]
+  # Set location filter
+  location_filter = jobs::LocationFilter.new address: city
+  # Perform a search for analyst  related jobs
+  job_query = jobs::JobQuery.new location_filters: [location_filter],
+                   				 company_names: [company_name]
 
-	search_jobs_request = jobs::SearchJobsRequest.new request_metadata: request_metadata,
-													  job_query: job_query,
-													  search_mode: "JOB_SEARCH",
-													  enable_broadening: true
+  search_jobs_request = jobs::SearchJobsRequest.new request_metadata: request_metadata,
+						                            job_query: job_query,
+						                            search_mode: "JOB_SEARCH",
+						                            enable_broadening: true
 
-	search_jobs_response = talent_solution_client.search_jobs(project_id, search_jobs_request)
+  search_jobs_response = talent_solution_client.search_jobs(project_id, search_jobs_request)
 
-	puts search_jobs_response.to_json
-	# [END broadening_location_search]
+  puts search_jobs_response.to_json
+  # [END broadening_location_search]
 end
 
 def run_location_search_sample arguments
 
-	require_relative "basic_company_sample"
-	require_relative "basic_job_sample"
+  require_relative "basic_company_sample"
+  require_relative "basic_job_sample"
 
-	command = arguments.shift
-	default_project_id = "projects/#{ENV["GOOGLE_CLOUD_PROJECT"]}"
-	company_name = "#{default_project_id}/companies/#{arguments.shift}"
+  command = arguments.shift
+  default_project_id = "projects/#{ENV["GOOGLE_CLOUD_PROJECT"]}"
+  company_name = "#{default_project_id}/companies/#{arguments.shift}"
 
-	case command
-	when "basic_location_search"
-		job_discovery_basic_location_search company_name: company_name,
-										    location: arguments.shift, 
-										    distance: arguments.shift,
-										    project_id: default_project_id
-	when "keyword_location_search"
-		job_discovery_keyword_location_search company_name: company_name,
-											  location: arguments.shift, 
-											  distance: arguments.shift,
-											  keyword: arguments.shift, 
-											  project_id: default_project_id
+  case command
+  when "basic_location_search"
+    job_discovery_basic_location_search company_name: company_name,
+				                        location: arguments.shift,
+				                        distance: arguments.shift,
+				                        project_id: default_project_id
+  when "keyword_location_search"
+    job_discovery_keyword_location_search company_name: company_name,
+					                      location: arguments.shift,
+					                      distance: arguments.shift,
+					                      keyword: arguments.shift,
+					                      project_id: default_project_id
     when "city_location_search"
-		job_discovery_city_location_search company_name: company_name,
-										   city: arguments.shift, 
-										   project_id: default_project_id
-	when "multi_location_search"
-		job_discovery_multi_location_search company_name: company_name,
-											location1: arguments.shift, 
-											distance1: arguments.shift, 
-											city2: arguments.shift, 
-											project_id: default_project_id
-	when "broadening_location_search"
-		job_discovery_broadening_location_search company_name: company_name, 
-											     city: arguments.shift, 
-											     project_id: default_project_id
-	else
-	puts <<-usage
+    job_discovery_city_location_search company_name: company_name,
+				                       city: arguments.shift,
+				                       project_id: default_project_id
+  when "multi_location_search"
+    job_discovery_multi_location_search company_name: company_name,
+				                        location1: arguments.shift,
+				                        distance1: arguments.shift,
+				                        city2: arguments.shift,
+				                        project_id: default_project_id
+  when "broadening_location_search"
+    job_discovery_broadening_location_search company_name: company_name,
+				                             city: arguments.shift,
+				                             project_id: default_project_id
+  else
+  puts <<-usage
 Usage: bundle exec ruby filter_search_sample.rb [command] [arguments]
 Commands:
   basic_location_search       <company_id><location><distance>                  Search jobs in given searching area under a provided company.
@@ -242,7 +242,7 @@ Commands:
 Environment variables:
   GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
 usage
-	end
+  end
 end
 
 if __FILE__ == $PROGRAM_NAME
