@@ -20,14 +20,14 @@ def product_search_update_product_labels(
   location   = "us-west1",
   product_id = "your-product-id"
 )
-  client = Google::Cloud::Vision::ProductSearch.new
-
+  client       = Google::Cloud::Vision::ProductSearch.new
   product_path = client.class.product_path project_id, location, product_id
-  product = {
+  product      = {
     name:           product_path,
     product_labels: [{key: "color", value: "green"}]
   }
-  client.update_product(product, update_mask: {"paths": ["product_labels"]})
+
+  client.update_product product, update_mask: {"paths": ["product_labels"]}
 end
 # [END vision_product_search_update_product_labels]
 

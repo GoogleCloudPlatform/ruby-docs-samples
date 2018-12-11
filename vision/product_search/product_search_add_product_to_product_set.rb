@@ -33,6 +33,7 @@ def product_search_add_product_to_product_set(
 
   # Add the product to the product set.
   client.add_product_to_product_set product_set_path, product_path
+
   puts "Product #{product_id} added to product set #{product_set_id}."
 end
 # [END vision_product_search_add_product_to_product_set]

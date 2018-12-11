@@ -20,9 +20,9 @@ def product_search_list_products_in_product_set(
   location       = "us-west1",
   product_set_id = "your-product-set-id"
 )
-  client = Google::Cloud::Vision::ProductSearch.new
-
+  client           = Google::Cloud::Vision::ProductSearch.new
   product_set_path = client.class.product_set_path project_id, location, product_set_id
+
   puts "Products in product set #{product_set_id}:"
   client.list_products_in_product_set(product_set_path).each do |product|
     puts "\t#{product.name}"

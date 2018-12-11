@@ -20,9 +20,9 @@ def product_search_get_product(
   location   = "us-west1",
   product_id = "your-product-id"
 )
-  client = Google::Cloud::Vision::ProductSearch.new
-
+  client       = Google::Cloud::Vision::ProductSearch.new
   product_path = client.class.product_path project_id, location, product_id
+
   product = client.get_product product_path
 
   puts "Product name: #{product.name}"

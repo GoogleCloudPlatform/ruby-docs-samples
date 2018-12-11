@@ -31,6 +31,7 @@ def product_search_remove_product_from_product_set(
 
   # Remove the product from the product set.
   client.remove_product_from_product_set product_set_path, product_path
+
   puts "Product #{product_id} removed from product set #{product_set_id}."
 end
 # [END vision_product_search_remove_product_from_product_set]

@@ -20,9 +20,9 @@ def product_search_list_reference_images(
   location   = "us-west1",
   product_id = "your-product-id"
 )
-  client = Google::Cloud::Vision::ProductSearch.new
-
+  client       = Google::Cloud::Vision::ProductSearch.new
   product_path = client.class.product_path project_id, location, product_id
+
   puts "Reference images for product #{product_id}:"
   client.list_reference_images(product_path).each do |reference_image|
     puts "\t#{reference_image.name}"

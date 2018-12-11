@@ -20,9 +20,9 @@ def product_search_delete_product(
   location   = "us-west1",
   product_id = "your-product_id"
 )
-  client = Google::Cloud::Vision::ProductSearch.new
-
+  client       = Google::Cloud::Vision::ProductSearch.new
   product_path = client.class.product_path project_id, location, product_id
+
   client.delete_product product_path
 
   puts "Product #{product_id} deleted."
