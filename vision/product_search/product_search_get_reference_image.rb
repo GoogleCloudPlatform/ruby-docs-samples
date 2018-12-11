@@ -15,7 +15,6 @@
 # [START vision_product_search_get_reference_image]
 require "google/cloud/vision"
 
-
 def product_search_get_reference_image(
   project_id = "your-project-id",
   location   = "us-west1",

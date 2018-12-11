@@ -17,7 +17,6 @@
 require "google/cloud/vision"
 # [END vision_product_search_tutorial_import]
 
-
 def product_search_create_product project_id = "your-project-id"
   client = Google::Cloud::Vision::ProductSearch.new
 

@@ -15,7 +15,6 @@
 # [START vision_product_search_remove_product_from_product_set]
 require "google/cloud/vision"
 
-
 def product_search_remove_product_from_product_set(
   project_id     = "your-project-id",
   location       = "us-west1",
