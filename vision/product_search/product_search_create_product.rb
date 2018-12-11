@@ -30,7 +30,7 @@ def product_search_create_product project_id = "your-project-id"
     display_name:     "sample-product-1234",
     description:      "Athletic shorts",
     product_category: "apparel",
-    product_labels:   [{key: "color", value: "blue"}]
+    product_labels:   [{ key: "color", value: "blue" }]
   }
 
   # The response is the product with the `name` field populated.

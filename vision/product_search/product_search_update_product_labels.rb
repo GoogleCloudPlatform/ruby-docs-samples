@@ -24,10 +24,10 @@ def product_search_update_product_labels(
   product_path = client.class.product_path project_id, location, product_id
   product      = {
     name:           product_path,
-    product_labels: [{key: "color", value: "green"}]
+    product_labels: [{ key: "color", value: "green" }]
   }
 
-  client.update_product product, update_mask: {"paths": ["product_labels"]}
+  client.update_product product, update_mask: { "paths": ["product_labels"] }
 end
 # [END vision_product_search_update_product_labels]
 
