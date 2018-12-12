@@ -17,10 +17,7 @@ require "spec_helper"
 describe "Get product" do
 
   example "Get product" do
-
-    current_directory = File.expand_path(File.dirname(__FILE__))
-    snippet_filepath = File.join current_directory, "..",
-                                 "product_search_get_product.rb"
+    snippet_filepath = get_snippet_filepath __FILE__
     product = create_temp_product
     product_id = get_id product
 

@@ -17,10 +17,7 @@ require "spec_helper"
 describe "List product sets" do
 
   example "List product sets" do
-
-    current_directory = File.expand_path(File.dirname(__FILE__))
-    snippet_filepath = File.join current_directory, "..",
-                                 "product_search_list_product_sets.rb"
+    snippet_filepath = get_snippet_filepath __FILE__
     2.times { create_temp_product_set }
 
     output = `ruby #{snippet_filepath} #{@project_id} #{@location}`

@@ -22,9 +22,7 @@ describe "Import product sets and retrieve reference images" do
   end
 
   example "Import product sets and retrieve reference images" do
-    current_directory = File.expand_path(File.dirname(__FILE__))
-    snippet_filepath = File.join current_directory, "..",
-                                 "product_search_import_product_images.rb"
+    snippet_filepath = get_snippet_filepath __FILE__
     product_images = {
       "fake_product_id_for_testing_1" => "shoes_1.jpg",
       "fake_product_id_for_testing_2" => "shoes_2.jpg"

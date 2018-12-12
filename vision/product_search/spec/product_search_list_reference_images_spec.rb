@@ -17,10 +17,7 @@ require "spec_helper"
 describe "List reference images" do
 
   example "List reference images" do
-
-    current_directory = File.expand_path(File.dirname(__FILE__))
-    snippet_filepath = File.join current_directory, "..",
-                                 "product_search_list_reference_images.rb"
+    snippet_filepath = get_snippet_filepath __FILE__
     product = create_temp_product
     product_id = get_id product
     2.times { create_temp_reference_image product }

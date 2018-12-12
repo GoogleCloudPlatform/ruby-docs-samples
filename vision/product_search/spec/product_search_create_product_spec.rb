@@ -17,10 +17,7 @@ require "spec_helper"
 describe "Create product" do
 
   example "Create a new product" do
-
-    current_directory = File.expand_path(File.dirname(__FILE__))
-    snippet_filepath = File.join current_directory, "..",
-                                 "product_search_create_product.rb"
+    snippet_filepath = get_snippet_filepath __FILE__
 
     output = `ruby #{snippet_filepath} #{@project_id}`
 

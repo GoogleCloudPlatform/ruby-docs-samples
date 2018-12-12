@@ -17,6 +17,7 @@ require "google/cloud/vision"
 
 RSpec.configure do |config|
   config.before(:all) do
+    @current_directory = File.expand_path(File.dirname(__FILE__))
     @client = Google::Cloud::Vision::ProductSearch.new
     @project_id = ENV["GOOGLE_CLOUD_PROJECT"]
     @location = "us-west1"
@@ -73,6 +74,14 @@ RSpec.configure do |config|
 
   def get_id resource
     resource.name.split("/").last
+  end
+
+  def get_snippet_filepath test_filepath
+    File.join(
+      @current_directory,
+      "..",
+      File.basename(test_filepath).sub("_spec", "")
+    )
   end
 
 end

@@ -17,9 +17,7 @@ require "spec_helper"
 describe "Update product labels" do
 
   example "Update product labels" do
-    current_directory = File.expand_path(File.dirname(__FILE__))
-    snippet_filepath = File.join current_directory, "..",
-                                 "product_search_update_product_labels.rb"
+    snippet_filepath = get_snippet_filepath __FILE__
     temp_product = create_temp_product
     temp_product_id = get_id temp_product
     expect(temp_product.product_labels).to be_empty

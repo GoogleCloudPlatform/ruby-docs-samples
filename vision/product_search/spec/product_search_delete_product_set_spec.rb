@@ -17,10 +17,7 @@ require "spec_helper"
 describe "Delete product set" do
 
   example "Delete product set" do
-
-    current_directory = File.expand_path(File.dirname(__FILE__))
-    snippet_filepath = File.join current_directory, "..",
-                                 "product_search_delete_product_set.rb"
+    snippet_filepath = get_snippet_filepath __FILE__
     product_set = create_temp_product
     product_set_id = get_id product_set
 
