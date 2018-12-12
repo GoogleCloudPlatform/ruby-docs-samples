@@ -12,26 +12,27 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-def job_discovery_generate_company display_name:, headquarters_address:
-  # [START generate_company]
+def job_discovery_generate_company display_name:, headquarters_address:, external_id:
+  # [START job_discovery_generate_company]
   # display_name         = "Your company display name"
   # headquarters_address = "Your company headquarters address"
+  # external_id          = "Your internal ID for this company"
 
   require "google/apis/jobs_v3"
   require "securerandom"
 
   jobs = Google::Apis::JobsV3
-  external_id = "externalId: #{display_name} #{SecureRandom.hex}"
+  
   company_generated = jobs::Company.new display_name: display_name,
-				                        headquarters_address: headquarters_address,
-				                        external_id: external_id
+                                        headquarters_address: headquarters_address,
+                                        external_id: external_id
   puts "Company generated: #{company_generated.to_json}"
   return company_generated
-  # [END generate_company]
+  # [END job_discovery_generate_company]
 end
 
 def job_discovery_create_company company_to_be_created:, project_id:
-  # [START create_company]
+  # [START job_discovery_create_company]
   # company_to_be_created  = "Company to be created"
   # project_id             = "Id of the project"
 
@@ -53,11 +54,11 @@ def job_discovery_create_company company_to_be_created:, project_id:
   rescue => e
      puts "Exception occurred while creating company: #{e}"
   end
-  # [END create_company]
+  # [END job_discovery_create_company]
 end
 
 def job_discovery_get_company company_name:
-  # [START get_company]
+  # [START job_discovery_get_company]
   # company_name  = "The name of the company you want to get"
 
   require "google/apis/jobs_v3"
@@ -77,11 +78,11 @@ def job_discovery_get_company company_name:
   rescue => e
       puts "Exception occurred while getting company: #{e}"
   end
-  # [END get_company]
+  # [END job_discovery_get_company]
 end
 
 def job_discovery_update_company company_name:, company_updated:
-  # [START update_company]
+  # [START job_discovery_update_company]
   # company_name     = "The name of the company you want to update"
   # company_updated  = "The new company object to be updated"
 
@@ -104,11 +105,11 @@ def job_discovery_update_company company_name:, company_updated:
   rescue => e
       puts "Exception occurred while updating company: #{e}"
   end
-  # [END update_company]
+  # [END job_discovery_update_company]
 end
 
 def job_discovery_update_company_with_field_mask company_name:, field_mask:, company_updated:
-  # [START update_company_with_field_mask]
+  # [START job_discovery_update_company_with_field_mask]
   # company_name     = "The name of the company you want to update"
   # field_mask       = "The field mask you want to update"
   # company_updated  = "The new company object to be updated"
@@ -125,20 +126,20 @@ def job_discovery_update_company_with_field_mask company_name:, field_mask:, com
 
   begin
     update_company_request = jobs::UpdateCompanyRequest.new company: company_updated,
-                                							update_mask: field_mask
+                                                            update_mask: field_mask
     company_updated = talent_solution_client.
               patch_project_company(company_name, update_company_request)
-    puts "Company updated with filedMask #{update_company_request.update_mask}. "\
-       "Updated company: #{company_updated.to_json}"
+    puts "Company updated with filedMask #{update_company_request.update_mask}. "
+    puts "Updated company: #{company_updated.to_json}"
     return company_updated
   rescue => e
       puts "Exception occurred while updating company with fieldMask: #{e}"
   end
-  # [END update_company_with_field_mask]
+  # [END job_discovery_update_company_with_field_mask]
 end
 
 def job_discovery_delete_company company_name:
-  # [START delete_company]
+  # [START job_discovery_delete_company]
   # company_name  = "The name of the company you want to delete"
 
   require "google/apis/jobs_v3"
@@ -157,7 +158,7 @@ def job_discovery_delete_company company_name:
   rescue => e
       puts "Exception occurred while deleting company: #{e}"
   end
-  # [END delete_company]
+  # [END job_discovery_delete_company]
 end
 
 def run_basic_company_sample arguments
@@ -170,36 +171,37 @@ def run_basic_company_sample arguments
 
   case command
   when "create_company"
-    company_generated_test =
+    company_generated =
       job_discovery_generate_company display_name: user_input,
-                       				 headquarters_address: arguments.shift
-    company_created_test =
-      job_discovery_create_company company_to_be_created: company_generated_test,
-                     			   project_id: default_project_id
+                                     external_id: arguments.shift,
+                                     headquarters_address: arguments.shift
+    company_created =
+      job_discovery_create_company company_to_be_created: company_generated,
+                                   project_id: default_project_id
   when "get_company"
     job_discovery_get_company company_name: company_name
   when "update_company"
     company_to_be_updated = job_discovery_get_company company_name: company_name
     company_to_be_updated.display_name = "Updated name Google"
     job_discovery_update_company company_name:company_name,
-                   				 company_updated:company_to_be_updated
+                                 company_updated:company_to_be_updated
   when "update_company_with_field_mask"
     company_to_be_updated = job_discovery_get_company company_name: company_name
     company_to_be_updated.display_name = "Updated name Google"
     job_discovery_update_company_with_field_mask company_name:company_name,
-							                     field_mask:"DisplayName",
-							                     company_updated:company_to_be_updated
+                                                 field_mask:"DisplayName",
+                                                 company_updated:company_to_be_updated
   when "delete_company"
     job_discovery_delete_company company_name:company_name
   else
   puts <<-usage
 Usage: bundle exec ruby basic_company_sample.rb [command] [arguments]
 Commands:
-  create_company                  <display_name> <headquarters_address>      Create a company with display name and headquaters address
-  get_company                     <company_id>                               Get company with name.
-  update_company                  <company_id>                               Update a company.
-  update_company_with_field_mask  <company_id>                               Update a company with field mask.
-  delete_company                  <company_id>                               Delete a company.
+  create_company                  <display_name> <external_id> <headquarters_address>      Create a company with display name and headquaters address
+  get_company                     <company_id>                                             Get company with name.
+  update_company                  <company_id>                                             Update a company.
+  update_company_with_field_mask  <company_id>                                             Update a company with field mask.
+  delete_company                  <company_id>                                             Delete a company.
 Environment variables:
   GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
     usage

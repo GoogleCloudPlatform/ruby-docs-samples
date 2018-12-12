@@ -13,7 +13,7 @@
 # limitations under the License.
 
 def job_discovery_job_title_auto_complete company_name:, query:, project_id:
-  # [START auto_complete_job_title]
+  # [START job_discovery_job_title_auto_complete]
   # company_name  = "The company's name which the job belongs to"
   # query         = "Job title prefix as auto complete query"
   # project_id    = "Project id required"
@@ -38,11 +38,11 @@ def job_discovery_job_title_auto_complete company_name:, query:, project_id:
           puts "Error when auto completing job title. Error message: #{err.to_json}"
         end
       end
-  # [END auto_complete_job_title]
+  # [END job_discovery_job_title_auto_complete]
 end
 
 def job_discovery_default_auto_complete company_name:, query:, project_id:
-  # [START default_auto_complete]
+  # [START job_discovery_default_auto_complete]
   # company_name  = "The company's name which the job belongs to"
   # query         = "Keyword prefix as auto complete query"
   # project_id    = "Project id required"
@@ -66,7 +66,7 @@ def job_discovery_default_auto_complete company_name:, query:, project_id:
           puts "Error when auto completing. Error message: #{err.to_json}"
         end
       end
-  # [END default_auto_complete]
+  # [END job_discovery_default_auto_complete]
 end
 
 def run_auto_complete_sample arguments
@@ -78,18 +78,18 @@ def run_auto_complete_sample arguments
   case command
   when "job_title_auto_complete"
     job_discovery_job_title_auto_complete company_name: company_name,
-				                          query: arguments.shift,
-				                          project_id: default_project_id
+                                          query: arguments.shift,
+                                          project_id: default_project_id
   when "default_auto_complete"
     job_discovery_default_auto_complete company_name: company_name,
-				                        query: arguments.shift,
-				                        project_id: default_project_id
+                                        query: arguments.shift,
+                                        project_id: default_project_id
   else
   puts <<-usage
 Usage: bundle exec ruby auto_complete_sample.rb [command] [arguments]
 Commands:
-  job_title_auto_complete     <company_id><title_prefix>     Auto completes job titles within given company_name and title prefix
-  default_auto_complete       <company_id><keyword_prefix>   Default auto completes within given company_name and keyword prefix
+  job_title_auto_complete     <company_id> <title_prefix>     Auto completes job titles within given company_name and title prefix
+  default_auto_complete       <company_id> <keyword_prefix>   Default auto completes within given company_name and keyword prefix
 Environment variables:
   GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
     usage

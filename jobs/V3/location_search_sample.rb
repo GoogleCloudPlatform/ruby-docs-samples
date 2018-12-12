@@ -13,7 +13,7 @@
 # limitations under the License.
 
 def job_discovery_basic_location_search company_name:, location:, distance:, project_id:
-  # [START basic_location_search]
+  # [START job_discovery_basic_location_search]
   # company_name = "The company name which has the job we want to search."
   # location     = "Location of the center where the search is based on."
   # distance     = "Radius of the searching area."
@@ -29,27 +29,27 @@ def job_discovery_basic_location_search company_name:, location:, distance:, pro
   )
   # Make sure to set the requestMetadata the same as the associated search request
   request_metadata = jobs::RequestMetadata.new user_id: "HashedUserId",
-					                           session_id: "HashedSessionId",
-					                           domain: "www.google.com"
+                                               session_id: "HashedSessionId",
+                                               domain: "www.google.com"
   # Set location filter
   location_filter = jobs::LocationFilter.new address: location,
-                         					 distance_in_miles: distance
+                                             distance_in_miles: distance
   # Perform a search for analyst  related jobs
   job_query = jobs::JobQuery.new location_filters: [location_filter],
-                   				 company_names: [company_name]
+                                 company_names: [company_name]
 
   search_jobs_request = jobs::SearchJobsRequest.new request_metadata: request_metadata,
-						                            job_query: job_query,
-						                            search_mode: "JOB_SEARCH"
+                                                    job_query: job_query,
+                                                    search_mode: "JOB_SEARCH"
 
   search_jobs_response = talent_solution_client.search_jobs(project_id, search_jobs_request)
 
   puts search_jobs_response.to_json
-  # [END basic_location_search]
+  # [END job_discovery_basic_location_search]
 end
 
 def job_discovery_keyword_location_search company_name:, location:, distance:, keyword:, project_id:
-  # [START keyword_location_search]
+  # [START job_discovery_keyword_location_search]
   # company_name = "The company name which has the job we want to search."
   # location     = "Location of the center where the search is based on."
   # distance     = "Radius of the searching area."
@@ -66,28 +66,28 @@ def job_discovery_keyword_location_search company_name:, location:, distance:, k
   )
   # Make sure to set the requestMetadata the same as the associated search request
   request_metadata = jobs::RequestMetadata.new user_id: "HashedUserId",
-					                           session_id: "HashedSessionId",
-					                           domain: "www.google.com"
+                                               session_id: "HashedSessionId",
+                                               domain: "www.google.com"
   # Set location filter
   location_filter = jobs::LocationFilter.new address: location,
-                         					 distance_in_miles: distance
+                                             distance_in_miles: distance
   # Perform a search for analyst  related jobs
   job_query = jobs::JobQuery.new location_filters: [location_filter],
-		                         query: keyword,
-		                         company_names: [company_name]
+                                 query: keyword,
+                                 company_names: [company_name]
 
   search_jobs_request = jobs::SearchJobsRequest.new request_metadata: request_metadata,
-						                            job_query: job_query,
-						                            search_mode: "JOB_SEARCH"
+                                                    job_query: job_query,
+                                                    search_mode: "JOB_SEARCH"
 
   search_jobs_response = talent_solution_client.search_jobs(project_id, search_jobs_request)
 
   puts search_jobs_response.to_json
-  # [END keyword_location_search]
+  # [END job_discovery_keyword_location_search]
 end
 
 def job_discovery_city_location_search company_name:, city:, project_id:
-  # [START city_location_search]
+  # [START job_discovery_city_location_search]
   # company_name = "The company name which has the job we want to search."
   # city         = "Name of the city where we want to do the job search."
   # project_id   = "Id of the project."
@@ -102,26 +102,26 @@ def job_discovery_city_location_search company_name:, city:, project_id:
   )
   # Make sure to set the requestMetadata the same as the associated search request
   request_metadata = jobs::RequestMetadata.new user_id: "HashedUserId",
-					                           session_id: "HashedSessionId",
-					                           domain: "www.google.com"
+                                               session_id: "HashedSessionId",
+                                               domain: "www.google.com"
   # Set location filter
   location_filter = jobs::LocationFilter.new address: city
   # Perform a search for analyst  related jobs
   job_query = jobs::JobQuery.new location_filters: [location_filter],
-                   				 company_names: [company_name]
+                                 company_names: [company_name]
 
   search_jobs_request = jobs::SearchJobsRequest.new request_metadata: request_metadata,
-						                            job_query: job_query,
-						                            search_mode: "JOB_SEARCH"
+                                                    job_query: job_query,
+                                                    search_mode: "JOB_SEARCH"
 
   search_jobs_response = talent_solution_client.search_jobs(project_id, search_jobs_request)
 
   puts search_jobs_response.to_json
-  # [END keyword_location_search]
+  # [END job_discovery_keyword_location_search]
 end
 
 def job_discovery_multi_location_search company_name:, location1:, distance1:, city2:, project_id:
-  # [START multi_location_search]
+  # [START job_discovery_multi_location_search]
   # company_name = "The company name which has the job we want to search."
   # location1    = "Location of the center where the first search is based on"
   # distance1    = "Radius of the first searching area."
@@ -138,29 +138,29 @@ def job_discovery_multi_location_search company_name:, location1:, distance1:, c
   )
   # Make sure to set the requestMetadata the same as the associated search request
   request_metadata = jobs::RequestMetadata.new user_id: "HashedUserId",
-					                           session_id: "HashedSessionId",
-					                           domain: "www.google.com"
+                                               session_id: "HashedSessionId",
+                                               domain: "www.google.com"
 
   # Set location filter
   location_filter1 = jobs::LocationFilter.new address: location1,
-                        					  distance_in_miles: distance1
+                                              distance_in_miles: distance1
   location_filter2 = jobs::LocationFilter.new address: city2
   # Perform a search for analyst  related jobs
   job_query = jobs::JobQuery.new location_filters: [location_filter1, location_filter2],
-                   				 company_names: [company_name]
+                                 company_names: [company_name]
 
   search_jobs_request = jobs::SearchJobsRequest.new request_metadata: request_metadata,
-						                            job_query: job_query,
-						                            search_mode: "JOB_SEARCH"
+                                                    job_query: job_query,
+                                                    search_mode: "JOB_SEARCH"
 
   search_jobs_response = talent_solution_client.search_jobs(project_id, search_jobs_request)
 
   puts search_jobs_response.to_json
-  # [END multi_location_search]
+  # [END job_discovery_multi_location_search]
 end
 
 def job_discovery_broadening_location_search company_name:, city:, project_id:
-  # [START broadening_location_search]
+  # [START job_discovery_broadening_location_search]
   # company_name = "The company name which has the job we want to search."
   # city         = "Name of the city where we want to do the job search."
   # project_id   = "Id of the project."
@@ -175,24 +175,24 @@ def job_discovery_broadening_location_search company_name:, city:, project_id:
   )
   # Make sure to set the requestMetadata the same as the associated search request
   request_metadata = jobs::RequestMetadata.new user_id: "HashedUserId",
-					                           session_id: "HashedSessionId",
-					                           domain: "www.google.com"
+                                               session_id: "HashedSessionId",
+                                               domain: "www.google.com"
 
   # Set location filter
   location_filter = jobs::LocationFilter.new address: city
   # Perform a search for analyst  related jobs
   job_query = jobs::JobQuery.new location_filters: [location_filter],
-                   				 company_names: [company_name]
+                                 company_names: [company_name]
 
   search_jobs_request = jobs::SearchJobsRequest.new request_metadata: request_metadata,
-						                            job_query: job_query,
-						                            search_mode: "JOB_SEARCH",
-						                            enable_broadening: true
+                                                    job_query: job_query,
+                                                    search_mode: "JOB_SEARCH",
+                                                    enable_broadening: true
 
   search_jobs_response = talent_solution_client.search_jobs(project_id, search_jobs_request)
 
   puts search_jobs_response.to_json
-  # [END broadening_location_search]
+  # [END job_discovery_broadening_location_search]
 end
 
 def run_location_search_sample arguments
@@ -207,38 +207,38 @@ def run_location_search_sample arguments
   case command
   when "basic_location_search"
     job_discovery_basic_location_search company_name: company_name,
-				                        location: arguments.shift,
-				                        distance: arguments.shift,
-				                        project_id: default_project_id
+                                        location: arguments.shift,
+                                        distance: arguments.shift,
+                                        project_id: default_project_id
   when "keyword_location_search"
     job_discovery_keyword_location_search company_name: company_name,
-					                      location: arguments.shift,
-					                      distance: arguments.shift,
-					                      keyword: arguments.shift,
-					                      project_id: default_project_id
+                                          location: arguments.shift,
+                                          distance: arguments.shift,
+                                          keyword: arguments.shift,
+                                          project_id: default_project_id
     when "city_location_search"
     job_discovery_city_location_search company_name: company_name,
-				                       city: arguments.shift,
-				                       project_id: default_project_id
+                                       city: arguments.shift,
+                                       project_id: default_project_id
   when "multi_location_search"
     job_discovery_multi_location_search company_name: company_name,
-				                        location1: arguments.shift,
-				                        distance1: arguments.shift,
-				                        city2: arguments.shift,
-				                        project_id: default_project_id
+                                        location1: arguments.shift,
+                                        distance1: arguments.shift,
+                                        city2: arguments.shift,
+                                        project_id: default_project_id
   when "broadening_location_search"
     job_discovery_broadening_location_search company_name: company_name,
-				                             city: arguments.shift,
-				                             project_id: default_project_id
+                                             city: arguments.shift,
+                                             project_id: default_project_id
   else
   puts <<-usage
 Usage: bundle exec ruby filter_search_sample.rb [command] [arguments]
 Commands:
-  basic_location_search       <company_id><location><distance>                  Search jobs in given searching area under a provided company.
-  keyword_location_search     <company_id><location><distance><search_keyword>  Search jobs with keyword in given searching area under a provided company.
-  city_location_search        <company_id><city>                                Search jobs in a city under a provided company.
-  multi_location_search       <company_id><location><distance><city>            Search jobs with multi condition under a provided company.
-  broadening_location_search  <company_id><city>                                Broaden search in a city under a provided company.
+  basic_location_search       <company_id> <location> <distance>                  Search jobs in given searching area under a provided company.
+  keyword_location_search     <company_id> <location> <distance> <search_keyword>  Search jobs with keyword in given searching area under a provided company.
+  city_location_search        <company_id> <city>                                Search jobs in a city under a provided company.
+  multi_location_search       <company_id> <location> <distance> <city>            Search jobs with multi condition under a provided company.
+  broadening_location_search  <company_id> <city>                                Broaden search in a city under a provided company.
 Environment variables:
   GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
 usage

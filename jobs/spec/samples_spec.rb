@@ -16,6 +16,7 @@ require "stringio"
 require "rspec"
 require "rspec/retry"
 require "google/apis/jobs_v3"
+require "securerandom"
 require_relative "../V3/basic_company_sample"
 require_relative "../V3/basic_job_sample"
 require_relative "../V3/auto_complete_sample"
@@ -51,7 +52,8 @@ describe "Cloud Job Discovery Samples" do
     begin
       company_generated_test = 
         job_discovery_generate_company display_name: "Google", 
-                                       headquarters_address: "1600 Amphitheatre Parkway "\
+                                       external_id: "externalId: Google #{SecureRandom.hex}",
+                                       headquarters_address: "1600 Amphitheatre Parkway " +
                                                              "Mountain View, CA 94043"
       company_created_test = 
         job_discovery_create_company company_to_be_created: company_generated_test,
@@ -94,12 +96,13 @@ describe "Cloud Job Discovery Samples" do
     begin
       company_generated_test = 
         job_discovery_generate_company display_name: "Google", 
-                                       headquarters_address: "1600 Amphitheatre Parkway "\
+                                       headquarters_address: "1600 Amphitheatre Parkway " +
                                                              "Mountain View, CA 94043"
       company_created_test = 
         job_discovery_create_company company_to_be_created: company_generated_test,
                                      project_id: @default_project_id
       job_generated_test = job_discovery_generate_job company_name: company_created_test.name
+                                                      requisition_id: "#{company_created_test.name} #{SecureRandom.hex}"
       job_created_test = job_discovery_create_job job_to_be_created: job_generated_test,
                                                   project_id: @default_project_id
       job_got = job_discovery_get_job job_name: job_created_test.name

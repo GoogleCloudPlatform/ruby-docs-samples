@@ -13,7 +13,7 @@
 # limitations under the License.
 
 def job_discovery_histogram_search company_name:, project_id:
-  # [START histogram_search]
+  # [START job_discovery_histogram_search]
   # company_name = "The company name which has the job we want to search"
   require "google/apis/jobs_v3"
 
@@ -28,26 +28,26 @@ def job_discovery_histogram_search company_name:, project_id:
 
   # Make sure to set the request_metadata the same as the associated search request
   request_metadata = jobs::RequestMetadata.new user_id: "HashedUserId",
-						                       session_id: "HashedSessionId",
-						                       domain: "http://careers.google.com"
+                                               session_id: "HashedSessionId",
+                                               domain: "http://careers.google.com"
 
   custom_attribute_histogram_request =
     jobs::CustomAttributeHistogramRequest.new key: "someFieldName1",
-                          					  string_value_histogram: true
+                                              string_value_histogram: true
   histogram_facets =
     jobs::HistogramFacets.new simple_histogram_facets: ["COMPANY_ID"],
-                  			  custom_attribute_histogram_facets: [custom_attribute_histogram_request]
+                              custom_attribute_histogram_facets: [custom_attribute_histogram_request]
   # Perform a search for analyst  related jobs
   job_query = jobs::JobQuery.new company_names: [company_name]
 
   search_jobs_request = jobs::SearchJobsRequest.new request_metadata: request_metadata,
-						                            job_query: job_query,
-						                            histogram_facets: histogram_facets
+                                                    job_query: job_query,
+                                                    histogram_facets: histogram_facets
   search_jobs_response = talent_solution_client.search_jobs(project_id, search_jobs_request)
 
   puts search_jobs_response.to_json
 end
-# [END histogram_search]
+# [END job_discovery_histogram_search]
 
 def run_histogram_sample arguments
 
@@ -60,7 +60,7 @@ def run_histogram_sample arguments
   case command
   when "histogram_search"
     job_discovery_histogram_search company_name: company_name,
-                    			   project_id: default_project_id
+                                   project_id: default_project_id
   else
   puts <<-usage
 Usage: bundle exec ruby histogram_sample.rb [command] [arguments]

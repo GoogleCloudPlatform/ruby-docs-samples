@@ -13,7 +13,7 @@
 # limitations under the License.
 
 def job_discovery_commute_search location:, project_id:
-  # [START commute_search]
+  # [START job_discovery_commute_search]
   # location_str = "Location where the commute search based on"
   # project_id   = "Id of the project"
 
@@ -28,22 +28,22 @@ def job_discovery_commute_search location:, project_id:
 
   # Make sure to set the request_metadata the same as the associated search request
   request_metadata = jobs::RequestMetadata.new user_id: "HashedUserId",
-						                       session_id: "HashedSessionId",
-						                       domain: "www.google.com"
+                                               session_id: "HashedSessionId",
+                                               domain: "www.google.com"
   # Set location filter
   commute_filter = jobs::CommuteFilter.new road_traffic: "TRAFFIC_FREE",
-					                       commute_method: "DRIVING",
-					                       travel_duration: "1000s",
-					                       start_coordinates: location
+                                           commute_method: "DRIVING",
+                                           travel_duration: "1000s",
+                                           start_coordinates: location
   # Perform a search for analyst  related jobs
   search_jobs_request =
     jobs::SearchJobsRequest.new request_metadata: request_metadata,
-				                job_query: (jobs::JobQuery.new commute_filter: commute_filter),
-				                job_view: "JOB_VIEW_FULL",
-				                require_precise_result_size: true
+                                job_query: (jobs::JobQuery.new commute_filter: commute_filter),
+                                job_view: "JOB_VIEW_FULL",
+                                require_precise_result_size: true
   search_jobs_response = talent_solution_client.search_jobs(project_id, search_jobs_request)
   puts search_jobs_response.to_json
-  # [END commute_search]
+  # [END job_discovery_commute_search]
 end
 
 def run_commute_search_sample arguments
@@ -54,9 +54,9 @@ def run_commute_search_sample arguments
   when "commute_search"
     location_arr = arguments.shift.split(',')
     location = Google::Apis::JobsV3::LatLng.new latitude: location_arr[0].to_f,
-                          						longitude: location_arr[1].to_f
+                                                longitude: location_arr[1].to_f
     job_discovery_commute_search location: location,
-                  				 project_id: default_project_id
+                                 project_id: default_project_id
   else
   puts <<-usage
 Usage: bundle exec ruby commute_search_sample.rb [command] [arguments]
