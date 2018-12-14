@@ -16,7 +16,7 @@ def job_discovery_generate_company display_name:, headquarters_address:, externa
   # [START job_discovery_generate_company]
   # display_name         = "Your company display name"
   # headquarters_address = "Your company headquarters address"
-  # external_id          = "Your internal ID for this company"
+  # external_id          = "Your internal ID for this company, allowing mapping internal identifiers to the company in Google's system"
 
   require "google/apis/jobs_v3"
   require "securerandom"
@@ -31,10 +31,10 @@ def job_discovery_generate_company display_name:, headquarters_address:, externa
   # [END job_discovery_generate_company]
 end
 
-def job_discovery_create_company company_to_be_created:, project_id:
+def job_discovery_create_company google_cloud_project_id:, company_to_be_created:
   # [START job_discovery_create_company]
-  # company_to_be_created  = "Company to be created"
-  # project_id             = "Id of the project"
+  # google_cloud_project_id = "Id of the project"
+  # company_to_be_created   = "Company to be created"
 
   require "google/apis/jobs_v3"
 
@@ -48,7 +48,7 @@ def job_discovery_create_company company_to_be_created:, project_id:
 
   begin
     create_company_request = jobs::CreateCompanyRequest.new company: company_to_be_created
-    company_created = talent_solution_client.create_company(project_id, create_company_request)
+    company_created = talent_solution_client.create_company(google_cloud_project_id, create_company_request)
     puts "Company created: #{company_created.to_json}"
     return company_created
   rescue => e
@@ -59,7 +59,7 @@ end
 
 def job_discovery_get_company company_name:
   # [START job_discovery_get_company]
-  # company_name  = "The name of the company you want to get"
+  # company_name  = "The name of the company you want to get. The format is "projects/{google_cloud_project_id}/companies/{company_id}""
 
   require "google/apis/jobs_v3"
 
@@ -83,7 +83,7 @@ end
 
 def job_discovery_update_company company_name:, company_updated:
   # [START job_discovery_update_company]
-  # company_name     = "The name of the company you want to update"
+  # company_name     = "The name of the company you want to update. The format is "projects/{google_cloud_project_id}/companies/{company_id}""
   # company_updated  = "The new company object to be updated"
 
   require "google/apis/jobs_v3"
@@ -110,7 +110,7 @@ end
 
 def job_discovery_update_company_with_field_mask company_name:, field_mask:, company_updated:
   # [START job_discovery_update_company_with_field_mask]
-  # company_name     = "The name of the company you want to update"
+  # company_name     = "The name of the company you want to update. The format is "projects/{google_cloud_project_id}/companies/{company_id}""
   # field_mask       = "The field mask you want to update"
   # company_updated  = "The new company object to be updated"
 
@@ -140,7 +140,7 @@ end
 
 def job_discovery_delete_company company_name:
   # [START job_discovery_delete_company]
-  # company_name  = "The name of the company you want to delete"
+  # company_name  = "The name of the company you want to delete. The format is "projects/{google_cloud_project_id}/companies/{company_id}""
 
   require "google/apis/jobs_v3"
 
@@ -163,10 +163,10 @@ end
 
 def run_basic_company_sample arguments
   command = arguments.shift
-  default_project_id = "projects/#{ENV["GOOGLE_CLOUD_PROJECT"]}"
+  default_google_cloud_project_id = "projects/#{ENV["GOOGLE_CLOUD_PROJECT"]}"
   user_input = arguments.shift
   if command != "create_company"
-    company_name = "#{default_project_id}/companies/#{user_input}"
+    company_name = "#{default_google_cloud_project_id}/companies/#{user_input}"
   end
 
   case command
@@ -177,7 +177,7 @@ def run_basic_company_sample arguments
                                      headquarters_address: arguments.shift
     company_created =
       job_discovery_create_company company_to_be_created: company_generated,
-                                   project_id: default_project_id
+                                   google_cloud_project_id: default_google_cloud_project_id
   when "get_company"
     job_discovery_get_company company_name: company_name
   when "update_company"

@@ -14,6 +14,8 @@
 
 def job_discovery_generate_featured_job company_name:, requisition_id:
   # [START job_discovery_generate_featured_job]
+  # company_name   = "The resource name of the company listing the job. The format is "projects/{google_cloud_project_id}/companies/{company_id}""
+  # requisition_id = "The posting ID, assigned by the client to identify a job"
 
   require "google/apis/jobs_v3"
   require "securerandom"
@@ -41,9 +43,11 @@ def job_discovery_generate_featured_job company_name:, requisition_id:
   # [END job_discovery_generate_featured_job]
 end
 
-def job_discovery_featured_jobs_search company_name:, query:, project_id:
+def job_discovery_featured_jobs_search google_cloud_project_id:, company_name:, query:
   # [START job_discovery_featured_jobs_search]
-
+  # google_cloud_project_id = "Id of the project"
+  # company_name            = "The resource name of the company listing the job. The format is "projects/{google_cloud_project_id}/companies/{company_id}""
+  # query                   = "Specify the job criteria to match against. These include location, job categories, employment types, text queries, companies, etc"
   require "google/apis/jobs_v3"
   # Instantiate the client
   jobs = Google::Apis::JobsV3
@@ -70,9 +74,10 @@ def job_discovery_featured_jobs_search company_name:, query:, project_id:
                                                     job_query: job_query,
                                                     search_mode: "FEATURED_JOB_SEARCH"
 
-  search_jobs_response = talent_solution_client.search_jobs(project_id, search_jobs_request)
+  search_jobs_response = talent_solution_client.search_jobs(google_cloud_project_id, search_jobs_request)
 
   puts search_jobs_response.to_json
+  return search_jobs_response
   # [END job_discovery_featured_jobs_search]
 end
 
@@ -82,19 +87,26 @@ def run_featured_job_sample arguments
   require_relative "basic_job_sample"
 
   command = arguments.shift
-  default_project_id = "projects/#{ENV["GOOGLE_CLOUD_PROJECT"]}"
-  company_name = "#{default_project_id}/companies/#{arguments.shift}"
+  default_google_cloud_project_id = "projects/#{ENV["GOOGLE_CLOUD_PROJECT"]}"
+  company_name = "#{default_google_cloud_project_id}/companies/#{arguments.shift}"
 
   case command
+  when "create_featured_job"
+    job_generated_test = 
+        job_discovery_generate_featured_job company_name: company_name,
+                                            requisition_id: arguments.shift
+    job_created_test = job_discovery_create_job job_to_be_created: job_generated_test,
+                                                google_cloud_project_id: default_google_cloud_project_id
   when "featured_jobs_search"
     job_discovery_featured_jobs_search company_name:company_name,
                                        query:arguments.shift,
-                                       project_id: default_project_id
+                                       google_cloud_project_id: default_google_cloud_project_id
   else
   puts <<-usage
 Usage: bundle exec ruby featured_job_sample.rb [command] [arguments]
 Commands:
-  featured_jobs_search       <company_id> <query>    Query a featured job under a provided company.
+  create_featured_job     <company_id> <requisition_id>  Create a featured job under a provided company.
+  featured_jobs_search    <company_id> <query>           Query a featured job under a provided company.
 Environment variables:
   GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
 usage

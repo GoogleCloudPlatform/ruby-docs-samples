@@ -14,7 +14,9 @@
 
 def job_discovery_generate_job company_name:, requisition_id:
   # [START job_discovery_generate_job]
-  # company_name  = "The company's name which has the job you want to create"
+  # company_name   = "The resource name of the company listing the job. The format is "projects/{google_cloud_project_id}/companies/{company_id}""
+  # requisition_id = "The posting ID, assigned by the client to identify a job"
+
   require "google/apis/jobs_v3"
 
   jobs   = Google::Apis::JobsV3
@@ -42,10 +44,10 @@ def job_discovery_generate_job company_name:, requisition_id:
   # [END job_discovery_generate_job]
 end
 
-def job_discovery_create_job job_to_be_created:, project_id:
+def job_discovery_create_job google_cloud_project_id:, job_to_be_created:
   # [START job_discovery_create_job]
-  # job_to_be_created  = "Job to be created"
-  # project_id         = "Id of the project"
+  # google_cloud_project_id = "Id of the project"
+  # job_to_be_created       = "Job to be created"
 
   require "google/apis/jobs_v3"
 
@@ -58,7 +60,7 @@ def job_discovery_create_job job_to_be_created:, project_id:
 
   begin
     create_job_request = jobs::CreateJobRequest.new job: job_to_be_created
-    job_created = talentSolution_client.create_job(project_id, create_job_request)
+    job_created = talentSolution_client.create_job(google_cloud_project_id, create_job_request)
     puts "Job created: #{job_created.to_json}"
     return job_created
   rescue => e
@@ -92,7 +94,7 @@ end
 def job_discovery_update_job job_name:, job_to_be_updated:
   # [START job_discovery_update_job]
   # job_name     = "The name of the job you want to update"
-  # job_updated  = "The new job object to be updated"
+  # job_to_be_updated  = "The new job object to be updated"
   require "google/apis/jobs_v3"
 
   jobs = Google::Apis::JobsV3
@@ -168,12 +170,12 @@ def run_basic_job_sample arguments
   require_relative "basic_company_sample"
 
   command = arguments.shift
-  default_project_id = "projects/#{ENV["GOOGLE_CLOUD_PROJECT"]}"
+  default_google_cloud_project_id = "projects/#{ENV["GOOGLE_CLOUD_PROJECT"]}"
   user_input = arguments.shift
   if command == "create_job"
-    company_name = "#{default_project_id}/companies/#{user_input}"
+    company_name = "#{default_google_cloud_project_id}/companies/#{user_input}"
   else
-    job_name = "#{default_project_id}/jobs/#{user_input}"
+    job_name = "#{default_google_cloud_project_id}/jobs/#{user_input}"
   end
 
   case command
@@ -182,7 +184,7 @@ def run_basic_job_sample arguments
     job_generated = job_discovery_generate_job company_name: company_got.name,
                                                requisition_id: arguments.shift
     job_created = job_discovery_create_job job_to_be_created: job_generated,
-                                                project_id: default_project_id
+                                                google_cloud_project_id: default_google_cloud_project_id
   when "get_job"
     job_discovery_get_job job_name: job_name
   when "update_job"
