@@ -24,7 +24,9 @@ def product_search_remove_product_from_product_set(
   client = Google::Cloud::Vision::ProductSearch.new
 
   # Get the full path of the product set.
-  product_set_path = client.class.product_set_path project_id, location, product_set_id
+  product_set_path = client.class.product_set_path(
+    project_id, location, product_set_id
+  )
 
   # Get the full path of the product.
   product_path = client.class.product_path project_id, location, product_id

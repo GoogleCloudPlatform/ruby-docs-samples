@@ -23,7 +23,9 @@ def product_search_get_reference_image(
 )
   client = Google::Cloud::Vision::ProductSearch.new
 
-  reference_image_path = client.class.reference_image_path project_id, location, product_id, image_id
+  reference_image_path = client.class.reference_image_path(
+    project_id, location, product_id, image_id
+  )
 
   image = client.get_reference_image reference_image_path
 

@@ -22,7 +22,9 @@ def product_search_delete_product_set(
 )
   client = Google::Cloud::Vision::ProductSearch.new
 
-  product_set_path = client.class.product_set_path project_id, location, product_set_id
+  product_set_path = client.class.product_set_path(
+    project_id, location, product_set_id
+  )
 
   client.delete_product_set product_set_path
 
