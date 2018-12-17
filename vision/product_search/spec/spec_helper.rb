@@ -22,7 +22,10 @@ RSpec.configure do |config|
     @project_id = ENV["GOOGLE_CLOUD_PROJECT"]
     @location = "us-west1"
     @location_path = @client.class.location_path @project_id, @location
-    @image_uri = "gs://cloud-samples-data/vision/product_search/shoes_1.jpg"
+    @image_uris = [
+      "gs://cloud-samples-data/vision/product_search/shoes_1.jpg",
+      "gs://cloud-samples-data/vision/product_search/shoes_2.jpg"
+    ]
     @temp_products = []
     @temp_product_sets = []
   end
@@ -56,8 +59,9 @@ RSpec.configure do |config|
     return product
   end
 
-  def create_temp_reference_image product
-    @client.create_reference_image product.name, { uri: @image_uri }
+  def create_temp_reference_image product, uri = nil
+    image_uri = uri || @image_uris[0]
+    @client.create_reference_image product.name, { uri: image_uri }
   end
 
   def create_temp_product_set products = []
