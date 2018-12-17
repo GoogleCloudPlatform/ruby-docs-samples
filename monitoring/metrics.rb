@@ -1,13 +1,13 @@
 require "google/cloud/monitoring"
 
 def create_metric_descriptor project_id:
-  # [START monitoring_create_metric]
-  client = Google::Cloud::Monitoring::Metric.new
-  project_name = Google::Cloud::Monitoring::V3::MetricServiceClient.project_path project_id
-
   # Random suffix for metric type to avoid collisions with other runs
   random_suffix = rand(36**10).to_s(36)
 
+  # [START monitoring_create_metric]
+  client = Google::Cloud::Monitoring::Metric.new
+  project_name = Google::Cloud::Monitoring::V3::MetricServiceClient.project_path project_id
+  
   descriptor = Google::Api::MetricDescriptor.new(
     type: "custom.googleapis.com/my_metric#{random_suffix}",
     metric_kind: Google::Api::MetricDescriptor::MetricKind::GAUGE,
