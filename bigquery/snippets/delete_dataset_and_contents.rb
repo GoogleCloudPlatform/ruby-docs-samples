@@ -1,4 +1,4 @@
-# Copyright 2015 Google, Inc
+# Copyright 2018 Google, LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -11,17 +11,15 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+# [START bigquery_delete_dataset_and_contents]
+require "google/cloud/bigquery"
 
-# [START gae_flex_storage_dependencies]
-source "https://rubygems.org"
+def delete_dataset_and_contents dataset_id = "my_dataset_with_tables"
+  bigquery = Google::Cloud::Bigquery.new
 
-gem "sinatra"
-gem "google-cloud-storage"
-# [END gae_flex_storage_dependencies]
-
-group :test do
-  gem "rspec"
-  gem "capybara"
-  gem "poltergeist"
-  gem "puma"
+  # Use the force parameter to delete a dataset and its contents
+  dataset = bigquery.dataset dataset_id
+  dataset.delete(force: true)
+  puts "Dataset #{dataset_id} and contents deleted."
 end
+# [END bigquery_delete_dataset_and_contents]

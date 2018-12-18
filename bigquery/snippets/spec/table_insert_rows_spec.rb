@@ -1,4 +1,4 @@
-# Copyright 2015 Google, Inc
+# Copyright 2018 Google, LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,16 +12,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START gae_flex_storage_dependencies]
-source "https://rubygems.org"
+require_relative "../table_insert_rows"
+require "spec_helper"
 
-gem "sinatra"
-gem "google-cloud-storage"
-# [END gae_flex_storage_dependencies]
+describe "Insert rows into a table" do
 
-group :test do
-  gem "rspec"
-  gem "capybara"
-  gem "poltergeist"
-  gem "puma"
+  before do
+    @dataset = create_temp_dataset
+    @table = @dataset.create_table "test_table" do |schema|
+      schema.string  "name"
+      schema.integer "value"
+    end
+  end
+
+  example "Insert rows into a table" do
+    output = capture { table_insert_rows @dataset.dataset_id, @table.table_id }
+
+    expect(output).to include("successfully")
+  end
+
 end

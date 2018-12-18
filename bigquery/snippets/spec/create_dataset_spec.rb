@@ -1,4 +1,4 @@
-# Copyright 2015 Google, Inc
+# Copyright 2018 Google, LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,16 +12,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START gae_flex_storage_dependencies]
-source "https://rubygems.org"
+require_relative "../create_dataset"
+require "spec_helper"
 
-gem "sinatra"
-gem "google-cloud-storage"
-# [END gae_flex_storage_dependencies]
+describe "Create dataset" do
 
-group :test do
-  gem "rspec"
-  gem "capybara"
-  gem "poltergeist"
-  gem "puma"
+  before do
+    @dataset_id = "test_dataset_#{Time.now.to_i}"
+  end
+
+  example "creates a new dataset" do
+    location = "US"
+    create_dataset @dataset_id, location
+
+    dataset = @bigquery.dataset @dataset_id
+    expect(dataset.location).to eq(location)
+  end
+
+  after do
+    @bigquery.dataset(@dataset_id).delete
+  end
+
 end

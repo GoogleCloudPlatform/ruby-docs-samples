@@ -1,4 +1,4 @@
-# Copyright 2015 Google, Inc
+# Copyright 2018 Google, LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,16 +12,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START gae_flex_storage_dependencies]
-source "https://rubygems.org"
+require_relative "../list_tables"
+require "spec_helper"
 
-gem "sinatra"
-gem "google-cloud-storage"
-# [END gae_flex_storage_dependencies]
 
-group :test do
-  gem "rspec"
-  gem "capybara"
-  gem "poltergeist"
-  gem "puma"
+describe "List tables" do
+
+  before do
+    @dataset = create_temp_dataset
+  end
+
+  example "list tables in a dataset" do
+    table1 = @dataset.create_table "test_table1_#{Time.now.to_i}"
+    table2 = @dataset.create_table "test_table2_#{Time.now.to_i}"
+
+    output = capture { list_tables @dataset.dataset_id }
+    expect(output).to include(table1.table_id)
+    expect(output).to include(table2.table_id)
+  end
+
 end

@@ -1,4 +1,4 @@
-# Copyright 2015 Google, Inc
+# Copyright 2018 Google, LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,16 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START gae_flex_storage_dependencies]
 source "https://rubygems.org"
 
-gem "sinatra"
-gem "google-cloud-storage"
-# [END gae_flex_storage_dependencies]
+gem "google-cloud-bigquery"
 
 group :test do
   gem "rspec"
-  gem "capybara"
-  gem "poltergeist"
-  gem "puma"
+  gem "rspec-retry"
+  gem "google-cloud-storage"
 end

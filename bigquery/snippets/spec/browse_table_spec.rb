@@ -1,4 +1,4 @@
-# Copyright 2015 Google, Inc
+# Copyright 2018 Google, LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,16 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START gae_flex_storage_dependencies]
-source "https://rubygems.org"
+require_relative "../browse_table"
+require "spec_helper"
 
-gem "sinatra"
-gem "google-cloud-storage"
-# [END gae_flex_storage_dependencies]
+describe "Browse table" do
 
-group :test do
-  gem "rspec"
-  gem "capybara"
-  gem "poltergeist"
-  gem "puma"
+  example "lists first 10 rows of table" do
+    output = capture { browse_table }
+    rows = output.split("\n")
+    expect(rows.length).to eq 10
+  end
+
 end

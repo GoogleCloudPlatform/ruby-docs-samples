@@ -1,4 +1,4 @@
-# Copyright 2015 Google, Inc
+# Copyright 2018 Google, LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -11,17 +11,22 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+# [START bigquery_query]
+require "google/cloud/bigquery"
 
-# [START gae_flex_storage_dependencies]
-source "https://rubygems.org"
+def query
+  bigquery = Google::Cloud::Bigquery.new
+  sql = "SELECT name FROM `bigquery-public-data.usa_names.usa_1910_2013` " +
+        "WHERE state = 'TX' " +
+        "LIMIT 100"
 
-gem "sinatra"
-gem "google-cloud-storage"
-# [END gae_flex_storage_dependencies]
+  # Location must match that of the dataset(s) referenced in the query.
+  results = bigquery.query sql do |config|
+    config.location = "US"
+  end
 
-group :test do
-  gem "rspec"
-  gem "capybara"
-  gem "poltergeist"
-  gem "puma"
+  results.each do |row|
+    puts row.inspect
+  end
 end
+# [END bigquery_query]

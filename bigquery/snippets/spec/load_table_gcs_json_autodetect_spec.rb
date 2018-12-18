@@ -1,4 +1,4 @@
-# Copyright 2015 Google, Inc
+# Copyright 2018 Google, LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,16 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START gae_flex_storage_dependencies]
-source "https://rubygems.org"
+require_relative "../load_table_gcs_json_autodetect"
+require "spec_helper"
 
-gem "sinatra"
-gem "google-cloud-storage"
-# [END gae_flex_storage_dependencies]
 
-group :test do
-  gem "rspec"
-  gem "capybara"
-  gem "poltergeist"
-  gem "puma"
+describe "Load table from JSON file on GCS with auto-detected schema" do
+
+  before do
+    @dataset = create_temp_dataset
+  end
+
+  example "Load a new table from a JSON file on GCS with auto-detected schema" do
+    output = capture { load_table_gcs_json_autodetect @dataset.dataset_id }
+
+    table = @dataset.tables.first
+    expect(output).to include(table.table_id)
+    expect(output).to include("50 rows")
+  end
+
 end

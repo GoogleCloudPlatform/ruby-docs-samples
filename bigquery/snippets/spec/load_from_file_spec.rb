@@ -1,4 +1,4 @@
-# Copyright 2015 Google, Inc
+# Copyright 2018 Google, LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,16 +12,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START gae_flex_storage_dependencies]
-source "https://rubygems.org"
+require_relative "../load_from_file"
+require "spec_helper"
 
-gem "sinatra"
-gem "google-cloud-storage"
-# [END gae_flex_storage_dependencies]
 
-group :test do
-  gem "rspec"
-  gem "capybara"
-  gem "poltergeist"
-  gem "puma"
+describe "Load table" do
+
+  before do
+    @dataset = create_temp_dataset
+  end
+
+  example "Load a new table from a local CSV file" do
+    file_path = File.expand_path("../resources/people.csv", __dir__)
+
+    output = capture { load_from_file @dataset.dataset_id, file_path }
+
+    table = @dataset.tables.first
+    expect(output).to include(table.table_id)
+    expect(output).to include("2 rows")
+  end
+
 end

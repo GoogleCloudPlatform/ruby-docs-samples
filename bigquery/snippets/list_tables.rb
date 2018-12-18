@@ -1,4 +1,4 @@
-# Copyright 2015 Google, Inc
+# Copyright 2018 Google, LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -11,17 +11,16 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+# [START bigquery_list_tables]
+require "google/cloud/bigquery"
 
-# [START gae_flex_storage_dependencies]
-source "https://rubygems.org"
+def list_tables dataset_id = "your_dataset_id"
+  bigquery = Google::Cloud::Bigquery.new
+  dataset  = bigquery.dataset dataset_id
 
-gem "sinatra"
-gem "google-cloud-storage"
-# [END gae_flex_storage_dependencies]
-
-group :test do
-  gem "rspec"
-  gem "capybara"
-  gem "poltergeist"
-  gem "puma"
+  puts "Tables in dataset #{dataset_id}:"
+  dataset.tables.each do |table|
+    puts "\t#{table.table_id}"
+  end
 end
+# [END bigquery_list_tables]

@@ -1,4 +1,4 @@
-# Copyright 2016 Google, Inc
+# Copyright 2018 Google, LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -11,23 +11,19 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-# [START bigquery_quickstart]
-# Imports the Google Cloud client library
+# [START bigquery_create_table]
 require "google/cloud/bigquery"
 
-# Your Google Cloud Platform project ID
-project_id = "YOUR_PROJECT_ID"
+def create_table dataset_id = "my_dataset"
+  bigquery = Google::Cloud::Bigquery.new
+  dataset  = bigquery.dataset dataset_id
+  table_id = "my_table"
 
-# Instantiates a client
-bigquery = Google::Cloud::Bigquery.new project: project_id
+  table = dataset.create_table table_id do |updater|
+    updater.string  "full_name", mode: :required
+    updater.integer "age",       mode: :required
+  end
 
-# The name for the new dataset
-dataset_name = "my_new_dataset"
-
-# Creates the new dataset
-dataset = bigquery.create_dataset dataset_name
-
-puts "Dataset #{dataset.dataset_id} created."
-# [END bigquery_quickstart]
-
+  puts "Created table: #{table_id}"
+end
+# [END bigquery_create_table]
