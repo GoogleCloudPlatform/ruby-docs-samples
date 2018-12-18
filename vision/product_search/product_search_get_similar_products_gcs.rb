@@ -15,7 +15,6 @@
 # [START vision_product_search_get_similar_products_gcs]
 require "google/cloud/vision"
 
-
 def product_search_get_similar_products_gcs(
   project_id       = "your-project-id",
   location         = "us-west1",
