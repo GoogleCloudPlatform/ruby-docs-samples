@@ -76,7 +76,7 @@ if __FILE__ == $PROGRAM_NAME
       ruby detect_landmarks.rb gs://my-bucket/image.png
     USAGE
   elsif image_path =~ URI::DEFAULT_PARSER.make_regexp
-    detect_landmarks_gs image_path: image_path
+    detect_landmarks_gcs image_path: image_path
   else
     detect_landmarks image_path: image_path
   end
