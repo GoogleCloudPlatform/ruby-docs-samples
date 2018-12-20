@@ -30,9 +30,9 @@ Before you can run or deploy the sample, you need to do the following:
 1.  Enable the Cloud Tasks API in the [Google Cloud Console](https://console.cloud.google.com/apis/api/tasks.googleapis.com).
 1.  Set up [Google Application Credentials](https://cloud.google.com/docs/authentication/getting-started).
 1.  Install dependencies:
-```
-bundle install
-```
+    ```
+    bundle install
+    ```
 
 ## Creating a queue
 
