@@ -30,7 +30,6 @@ Before you can run or deploy the sample, you need to do the following:
 1.  Enable the Cloud Tasks API in the [Google Cloud Console](https://console.cloud.google.com/apis/api/tasks.googleapis.com).
 1.  Set up [Google Application Credentials](https://cloud.google.com/docs/authentication/getting-started).
 1.  Install dependencies:
-
 ```
 bundle install
 ```
@@ -48,11 +47,11 @@ version unless configured to do otherwise.
 
 Deploy the App Engine app with gcloud:
 
-    `gcloud app deploy app.yaml`
+    gcloud app deploy app.yaml
 
 Verify the index page is serving:
 
-    `gcloud app browse`
+    gcloud app browse
 
 ## Run the Sample Using the Command Line
 
