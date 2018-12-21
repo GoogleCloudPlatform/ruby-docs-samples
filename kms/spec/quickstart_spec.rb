@@ -14,7 +14,7 @@
 
 require "rspec"
 require "rspec/retry"
-require "google/apis/cloudkms_v1"
+require "google/cloud/kms/v1"
 
 RSpec.configure do |config|
   # show retry status in spec process
@@ -29,7 +29,7 @@ end
 
 
 describe "Key Management Service Quickstart" do
-  Cloudkms = Google::Apis::CloudkmsV1
+  CloudKMS = Google::Cloud::Kms::V1
 
   def create_test_key_ring parent, key_ring_id
     client = CloudKMS::KeyManagementServiceClient.new
@@ -42,7 +42,7 @@ describe "Key Management Service Quickstart" do
   end
 
   before :all do
-    # Note: The quickstart sample defines a `Cloudkms` constant and causes
+    # Note: The quickstart sample defines a `CloudKMS` constant and causes
     #       "already initialized constant" warning because the spec defines the
     #       same constant. $VERBOSE is disabled to silence this warning.
     $VERBOSE = nil
@@ -50,6 +50,7 @@ describe "Key Management Service Quickstart" do
 
   it "can list global key rings by name" do
     test_project_id  = ENV["GOOGLE_CLOUD_PROJECT"]
+    test_location_id = "global"
     test_key_ring_id = "a-key-ring-list-#{test_project_id}"
     test_parent      = "projects/#{test_project_id}/locations/global"
     test_key_rings   = list_test_key_rings(test_parent)
@@ -58,7 +59,7 @@ describe "Key Management Service Quickstart" do
       key_ring.name.end_with?(test_key_ring_id)
     end
     if !created
-      test_key_ring = create_test_key_ring test_parent, test_key_ring_id
+      test_key_ring = create_test_key_ring(test_project_id, test_location_id, test_key_ring_id)
 
       expect(test_key_ring).not_to  eq nil
       expect(test_key_ring.name).to include test_key_ring_id

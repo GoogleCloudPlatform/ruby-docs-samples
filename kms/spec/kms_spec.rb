@@ -15,7 +15,7 @@
 require "rspec"
 require "rspec/retry"
 require "tempfile"
-require "google/apis/cloudkms_v1"
+require "google/cloud/kms/v1" 
 require_relative "../kms"
 
 RSpec.configure do |config|
@@ -30,259 +30,177 @@ RSpec.configure do |config|
 end
 
 describe "Key Management Service" do
-
-  def create_service_client
-    kms_client = Google::Apis::CloudkmsV1::CloudKMSService.new
-    kms_client.authorization = Google::Auth.get_application_default(
-      "https://www.googleapis.com/auth/cloud-platform"
-    )
-    kms_client
-  end
+  CloudKMS = Google::Cloud::Kms::V1
 
   def create_test_key_ring project_id:, location_id:, key_ring_id:
-    kms_client = create_service_client
+    client = CloudKMS::KeyManagementServiceClient.new
+    location_path = CloudKMS::KeyManagementServiceClient.location_path(project_id, location_id)
 
-    resource = "projects/#{project_id}/locations/#{location_id}"
-
-    kms_client.create_project_location_key_ring(
-      resource,
-      Google::Apis::CloudkmsV1::KeyRing.new,
-      key_ring_id: key_ring_id
-    )
+    client.create_key_ring(location_path, key_ring_id, nil)
   end
 
   def get_test_key_ring project_id:, location_id:, key_ring_id:
-    kms_client = create_service_client
+    client = CloudKMS::KeyManagementServiceClient.new
+    key_ring_path = CloudKMS::KeyManagementServiceClient.key_ring_path(
+        project_id, location_id, key_ring_id)
 
-    resource = "projects/#{project_id}/locations/#{location_id}/" +
-               "keyRings/#{key_ring_id}"
-
-    kms_client.get_project_location_key_ring resource
+    client.get_key_ring(key_ring_path)
   end
 
   def create_test_crypto_key project_id:, location_id:, key_ring_id:, crypto_key_id:
-    kms_client = create_service_client
+    client = CloudKMS::KeyManagementServiceClient.new
+    key_ring_path = CloudKMS::KeyManagementServiceClient.key_ring_path(
+        project_id, location_id, key_ring_id)
 
-    resource = "projects/#{project_id}/locations/#{location_id}/" +
-               "keyRings/#{key_ring_id}"
+    crypto_key_spec = CloudKMS::CryptoKey.new
+    crypto_key_spec.purpose = CloudKMS::CryptoKey::CryptoKeyPurpose::ENCRYPT_DECRYPT
 
-    kms_client.create_project_location_key_ring_crypto_key(
-      resource,
-      Google::Apis::CloudkmsV1::CryptoKey.new(
-        purpose: "ENCRYPT_DECRYPT"
-      ),
-      crypto_key_id: crypto_key_id
-    )
+    client.create_crypto_key(key_ring_path, crypto_key_id, crypto_key_spec)
   end
 
   def create_test_crypto_key_version project_id:, location_id:, key_ring_id:, crypto_key_id:
-    kms_client = create_service_client
+    client = CloudKMS::KeyManagementServiceClient.new
+    crypto_key_path = CloudKMS::KeyManagementServiceClient.crypto_key_path(
+        project_id, location_id, key_ring_id, crypto_key_id)
 
-    resource = "projects/#{project_id}/locations/#{location_id}/" +
-               "keyRings/#{key_ring_id}/cryptoKeys/#{crypto_key_id}"
-
-    crypto_key_version = kms_client.create_project_location_key_ring_crypto_key_crypto_key_version(
-        resource,
-        Cloudkms::CryptoKey.new(purpose: "ENCRYPT_DECRYPT")
-    )
+    client.create_crypto_key_version(crypto_key_path, nil)
   end
 
   def destroy_test_crypto_key_version project_id:, location_id:, key_ring_id:, crypto_key_id:, version_id:
-    kms_client = create_service_client
-
-    # The resource name of the location associated with the key ring
-    resource = "projects/#{project_id}/locations/#{location_id}/" +
-               "keyRings/#{key_ring_id}/cryptoKeys/#{crypto_key_id}/" +
-               "cryptoKeyVersions/#{version_id}"
+    client = CloudKMS::KeyManagementServiceClient.new
+    crypto_key_version_path = CloudKMS::KeyManagementServiceClient.crypto_key_version_path(
+        project_id, location_id, key_ring_id, crypto_key_id, version_id)
 
     # Destroy specific version of the crypto key
-    kms_client.destroy_crypto_key_version(
-      resource,
-      Cloudkms::DestroyCryptoKeyVersionRequest.new
-    )
+    client.destroy_crypto_key_version(crypto_key_version_path)
   end
 
   def disable_test_crypto_key_version project_id:, location_id:, key_ring_id:, crypto_key_id:, version_id:
-    kms_client = create_service_client
+    client = CloudKMS::KeyManagementServiceClient.new
+    crypto_key_version_path = CloudKMS::KeyManagementServiceClient.crypto_key_version_path(
+        project_id, location_id, key_ring_id, crypto_key_id, version_id)
 
-    resource = "projects/#{project_id}/locations/#{location_id}/" +
-             "keyRings/#{key_ring_id}/cryptoKeys/#{crypto_key_id}/" +
-             "cryptoKeyVersions/#{version_id}"
+    version = client.get_crypto_key_version(crypto_key_version_path)
 
-    # Get a version of the crypto key
-    crypto_key_version = kms_client.get_project_location_key_ring_crypto_key_crypto_key_version resource
+    # Set the version state to disabled for update
+    version.state = CloudKMS::CryptoKeyVersion::CryptoKeyVersionState::DISABLED
+    update_mask = Google::Protobuf::FieldMask.new
+    update_mask.paths << "state"
 
-    # Set the primary version state as disabled for update
-    crypto_key_version.state = "DISABLED"
-
-    # Disable the crypto key version
-    kms_client.patch_project_location_key_ring_crypto_key_crypto_key_version(
-      resource,
-      crypto_key_version, update_mask: "state"
-    )
+    client.update_crypto_key_version(version, update_mask)
   end
 
   def get_test_crypto_key project_id:, location_id:, key_ring_id:, crypto_key_id:
-    kms_client = create_service_client
+    client = CloudKMS::KeyManagementServiceClient.new
+    crypto_key_path = CloudKMS::KeyManagementServiceClient.crypto_key_path(
+        project_id, location_id, key_ring_id, crypto_key_id)
 
-    resource = "projects/#{project_id}/locations/#{location_id}/" +
-               "keyRings/#{key_ring_id}/cryptoKeys/#{crypto_key_id}"
-
-    kms_client.get_project_location_key_ring_crypto_key resource
+    client.get_crypto_key(crypto_key_path)
   end
 
   def get_test_crypto_key_version project_id:, location_id:, key_ring_id:, crypto_key_id:, version_id:
+    client = CloudKMS::KeyManagementServiceClient.new
+    crypto_key_version_path = CloudKMS::KeyManagementServiceClient.crypto_key_version_path(
+        project_id, location_id, key_ring_id, crypto_key_id, version_id)
 
-    kms_client = create_service_client
-
-    name = "projects/#{project_id}/locations/#{location_id}/" +
-           "keyRings/#{key_ring_id}/cryptoKeys/#{crypto_key_id}/" +
-           "cryptoKeyVersions/#{version_id}"
-
-    kms_client.get_project_location_key_ring_crypto_key_crypto_key_version name
+    client.get_crypto_key_version(crypto_key_version_path)
   end
 
   def list_test_crypto_key_version project_id:, location_id:, key_ring_id:, crypto_key_id:
-    kms_client = create_service_client
+    client = CloudKMS::KeyManagementServiceClient.new
+    crypto_key_path = CloudKMS::KeyManagementServiceClient.crypto_key_path(
+        project_id, location_id, key_ring_id, crypto_key_id)
 
-    resource = "projects/#{project_id}/locations/#{location_id}/" +
-               "keyRings/#{key_ring_id}/cryptoKeys/#{crypto_key_id}"
-
-    kms_client.list_project_location_key_ring_crypto_key_crypto_key_versions(
-        resource
-    )
+    client.list_crypto_key_versions(crypto_key_path)
   end
 
   def list_test_key_rings project_id:, location_id:
-    kms_client = create_service_client
+    client = CloudKMS::KeyManagementServiceClient.new
+    location_path = CloudKMS::KeyManagementServiceClient.location_path(project_id, location_id)
 
-    resource = "projects/#{project_id}/locations/#{location_id}"
-
-    kms_client.list_project_location_key_rings resource
+    client.list_key_rings(location_path)
   end
 
   def get_test_crypto_key_policy project_id:, location_id:, key_ring_id:, crypto_key_id:
-    kms_client = create_service_client
+    client = CloudKMS::KeyManagementServiceClient.new
+    crypto_key_path = CloudKMS::KeyManagementServiceClient.crypto_key_path(
+        project_id, location_id, key_ring_id, crypto_key_id)
 
-    resource = "projects/#{project_id}/locations/#{location_id}/" +
-               "keyRings/#{key_ring_id}/cryptoKeys/#{crypto_key_id}"
-
-    kms_client.get_project_location_key_ring_crypto_key_iam_policy resource
+    client.get_iam_policy(crypto_key_path)
   end
 
   def get_test_key_ring_policy project_id:, location_id:, key_ring_id:
-    kms_client = create_service_client
+    client = CloudKMS::KeyManagementServiceClient.new
+    key_ring_path = CloudKMS::KeyManagementServiceClient.key_ring_path(
+        project_id, location_id, key_ring_id)
 
-    resource = "projects/#{project_id}/locations/#{location_id}/" +
-               "keyRings/#{key_ring_id}"
-
-    kms_client.get_project_location_key_ring_iam_policy resource
+    client.get_iam_policy(key_ring_path)
   end
 
   def add_test_member_to_crypto_key_policy project_id:, location_id:, key_ring_id:, crypto_key_id:, member:, role:
-    kms_client = create_service_client
+    client = CloudKMS::KeyManagementServiceClient.new
+    crypto_key_path = CloudKMS::KeyManagementServiceClient.crypto_key_path(
+        project_id, location_id, key_ring_id, crypto_key_id)
 
-    resource = "projects/#{project_id}/locations/#{location_id}/" +
-               "keyRings/#{key_ring_id}/cryptoKeys/#{crypto_key_id}"
-
-    policy = kms_client.get_project_location_key_ring_crypto_key_iam_policy resource
+    policy = client.get_iam_policy(crypto_key_path)
 
     policy.bindings ||= []
-    policy.bindings << Google::Apis::CloudkmsV1::Binding.new(
-      members: [member],
-      role: role
-    )
+    policy.bindings << Google::Iam::V1::Binding.new(members: [member], role: role)
 
-    policy_request = Google::Apis::CloudkmsV1::SetIamPolicyRequest.new(
-      policy: policy
-    )
-
-    kms_client.set_crypto_key_iam_policy resource, policy_request
+    client.set_iam_policy(crypto_key_path, policy)
   end
 
   def add_test_member_to_key_ring_policy project_id:, location_id:, key_ring_id:, member:, role:
-    kms_client = create_service_client
+    client = CloudKMS::KeyManagementServiceClient.new
+    key_ring_path = CloudKMS::KeyManagementServiceClient.key_ring_path(
+      project_id, location_id, key_ring_id)
 
-    policy = get_test_key_ring_policy(
-      project_id: project_id,
-      location_id: location_id,
-      key_ring_id: key_ring_id
-    )
-
-    resource = "projects/#{project_id}/locations/#{location_id}/" +
-               "keyRings/#{key_ring_id}"
-
+    policy = client.get_iam_policy(key_ring_path)
 
     policy.bindings ||= []
-    policy.bindings << Google::Apis::CloudkmsV1::Binding.new(
-      members: [member],
-      role: role
-    )
+    policy.bindings << Google::Iam::V1::Binding.new(members: [member], role: role)
 
-    policy_request = Google::Apis::CloudkmsV1::SetIamPolicyRequest.new(
-      policy: policy
-    )
-
-    kms_client.set_key_ring_iam_policy resource, policy_request
+    client.set_iam_policy(key_ring_path, policy)
   end
 
   def remove_test_member_to_key_ring_policy project_id:, location_id:, key_ring_id:, member:, role:
-    kms_client = create_service_client
+    client = CloudKMS::KeyManagementServiceClient.new
+    key_ring_path = CloudKMS::KeyManagementServiceClient.key_ring_path(
+      project_id, location_id, key_ring_id)
 
-    policy = get_test_key_ring_policy(
-      project_id: project_id,
-      location_id: location_id,
-      key_ring_id: key_ring_id
-    )
-
-    resource = "projects/#{project_id}/locations/#{location_id}/" +
-               "keyRings/#{key_ring_id}"
+    policy = client.get_iam_policy(key_ring_path)
 
     if policy.bindings
       policy.bindings.delete_if do |binding|
-        binding.role.include?(role) && binding.members.include?(member)
+        binding.role == role && binding.members.include?(member)
       end
     end
 
-    policy_request = Google::Apis::CloudkmsV1::SetIamPolicyRequest.new(
-      policy: policy
-    )
-
-    kms_client.set_key_ring_iam_policy resource, policy_request
+    client.set_iam_policy(key_ring_path, policy)
   end
 
   def encrypt_test_file project_id:, location_id:, key_ring_id:, crypto_key_id:, plaintext_file:, ciphertext_file:
-    kms_client = create_service_client
+    client = CloudKMS::KeyManagementServiceClient.new
+    crypto_key_path = CloudKMS::KeyManagementServiceClient.crypto_key_path(
+        project_id, location_id, key_ring_id, crypto_key_id)
 
-    name = "projects/#{project_id}/locations/#{location_id}/" +
-           "keyRings/#{key_ring_id}/cryptoKeys/#{crypto_key_id}"
+    plaintext = File.open(plaintext_file, 'rb'){ |f| f.read }
 
-    plaintext = File.read plaintext_file
+    response = client.encrypt(crypto_key_path, plaintext)
 
-    request = Google::Apis::CloudkmsV1::EncryptRequest.new(
-      plaintext: plaintext
-    )
-
-    response = kms_client.encrypt_crypto_key name, request
-
-    File.write ciphertext_file, response.ciphertext
+    File.open(ciphertext_file, 'wb'){ |f| f.write(response.ciphertext) }
   end
 
   def decrypt_test_file project_id:, location_id:, key_ring_id:, crypto_key_id:, ciphertext_file:, plaintext_file:
-    kms_client = create_service_client
+    client = CloudKMS::KeyManagementServiceClient.new
+    crypto_key_path = CloudKMS::KeyManagementServiceClient.crypto_key_path(
+        project_id, location_id, key_ring_id, crypto_key_id)
 
-    name = "projects/#{project_id}/locations/#{location_id}/" +
-           "keyRings/#{key_ring_id}/cryptoKeys/#{crypto_key_id}"
+    ciphertext = File.open(ciphertext_file, 'rb'){ |f| f.read }
 
-    ciphertext = File.read ciphertext_file
+    response = client.decrypt(crypto_key_path, ciphertext)
 
-    request = Google::Apis::CloudkmsV1::DecryptRequest.new(
-      ciphertext: ciphertext
-    )
-
-    response = kms_client.decrypt_crypto_key name, request
-
-    File.write plaintext_file, response.plaintext
+    File.open(plaintext_file, 'wb'){ |f| f.write(response.plaintext) }
   end
 
   before :all do
@@ -300,7 +218,7 @@ describe "Key Management Service" do
 
     @plaintext_file = File.expand_path "resources/file.txt", __dir__
 
-    # Note: All samples define a `Cloudkms` constant and cause
+    # Note: All samples define a `CloudKMS` constant and cause
     #       "already initialized constant" warnings. $VERBOSE is disabled to
     #       silence these warnings.
     $VERBOSE = nil
@@ -437,7 +355,7 @@ describe "Key Management Service" do
       crypto_key_id: test_crypto_key_id
     )
 
-    expect(after_version_list.total_size).to be > before_version_list.total_size
+    expect(after_version_list.count).to be > before_version_list.count
   end
 
   it "can set a crypto key version as the primary version" do
@@ -499,7 +417,7 @@ describe "Key Management Service" do
       version_id: version_id
     )
 
-    expect(disabled_crypto_key_version.state).to eq "DISABLED"
+    expect(disabled_crypto_key_version.state).to eq :DISABLED
 
     expect {
       $enable_crypto_key_version.call(
@@ -519,7 +437,7 @@ describe "Key Management Service" do
       version_id: version_id
     )
 
-    expect(crypto_key.state).to eq "ENABLED"
+    expect(crypto_key.state).to eq :ENABLED
   end
 
   it "can disable a crypto key version" do
@@ -552,7 +470,7 @@ describe "Key Management Service" do
       version_id: version_id
     )
 
-    expect(crypto_key.state).to eq "DISABLED"
+    expect(crypto_key.state).to eq :DISABLED
   end
 
   it "can restore a crypto key version" do
@@ -575,7 +493,7 @@ describe "Key Management Service" do
       version_id: version_id
     )
 
-    expect(scheduled_crypto_key_version.state).to eq "DESTROY_SCHEDULED"
+    expect(scheduled_crypto_key_version.state).to eq :DESTROY_SCHEDULED
 
     expect {
       $restore_crypto_key_version.call(
@@ -595,7 +513,7 @@ describe "Key Management Service" do
       version_id: version_id
     )
 
-    expect(crypto_key.state).to eq "DISABLED"
+    expect(crypto_key.state).to eq :DISABLED
   end
 
   it "can destroy a crypto key version" do
@@ -628,7 +546,7 @@ describe "Key Management Service" do
       version_id: version_id
     )
 
-    expect(crypto_key.state).to eq "DESTROY_SCHEDULED"
+    expect(crypto_key.state).to eq :DESTROY_SCHEDULED
   end
 
   it "can add a member to a crypto key policy" do
