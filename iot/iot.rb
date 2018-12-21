@@ -658,6 +658,40 @@ $send_device_command = -> (project_id:, location_id:, registry_id:, device_id:, 
 end
 
 
+$list_devices_for_gateway = -> (project_id:, location_id:, registry_id:, gateway_id:) do
+  # [START iot_list_devices_for_gateway]
+  # project_id  = "Your Google Cloud project ID"
+  # location_id = "The Cloud region for the registry"
+  # registry_id = "The registry to list gateway-bound devices in"
+  # gateway_id = "The gateway to list devices on"
+
+  require "google/apis/cloudiot_v1"
+
+  # Initialize the client and authenticate with the specified scope
+  Cloudiot   = Google::Apis::CloudiotV1
+  iot_client = Cloudiot::CloudIotService.new
+  iot_client.authorization = Google::Auth.get_application_default(
+    "https://www.googleapis.com/auth/cloud-platform"
+  )
+
+  # The resource name of the location associated with the project
+  resource = "projects/#{project_id}/locations/#{location_id}/registries/#{registry_id}"
+
+  # List the devices in the provided region
+  response = iot_client.list_project_location_registry_devices(
+    resource, gateway_list_options_associations_gateway_id: "#{gateway_id}"
+  )
+
+  puts "Devices:"
+  if response.devices && response.devices.any?
+    response.devices.each { |device| puts "\t#{device.id}" }
+  else
+    puts "\tNo device registries found in this region for your project."
+  end
+  # [END iot_list_devices_for_gateway]
+end
+
+
 $list_gateways = -> (project_id:, location_id:, registry_id:) do
   # [START iot_list_gateways]
   # project_id  = "Your Google Cloud project ID"
@@ -798,7 +832,20 @@ def run_sample arguments
       location_id: arguments.shift,
       registry_id: arguments.shift,
     )
+  when "list_devices_for_gateway"
+    $list_devices_for_gateway.call(
+      project_id:  project_id,
+      location_id: arguments.shift,
+      registry_id: arguments.shift,
+      gateway_id: arguments.shift
+    )
   when "list_gateways"
+    $list_gateways.call(
+      project_id:  project_id,
+      location_id: arguments.shift,
+      registry_id: arguments.shift,
+    )
+  when "list_devices_for_gateways"
     $list_gateways.call(
       project_id:  project_id,
       location_id: arguments.shift,
