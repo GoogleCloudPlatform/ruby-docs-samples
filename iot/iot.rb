@@ -658,6 +658,43 @@ $send_device_command = -> (project_id:, location_id:, registry_id:, device_id:, 
 end
 
 
+$list_gateways = -> (project_id:, location_id:, registry_id:) do
+  # [START iot_list_gateways]
+  # project_id  = "Your Google Cloud project ID"
+  # location_id = "The Cloud region for the registry"
+  # registry_id = "The registrie to list gateways in"
+
+  require "google/apis/cloudiot_v1"
+
+  # Initialize the client and authenticate with the specified scope
+  Cloudiot   = Google::Apis::CloudiotV1
+  iot_client = Cloudiot::CloudIotService.new
+  iot_client.authorization = Google::Auth.get_application_default(
+    "https://www.googleapis.com/auth/cloud-platform"
+  )
+
+  # The resource name of the location associated with the project
+  resource = "projects/#{project_id}/locations/#{location_id}/registries/#{registry_id}"
+
+  # List the devices in the provided region
+  gateways = iot_client.list_project_location_registry_devices(
+    resource, field_mask: 'config,gatewayConfig'
+  )
+
+  puts "Gateways:"
+  if gateways.devices && gateways.devices.any?
+    gateways.devices.each { |gateway|
+      if gateway.gateway_config && gateway.gateway_config.gateway_type == 'GATEWAY'
+        puts "\t#{gateway.id}"
+      end
+    }
+  else
+    puts "\tNo gateways found in this registry."
+  end
+  # [END iot_list_gateways]
+end
+
+
 def run_sample arguments
   command    = arguments.shift
   project_id = ENV["GOOGLE_CLOUD_PROJECT"]
@@ -761,6 +798,12 @@ def run_sample arguments
       location_id: arguments.shift,
       registry_id: arguments.shift,
     )
+  when "list_gateways"
+    $list_gateways.call(
+      project_id:  project_id,
+      location_id: arguments.shift,
+      registry_id: arguments.shift,
+    )
   when "patch_es_device"
     $patch_es_device.call(
       project_id:  project_id,
@@ -818,6 +861,14 @@ Device Management Commands:
   patch_rsa_device <location> <registry_id> <device_id> <public_key_path> Patch a device with an RSA credential
   send_command <location> <registry_id> <device_id> <data> Send a command to a device.
   send_configuration <location> <registry_id> <device_id> <data> Set a device configuration.
+
+Beta device management commands:
+  create_gateway <location> <registry_id> <gateway_id> Create a gateway
+  delete_gateway <location> <registry_id> <device_id> Delete a gateway
+  list_gateways <location> <registry_id> List gateways in a registry
+  list_devices_for_gateway <location> <registry_id> <gateway_id> List devices for gateway
+  bind_device_to_gateway <location> <registry_id> <gateway_id> <device_id> Bind device to gateway
+  unbind_device_from_gateway <location> <registry_id> <gateway_id> <device_id> Unbind device from gateway
 
 Environment variables:
   GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
