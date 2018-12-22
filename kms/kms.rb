@@ -390,10 +390,8 @@ $remove_member_from_crypto_key_policy = -> (project_id:, location_id:, key_ring_
   policy = client.get_iam_policy(crypto_key)
 
   # Remove a member from current bindings
-  if policy.bindings
-    policy.bindings.delete_if do |binding|
-      binding.role == role && binding.members.include?(member)
-    end
+  policy.bindings.each do |binding|
+    binding.members.delete(member) if binding.role == role
   end
 
   # Update IAM policy
