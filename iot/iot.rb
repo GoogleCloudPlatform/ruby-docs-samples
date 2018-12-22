@@ -760,10 +760,10 @@ $create_gateway = -> (project_id:, location_id:, registry_id:, gateway_id:, cert
 
   device.gateway_config = gateway_config
 
-  # Create the device
+  # Create the Gateway
   device = iot_client.create_project_location_registry_device parent, device
 
-  puts "Device: #{device.id}"
+  puts "Gateway: #{device.id}"
   puts "\tBlocked: #{device.blocked}"
   puts "\tLast Event Time: #{device.last_event_time}"
   puts "\tLast State Time: #{device.last_state_time}"
@@ -773,60 +773,6 @@ end
 
 $delete_gateway = -> (project_id:, location_id:, registry_id:, gateway_id:) do
   # [START iot_delete_gateway]
-  # project_id  = "Your Google Cloud project ID"
-  # location_id = "The Cloud region the registry is located in"
-  # registry_id = "The registry to create a device in"
-  # device_id   = "The identifier of the device to create"
-
-  require "google/apis/cloudiot_v1"
-
-  # Initialize the client and authenticate with the specified scope
-  Cloudiot   = Google::Apis::CloudiotV1
-  iot_client = Cloudiot::CloudIotService.new
-  iot_client.authorization = Google::Auth.get_application_default(
-    "https://www.googleapis.com/auth/cloud-platform"
-  )
-
-  # The resource name of the location associated with the project
-  parent = "projects/#{project_id}/locations/#{location_id}/registries/#{registry_id}"
-
-  device = Cloudiot::Device.new
-  device.id = gateway_id
-
-  if alg == 'ES256'
-    certificate_format = 'ES256_PEM'
-  else
-    certificate_format = 'RSA_X509_PEM'
-  end
-
-  pubkey = Google::Apis::CloudiotV1::PublicKeyCredential.new
-  pubkey.key = File.read(cert_path)
-  pubkey.format = certificate_format
-
-  cred = Google::Apis::CloudiotV1::DeviceCredential.new
-  cred.public_key = pubkey
-
-  device.credentials = [cred]
-
-  gateway_config = Google::Apis::CloudiotV1::GatewayConfig.new
-  gateway_config.gateway_type = 'GATEWAY'
-  gateway_config.gateway_auth_method= 'ASSOCIATION_ONLY'
-
-  device.gateway_config = gateway_config
-
-  # Create the device
-  device = iot_client.create_project_location_registry_device parent, device
-
-  puts "Device: #{device.id}"
-  puts "\tBlocked: #{device.blocked}"
-  puts "\tLast Event Time: #{device.last_event_time}"
-  puts "\tLast State Time: #{device.last_state_time}"
-  puts "\tName: #{device.name}"
-  # [END iot_create_gateway]
-end
-
-$delete_gateway = -> (project_id:, location_id:, registry_id:, gateway_id:) do
-  # [START iot_delete_device]
   # project_id  = "Your Google Cloud project ID"
   # location_id = "The Cloud region the registry is located in"
   # registry_id = "The registry to create a device in"
@@ -845,14 +791,14 @@ $delete_gateway = -> (project_id:, location_id:, registry_id:, gateway_id:) do
   parent = "projects/#{project_id}/locations/#{location_id}"
   device_path = "#{parent}/registries/#{registry_id}/devices/#{gateway_id}"
 
-  # TODO: unbind all devices
+  # TODO: unbind all devices?
   # Delete the gateway
   result = iot_client.delete_project_location_registry_device(
     device_path
   )
 
-  puts "Deleted device."
-  # [END iot_delete_device]
+  puts "Deleted gateway."
+  # [END iot_delete_gateway]
 end
 
 

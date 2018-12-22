@@ -509,4 +509,155 @@ describe "Cloud IoT Core" do
       registry_id: registry_name
     )
   end
+
+  example "List gateways" do
+    # Setup scenario
+    topic_name    = "A#{@seed}-iot_list_gateways"
+    registry_name = "A#{@seed}iot_list_gateways"
+    topic         = create_pubsub_topic topic_name
+
+    $create_registry.call(
+      project_id:   @project_id,
+      location_id:  @region,
+      registry_id:  registry_name,
+      pubsub_topic: topic.name
+    )
+
+    expect {
+      $list_gateways.call(
+        project_id:  @project_id,
+        location_id: @region,
+        registry_id: registry_name
+      )
+    }.to output(
+      /Gateways:/m
+    ).to_stdout
+
+    # Clean up resources
+    $delete_registry.call(
+      project_id:  @project_id,
+      location_id: @region,
+      registry_id: registry_name
+    )
+  end
+
+  example "Create delete gateway" do
+    # Setup scenario
+    gateway_id = "create_delete_me"
+    topic_name    = "A#{@seed}-iot_create_delete_gateway"
+    registry_name = "A#{@seed}iot_create_delete_gateway"
+    topic         = create_pubsub_topic topic_name
+
+    $create_registry.call(
+      project_id:   @project_id,
+      location_id:  @region,
+      registry_id:  registry_name,
+      pubsub_topic: topic.name
+    )
+
+    expect {
+      $create_gateway.call(
+        project_id:  @project_id,
+        location_id: @region,
+        registry_id: registry_name,
+        gateway_id:  gateway_id,
+        cert_path:   resource("rsa_cert.pem"),
+        alg:         "RS256"
+      )
+    }.to output(
+      /Gateway:/m
+    ).to_stdout
+
+    expect {
+      $delete_gateway.call(
+        project_id:  @project_id,
+        location_id: @region,
+        registry_id: registry_name,
+        gateway_id: gateway_id
+      )
+    }.to output(
+      /Deleted gateway/m
+    ).to_stdout
+
+    # Clean up resources
+    $delete_registry.call(
+      project_id:  @project_id,
+      location_id: @region,
+      registry_id: registry_name
+    )
+  end
+
+  example "Bind list unbind device" do
+    # Setup scenario
+    device_id     = "bind_unbind_device"
+    gateway_id    = "bind_unbind_gateway"
+    topic_name    = "A#{@seed}-iot_create_delete_gateway"
+    registry_name = "A#{@seed}iot_create_delete_gateway"
+    topic         = create_pubsub_topic topic_name
+    $create_registry.call(
+      project_id:   @project_id,
+      location_id:  @region,
+      registry_id:  registry_name,
+      pubsub_topic: topic.name
+    )
+    $create_gateway.call(
+      project_id:  @project_id,
+      location_id: @region,
+      registry_id: registry_name,
+      gateway_id:  gateway_id,
+      cert_path:   resource("rsa_cert.pem"),
+      alg:         "RS256"
+    )
+    $create_rsa_device.call(
+      project_id:  @project_id,
+      location_id: @region,
+      registry_id: registry_name,
+      device_id:   device_id,
+      cert_path:   resource("rsa_cert.pem")
+    )
+
+    expect {
+      $bind_device_to_gateway.call(
+        project_id:  @project_id,
+        location_id: @region,
+        registry_id: registry_name,
+        gateway_id:  gateway_id,
+        device_id:   device_id,
+      )
+      $list_devices_for_gateway.call(
+        project_id:  @project_id,
+        location_id: @region,
+        gateway_id:  gateway_id,
+        registry_id: registry_name
+      )
+      $unbind_device_from_gateway.call(
+        project_id:  @project_id,
+        location_id: @region,
+        gateway_id:  gateway_id,
+        registry_id: registry_name,
+        device_id:   device_id,
+      )
+    }.to output(
+      /Devices/m
+    ).to_stdout
+
+    # Clean up resources
+    $delete_gateway.call(
+      project_id:  @project_id,
+      location_id: @region,
+      registry_id: registry_name,
+      gateway_id:  gateway_id
+    )
+    $delete_device.call(
+      project_id:  @project_id,
+      location_id: @region,
+      registry_id: registry_name,
+      device_id:   device_id,
+    )
+    $delete_registry.call(
+      project_id:  @project_id,
+      location_id: @region,
+      registry_id: registry_name
+    )
+  end
 end
