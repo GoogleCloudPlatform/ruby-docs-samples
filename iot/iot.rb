@@ -682,7 +682,7 @@ $bind_device_to_gateway = -> (project_id:, location_id:, registry_id:, gateway_i
   bind_req.device_id = device_id
 
   res = iot_client.bind_registry_device_to_gateway parent, bind_req
-  puts
+  puts "Device bound"
   # [END iot_bind_device_to_gateway]
 end
 
@@ -711,7 +711,7 @@ $unbind_device_from_gateway = -> (project_id:, location_id:, registry_id:, gatew
   unbind_req.device_id = device_id
 
   res = iot_client.unbind_registry_device_from_gateway parent, unbind_req
-  puts
+  puts "Device unbound"
   # [END iot_unbind_device_from_gateway]
 end
 
@@ -971,12 +971,6 @@ def run_sample arguments
     )
   when "list_devices"
     $list_devices.call(
-      project_id:  project_id,
-      location_id: arguments.shift,
-      registry_id: arguments.shift,
-    )
-  when "list_devices_for_gateways"
-    $list_gateways.call(
       project_id:  project_id,
       location_id: arguments.shift,
       registry_id: arguments.shift,
