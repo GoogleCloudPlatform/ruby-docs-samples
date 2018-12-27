@@ -839,7 +839,7 @@ $list_gateways = -> (project_id:, location_id:, registry_id:) do
   # [START iot_list_gateways]
   # project_id  = "Your Google Cloud project ID"
   # location_id = "The Cloud region for the registry"
-  # registry_id = "The registrie to list gateways in"
+  # registry_id = "The registry to list gateways in"
 
   require "google/apis/cloudiot_v1"
 
