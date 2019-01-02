@@ -22,7 +22,7 @@ def product_search_create_reference_image(
 )
   client = Google::Cloud::Vision::ProductSearch.new
 
-  product_path    = client.class.product_path project_id, location, product_id
+  product_path    = client.product_path project_id, location, product_id
   reference_image = {
     uri: "gs://cloud-samples-data/vision/product_search/shoes_1.jpg"
   }

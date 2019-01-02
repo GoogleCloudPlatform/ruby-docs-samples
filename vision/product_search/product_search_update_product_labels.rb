@@ -22,7 +22,7 @@ def product_search_update_product_labels(
 )
   client = Google::Cloud::Vision::ProductSearch.new
 
-  product_path = client.class.product_path project_id, location, product_id
+  product_path = client.product_path project_id, location, product_id
   product      = {
     name:           product_path,
     product_labels: [{ key: "color", value: "green" }]

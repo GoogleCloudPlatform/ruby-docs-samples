@@ -889,15 +889,15 @@ describe "Google Cloud Spanner API samples" do
                            database_id: database.database_id
     end
 
-    original_timestamp  = client.read("Albums", [:LastUpdateTime], keys: [[1,1]]).rows.first
+    original_timestamp  = client.read("Albums", [:LastUpdateTime], keys: [[1,1]]).rows.first.to_h
     capture do
       update_using_dml_with_timestamp project_id:  @project_id,
                                       instance_id: @instance.instance_id,
                                       database_id: database.database_id
     end
     expect(captured_output).to include "2 records updated."
-    updated_timestamp  = client.read("Albums", [:LastUpdateTime], keys: [[1,1]]).rows.first
-    expect(Time.at(original_timestamp) < Time.at(updated_timestamp)).to be true
+    updated_timestamp  = client.read("Albums", [:LastUpdateTime], keys: [[1,1]]).rows.first.to_h
+    expect(original_timestamp[:LastUpdateTime].to_i < updated_timestamp[:LastUpdateTime].to_i).to be true
   end
 
   example "write and read data using dml" do
@@ -1018,7 +1018,7 @@ describe "Google Cloud Spanner API samples" do
     expect(second_album[:MarketingBudget]).to eq 300_000
   end
 
-  example "update data using partiioned dml" do
+  example "update data using partioned dml" do
     database = create_singers_albums_database
     client   = @spanner.client @instance.instance_id, database.database_id
 

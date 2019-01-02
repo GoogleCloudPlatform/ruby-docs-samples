@@ -17,12 +17,11 @@ require "google/cloud/vision"
 
 RSpec.configure do |config|
   config.before(:all) do
-    skip("Awaiting a fix in Kokoro project authentication")
     @current_directory = File.expand_path(File.dirname(__FILE__))
     @client = Google::Cloud::Vision::ProductSearch.new
     @project_id = ENV["GOOGLE_CLOUD_PROJECT"]
     @location = "us-west1"
-    @location_path = @client.class.location_path @project_id, @location
+    @location_path = @client.location_path @project_id, @location
     @image_uris = [
       "gs://cloud-samples-data/vision/product_search/shoes_1.jpg",
       "gs://cloud-samples-data/vision/product_search/shoes_2.jpg"
@@ -34,7 +33,7 @@ RSpec.configure do |config|
   config.after(:each) do
     @temp_products.each do |product|
       if product.is_a? String
-        product_path = @client.class.product_path(
+        product_path = @client.product_path(
           @project_id, @location, product
         )
       else
@@ -44,7 +43,7 @@ RSpec.configure do |config|
     end
     @temp_product_sets.each do |product_set|
       if product_set.is_a? String
-        product_set_path = @client.class.product_set_path(
+        product_set_path = @client.product_set_path(
           @project_id, @location, product_set
         )
       else

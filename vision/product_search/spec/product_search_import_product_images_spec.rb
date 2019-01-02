@@ -36,7 +36,7 @@ describe "Import product sets and retrieve reference images" do
     end
 
     # Verify project set existence
-    product_set_path = @client.class.product_set_path @project_id, @location, @product_set_id
+    product_set_path = @client.product_set_path @project_id, @location, @product_set_id
     product_set = @client.get_product_set(product_set_path)
     expect(product_set).to be_truthy
 
