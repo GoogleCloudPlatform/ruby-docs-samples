@@ -16,6 +16,6 @@
 require "sinatra"
 
 get "/" do
-  "Hello world!"
+  "This is Renters Compass. Welcome!"
 end
 # [END gae_flex_quickstart]
