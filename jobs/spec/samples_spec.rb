@@ -205,12 +205,11 @@ describe "Cloud Job Discovery Samples" do
         job_discovery_create_company company_to_be_created: company_generated,
                                      google_cloud_project_id: @default_google_cloud_project_id
       job_generated = job_discovery_generate_job company_name: company_created.name,
-                                                      requisition_id: "#{company_created.name} #{SecureRandom.hex}"
+                                                 requisition_id: "#{company_created.name} #{SecureRandom.hex}"
       job_created = job_discovery_create_job job_to_be_created: job_generated,
-                                                  google_cloud_project_id: @default_google_cloud_project_id
-      sleep 40
-      location = Google::Apis::JobsV3::LatLng.new latitude: 37.4227839,
-                                                longitude: -122.0859116
+                                             google_cloud_project_id: @default_google_cloud_project_id
+      sleep 30
+      location = company_created.derived_info.headquarters_location.lat_lng
       commute_search_result = job_discovery_commute_search commute_method: "DRIVING",
                                                            travel_duration: "1000s",
                                                            start_coordinates: location, 
