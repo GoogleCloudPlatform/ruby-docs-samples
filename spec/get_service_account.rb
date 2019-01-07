@@ -1,9 +1,9 @@
 if __FILE__ == $PROGRAM_NAME
   require "json"
 
-  project_id = ENV["GOOGLE_CLOUD_PROJECT"]
-  gfile_dir = ENV["KOKORO_GFILE_DIR"]
-  files = Dir.entries(gfile_dir).select do |entry| 
+  project_id = ARGV.shift
+  gfile_dir = ARGV.shift
+  files = Dir.entries(gfile_dir).select do |entry|
     !File.directory?(entry) && entry.split(".").last == "json"
   end
 
