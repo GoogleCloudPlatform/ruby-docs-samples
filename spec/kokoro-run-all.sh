@@ -51,6 +51,8 @@ fi
 echo "Running tests in project $GOOGLE_CLOUD_PROJECT";
 trap "gimmeproj -project cloud-samples-ruby-test-kokoro done $GOOGLE_CLOUD_PROJECT" EXIT
 
+export GOOGLE_APPLICATION_CREDENTIALS="$(ruby get_service_account.rb)"
+
 export FIRESTORE_PROJECT_ID=ruby-firestore
 export E2E_GOOGLE_CLOUD_PROJECT=cloud-samples-ruby-test-kokoro
 export MYSQL_DATABASE=${GOOGLE_CLOUD_PROJECT//-/_}

@@ -28,7 +28,7 @@ To set up an account:
    and tables `cloud_samples_ruby_test_{0..9}`. This way, we can save costs by
    only running CloudSQL in a single project, but keep project data independent.
    First, set the variables referenced in the `create_tables.rb` files, then run:
-   
+
     ```bash
     cd appengine/cloudsql-mysql
     for i in {0..9}; do
