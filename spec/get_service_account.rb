@@ -8,7 +8,7 @@ if __FILE__ == $PROGRAM_NAME
   end
 
   files.each do |file|
-    filename = File.join(gfile_dir, file)
+    filename = File.expand_path(File.join(gfile_dir, file))
     content = JSON.parse(File.read(filename))
     if content["project_id"] == project_id
       return STDOUT.write filename
