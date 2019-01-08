@@ -17,6 +17,7 @@ require "google/cloud/vision"
 
 RSpec.configure do |config|
   config.before(:all) do
+    skip("Awaiting a fix in Kokoro project authentication")
     @current_directory = File.expand_path(File.dirname(__FILE__))
     @client = Google::Cloud::Vision::ProductSearch.new
     @project_id = ENV["GOOGLE_CLOUD_PROJECT"]
