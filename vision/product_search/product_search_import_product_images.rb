@@ -22,7 +22,7 @@ def product_search_import_product_sets(
   client = Google::Cloud::Vision::ProductSearch.new
 
   # A resource that represents Google Cloud Platform location.
-  location_path = client.class.location_path project_id, location
+  location_path = client.location_path project_id, location
 
   # Set the input configuration along with Google Cloud Storage URI
   input_config = {

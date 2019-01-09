@@ -18,8 +18,7 @@ describe "List products in product set" do
 
   example "List products in product set" do
     snippet_filepath = get_snippet_filepath __FILE__
-    products = []
-    2.times { products << create_temp_product }
+    products = Array.new(2) { create_temp_product }
     product_set = create_temp_product_set products
     product_set_id = get_id product_set
 

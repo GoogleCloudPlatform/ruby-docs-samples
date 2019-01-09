@@ -21,7 +21,7 @@ def product_search_list_product_sets(
 )
   client = Google::Cloud::Vision::ProductSearch.new
 
-  location_path = client.class.location_path project_id, location
+  location_path = client.location_path project_id, location
 
   puts "Product Sets in location #{location}:"
   client.list_product_sets(location_path).each do |product_set|

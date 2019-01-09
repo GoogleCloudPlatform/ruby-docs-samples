@@ -20,7 +20,7 @@ def product_search_create_product_set project_id = "your-project-id"
 
   # A resource that represents Google Cloud Platform location.
   location = "us-west1"  # specify a compute region name
-  location_path = client.class.location_path project_id, location
+  location_path = client.location_path project_id, location
 
   # Create a product set with the product set specification in the region.
   product_set = {

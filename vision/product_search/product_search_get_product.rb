@@ -22,7 +22,7 @@ def product_search_get_product(
 )
   client = Google::Cloud::Vision::ProductSearch.new
 
-  product_path = client.class.product_path project_id, location, product_id
+  product_path = client.product_path project_id, location, product_id
 
   product = client.get_product product_path
 

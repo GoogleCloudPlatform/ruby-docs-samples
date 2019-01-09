@@ -26,7 +26,7 @@ def product_search_get_similar_products(
   product_search_client  = Google::Cloud::Vision::ProductSearch.new
   image_annotator_client = Google::Cloud::Vision::ImageAnnotator.new
 
-  product_set_path = product_search_client.class.product_set_path(
+  product_set_path = product_search_client.product_set_path(
     project_id, location, product_set_id
   )
 
