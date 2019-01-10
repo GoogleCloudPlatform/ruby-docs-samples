@@ -208,7 +208,7 @@ describe "Cloud Job Discovery Samples" do
                                                  requisition_id: "#{company_created.name} #{SecureRandom.hex}"
       job_created = job_discovery_create_job job_to_be_created: job_generated,
                                              google_cloud_project_id: @default_google_cloud_project_id
-      sleep 30
+      sleep 60
       location = company_created.derived_info.headquarters_location.lat_lng
       commute_search_result = job_discovery_commute_search commute_method: "DRIVING",
                                                            travel_duration: "1000s",
