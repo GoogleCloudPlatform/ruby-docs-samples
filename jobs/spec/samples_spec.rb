@@ -216,7 +216,7 @@ describe "Cloud Job Discovery Samples" do
                                                            google_cloud_project_id: @default_google_cloud_project_id
       job_discovery_delete_job job_name: job_created.name
       job_discovery_delete_company company_name: company_created.name
-      expect(commute_search_result.matching_jobs).not_to be nil
+      expect(commute_search_result).not_to be nil
     end
   end
 # verify custom_attribute_sample.rb
