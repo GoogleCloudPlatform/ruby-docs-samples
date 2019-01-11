@@ -31,16 +31,6 @@ end
 describe "Key Management Service Quickstart" do
   CloudKMS = Google::Cloud::Kms::V1
 
-  def create_test_key_ring parent, key_ring_id
-    client = CloudKMS::KeyManagementServiceClient.new
-    client.create_key_ring parent key_ring_id
-  end
-
-  def list_test_key_rings parent
-    client = CloudKMS::KeyManagementServiceClient.new
-    client.list_key_rings parent
-  end
-
   before :all do
     # Note: The quickstart sample defines a `CloudKMS` constant and causes
     #       "already initialized constant" warning because the spec defines the
@@ -50,18 +40,19 @@ describe "Key Management Service Quickstart" do
 
   it "can list global key rings by name" do
     test_project_id  = ENV["GOOGLE_CLOUD_PROJECT"]
-    test_location_id = "global"
     test_key_ring_id = "a-key-ring-list-#{test_project_id}"
     test_parent      = "projects/#{test_project_id}/locations/global"
-    test_key_rings   = list_test_key_rings(test_parent)
+
+    client = CloudKMS::KeyManagementServiceClient.new
+    test_key_rings = client.list_key_rings test_parent
 
     created = test_key_rings.any? do |key_ring|
       key_ring.name.end_with?(test_key_ring_id)
     end
-    if !created
-      test_key_ring = create_test_key_ring(test_project_id, test_location_id, test_key_ring_id)
 
-      expect(test_key_ring).not_to  eq nil
+    if !created
+      test_key_ring = client.create_key_ring(test_parent, test_key_ring_id, nil)
+      expect(test_key_ring).not_to eq nil
       expect(test_key_ring.name).to include test_key_ring_id
     end
 
