@@ -41,3 +41,24 @@ To set up an account:
         bundle exec ruby create_tables.rb
     end
     ```
+
+## Creating the Kokoro service account
+
+for i in {0..9}; do
+    gcloud config set project cloud-samples-ruby-test-$i
+
+    gcloud iam service-accounts create kokoro-cloud-samples-ruby-$i --display-name "Kokoro Ruby $i"
+    gcloud iam service-accounts keys create kokoro-cloud-samples-ruby-test-$i.json --iam-account kokoro-cloud-samples-ruby-$i@cloud-samples-ruby-test-$i.iam.gserviceaccount.com
+
+    gcloud projects add-iam-policy-binding cloud-samples-ruby-test-$i --member serviceAccount:kokoro-cloud-samples-ruby-$i@cloud-samples-ruby-test-$i.iam.gserviceaccount.com --role roles/owner
+    gcloud projects add-iam-policy-binding cloud-samples-ruby-test-$i --member serviceAccount:kokoro-cloud-samples-ruby-$i@cloud-samples-ruby-test-$i.iam.gserviceaccount.com --role roles/cloudkms.cryptoKeyEncrypterDecrypter
+
+    # Every service account should have access to the main project, the 0
+    # project (for Spanner), and the 1 project (for Stackdriver).
+    gcloud projects add-iam-policy-binding cloud-samples-ruby-test-kokoro --member serviceAccount:kokoro-cloud-samples-ruby-$i@cloud-samples-ruby-test-$i.iam.gserviceaccount.com --role roles/owner
+    gcloud projects add-iam-policy-binding cloud-samples-ruby-test-0 --member serviceAccount:kokoro-cloud-samples-ruby-$i@cloud-samples-ruby-test-$i.iam.gserviceaccount.com --role roles/owner
+    gcloud projects add-iam-policy-binding cloud-samples-ruby-test-1 --member serviceAccount:kokoro-cloud-samples-ruby-$i@cloud-samples-ruby-test-$i.iam.gserviceaccount.com --role roles/owner
+
+    # Every project should have access to the Firebase project.
+    gcloud projects add-iam-policy-binding ruby-firestore --member serviceAccount:kokoro-cloud-samples-ruby-$i@cloud-samples-ruby-test-$i.iam.gserviceaccount.com --role roles/owner
+done
