@@ -14,7 +14,7 @@
 
 source "https://rubygems.org"
 
-gem "google-api-client", "~> 0.10"
+gem "google-cloud-kms", "~> 0.2.5"
 
 group :test do
   gem "rspec"
