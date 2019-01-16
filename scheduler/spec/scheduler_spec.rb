@@ -49,7 +49,7 @@ describe "CloudScheduler", type: :feature do
     post "/log_payload", "Hello"
     expect(last_response.body).to include("Printed job payload")
   end
-
+  
   it "can create and delete a job" do
     response = create_job(GOOGLE_CLOUD_PROJECT, LOCATION_ID, "my-service")
     expect(response).to include('projects/')
