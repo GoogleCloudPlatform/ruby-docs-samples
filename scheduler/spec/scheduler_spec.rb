@@ -17,9 +17,24 @@ require_relative "../create_job"
 require_relative "../delete_job"
 require "rspec"
 require "rack/test"
+require "google/cloud/scheduler"
 
 describe "CloudScheduler", type: :feature do
   include Rack::Test::Methods
+
+  before(:all) do
+    GOOGLE_CLOUD_PROJECT = ENV["GOOGLE_CLOUD_PROJECT"]
+    LOCATION_ID          = "us-east1"
+
+    client = Google::Cloud::Scheduler.new
+    location_path = "projects/#{GOOGLE_CLOUD_PROJECT}/locations/#{LOCATION_ID}"
+
+    begin
+      client.list_jobs(location_path)
+    rescue
+      LOCATION_ID = "us-east4"
+    end
+  end
 
   def app
     Sinatra::Application
@@ -36,9 +51,6 @@ describe "CloudScheduler", type: :feature do
   end
 
   it "can create and delete a job" do
-    GOOGLE_CLOUD_PROJECT = ENV["GOOGLE_CLOUD_PROJECT"]
-    LOCATION_ID          = "us-central1"
-
     response = create_job(GOOGLE_CLOUD_PROJECT, LOCATION_ID, "my-service")
     expect(response).to include('projects/')
 
