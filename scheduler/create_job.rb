@@ -46,4 +46,5 @@ def create_job(project_id, location_id, service_id)
 
   puts "Created job: #{response.name}"
   # [END cloud_scheduler_create_job]
+  return response.name
 end

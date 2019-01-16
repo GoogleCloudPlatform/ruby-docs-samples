@@ -14,6 +14,7 @@
 
 require_relative "../app"
 require_relative "../create_job"
+require_relative "../delete_job"
 require "rspec"
 require "rack/test"
 
@@ -38,9 +39,13 @@ describe "CloudScheduler", type: :feature do
     GOOGLE_CLOUD_PROJECT = ENV["GOOGLE_CLOUD_PROJECT"]
     LOCATION_ID          = "us-central1"
 
-    # expect {
-    #   create_scheduler_job(GOOGLE_CLOUD_PROJECT, LOCATION_ID, "my-service")
-    # }.to output("Created job").to_stdout
-    output = create__job(GOOGLE_CLOUD_PROJECT, LOCATION_ID, "my-service")
+    response = create_job(GOOGLE_CLOUD_PROJECT, LOCATION_ID, "my-service")
+    expect(response).to include('projects/')
+
+    job_name = response.split('/')[-1]
+
+    expect {
+      delete_job(GOOGLE_CLOUD_PROJECT, LOCATION_ID, job_name)
+    }.to output(/Job deleted/).to_stdout
   end
 end
