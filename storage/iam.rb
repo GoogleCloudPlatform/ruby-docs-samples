@@ -13,7 +13,7 @@
 # limitations under the License.
 
 def view_bucket_iam_members project_id:, bucket_name:
-  # [START view_bucket_iam_members]
+  # [START storage_get_bucket_iam_members]
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
 
@@ -27,11 +27,11 @@ def view_bucket_iam_members project_id:, bucket_name:
   policy.roles.each do |role, members|
     puts "Role: #{role} Members: #{members}"
   end
-  # [END view_bucket_iam_members]
+  # [END storage_get_bucket_iam_members]
 end
 
 def add_bucket_iam_member project_id:, bucket_name:, role:, member:
-  # [START add_bucket_iam_member]
+  # [START storage_add_bucket_iam_member]
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
   # role        = "Bucket-level IAM role"
@@ -47,11 +47,11 @@ def add_bucket_iam_member project_id:, bucket_name:, role:, member:
   end
 
   puts "Added #{member} with role #{role} to #{bucket_name}"
-  # [END add_bucket_iam_member]
+  # [END storage_add_bucket_iam_member]
 end
 
 def remove_bucket_iam_member project_id:, bucket_name:, role:, member:
-  # [START remove_bucket_iam_member]
+  # [START storage_delete_bucket_iam_member]
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
   # role        = "Bucket-level IAM role"
@@ -67,7 +67,7 @@ def remove_bucket_iam_member project_id:, bucket_name:, role:, member:
   end
 
   puts "Removed #{member} with role #{role} from #{bucket_name}"
-  # [END remove_bucket_iam_member]
+  # [END storage_delete_bucket_iam_member]
 end
 
 def run_sample arguments

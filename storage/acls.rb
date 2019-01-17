@@ -13,7 +13,7 @@
 # limitations under the License.
 
 def print_bucket_acl project_id:, bucket_name:
-  # [START print_bucket_acl]
+  # [START storage_print_bucket_acl]
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
 
@@ -35,11 +35,11 @@ def print_bucket_acl project_id:, bucket_name:
   bucket.acl.readers.each do |reader|
     puts "READER #{reader}"
   end
-  # [END print_bucket_acl]
+  # [END storage_print_bucket_acl]
 end
 
 def print_bucket_acl_for_user project_id:, bucket_name:, email:
-  # [START print_bucket_acl_for_user]
+  # [START storage_print_bucket_acl_for_user]
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
   # email       = "Google Cloud Storage ACL Entity email"
@@ -53,11 +53,11 @@ def print_bucket_acl_for_user project_id:, bucket_name:, email:
   puts "OWNER"  if bucket.acl.owners.include?  email
   puts "WRITER" if bucket.acl.writers.include? email
   puts "READER" if bucket.acl.readers.include? email
-  # [END print_bucket_acl_for_user]
+  # [END storage_print_bucket_acl_for_user]
 end
 
 def add_bucket_owner project_id:, bucket_name:, email:
-  # [START add_bucket_owner]
+  # [START storage_add_bucket_owner]
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
   # email       = "Google Cloud Storage ACL Entity email"
@@ -70,11 +70,11 @@ def add_bucket_owner project_id:, bucket_name:, email:
   bucket.acl.add_owner email
 
   puts "Added OWNER permission for #{email} to #{bucket_name}"
-  # [END add_bucket_owner]
+  # [END storage_add_bucket_owner]
 end
 
 def remove_bucket_acl project_id:, bucket_name:, email:
-  # [START remove_bucket_acl]
+  # [START storage_remove_bucket_acl]
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
   # email       = "Google Cloud Storage ACL Entity email"
@@ -87,11 +87,11 @@ def remove_bucket_acl project_id:, bucket_name:, email:
   bucket.acl.delete email
 
   puts "Removed ACL permissions for #{email} from #{bucket_name}"
-  # [END remove_bucket_acl]
+  # [END storage_remove_bucket_acl]
 end
 
 def add_bucket_default_owner project_id:, bucket_name:, email:
-  # [START add_bucket_default_owner]
+  # [START storage_add_bucket_default_owner]
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
   # email       = "Google Cloud Storage ACL Entity email"
@@ -104,11 +104,11 @@ def add_bucket_default_owner project_id:, bucket_name:, email:
   bucket.default_acl.add_owner email
 
   puts "Added default OWNER permission for #{email} to #{bucket_name}"
-  # [END add_bucket_default_owner]
+  # [END storage_add_bucket_default_owner]
 end
 
 def remove_bucket_default_acl project_id:, bucket_name:, email:
-  # [START remove_bucket_default_acl]
+  # [START storage_remove_bucket_default_owner]
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
   # email       = "Google Cloud Storage ACL Entity email"
@@ -121,11 +121,11 @@ def remove_bucket_default_acl project_id:, bucket_name:, email:
   bucket.default_acl.delete email
 
   puts "Removed default ACL permissions for #{email} from #{bucket_name}"
-  # [END remove_bucket_default_acl]
+  # [END storage_remove_bucket_default_owner]
 end
 
 def print_file_acl project_id:, bucket_name:, file_name:
-  # [START print_file_acl]
+  # [START storage_print_file_acl]
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
   # file_name   = "Name of a file in the Storage bucket"
@@ -146,11 +146,11 @@ def print_file_acl project_id:, bucket_name:, file_name:
   file.acl.readers.each do |reader|
     puts "READER #{reader}"
   end
-  # [END print_file_acl]
+  # [END storage_print_file_acl]
 end
 
 def print_file_acl_for_user project_id:, bucket_name:, file_name:, email:
-  # [START print_file_acl_for_user]
+  # [START storage_print_file_acl_for_user]
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
   # file_name   = "Name of a file in the Storage bucket"
@@ -165,11 +165,11 @@ def print_file_acl_for_user project_id:, bucket_name:, file_name:, email:
   puts "Permissions for #{email}:"
   puts "OWNER"  if file.acl.owners.include?  email
   puts "READER" if file.acl.readers.include? email
-  # [END print_file_acl_for_user]
+  # [END storage_print_file_acl_for_user]
 end
 
 def add_file_owner project_id:, bucket_name:, file_name:, email:
-  # [START add_file_owner]
+  # [START storage_add_file_owner]
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
   # file_name   = "Name of a file in the Storage bucket"
@@ -184,7 +184,7 @@ def add_file_owner project_id:, bucket_name:, file_name:, email:
   file.acl.add_owner email
 
   puts "Added OWNER permission for #{email} to #{file_name}"
-  # [END add_file_owner]
+  # [END storage_add_file_owner]
 end
 
 def remove_file_acl project_id:, bucket_name:, file_name:, email:

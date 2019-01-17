@@ -13,7 +13,7 @@
 # limitations under the License.
 
 def list_buckets project_id:
-  # [START list_buckets]
+  # [START storage_list_buckets]
   # project_id = "Your Google Cloud project ID"
 
   require "google/cloud/storage"
@@ -23,11 +23,11 @@ def list_buckets project_id:
   storage.buckets.each do |bucket|
     puts bucket.name
   end
-  # [END list_buckets]
+  # [END storage_list_buckets]
 end
 
 def disable_requester_pays project_id:, bucket_name:
-  # [START disable_requester_pays]
+  # [START storage_disable_requester_pays]
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Name of your Google Cloud Storage bucket"
 
@@ -39,11 +39,11 @@ def disable_requester_pays project_id:, bucket_name:
   bucket.requester_pays = false
 
   puts "Requester pays has been disabled for #{bucket_name}"
-  # [END disable_requester_pays]
+  # [END storage_disable_requester_pays]
 end
 
 def enable_requester_pays project_id:, bucket_name:
-  # [START enable_requester_pays]
+  # [START storage_enable_requester_pays]
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Name of your Google Cloud Storage bucket"
 
@@ -55,11 +55,11 @@ def enable_requester_pays project_id:, bucket_name:
   bucket.requester_pays = true
 
   puts "Requester pays has been enabled for #{bucket_name}"
-  # [END enable_requester_pays]
+  # [END storage_enable_requester_pays]
 end
 
 def get_requester_pays_status project_id:, bucket_name:
-  # [START get_requester_pays_status]
+  # [START storage_get_requester_pays_status]
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Name of your Google Cloud Storage bucket"
 
@@ -73,7 +73,7 @@ def get_requester_pays_status project_id:, bucket_name:
   else
     puts "Requester Pays is disabled for #{bucket_name}"
   end
-  # [END get_requester_pays_status]
+  # [END storage_get_requester_pays_status]
 end
 
 def enable_default_kms_key project_id:, bucket_name:, default_kms_key:
@@ -94,7 +94,7 @@ def enable_default_kms_key project_id:, bucket_name:, default_kms_key:
 end
 
 def create_bucket project_id:, bucket_name:
-  # [START create_bucket]
+  # [START storage_create_bucket]
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Name of Google Cloud Storage bucket to create"
 
@@ -104,12 +104,12 @@ def create_bucket project_id:, bucket_name:
   bucket  = storage.create_bucket bucket_name
 
   puts "Created bucket: #{bucket.name}"
-  # [END create_bucket]
+  # [END storage_create_bucket]
 end
 
 def create_bucket_class_location project_id:, bucket_name:, location:,
   storage_class:
-  # [START create_bucket_class_location]
+  # [START storage_create_bucket_class_location]
   # project_id    = "Your Google Cloud project ID"
   # bucket_name   = "Name of Google Cloud Storage bucket to create"
   # location      = "Location of where to create Cloud Storage bucket"
@@ -124,11 +124,11 @@ def create_bucket_class_location project_id:, bucket_name:, location:,
 
   puts "Created bucket #{bucket.name} in #{location}" +
        " with #{storage_class} class"
-  # [END create_bucket_class_location]
+  # [END storage_create_bucket_class_location]
 end
 
 def list_bucket_labels project_id:, bucket_name:
-  # [START get_bucket_labels]
+  # [START storage_get_bucket_labels]
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Name of your Google Cloud Storage bucket"
 
@@ -141,11 +141,11 @@ def list_bucket_labels project_id:, bucket_name:
   bucket.labels.each do |key, value|
     puts "#{key} = #{value}"
   end
-  # [END get_bucket_labels]
+  # [END storage_get_bucket_labels]
 end
 
 def add_bucket_label project_id:, bucket_name:, label_key:, label_value:
-  # [START add_bucket_label]
+  # [START storage_add_bucket_label]
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Name of your Google Cloud Storage bucket"
   # label_key   = "Cloud Storage bucket Label Key"
@@ -161,11 +161,11 @@ def add_bucket_label project_id:, bucket_name:, label_key:, label_value:
   end
 
   puts "Added label #{label_key} with value #{label_value} to #{bucket_name}"
-  # [END add_bucket_label]
+  # [END storage_add_bucket_label]
 end
 
 def delete_bucket_label project_id:, bucket_name:, label_key:
-  # [START remove_bucket_label]
+  # [START storage_remove_bucket_label]
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Name of your Google Cloud Storage bucket"
   # label_key   = "Cloud Storage bucket Label Key"
@@ -180,11 +180,11 @@ def delete_bucket_label project_id:, bucket_name:, label_key:
   end
 
   puts "Deleted label #{label_key} from #{bucket_name}"
-  # [END remove_bucket_label]
+  # [END storage_remove_bucket_label]
 end
 
 def delete_bucket project_id:, bucket_name:
-  # [START delete_bucket]
+  # [START storage_delete_bucket]
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Name of your Google Cloud Storage bucket to delete"
 
@@ -196,7 +196,7 @@ def delete_bucket project_id:, bucket_name:
   bucket.delete
 
   puts "Deleted bucket: #{bucket.name}"
-  # [END delete_bucket]
+  # [END storage_delete_bucket]
 end
 
 def set_retention_policy project_id:, bucket_name:, retention_period:
