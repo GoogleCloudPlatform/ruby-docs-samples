@@ -129,7 +129,7 @@ if [[ $E2E = "true" ]]; then
   # Start Cloud SQL Proxy.
   /cloud_sql_proxy -dir=/cloudsql -credential_file=$GOOGLE_APPLICATION_CREDENTIALS &
   export CLOUD_SQL_PROXY_PROCESS_ID=$!
-  trap "kill $CLOUD_SQL_PROXY_PROCESS_ID" EXIT
+  trap "kill $CLOUD_SQL_PROXY_PROCESS_ID || true" EXIT
 fi
 
 # Capture failures
