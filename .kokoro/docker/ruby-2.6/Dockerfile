@@ -1,4 +1,4 @@
-FROM ruby:2.3-stretch
+FROM ruby:2.6-stretch
 
 ENTRYPOINT /bin/bash
 
