@@ -27,7 +27,7 @@ describe "Translate Quickstart" do
       load File.expand_path("../quickstart.rb", __dir__)
     }.to output(
       "Text: Hello, world!\n"+
-      "Translation: Привет мир!\n"
+      "Translation: Привет, мир!\n"
     ).to_stdout
   end
 

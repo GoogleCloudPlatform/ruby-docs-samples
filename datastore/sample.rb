@@ -475,6 +475,7 @@ end
 def cursor_paging
   datastore = Google::Cloud::Datastore.new
 
+  # [START datastore_cursor_paging]
   page_size = 2
   query = datastore.query("Task").
           limit(page_size)
@@ -482,7 +483,6 @@ def cursor_paging
 
   page_cursor = tasks.cursor
 
-  # [START datastore_cursor_paging]
   query = datastore.query("Task").
           limit(page_size).
           start(page_cursor)

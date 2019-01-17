@@ -941,7 +941,7 @@ def update_using_partitioned_dml project_id:, instance_id:, database_id:
   spanner = Google::Cloud::Spanner.new project: project_id
   client  = spanner.client instance_id, database_id
 
-  row_count = client.execute_partitioned_update(
+  row_count = client.execute_partition_update(
     "UPDATE Albums SET MarketingBudget = 100000 WHERE SingerId > 1"
   )
 
@@ -960,7 +960,7 @@ def delete_using_partitioned_dml project_id:, instance_id:, database_id:
   spanner = Google::Cloud::Spanner.new project: project_id
   client  = spanner.client instance_id, database_id
 
-  row_count = client.execute_partitioned_update(
+  row_count = client.execute_partition_update(
     "DELETE FROM Singers WHERE SingerId > 10"
   )
 

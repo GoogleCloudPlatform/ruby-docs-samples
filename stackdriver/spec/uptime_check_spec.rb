@@ -15,6 +15,7 @@
 # bundle exec rspec
 
 require_relative "../uptime_check"
+require "google/cloud/monitoring/v3"
 require "rspec"
 
 describe "Stackdriver uptime check" do
@@ -28,6 +29,13 @@ describe "Stackdriver uptime check" do
     if /cloud-samples-ruby-test-\d/.match(@project_id)
       @project_id = "cloud-samples-ruby-test-1"
     end
+
+    # Delete all uptime checks before running tests.
+    client = Google::Cloud::Monitoring::V3::UptimeCheck.new
+    project_name = Google::Cloud::Monitoring::V3::UptimeCheckServiceClient.project_path(@project_id)
+    configs = client.list_uptime_check_configs(project_name)
+    configs.each { |config| delete_uptime_check_config(config.name) }
+
     @configs = [create_uptime_check_config(project_id:@project_id),
       create_uptime_check_config(project_id:@project_id)]
   end

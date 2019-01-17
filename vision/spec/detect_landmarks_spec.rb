@@ -19,11 +19,6 @@ require_relative "../detect_landmarks"
 
 describe "Detect Landmarks" do
 
-  before do
-    @storage    = Google::Cloud::Storage.new
-    @bucket     = @storage.bucket ENV["GOOGLE_CLOUD_STORAGE_BUCKET"]
-  end
-
   # Returns full path to sample image included in repository for testing
   def image_path filename
     File.expand_path "../resources/#{filename}", __dir__
@@ -31,20 +26,19 @@ describe "Detect Landmarks" do
 
   example "detect landmarks from local image file" do
     expect {
-      detect_landmarks image_path: image_path("eiffel_tower.jpg")
+      detect_landmarks image_path: image_path("palace_of_fine_arts.jpg")
     }.to output(
-      /Eiffel Tower\n.*48.858461, 2.294351/
+      /Palace/
     ).to_stdout
   end
 
   example "detect landmarks from image file in Google Cloud Storage" do
-    storage_file = @bucket.upload_file image_path("eiffel_tower.jpg"),
-                                       "eiffel_tower.jpg"
+    gcs_uri = "gs://cloud-samples-data/vision/palace_of_fine_arts.jpg"
 
     expect {
-      detect_landmarks_gcs image_path: storage_file.to_gs_url
+      detect_landmarks_gcs image_path: gcs_uri
     }.to output(
-      /Eiffel Tower\n.*48.858461, 2.294351/
+      /Palace/
     ).to_stdout
   end
 end

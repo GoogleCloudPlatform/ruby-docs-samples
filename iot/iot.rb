@@ -339,7 +339,7 @@ $delete_device = -> (project_id:, location_id:, registry_id:, device_id:) do
   # project_id  = "Your Google Cloud project ID"
   # location_id = "The Cloud region the registry is located in"
   # registry_id = "The registry to create a device in"
-  # device_id   = "The identifier of the device to create"
+  # device_id   = "The identifier of the device to delete"
 
   require "google/apis/cloudiot_v1"
 
@@ -354,7 +354,7 @@ $delete_device = -> (project_id:, location_id:, registry_id:, device_id:) do
   parent = "projects/#{project_id}/locations/#{location_id}"
   device_path = "#{parent}/registries/#{registry_id}/devices/#{device_id}"
 
-  # Create the device
+  # Delete the device
   result = iot_client.delete_project_location_registry_device(
     device_path
   )
@@ -657,6 +657,220 @@ $send_device_command = -> (project_id:, location_id:, registry_id:, device_id:, 
   # [END iot_send_command]
 end
 
+$bind_device_to_gateway = -> (project_id:, location_id:, registry_id:, gateway_id:, device_id:) do
+  # [START iot_bind_device_to_gateway]
+  # project_id  = "Your Google Cloud project ID"
+  # location_id = "The Cloud region the registry is located in"
+  # registry_id = "The registry to create a device in"
+  # gateway_id  = "The Gateway to bind to"
+  # device_id   = "The identifier of the device to bind"
+
+  require "google/apis/cloudiot_v1"
+
+  # Initialize the client and authenticate with the specified scope
+  Cloudiot   = Google::Apis::CloudiotV1
+  iot_client = Cloudiot::CloudIotService.new
+  iot_client.authorization = Google::Auth.get_application_default(
+    "https://www.googleapis.com/auth/cloud-platform"
+  )
+
+  # The resource name of the location associated with the project
+  parent = "projects/#{project_id}/locations/#{location_id}/registries/#{registry_id}"
+
+  bind_req = Google::Apis::CloudiotV1::BindDeviceToGatewayRequest.new
+  bind_req.gateway_id = gateway_id
+  bind_req.device_id = device_id
+
+  res = iot_client.bind_registry_device_to_gateway parent, bind_req
+  puts "Device bound"
+  # [END iot_bind_device_to_gateway]
+end
+
+$unbind_device_from_gateway = -> (project_id:, location_id:, registry_id:, gateway_id:, device_id:) do
+  # [START iot_unbind_device_from_gateway]
+  # project_id  = "Your Google Cloud project ID"
+  # location_id = "The Cloud region the registry is located in"
+  # registry_id = "The registry to bind a device in"
+  # gateway_id  = "The Gateway to bind to"
+  # device_id   = "The identifier of the device to bind"
+
+  require "google/apis/cloudiot_v1"
+
+  # Initialize the client and authenticate with the specified scope
+  Cloudiot   = Google::Apis::CloudiotV1
+  iot_client = Cloudiot::CloudIotService.new
+  iot_client.authorization = Google::Auth.get_application_default(
+    "https://www.googleapis.com/auth/cloud-platform"
+  )
+
+  # The resource name of the location associated with the project
+  parent = "projects/#{project_id}/locations/#{location_id}/registries/#{registry_id}"
+
+  unbind_req = Google::Apis::CloudiotV1::UnbindDeviceFromGatewayRequest.new
+  unbind_req.gateway_id = gateway_id
+  unbind_req.device_id = device_id
+
+  res = iot_client.unbind_registry_device_from_gateway parent, unbind_req
+  puts "Device unbound"
+  # [END iot_unbind_device_from_gateway]
+end
+
+$create_gateway = -> (project_id:, location_id:, registry_id:, gateway_id:, cert_path:, alg:) do
+  # [START iot_create_gateway]
+  # project_id  = "Your Google Cloud project ID"
+  # location_id = "The Cloud region the registry is located in"
+  # registry_id = "The registry to create a gateway in"
+  # gateway_id  = "The identifier of the gateway to create"
+  # cert_path   = "The path to the certificate"
+  # alg         = "ES256 || RS256"
+
+  require "google/apis/cloudiot_v1"
+
+  # Initialize the client and authenticate with the specified scope
+  Cloudiot   = Google::Apis::CloudiotV1
+  iot_client = Cloudiot::CloudIotService.new
+  iot_client.authorization = Google::Auth.get_application_default(
+    "https://www.googleapis.com/auth/cloud-platform"
+  )
+
+  # The resource name of the location associated with the project
+  parent = "projects/#{project_id}/locations/#{location_id}/registries/#{registry_id}"
+
+  device = Cloudiot::Device.new
+  device.id = gateway_id
+
+  if alg == 'ES256'
+    certificate_format = 'ES256_PEM'
+  else
+    certificate_format = 'RSA_X509_PEM'
+  end
+
+  pubkey = Google::Apis::CloudiotV1::PublicKeyCredential.new
+  pubkey.key = File.read(cert_path)
+  pubkey.format = certificate_format
+
+  cred = Google::Apis::CloudiotV1::DeviceCredential.new
+  cred.public_key = pubkey
+
+  device.credentials = [cred]
+
+  gateway_config = Google::Apis::CloudiotV1::GatewayConfig.new
+  gateway_config.gateway_type = 'GATEWAY'
+  gateway_config.gateway_auth_method= 'ASSOCIATION_ONLY'
+
+  device.gateway_config = gateway_config
+
+  # Create the Gateway
+  device = iot_client.create_project_location_registry_device parent, device
+
+  puts "Gateway: #{device.id}"
+  puts "\tBlocked: #{device.blocked}"
+  puts "\tLast Event Time: #{device.last_event_time}"
+  puts "\tLast State Time: #{device.last_state_time}"
+  puts "\tName: #{device.name}"
+  # [END iot_create_gateway]
+end
+
+$delete_gateway = -> (project_id:, location_id:, registry_id:, gateway_id:) do
+  # [START iot_delete_gateway]
+  # project_id  = "Your Google Cloud project ID"
+  # location_id = "The Cloud region the registry is located in"
+  # registry_id = "The registry to create a device in"
+  # gateway_id   = "The identifier of the gateway to delete"
+
+  require "google/apis/cloudiot_v1"
+
+  # Initialize the client and authenticate with the specified scope
+  Cloudiot   = Google::Apis::CloudiotV1
+  iot_client = Cloudiot::CloudIotService.new
+  iot_client.authorization = Google::Auth.get_application_default(
+    "https://www.googleapis.com/auth/cloud-platform"
+  )
+
+  # The resource name of the location associated with the project
+  parent = "projects/#{project_id}/locations/#{location_id}"
+  device_path = "#{parent}/registries/#{registry_id}/devices/#{gateway_id}"
+
+  # TODO: unbind all devices?
+  # Delete the gateway
+  result = iot_client.delete_project_location_registry_device(
+    device_path
+  )
+
+  puts "Deleted gateway."
+  # [END iot_delete_gateway]
+end
+
+
+$list_devices_for_gateway = -> (project_id:, location_id:, registry_id:, gateway_id:) do
+  # [START iot_list_devices_for_gateway]
+  # project_id  = "Your Google Cloud project ID"
+  # location_id = "The Cloud region for the registry"
+  # registry_id = "The registry to list gateway-bound devices in"
+  # gateway_id = "The gateway to list devices on"
+
+  require "google/apis/cloudiot_v1"
+
+  # Initialize the client and authenticate with the specified scope
+  Cloudiot   = Google::Apis::CloudiotV1
+  iot_client = Cloudiot::CloudIotService.new
+  iot_client.authorization = Google::Auth.get_application_default(
+    "https://www.googleapis.com/auth/cloud-platform"
+  )
+
+  # The resource name of the location associated with the project
+  resource = "projects/#{project_id}/locations/#{location_id}/registries/#{registry_id}"
+
+  # List the devices in the provided region
+  response = iot_client.list_project_location_registry_devices(
+    resource, gateway_list_options_associations_gateway_id: "#{gateway_id}"
+  )
+
+  puts "Devices:"
+  if response.devices && response.devices.any?
+    response.devices.each { |device| puts "\t#{device.id}" }
+  else
+    puts "\tNo device registries found in this region for your project."
+  end
+  # [END iot_list_devices_for_gateway]
+end
+
+$list_gateways = -> (project_id:, location_id:, registry_id:) do
+  # [START iot_list_gateways]
+  # project_id  = "Your Google Cloud project ID"
+  # location_id = "The Cloud region for the registry"
+  # registry_id = "The registry to list gateways in"
+
+  require "google/apis/cloudiot_v1"
+
+  # Initialize the client and authenticate with the specified scope
+  Cloudiot   = Google::Apis::CloudiotV1
+  iot_client = Cloudiot::CloudIotService.new
+  iot_client.authorization = Google::Auth.get_application_default(
+    "https://www.googleapis.com/auth/cloud-platform"
+  )
+
+  # The resource name of the location associated with the project
+  resource = "projects/#{project_id}/locations/#{location_id}/registries/#{registry_id}"
+
+  # List the devices in the provided region
+  gateways = iot_client.list_project_location_registry_devices(
+    resource, field_mask: 'config,gatewayConfig'
+  )
+
+  puts "Gateways:"
+  if gateways.devices && gateways.devices.any?
+    gateways.devices.each { |gateway|
+      if gateway.gateway_config && gateway.gateway_config.gateway_type == 'GATEWAY'
+        puts "\t#{gateway.id}"
+      end
+    }
+  else
+    puts "\tNo gateways found in this registry."
+  end
+  # [END iot_list_gateways]
+end
+
 
 def run_sample arguments
   command    = arguments.shift
@@ -793,6 +1007,53 @@ def run_sample arguments
       device_id:   arguments.shift,
       data:        arguments.shift,
     )
+
+  # Beta features
+  when "create_gateway"
+    $create_gateway.call(
+      project_id:  project_id,
+      location_id: arguments.shift,
+      registry_id: arguments.shift,
+      gateway_id:  arguments.shift,
+      cert_path:   arguments.shift,
+      alg:         arguments.shift,
+    )
+  when "delete_gateway"
+    $delete_gateway.call(
+      project_id:  project_id,
+      location_id: arguments.shift,
+      registry_id: arguments.shift,
+      gateway_id:  arguments.shift,
+    )
+  when "list_devices_for_gateway"
+    $list_devices_for_gateway.call(
+      project_id:  project_id,
+      location_id: arguments.shift,
+      registry_id: arguments.shift,
+      gateway_id: arguments.shift
+    )
+  when "list_gateways"
+    $list_gateways.call(
+      project_id:  project_id,
+      location_id: arguments.shift,
+      registry_id: arguments.shift,
+    )
+  when "bind_device_to_gateway"
+    $bind_device_to_gateway.call(
+      project_id:  project_id,
+      location_id: arguments.shift,
+      registry_id: arguments.shift,
+      gateway_id:  arguments.shift,
+      device_id:  arguments.shift,
+    )
+  when "unbind_device_from_gateway"
+    $unbind_device_from_gateway.call(
+      project_id:  project_id,
+      location_id: arguments.shift,
+      registry_id: arguments.shift,
+      gateway_id:  arguments.shift,
+      device_id:  arguments.shift,
+    )
   else
     puts <<-usage
 Usage: bundle exec ruby iot.rb [command] [arguments]
@@ -818,6 +1079,14 @@ Device Management Commands:
   patch_rsa_device <location> <registry_id> <device_id> <public_key_path> Patch a device with an RSA credential
   send_command <location> <registry_id> <device_id> <data> Send a command to a device.
   send_configuration <location> <registry_id> <device_id> <data> Set a device configuration.
+
+Beta device management commands:
+  create_gateway <location> <registry_id> <gateway_id> <cert_path> <alg> Create a gateway
+  delete_gateway <location> <registry_id> <device_id> Delete a gateway
+  list_gateways <location> <registry_id> List gateways in a registry
+  list_devices_for_gateway <location> <registry_id> <gateway_id> List devices for gateway
+  bind_device_to_gateway <location> <registry_id> <gateway_id> <device_id> Bind device to gateway
+  unbind_device_from_gateway <location> <registry_id> <gateway_id> <device_id> Unbind device from gateway
 
 Environment variables:
   GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
