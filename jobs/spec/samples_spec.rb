@@ -23,6 +23,7 @@ require_relative "../V3/auto_complete_sample"
 require_relative "../V3/batch_operation_sample"
 require_relative "../V3/commute_search_sample"
 require_relative "../V3/custom_attribute_sample"
+require_relative "../V3/email_alert_search_sample"
 require_relative "../V3/featured_job_sample"
 require_relative "../V3/filter_search_sample"
 require_relative "../V3/histogram_sample"
@@ -250,6 +251,31 @@ describe "Cloud Job Discovery Samples" do
       expect(long_filter_result.matching_jobs).not_to be nil
       expect(string_filter_result.matching_jobs).not_to be nil
       expect(multi_filters_result.matching_jobs).not_to be nil
+    end
+  end
+# verify email_alert_search_sample.rb
+  it "email_alert_search_sample" do
+    capture do
+      company_generated = 
+        job_discovery_generate_company display_name: "Google", 
+                                       external_id: "externalId: Google #{SecureRandom.hex}",
+                                       headquarters_address: "1600 Amphitheatre Parkway " +
+                                                             "Mountain View, CA 94043"
+      company_created = 
+        job_discovery_create_company company_to_be_created: company_generated,
+                                     google_cloud_project_id: @default_google_cloud_project_id
+      job_generated = 
+        job_discovery_generate_job_with_custom_attribute company_name: company_created.name,
+                                                         requisition_id: "#{company_created.name} #{SecureRandom.hex}"
+      job_created = job_discovery_create_job job_to_be_created: job_generated,
+                                                  google_cloud_project_id: @default_google_cloud_project_id
+      sleep 10
+      email_alert_search_result =
+        job_discovery_email_alert_search google_cloud_project_id: @default_google_cloud_project_id,
+                                                            company_name: company_created.name
+      job_discovery_delete_job job_name: job_created.name
+      job_discovery_delete_company company_name: company_created.name
+      expect(email_alert_search_result.matching_jobs).not_to be nil
     end
   end
 # verify featured_job_sample.rb
