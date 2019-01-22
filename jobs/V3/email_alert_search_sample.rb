@@ -1,4 +1,4 @@
-# Copyright 2018 Google, Inc
+# Copyright 2019 Google, Inc
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,11 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-def job_discovery_email_alert_search google_cloud_project_id:, company_name:
+def job_discovery_email_alert_search project_id:, company_name:
   # [START job_discovery_email_alert_search]
-  # google_cloud_project_id = "Id of the project"
-  # company_name            = "The resource name of the company listing the job. The format is "projects/{google_cloud_project_id}/companies/{company_id}""
- 
+  # project_id      = "Id of the project"
+  # company_name    = "The resource name of the company listing the job. The format is "projects/{project_id}/companies/{company_id}""
+
   require "google/apis/jobs_v3"
 
   # Instantiate the client
@@ -40,7 +40,8 @@ def job_discovery_email_alert_search google_cloud_project_id:, company_name:
   search_jobs_request = jobs::SearchJobsRequest.new request_metadata: request_metadata,
                                                     job_query: job_query,
                                                     search_mode: "JOB_SEARCH"
-  search_jobs_response = talent_solution_client.search_project_job_for_alert(google_cloud_project_id, search_jobs_request)
+  search_jobs_response = talent_solution_client.search_project_job_for_alert(project_id,
+                                                                             search_jobs_request)
   puts search_jobs_response.to_json
   return search_jobs_response
   # [END job_discovery_email_alert_search]
@@ -52,13 +53,13 @@ def run_email_alert_search_sample arguments
   require_relative "basic_job_sample"
 
   command = arguments.shift
-  default_google_cloud_project_id = "projects/#{ENV["GOOGLE_CLOUD_PROJECT"]}"
-  company_name = "#{default_google_cloud_project_id}/companies/#{arguments.shift}"
-  
+  default_project_id = "projects/#{ENV["GOOGLE_CLOUD_PROJECT"]}"
+  company_name = "#{default_project_id}/companies/#{arguments.shift}"
+
   case command
   when "email_alert_search"
     job_discovery_email_alert_search company_name: company_name,
-                                     google_cloud_project_id: default_google_cloud_project_id
+                                     project_id: default_project_id
   else
   puts <<-usage
 Usage: bundle exec ruby email_alert_search_sample.rb [command] [arguments]

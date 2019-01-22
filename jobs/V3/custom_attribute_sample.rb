@@ -14,7 +14,7 @@
 
 def job_discovery_generate_job_with_custom_attribute company_name:, requisition_id:
   # [START job_discovery_generate_job_with_custom_attribute]
-  # company_name   = "The resource name of the company listing the job. The format is "projects/{google_cloud_project_id}/companies/{company_id}""
+  # company_name   = "The resource name of the company listing the job. The format is "projects/{project_id}/companies/{company_id}""
   # requisition_id = "The posting ID, assigned by the client to identify a job"
 
   require "google/apis/jobs_v3"
@@ -48,10 +48,10 @@ def job_discovery_generate_job_with_custom_attribute company_name:, requisition_
   # [END job_discovery_generate_job_with_custom_attribute]
 end
 
-def job_discovery_filters_on_long_value_custom_attribute google_cloud_project_id:, company_name:
+def job_discovery_filters_on_long_value_custom_attribute project_id:, company_name:
   # [START job_discovery_filters_on_long_value_custom_attribute]
-  # google_cloud_project_id   = "Id of the project"
-  # company_name              = "The resource name of the company listing the job. The format is "projects/{google_cloud_project_id}/companies/{company_id}""
+  # project_id       = "Id of the project"
+  # company_name     = "The resource name of the company listing the job. The format is "projects/{project_id}/companies/{company_id}""
 
   require "google/apis/jobs_v3"
 
@@ -71,17 +71,17 @@ def job_discovery_filters_on_long_value_custom_attribute google_cloud_project_id
   search_jobs_request = jobs::SearchJobsRequest.new request_metadata: request_metadata,
                                                     job_query: job_query,
                                                     job_view: "JOB_VIEW_FULL"
-  search_jobs_response = talent_solution_client.search_jobs(google_cloud_project_id, search_jobs_request)
+  search_jobs_response = talent_solution_client.search_jobs(project_id, search_jobs_request)
 
   puts search_jobs_response.to_json
   return search_jobs_response
   # [END job_discovery_filters_on_long_value_custom_attribute]
 end
 
-def job_discovery_filters_on_string_value_custom_attribute google_cloud_project_id:, company_name:
+def job_discovery_filters_on_string_value_custom_attribute project_id:, company_name:
   # [START job_discovery_filters_on_string_value_custom_attribute]
-  # google_cloud_project_id   = "Id of the project"
-  # company_name              = "The resource name of the company listing the job. The format is "projects/{google_cloud_project_id}/companies/{company_id}""
+  # project_id      = "Id of the project"
+  # company_name    = "The resource name of the company listing the job. The format is "projects/{project_id}/companies/{company_id}""
 
   require "google/apis/jobs_v3"
 
@@ -102,17 +102,17 @@ def job_discovery_filters_on_string_value_custom_attribute google_cloud_project_
   search_jobs_request = jobs::SearchJobsRequest.new request_metadata: request_metadata,
                                                     job_query: job_query,
                                                     job_view: "JOB_VIEW_FULL"
-  search_jobs_response = talent_solution_client.search_jobs(google_cloud_project_id, search_jobs_request)
+  search_jobs_response = talent_solution_client.search_jobs(project_id, search_jobs_request)
 
   puts search_jobs_response.to_json
   return search_jobs_response
   # [END job_discovery_filters_on_string_value_custom_attribute]
 end
 
-def job_discovery_filters_on_multi_custom_attributes google_cloud_project_id:, company_name:
+def job_discovery_filters_on_multi_custom_attributes project_id:, company_name:
   # [START job_discovery_filters_on_multi_custom_attributes]
-  # google_cloud_project_id   = "Id of the project"
-  # company_name              = "The resource name of the company listing the job. The format is "projects/{google_cloud_project_id}/companies/{company_id}""
+  # project_id       = "Id of the project"
+  # company_name     = "The resource name of the company listing the job. The format is "projects/{project_id}/companies/{company_id}""
 
   require "google/apis/jobs_v3"
 
@@ -134,7 +134,7 @@ def job_discovery_filters_on_multi_custom_attributes google_cloud_project_id:, c
   search_jobs_request = jobs::SearchJobsRequest.new request_metadata: request_metadata,
                                                     job_query: job_query,
                                                     job_view: "JOB_VIEW_FULL"
-  search_jobs_response = talent_solution_client.search_jobs(google_cloud_project_id, search_jobs_request)
+  search_jobs_response = talent_solution_client.search_jobs(project_id, search_jobs_request)
 
   puts search_jobs_response.to_json
   return search_jobs_response
@@ -147,24 +147,24 @@ def run_custom_attribute_sample arguments
   require_relative "basic_job_sample"
 
   command = arguments.shift
-  default_google_cloud_project_id = "projects/#{ENV["GOOGLE_CLOUD_PROJECT"]}"
+  default_project_id = "projects/#{ENV["GOOGLE_CLOUD_PROJECT"]}"
 
-  company_name = "#{default_google_cloud_project_id}/companies/#{arguments.shift}"
+  company_name = "#{default_project_id}/companies/#{arguments.shift}"
 
   case command
   when "create_job_with_custom_attribute"
     job_generated = job_discovery_generate_job_with_custom_attribute company_name: company_name,
                                                                      requisition_id: arguments.shift
     job_created = job_discovery_create_job job_to_be_created: job_generated,
-                                           google_cloud_project_id: default_google_cloud_project_id
+                                           project_id: default_project_id
   when "filters_on_long_value_custom_attribute"
-    job_discovery_filters_on_long_value_custom_attribute google_cloud_project_id: default_google_cloud_project_id,
+    job_discovery_filters_on_long_value_custom_attribute project_id: default_project_id,
                                                          company_name: company_name
   when "filters_on_string_value_custom_attribute"
-    job_discovery_filters_on_string_value_custom_attribute google_cloud_project_id: default_google_cloud_project_id,
+    job_discovery_filters_on_string_value_custom_attribute project_id: default_project_id,
                                                            company_name: company_name
   when "filters_on_multi_custom_attributes"
-    job_discovery_filters_on_multi_custom_attributes google_cloud_project_id: default_google_cloud_project_id,
+    job_discovery_filters_on_multi_custom_attributes project_id: default_project_id,
                                                      company_name: company_name
   else
   puts <<-usage

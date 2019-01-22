@@ -12,12 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-def job_discovery_basic_location_search google_cloud_project_id:, company_name:, location:, distance:
+def job_discovery_basic_location_search project_id:, company_name:, location:, distance:
   # [START job_discovery_basic_location_search]
-  # google_cloud_project_id = "Id of the project."
-  # company_name            = "The resource name of the company listing the job. The format is "projects/{google_cloud_project_id}/companies/{company_id}""
-  # location                = "Location of the center where the search is based on."
-  # distance                = "The distance from the provided location in miles in which to search."
+  # project_id       = "Id of the project."
+  # company_name     = "The resource name of the company listing the job. The format is "projects/{project_id}/companies/{company_id}""
+  # location         = "Location of the center where the search is based on."
+  # distance         = "The distance from the provided location in miles in which to search."
   require "google/apis/jobs_v3"
   # Instantiate the client
   jobs   = Google::Apis::JobsV3
@@ -42,20 +42,20 @@ def job_discovery_basic_location_search google_cloud_project_id:, company_name:,
                                                     job_query: job_query,
                                                     search_mode: "JOB_SEARCH"
 
-  search_jobs_response = talent_solution_client.search_jobs(google_cloud_project_id, search_jobs_request)
+  search_jobs_response = talent_solution_client.search_jobs(project_id, search_jobs_request)
 
   puts search_jobs_response.to_json
   return search_jobs_response
   # [END job_discovery_basic_location_search]
 end
 
-def job_discovery_keyword_location_search google_cloud_project_id:, company_name:, location:, distance:, keyword:
+def job_discovery_keyword_location_search project_id:, company_name:, location:, distance:, keyword:
   # [START job_discovery_keyword_location_search]
-  # google_cloud_project_id = "Id of the project."
-  # company_name            = "The resource name of the company listing the job. The format is "projects/{google_cloud_project_id}/companies/{company_id}""
-  # location                = "Location of the center where the search is based on."
-  # distance                = "The distance from the provided location in miles in which to search."
-  # keyword                 = "Keyword of the search."
+  # project_id      = "Id of the project."
+  # company_name    = "The resource name of the company listing the job. The format is "projects/{project_id}/companies/{company_id}""
+  # location        = "Location of the center where the search is based on."
+  # distance        = "The distance from the provided location in miles in which to search."
+  # keyword         = "Keyword of the search."
   require "google/apis/jobs_v3"
   # Instantiate the client
   jobs   = Google::Apis::JobsV3
@@ -81,18 +81,18 @@ def job_discovery_keyword_location_search google_cloud_project_id:, company_name
                                                     job_query: job_query,
                                                     search_mode: "JOB_SEARCH"
 
-  search_jobs_response = talent_solution_client.search_jobs(google_cloud_project_id, search_jobs_request)
+  search_jobs_response = talent_solution_client.search_jobs(project_id, search_jobs_request)
 
   puts search_jobs_response.to_json
   return search_jobs_response
   # [END job_discovery_keyword_location_search]
 end
 
-def job_discovery_city_location_search google_cloud_project_id:, company_name:, city:
+def job_discovery_city_location_search project_id:, company_name:, city:
   # [START job_discovery_city_location_search]
-  # google_cloud_project_id = "Id of the project."
-  # company_name            = "The resource name of the company listing the job. The format is "projects/{google_cloud_project_id}/companies/{company_id}""
-  # city                    = "Name of the city where we want to do the job search."
+  # project_id       = "Id of the project."
+  # company_name     = "The resource name of the company listing the job. The format is "projects/{project_id}/companies/{company_id}""
+  # city             = "Name of the city where we want to do the job search."
   require "google/apis/jobs_v3"
   # Instantiate the client
   jobs   = Google::Apis::JobsV3
@@ -116,20 +116,20 @@ def job_discovery_city_location_search google_cloud_project_id:, company_name:, 
                                                     job_query: job_query,
                                                     search_mode: "JOB_SEARCH"
 
-  search_jobs_response = talent_solution_client.search_jobs(google_cloud_project_id, search_jobs_request)
+  search_jobs_response = talent_solution_client.search_jobs(project_id, search_jobs_request)
 
   puts search_jobs_response.to_json
   return search_jobs_response
   # [END job_discovery_city_location_search]
 end
 
-def job_discovery_multi_location_search google_cloud_project_id:, company_name:, location1:, distance1:, city2:
+def job_discovery_multi_location_search project_id:, company_name:, location1:, distance1:, city2:
   # [START job_discovery_multi_location_search]
-  # google_cloud_project_id = "Id of the project."
-  # company_name            = "The resource name of the company listing the job. The format is "projects/{google_cloud_project_id}/companies/{company_id}""
-  # location1               = "Location of the center where the first search is based on"
-  # distance1               = "The distance from the provided location in miles in which to search."
-  # city                    = "Name of the city where we want to do the second search."
+  # project_id       = "Id of the project."
+  # company_name     = "The resource name of the company listing the job. The format is "projects/{project_id}/companies/{company_id}""
+  # location1        = "Location of the center where the first search is based on"
+  # distance1        = "The distance from the provided location in miles in which to search."
+  # city             = "Name of the city where we want to do the second search."
   require "google/apis/jobs_v3"
   # Instantiate the client
   jobs   = Google::Apis::JobsV3
@@ -156,18 +156,18 @@ def job_discovery_multi_location_search google_cloud_project_id:, company_name:,
                                                     job_query: job_query,
                                                     search_mode: "JOB_SEARCH"
 
-  search_jobs_response = talent_solution_client.search_jobs(google_cloud_project_id, search_jobs_request)
+  search_jobs_response = talent_solution_client.search_jobs(project_id, search_jobs_request)
 
   puts search_jobs_response.to_json
   return search_jobs_response
   # [END job_discovery_multi_location_search]
 end
 
-def job_discovery_broadening_location_search google_cloud_project_id:, company_name:, city:
+def job_discovery_broadening_location_search project_id:, company_name:, city:
   # [START job_discovery_broadening_location_search]
-  # google_cloud_project_id = "Id of the project."
-  # company_name            = "The resource name of the company listing the job. The format is "projects/{google_cloud_project_id}/companies/{company_id}""
-  # city                    = "Name of the city where we want to do the job search."
+  # project_id      = "Id of the project."
+  # company_name    = "The resource name of the company listing the job. The format is "projects/{project_id}/companies/{company_id}""
+  # city            = "Name of the city where we want to do the job search."
   require "google/apis/jobs_v3"
   # Instantiate the client
   jobs   = Google::Apis::JobsV3
@@ -193,7 +193,7 @@ def job_discovery_broadening_location_search google_cloud_project_id:, company_n
                                                     search_mode: "JOB_SEARCH",
                                                     enable_broadening: true
 
-  search_jobs_response = talent_solution_client.search_jobs(google_cloud_project_id, search_jobs_request)
+  search_jobs_response = talent_solution_client.search_jobs(project_id, search_jobs_request)
 
   puts search_jobs_response.to_json
   return search_jobs_response
@@ -206,35 +206,35 @@ def run_location_search_sample arguments
   require_relative "basic_job_sample"
 
   command = arguments.shift
-  default_google_cloud_project_id = "projects/#{ENV["GOOGLE_CLOUD_PROJECT"]}"
-  company_name = "#{default_google_cloud_project_id}/companies/#{arguments.shift}"
+  default_project_id = "projects/#{ENV["GOOGLE_CLOUD_PROJECT"]}"
+  company_name = "#{default_project_id}/companies/#{arguments.shift}"
 
   case command
   when "basic_location_search"
     job_discovery_basic_location_search company_name: company_name,
                                         location: arguments.shift,
                                         distance: arguments.shift,
-                                        google_cloud_project_id: default_google_cloud_project_id
+                                        project_id: default_project_id
   when "keyword_location_search"
     job_discovery_keyword_location_search company_name: company_name,
                                           location: arguments.shift,
                                           distance: arguments.shift,
                                           keyword: arguments.shift,
-                                          google_cloud_project_id: default_google_cloud_project_id
+                                          project_id: default_project_id
     when "city_location_search"
     job_discovery_city_location_search company_name: company_name,
                                        city: arguments.shift,
-                                       google_cloud_project_id: default_google_cloud_project_id
+                                       project_id: default_project_id
   when "multi_location_search"
     job_discovery_multi_location_search company_name: company_name,
                                         location1: arguments.shift,
                                         distance1: arguments.shift,
                                         city2: arguments.shift,
-                                        google_cloud_project_id: default_google_cloud_project_id
+                                        project_id: default_project_id
   when "broadening_location_search"
     job_discovery_broadening_location_search company_name: company_name,
                                              city: arguments.shift,
-                                             google_cloud_project_id: default_google_cloud_project_id
+                                             project_id: default_project_id
   else
   puts <<-usage
 Usage: bundle exec ruby filter_search_sample.rb [command] [arguments]
