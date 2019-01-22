@@ -235,11 +235,11 @@ describe "Cloud Job Discovery Samples" do
         job_discovery_generate_job_with_custom_attribute company_name: company_created.name,
                                                          requisition_id: "#{company_created.name} #{SecureRandom.hex}"
       job_created = job_discovery_create_job job_to_be_created: job_generated,
-                                                  google_cloud_project_id: @default_google_cloud_project_id
+                                             google_cloud_project_id: @default_google_cloud_project_id
       sleep 10
       long_filter_result =
         job_discovery_filters_on_long_value_custom_attribute google_cloud_project_id: @default_google_cloud_project_id,
-                                                            company_name: company_created.name
+                                                             company_name: company_created.name
       string_filter_result =
         job_discovery_filters_on_string_value_custom_attribute google_cloud_project_id: @default_google_cloud_project_id,
                                                                company_name: company_created.name
@@ -268,11 +268,11 @@ describe "Cloud Job Discovery Samples" do
         job_discovery_generate_job_with_custom_attribute company_name: company_created.name,
                                                          requisition_id: "#{company_created.name} #{SecureRandom.hex}"
       job_created = job_discovery_create_job job_to_be_created: job_generated,
-                                                  google_cloud_project_id: @default_google_cloud_project_id
+                                             google_cloud_project_id: @default_google_cloud_project_id
       sleep 10
       email_alert_search_result =
         job_discovery_email_alert_search google_cloud_project_id: @default_google_cloud_project_id,
-                                                            company_name: company_created.name
+                                         company_name: company_created.name
       job_discovery_delete_job job_name: job_created.name
       job_discovery_delete_company company_name: company_created.name
       expect(email_alert_search_result.matching_jobs).not_to be nil
@@ -294,7 +294,7 @@ describe "Cloud Job Discovery Samples" do
                                             requisition_id: "#{company_created.name} #{SecureRandom.hex}"
       job_generated.title = "Lab Technician"
       job_created = job_discovery_create_job job_to_be_created: job_generated,
-                                                  google_cloud_project_id: @default_google_cloud_project_id
+                                             google_cloud_project_id: @default_google_cloud_project_id
       sleep 10
       search_result = job_discovery_featured_jobs_search company_name: company_created.name,
                                                          query: "Lab", 
@@ -316,9 +316,9 @@ describe "Cloud Job Discovery Samples" do
         job_discovery_create_company company_to_be_created: company_generated,
                                      google_cloud_project_id: @default_google_cloud_project_id
       job_generated = job_discovery_generate_job company_name: company_created.name,
-                                                      requisition_id: "#{company_created.name} #{SecureRandom.hex}"
+                                                 requisition_id: "#{company_created.name} #{SecureRandom.hex}"
       job_created = job_discovery_create_job job_to_be_created: job_generated,
-                                                  google_cloud_project_id: @default_google_cloud_project_id
+                                             google_cloud_project_id: @default_google_cloud_project_id
       sleep 10
       keyword_search_result = job_discovery_basic_keyword_search company_name: company_created.name,
                                                                  query: job_created.title, 
@@ -365,9 +365,9 @@ describe "Cloud Job Discovery Samples" do
         job_discovery_create_company company_to_be_created: company_generated,
                                      google_cloud_project_id: @default_google_cloud_project_id
       job_generated = job_discovery_generate_job company_name: company_created.name,
-                                                      requisition_id: "#{company_created.name} #{SecureRandom.hex}"
+                                                 requisition_id: "#{company_created.name} #{SecureRandom.hex}"
       job_created = job_discovery_create_job job_to_be_created: job_generated,
-                                                  google_cloud_project_id: @default_google_cloud_project_id
+                                             google_cloud_project_id: @default_google_cloud_project_id
       sleep 10
       search_result = job_discovery_histogram_search company_name: company_created.name,
                                                      google_cloud_project_id: @default_google_cloud_project_id
@@ -388,15 +388,15 @@ describe "Cloud Job Discovery Samples" do
         job_discovery_create_company company_to_be_created: company_generated,
                                      google_cloud_project_id: @default_google_cloud_project_id
       job_generated1 = job_discovery_generate_job company_name: company_created.name,
-                                                       requisition_id: "#{company_created.name} #{SecureRandom.hex}"
+                                                  requisition_id: "#{company_created.name} #{SecureRandom.hex}"
       job_generated1.addresses =["Mountain View, CA"]
       job_created1 = job_discovery_create_job job_to_be_created: job_generated1,
-                                                   google_cloud_project_id: @default_google_cloud_project_id
+                                              google_cloud_project_id: @default_google_cloud_project_id
       job_generated1 = job_discovery_generate_job company_name: company_created.name,
-                                                       requisition_id: "#{company_created.name} #{SecureRandom.hex}"
+                                                  requisition_id: "#{company_created.name} #{SecureRandom.hex}"
       job_generated2.addresses = ["Sunnyvale, CA"]
       job_created2 = job_discovery_create_job job_to_be_created: job_generated2,
-                                                   google_cloud_project_id: @default_google_cloud_project_id
+                                              google_cloud_project_id: @default_google_cloud_project_id
       sleep 10
       basic_search_result = job_discovery_basic_location_search company_name: company_created.name,
                                                                 location: "Mountain View, CA",
