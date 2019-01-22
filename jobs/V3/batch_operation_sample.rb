@@ -12,10 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-def job_discovery_batch_create_jobs google_cloud_project_id:, company_name:
+def job_discovery_batch_create_jobs project_id:, company_name:
   # [START job_discovery_batch_create_jobs]
-  # google_cloud_project_id = "Id of the project"
-  # company_name            = "The resource name of the company listing the job. The format is "projects/{google_cloud_project_id}/companies/{company_id}""
+  # project_id     = "Id of the project"
+  # company_name   = "The resource name of the company listing the job. The format is "projects/{project_id}/companies/{company_id}""
 
   require "google/apis/jobs_v3"
 
@@ -48,14 +48,14 @@ def job_discovery_batch_create_jobs google_cloud_project_id:, company_name:
   create_job_request2 = jobs::CreateJobRequest.new job: job_generated2
 
   talent_solution_client.batch do |client|
-    client.create_job(google_cloud_project_id, create_job_request1) do |job, err|
+    client.create_job(project_id, create_job_request1) do |job, err|
       if err.nil?
         jobs_created.push job
       else
         puts "Batch job create error message: #{err.message}"
       end
     end
-    client.create_job(google_cloud_project_id, create_job_request2) do |job, err|
+    client.create_job(project_id, create_job_request2) do |job, err|
       if err.nil?
         jobs_created.push job
       else
@@ -63,7 +63,7 @@ def job_discovery_batch_create_jobs google_cloud_project_id:, company_name:
       end
     end
   end
-  # jobCreated = batchCreate.create_job(google_cloud_project_id, create_job_request1)
+  # jobCreated = batchCreate.create_job(project_id, create_job_request1)
   puts "Batch job created: #{jobs_created.to_json}"
   return jobs_created
   # [END job_discovery_batch_create_jobs]
@@ -101,7 +101,7 @@ def job_discovery_batch_update_jobs job_to_be_updated:
       end
     end
   end
-  # jobCreated = batchCreate.create_job(google_cloud_project_id, create_job_request1)
+  # jobCreated = batchCreate.create_job(project_id, create_job_request1)
   puts "Batch job updated: #{jobs_updated.to_json}"
 
   return jobs_updated
@@ -179,9 +179,10 @@ def job_discovery_batch_delete_jobs job_to_be_deleted:
   # [END job_discovery_batch_delete_jobs]
 end
 
-def job_discovery_list_jobs google_cloud_project_id:, company_name:
-  # [START job_discovery_list_job]
-  # company_name  = "The company's name which has the job you want to list. The format is "projects/{google_cloud_project_id}/companies/{company_id}""
+def job_discovery_list_jobs project_id:, company_name:
+  # [START job_discovery_list_jobs]
+  # project_id    = "Id of the project"
+  # company_name  = "The company's name which has the job you want to list. The format is "projects/{project_id}/companies/{company_id}""
   require "google/apis/jobs_v3"
 
   jobs   = Google::Apis::JobsV3
@@ -192,29 +193,29 @@ def job_discovery_list_jobs google_cloud_project_id:, company_name:
   )
 
   begin
-    job_got = talentSolution_client.list_project_jobs(google_cloud_project_id, filter: "companyName = \"#{company_name}\"")
+    job_got = talentSolution_client.list_project_jobs(project_id, filter: "companyName = \"#{company_name}\"")
     puts "Job got: #{job_got.to_json}"
     return job_got
   rescue => e
       puts "Exception occurred while getting job: #{e}"
   end
-  # [END job_discovery_get_job]
+  # [END job_discovery_list_jobs]
 end
 
 def run_batch_operation_sample arguments
   command = arguments.shift
-  default_google_cloud_project_id = "projects/#{ENV["GOOGLE_CLOUD_PROJECT"]}"
+  default_project_id = "projects/#{ENV["GOOGLE_CLOUD_PROJECT"]}"
   user_input = arguments.shift
-  company_name = "#{default_google_cloud_project_id}/companies/#{user_input}"
+  company_name = "#{default_project_id}/companies/#{user_input}"
   jobs_created = Array.new
   job_names = Array.new
   case command
   when "batch_create_jobs"
     jobs_created = job_discovery_batch_create_jobs company_name: company_name,
-                                                   google_cloud_project_id: default_google_cloud_project_id
+                                                   project_id: default_project_id
   when "batch_update_jobs"
     list_job_response = job_discovery_list_jobs company_name: company_name,
-                                                google_cloud_project_id: default_google_cloud_project_id
+                                                project_id: default_project_id
     jobs_got = list_job_response.jobs
     jobs_got.each do |job|
       job.title = job.title + " updated"
@@ -223,7 +224,7 @@ def run_batch_operation_sample arguments
     job_discovery_batch_update_jobs job_to_be_updated: jobs_got
   when "batch_update_jobs_with_mask"
     list_job_response = job_discovery_list_jobs company_name: company_name,
-                                                google_cloud_project_id: default_google_cloud_project_id
+                                                project_id: default_project_id
     jobs_got = list_job_response.jobs
     jobs_got.each do |job|
       job.title = job.title + " updated with mask"
@@ -231,7 +232,7 @@ def run_batch_operation_sample arguments
     job_discovery_batch_update_jobs_with_mask job_to_be_updated: jobs_got
   when "batch_delete_jobs"
     list_job_response = job_discovery_list_jobs company_name: company_name,
-                                                google_cloud_project_id: default_google_cloud_project_id
+                                                project_id: default_project_id
     jobs_got = list_job_response.jobs
     jobs_got.each do |job|
       job_names.push job.name

@@ -23,6 +23,7 @@ require_relative "../V3/auto_complete_sample"
 require_relative "../V3/batch_operation_sample"
 require_relative "../V3/commute_search_sample"
 require_relative "../V3/custom_attribute_sample"
+require_relative "../V3/email_alert_search_sample"
 require_relative "../V3/featured_job_sample"
 require_relative "../V3/filter_search_sample"
 require_relative "../V3/histogram_sample"
@@ -33,7 +34,6 @@ RSpec.configure do |config|
   config.verbose_retry = true
   # show exception that triggers a retry if verbose_retry is set to true
   config.display_try_failure_messages = true
-
   # set retry count and retry sleep interval to 10 seconds
   config.default_retry_count = 5
   config.default_sleep_interval = 10
@@ -44,7 +44,7 @@ describe "Cloud Job Discovery Samples" do
 
   before do
     $stdout = StringIO.new
-    @default_google_cloud_project_id = "projects/#{ENV["GOOGLE_CLOUD_PROJECT"]}"
+    @default_project_id = "projects/#{ENV["GOOGLE_CLOUD_PROJECT"]}"
   end
 
   # Capture and return STDOUT output by block
@@ -56,28 +56,28 @@ describe "Cloud Job Discovery Samples" do
   ensure
     $stdout = real_stdout
   end
-  attr_reader :captured_output
 
+  attr_reader :captured_output
 
 # verify basic_company_sample.rb
   it "basic_company_sample" do
     capture do
-      company_generated = 
-        job_discovery_generate_company display_name: "Google", 
+      company_generated =
+        job_discovery_generate_company display_name: "Google",
                                        external_id: "externalId: Google #{SecureRandom.hex}",
                                        headquarters_address: "1600 Amphitheatre Parkway " +
                                                              "Mountain View, CA 94043"
-      company_created = 
+      company_created =
         job_discovery_create_company company_to_be_created: company_generated,
-                                     google_cloud_project_id: @default_google_cloud_project_id
+                                     project_id: @default_project_id
       company_got  = job_discovery_get_company company_name: company_created.name
       company_created.display_name = "Updated name Google"
-      company_updated = job_discovery_update_company company_name: company_created.name, 
+      company_updated = job_discovery_update_company company_name: company_created.name,
                                                      company_updated: company_created
       company_created.display_name = "Updated name with field mask Google"
-      company_updated_with_field_mask = 
-        job_discovery_update_company_with_field_mask company_name: company_created.name, 
-                                                     field_mask: "DisplayName", 
+      company_updated_with_field_mask =
+        job_discovery_update_company_with_field_mask company_name: company_created.name,
+                                                     field_mask: "DisplayName",
                                                      company_updated: company_created
       job_discovery_delete_company company_name:company_created.name
       # Verify status of job service
@@ -92,26 +92,26 @@ describe "Cloud Job Discovery Samples" do
 # verify basic_job_sample.rb
   it "basic_job_sample" do
     capture do
-      company_generated = 
-        job_discovery_generate_company display_name: "Google", 
+      company_generated =
+        job_discovery_generate_company display_name: "Google",
                                        external_id: "externalId: Google #{SecureRandom.hex}",
                                        headquarters_address: "1600 Amphitheatre Parkway " +
                                                              "Mountain View, CA 94043"
-      company_created = 
+      company_created =
         job_discovery_create_company company_to_be_created: company_generated,
-                                     google_cloud_project_id: @default_google_cloud_project_id
+                                     project_id: @default_project_id
       job_generated = job_discovery_generate_job company_name: company_created.name,
-                                                      requisition_id: "#{company_created.name} #{SecureRandom.hex}"
+                                                 requisition_id: "#{company_created.name} #{SecureRandom.hex}"
       job_created = job_discovery_create_job job_to_be_created: job_generated,
-                                                  google_cloud_project_id: @default_google_cloud_project_id
+                                             project_id: @default_project_id
       job_got = job_discovery_get_job job_name: job_created.name
       job_created.description = "Updated description"
-      job_updated = job_discovery_update_job job_name: job_created.name, 
+      job_updated = job_discovery_update_job job_name: job_created.name,
                                              job_to_be_updated: job_created
       job_created.title = "Updated title software Engineer"
-      job_updated_with_field_mask = 
+      job_updated_with_field_mask =
         job_discovery_update_job_with_field_mask job_name: job_created.name,
-                                                 field_mask: "title", 
+                                                 field_mask: "title",
                                                  job_to_be_updated: job_created
       job_discovery_delete_job job_name: job_created.name
       job_discovery_delete_company company_name: company_created.name
@@ -127,25 +127,25 @@ describe "Cloud Job Discovery Samples" do
 # verify auto_complete_sample.rb
   it "auto_complete_sample" do
     capture do
-      company_generated = 
-        job_discovery_generate_company display_name: "Google", 
+      company_generated =
+        job_discovery_generate_company display_name: "Google",
                                        external_id: "externalId: Google #{SecureRandom.hex}",
                                        headquarters_address: "1600 Amphitheatre Parkway " +
                                                              "Mountain View, CA 94043"
-      company_created = 
+      company_created =
         job_discovery_create_company company_to_be_created: company_generated,
-                                     google_cloud_project_id: @default_google_cloud_project_id
+                                     project_id: @default_project_id
       job_generated = job_discovery_generate_job company_name: company_created.name,
-                                                      requisition_id: "#{company_created.name} #{SecureRandom.hex}"
+                                                 requisition_id: "#{company_created.name} #{SecureRandom.hex}"
       job_generated.title = "software enginner"
       job_created = job_discovery_create_job job_to_be_created: job_generated,
-                                                  google_cloud_project_id: @default_google_cloud_project_id
-      title_auto_complete_result = job_discovery_job_title_auto_complete company_name: company_created.name, 
-                                                                   query: "sof", 
-                                                                   google_cloud_project_id: @default_google_cloud_project_id
-      default_auto_complete_result = job_discovery_default_auto_complete company_name: company_created.name, 
-                                                                         query: "sof", 
-                                                                         google_cloud_project_id: @default_google_cloud_project_id
+                                             project_id: @default_project_id
+      title_auto_complete_result = job_discovery_job_title_auto_complete company_name: company_created.name,
+                                                                         query: "sof",
+                                                                         project_id: @default_project_id
+      default_auto_complete_result = job_discovery_default_auto_complete company_name: company_created.name,
+                                                                         query: "sof",
+                                                                         project_id: @default_project_id
       job_discovery_delete_job job_name: job_created.name
       job_discovery_delete_company company_name: company_created.name
       # Verify status of job service
@@ -157,16 +157,16 @@ describe "Cloud Job Discovery Samples" do
   it "batch_operation_sample" do
     job_names = Array.new
     capture do
-      company_generated = 
-        job_discovery_generate_company display_name: "Google", 
+      company_generated =
+        job_discovery_generate_company display_name: "Google",
                                        external_id: "externalId: Google #{SecureRandom.hex}",
                                        headquarters_address: "1600 Amphitheatre Parkway " +
                                                              "Mountain View, CA 94043"
-      company_created = 
+      company_created =
         job_discovery_create_company company_to_be_created: company_generated,
-                                     google_cloud_project_id: @default_google_cloud_project_id
+                                     project_id: @default_project_id
       jobs_created = job_discovery_batch_create_jobs company_name: company_created.name,
-                                                     google_cloud_project_id: @default_google_cloud_project_id
+                                                     project_id: @default_project_id
       jobs_created.each do |job|
         job.description = job.description + " updated"
       end
@@ -196,24 +196,24 @@ describe "Cloud Job Discovery Samples" do
 # verify commute_search_sample.rb
   it "commute_search_sample" do
     capture do
-      company_generated = 
-        job_discovery_generate_company display_name: "Google", 
+      company_generated =
+        job_discovery_generate_company display_name: "Google",
                                        external_id: "externalId: Google #{SecureRandom.hex}",
                                        headquarters_address: "1600 Amphitheatre Parkway " +
                                                              "Mountain View, CA 94043"
-      company_created = 
+      company_created =
         job_discovery_create_company company_to_be_created: company_generated,
-                                     google_cloud_project_id: @default_google_cloud_project_id
+                                     project_id: @default_project_id
       job_generated = job_discovery_generate_job company_name: company_created.name,
                                                  requisition_id: "#{company_created.name} #{SecureRandom.hex}"
       job_created = job_discovery_create_job job_to_be_created: job_generated,
-                                             google_cloud_project_id: @default_google_cloud_project_id
+                                             project_id: @default_project_id
       sleep 60
       location = company_created.derived_info.headquarters_location.lat_lng
       commute_search_result = job_discovery_commute_search commute_method: "DRIVING",
                                                            travel_duration: "1000s",
-                                                           start_coordinates: location, 
-                                                           google_cloud_project_id: @default_google_cloud_project_id
+                                                           start_coordinates: location,
+                                                           project_id: @default_project_id
       job_discovery_delete_job job_name: job_created.name
       job_discovery_delete_company company_name: company_created.name
       expect(commute_search_result).not_to be nil
@@ -222,28 +222,28 @@ describe "Cloud Job Discovery Samples" do
 # verify custom_attribute_sample.rb
   it "custom_attribute_sample" do
     capture do
-      company_generated = 
-        job_discovery_generate_company display_name: "Google", 
+      company_generated =
+        job_discovery_generate_company display_name: "Google",
                                        external_id: "externalId: Google #{SecureRandom.hex}",
                                        headquarters_address: "1600 Amphitheatre Parkway " +
                                                              "Mountain View, CA 94043"
-      company_created = 
+      company_created =
         job_discovery_create_company company_to_be_created: company_generated,
-                                     google_cloud_project_id: @default_google_cloud_project_id
-      job_generated = 
+                                     project_id: @default_project_id
+      job_generated =
         job_discovery_generate_job_with_custom_attribute company_name: company_created.name,
                                                          requisition_id: "#{company_created.name} #{SecureRandom.hex}"
       job_created = job_discovery_create_job job_to_be_created: job_generated,
-                                                  google_cloud_project_id: @default_google_cloud_project_id
+                                             project_id: @default_project_id
       sleep 10
       long_filter_result =
-        job_discovery_filters_on_long_value_custom_attribute google_cloud_project_id: @default_google_cloud_project_id,
-                                                            company_name: company_created.name
+        job_discovery_filters_on_long_value_custom_attribute project_id: @default_project_id,
+                                                             company_name: company_created.name
       string_filter_result =
-        job_discovery_filters_on_string_value_custom_attribute google_cloud_project_id: @default_google_cloud_project_id,
+        job_discovery_filters_on_string_value_custom_attribute project_id: @default_project_id,
                                                                company_name: company_created.name
       multi_filters_result =
-        job_discovery_filters_on_multi_custom_attributes google_cloud_project_id: @default_google_cloud_project_id,
+        job_discovery_filters_on_multi_custom_attributes project_id: @default_project_id,
                                                          company_name: company_created.name
       job_discovery_delete_job job_name: job_created.name
       job_discovery_delete_company company_name: company_created.name
@@ -252,27 +252,52 @@ describe "Cloud Job Discovery Samples" do
       expect(multi_filters_result.matching_jobs).not_to be nil
     end
   end
-# verify featured_job_sample.rb
-  it "featured_job_sample" do
+# verify email_alert_search_sample.rb
+  it "email_alert_search_sample" do
     capture do
-      company_generated = 
-        job_discovery_generate_company display_name: "Google", 
+      company_generated =
+        job_discovery_generate_company display_name: "Google",
                                        external_id: "externalId: Google #{SecureRandom.hex}",
                                        headquarters_address: "1600 Amphitheatre Parkway " +
                                                              "Mountain View, CA 94043"
-      company_created = 
+      company_created =
         job_discovery_create_company company_to_be_created: company_generated,
-                                     google_cloud_project_id: @default_google_cloud_project_id
-      job_generated = 
+                                     project_id: @default_project_id
+      job_generated =
+        job_discovery_generate_job_with_custom_attribute company_name: company_created.name,
+                                                         requisition_id: "#{company_created.name} #{SecureRandom.hex}"
+      job_created = job_discovery_create_job job_to_be_created: job_generated,
+                                             project_id: @default_project_id
+      sleep 10
+      email_alert_search_result =
+        job_discovery_email_alert_search project_id: @default_project_id,
+                                         company_name: company_created.name
+      job_discovery_delete_job job_name: job_created.name
+      job_discovery_delete_company company_name: company_created.name
+      expect(email_alert_search_result.matching_jobs).not_to be nil
+    end
+  end
+# verify featured_job_sample.rb
+  it "featured_job_sample" do
+    capture do
+      company_generated =
+        job_discovery_generate_company display_name: "Google",
+                                       external_id: "externalId: Google #{SecureRandom.hex}",
+                                       headquarters_address: "1600 Amphitheatre Parkway " +
+                                                             "Mountain View, CA 94043"
+      company_created =
+        job_discovery_create_company company_to_be_created: company_generated,
+                                     project_id: @default_project_id
+      job_generated =
         job_discovery_generate_featured_job company_name: company_created.name,
                                             requisition_id: "#{company_created.name} #{SecureRandom.hex}"
       job_generated.title = "Lab Technician"
       job_created = job_discovery_create_job job_to_be_created: job_generated,
-                                                  google_cloud_project_id: @default_google_cloud_project_id
+                                             project_id: @default_project_id
       sleep 10
       search_result = job_discovery_featured_jobs_search company_name: company_created.name,
-                                                         query: "Lab", 
-                                                         google_cloud_project_id: @default_google_cloud_project_id
+                                                         query: "Lab",
+                                                         project_id: @default_project_id
       job_discovery_delete_job job_name: job_created.name
       job_discovery_delete_company company_name: company_created.name
       expect(search_result.matching_jobs).not_to be nil
@@ -281,41 +306,41 @@ describe "Cloud Job Discovery Samples" do
 # verify filter_search_sample.rb
   it "filter_search_sample" do
     capture do
-      company_generated = 
-        job_discovery_generate_company display_name: "Google", 
+      company_generated =
+        job_discovery_generate_company display_name: "Google",
                                        external_id: "externalId: Google #{SecureRandom.hex}",
                                        headquarters_address: "1600 Amphitheatre Parkway " +
                                                              "Mountain View, CA 94043"
-      company_created = 
+      company_created =
         job_discovery_create_company company_to_be_created: company_generated,
-                                     google_cloud_project_id: @default_google_cloud_project_id
+                                     project_id: @default_project_id
       job_generated = job_discovery_generate_job company_name: company_created.name,
-                                                      requisition_id: "#{company_created.name} #{SecureRandom.hex}"
+                                                 requisition_id: "#{company_created.name} #{SecureRandom.hex}"
       job_created = job_discovery_create_job job_to_be_created: job_generated,
-                                                  google_cloud_project_id: @default_google_cloud_project_id
+                                             project_id: @default_project_id
       sleep 10
       keyword_search_result = job_discovery_basic_keyword_search company_name: company_created.name,
-                                                                 query: job_created.title, 
-                                                                 google_cloud_project_id: @default_google_cloud_project_id
+                                                                 query: job_created.title,
+                                                                 project_id: @default_project_id
       filter_search_result = job_discovery_category_filter_search company_name: company_created.name,
-                                                                  categories: job_created.derived_info.job_categories, 
-                                                                  google_cloud_project_id: @default_google_cloud_project_id
+                                                                  categories: job_created.derived_info.job_categories,
+                                                                  project_id: @default_project_id
       employment_search_result = job_discovery_employment_types_filter_search company_name: company_created.name,
-                                                                              employment_types: job_created.employment_types, 
-                                                                              google_cloud_project_id: @default_google_cloud_project_id
-      date_search_result = job_discovery_date_range_filter_search company_name: company_created.name, 
-                                                                  start_time: "1980-01-15T01:30:15.01Z", 
-                                                                  end_time: "2099-01-15T01:30:15.01Z", 
-                                                                  google_cloud_project_id: @default_google_cloud_project_id
-      code_search_result = job_discovery_language_code_filter_search company_name: company_created.name, 
+                                                                              employment_types: job_created.employment_types,
+                                                                              project_id: @default_project_id
+      date_search_result = job_discovery_date_range_filter_search company_name: company_created.name,
+                                                                  start_time: "1980-01-15T01:30:15.01Z",
+                                                                  end_time: "2099-01-15T01:30:15.01Z",
+                                                                  project_id: @default_project_id
+      code_search_result = job_discovery_language_code_filter_search company_name: company_created.name,
                                                                      language_codes: ["en-Us"],
-                                                                     google_cloud_project_id: @default_google_cloud_project_id
-      name_search_result = job_discovery_company_display_name_search company_display_names: ["Google"], 
-                                                                     google_cloud_project_id: @default_google_cloud_project_id
+                                                                     project_id: @default_project_id
+      name_search_result = job_discovery_company_display_name_search company_display_names: ["Google"],
+                                                                     project_id: @default_project_id
       compensation_search_result = job_discovery_compensation_search company_name: company_created.name,
                                                                      min_unit: 0,
                                                                      max_unit: 100,
-                                                                     google_cloud_project_id: @default_google_cloud_project_id
+                                                                     project_id: @default_project_id
       job_discovery_delete_job job_name: job_created.name
       job_discovery_delete_company company_name: company_created.name
       expect(keyword_search_result.matching_jobs).not_to be nil
@@ -330,21 +355,21 @@ describe "Cloud Job Discovery Samples" do
 # verify histogram_sample.rb
   it "histogram_sample" do
     capture do
-      company_generated = 
-        job_discovery_generate_company display_name: "Google", 
+      company_generated =
+        job_discovery_generate_company display_name: "Google",
                                        external_id: "externalId: Google #{SecureRandom.hex}",
                                        headquarters_address: "1600 Amphitheatre Parkway " +
                                                              "Mountain View, CA 94043"
-      company_created = 
+      company_created =
         job_discovery_create_company company_to_be_created: company_generated,
-                                     google_cloud_project_id: @default_google_cloud_project_id
+                                     project_id: @default_project_id
       job_generated = job_discovery_generate_job company_name: company_created.name,
-                                                      requisition_id: "#{company_created.name} #{SecureRandom.hex}"
+                                                 requisition_id: "#{company_created.name} #{SecureRandom.hex}"
       job_created = job_discovery_create_job job_to_be_created: job_generated,
-                                                  google_cloud_project_id: @default_google_cloud_project_id
+                                             project_id: @default_project_id
       sleep 10
       search_result = job_discovery_histogram_search company_name: company_created.name,
-                                                     google_cloud_project_id: @default_google_cloud_project_id
+                                                     project_id: @default_project_id
       job_discovery_delete_job job_name: job_created.name
       job_discovery_delete_company company_name: company_created.name
       expect(search_result.matching_jobs).not_to be nil
@@ -353,45 +378,45 @@ describe "Cloud Job Discovery Samples" do
 # verify location_search_sample.rb
   it "location_search_sample" do
     begin
-      company_generated = 
-        job_discovery_generate_company display_name: "Google", 
+      company_generated =
+        job_discovery_generate_company display_name: "Google",
                                        external_id: "externalId: Google #{SecureRandom.hex}",
                                        headquarters_address: "1600 Amphitheatre Parkway " +
                                                              "Mountain View, CA 94043"
-      company_created = 
+      company_created =
         job_discovery_create_company company_to_be_created: company_generated,
-                                     google_cloud_project_id: @default_google_cloud_project_id
+                                     project_id: @default_project_id
       job_generated1 = job_discovery_generate_job company_name: company_created.name,
-                                                       requisition_id: "#{company_created.name} #{SecureRandom.hex}"
+                                                  requisition_id: "#{company_created.name} #{SecureRandom.hex}"
       job_generated1.addresses =["Mountain View, CA"]
       job_created1 = job_discovery_create_job job_to_be_created: job_generated1,
-                                                   google_cloud_project_id: @default_google_cloud_project_id
+                                              project_id: @default_project_id
       job_generated1 = job_discovery_generate_job company_name: company_created.name,
-                                                       requisition_id: "#{company_created.name} #{SecureRandom.hex}"
+                                                  requisition_id: "#{company_created.name} #{SecureRandom.hex}"
       job_generated2.addresses = ["Sunnyvale, CA"]
       job_created2 = job_discovery_create_job job_to_be_created: job_generated2,
-                                                   google_cloud_project_id: @default_google_cloud_project_id
+                                              project_id: @default_project_id
       sleep 10
       basic_search_result = job_discovery_basic_location_search company_name: company_created.name,
                                                                 location: "Mountain View, CA",
                                                                 distance: 0.5,
-                                                                google_cloud_project_id: @default_google_cloud_project_id
+                                                                project_id: @default_project_id
       keyword_search_result = job_discovery_keyword_location_search company_name: company_created.name,
-                                                                    location: "Mountain View, CA", 
+                                                                    location: "Mountain View, CA",
                                                                     distance: 0.5,
-                                                                    keyword: "Lab", 
-                                                                    google_cloud_project_id: @default_google_cloud_project_id
+                                                                    keyword: "Lab",
+                                                                    project_id: @default_project_id
       city_search_result = job_discovery_city_location_search company_name: company_created.name,
-                                                              city: "Mountain View, CA", 
-                                                              google_cloud_project_id: @default_google_cloud_project_id
+                                                              city: "Mountain View, CA",
+                                                              project_id: @default_project_id
       multi_search_result = job_discovery_multi_location_search company_name: company_created.name,
-                                                                location1: "Mountain View, CA", 
-                                                                distance1: 0.5, 
-                                                                city2: "Sunnyvale", 
-                                                                google_cloud_project_id: @default_google_cloud_project_id
-      broadening_search_result = job_discovery_broadening_location_search company_name: company_created.name, 
-                                                                          city: "Sunnyvale", 
-                                                                          google_cloud_project_id: @default_google_cloud_project_id
+                                                                location1: "Mountain View, CA",
+                                                                distance1: 0.5,
+                                                                city2: "Sunnyvale",
+                                                                project_id: @default_project_id
+      broadening_search_result = job_discovery_broadening_location_search company_name: company_created.name,
+                                                                          city: "Sunnyvale",
+                                                                          project_id: @default_project_id
       job_discovery_delete_job job_name: job_created1.name
       job_discovery_delete_job job_name: job_created2.name
       job_discovery_delete_company company_name: company_created.name
@@ -407,4 +432,3 @@ describe "Cloud Job Discovery Samples" do
     end
   end
 end
-

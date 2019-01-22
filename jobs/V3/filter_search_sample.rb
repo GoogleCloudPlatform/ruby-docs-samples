@@ -12,11 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-def job_discovery_basic_keyword_search google_cloud_project_id:, company_name:, query:
+def job_discovery_basic_keyword_search project_id:, company_name:, query:
   # [START job_discovery_basic_keyword_search]
-  # google_cloud_project_id = "Id of the project"
-  # company_name            = "The resource name of the company listing the job. The format is "projects/{google_cloud_project_id}/companies/{company_id}""
-  # query                   = "Specify the job criteria to match against. These include location, job categories, employment types, text queries, companies, etc"
+  # project_id      = "Id of the project"
+  # company_name    = "The resource name of the company listing the job. The format is "projects/{project_id}/companies/{company_id}""
+  # query           = "Specify the job criteria to match against. These include location, job categories, employment types, text queries, companies, etc"
 
   require "google/apis/jobs_v3"
 
@@ -41,17 +41,17 @@ def job_discovery_basic_keyword_search google_cloud_project_id:, company_name:, 
   search_jobs_request = jobs::SearchJobsRequest.new request_metadata: request_metadata,
                                                     job_query: job_query,
                                                     search_mode: "JOB_SEARCH"
-  search_jobs_response = talent_solution_client.search_jobs(google_cloud_project_id, search_jobs_request)
+  search_jobs_response = talent_solution_client.search_jobs(project_id, search_jobs_request)
   puts search_jobs_response.to_json
   return search_jobs_response
   # [END job_discovery_basic_keyword_search]
 end
 
-def job_discovery_category_filter_search google_cloud_project_id:, company_name:, categories:
+def job_discovery_category_filter_search project_id:, company_name:, categories:
   # [START job_discovery_category_filter_search]
-  # google_cloud_project_id = "Id of the project"
-  # company_name            = "The resource name of the company listing the job. The format is "projects/{google_cloud_project_id}/companies/{company_id}""
-  # categories              = "Array of categories which we want to search on"
+  # project_id      = "Id of the project"
+  # company_name    = "The resource name of the company listing the job. The format is "projects/{project_id}/companies/{company_id}""
+  # categories      = "Array of categories which we want to search on"
 
   require "google/apis/jobs_v3"
   # Instantiate the client
@@ -75,17 +75,17 @@ def job_discovery_category_filter_search google_cloud_project_id:, company_name:
   search_jobs_request = jobs::SearchJobsRequest.new request_metadata: request_metadata,
                                                     job_query: job_query,
                                                     search_mode: "JOB_SEARCH"
-  search_jobs_response = talent_solution_client.search_jobs(google_cloud_project_id, search_jobs_request)
+  search_jobs_response = talent_solution_client.search_jobs(project_id, search_jobs_request)
   puts search_jobs_response.to_json
   return search_jobs_response
   # [END job_discovery_category_filter_search]
 end
 
-def job_discovery_employment_types_filter_search google_cloud_project_id:, company_name:, employment_types:
+def job_discovery_employment_types_filter_search project_id:, company_name:, employment_types:
   # [START job_discovery_employment_types_filter_search]
-  # google_cloud_project_id = "Id of the project"
-  # company_name            = "The resource name of the company listing the job. The format is "projects/{google_cloud_project_id}/companies/{company_id}""
-  # employment_types        = "Array of employment types which we want to search on"
+  # project_id          = "Id of the project"
+  # company_name        = "The resource name of the company listing the job. The format is "projects/{project_id}/companies/{company_id}""
+  # employment_types    = "Array of employment types which we want to search on"
 
   require "google/apis/jobs_v3"
 
@@ -110,18 +110,18 @@ def job_discovery_employment_types_filter_search google_cloud_project_id:, compa
   search_jobs_request = jobs::SearchJobsRequest.new request_metadata: request_metadata,
                                                     job_query: job_query,
                                                     search_mode: "JOB_SEARCH"
-  search_jobs_response = talent_solution_client.search_jobs(google_cloud_project_id, search_jobs_request)
+  search_jobs_response = talent_solution_client.search_jobs(project_id, search_jobs_request)
   puts search_jobs_response.to_json
   return search_jobs_response
   # [END job_discovery_employment_types_filter_search]
 end
 
-def job_discovery_date_range_filter_search google_cloud_project_id:, company_name:, start_time:, end_time:
+def job_discovery_date_range_filter_search project_id:, company_name:, start_time:, end_time:
   # [START job_discovery_date_range_filter_search]
-  # google_cloud_project_id = "Id of the project"
-  # company_name            = "The resource name of the company listing the job. The format is "projects/{google_cloud_project_id}/companies/{company_id}""
-  # start_time              = "Start time of the date range we want to search on"
-  # end_time                = "End time of the date range we want to search on"
+  # project_id      = "Id of the project"
+  # company_name    = "The resource name of the company listing the job. The format is "projects/{project_id}/companies/{company_id}""
+  # start_time      = "Start time of the date range we want to search on"
+  # end_time        = "End time of the date range we want to search on"
 
   require "google/apis/jobs_v3"
   # Instantiate the client
@@ -145,18 +145,18 @@ def job_discovery_date_range_filter_search google_cloud_project_id:, company_nam
   search_jobs_request = jobs::SearchJobsRequest.new request_metadata: request_metadata,
                                                     job_query: job_query,
                                                     search_mode: "JOB_SEARCH"
-  search_jobs_response = talent_solution_client.search_jobs(google_cloud_project_id, search_jobs_request)
+  search_jobs_response = talent_solution_client.search_jobs(project_id, search_jobs_request)
 
   puts search_jobs_response.to_json
   return search_jobs_response
   # [END job_discovery_date_range_filter_search]
 end
 
-def job_discovery_language_code_filter_search google_cloud_project_id:, company_name:, language_codes:
+def job_discovery_language_code_filter_search project_id:, company_name:, language_codes:
   # [START job_discovery_language_code_filter_search]
-  # google_cloud_project_id = "Id of the project"
-  # company_name            = "The resource name of the company listing the job. The format is "projects/{google_cloud_project_id}/companies/{company_id}""
-  # language_codes          = "Array of language codes which we want to search on"
+  # project_id        = "Id of the project"
+  # company_name      = "The resource name of the company listing the job. The format is "projects/{project_id}/companies/{company_id}""
+  # language_codes    = "Array of language codes which we want to search on"
 
   require "google/apis/jobs_v3"
 
@@ -179,16 +179,16 @@ def job_discovery_language_code_filter_search google_cloud_project_id:, company_
   search_jobs_request = jobs::SearchJobsRequest.new request_metadata: request_metadata,
                                                     job_query: job_query,
                                                     search_mode: "JOB_SEARCH"
-  search_jobs_response = talent_solution_client.search_jobs(google_cloud_project_id, search_jobs_request)
+  search_jobs_response = talent_solution_client.search_jobs(project_id, search_jobs_request)
 
   puts search_jobs_response.to_json
   return search_jobs_response
   # [END job_discovery_language_code_filter_search]
 end
 
-def job_discovery_company_display_name_search google_cloud_project_id:, company_display_names:
+def job_discovery_company_display_name_search project_id:, company_display_names:
   # [START job_discovery_company_display_name_search]
-  # google_cloud_project_id = "Id of the project"
+  # project_id              = "Id of the project"
   # company_display_names   = "Array of company display names which we want to search on"
 
   require "google/apis/jobs_v3"
@@ -209,19 +209,19 @@ def job_discovery_company_display_name_search google_cloud_project_id:, company_
   search_jobs_request = jobs::SearchJobsRequest.new request_metadata: request_metadata,
                                                     job_query: job_query,
                                                     search_mode: "JOB_SEARCH"
-  search_jobs_response = talent_solution_client.search_jobs(google_cloud_project_id, search_jobs_request)
+  search_jobs_response = talent_solution_client.search_jobs(project_id, search_jobs_request)
 
   puts search_jobs_response.to_json
   return search_jobs_response
   # [END job_discovery_company_display_name_search]
 end
 
-def job_discovery_compensation_search google_cloud_project_id:, company_name:, min_unit:, max_unit:
+def job_discovery_compensation_search project_id:, company_name:, min_unit:, max_unit:
   # [START job_discovery_compensation_search]
-  # google_cloud_project_id = "Id of the project"
-  # company_name            = "The resource name of the company listing the job. The format is "projects/{google_cloud_project_id}/companies/{company_id}""
-  # min_unit                = "Min value of the compensation range we want to search on"
-  # max_unit                = "Max value of the compensation range we want to search on"
+  # project_id        = "Id of the project"
+  # company_name      = "The resource name of the company listing the job. The format is "projects/{project_id}/companies/{company_id}""
+  # min_unit          = "Min value of the compensation range we want to search on"
+  # max_unit          = "Max value of the compensation range we want to search on"
 
   require "google/apis/jobs_v3"
   # Instantiate the client
@@ -256,7 +256,7 @@ def job_discovery_compensation_search google_cloud_project_id:, company_name:, m
   search_jobs_request = jobs::SearchJobsRequest.new request_metadata: request_metadata,
                                                     job_query: job_query,
                                                     search_mode: "JOB_SEARCH"
-  search_jobs_response = talent_solution_client.search_jobs(google_cloud_project_id, search_jobs_request)
+  search_jobs_response = talent_solution_client.search_jobs(project_id, search_jobs_request)
 
   puts search_jobs_response.to_json
   return search_jobs_response
@@ -269,9 +269,9 @@ def run_filter_search_sample arguments
   require_relative "basic_job_sample"
 
   command = arguments.shift
-  default_google_cloud_project_id = "projects/#{ENV["GOOGLE_CLOUD_PROJECT"]}"
+  default_project_id = "projects/#{ENV["GOOGLE_CLOUD_PROJECT"]}"
   if command != "company_display_name_search"
-    company_name = "#{default_google_cloud_project_id}/companies/#{arguments.shift}"
+    company_name = "#{default_project_id}/companies/#{arguments.shift}"
   end
   if command == "category_filter_search" || command == "employment_types_filter_search" ||
      command == "language_code_filter_search" || command == "company_display_name_search"
@@ -282,32 +282,32 @@ def run_filter_search_sample arguments
   when "basic_keyword_search"
     job_discovery_basic_keyword_search company_name: company_name,
                                        query: arguments.shift,
-                                       google_cloud_project_id: default_google_cloud_project_id
+                                       project_id: default_project_id
   when "category_filter_search"
     job_discovery_category_filter_search company_name: company_name,
                                          categories: user_input_array,
-                                         google_cloud_project_id: default_google_cloud_project_id
+                                         project_id: default_project_id
     when "employment_types_filter_search"
     job_discovery_employment_types_filter_search company_name: company_name,
                                                  employment_types: user_input_array,
-                                                 google_cloud_project_id: default_google_cloud_project_id
+                                                 project_id: default_project_id
   when "date_range_filter_search"
     job_discovery_date_range_filter_search company_name: company_name,
                                            start_time: arguments.shift,
                                            end_time: arguments.shift,
-                                           google_cloud_project_id: default_google_cloud_project_id
+                                           project_id: default_project_id
   when "language_code_filter_search"
     job_discovery_language_code_filter_search company_name: company_name,
                                               language_codes: user_input_array,
-                                              google_cloud_project_id: default_google_cloud_project_id
+                                              project_id: default_project_id
   when "company_display_name_search"
     job_discovery_company_display_name_search company_display_names: user_input_array,
-                                              google_cloud_project_id: default_google_cloud_project_id
+                                              project_id: default_project_id
   when "compensation_search"
     job_discovery_compensation_search company_name: company_name,
                                       min_unit: arguments.shift,
                                       max_unit: arguments.shift,
-                                      google_cloud_project_id: default_google_cloud_project_id
+                                      project_id: default_project_id
   else
   puts <<-usage
 Usage: bundle exec ruby filter_search_sample.rb [command] [arguments]

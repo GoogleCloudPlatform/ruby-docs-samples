@@ -1,4 +1,4 @@
-# Copyright 2018 Google, Inc
+# Copyright 2019 Google, Inc
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,10 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-def job_discovery_histogram_search project_id:, company_name:
-  # [START job_discovery_histogram_search]
-  # project_id     = "Id of the project"
-  # company_name   = "The resource name of the company listing the job. The format is "projects/{project_id}/companies/{company_id}""
+def job_discovery_email_alert_search project_id:, company_name:
+  # [START job_discovery_email_alert_search]
+  # project_id      = "Id of the project"
+  # company_name    = "The resource name of the company listing the job. The format is "projects/{project_id}/companies/{company_id}""
+
   require "google/apis/jobs_v3"
 
   # Instantiate the client
@@ -26,48 +27,44 @@ def job_discovery_histogram_search project_id:, company_name:
   talent_solution_client.authorization = Google::Auth.get_application_default(
     "https://www.googleapis.com/auth/jobs"
   )
-
   # Make sure to set the request_metadata the same as the associated search request
   request_metadata = jobs::RequestMetadata.new user_id: "HashedUserId",
                                                session_id: "HashedSessionId",
-                                               domain: "http://careers.google.com"
+                                               domain: "www.google.com"
 
-  custom_attribute_histogram_request =
-    jobs::CustomAttributeHistogramRequest.new key: "someFieldName1",
-                                              string_value_histogram: true
-  histogram_facets =
-    jobs::HistogramFacets.new simple_histogram_facets: ["COMPANY_ID"],
-                              custom_attribute_histogram_facets: [custom_attribute_histogram_request]
   # Perform a search for analyst  related jobs
-  job_query = jobs::JobQuery.new company_names: [company_name]
-
+  job_query = jobs::JobQuery.new
+  if !company_name.nil?
+    job_query.company_names = [company_name]
+  end
   search_jobs_request = jobs::SearchJobsRequest.new request_metadata: request_metadata,
                                                     job_query: job_query,
-                                                    histogram_facets: histogram_facets
-  search_jobs_response = talent_solution_client.search_jobs(project_id, search_jobs_request)
-
+                                                    search_mode: "JOB_SEARCH"
+  search_jobs_response = talent_solution_client.search_project_job_for_alert(project_id,
+                                                                             search_jobs_request)
   puts search_jobs_response.to_json
   return search_jobs_response
+  # [END job_discovery_email_alert_search]
 end
-# [END job_discovery_histogram_search]
 
-def run_histogram_sample arguments
+def run_email_alert_search_sample arguments
 
   require_relative "basic_company_sample"
+  require_relative "basic_job_sample"
 
   command = arguments.shift
   default_project_id = "projects/#{ENV["GOOGLE_CLOUD_PROJECT"]}"
   company_name = "#{default_project_id}/companies/#{arguments.shift}"
 
   case command
-  when "histogram_search"
-    job_discovery_histogram_search company_name: company_name,
-                                   project_id: default_project_id
+  when "email_alert_search"
+    job_discovery_email_alert_search company_name: company_name,
+                                     project_id: default_project_id
   else
   puts <<-usage
-Usage: bundle exec ruby histogram_sample.rb [command] [arguments]
+Usage: bundle exec ruby email_alert_search_sample.rb [command] [arguments]
 Commands:
-  histogram_search      <company_id>   Search by histogram facets under given company.
+  email_alert_search           <company_id>      Search a job which has email alerts signed-up.
 Environment variables:
   GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
 usage
@@ -75,5 +72,5 @@ usage
 end
 
 if __FILE__ == $PROGRAM_NAME
-  run_histogram_sample ARGV
+  run_email_alert_search_sample ARGV
 end

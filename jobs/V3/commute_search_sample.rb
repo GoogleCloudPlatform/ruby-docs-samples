@@ -12,9 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-def job_discovery_commute_search google_cloud_project_id:, commute_method:, travel_duration:, start_coordinates:
+def job_discovery_commute_search project_id:, commute_method:, travel_duration:, start_coordinates:
   # [START job_discovery_commute_search]
-  # google_cloud_project_id = "Id of the project"
+  # project_id              = "Id of the project"
   # commute_method          = "The method of transportation for which to calculate the commute time"
   # travel_duration         = "The maximum travel time in seconds"
   # start_coordinates       = "The latitude and longitude of the location from which to calculate the commute time"
@@ -43,7 +43,7 @@ def job_discovery_commute_search google_cloud_project_id:, commute_method:, trav
                                 job_query: (jobs::JobQuery.new commute_filter: commute_filter),
                                 job_view: "JOB_VIEW_FULL",
                                 require_precise_result_size: true
-  search_jobs_response = talent_solution_client.search_jobs(google_cloud_project_id, search_jobs_request)
+  search_jobs_response = talent_solution_client.search_jobs(project_id, search_jobs_request)
   puts search_jobs_response.to_json
   return search_jobs_response
   # [END job_discovery_commute_search]
@@ -54,13 +54,13 @@ def run_commute_search_sample arguments
   command = arguments.shift
   commute_method = arguments.shift
   travel_duration = arguments.shift
-  default_google_cloud_project_id = "projects/#{ENV["GOOGLE_CLOUD_PROJECT"]}"
+  default_project_id = "projects/#{ENV["GOOGLE_CLOUD_PROJECT"]}"
   case command
   when "commute_search"
     location_arr = arguments.shift.split(',')
     location = Google::Apis::JobsV3::LatLng.new latitude: location_arr[0].to_f,
                                                 longitude: location_arr[1].to_f
-    job_discovery_commute_search google_cloud_project_id: default_google_cloud_project_id,
+    job_discovery_commute_search project_id: default_project_id,
                                  commute_method: commute_method,
                                  travel_duration: travel_duration,
                                  start_coordinates: location
