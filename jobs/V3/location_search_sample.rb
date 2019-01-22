@@ -120,7 +120,7 @@ def job_discovery_city_location_search google_cloud_project_id:, company_name:, 
 
   puts search_jobs_response.to_json
   return search_jobs_response
-  # [END job_discovery_keyword_location_search]
+  # [END job_discovery_city_location_search]
 end
 
 def job_discovery_multi_location_search google_cloud_project_id:, company_name:, location1:, distance1:, city2:

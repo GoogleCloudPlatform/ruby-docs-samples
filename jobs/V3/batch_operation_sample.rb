@@ -180,7 +180,7 @@ def job_discovery_batch_delete_jobs job_to_be_deleted:
 end
 
 def job_discovery_list_jobs google_cloud_project_id:, company_name:
-  # [START job_discovery_list_job]
+  # [START job_discovery_list_jobs]
   # company_name  = "The company's name which has the job you want to list. The format is "projects/{google_cloud_project_id}/companies/{company_id}""
   require "google/apis/jobs_v3"
 
@@ -198,7 +198,7 @@ def job_discovery_list_jobs google_cloud_project_id:, company_name:
   rescue => e
       puts "Exception occurred while getting job: #{e}"
   end
-  # [END job_discovery_get_job]
+  # [END job_discovery_list_jobs]
 end
 
 def run_batch_operation_sample arguments
