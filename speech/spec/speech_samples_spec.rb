@@ -134,4 +134,11 @@ describe "Google Cloud Speech API samples" do
       speech_transcribe_model_selection file_path: video_file_path, model: "video"
     }.to output(/the weather outside is sunny/).to_stdout
   end
+
+  example "transcribe audio file with multichannel" do
+    audio_file_path = File.expand_path "../resources/Google_Gnome.wav", __dir__
+    expect {
+      speech_transcribe_multichannel audio_file_path: audio_file_path
+    }.to output(/OK Google stream stranger things from Netflix to my TV/).to_stdout
+  end
 end
