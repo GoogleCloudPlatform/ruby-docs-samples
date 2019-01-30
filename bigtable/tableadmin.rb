@@ -21,14 +21,14 @@ require "google-cloud-bigtable"
 def run_table_operations instance_id, table_id
   bigtable = Google::Cloud.new.bigtable
   p "==> Checking if table exists"
-  table = bigtable.table(instance_id, table_id, perform_lookup: true)
+  table = bigtable.table instance_id, table_id, perform_lookup: true
 
   if table
     p "==> Table exists"
   else
     p "==> Table does not exist. Creating table `#{table_id}`"
     # [START bigtable_create_table]
-    table = bigtable.create_table(instance_id, table_id)
+    table = bigtable.create_table instance_id, table_id
     p "==> Table created #{table.name}"
     # [END bigtable_create_table]
   end
@@ -58,7 +58,7 @@ def run_table_operations instance_id, table_id
   # Create a column family with GC policy : maximum age
   # where age = current time minus cell timestamp
   # NOTE: Age value must be atleast 1 millisecond
-  gc_rule = Google::Cloud::Bigtable::GcRule.max_age(60 * 60 * 24 * 5)
+  gc_rule = Google::Cloud::Bigtable::GcRule.max_age 60 * 60 * 24 * 5
   family = table.column_family("cf1", gc_rule).create
   # [END bigtable_create_family_gc_max_age]
 
@@ -67,7 +67,7 @@ def run_table_operations instance_id, table_id
   # [START bigtable_create_family_gc_max_versions]
   # Create a column family with GC policy : most recent N versions
   # where 1 = most recent version
-  gc_rule = Google::Cloud::Bigtable::GcRule.max_versions(3)
+  gc_rule = Google::Cloud::Bigtable::GcRule.max_versions 3
   family = table.column_family("cf2", gc_rule).create
   # [END bigtable_create_family_gc_max_versions]
 
@@ -76,8 +76,8 @@ def run_table_operations instance_id, table_id
   # [START bigtable_create_family_gc_union]
   # Create a column family with GC policy to drop data that matches at least
   # one condition
-  gc_rule = Google::Cloud::Bigtable::GcRule.max_age(60 * 60 * 24 * 5)
-  union_gc_rule = Google::Cloud::Bigtable::GcRule.union(gc_rule)
+  gc_rule = Google::Cloud::Bigtable::GcRule.max_age 60 * 60 * 24 * 5
+  union_gc_rule = Google::Cloud::Bigtable::GcRule.union gc_rule
   family = table.column_family("cf3", union_gc_rule).create
   # [END bigtable_create_family_gc_union]
   p "==> Created column family: `#{family.name}`"
@@ -87,8 +87,8 @@ def run_table_operations instance_id, table_id
   # [START bigtable_create_family_gc_intersection]
   # Create a column family with GC policy to drop data that matches at least
   # one condition
-  gc_rule = Google::Cloud::Bigtable::GcRule.max_age(60 * 60 * 24 * 5)
-  intersection_gc_rule = Google::Cloud::Bigtable::GcRule.intersection(gc_rule)
+  gc_rule = Google::Cloud::Bigtable::GcRule.max_age 60 * 60 * 24 * 5
+  intersection_gc_rule = Google::Cloud::Bigtable::GcRule.intersection gc_rule
   family = table.column_family("cf4", intersection_gc_rule).create
   # [END bigtable_create_family_gc_intersection]
   p "==> Created column family: `#{family.name}`"
@@ -100,9 +100,9 @@ def run_table_operations instance_id, table_id
   # Drop cells that are either older than the 10 recent versions
   # OR
   # Drop cells that are older than a month AND older than the 2 recent versions
-  gc_rule1 = Google::Cloud::Bigtable::GcRule.max_age(60 * 60 * 24 * 30)
-  gc_rule2 = Google::Cloud::Bigtable::GcRule.max_versions(2)
-  nested_gc_rule = Google::Cloud::Bigtable::GcRule.union(gc_rule1, gc_rule2)
+  gc_rule1 = Google::Cloud::Bigtable::GcRule.max_age 60 * 60 * 24 * 30
+  gc_rule2 = Google::Cloud::Bigtable::GcRule.max_versions 2
+  nested_gc_rule = Google::Cloud::Bigtable::GcRule.union gc_rule1, gc_rule2
   # [END bigtable_create_family_gc_nested]
   family = table.column_family("cf5", nested_gc_rule).create
   p "==> Created column family: `#{family.name}`"
@@ -125,7 +125,7 @@ def run_table_operations instance_id, table_id
   p "==> Updating column family cf1 GC rule"
   # [START bigtable_update_gc_rule]
   family = table.column_families.find { |cf| cf.name == "cf1" }
-  family.gc_rule = Google::Cloud::Bigtable::GcRule.max_versions(1)
+  family.gc_rule = Google::Cloud::Bigtable::GcRule.max_versions 1
   updated_family = family.save
   p updated_family
   # [END bigtable_update_gc_rule]
@@ -152,7 +152,7 @@ def delete_table instance_id, table_id
 
   p "==> Delete the table."
   #  [START bigtable_delete_table]
-  table = bigtable.table(instance_id, table_id)
+  table = bigtable.table instance_id, table_id
   table.delete
   #  [END bigtable_delete_table]
 

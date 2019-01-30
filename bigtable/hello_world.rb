@@ -17,12 +17,12 @@ bigtable = gcloud.bigtable
 # [START creating_a_table]
 if bigtable.table(instance_id, table_id).exists?
   puts " '#{table_id}' is already exists."
-  exit(0)
+  exit 0
 else
   table = bigtable.create_table(instance_id, table_id) do |column_families|
     column_families.add(
       column_family,
-      Google::Cloud::Bigtable::GcRule.max_versions(1)
+      Google::Cloud::Bigtable::GcRule.max_versions 1
     )
   end
 

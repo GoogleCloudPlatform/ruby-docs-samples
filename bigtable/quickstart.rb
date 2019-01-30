@@ -23,8 +23,8 @@ gcloud = Google::Cloud.new
 bigtable = gcloud.bigtable
 
 # Get table client
-table = bigtable.table("my-bigtable-instance", "my-table")
+table = bigtable.table "my-bigtable-instance", "my-table"
 
 # Read and print row
-p table.read_row("user0000001")
+p table.read_row "user0000001"
 # [END bigtable_quickstart]

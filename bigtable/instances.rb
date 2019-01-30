@@ -23,7 +23,7 @@ def create_prod_instance instance_id, cluster_id
   p "==> Check Instance Exists"
 
   # [START bigtable_check_instance_exists]
-  if bigtable.instance(instance_id)
+  if bigtable.instance instance_id
     p "Instance #{instance_id} exists"
   # [END bigtable_check_instance_exists]
   else
@@ -35,7 +35,7 @@ def create_prod_instance instance_id, cluster_id
       labels: { "env": "production" },
       type: :PRODUCTION # Optional as default type is :PRODUCTION
     ) do |clusters|
-      clusters.add(cluster_id, "us-central1-f", nodes: 3, storage_type: :SSD)
+      clusters.add cluster_id, "us-central1-f", nodes: 3, storage_type: :SSD
     end
 
     job.wait_until_done!
@@ -53,7 +53,7 @@ def create_prod_instance instance_id, cluster_id
 
   p "==> Get Instance"
   # [START bigtable_get_instance]
-  p bigtable.instance(instance_id)
+  p bigtable.instance instance_id
   # [END bigtable_get_instance]
 
   p "==> Listing Clusters of #{instance_id}" do
@@ -76,7 +76,7 @@ def create_dev_instance instance_id, cluster_id
     labels: { "env": "development" },
     type: :DEVELOPMENT
   ) do |clusters|
-    clusters.add(cluster_id, "us-central1-f", storage_type: :HDD)
+    clusters.add cluster_id, "us-central1-f", storage_type: :HDD
   end
 
   job.wait_until_done!
@@ -87,7 +87,7 @@ end
 
 def delete_instance instance_id
   bigtable = Google::Cloud.new.bigtable
-  instance = bigtable.instance(instance_id)
+  instance = bigtable.instance instance_id
   p "==> Deleting Instance"
 
   # [START bigtable_delete_instance]
@@ -98,7 +98,7 @@ end
 
 def add_cluster instance_id, cluster_id
   bigtable = Google::Cloud.new.bigtable
-  instance = bigtable.instance(instance_id)
+  instance = bigtable.instance instance_id
 
   unless instance
     p "==> Instance does not exists"
@@ -123,8 +123,8 @@ end
 
 def delete_cluster instance_id, cluster_id
   bigtable = Google::Cloud.new.bigtable
-  instance = bigtable.instance(instance_id)
-  cluster = instance.cluster(cluster_id)
+  instance = bigtable.instance instance_id
+  cluster = instance.cluster cluster_id
   p "==> Deleting Cluster"
 
   # [START bigtable_delete_cluster]
