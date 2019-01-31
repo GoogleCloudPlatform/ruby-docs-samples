@@ -1,0 +1,8 @@
+
+
+export KOKORO_BUILD_ID=912739483;
+
+  export BUILD_ID=${KOKORO_BUILD_ID: -10};
+
+
+  echo $BUILD_ID
