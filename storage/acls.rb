@@ -188,7 +188,7 @@ def add_file_owner project_id:, bucket_name:, file_name:, email:
 end
 
 def remove_file_acl project_id:, bucket_name:, file_name:, email:
-  # [START remove_file_acl]
+  # [START storage_remove_file_owner]
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
   # file_name   = "Name of a file in the Storage bucket"
@@ -203,7 +203,7 @@ def remove_file_acl project_id:, bucket_name:, file_name:, email:
   file.acl.delete email
 
   puts "Removed ACL permissions for #{email} from #{file_name}"
-  # [END remove_file_acl]
+  # [END storage_remove_file_owner]
 end
 
 def run_sample arguments
