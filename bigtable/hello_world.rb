@@ -1,22 +1,22 @@
 # frozen_string_literal: true
 
 # [START dependencies]
-require "google-cloud-bigtable"
+require "google/cloud/bigtable"
 # [END dependencies]
 
 # [START connecting_to_bigtable]
+project_id = "YOUR_PROJECT_ID"
 table_id = "Hello-Bigtable"
 instance_id = "my-instance"
 column_family = "cf"
 column_qualifier = "greeting"
 
-gcloud = Google::Cloud.new
-bigtable = gcloud.bigtable
+bigtable = Google::Cloud::Bigtable.new project_id: project_id
 # [END connecting_to_bigtable]
 
 # [START creating_a_table]
 if bigtable.table(instance_id, table_id).exists?
-  puts " '#{table_id}' is already exists."
+  puts "#{table_id} is already exists."
   exit 0
 else
   table = bigtable.create_table(instance_id, table_id) do |column_families|
@@ -26,12 +26,12 @@ else
     )
   end
 
-  puts "Table '#{table_id}' created."
+  puts "Table #{table_id} created."
 end
 # [END creating_a_table]
 
 # [START writing_rows]
-puts "Write some greetings to the table '#{table_id}'"
+puts "Write some greetings to the table #{table_id}"
 greetings = ["Hello World!", "Hello Bigtable!", "Hello Ruby!"]
 
 # Insert rows one by one

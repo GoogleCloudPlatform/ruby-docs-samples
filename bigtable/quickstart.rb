@@ -17,13 +17,22 @@
 
 # [START bigtable_quickstart]
 # Import google bigtable client lib
-require "google-cloud-bigtable"
+require "google/cloud/bigtable"
 
-gcloud = Google::Cloud.new
-bigtable = gcloud.bigtable
+# Your Google Cloud Platform project ID
+project_id = "YOUR_PROJECT_ID"
+
+# Instantiates a client
+bigtable = Google::Cloud::Bigtable.new project_id: project_id
+
+# Your Cloud Bigtable instance ID
+instance_id = "my-bigtable-instance"
+
+# Your Cloud Bigtable table ID
+table_id = "my-table"
 
 # Get table client
-table = bigtable.table "my-bigtable-instance", "my-table"
+table = bigtable.table instance_id, table_id
 
 # Read and print row
 p table.read_row "user0000001"

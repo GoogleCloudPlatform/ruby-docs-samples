@@ -16,6 +16,7 @@
 - [Samples](#samples)
   - [Hello World](#hello-world)
   - [Instances](#instances)
+  - [Table and column family management](#table-and-column-family-management)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -92,18 +93,18 @@ Examples:
 For more information, see https://cloud.google.com/bigtable/docs
 ```
 
-### Table / Column family management
+### Table and column family management
 
-View the [source code](tableadmin.rb).
+View the [source code](tableadmin_code).
 This sample showcases the basic table / column family operations:
 1. Create a table (if does not exist)
-1. List tables in the current project
-1. Retrieve table metadata
-1. Create column families with supported garbage collection(GC) rules
-1. List table column families and GC rules
-1. Update a column family GC rule
-1. Delete a column family
-1. Delete a table
+2. List tables in the current project
+3. Retrieve table metadata
+4. Create column families with supported garbage collection(GC) rules
+5. List table column families and GC rules
+6. Update a column family GC rule
+7. Delete a column family
+8. Delete a table
 
 [![Open in Cloud Shell][shell_img]](https://console.cloud.google.com/cloudshell/open?git_repo=https://github.com/googleapis/google-cloud-ruby&page=editor&page=editor&open_in_editor=google-cloud-bigtable/samples/tableadmin.rb,samples/README.md)
 
@@ -122,6 +123,7 @@ For more information, see https://cloud.google.com/bigtable/docs
 ```
 [instances_0_docs]: https://cloud.google.com/bigtable/docs/
 [instances_0_code]: instances.rb
+[tableadmin_code]: tableadmin.rb
 
 [hello_world_directory]: hello-world
 
