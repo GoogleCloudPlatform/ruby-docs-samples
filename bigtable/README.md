@@ -15,7 +15,7 @@
 - [Before you begin](#before-you-begin)
 - [Samples](#samples)
   - [Hello World](#hello-world)
-  - [Instances](#instances)
+  - [Instance Admin](#instance-admin)
   - [Table and column family management](#table-and-column-family-management)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -64,16 +64,16 @@ Expected output similar to:
 View the [Hello World][hello_world_directory] sample to see a basic usage of
 the Bigtable client library.
 
-### Instances
+### Instance Admin
 
 View the [source code][instances_0_code].
 
-[![Open in Cloud Shell][shell_img]](https://console.cloud.google.com/cloudshell/open?git_repo=https://github.com/googleapis/google-cloud-ruby&page=editor&open_in_editor=google-cloud-bigtable/samples/instances.rb,samples/README.md)
+[![Open in Cloud Shell][shell_img]](https://console.cloud.google.com/cloudshell/open?git_repo=https://github.com/googleapis/google-cloud-ruby&page=editor&open_in_editor=google-cloud-bigtable/samples/instanceadmin.rb)
 
-__Usage:__ `bundle exec ruby instances.rb --help`
+__Usage:__ `bundle exec ruby instanceadmin.rb --help`
 
 ```
-bundle exec ruby instances.rb <command> <instance_id> <cluster_id>
+bundle exec ruby instanceadmin.rb <command> <instance_id> <cluster_id>
 
 COMMANDS:
 
@@ -84,11 +84,11 @@ COMMANDS:
   dev-instance <instance_id>                Create Development Instance
 
 Examples:
-  bundle exec ruby instances.rb run <instance_id> <cluster_id>            Run instance operations
-  bundle exec ruby instances.rb dev-instance <instance_id> <cluster_id>   Create Development Instance
-  bundle exec ruby instances.rb del-instance <instance_id> <cluster_id>   Delete the Instance.
-  bundle exec ruby instances.rb add-cluster <instance_id> <cluster_id>    Add Cluster
-  bundle exec ruby instances.rb del-cluster <instance_id> <cluster_id>    Delete the Cluster
+  bundle exec ruby instanceadmin.rb run <instance_id> <cluster_id>            Run instance operations
+  bundle exec ruby instanceadmin.rb dev-instance <instance_id> <cluster_id>   Create Development Instance
+  bundle exec ruby instanceadmin.rb del-instance <instance_id> <cluster_id>   Delete the Instance.
+  bundle exec ruby instanceadmin.rb add-cluster <instance_id> <cluster_id>    Add Cluster
+  bundle exec ruby instanceadmin.rb del-cluster <instance_id> <cluster_id>    Delete the Cluster
 
 For more information, see https://cloud.google.com/bigtable/docs
 ```
@@ -106,7 +106,7 @@ This sample showcases the basic table / column family operations:
 7. Delete a column family
 8. Delete a table
 
-[![Open in Cloud Shell][shell_img]](https://console.cloud.google.com/cloudshell/open?git_repo=https://github.com/googleapis/google-cloud-ruby&page=editor&page=editor&open_in_editor=google-cloud-bigtable/samples/tableadmin.rb,samples/README.md)
+[![Open in Cloud Shell][shell_img]](https://console.cloud.google.com/cloudshell/open?git_repo=https://github.com/googleapis/google-cloud-ruby&page=editor&page=editor&open_in_editor=google-cloud-bigtable/samples/tableadmin.rb)
 
 __Usage:__ `bundle exec ruby tableadmin.rb --help`
 
@@ -122,7 +122,7 @@ Examples:
 For more information, see https://cloud.google.com/bigtable/docs
 ```
 [instances_0_docs]: https://cloud.google.com/bigtable/docs/
-[instances_0_code]: instances.rb
+[instances_0_code]: instanceadmin.rb
 [tableadmin_code]: tableadmin.rb
 
 [hello_world_directory]: hello-world

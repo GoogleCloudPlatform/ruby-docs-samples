@@ -150,7 +150,7 @@ if __FILE__ == $PROGRAM_NAME
     create_dev_instance project_id, ARGV.shift, ARGV.shift
   else
     puts <<~USAGE
-       Usage: bundle exec ruby instances.rb [command] [arguments]
+       Usage: bundle exec ruby instanceadmin.rb [command] [arguments]
 
        Commands:
        run          <instance_id> <cluster_id>   Creates an Instance(type: PRODUCTION) and run basic instance-operations

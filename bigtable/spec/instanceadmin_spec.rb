@@ -1,9 +1,9 @@
 require_relative "spec_helper"
 require "securerandom"
 require "google/cloud/bigtable"
-require_relative "../instances"
+require_relative "../instanceadmin"
 
-describe "Google Cloud Bigtable instance Samples" do
+describe "Google Cloud Bigtable instance admin samples" do
   before do
     @project_id = ENV["GOOGLE_CLOUD_BIGTABLE_PROJECT"]
 
