@@ -79,7 +79,7 @@ Usage:
 
 Example:
 
-    bundle exec ruby create_topic YOUR-PROJECT-ID new_topic
+    bundle exec ruby topics.rb create_topic YOUR-PROJECT-ID new_topic
 
     Topic new_topic created.
 
