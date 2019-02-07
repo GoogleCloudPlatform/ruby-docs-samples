@@ -33,7 +33,7 @@ describe "Detect Logos" do
     expect {
       detect_logos image_path: image_path("logos.png")
     }.to output(
-      "Google\n"
+      /google/i
     ).to_stdout
   end
 
@@ -44,7 +44,7 @@ describe "Detect Logos" do
     expect {
       detect_logos_gcs image_path: storage_file.to_gs_url
     }.to output(
-      "Google\n"
+      /google/i
     ).to_stdout
   end
 end

@@ -33,7 +33,7 @@ describe "Detect Labels" do
     expect {
       detect_labels image_path: image_path("otter_crossing.jpg")
     }.to output(
-      /traffic sign/
+      /traffic sign/i
     ).to_stdout
   end
 
@@ -44,11 +44,11 @@ describe "Detect Labels" do
     expect {
       detect_labels_gcs image_path: storage_file.to_gs_url
     }.to output(
-      /traffic sign/
+      /traffic sign/i
     ).to_stdout
 
     expect {
       detect_labels_gcs_migration
-    }.to output(/suit/).to_stdout
+    }.to output(/suit/i).to_stdout
   end
 end
