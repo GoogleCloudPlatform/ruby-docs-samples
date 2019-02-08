@@ -1,0 +1,59 @@
+# G Suite Ruby Samples rules
+AllCops:
+  TargetRubyVersion: 2.3
+  Exclude:
+  - '**/lib/**/*'
+
+Metrics/BlockLength:
+  Max: 200
+
+Metrics/ModuleLength:
+  Max: 200
+
+Style/FormatString:
+  EnforcedStyle: sprintf
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/WordArray:
+  Enabled: false
+
+Metrics/AbcSize:
+  Max: 79
+
+Metrics/ClassLength:
+  Max: 220
+
+Metrics/CyclomaticComplexity:
+  Max: 10
+
+Metrics/LineLength:
+  Max: 127
+
+Metrics/MethodLength:
+  Max: 43
+
+Metrics/ParameterLists:
+  Max: 6
+
+Metrics/PerceivedComplexity:
+  Max: 11
+
+Style/Documentation:
+  Enabled: false
+
+Layout/EmptyLines:
+  Enabled: false
+
+Layout/EmptyLinesAroundClassBody:
+  Enabled: false
+
+Style/DateTime:
+  Enabled: false
+
+Style/Next:
+  Enabled: false
+
+Style/RedundantSelf:
+  Enabled: false
