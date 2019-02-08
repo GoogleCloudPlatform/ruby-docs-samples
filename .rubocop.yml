@@ -1,4 +1,3 @@
-# G Suite Ruby Samples rules
 AllCops:
   TargetRubyVersion: 2.3
   Exclude:
@@ -29,16 +28,16 @@ Metrics/CyclomaticComplexity:
   Max: 10
 
 Metrics/LineLength:
-  Max: 127
+  Max: 120
 
 Metrics/MethodLength:
-  Max: 43
+  Max: 50
 
 Metrics/ParameterLists:
-  Max: 6
+  Max: 5
 
 Metrics/PerceivedComplexity:
-  Max: 11
+  Max: 10
 
 Style/Documentation:
   Enabled: false

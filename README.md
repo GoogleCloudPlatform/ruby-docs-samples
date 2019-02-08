@@ -1,4 +1,4 @@
-## Ruby docs samples
+## Ruby docs samples [![Build Status](https://travis-ci.org/GoogleCloudPlatform/ruby-docs-samples.svg?branch=master)](https://travis-ci.org/GoogleCloudPlatform/ruby-docs-samples)
 
 Kokoro: [![Kokoro](https://storage.googleapis.com/cloud-devrel-kokoro-resources/ruby/ruby-docs-samples/system_tests-ubuntu.png)](https://fusion.corp.google.com/projectanalysis/current/KOKORO/prod:cloud-devrel%2Fruby%2Fruby-docs-samples%2Fsystem_tests)
 
