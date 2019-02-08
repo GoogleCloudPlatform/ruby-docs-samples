@@ -107,7 +107,7 @@ Usage:
 
 Example:
 
-    bundle exec ruby list_subscriptions YOUR-PROJECT-ID
+    bundle exec ruby subscriptions.rb list_subscriptions YOUR-PROJECT-ID
 
     Subscriptions:
     YOUR-SUBSCRIPTION
