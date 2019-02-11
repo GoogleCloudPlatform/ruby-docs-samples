@@ -4,18 +4,6 @@ require "google/cloud/bigtable"
 require_relative "../tableadmin"
 
 describe "Google Cloud Bigtable instance Samples" do
-  before do
-    @project_id  = ENV["GOOGLE_CLOUD_BIGTABLE_PROJECT"]
-    @instance_id = ENV["GOOGLE_CLOUD_BIGTABLE_TEST_INSTANCE"]
-
-    if @project_id.nil? || @instance_id.nil?
-      skip "GOOGLE_CLOUD_BIGTABLE_TEST_INSTANCE and/or " \
-        "GOOGLE_CLOUD_BIGTABLE_PROJECT not defined"
-    end
-
-    @bigtable = Google::Cloud::Bigtable.new project_id: @project_id
-  end
-
   it "create table, run table admin operations and delete table" do
     table_id = "test-table-#{SecureRandom.hex(8)}"
 

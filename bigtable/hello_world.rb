@@ -22,7 +22,7 @@ else
   table = bigtable.create_table(instance_id, table_id) do |column_families|
     column_families.add(
       column_family,
-      Google::Cloud::Bigtable::GcRule.max_versions 1
+      Google::Cloud::Bigtable::GcRule.max_versions(1)
     )
   end
 
@@ -37,7 +37,7 @@ greetings = ["Hello World!", "Hello Bigtable!", "Hello Ruby!"]
 # Insert rows one by one
 # Note: To perform multiple mutation on multiple rows use `mutate_rows`.
 greetings.each_with_index do |value, i|
-  puts "  Writing,  Row key: greeting#{i}, Value: #{value}"
+  puts " Writing,  Row key: greeting#{i}, Value: #{value}"
 
   entry = table.new_mutation_entry "greeting#{i}"
   entry.set_cell(
@@ -70,6 +70,6 @@ end
 # [END scanning_all_rows]
 
 # [START deleting_a_table]
-puts "Deleting the table '#{table_id}'"
+puts "Deleting the table #{table_id}"
 bigtable.delete_table instance_id, table_id
 # [END deleting_a_table]

@@ -135,7 +135,8 @@ def delete_cluster project_id, instance_id, cluster_id
 end
 
 if __FILE__ == $PROGRAM_NAME
-  project_id = ENV["GOOGLE_CLOUD_BIGTABLE_PROJECT"]
+  project_id = ENV["GOOGLE_CLOUD_BIGTABLE_PROJECT"] ||
+    ENV["GOOGLE_CLOUD_PROJECT"]
 
   case ARGV.shift
   when "run"
@@ -160,7 +161,7 @@ if __FILE__ == $PROGRAM_NAME
        dev-instance <instance_id> <cluster_id>   Create Development Instance
 
        Environment variables:
-        GOOGLE_CLOUD_BIGTABLE_PROJECT must be set to your Google Cloud project ID
+        GOOGLE_CLOUD_BIGTABLE_PROJECT or GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
      USAGE
   end
 end
