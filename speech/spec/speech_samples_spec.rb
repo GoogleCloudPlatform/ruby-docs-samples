@@ -29,6 +29,9 @@ describe "Google Cloud Speech API samples" do
     # Path to RAW audio file with sample rate of 16000 using LINEAR16 encoding
     @audio_file_path = File.expand_path "../resources/audio.raw", __dir__
 
+    # Path to WAV audio file with sample rate of 44100 using LINEAR16 encoding with 2 channels
+    @multi_file_path = File.expand_path "../resources/multi.wav", __dir__
+
     # Expected transcript of spoken English recorded in the audio.raw file
     @audio_file_transcript = "how old is the Brooklyn Bridge"
   end
@@ -136,9 +139,18 @@ describe "Google Cloud Speech API samples" do
   end
 
   example "transcribe audio file with multichannel" do
-    audio_file_path = File.expand_path "../resources/Google_Gnome.wav", __dir__
+    audio_file_path = File.expand_path "../resources/multi.wav", __dir__
     expect {
       speech_transcribe_multichannel audio_file_path: audio_file_path
-    }.to output(/OK Google stream stranger things from Netflix to my TV/).to_stdout
+    }.to output(/how are you doing/).to_stdout
+  end
+
+  example "transcribe audio file with multichannel from GCS" do
+    file = @bucket.upload_file @multi_file_path, "multi.wav"
+    path = "gs://#{file.bucket}/multi.wav"
+
+    expect {
+      speech_transcribe_multichannel_gcs storage_path: path
+    }.to output(/how are you doing/).to_stdout
   end
 end
