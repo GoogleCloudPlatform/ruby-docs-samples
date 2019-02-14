@@ -71,5 +71,5 @@ end
 
 # [START deleting_a_table]
 puts "Deleting the table #{table_id}"
-bigtable.delete_table instance_id, table_id
+table.delete
 # [END deleting_a_table]
