@@ -411,8 +411,7 @@ def speech_transcribe_multichannel_gcs storage_path: nil
     enable_separate_recognition_per_channel: true
   }
 
-  audio_file = File.binread audio_file_path
-  audio      = { content: audio_file }
+  audio  = { uri: storage_path }
 
   response = speech.recognize config, audio
 
