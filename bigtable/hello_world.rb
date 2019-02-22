@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-# [START dependencies]
+# [START bigtable_hw_imports]
 require "google/cloud/bigtable"
-# [END dependencies]
+# [END bigtable_hw_imports]
 
-# [START connecting_to_bigtable]
+# [START bigtable_hw_connect]
 project_id = "YOUR_PROJECT_ID"
 table_id = "Hello-Bigtable"
 instance_id = "my-instance"
@@ -12,9 +12,9 @@ column_family = "cf"
 column_qualifier = "greeting"
 
 bigtable = Google::Cloud::Bigtable.new project_id: project_id
-# [END connecting_to_bigtable]
+# [END bigtable_hw_connect]
 
-# [START creating_a_table]
+# [START bigtable_hw_create_table]
 if bigtable.table(instance_id, table_id).exists?
   puts "#{table_id} is already exists."
   exit 0
@@ -28,9 +28,9 @@ else
 
   puts "Table #{table_id} created."
 end
-# [END creating_a_table]
+# [END bigtable_hw_create_table]
 
-# [START writing_rows]
+# [START bigtable_hw_write_rows]
 puts "Write some greetings to the table #{table_id}"
 greetings = ["Hello World!", "Hello Bigtable!", "Hello Ruby!"]
 
@@ -49,27 +49,27 @@ greetings.each_with_index do |value, i|
 
   table.mutate_row entry
 end
-# [END writing_rows]
+# [END bigtable_hw_write_rows]
 
-# [START creating_a_filter]
+# [START bigtable_hw_create_filter]
 # Only retrieve the most recent version of the cell.
 filter = Google::Cloud::Bigtable::RowFilter.cells_per_column 1
-# [END creating_a_filter]
+# [END bigtable_hw_create_filter]
 
-# [START getting_a_row]
+# [START bigtable_hw_get_with_filter]
 puts "Reading a single row by row key"
 row = table.read_row "greeting0", filter: filter
 puts "Row key: #{row.key}, Value: #{row.cells[column_family].first.value}"
-# [START getting_a_row]
+# [START bigtable_hw_get_with_filter]
 
-# [START scanning_all_rows]
+# [START bigtable_hw_scan_with_filter]
 puts "Reading the entire table"
 table.read_rows.each do |row|
   p "Row key: #{row.key}, Value: #{row.cells[column_family].first.value}"
 end
-# [END scanning_all_rows]
+# [END bigtable_hw_scan_with_filter]
 
-# [START deleting_a_table]
+# [START bigtable_hw_delete_table]
 puts "Deleting the table #{table_id}"
 table.delete
-# [END deleting_a_table]
+# [END bigtable_hw_delete_table]

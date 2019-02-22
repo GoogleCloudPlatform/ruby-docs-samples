@@ -30,7 +30,7 @@ library's README.
 ## Samples
 
 ### Quickstart
-The [Quick start](quickstart.rb) sample shows a basic usage of the Bigtable client library: reading rows from a table.
+The [Quick start](quickstart.rb) sample shows a basic usage of the Cloud Bigtable client library: reading rows from a table.
 
 Follow the [cbt tutorial](https://cloud.google.com/bigtable/docs/quickstart-cbt) to install the cbt command line tool.
 Here are the cbt commands to create a table, column family and add some data:
@@ -62,7 +62,7 @@ Expected output similar to:
 ### Hello World
 
 View the [Hello World][hello_world_directory] sample to see a basic usage of
-the Bigtable client library.
+the Cloud Bigtable client library.
 
 ### Instance Admin
 
