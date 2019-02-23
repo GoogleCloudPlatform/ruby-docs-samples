@@ -471,6 +471,7 @@ Commands:
   enhanced_model            <filename> Detects speech in a local audio file, using a model enhanced for phone call audio.
   model_selection           <filename> Detects speech in a local file, using a specific model.
   multichannel              <filename> Detects speech in separate channels in a local file.
+  multichannel_gcs           <filename> Detects speech in separate channels in an audio file located in a Google Cloud Storage bucket.
     usage
   end
 end
