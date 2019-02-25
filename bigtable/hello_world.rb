@@ -65,7 +65,7 @@ puts "Row key: #{row.key}, Value: #{row.cells[column_family].first.value}"
 # [START bigtable_hw_scan_with_filter]
 puts "Reading the entire table"
 table.read_rows.each do |row|
-  p "Row key: #{row.key}, Value: #{row.cells[column_family].first.value}"
+  puts "Row key: #{row.key}, Value: #{row.cells[column_family].first.value}"
 end
 # [END bigtable_hw_scan_with_filter]
 
