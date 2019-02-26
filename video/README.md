@@ -51,4 +51,6 @@ environment variable to the path to the key file, for example:
       analyze_labels_local     <local_path> Detects labels given file path.
       analyze_shots            <gcs_path>   Detects camera shot changes given a GCS path.
       analyze_explicit_content <gcs_path>   Detects explicit content given a GCS path.
-      speech_transcription <gcs_path>       Transcribes speech given a GCS path.
+      speech_transcription     <gcs_path>   Transcribes speech given a GCS path.
+      detect_text_gcs          <gcs_path>   Detects text given a GCS path.
+      detect_text_local        <local_path> Detects text given file path.
