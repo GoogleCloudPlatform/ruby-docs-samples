@@ -54,3 +54,5 @@ environment variable to the path to the key file, for example:
       speech_transcription     <gcs_path>   Transcribes speech given a GCS path.
       detect_text_gcs          <gcs_path>   Detects text given a GCS path.
       detect_text_local        <local_path> Detects text given file path.
+      track_objects_gcs        <gcs_path>   Track objects given a GCS path.
+      track_objects_local      <local_path> Track objects given file path.
