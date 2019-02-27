@@ -12,14 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START dlp_inspect_image_file]
-require "google/cloud/dlp"
 
-# Inspects the specified image file.
-#
-# @param [String] project_id Your Google Cloud Project ID.
-# @param [String] filepath The path to the image file to inspect.
-def inspect_image_file project_id="YOUR_PROJECT_ID", filepath="path/to/image.png"
+def inspect_image_file project_id, filepath
+  # [START dlp_inspect_image_file]
+  require "google/cloud/dlp"
+
+  # TODO(developer): Uncomment these variables before running the sample.
+  # project_id = "YOUR_PROJECT_ID"
+  # filepath = "path/to/image.png"
+
   # Instantiate a client
   dlp = Google::Cloud::Dlp.new
 
@@ -57,7 +58,7 @@ def inspect_image_file project_id="YOUR_PROJECT_ID", filepath="path/to/image.png
       puts "Likelihood: #{finding.likelihood}"
     end
   end
+  # [END dlp_inspect_image_file]
 end
-# [END dlp_inspect_image_file]
 
 inspect_image_file *ARGV if $PROGRAM_NAME == __FILE__
