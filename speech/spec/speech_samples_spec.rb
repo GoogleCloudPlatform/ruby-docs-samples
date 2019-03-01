@@ -61,7 +61,7 @@ describe "Google Cloud Speech API samples" do
     expect(captured_output).to include "Word: is 0.6 0.8"
     expect(captured_output).to include "Word: the 0.8 0.9"
     expect(captured_output).to include "Word: Brooklyn 0.9 1.1"
-    expect(captured_output).to include "Word: Bridge 1.1 1.5"
+    expect(captured_output).to include "Word: Bridge 1.1 1.4"
   end
 
   example "transcribe audio file from GCS" do
@@ -103,7 +103,7 @@ describe "Google Cloud Speech API samples" do
     expect(captured_output).to include "Word: is 0.6 0.8"
     expect(captured_output).to include "Word: the 0.8 0.9"
     expect(captured_output).to include "Word: Brooklyn 0.9 1.1"
-    expect(captured_output).to include "Word: Bridge 1.1 1.5"
+    expect(captured_output).to include "Word: Bridge 1.1 1.4"
   end
 
   example "streaming operation to transcribe audio file" do
