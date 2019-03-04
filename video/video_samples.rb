@@ -350,7 +350,7 @@ end
 
 def track_objects_local path:
   # [START video_object_tracking]
-  # path = "Path to a video file on Google Cloud Storage: gs://bucket/video.mp4"
+  # "Path to a local video file: path/to/file.mp4"
 
   require "google/cloud/video_intelligence"
 

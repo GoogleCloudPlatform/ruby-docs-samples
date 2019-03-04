@@ -78,5 +78,21 @@ describe "Google Cloud Video API sample" do
       /cultural/
     ).to_stdout
   end
+
+  it "can detect texts from a gcs file" do
+    expect {
+      detect_text_gcs path: "gs://#{@transcription_file}"
+    }.to output(
+      /GOOGLE/
+    ).to_stdout
+  end
+
+  it "can track objects from a gcs file" do
+    expect {
+      track_objects_gcs path: "gs://#{@labels_file}"
+    }.to output(
+      /cat/
+    ).to_stdout
+  end
 end
 
