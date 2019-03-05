@@ -242,7 +242,7 @@ def detect_text_gcs path:
     end
   end
 
-  puts "Processing video for speech transcriptions:"
+  puts "Processing video for text detection:"
   operation.wait_until_done!
   # [END video_detect_text_gcs]
 end
@@ -292,7 +292,7 @@ def detect_text_local path:
     end
   end
 
-  puts "Processing video for speech transcriptions:"
+  puts "Processing video for text detection:"
   operation.wait_until_done!
   # [END video_detect_text]
 end
@@ -343,7 +343,7 @@ def track_objects_gcs path:
     end
   end
 
-  puts "Processing video for speech transcriptions:"
+  puts "Processing video for object tracking:"
   operation.wait_until_done!
   # [END video_object_tracking_gcs]
 end
@@ -396,7 +396,7 @@ def track_objects_local path:
     end
   end
 
-  puts "Processing video for speech transcriptions:"
+  puts "Processing video for object tracking:"
   operation.wait_until_done!
   # [END video_object_tracking]
 end
