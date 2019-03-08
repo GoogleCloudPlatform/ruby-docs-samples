@@ -199,6 +199,208 @@ def transcribe_speech_gcs path:
   # [END video_speech_transcription_gcs]
 end
 
+def detect_text_gcs path:
+  # [START video_detect_text_gcs]
+  # path = "Path to a video file on Google Cloud Storage: gs://bucket/video.mp4"
+
+  require "google/cloud/video_intelligence"
+
+  video = Google::Cloud::VideoIntelligence.new
+
+  # Register a callback during the method call
+  operation = video.annotate_video input_uri: path, features: [:TEXT_DETECTION] do |operation|
+    raise operation.results.message? if operation.error?
+    puts "Finished Processing."
+
+    text_annotations = operation.results.annotation_results.first.text_annotations
+
+    text_annotations.each do |text_annotation|
+      puts "Text: #{text_annotation.text}"
+
+      # Print information about the first segment of the text.
+      text_segment = text_annotation.segments.first
+      start_time_offset = text_segment.segment.start_time_offset
+      end_time_offset = text_segment.segment.end_time_offset
+      start_time = ( start_time_offset.seconds +
+                     start_time_offset.nanos / 1e9 )
+      end_time =   ( end_time_offset.seconds +
+                     end_time_offset.nanos / 1e9 )
+      puts "start_time: #{start_time}, end_time: #{end_time}"
+
+      puts "Confidence: #{text_segment.confidence}"
+
+      # Print information about the first frame of the segment.
+      frame = text_segment.frames.first
+      time_offset = ( frame.time_offset.seconds +
+                      frame.time_offset.nanos / 1e9 )
+      puts "Time offset for the first frame: #{time_offset}"
+
+      puts "Rotated bounding box vertices:"
+      frame.rotated_bounding_box.vertices.each do |vertex|
+        puts "\tVertex.x: #{vertex.x}, Vertex.y: #{vertex.y}"
+      end
+    end
+  end
+
+  puts "Processing video for text detection:"
+  operation.wait_until_done!
+  # [END video_detect_text_gcs]
+end
+
+def detect_text_local path:
+  # [START video_detect_text]
+  # "Path to a local video file: path/to/file.mp4"
+
+  require "google/cloud/video_intelligence"
+
+  video = Google::Cloud::VideoIntelligence.new
+
+  video_contents = File.binread path
+
+  # Register a callback during the method call
+  operation = video.annotate_video input_content: video_contents, features: [:TEXT_DETECTION] do |operation|
+    raise operation.results.message? if operation.error?
+    puts "Finished Processing."
+
+    text_annotations = operation.results.annotation_results.first.text_annotations
+
+    text_annotations.each do |text_annotation|
+      puts "Text: #{text_annotation.text}"
+
+      # Print information about the first segment of the text.
+      text_segment = text_annotation.segments.first
+      start_time_offset = text_segment.segment.start_time_offset
+      end_time_offset = text_segment.segment.end_time_offset
+      start_time = ( start_time_offset.seconds +
+                     start_time_offset.nanos / 1e9 )
+      end_time =   ( end_time_offset.seconds +
+                     end_time_offset.nanos / 1e9 )
+      puts "start_time: #{start_time}, end_time: #{end_time}"
+
+      puts "Confidence: #{text_segment.confidence}"
+
+      # Print information about the first frame of the segment.
+      frame = text_segment.frames.first
+      time_offset = ( frame.time_offset.seconds +
+                      frame.time_offset.nanos / 1e9 )
+      puts "Time offset for the first frame: #{time_offset}"
+
+      puts "Rotated bounding box vertices:"
+      frame.rotated_bounding_box.vertices.each do |vertex|
+        puts "\tVertex.x: #{vertex.x}, Vertex.y: #{vertex.y}"
+      end
+    end
+  end
+
+  puts "Processing video for text detection:"
+  operation.wait_until_done!
+  # [END video_detect_text]
+end
+
+def track_objects_gcs path:
+  # [START video_object_tracking_gcs]
+  # path = "Path to a video file on Google Cloud Storage: gs://bucket/video.mp4"
+
+  require "google/cloud/video_intelligence"
+
+  video = Google::Cloud::VideoIntelligence.new
+
+  # Register a callback during the method call
+  operation = video.annotate_video input_uri: path, features: [:OBJECT_TRACKING] do |operation|
+    raise operation.results.message? if operation.error?
+    puts "Finished Processing."
+
+    object_annotations = operation.results.annotation_results.first.object_annotations
+
+    object_annotations.each do |object_annotation|
+      puts "Entity description: #{object_annotation.entity.description}"
+      if object_annotation.entity.entity_id
+        puts "Entity id: #{object_annotation.entity.entity_id}"
+      end
+
+      object_segment = object_annotation.segment
+      start_time = ( object_segment.start_time_offset.seconds +
+                     object_segment.start_time_offset.nanos / 1e9 )
+      end_time =   ( object_segment.end_time_offset.seconds +
+                     object_segment.end_time_offset.nanos / 1e9 )
+      puts "Segment: #{start_time}s to #{end_time}s"
+
+      puts "Confidence: #{object_annotation.confidence}"
+
+      # Print information about the first frame of the segment.
+      frame = object_annotation.frames.first
+      box = frame.normalized_bounding_box
+
+      time_offset = ( frame.time_offset.seconds +
+                      frame.time_offset.nanos / 1e9 )
+      puts "Time offset for the first frame: #{time_offset}s"
+
+      puts "Bounding box position:"
+      puts "\tleft  : #{box.left}"
+      puts "\ttop   : #{box.top}"
+      puts "\tright : #{box.right}"
+      puts "\tbottom: #{box.bottom}\n"
+    end
+  end
+
+  puts "Processing video for object tracking:"
+  operation.wait_until_done!
+  # [END video_object_tracking_gcs]
+end
+
+def track_objects_local path:
+  # [START video_object_tracking]
+  # "Path to a local video file: path/to/file.mp4"
+
+  require "google/cloud/video_intelligence"
+
+  video = Google::Cloud::VideoIntelligence.new
+
+  video_contents = File.binread path
+
+  # Register a callback during the method call
+  operation = video.annotate_video input_content: video_contents, features: [:OBJECT_TRACKING] do |operation|
+    raise operation.results.message? if operation.error?
+    puts "Finished Processing."
+
+    object_annotations = operation.results.annotation_results.first.object_annotations
+
+    object_annotations.each do |object_annotation|
+      puts "Entity description: #{object_annotation.entity.description}"
+      if object_annotation.entity.entity_id
+        puts "Entity id: #{object_annotation.entity.entity_id}"
+      end
+
+      object_segment = object_annotation.segment
+      start_time = ( object_segment.start_time_offset.seconds +
+                     object_segment.start_time_offset.nanos / 1e9 )
+      end_time =   ( object_segment.end_time_offset.seconds +
+                     object_segment.end_time_offset.nanos / 1e9 )
+      puts "Segment: #{start_time}s to #{end_time}s"
+
+      puts "Confidence: #{object_annotation.confidence}"
+
+      # Print information about the first frame of the segment.
+      frame = object_annotation.frames.first
+      box = frame.normalized_bounding_box
+
+      time_offset = ( frame.time_offset.seconds +
+                      frame.time_offset.nanos / 1e9 )
+      puts "Time offset for the first frame: #{time_offset}s"
+
+      puts "Bounding box position:"
+      puts "\tleft  : #{box.left}"
+      puts "\ttop   : #{box.top}"
+      puts "\tright : #{box.right}"
+      puts "\tbottom: #{box.bottom}\n"
+    end
+  end
+
+  puts "Processing video for object tracking:"
+  operation.wait_until_done!
+  # [END video_object_tracking]
+end
+
 def run_sample arguments
   command = arguments.shift
 
@@ -213,6 +415,14 @@ def run_sample arguments
     analyze_explicit_content path: arguments.shift
   when "transcribe_speech"
     transcribe_speech_gcs path: arguments.shift
+  when "detect_text_gcs"
+    detect_text_gcs path: arguments.shift
+  when "detect_text_local"
+    detect_text_local path: arguments.shift
+  when "track_objects_gcs"
+    track_objects_gcs path: arguments.shift
+  when "track_objects_local"
+    track_objects_local path: arguments.shift
   else
     puts <<-usage
 Usage: bundle exec ruby video_samples.rb [command] [arguments]
@@ -222,7 +432,11 @@ Commands:
   analyze_labels_local     <local_path> Detects labels given file path.
   analyze_shots            <gcs_path>   Detects camera shot changes given a GCS path.
   analyze_explicit_content <gcs_path>   Detects explicit content given a GCS path.
-  transcribe_speech <gcs_path>          Transcribes speech given a GCS path.
+  transcribe_speech        <gcs_path>   Transcribes speech given a GCS path.
+  detect_text_gcs          <gcs_path>   Detects text given a GCS path.
+  detect_text_local        <local_path> Detects text given file path.
+  track_objects_gcs        <gcs_path>   Track objects given a GCS path.
+  track_objects_local      <local_path> Track objects given file path.
     usage
   end
 end
