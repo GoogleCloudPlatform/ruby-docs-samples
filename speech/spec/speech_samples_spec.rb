@@ -59,12 +59,12 @@ describe "Google Cloud Speech API samples" do
     end
 
     expect(captured_output).to include "Transcription: how old is the Brooklyn Bridge"
-    expect(captured_output).to include "Word: how"
-    expect(captured_output).to include "Word: old"
-    expect(captured_output).to include "Word: is"
-    expect(captured_output).to include "Word: the"
-    expect(captured_output).to include "Word: Brooklyn"
-    expect(captured_output).to include "Word: Bridge"
+    expect(captured_output).to include "Word: how 0.0 0.3"
+    expect(captured_output).to include "Word: old 0.3 0.6"
+    expect(captured_output).to include "Word: is 0.6 0.8"
+    expect(captured_output).to include "Word: the 0.8 0.9"
+    expect(captured_output).to include "Word: Brooklyn 0.9 1.1"
+    expect(captured_output).to include "Word: Bridge 1.1 1.4"
   end
 
   example "transcribe audio file from GCS" do
@@ -101,12 +101,12 @@ describe "Google Cloud Speech API samples" do
 
     expect(captured_output).to include "Operation started"
     expect(captured_output).to include "Transcription: how old is the Brooklyn Bridge"
-    expect(captured_output).to include "Word: how"
-    expect(captured_output).to include "Word: old"
-    expect(captured_output).to include "Word: is"
-    expect(captured_output).to include "Word: the"
-    expect(captured_output).to include "Word: Brooklyn"
-    expect(captured_output).to include "Word: Bridge"
+    expect(captured_output).to include "Word: how 0.0 0.3"
+    expect(captured_output).to include "Word: old 0.3 0.6"
+    expect(captured_output).to include "Word: is 0.6 0.8"
+    expect(captured_output).to include "Word: the 0.8 0.9"
+    expect(captured_output).to include "Word: Brooklyn 0.9 1.1"
+    expect(captured_output).to include "Word: Bridge 1.1 1.4"
   end
 
   example "streaming operation to transcribe audio file" do

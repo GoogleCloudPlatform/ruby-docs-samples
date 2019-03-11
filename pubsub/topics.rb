@@ -170,7 +170,7 @@ def publish_message project_id:, topic_name:
   pubsub = Google::Cloud::Pubsub.new project: project_id
 
   topic = pubsub.topic topic_name
-  topic.publish data: "This is a test message."
+  topic.publish "This is a test message."
 
   puts "Message published."
   # [END pubsub_quickstart_publisher]
