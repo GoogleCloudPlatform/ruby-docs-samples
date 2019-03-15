@@ -42,7 +42,7 @@ GEM
     multipart-post (2.0.0)
     os (0.9.6)
     public_suffix (3.0.2)
-    rack (2.0.5)
+    rack (2.0.6)
     rack-test (1.0.0)
       rack (>= 1.0, < 3)
     rly (0.2.3)
@@ -74,4 +74,4 @@ DEPENDENCIES
   rspec
 
 BUNDLED WITH
-   1.16.1
+   1.16.2
