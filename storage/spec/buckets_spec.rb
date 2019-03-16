@@ -113,6 +113,51 @@ describe "Google Cloud Storage buckets sample" do
     }.to_stdout
   end
 
+  example "disable bucket policy only" do
+    @storage.bucket(@bucket_name).policy_only = true
+
+    expect(@storage.bucket(@bucket_name).policy_only?).to be true
+
+    expect {
+      disable_bucket_policy_only project_id:  @project_id,
+                                 bucket_name: @bucket_name
+    }.to output{
+      /Bucket Policy Only was disabled for #{@bucket_name}/
+    }.to_stdout
+
+    expect(@storage.bucket(@bucket_name).policy_only?).to be false
+  end
+
+  example "enable bucket policy only" do
+    @storage.bucket(@bucket_name).policy_only = false
+
+    expect(@storage.bucket(@bucket_name).policy_only?).to be false
+
+    expect {
+      enable_bucket_policy_only project_id:  @project_id,
+                                bucket_name: @bucket_name
+    }.to output{
+      /Bucket Policy Only was enabled for #{@bucket_name}/
+    }.to_stdout
+
+    expect(@storage.bucket(@bucket_name).policy_only?).to be true
+    @storage.bucket(@bucket_name).policy_only = false
+  end
+
+  example "get bucket policy only" do
+    @storage.bucket(@bucket_name).policy_only = true
+    expect(@storage.bucket(@bucket_name).policy_only?).to be true
+
+    expect {
+      get_bucket_policy_only project_id:  @project_id,
+                             bucket_name: @bucket_name
+    }.to output{
+      /Bucket Policy Only is enabled for #{@bucket_name}/
+    }.to_stdout
+
+    @storage.bucket(@bucket_name).policy_only = false
+  end
+
   example "enable default kms key" do
     @storage.bucket(@bucket_name).default_kms_key = nil
 
