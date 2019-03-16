@@ -88,7 +88,7 @@ def disable_bucket_policy_only project_id:, bucket_name:
 
   bucket.policy_only = false
 
-  puts "Bucket Policy Only was disabled for #{bucket_name}"
+  puts "Bucket Policy Only was disabled for #{bucket_name}."
   # [END storage_disable_bucket_policy_only]
 end
 
@@ -104,7 +104,7 @@ def enable_bucket_policy_only project_id:, bucket_name:
 
   bucket.policy_only = true
 
-  puts "Bucket Policy Only was enabled for #{bucket_name}"
+  puts "Bucket Policy Only was enabled for #{bucket_name}."
   # [END storage_enable_bucket_policy_only]
 end
 
@@ -122,7 +122,7 @@ def get_bucket_policy_only project_id:, bucket_name:
     puts "Bucket Policy Only is enabled for #{bucket_name}."
     puts "Bucket will be locked on #{bucket.policy_only_locked_at}."
   else
-    puts "Bucket Policy Only is enabled for #{bucket_name}."
+    puts "Bucket Policy Only is disabled for #{bucket_name}."
   end
   # [END storage_get_bucket_policy_only]
 end
