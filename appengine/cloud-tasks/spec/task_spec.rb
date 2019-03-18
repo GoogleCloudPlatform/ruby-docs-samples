@@ -16,6 +16,7 @@ require_relative "../app"
 require "rspec"
 require "rack/test"
 require "google/cloud/tasks"
+require 'cgi'
 
 describe "CloudTasks", type: :feature do
   include Rack::Test::Methods
@@ -58,6 +59,15 @@ describe "CloudTasks", type: :feature do
               #{QUEUE_ID} #{payload}`
 
     expect(output).to include "Created task"
+  end
 
+  it "can create an HTTP task" do
+    current_directory = File.expand_path(File.dirname(__FILE__))
+    snippet_filepath  = File.join current_directory, "..", "create_http_task.rb"
+
+    output = `ruby #{snippet_filepath} #{GOOGLE_CLOUD_PROJECT} #{LOCATION_ID} \
+            #{QUEUE_ID} #{"http://test"}`
+
+    expect(output).to include "Created task"
   end
 end
