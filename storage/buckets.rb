@@ -76,6 +76,57 @@ def get_requester_pays_status project_id:, bucket_name:
   # [END get_requester_pays_status]
 end
 
+def disable_bucket_policy_only project_id:, bucket_name:
+  # [START storage_disable_bucket_policy_only]
+  # project_id  = "Your Google Cloud project ID"
+  # bucket_name = "Name of your Google Cloud Storage bucket"
+
+  require "google/cloud/storage"
+
+  storage = Google::Cloud::Storage.new project_id: project_id
+  bucket  = storage.bucket bucket_name
+
+  bucket.policy_only = false
+
+  puts "Bucket Policy Only was disabled for #{bucket_name}."
+  # [END storage_disable_bucket_policy_only]
+end
+
+def enable_bucket_policy_only project_id:, bucket_name:
+  # [START storage_enable_bucket_policy_only]
+  # project_id  = "Your Google Cloud project ID"
+  # bucket_name = "Name of your Google Cloud Storage bucket"
+
+  require "google/cloud/storage"
+
+  storage = Google::Cloud::Storage.new project_id: project_id
+  bucket  = storage.bucket bucket_name
+
+  bucket.policy_only = true
+
+  puts "Bucket Policy Only was enabled for #{bucket_name}."
+  # [END storage_enable_bucket_policy_only]
+end
+
+def get_bucket_policy_only project_id:, bucket_name:
+  # [START storage_get_bucket_policy_only]
+  # project_id  = "Your Google Cloud project ID"
+  # bucket_name = "Name of your Google Cloud Storage bucket"
+
+  require "google/cloud/storage"
+
+  storage = Google::Cloud::Storage.new project_id: project_id
+  bucket  = storage.bucket bucket_name
+
+  if bucket.policy_only?
+    puts "Bucket Policy Only is enabled for #{bucket_name}."
+    puts "Bucket will be locked on #{bucket.policy_only_locked_at}."
+  else
+    puts "Bucket Policy Only is disabled for #{bucket_name}."
+  end
+  # [END storage_get_bucket_policy_only]
+end
+
 def enable_default_kms_key project_id:, bucket_name:, default_kms_key:
   # [START storage_set_bucket_default_kms_key]
   # project_id      = "Your Google Cloud project ID"
@@ -388,6 +439,15 @@ if __FILE__ == $0
   when "get_default_event_based_hold"
     get_default_event_based_hold project_id: project_id,
                                  bucket_name: ARGV.shift
+  when "enable_bucket_policy_only"
+    enable_bucket_policy_only project_id: project_id,
+                              bucket_name: ARGV.shift
+  when "disable_bucket_policy_only"
+    disable_bucket_policy_only project_id: project_id,
+                               bucket_name: ARGV.shift
+  when "get_bucket_policy_only"
+    get_bucket_policy_only project_id: project_id,
+                           bucket_name: ARGV.shift
   else
     puts <<-usage
 Usage: bundle exec ruby buckets.rb [command] [arguments]
@@ -411,6 +471,9 @@ Commands:
   enable_default_event_based_hold  <bucket>                  Enable event-based hold for a bucket
   disable_default_event_based_hold <bucket>                  Disable event-based hold for a bucket
   get_default_event_based_hold     <bucket>                  Get state of event-based hold for a bucket
+  enable_bucket_policy_only        <bucket>                  Enable Bucket Policy Only for a bucket
+  disable_bucket_policy_only       <bucket>                  Disable Bucket Policy Only for a bucket
+  get_bucket_policy_only           <bucket>                  Get Bucket Policy Only for a bucket
 
 Environment variables:
   GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
