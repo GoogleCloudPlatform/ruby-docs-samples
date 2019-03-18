@@ -362,6 +362,71 @@ def speech_transcribe_model_selection file_path: nil, model: nil
   # [END speech_transcribe_model_selection]
 end
 
+def speech_transcribe_multichannel audio_file_path: nil
+  # [START speech_transcribe_multichannel]
+  # audio_file_path = "path/to/audio.wav"
+
+  require "google/cloud/speech"
+
+  speech = Google::Cloud::Speech.new
+
+  config = {
+    encoding:                                :LINEAR16,
+    sample_rate_hertz:                       44100,
+    language_code:                           "en-US",
+    audio_channel_count:                     2,
+    enable_separate_recognition_per_channel: true
+  }
+
+  audio_file = File.binread audio_file_path
+  audio      = { content: audio_file }
+
+  response = speech.recognize config, audio
+
+  results = response.results
+
+  results.each_with_index do |result, i|
+    alternative = result.alternatives.first
+    puts "-" * 20
+    puts "First alternative of result #{i}"
+    puts "Transcript: #{alternative.transcript}"
+    puts "Channel Tag: #{result.channel_tag}"
+  end
+  # [END speech_transcribe_multichannel]
+end
+
+def speech_transcribe_multichannel_gcs storage_path: nil
+  # [START speech_transcribe_multichannel_gcs]
+  # storage_path = "Path to file in Cloud Storage, eg. gs://bucket/audio.raw"
+
+  require "google/cloud/speech"
+
+  speech = Google::Cloud::Speech.new
+
+  config = {
+    encoding:                                :LINEAR16,
+    sample_rate_hertz:                       44100,
+    language_code:                           "en-US",
+    audio_channel_count:                     2,
+    enable_separate_recognition_per_channel: true
+  }
+
+  audio  = { uri: storage_path }
+
+  response = speech.recognize config, audio
+
+  results = response.results
+
+  results.each_with_index do |result, i|
+    alternative = result.alternatives.first
+    puts "-" * 20
+    puts "First alternative of result #{i}"
+    puts "Transcript: #{alternative.transcript}"
+    puts "Channel Tag: #{result.channel_tag}"
+  end
+  # [END speech_transcribe_multichannel_gcs]
+end
+
 if __FILE__ == $PROGRAM_NAME
   command    = ARGV.shift
 
@@ -386,6 +451,10 @@ if __FILE__ == $PROGRAM_NAME
     speech_transcribe_enhanced_model audio_file_path: ARGV.first
   when "model_selection"
     speech_transcribe_model_selection file_path: ARGV.first, model: ARGV[1]
+  when "multichannel"
+    speech_transcribe_multichannel audio_file_path: ARGV.first
+  when "multichannel_gcs"
+    speech_transcribe_multichannel_gcs storage_path: ARGV.first
   else
     puts <<-usage
 Usage: ruby speech_samples.rb <command> [arguments]
@@ -401,6 +470,8 @@ Commands:
   auto_punctuation          <filename> Detects speech in a local audio file, including automatic punctuation in the transcript.
   enhanced_model            <filename> Detects speech in a local audio file, using a model enhanced for phone call audio.
   model_selection           <filename> Detects speech in a local file, using a specific model.
+  multichannel              <filename> Detects speech in separate channels in a local file.
+  multichannel_gcs           <gcsUri> Detects speech in separate channels in an audio file located in a Google Cloud Storage bucket.
     usage
   end
 end
