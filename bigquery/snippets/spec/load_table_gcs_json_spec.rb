@@ -17,7 +17,6 @@ require "spec_helper"
 
 
 describe "Load table from JSON file on GCS" do
-
   before do
     @dataset = create_temp_dataset
   end
@@ -29,5 +28,4 @@ describe "Load table from JSON file on GCS" do
     expect(output).to include(table.table_id)
     expect(output).to include("50 rows")
   end
-
 end

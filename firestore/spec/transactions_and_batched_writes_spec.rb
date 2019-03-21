@@ -16,7 +16,6 @@ RSpec.configure do |config|
 end
 
 describe "Google Cloud Firestore API samples - Transactions and Batched Writes" do
-
   before do
     @firestore_project = ENV["FIRESTORE_PROJECT_ID"]
     query_create_examples project_id: @firestore_project
@@ -27,34 +26,34 @@ describe "Google Cloud Firestore API samples - Transactions and Batched Writes" 
   end
 
   # Capture and return STDOUT output by block
-  def capture &block
+  def capture
     real_stdout = $stdout
     $stdout = StringIO.new
-    block.call
+    yield
     $stdout.string
   ensure
     $stdout = real_stdout
   end
 
   example "run_simple_transaction" do
-    output = capture {
+    output = capture do
       run_simple_transaction project_id: @firestore_project
-    }
+    end
     expect(output).to include "New population is 860001."
     expect(output).to include "Ran a simple transaction to update the population field in the SF document in the cities collection."
   end
 
   example "return_info_transaction" do
-    output = capture {
+    output = capture do
       return_info_transaction project_id: @firestore_project
-    }
+    end
     expect(output).to include "Population updated!"
   end
 
   example "batch_write" do
-    output = capture {
+    output = capture do
       batch_write project_id: @firestore_project
-    }
+    end
     expect(output).to include "Batch write successfully completed."
   end
 end

@@ -19,6 +19,6 @@ gem "sinatra"
 # [END gae_flex_quickstart_dependencies]
 
 group :test do
-  gem "rspec"
   gem "rack-test"
+  gem "rspec"
 end

@@ -29,9 +29,7 @@ describe "PubSub", type: :feature do
     @pubsub = Google::Cloud::Pubsub.new
 
     topic = @pubsub.topic @topic_name
-    if topic.nil?
-      @pubsub.create_topic @topic_name
-    end
+    @pubsub.create_topic @topic_name if topic.nil?
     require_relative "../app.rb"
   end
 
@@ -51,6 +49,6 @@ describe "PubSub", type: :feature do
 
   after :all do
     topic = @pubsub.topic @topic_name
-    topic.delete if topic
+    topic&.delete
   end
 end

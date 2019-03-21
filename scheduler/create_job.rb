@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-def create_job(project_id, location_id, service_id)
+def create_job project_id, location_id, service_id
   # [START cloud_scheduler_create_job]
   require "google/cloud/scheduler"
 
@@ -25,7 +25,7 @@ def create_job(project_id, location_id, service_id)
   # service_id = "my-serivce"
 
   # Construct the fully qualified location path.
-  parent = client.location_path(project_id, location_id)
+  parent = client.location_path project_id, location_id
 
   # Construct the request body.
   job = {
@@ -33,18 +33,18 @@ def create_job(project_id, location_id, service_id)
       app_engine_routing: {
         service: service_id
       },
-      relative_uri: "/log_payload",
-      http_method: "POST",
-      body: "Hello World"
+      relative_uri:       "/log_payload",
+      http_method:        "POST",
+      body:               "Hello World"
     },
-    schedule: "* * * * *",
-    time_zone: "America/Los_Angeles"
+    schedule:               "* * * * *",
+    time_zone:              "America/Los_Angeles"
   }
 
   # Use the client to send the job creation request.
-  response = client.create_job(parent, job)
+  response = client.create_job parent, job
 
   puts "Created job: #{response.name}"
   # [END cloud_scheduler_create_job]
-  return response.name
+  response.name
 end

@@ -17,20 +17,17 @@ require "rspec/retry"
 require "google/cloud/logging"
 
 describe "Logging Quickstart" do
-
-  def wait_until &condition
-    1.upto(7) do |n|
-      return if condition.call
+  def wait_until
+    1.upto 7 do |n|
+      return if yield
       sleep 2**n
     end
     raise "Attempted to wait but Condition not met."
   end
 
   def delete_log_entries
-    begin
-      @logging.delete_log @log_name
-    rescue Google::Cloud::NotFoundError
-    end
+    @logging.delete_log @log_name
+  rescue Google::Cloud::NotFoundError
   end
 
   before do
@@ -48,13 +45,13 @@ describe "Logging Quickstart" do
   end
 
   def test_log_entries
-    @logging.entries filter: %Q{logName = "#{@log_name}"}
+    @logging.entries filter: %(logName = "#{@log_name}")
   end
 
   it "logs a new entry" do
-    expect(Google::Cloud::Logging).to receive(:new).
-                                      with(project: "YOUR_PROJECT_ID").
-                                      and_return(@logging)
+    expect(Google::Cloud::Logging).to receive(:new)
+      .with(project: "YOUR_PROJECT_ID")
+      .and_return(@logging)
     expect(@logging).to receive(:entry).and_return(@entry)
     allow(@entry).to receive(:log_name=).with("my-log")
 
@@ -68,7 +65,7 @@ describe "Logging Quickstart" do
 
     entries = []
 
-    entries = test_log_entries;
+    entries = test_log_entries
 
     wait_until { entries = test_log_entries; entries.any? }
 
@@ -79,4 +76,3 @@ describe "Logging Quickstart" do
     expect(entry.payload).to eq "Hello, world!"
   end
 end
-

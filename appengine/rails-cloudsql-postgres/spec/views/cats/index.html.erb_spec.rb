@@ -12,27 +12,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe "cats/index", type: :view do
-  before(:each) do
-    assign(:cats, [
-      Cat.create!(
-        :name => "Mr. Whiskers",
-        :age => 4
-      ),
-      Cat.create!(
-        :name => "Ms. Paws",
-        :age => 2
-      )
-    ])
+  before :each do
+    assign(
+      :cats,
+      [
+        Cat.create!(name: "Mr. Whiskers", age: 4),
+        Cat.create!(name: "Ms. Paws", age: 2)
+      ]
+    )
   end
 
   it "renders a list of cats" do
     render
-    assert_select "tr>td", :text => "Mr. Whiskers".to_s, :count => 1
-    assert_select "tr>td", :text => 4.to_s, :count => 1
-    assert_select "tr>td", :text => "Ms. Paws".to_s, :count => 1
-    assert_select "tr>td", :text => 2.to_s, :count => 1
+    assert_select "tr>td", text: "Mr. Whiskers".to_s, count: 1
+    assert_select "tr>td", text: 4.to_s, count: 1
+    assert_select "tr>td", text: "Ms. Paws".to_s, count: 1
+    assert_select "tr>td", text: 2.to_s, count: 1
   end
 end

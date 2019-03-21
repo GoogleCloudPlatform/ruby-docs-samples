@@ -18,7 +18,6 @@ require "google/cloud/storage"
 require_relative "../detect_crop_hints"
 
 describe "Detect Crop Hints" do
-
   before do
     @storage    = Google::Cloud::Storage.new
     @bucket     = @storage.bucket ENV["GOOGLE_CLOUD_STORAGE_BUCKET"]

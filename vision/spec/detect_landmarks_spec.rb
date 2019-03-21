@@ -18,7 +18,6 @@ require "google/cloud/storage"
 require_relative "../detect_landmarks"
 
 describe "Detect Landmarks" do
-
   # Returns full path to sample image included in repository for testing
   def image_path filename
     File.expand_path "../resources/#{filename}", __dir__

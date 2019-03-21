@@ -16,7 +16,7 @@
 #       method definitions in Ruby. To allow for this, code snippets in this
 #       sample are wrapped in global lambdas.
 
-$create_key_ring = -> (project_id:, location_id:, key_ring_id:) do
+$create_key_ring = lambda do |project_id:, location_id:, key_ring_id:|
   # [START kms_create_keyring]
   # project_id  = "Your Google Cloud project ID"
   # key_ring_id = "The ID of the new key ring"
@@ -29,19 +29,19 @@ $create_key_ring = -> (project_id:, location_id:, key_ring_id:) do
   client = CloudKMS::KeyManagementServiceClient.new
 
   # The location associated with the key ring
-  location = CloudKMS::KeyManagementServiceClient.location_path(project_id, location_id)
+  location = CloudKMS::KeyManagementServiceClient.location_path project_id, location_id
 
   # KeyRing creation parameters (currently unused)
   key_ring_spec = CloudKMS::KeyRing.new
 
   # Create a key ring for your project
-  key_ring = client.create_key_ring(location, key_ring_id, key_ring_spec)
+  key_ring = client.create_key_ring location, key_ring_id, key_ring_spec
 
   puts "Created key ring #{key_ring_id}"
   # [END kms_create_keyring]
 end
 
-$create_crypto_key = -> (project_id:, location_id:, key_ring_id:, crypto_key_id:) do
+$create_crypto_key = lambda do |project_id:, location_id:, key_ring_id:, crypto_key_id:|
   # [START kms_create_cryptokey]
   # project_id    = "Your Google Cloud project ID"
   # location_id   = "The location of the key ring"
@@ -56,20 +56,20 @@ $create_crypto_key = -> (project_id:, location_id:, key_ring_id:, crypto_key_id:
 
   # The key ring to use
   key_ring =
-     CloudKMS::KeyManagementServiceClient.key_ring_path(project_id, location_id, key_ring_id)
+    CloudKMS::KeyManagementServiceClient.key_ring_path project_id, location_id, key_ring_id
 
   # CryptoKey creation parameters
   crypto_key_spec = CloudKMS::CryptoKey.new
   crypto_key_spec.purpose = CloudKMS::CryptoKey::CryptoKeyPurpose::ENCRYPT_DECRYPT
 
   # Create a crypto key in the key ring
-  crypto_key = client.create_crypto_key(key_ring, crypto_key_id, crypto_key_spec)
+  crypto_key = client.create_crypto_key key_ring, crypto_key_id, crypto_key_spec
 
   puts "Created crypto key #{crypto_key_id}"
   # [END kms_create_cryptokey]
 end
 
-$encrypt = -> (project_id:, location_id:, key_ring_id:, crypto_key_id:, plaintext_file:, ciphertext_file:) do
+$encrypt = lambda do |project_id:, location_id:, key_ring_id:, crypto_key_id:, plaintext_file:, ciphertext_file:|
   # [START kms_encrypt]
   # project_id      = "Your Google Cloud project ID"
   # location_id     = "The location of the key ring"
@@ -86,22 +86,23 @@ $encrypt = -> (project_id:, location_id:, key_ring_id:, crypto_key_id:, plaintex
 
   # The crypto key to use
   crypto_key = CloudKMS::KeyManagementServiceClient.crypto_key_path(
-      project_id, location_id, key_ring_id, crypto_key_id)
+    project_id, location_id, key_ring_id, crypto_key_id
+  )
 
   # Read the secret data from the file
-  plaintext = File.open(plaintext_file, 'rb'){ |f| f.read }
+  plaintext = File.open(plaintext_file, "rb", &:read)
 
   # Use the KMS API to encrypt the data
-  response = client.encrypt(crypto_key, plaintext)
+  response = client.encrypt crypto_key, plaintext
 
   # Write the encrypted binary data to the output file
-  File.open(ciphertext_file, 'wb'){ |f| f.write response.ciphertext }
+  File.open(ciphertext_file, "wb") { |f| f.write response.ciphertext }
 
   puts "Saved encrypted #{plaintext_file} as #{ciphertext_file}"
   # [END kms_encrypt]
 end
 
-$decrypt = -> (project_id:, location_id:, key_ring_id:, crypto_key_id:, ciphertext_file:, plaintext_file:) do
+$decrypt = lambda do |project_id:, location_id:, key_ring_id:, crypto_key_id:, ciphertext_file:, plaintext_file:|
   # [START kms_decrypt]
   # project_id    = "Your Google Cloud project ID"
   # location_id   = "The location of the key ring"
@@ -118,22 +119,23 @@ $decrypt = -> (project_id:, location_id:, key_ring_id:, crypto_key_id:, cipherte
 
   # The crypto key to use
   crypto_key = CloudKMS::KeyManagementServiceClient.crypto_key_path(
-      project_id, location_id, key_ring_id, crypto_key_id)
+    project_id, location_id, key_ring_id, crypto_key_id
+  )
 
   # Read the encrypted data from the file
-  ciphertext = File.open(ciphertext_file, 'rb'){ |f| f.read }
+  ciphertext = File.open(ciphertext_file, "rb", &:read)
 
   # Use the KMS API to decrypt the data
-  response = client.decrypt(crypto_key, ciphertext)
+  response = client.decrypt crypto_key, ciphertext
 
   # Write the decrypted text to the output file
-  File.open(plaintext_file, 'wb'){ |f| f.write response.plaintext }
+  File.open(plaintext_file, "wb") { |f| f.write response.plaintext }
 
   puts "Saved decrypted #{ciphertext_file} as #{plaintext_file}"
   # [END kms_decrypt]
 end
 
-$create_crypto_key_version = -> (project_id:, location_id:, key_ring_id:, crypto_key_id:) do
+$create_crypto_key_version = lambda do |project_id:, location_id:, key_ring_id:, crypto_key_id:|
   # [START kms_create_cryptokey_version]
   # project_id    = "Your Google Cloud project ID"
   # location_id   = "The location of the key ring"
@@ -148,20 +150,21 @@ $create_crypto_key_version = -> (project_id:, location_id:, key_ring_id:, crypto
 
   # The crypto key to use
   crypto_key = CloudKMS::KeyManagementServiceClient.crypto_key_path(
-      project_id, location_id, key_ring_id, crypto_key_id)
+    project_id, location_id, key_ring_id, crypto_key_id
+  )
 
   # CryptoKeyVersion creation parameters (currently unused)
   version_spec = CloudKMS::CryptoKeyVersion.new
 
   # Create a new version in the crypto key
-  crypto_key_version = client.create_crypto_key_version(crypto_key, version_spec)
+  crypto_key_version = client.create_crypto_key_version crypto_key, version_spec
 
   puts "Created version #{crypto_key_version.name} for key " +
        "#{crypto_key_id} in key ring #{key_ring_id}"
   # [END kms_create_cryptokey_version]
 end
 
-$set_crypto_key_primary_version = -> (project_id:, location_id:, key_ring_id:, crypto_key_id:, version_id:) do
+$set_crypto_key_primary_version = lambda do |project_id:, location_id:, key_ring_id:, crypto_key_id:, version_id:|
   # [START kms_set_cryptokey_primary_version]
   # project_id    = "Your Google Cloud project ID"
   # location_id   = "The location of the key ring"
@@ -177,17 +180,18 @@ $set_crypto_key_primary_version = -> (project_id:, location_id:, key_ring_id:, c
 
   # The crypto key to use
   crypto_key = CloudKMS::KeyManagementServiceClient.crypto_key_path(
-      project_id, location_id, key_ring_id, crypto_key_id)
+    project_id, location_id, key_ring_id, crypto_key_id
+  )
 
   # Update the CryptoKey primary version
-  crypto_key_version = client.update_crypto_key_primary_version(crypto_key, version_id)
+  crypto_key_version = client.update_crypto_key_primary_version crypto_key, version_id
 
   puts "Set #{version_id} as primary version for crypto key " +
        "#{crypto_key_id} in key ring #{key_ring_id}"
   # [END kms_set_cryptokey_primary_version]
 end
 
-$enable_crypto_key_version = -> (project_id:, location_id:, key_ring_id:, crypto_key_id:, version_id:) do
+$enable_crypto_key_version = lambda do |project_id:, location_id:, key_ring_id:, crypto_key_id:, version_id:|
   # [START kms_enable_cryptokey_version]
   # project_id    = "Your Google Cloud project ID"
   # location_id   = "The location of the key ring"
@@ -203,8 +207,9 @@ $enable_crypto_key_version = -> (project_id:, location_id:, key_ring_id:, crypto
 
   # Retrieve the crypto key version to update
   version_path = CloudKMS::KeyManagementServiceClient.crypto_key_version_path(
-      project_id, location_id, key_ring_id, crypto_key_id, version_id)
-  version = client.get_crypto_key_version(version_path)
+    project_id, location_id, key_ring_id, crypto_key_id, version_id
+  )
+  version = client.get_crypto_key_version version_path
 
   # Set the version state to enabled for update
   version.state = CloudKMS::CryptoKeyVersion::CryptoKeyVersionState::ENABLED
@@ -212,13 +217,13 @@ $enable_crypto_key_version = -> (project_id:, location_id:, key_ring_id:, crypto
   update_mask.paths << "state"
 
   # Enable the crypto key version
-  result = client.update_crypto_key_version(version, update_mask)
+  result = client.update_crypto_key_version version, update_mask
 
   puts "Enabled version #{version_id} of #{crypto_key_id}"
   # [END kms_enable_cryptokey_version]
 end
 
-$disable_crypto_key_version = -> (project_id:, key_ring_id:, crypto_key_id:, version_id:, location_id:) do
+$disable_crypto_key_version = lambda do |project_id:, key_ring_id:, crypto_key_id:, version_id:, location_id:|
   # [START kms_disable_cryptokey_version]
   # project_id    = "Your Google Cloud project ID"
   # location_id   = "The location of the key ring"
@@ -234,8 +239,9 @@ $disable_crypto_key_version = -> (project_id:, key_ring_id:, crypto_key_id:, ver
 
   # Retrieve the crypto key version to update
   version_path = CloudKMS::KeyManagementServiceClient.crypto_key_version_path(
-      project_id, location_id, key_ring_id, crypto_key_id, version_id)
-  version = client.get_crypto_key_version(version_path)
+    project_id, location_id, key_ring_id, crypto_key_id, version_id
+  )
+  version = client.get_crypto_key_version version_path
 
   # Set the version state to disabled for update
   version.state = CloudKMS::CryptoKeyVersion::CryptoKeyVersionState::DISABLED
@@ -243,13 +249,13 @@ $disable_crypto_key_version = -> (project_id:, key_ring_id:, crypto_key_id:, ver
   update_mask.paths << "state"
 
   # Disable the crypto key version
-  result = client.update_crypto_key_version(version, update_mask)
+  result = client.update_crypto_key_version version, update_mask
 
   puts "Disabled version #{version_id} of #{crypto_key_id}"
   # [END kms_disable_cryptokey_version]
 end
 
-$restore_crypto_key_version = -> (project_id:, location_id:, key_ring_id:, crypto_key_id:, version_id:) do
+$restore_crypto_key_version = lambda do |project_id:, location_id:, key_ring_id:, crypto_key_id:, version_id:|
   # [START kms_restore_cryptokey_version]
   # project_id    = "Your Google Cloud project ID"
   # location_id   = "The location of the key ring"
@@ -265,17 +271,18 @@ $restore_crypto_key_version = -> (project_id:, location_id:, key_ring_id:, crypt
 
   # The crypto key version to restore
   version = CloudKMS::KeyManagementServiceClient.crypto_key_version_path(
-      project_id, location_id, key_ring_id, crypto_key_id, version_id)
+    project_id, location_id, key_ring_id, crypto_key_id, version_id
+  )
 
   # Restore the crypto key version
-  restored = client.restore_crypto_key_version(version)
+  restored = client.restore_crypto_key_version version
 
   puts "Restored version #{version_id} of #{crypto_key_id}"
   # [END kms_restore_cryptokey_version]
 end
 
 
-$destroy_crypto_key_version = -> (project_id:, location_id:, key_ring_id:, crypto_key_id:, version_id:) do
+$destroy_crypto_key_version = lambda do |project_id:, location_id:, key_ring_id:, crypto_key_id:, version_id:|
   # [START kms_destroy_cryptokey_version]
   # project_id    = "Your Google Cloud project ID"
   # location_id   = "The location of the key ring"
@@ -291,16 +298,17 @@ $destroy_crypto_key_version = -> (project_id:, location_id:, key_ring_id:, crypt
 
   # The crypto key version to destroy
   version = CloudKMS::KeyManagementServiceClient.crypto_key_version_path(
-      project_id, location_id, key_ring_id, crypto_key_id, version_id)
- 
+    project_id, location_id, key_ring_id, crypto_key_id, version_id
+  )
+
   # Destroy the crypto key version
-  destroyed = client.destroy_crypto_key_version(version)
+  destroyed = client.destroy_crypto_key_version version
 
   puts "Destroyed version #{version_id} of #{crypto_key_id}"
   # [END kms_destroy_cryptokey_version]
 end
 
-$add_member_to_key_ring_policy = -> (project_id:, location_id:, key_ring_id:, member:, role:) do
+$add_member_to_key_ring_policy = lambda do |project_id:, location_id:, key_ring_id:, member:, role:|
   # [START kms_add_member_to_keyring_policy]
   # project_id  = "Your Google Cloud project ID"
   # location_id = "The location of the key ring"
@@ -316,24 +324,24 @@ $add_member_to_key_ring_policy = -> (project_id:, location_id:, key_ring_id:, me
 
   # The key ring to use
   key_ring =
-     CloudKMS::KeyManagementServiceClient.key_ring_path(project_id, location_id, key_ring_id)
+    CloudKMS::KeyManagementServiceClient.key_ring_path project_id, location_id, key_ring_id
 
   # Get the current IAM policy
-  policy = client.get_iam_policy(key_ring)
+  policy = client.get_iam_policy key_ring
 
   # Add new member to current bindings
   policy.bindings ||= []
   policy.bindings << Google::Iam::V1::Binding.new(members: [member], role: role)
 
   # Update IAM policy
-  client.set_iam_policy(key_ring, policy)
+  client.set_iam_policy key_ring, policy
 
   puts "Member #{member} added to policy for " +
        "key ring #{key_ring_id}"
   # [END kms_add_member_to_keyring_policy]
 end
 
-$add_member_to_crypto_key_policy = -> (project_id:, location_id:, key_ring_id:, crypto_key_id:, member:, role:) do
+$add_member_to_crypto_key_policy = lambda do |project_id:, location_id:, key_ring_id:, crypto_key_id:, member:, role:|
   # [START kms_add_member_to_cryptokey_policy]
   # project_id    = "Your Google Cloud project ID"
   # location_id   = "The location of the key ring"
@@ -350,24 +358,25 @@ $add_member_to_crypto_key_policy = -> (project_id:, location_id:, key_ring_id:, 
 
   # The CryptoKey to use
   crypto_key = CloudKMS::KeyManagementServiceClient.crypto_key_path(
-    project_id, location_id, key_ring_id, crypto_key_id)
+    project_id, location_id, key_ring_id, crypto_key_id
+  )
 
   # Get the current IAM policy
-  policy = client.get_iam_policy(crypto_key)
+  policy = client.get_iam_policy crypto_key
 
   # Add new member to current bindings
   policy.bindings ||= []
   policy.bindings << Google::Iam::V1::Binding.new(members: [member], role: role)
 
   # Update IAM policy
-  client.set_iam_policy(crypto_key, policy)
+  client.set_iam_policy crypto_key, policy
 
   puts "Member #{member} added to policy for " +
        "crypto key #{crypto_key_id} in key ring #{key_ring_id}"
   # [END kms_add_member_to_cryptokey_policy]
 end
 
-$remove_member_from_crypto_key_policy = -> (project_id:, location_id:, key_ring_id:, crypto_key_id:, member:, role:) do
+$remove_member_from_crypto_key_policy = lambda do |project_id:, location_id:, key_ring_id:, crypto_key_id:, member:, role:|
   # [START kms_remove_member_from_cryptokey_policy]
   # project_id    = "Your Google Cloud project ID"
   # location_id   = "The location of the key ring"
@@ -384,25 +393,28 @@ $remove_member_from_crypto_key_policy = -> (project_id:, location_id:, key_ring_
 
   # The CryptoKey to use
   crypto_key = CloudKMS::KeyManagementServiceClient.crypto_key_path(
-    project_id, location_id, key_ring_id, crypto_key_id)
+    project_id, location_id, key_ring_id, crypto_key_id
+  )
 
   # Get the current IAM policy
-  policy = client.get_iam_policy(crypto_key)
+  policy = client.get_iam_policy crypto_key
 
   # Remove a member from current bindings
   policy.bindings.each do |binding|
-    binding.members.delete(member) if binding.role == role
+    if binding.role == role
+      binding.members.delete member
+    end
   end
 
   # Update IAM policy
-  client.set_iam_policy(crypto_key, policy)
+  client.set_iam_policy crypto_key, policy
 
   puts "Member #{member} removed from policy for " +
        "crypto key #{crypto_key_id} in key ring #{key_ring_id}"
   # [END kms_remove_member_from_cryptokey_policy]
 end
 
-$get_key_ring_policy = -> (project_id:, key_ring_id:, location_id:) do
+$get_key_ring_policy = lambda do |project_id:, key_ring_id:, location_id:|
   # [START kms_get_keyring_policy]
   # project_id  = "Your Google Cloud project ID"
   # location_id = "The location of the key ring"
@@ -416,10 +428,10 @@ $get_key_ring_policy = -> (project_id:, key_ring_id:, location_id:) do
 
   # The key ring to use
   key_ring =
-     CloudKMS::KeyManagementServiceClient.key_ring_path(project_id, location_id, key_ring_id)
+    CloudKMS::KeyManagementServiceClient.key_ring_path project_id, location_id, key_ring_id
 
   # Get the current IAM policy
-  policy = client.get_iam_policy(key_ring)
+  policy = client.get_iam_policy key_ring
 
   # Print role and associated members
   if policy.bindings
@@ -439,9 +451,9 @@ def run_sample arguments
   case command
   when "create_key_ring"
     $create_key_ring.call(
-      project_id:    project_id,
-      location_id:   arguments.shift,
-      key_ring_id:   arguments.shift
+      project_id:  project_id,
+      location_id: arguments.shift,
+      key_ring_id: arguments.shift
     )
   when "create_crypto_key"
     $create_crypto_key.call(
@@ -505,7 +517,7 @@ def run_sample arguments
       location_id:   arguments.shift,
       key_ring_id:   arguments.shift,
       crypto_key_id: arguments.shift,
-      version_id:    arguments.shift,
+      version_id:    arguments.shift
     )
   when "destroy_crypto_key_version"
     $destroy_crypto_key_version.call(
@@ -517,11 +529,11 @@ def run_sample arguments
     )
   when "add_member_to_key_ring_policy"
     $add_member_to_key_ring_policy.call(
-      project_id:    project_id,
-      location_id:   arguments.shift,
-      key_ring_id:   arguments.shift,
-      member:        arguments.shift,
-      role:          arguments.shift
+      project_id:  project_id,
+      location_id: arguments.shift,
+      key_ring_id: arguments.shift,
+      member:      arguments.shift,
+      role:        arguments.shift
     )
   when "add_member_to_crypto_key_policy"
     $add_member_to_crypto_key_policy.call(
@@ -543,37 +555,36 @@ def run_sample arguments
     )
   when "get_key_ring_policy"
     $get_key_ring_policy.call(
-      project_id:    project_id,
-      location_id:   arguments.shift,
-      key_ring_id:   arguments.shift
+      project_id:  project_id,
+      location_id: arguments.shift,
+      key_ring_id: arguments.shift
     )
   else
-    puts <<-usage
-Usage: bundle exec ruby kms.rb [command] [arguments]
+    puts <<~USAGE
+      Usage: bundle exec ruby kms.rb [command] [arguments]
 
-Commands:
-  create_key_ring                      <location> <key_ring> Create a new key ring
-  create_crypto_key                    <location> <key_ring> <crypto_key> Create a new crypto key
-  encrypt_file                         <location> <key_ring> <crypto_key> <input_file> <output_file> Encrypt a file
-  decrypt_file                         <location> <key_ring> <crypto_key> <input_file> <output_file> Decrypt a file
-  create_crypto_key_version            <location> <key_ring> <crypto_key> Create a new crypto key version
-  set_crypto_key_primary_version       <location> <key_ring> <crypto_key> <verison> Set a primary crypto key version
-  enable_crypto_key_version            <location> <key_ring> <crypto_key> <version> Enable a crypto key version
-  disable_crypto_key_version           <location> <key_ring> <crypto_key> <version> Disable a crypto key version
-  restore_crypto_key_version           <location> <key_ring> <crypto_key> <version> Restore a crypto key version
-  destroy_crypto_key_version           <location> <key_ring> <crypto_key> <version> Destroy a crypto key version
-  add_member_to_key_ring_policy        <location> <key_ring> <member> <role> Add member to key ring IAM policy
-  add_member_to_crypto_key_policy      <location> <key_ring> <crypto_key> <member> <role> Add member to crypto key IAM policy
-  remove_member_from_crypto_key_policy <location> <key_ring> <crypto_key> <member> <role> Remove member from crypto key IAM policy
-  get_key_ring_policy                  <location> <key_ring> Get a key ring IAM policy
+      Commands:
+        create_key_ring                      <location> <key_ring> Create a new key ring
+        create_crypto_key                    <location> <key_ring> <crypto_key> Create a new crypto key
+        encrypt_file                         <location> <key_ring> <crypto_key> <input_file> <output_file> Encrypt a file
+        decrypt_file                         <location> <key_ring> <crypto_key> <input_file> <output_file> Decrypt a file
+        create_crypto_key_version            <location> <key_ring> <crypto_key> Create a new crypto key version
+        set_crypto_key_primary_version       <location> <key_ring> <crypto_key> <verison> Set a primary crypto key version
+        enable_crypto_key_version            <location> <key_ring> <crypto_key> <version> Enable a crypto key version
+        disable_crypto_key_version           <location> <key_ring> <crypto_key> <version> Disable a crypto key version
+        restore_crypto_key_version           <location> <key_ring> <crypto_key> <version> Restore a crypto key version
+        destroy_crypto_key_version           <location> <key_ring> <crypto_key> <version> Destroy a crypto key version
+        add_member_to_key_ring_policy        <location> <key_ring> <member> <role> Add member to key ring IAM policy
+        add_member_to_crypto_key_policy      <location> <key_ring> <crypto_key> <member> <role> Add member to crypto key IAM policy
+        remove_member_from_crypto_key_policy <location> <key_ring> <crypto_key> <member> <role> Remove member from crypto key IAM policy
+        get_key_ring_policy                  <location> <key_ring> Get a key ring IAM policy
 
-Environment variables:
-  GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
-    usage
+      Environment variables:
+        GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
+    USAGE
   end
 end
 
-if __FILE__ == $PROGRAM_NAME
+if $PROGRAM_NAME == __FILE__
   run_sample ARGV
 end
-

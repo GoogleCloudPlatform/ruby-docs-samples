@@ -2,16 +2,16 @@ require "google/cloud/monitoring"
 
 def create_metric_descriptor project_id:
   # Random suffix for metric type to avoid collisions with other runs
-  random_suffix = rand(36**10).to_s(36)
+  random_suffix = rand(36**10).to_s 36
 
   # [START monitoring_create_metric]
   client = Google::Cloud::Monitoring::Metric.new
   project_name = Google::Cloud::Monitoring::V3::MetricServiceClient.project_path project_id
-  
+
   descriptor = Google::Api::MetricDescriptor.new(
-    type: "custom.googleapis.com/my_metric#{random_suffix}",
+    type:        "custom.googleapis.com/my_metric#{random_suffix}",
     metric_kind: Google::Api::MetricDescriptor::MetricKind::GAUGE,
-    value_type: Google::Api::MetricDescriptor::ValueType::DOUBLE,
+    value_type:  Google::Api::MetricDescriptor::ValueType::DOUBLE,
     description: "This is a simple example of a custom metric."
   )
 
@@ -35,7 +35,7 @@ def write_time_series project_id:
   project_name = Google::Cloud::Monitoring::V3::MetricServiceClient.project_path project_id
 
   # Random suffix for metric type to avoid collisions with other runs
-  random_suffix = rand(36**10).to_s(36)
+  random_suffix = rand(36**10).to_s 36
 
   series = Google::Monitoring::V3::TimeSeries.new
   metric = Google::Api::Metric.new type: "custom.googleapis.com/my_metric#{random_suffix}"
@@ -113,7 +113,7 @@ def list_time_series_aggregate project_id:
   interval.start_time = Google::Protobuf::Timestamp.new seconds: now.to_i - 300, nanos: now.usec
 
   aggregation = Google::Monitoring::V3::Aggregation.new(
-    alignment_period: { seconds: 300 },
+    alignment_period:   { seconds: 300 },
     per_series_aligner: Google::Monitoring::V3::Aggregation::Aligner::ALIGN_MEAN
   )
 
@@ -142,10 +142,10 @@ def list_time_series_reduce project_id:
   interval.start_time = Google::Protobuf::Timestamp.new seconds: now.to_i - 300, nanos: now.usec
 
   aggregation = Google::Monitoring::V3::Aggregation.new(
-    alignment_period: { seconds: 300 },
-    per_series_aligner: Google::Monitoring::V3::Aggregation::Aligner::ALIGN_MEAN,
+    alignment_period:     { seconds: 300 },
+    per_series_aligner:   Google::Monitoring::V3::Aggregation::Aligner::ALIGN_MEAN,
     cross_series_reducer: Google::Monitoring::V3::Aggregation::Reducer::REDUCE_MEAN,
-    group_by_fields: ["resource.zone"]
+    group_by_fields:      ["resource.zone"]
   )
 
   results = client.list_time_series(
@@ -205,7 +205,7 @@ def get_metric_descriptor metric_name:
   # [END monitoring_get_descriptor]
 end
 
-if __FILE__ == $PROGRAM_NAME
+if $PROGRAM_NAME == __FILE__
   case ARGV.shift
   when "create_metric_descriptor"
     create_metric_descriptor project_id: ARGV.shift

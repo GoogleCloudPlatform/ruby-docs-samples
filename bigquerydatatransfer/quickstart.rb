@@ -38,4 +38,3 @@ data_transfer.list_data_sources(project_path).each do |data_source|
   puts "Description: #{data_source.description}"
 end
 # [END bigquerydatatransfer_quickstart]
-

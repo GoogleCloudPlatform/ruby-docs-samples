@@ -25,7 +25,7 @@ get "/" do
   request = Net::HTTP::Get.new uri.path
   request.add_field "Metadata-Flavor", "Google"
 
-  http = Net::HTTP.new(uri.host, uri.port)
+  http = Net::HTTP.new uri.host, uri.port
 
   response = http.request request
 

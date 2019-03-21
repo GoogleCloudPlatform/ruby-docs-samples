@@ -57,17 +57,16 @@ def detect_image_properties_gcs image_path:
   # [END vision_image_property_detection_gcs]
 end
 
-if __FILE__ == $PROGRAM_NAME
+if $PROGRAM_NAME == __FILE__
   image_path = ARGV.shift
 
   if !image_path
     puts <<~USAGE
-    Usage: ruby detect_image_properties.rb [image file path]
-
-    Example:
-      ruby detect_image_properties.rb image.png
-      ruby detect_image_properties.rb https://public-url/image.png
-      ruby detect_image_properties.rb gs://my-bucket/image.png
+      Usage: ruby detect_image_properties.rb [image file path]
+       Example:
+        ruby detect_image_properties.rb image.png
+        ruby detect_image_properties.rb https://public-url/image.png
+        ruby detect_image_properties.rb gs://my-bucket/image.png
     USAGE
   elsif image_path =~ URI::DEFAULT_PARSER.make_regexp
     detect_image_properties_gs image_path: image_path

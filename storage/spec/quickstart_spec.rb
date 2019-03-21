@@ -28,7 +28,6 @@ RSpec.configure do |config|
 end
 
 describe "Storage Quickstart" do
-
   it "creates a new bucket" do
     storage     = Google::Cloud::Storage.new
     bucket_name = ENV["GOOGLE_CLOUD_STORAGE_BUCKET"]
@@ -39,14 +38,14 @@ describe "Storage Quickstart" do
       bucket.delete
     end
 
-    expect(storage.bucket bucket_name).to be nil
-    expect(Google::Cloud::Storage).to receive(:new).
-                                      with(project_id: "YOUR_PROJECT_ID").
-                                      and_return(storage)
+    expect(storage.bucket(bucket_name)).to be nil
+    expect(Google::Cloud::Storage).to receive(:new)
+      .with(project_id: "YOUR_PROJECT_ID")
+      .and_return(storage)
 
     bucket = storage.create_bucket bucket_name
-    expect(storage).to receive(:create_bucket).with("my-new-bucket").
-                                               and_return(bucket)
+    expect(storage).to receive(:create_bucket).with("my-new-bucket")
+                                              .and_return(bucket)
 
     expect {
       load File.expand_path("../quickstart.rb", __dir__)
@@ -54,8 +53,6 @@ describe "Storage Quickstart" do
       "Bucket #{bucket_name} was created.\n"
     ).to_stdout
 
-    expect(storage.bucket bucket_name).not_to be nil
+    expect(storage.bucket(bucket_name)).not_to be nil
   end
-
 end
-

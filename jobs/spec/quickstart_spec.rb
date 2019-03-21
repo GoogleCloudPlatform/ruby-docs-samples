@@ -36,4 +36,3 @@ describe "Cloud Job Discovery Quickstart" do
     ).to_stdout
   end
 end
-

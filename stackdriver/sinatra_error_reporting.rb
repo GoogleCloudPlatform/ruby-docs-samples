@@ -35,14 +35,13 @@ get "/" do
 end
 
 get "/raise" do
-# [START error_reporting_exception]
+  # [START error_reporting_exception]
   require "google/cloud/error_reporting"
 
   begin
-    fail "Raise an exception for Error Reporting."
-  rescue => exception
+    raise "Raise an exception for Error Reporting."
+  rescue StandardError => exception
     Google::Cloud::ErrorReporting.report exception
   end
-# [END error_reporting_exception]
+  # [END error_reporting_exception]
 end
-

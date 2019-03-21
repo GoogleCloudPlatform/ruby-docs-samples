@@ -49,7 +49,7 @@ end
 
 # [START datastore_retrieve_entities]
 def list_tasks
-  query = @datastore.query("Task").order("created")
+  query = @datastore.query("Task").order "created"
   tasks = @datastore.run query
 
   tasks.each do |t|
@@ -68,7 +68,7 @@ def delete_task task_id
 end
 # [END datastore_delete_entity]
 
-if __FILE__ == $0
+if $PROGRAM_NAME == __FILE__
   create_client ENV["GOOGLE_CLOUD_PROJECT"]
   case ARGV.shift
   when "new"
@@ -80,17 +80,17 @@ if __FILE__ == $0
   when "delete"
     delete_task ARGV.shift.to_i
   else
-    puts <<-usage
-Usage: bundle exec ruby tasks.rb [command] [arguments]
+    puts <<~USAGE
+      Usage: bundle exec ruby tasks.rb [command] [arguments]
 
-Commands:
-  new <description>    Adds a task with description <description>.
-  done <task_id>       Marks a task as done.
-  list                 Lists all tasks by creation time.
-  delete <task_id>     Deletes a task.
+      Commands:
+        new <description>    Adds a task with description <description>.
+        done <task_id>       Marks a task as done.
+        list                 Lists all tasks by creation time.
+        delete <task_id>     Deletes a task.
 
-Environment variables:
-  GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
-    usage
+      Environment variables:
+        GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
+    USAGE
   end
 end

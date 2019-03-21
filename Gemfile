@@ -1,4 +1,4 @@
-# Copyright 2016 Google, Inc
+# Copyright 2019 Google, Inc
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,21 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START gae_flex_redislabs_memcache]
-require "sinatra"
-require "memcache"
+source "https://rubygems.org"
 
-memcached_address = ENV["MEMCACHE_PORT_11211_TCP_ADDR"] || "localhost"
-memcached_port    = ENV["MEMCACHE_PORT_11211_TCP_PORT"] || 11_211
-
-memcache = MemCache.new "#{memcached_address}:#{memcached_port}"
-
-# Set initial value of counter
-memcache.set "counter", 0, 0, true
-
-get "/" do
-  value = memcache.incr "counter"
-
-  "Counter value is #{value}"
-end
-# [END gae_flex_redislabs_memcache]
+gem "google-style", "~> 0.2", groups: [:development, :test]

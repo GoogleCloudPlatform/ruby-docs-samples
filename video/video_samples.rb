@@ -35,10 +35,10 @@ def analyze_labels_gcs path:
       end
 
       label.segments.each do |segment|
-        start_time = ( segment.segment.start_time_offset.seconds +
-                       segment.segment.start_time_offset.nanos / 1e9 )
-        end_time =   ( segment.segment.end_time_offset.seconds +
-                       segment.segment.end_time_offset.nanos / 1e9 )
+        start_time = (segment.segment.start_time_offset.seconds +
+                       segment.segment.start_time_offset.nanos / 1e9)
+        end_time =   (segment.segment.end_time_offset.seconds +
+                       segment.segment.end_time_offset.nanos / 1e9)
 
         puts "Segment: #{start_time} to #{end_time}"
         puts "Confidence: #{segment.confidence}"
@@ -76,10 +76,10 @@ def analyze_labels_local path:
       end
 
       label.segments.each do |segment|
-        start_time = ( segment.segment.start_time_offset.seconds +
-                       segment.segment.start_time_offset.nanos / 1e9 )
-        end_time =   ( segment.segment.end_time_offset.seconds +
-                       segment.segment.end_time_offset.nanos / 1e9 )
+        start_time = (segment.segment.start_time_offset.seconds +
+                       segment.segment.start_time_offset.nanos / 1e9)
+        end_time =   (segment.segment.end_time_offset.seconds +
+                       segment.segment.end_time_offset.nanos / 1e9)
 
         puts "Segment: #{start_time} to #{end_time}"
         puts "Confidence: #{segment.confidence}"
@@ -110,10 +110,10 @@ def analyze_shots path:
     puts "Scenes:"
 
     annotation_result.shot_annotations.each do |shot_annotation|
-      start_time = ( shot_annotation.start_time_offset.seconds +
-                     shot_annotation.start_time_offset.nanos / 1e9 )
-      end_time =   ( shot_annotation.end_time_offset.seconds +
-                     shot_annotation.end_time_offset.nanos / 1e9 )
+      start_time = (shot_annotation.start_time_offset.seconds +
+                     shot_annotation.start_time_offset.nanos / 1e9)
+      end_time =   (shot_annotation.end_time_offset.seconds +
+                     shot_annotation.end_time_offset.nanos / 1e9)
 
       puts "#{start_time} to #{end_time}"
     end
@@ -162,7 +162,7 @@ def transcribe_speech_gcs path:
 
   context = {
     speech_transcription_config: {
-      language_code: "en-US",
+      language_code:                "en-US",
       enable_automatic_punctuation: true
     }
   }
@@ -183,10 +183,10 @@ def transcribe_speech_gcs path:
 
         puts "Word level information:"
         alternative.words.each do |word_info|
-          start_time = ( word_info.start_time.seconds +
-                         word_info.start_time.nanos / 1e9 )
-          end_time =   ( word_info.end_time.seconds +
-                         word_info.end_time.nanos / 1e9 )
+          start_time = (word_info.start_time.seconds +
+                         word_info.start_time.nanos / 1e9)
+          end_time =   (word_info.end_time.seconds +
+                         word_info.end_time.nanos / 1e9)
 
           puts "#{word_info.word}: #{start_time} to #{end_time}"
         end
@@ -221,18 +221,18 @@ def detect_text_gcs path:
       text_segment = text_annotation.segments.first
       start_time_offset = text_segment.segment.start_time_offset
       end_time_offset = text_segment.segment.end_time_offset
-      start_time = ( start_time_offset.seconds +
-                     start_time_offset.nanos / 1e9 )
-      end_time =   ( end_time_offset.seconds +
-                     end_time_offset.nanos / 1e9 )
+      start_time = (start_time_offset.seconds +
+                     start_time_offset.nanos / 1e9)
+      end_time =   (end_time_offset.seconds +
+                     end_time_offset.nanos / 1e9)
       puts "start_time: #{start_time}, end_time: #{end_time}"
 
       puts "Confidence: #{text_segment.confidence}"
 
       # Print information about the first frame of the segment.
       frame = text_segment.frames.first
-      time_offset = ( frame.time_offset.seconds +
-                      frame.time_offset.nanos / 1e9 )
+      time_offset = (frame.time_offset.seconds +
+                      frame.time_offset.nanos / 1e9)
       puts "Time offset for the first frame: #{time_offset}"
 
       puts "Rotated bounding box vertices:"
@@ -271,18 +271,18 @@ def detect_text_local path:
       text_segment = text_annotation.segments.first
       start_time_offset = text_segment.segment.start_time_offset
       end_time_offset = text_segment.segment.end_time_offset
-      start_time = ( start_time_offset.seconds +
-                     start_time_offset.nanos / 1e9 )
-      end_time =   ( end_time_offset.seconds +
-                     end_time_offset.nanos / 1e9 )
+      start_time = (start_time_offset.seconds +
+                     start_time_offset.nanos / 1e9)
+      end_time =   (end_time_offset.seconds +
+                     end_time_offset.nanos / 1e9)
       puts "start_time: #{start_time}, end_time: #{end_time}"
 
       puts "Confidence: #{text_segment.confidence}"
 
       # Print information about the first frame of the segment.
       frame = text_segment.frames.first
-      time_offset = ( frame.time_offset.seconds +
-                      frame.time_offset.nanos / 1e9 )
+      time_offset = (frame.time_offset.seconds +
+                      frame.time_offset.nanos / 1e9)
       puts "Time offset for the first frame: #{time_offset}"
 
       puts "Rotated bounding box vertices:"
@@ -314,15 +314,13 @@ def track_objects_gcs path:
 
     object_annotations.each do |object_annotation|
       puts "Entity description: #{object_annotation.entity.description}"
-      if object_annotation.entity.entity_id
-        puts "Entity id: #{object_annotation.entity.entity_id}"
-      end
+      puts "Entity id: #{object_annotation.entity.entity_id}" if object_annotation.entity.entity_id
 
       object_segment = object_annotation.segment
-      start_time = ( object_segment.start_time_offset.seconds +
-                     object_segment.start_time_offset.nanos / 1e9 )
-      end_time =   ( object_segment.end_time_offset.seconds +
-                     object_segment.end_time_offset.nanos / 1e9 )
+      start_time = (object_segment.start_time_offset.seconds +
+                     object_segment.start_time_offset.nanos / 1e9)
+      end_time =   (object_segment.end_time_offset.seconds +
+                     object_segment.end_time_offset.nanos / 1e9)
       puts "Segment: #{start_time}s to #{end_time}s"
 
       puts "Confidence: #{object_annotation.confidence}"
@@ -331,8 +329,8 @@ def track_objects_gcs path:
       frame = object_annotation.frames.first
       box = frame.normalized_bounding_box
 
-      time_offset = ( frame.time_offset.seconds +
-                      frame.time_offset.nanos / 1e9 )
+      time_offset = (frame.time_offset.seconds +
+                      frame.time_offset.nanos / 1e9)
       puts "Time offset for the first frame: #{time_offset}s"
 
       puts "Bounding box position:"
@@ -367,15 +365,13 @@ def track_objects_local path:
 
     object_annotations.each do |object_annotation|
       puts "Entity description: #{object_annotation.entity.description}"
-      if object_annotation.entity.entity_id
-        puts "Entity id: #{object_annotation.entity.entity_id}"
-      end
+      puts "Entity id: #{object_annotation.entity.entity_id}" if object_annotation.entity.entity_id
 
       object_segment = object_annotation.segment
-      start_time = ( object_segment.start_time_offset.seconds +
-                     object_segment.start_time_offset.nanos / 1e9 )
-      end_time =   ( object_segment.end_time_offset.seconds +
-                     object_segment.end_time_offset.nanos / 1e9 )
+      start_time = (object_segment.start_time_offset.seconds +
+                     object_segment.start_time_offset.nanos / 1e9)
+      end_time =   (object_segment.end_time_offset.seconds +
+                     object_segment.end_time_offset.nanos / 1e9)
       puts "Segment: #{start_time}s to #{end_time}s"
 
       puts "Confidence: #{object_annotation.confidence}"
@@ -384,8 +380,8 @@ def track_objects_local path:
       frame = object_annotation.frames.first
       box = frame.normalized_bounding_box
 
-      time_offset = ( frame.time_offset.seconds +
-                      frame.time_offset.nanos / 1e9 )
+      time_offset = (frame.time_offset.seconds +
+                      frame.time_offset.nanos / 1e9)
       puts "Time offset for the first frame: #{time_offset}s"
 
       puts "Bounding box position:"
@@ -424,24 +420,23 @@ def run_sample arguments
   when "track_objects_local"
     track_objects_local path: arguments.shift
   else
-    puts <<-usage
-Usage: bundle exec ruby video_samples.rb [command] [arguments]
+    puts <<~USAGE
+      Usage: bundle exec ruby video_samples.rb [command] [arguments]
 
-Commands:
-  analyze_labels           <gcs_path>   Detects labels given a GCS path.
-  analyze_labels_local     <local_path> Detects labels given file path.
-  analyze_shots            <gcs_path>   Detects camera shot changes given a GCS path.
-  analyze_explicit_content <gcs_path>   Detects explicit content given a GCS path.
-  transcribe_speech        <gcs_path>   Transcribes speech given a GCS path.
-  detect_text_gcs          <gcs_path>   Detects text given a GCS path.
-  detect_text_local        <local_path> Detects text given file path.
-  track_objects_gcs        <gcs_path>   Track objects given a GCS path.
-  track_objects_local      <local_path> Track objects given file path.
-    usage
+      Commands:
+        analyze_labels           <gcs_path>   Detects labels given a GCS path.
+        analyze_labels_local     <local_path> Detects labels given file path.
+        analyze_shots            <gcs_path>   Detects camera shot changes given a GCS path.
+        analyze_explicit_content <gcs_path>   Detects explicit content given a GCS path.
+        transcribe_speech        <gcs_path>   Transcribes speech given a GCS path.
+        detect_text_gcs          <gcs_path>   Detects text given a GCS path.
+        detect_text_local        <local_path> Detects text given file path.
+        track_objects_gcs        <gcs_path>   Track objects given a GCS path.
+        track_objects_local      <local_path> Track objects given file path.
+    USAGE
   end
 end
 
 if $PROGRAM_NAME == __FILE__
   run_sample ARGV
 end
-

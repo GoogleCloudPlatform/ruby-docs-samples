@@ -16,7 +16,6 @@ require_relative "../table_insert_rows"
 require "spec_helper"
 
 describe "Insert rows into a table" do
-
   before do
     @dataset = create_temp_dataset
     @table = @dataset.create_table "test_table" do |schema|
@@ -30,5 +29,4 @@ describe "Insert rows into a table" do
 
     expect(output).to include("successfully")
   end
-
 end

@@ -138,6 +138,8 @@ function set_failed_status {
   EXIT_STATUS=1
 }
 
+(bundle update && bundle exec rubocop) || set_failed_status
+
 if [[ $RUN_ALL_TESTS = "1" ]]; then
   echo "Running all tests"
   SPEC_DIRS=$(find * -type d -name 'spec' -path "*/*" -not -path "*vendor/*" -exec dirname {} \; | sort | uniq)
@@ -147,7 +149,7 @@ if [[ $RUN_ALL_TESTS = "1" ]]; then
     export TEST_DIR="$PRODUCT"
     pushd "$REPO_DIRECTORY/$PRODUCT/"
 
-    (bundle install && bundle exec rspec --format documentation) || set_failed_status
+    (bundle update && bundle exec rspec --format documentation) || set_failed_status
 
     if [[ $E2E = "true" ]]; then
       # Clean up deployed version
@@ -165,7 +167,7 @@ else
     export TEST_DIR="$PRODUCT"
     pushd "$REPO_DIRECTORY/$PRODUCT/"
 
-    (bundle install && bundle exec rspec --format documentation) || set_failed_status
+    (bundle update && bundle exec rspec --format documentation) || set_failed_status
 
     if [[ $E2E = "true" ]]; then
       # Clean up deployed version

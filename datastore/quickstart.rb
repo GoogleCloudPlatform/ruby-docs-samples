@@ -39,4 +39,3 @@ datastore.save task
 
 puts "Saved #{task.key.name}: #{task['description']}"
 # [END datastore_quickstart]
-

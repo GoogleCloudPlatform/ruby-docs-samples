@@ -64,4 +64,3 @@ def explicit_compute_engine
   end
   # [END auth_cloud_explicit_compute_engine]
 end
-

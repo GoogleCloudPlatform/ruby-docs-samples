@@ -19,7 +19,7 @@ def document_ref project_id:
 
   firestore = Google::Cloud::Firestore.new project_id: project_id
   # [START fs_document_ref]
-  document_ref = firestore.col("users").doc("alovelace")
+  document_ref = firestore.col("users").doc "alovelace"
   # [END fs_document_ref]
 end
 
@@ -46,11 +46,11 @@ def subcollection_ref project_id:
 
   firestore = Google::Cloud::Firestore.new project_id: project_id
   # [START fs_subcollection_ref]
-  message_ref = firestore.col("rooms").doc("roomA").col("messages").doc("message1")
+  message_ref = firestore.col("rooms").doc("roomA").col("messages").doc "message1"
   # [END fs_subcollection_ref]
 end
 
-if __FILE__ == $PROGRAM_NAME
+if $PROGRAM_NAME == __FILE__
   project = ENV["FIRESTORE_PROJECT_ID"]
   case ARGV.shift
   when "document_ref"
@@ -62,14 +62,14 @@ if __FILE__ == $PROGRAM_NAME
   when "subcollection_ref"
     subcollection_ref project_id: project
   else
-    puts <<-usage
-Usage: bundle exec ruby data_model.rb [command]
+    puts <<~USAGE
+      Usage: bundle exec ruby data_model.rb [command]
 
-Commands:
-  document_ref       Create a document reference.
-  collection_ref     Create a collection reference.
-  document_path_ref  Create a document path reference.
-  subcollection_ref  Create a subcollection reference.
-    usage
+      Commands:
+        document_ref       Create a document reference.
+        collection_ref     Create a collection reference.
+        document_path_ref  Create a document path reference.
+        subcollection_ref  Create a subcollection reference.
+    USAGE
   end
 end

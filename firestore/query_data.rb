@@ -20,41 +20,41 @@ def query_create_examples project_id:
   firestore = Google::Cloud::Firestore.new project_id: project_id
   # [START fs_query_create_examples]
   cities_ref = firestore.col "cities"
-  cities_ref.doc("SF").set({
+  cities_ref.doc("SF").set(
     name:       "San Francisco",
     state:      "CA",
     country:    "USA",
     capital:    false,
-    population: 860000
-  })
-  cities_ref.doc("LA").set({
+    population: 860_000
+  )
+  cities_ref.doc("LA").set(
     name:       "Los Angeles",
     state:      "CA",
     country:    "USA",
     capital:    false,
-    population: 3900000
-  })
-  cities_ref.doc("DC").set({
+    population: 3_900_000
+  )
+  cities_ref.doc("DC").set(
     name:       "Washington D.C.",
     state:      nil,
     country:    "USA",
     capital:    true,
-    population: 680000
-  })
-  cities_ref.doc("TOK").set({
+    population: 680_000
+  )
+  cities_ref.doc("TOK").set(
     name:       "Tokyo",
     state:      nil,
     country:    "Japan",
     capital:    true,
-    population: 9000000
-  })
-  cities_ref.doc("BJ").set({
+    population: 9_000_000
+  )
+  cities_ref.doc("BJ").set(
     name:       "Beijing",
     state:      nil,
     country:    "China",
     capital:    true,
-    population: 21500000
-  })
+    population: 21_500_000
+  )
   # [END fs_query_create_examples]
   puts "Added example cities data to the cities collection."
 end
@@ -96,7 +96,7 @@ def simple_queries project_id:
   cities_ref = firestore.col "cities"
   # [START fs_simple_queries]
   state_query      = cities_ref.where "state", "=", "CA"
-  population_query = cities_ref.where "population", ">", 1000000
+  population_query = cities_ref.where "population", ">", 1_000_000
   name_query       = cities_ref.where "name", ">=", "San Francisco"
   # [END fs_simple_queries]
   state_query.get do |city|
@@ -116,7 +116,7 @@ def chained_query project_id:
   firestore  = Google::Cloud::Firestore.new project_id: project_id
   cities_ref = firestore.col "cities"
   # [START fs_chained_query]
-  chained_query = cities_ref.where("state", "=", "CA").where("name", "=", "San Francisco")
+  chained_query = cities_ref.where("state", "=", "CA").where "name", "=", "San Francisco"
   # [END fs_chained_query]
   chained_query.get do |city|
     puts "Document #{city.document_id} returned by query state=CA and name=San Francisco."
@@ -129,7 +129,7 @@ def composite_index_chained_query project_id:
   firestore  = Google::Cloud::Firestore.new project_id: project_id
   cities_ref = firestore.col "cities"
   # [START fs_composite_index_chained_query]
-  chained_query = cities_ref.where("state", "=", "CA").where("population", "<", 1000000)
+  chained_query = cities_ref.where("state", "=", "CA").where "population", "<", 1_000_000
   # [END fs_composite_index_chained_query]
   chained_query.get do |city|
     puts "Document #{city.document_id} returned by query state=CA and population<1000000."
@@ -142,7 +142,7 @@ def range_query project_id:
   firestore  = Google::Cloud::Firestore.new project_id: project_id
   cities_ref = firestore.col "cities"
   # [START fs_range_query]
-  range_query = cities_ref.where("state", ">=", "CA").where("state", "<=", "IN")
+  range_query = cities_ref.where("state", ">=", "CA").where "state", "<=", "IN"
   # [END fs_range_query]
   range_query.get do |city|
     puts "Document #{city.document_id} returned by query CA<=state<=IN."
@@ -155,12 +155,12 @@ def invalid_range_query project_id:
   firestore  = Google::Cloud::Firestore.new project_id: project_id
   cities_ref = firestore.col "cities"
   # [START fs_invalid_range_query]
-  invalid_range_query = cities_ref.where("state", ">=", "CA").where("population", ">", 1000000)
+  invalid_range_query = cities_ref.where("state", ">=", "CA").where "population", ">", 1_000_000
   # [END fs_invalid_range_query]
 end
 
 
-if __FILE__ == $PROGRAM_NAME
+if $PROGRAM_NAME == __FILE__
   project = ENV["FIRESTORE_PROJECT_ID"]
   case ARGV.shift
   when "query_create_examples"
@@ -180,18 +180,18 @@ if __FILE__ == $PROGRAM_NAME
   when "invalid_range_query"
     invalid_range_query project_id: project
   else
-    puts <<-usage
-Usage: bundle exec ruby query_data.rb [command]
+    puts <<~USAGE
+      Usage: bundle exec ruby query_data.rb [command]
 
-Commands:
-  query_create_examples          Create an example collection of documents.
-  create_query_state             Create a query by state.
-  create_query_capital           Create a query by capital.
-  simple_queries                 Create simple queries with a single where clause.
-  chained_query                  Create a query with chained clauses.
-  composite_index_chained_query  Create a composite index chained query.
-  range_query                    Create a query with range clauses.
-  invalid_range_query            An example of an invalid range query.
-    usage
+      Commands:
+        query_create_examples          Create an example collection of documents.
+        create_query_state             Create a query by state.
+        create_query_capital           Create a query by capital.
+        simple_queries                 Create simple queries with a single where clause.
+        chained_query                  Create a query with chained clauses.
+        composite_index_chained_query  Create a composite index chained query.
+        range_query                    Create a query with range clauses.
+        invalid_range_query            An example of an invalid range query.
+    USAGE
   end
 end

@@ -31,11 +31,11 @@ def add_data_1 project_id:
   # [START fs_add_data_1]
   doc_ref = firestore.doc "users/alovelace"
 
-  doc_ref.set({
+  doc_ref.set(
     first: "Ada",
     last:  "Lovelace",
     born:  1815
-  })
+  )
 
   puts "Added data to the alovelace document in the users collection."
   # [END fs_add_data_1]
@@ -48,12 +48,12 @@ def add_data_2 project_id:
   # [START fs_add_data_2]
   doc_ref = firestore.doc "users/aturing"
 
-  doc_ref.set({
+  doc_ref.set(
     first:  "Alan",
     middle: "Mathison",
     last:   "Turing",
     born:   1912
-  })
+  )
 
   puts "Added data to the aturing document in the users collection."
   # [END fs_add_data_2]
@@ -72,7 +72,7 @@ def get_all project_id:
 end
 
 
-if __FILE__ == $PROGRAM_NAME
+if $PROGRAM_NAME == __FILE__
   project = ENV["FIRESTORE_PROJECT_ID"]
   case ARGV.shift
   when "initialize"
@@ -84,14 +84,14 @@ if __FILE__ == $PROGRAM_NAME
   when "get_all"
     get_all project_id: project
   else
-    puts <<-usage
-Usage: bundle exec ruby quickstart.rb [command]
+    puts <<~USAGE
+      Usage: bundle exec ruby quickstart.rb [command]
 
-Commands:
-  initialize  Initialize a Cloud Firestore client.
-  add_data_1  Add a sample document to a collection.
-  add_data_2  Add a sample document.
-  get_all     Retrieve all documents from a collection.
-    usage
+      Commands:
+        initialize  Initialize a Cloud Firestore client.
+        add_data_1  Add a sample document to a collection.
+        add_data_2  Add a sample document.
+        get_all     Retrieve all documents from a collection.
+    USAGE
   end
 end

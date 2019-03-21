@@ -158,8 +158,8 @@ def create_bucket project_id:, bucket_name:
   # [END create_bucket]
 end
 
-def create_bucket_class_location project_id:, bucket_name:, location:,
-  storage_class:
+def create_bucket_class_location(project_id:, bucket_name:, location:,
+                                 storage_class:)
   # [START create_bucket_class_location]
   # project_id    = "Your Google Cloud project ID"
   # bucket_name   = "Name of Google Cloud Storage bucket to create"
@@ -377,7 +377,7 @@ def get_default_event_based_hold project_id:, bucket_name:
   # [END storage_get_default_event_based_hold]
 end
 
-if __FILE__ == $0
+if $PROGRAM_NAME == __FILE__
   project_id = ENV["GOOGLE_CLOUD_PROJECT"]
 
   case ARGV.shift
@@ -421,62 +421,62 @@ if __FILE__ == $0
                         bucket_name: ARGV.shift,
                         label_key:   ARGV.shift
   when "set_retention_policy"
-    set_retention_policy project_id: project_id,
-                         bucket_name: ARGV.shift,
+    set_retention_policy project_id:       project_id,
+                         bucket_name:      ARGV.shift,
                          retention_period: ARGV.shift
   when "get_retention_policy"
     get_retention_policy project_id:  project_id,
                          bucket_name: ARGV.shift
   when "lock_retention_policy"
-    lock_retention_policy project_id: project_id,
+    lock_retention_policy project_id:  project_id,
                           bucket_name: ARGV.shift
   when "enable_default_event_based_hold"
-    enable_default_event_based_hold project_id: project_id,
+    enable_default_event_based_hold project_id:  project_id,
                                     bucket_name: ARGV.shift
   when "disable_default_event_based_hold"
-    disable_default_event_based_hold project_id: project_id,
+    disable_default_event_based_hold project_id:  project_id,
                                      bucket_name: ARGV.shift
   when "get_default_event_based_hold"
-    get_default_event_based_hold project_id: project_id,
+    get_default_event_based_hold project_id:  project_id,
                                  bucket_name: ARGV.shift
   when "enable_bucket_policy_only"
-    enable_bucket_policy_only project_id: project_id,
+    enable_bucket_policy_only project_id:  project_id,
                               bucket_name: ARGV.shift
   when "disable_bucket_policy_only"
-    disable_bucket_policy_only project_id: project_id,
+    disable_bucket_policy_only project_id:  project_id,
                                bucket_name: ARGV.shift
   when "get_bucket_policy_only"
-    get_bucket_policy_only project_id: project_id,
+    get_bucket_policy_only project_id:  project_id,
                            bucket_name: ARGV.shift
   else
-    puts <<-usage
-Usage: bundle exec ruby buckets.rb [command] [arguments]
+    puts <<~USAGE
+      Usage: bundle exec ruby buckets.rb [command] [arguments]
 
-Commands:
-  list                                                       List all buckets in the authenticated project
-  enable_requester_pays  <bucket>                            Enable requester pays for a bucket
-  disable_requester_pays <bucket>                            Disable requester pays for a bucket
-  check_requester_pays   <bucket>                            Check status of requester pays for a bucket
-  enable_default_kms_key <bucket> <kms_key>                  Enable default KMS encryption for bucket
-  create                 <bucket>                            Create a new bucket with default storage class and location
-  create                 <bucket> <location> <storage_class> Create a new bucket with specific storage class and location
-  list_bucket_labels     <bucket>                            List bucket labels
-  add_bucket_label       <bucket> <label_key> <label_value>  Add bucket label
-  delete_bucket_label    <bucket> <label_key>                Delete bucket label
-  delete                 <bucket>                            Delete bucket with the provided name
-  set_retention_policy    <bucket> <retention_period>        Set a retention policy on bucket with a retention period determined in seconds
-  remove_retention_policy <bucket>                           Remove a retention policy from a bucket if policy is not locked
-  lock_retention_policy   <bucket>                           Lock retention policy
-  get_retention_policy    <bucket>                           Get retention policy for a bucket
-  enable_default_event_based_hold  <bucket>                  Enable event-based hold for a bucket
-  disable_default_event_based_hold <bucket>                  Disable event-based hold for a bucket
-  get_default_event_based_hold     <bucket>                  Get state of event-based hold for a bucket
-  enable_bucket_policy_only        <bucket>                  Enable Bucket Policy Only for a bucket
-  disable_bucket_policy_only       <bucket>                  Disable Bucket Policy Only for a bucket
-  get_bucket_policy_only           <bucket>                  Get Bucket Policy Only for a bucket
+      Commands:
+        list                                                                 List all buckets in the authenticated project
+        enable_requester_pays            <bucket>                            Enable requester pays for a bucket
+        disable_requester_pays           <bucket>                            Disable requester pays for a bucket
+        check_requester_pays             <bucket>                            Check status of requester pays for a bucket
+        enable_default_kms_key           <bucket> <kms_key>                  Enable default KMS encryption for bucket
+        create                           <bucket>                            Create a new bucket with default storage class and location
+        create                           <bucket> <location> <storage_class> Create a new bucket with specific storage class and location
+        list_bucket_labels               <bucket>                            List bucket labels
+        add_bucket_label                 <bucket> <label_key> <label_value>  Add bucket label
+        delete_bucket_label              <bucket> <label_key>                Delete bucket label
+        delete                           <bucket>                            Delete bucket with the provided name
+        set_retention_policy             <bucket> <retention_period>         Set a retention policy on bucket with a retention period determined in seconds
+        remove_retention_policy          <bucket>                            Remove a retention policy from a bucket if policy is not locked
+        lock_retention_policy            <bucket>                            Lock retention policy
+        get_retention_policy             <bucket>                            Get retention policy for a bucket
+        enable_default_event_based_hold  <bucket>                            Enable event-based hold for a bucket
+        disable_default_event_based_hold <bucket>                            Disable event-based hold for a bucket
+        get_default_event_based_hold     <bucket>                            Get state of event-based hold for a bucket
+        enable_bucket_policy_only        <bucket>                            Enable Bucket Policy Only for a bucket
+        disable_bucket_policy_only       <bucket>                            Disable Bucket Policy Only for a bucket
+        get_bucket_policy_only           <bucket>                            Get Bucket Policy Only for a bucket
 
-Environment variables:
-  GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
-    usage
+      Environment variables:
+        GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
+    USAGE
   end
 end

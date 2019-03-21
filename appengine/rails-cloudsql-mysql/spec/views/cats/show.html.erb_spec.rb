@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe "cats/show", type: :view do
-  before(:each) do
-    @cat = assign(:cat, Cat.create!(
-      :name => "Ms. Paws",
-      :age => 2
-    ))
+  before :each do
+    @cat = assign(
+      :cat, Cat.create!(name: "Ms. Paws", age: 2)
+    )
   end
 
   it "renders attributes in <p>" do

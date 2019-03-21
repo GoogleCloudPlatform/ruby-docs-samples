@@ -16,7 +16,6 @@ require_relative "../create_table"
 require "spec_helper"
 
 describe "Create table" do
-
   before do
     @dataset = create_temp_dataset
   end
@@ -27,5 +26,4 @@ describe "Create table" do
     table = @dataset.table "my_table"
     expect(table.exists?).to be(true)
   end
-
 end

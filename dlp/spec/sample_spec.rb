@@ -16,7 +16,6 @@ require_relative "../sample"
 require "rspec"
 
 describe "DLP sample" do
-
   before do
     @project = ENV["GOOGLE_CLOUD_PROJECT"]
   end
@@ -32,8 +31,8 @@ describe "DLP sample" do
   it "can limit max findings of inspect string results" do
     expect {
       inspect_string(
-        project_id: @project,
-        content: "Robert Frost is the name of poet Robert Frost",
+        project_id:   @project,
+        content:      "Robert Frost is the name of poet Robert Frost",
         max_findings: 1
       )
     }.to output(
@@ -50,5 +49,4 @@ describe "DLP sample" do
       "Likelihood: LIKELY\n"
     ).to_stdout
   end
-
 end
