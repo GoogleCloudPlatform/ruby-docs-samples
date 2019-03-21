@@ -19,7 +19,7 @@ def document_ref project_id:
 
   firestore = Google::Cloud::Firestore.new project_id: project_id
   # [START fs_document_ref]
-  document_ref = firestore.col("users").doc "alovelace"
+  document_ref = firestore.col("users").doc("alovelace")
   # [END fs_document_ref]
 end
 
@@ -46,7 +46,7 @@ def subcollection_ref project_id:
 
   firestore = Google::Cloud::Firestore.new project_id: project_id
   # [START fs_subcollection_ref]
-  message_ref = firestore.col("rooms").doc("roomA").col("messages").doc "message1"
+  message_ref = firestore.col("rooms").doc("roomA").col("messages").doc("message1")
   # [END fs_subcollection_ref]
 end
 

@@ -49,7 +49,7 @@ end
 
 # [START datastore_retrieve_entities]
 def list_tasks
-  query = @datastore.query("Task").order "created"
+  query = @datastore.query("Task").order("created")
   tasks = @datastore.run query
 
   tasks.each do |t|

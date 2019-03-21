@@ -43,12 +43,16 @@ Style/IfUnlessModifier:
   Enabled: false
 Style/LineEndConcatenation:
   Enabled: false
+Style/MethodCallWithArgsParentheses:
+  AllowParenthesesInChaining: true
 Style/MethodDefParentheses:
   EnforcedStyle: require_no_parentheses_except_multiline
 Style/MixinUsage:
   Exclude:
     - "appengine/rails*/**/*"
 Style/Next:
+  Enabled: false
+Style/SafeNavigation:
   Enabled: false
 Style/SymbolArray:
   EnforcedStyle: brackets

@@ -28,7 +28,7 @@ get "/" do
   datastore.save visit
 
   # Query the last 10 visits from the Datastore
-  query     = datastore.query("Visit").order("timestamp", :desc).limit 10
+  query     = datastore.query("Visit").order("timestamp", :desc).limit(10)
   visits    = datastore.run query
 
   response.write "Last 10 visits:\n"

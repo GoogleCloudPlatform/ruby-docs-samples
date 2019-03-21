@@ -572,7 +572,7 @@ def transactional_single_entity_group_read_only
   task_list_key = datastore.key "TaskList", "default"
   datastore.read_only_transaction do |tx|
     task_list = tx.find task_list_key
-    query = datastore.query("Task").ancestor task_list
+    query = datastore.query("Task").ancestor(task_list)
     tasks_in_list = tx.run query
   end
   # [END datastore_transactional_single_entity_group_read_only]

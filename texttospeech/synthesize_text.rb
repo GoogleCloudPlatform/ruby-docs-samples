@@ -88,7 +88,3 @@ if $PROGRAM_NAME == __FILE__
     USAGE
   end
 end
-
-
-"asdfasdfasdfasdfasdfasdfasdfasdfasdfasdasdfasdfasdfasdfasdfasdf" +
-  "asdfasdfasdfasdfasdfasdfasdfasdfasdfasdasdfasdfasdfasdfasdfasdf"

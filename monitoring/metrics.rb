@@ -2,7 +2,7 @@ require "google/cloud/monitoring"
 
 def create_metric_descriptor project_id:
   # Random suffix for metric type to avoid collisions with other runs
-  random_suffix = rand(36**10).to_s 36
+  random_suffix = rand(36**10).to_s(36)
 
   # [START monitoring_create_metric]
   client = Google::Cloud::Monitoring::Metric.new
@@ -35,7 +35,7 @@ def write_time_series project_id:
   project_name = Google::Cloud::Monitoring::V3::MetricServiceClient.project_path project_id
 
   # Random suffix for metric type to avoid collisions with other runs
-  random_suffix = rand(36**10).to_s 36
+  random_suffix = rand(36**10).to_s(36)
 
   series = Google::Monitoring::V3::TimeSeries.new
   metric = Google::Api::Metric.new type: "custom.googleapis.com/my_metric#{random_suffix}"

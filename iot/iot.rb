@@ -165,7 +165,7 @@ $list_registries = lambda do |project_id:, location_id:|
   )
 
   puts "Registries:"
-  if registries.device_registries&.any?
+  if registries.device_registries && registries.device_registries.any?
     registries.device_registries.each { |registry| puts "\t#{registry.id}" }
   else
     puts "\tNo device registries found in this region for your project."
@@ -387,7 +387,7 @@ $list_devices = lambda do |project_id:, location_id:, registry_id:|
   )
 
   puts "Devices:"
-  if response.devices&.any?
+  if response.devices && response.devices.any?
     response.devices.each { |device| puts "\t#{device.id}" }
   else
     puts "\tNo device registries found in this region for your project."
@@ -827,7 +827,7 @@ $list_devices_for_gateway = lambda do |project_id:, location_id:, registry_id:, 
   )
 
   puts "Devices:"
-  if response.devices&.any?
+  if response.devices && response.devices.any?
     response.devices.each { |device| puts "\t#{device.id}" }
   else
     puts "\tNo device registries found in this region for your project."
@@ -859,7 +859,7 @@ $list_gateways = lambda do |project_id:, location_id:, registry_id:|
   )
 
   puts "Gateways:"
-  if gateways.devices&.any?
+  if gateways.devices && gateways.devices.any?
     gateways.devices.each do |gateway|
       if gateway.gateway_config && gateway.gateway_config.gateway_type == "GATEWAY"
         puts "\t#{gateway.id}"

@@ -116,7 +116,7 @@ def chained_query project_id:
   firestore  = Google::Cloud::Firestore.new project_id: project_id
   cities_ref = firestore.col "cities"
   # [START fs_chained_query]
-  chained_query = cities_ref.where("state", "=", "CA").where "name", "=", "San Francisco"
+  chained_query = cities_ref.where("state", "=", "CA").where("name", "=", "San Francisco")
   # [END fs_chained_query]
   chained_query.get do |city|
     puts "Document #{city.document_id} returned by query state=CA and name=San Francisco."
@@ -129,7 +129,7 @@ def composite_index_chained_query project_id:
   firestore  = Google::Cloud::Firestore.new project_id: project_id
   cities_ref = firestore.col "cities"
   # [START fs_composite_index_chained_query]
-  chained_query = cities_ref.where("state", "=", "CA").where "population", "<", 1_000_000
+  chained_query = cities_ref.where("state", "=", "CA").where("population", "<", 1_000_000)
   # [END fs_composite_index_chained_query]
   chained_query.get do |city|
     puts "Document #{city.document_id} returned by query state=CA and population<1000000."
@@ -142,7 +142,7 @@ def range_query project_id:
   firestore  = Google::Cloud::Firestore.new project_id: project_id
   cities_ref = firestore.col "cities"
   # [START fs_range_query]
-  range_query = cities_ref.where("state", ">=", "CA").where "state", "<=", "IN"
+  range_query = cities_ref.where("state", ">=", "CA").where("state", "<=", "IN")
   # [END fs_range_query]
   range_query.get do |city|
     puts "Document #{city.document_id} returned by query CA<=state<=IN."
@@ -155,7 +155,7 @@ def invalid_range_query project_id:
   firestore  = Google::Cloud::Firestore.new project_id: project_id
   cities_ref = firestore.col "cities"
   # [START fs_invalid_range_query]
-  invalid_range_query = cities_ref.where("state", ">=", "CA").where "population", ">", 1_000_000
+  invalid_range_query = cities_ref.where("state", ">=", "CA").where("population", ">", 1_000_000)
   # [END fs_invalid_range_query]
 end
 
