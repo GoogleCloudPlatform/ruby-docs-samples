@@ -85,6 +85,7 @@ environment variable to the path to the key file, for example:
       write_with_transaction_using_dml   <instance_id> <database_id> Update data using a DML statement within a read-write transaction.
       update_using_partitioned_dml       <instance_id> <database_id> Update multiple records using a partitioned DML statement.
       delete_using_partitioned_dml       <instance_id> <database_id> Delete multiple records using a partitioned DML statement.
+      update_using_batch_dml             <instance_id> <database_id> Updates sample data in the database using Batch DML.
 
     Environment variables:
       GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID

@@ -978,25 +978,22 @@ def update_using_batch_dml project_id:, instance_id:, database_id:
 
   spanner = Google::Cloud::Spanner.new project: project_id
   client  = spanner.client instance_id, database_id
-  insert_statement = "INSERT INTO Albums "\
-    "(SingerId, AlbumId, AlbumTitle, MarketingBudget) "\
-    "VALUES (1, 3, 'Test Album Title', 10000)"
-  update_statement = "UPDATE Albums "\
-    "SET MarketingBudget = MarketingBudget * 2 "\
-    "WHERE SingerId = 1 and AlbumId = 3"
-  row_counts = Array.new
-  row_count = 0
 
+  row_counts = nil
   client.transaction do |transaction|
     row_counts = transaction.batch_update do |b|
-      b.batch_update insert_statement
-      b.batch_update update_statement
+      b.batch_update "INSERT INTO Albums "\
+        "(SingerId, AlbumId, AlbumTitle, MarketingBudget) "\
+        "VALUES (1, 3, 'Test Album Title', 10000)"
+      b.batch_update "UPDATE Albums "\
+        "SET MarketingBudget = MarketingBudget * 2 "\
+        "WHERE SingerId = 1 and AlbumId = 3"
     end
   end
 
-  row_count = row_counts.count
+  statement_count = row_counts.count
 
-  puts "Executed #{row_count} SQL statements using Batch DML."
+  puts "Executed #{statement_count} SQL statements using Batch DML."
   # [END spanner_dml_batch_update]
 end
 
