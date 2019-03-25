@@ -1079,4 +1079,37 @@ describe "Google Cloud Spanner API samples" do
     expect(singers.count).to eq 5
     expect(singers.find {|s| s[:FirstName] == "Melissa" }).to be_nil
   end
+
+  example "insert and update a record using batch dml" do
+    database = create_singers_albums_database
+    # Ignore the following capture block
+    capture do
+      # Insert Singers and Albums (re-use insert_data sample to populate)
+      insert_data project_id:  @project_id,
+                  instance_id: @instance.instance_id,
+                  database_id: database.database_id
+
+      # Add MarketingBudget column (re-use add_column to add)
+      add_column project_id:  @project_id,
+                  instance_id: @instance.instance_id,
+                  database_id: database.database_id
+    end
+
+    client = @spanner.client @instance.instance_id, database.database_id
+
+    expect(client.execute("SELECT * FROM Albums").rows.count).to eq 5
+
+    expect {
+      update_using_batch_dml project_id:  @project_id,
+                      instance_id: @instance.instance_id,
+                      database_id: database.database_id
+    }.to output("Executed 2 SQL statements using Batch DML.\n").to_stdout
+
+    albums = client.execute("SELECT * FROM Albums").rows.to_a
+    expect(albums.count).to eq 6
+    expect(albums.find {|s| s[:AlbumTitle] == "Test Album Title" }).not_to be nil
+
+    album  = client.read("Albums", [:MarketingBudget], keys: [[1,3]]).rows.first
+    expect(album[:MarketingBudget]).to  eq 20_000
+  end
 end
