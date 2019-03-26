@@ -3,12 +3,12 @@ require "securerandom"
 
 describe "Google Cloud Bigtable Hello World" do
   it "create table, write rows and read rows" do
-    table_id = "test_table_#{SecureRandom.hex(8)}"
+    table_id = "test_table_#{SecureRandom.hex 8}"
     table = @bigtable.table @instance_id, table_id
 
     unless table.exists?
       table = @bigtable.create_table @instance_id, table_id do |cf|
-        cf.add("cf", Google::Cloud::Bigtable::GcRule.max_versions(1))
+        cf.add "cf", Google::Cloud::Bigtable::GcRule.max_versions(1)
       end
     end
 

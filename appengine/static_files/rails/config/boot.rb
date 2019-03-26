@@ -11,6 +11,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-ENV["BUNDLE_GEMFILE"] ||= File.expand_path("../../Gemfile", __FILE__)
+ENV["BUNDLE_GEMFILE"] ||= File.expand_path "../Gemfile", __dir__
 
 require "bundler/setup" # Set up gems listed in the Gemfile.

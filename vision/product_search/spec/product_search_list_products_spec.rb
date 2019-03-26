@@ -15,7 +15,6 @@
 require "spec_helper"
 
 describe "List products" do
-
   example "List products" do
     snippet_filepath = get_snippet_filepath __FILE__
     2.times { create_temp_product }
@@ -25,5 +24,4 @@ describe "List products" do
     output_products = output.split("\n").select { |line| line.include? "projects/" }
     expect(output_products.length).to be >= 2
   end
-
 end

@@ -16,7 +16,7 @@
 require "google/apis/jobs_v2"
 
 # Instantiate the client
-Jobs   = Google::Apis::JobsV2
+Jobs = Google::Apis::JobsV2
 jobs_client = Jobs::JobServiceService.new
 
 # @see https://developers.google.com/identity/protocols/application-default-credentials#callingruby
@@ -25,7 +25,7 @@ jobs_client.authorization = Google::Auth.get_application_default(
 )
 
 # Request list of companies
-response = jobs_client.list_companies 
+response = jobs_client.list_companies
 
 # Print the request id
 puts "Request id : " + response.metadata.request_id
@@ -40,4 +40,3 @@ else
   puts "No companies found"
 end
 # [END quickstart]
-

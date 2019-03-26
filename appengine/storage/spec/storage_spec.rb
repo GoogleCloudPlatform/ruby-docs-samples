@@ -23,7 +23,7 @@ describe "Cloud Storage", type: :feature do
   end
   it "can upload and get public URL of uploaded file" do
     Capybara.app = Sinatra::Application
-    file_path = File.expand_path("../ruby-storage-test-upload.txt", __FILE__)
+    file_path = File.expand_path "ruby-storage-test-upload.txt", __dir__
 
     visit "/"
     attach_file "file", file_path

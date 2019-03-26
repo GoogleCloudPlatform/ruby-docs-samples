@@ -17,7 +17,7 @@ require "google/apis/jobs_v3"
 require "rails"
 
 # Instantiate the client
-Jobs   = Google::Apis::JobsV3
+Jobs = Google::Apis::JobsV3
 jobs_client = Jobs::CloudTalentSolutionService.new
 
 # @see https://developers.google.com/identity/protocols/application-default-credentials#callingruby
@@ -26,9 +26,9 @@ jobs_client.authorization = Google::Auth.get_application_default(
 )
 
 # ProjectId to get company list
-DEFAULT_PROJECT_ID = "projects/" + ENV["GOOGLE_CLOUD_PROJECT"];
+DEFAULT_PROJECT_ID = "projects/" + ENV["GOOGLE_CLOUD_PROJECT"]
 # Request list of companies
-response = jobs_client.list_project_companies(DEFAULT_PROJECT_ID)
+response = jobs_client.list_project_companies DEFAULT_PROJECT_ID
 
 # Print the request id
 puts "Request id : " + response.metadata.request_id
@@ -43,4 +43,3 @@ else
   puts "No companies found"
 end
 # [END quickstart]
-

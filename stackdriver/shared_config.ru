@@ -13,4 +13,4 @@ use Google::Cloud::Logging::Middleware
 use Google::Cloud::ErrorReporting::Middleware
 use Google::Cloud::Trace::Middleware
 
-run Proc.new { |env| ["200", {"Content-Type" => "text/html"}, ["Hello world!"]] }
+run(proc { |_env| ["200", { "Content-Type" => "text/html" }, ["Hello world!"]] })

@@ -24,4 +24,3 @@ require "google/cloud/debugger"
 
 Google::Cloud::Debugger.new.start
 # [END implicit_debugger_ruby]
-

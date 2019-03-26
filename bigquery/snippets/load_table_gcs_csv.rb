@@ -26,10 +26,10 @@ def load_table_gcs_csv dataset_id = "your_dataset_id"
   end
   puts "Starting job #{load_job.job_id}"
 
-  load_job.wait_until_done!  # Waits for table load to complete.
+  load_job.wait_until_done! # Waits for table load to complete.
   puts "Job finished."
 
-  table = dataset.table(table_id)
+  table = dataset.table table_id
   puts "Loaded #{table.rows_count} rows to table #{table.id}"
 end
 # [END bigquery_load_table_gcs_csv]

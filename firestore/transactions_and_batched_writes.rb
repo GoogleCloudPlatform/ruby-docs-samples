@@ -25,7 +25,7 @@ def run_simple_transaction project_id:
   firestore.transaction do |tx|
     new_population = tx.get(city_ref).data[:population] + 1
     puts "New population is #{new_population}."
-    tx.update(city_ref, { population: new_population })
+    tx.update city_ref, population: new_population
   end
   puts "Ran a simple transaction to update the population field in the SF document in the cities collection."
 end
@@ -41,8 +41,8 @@ def return_info_transaction project_id:
 
   updated = firestore.transaction do |tx|
     new_population = tx.get(city_ref).data[:population] + 1
-    if new_population < 1000000
-      tx.update(city_ref, { population: new_population} )
+    if new_population < 1_000_000
+      tx.update city_ref, population: new_population
     else
       false
     end
@@ -63,19 +63,19 @@ def batch_write project_id:
   # [START fs_batch_write]
   firestore.batch do |b|
     # Set the data for NYC
-    b.set("cities/NYC", { name: "New York City" })
+    b.set "cities/NYC", name: "New York City"
 
     # Update the population for SF
-    b.update("cities/SF", { population: 1000000 })
+    b.update "cities/SF", population: 1_000_000
 
     # Delete LA
-    b.delete("cities/LA")
+    b.delete "cities/LA"
   end
   # [END fs_batch_write]
   puts "Batch write successfully completed."
 end
 
-if __FILE__ == $PROGRAM_NAME
+if $PROGRAM_NAME == __FILE__
   project = ENV["FIRESTORE_PROJECT_ID"]
   case ARGV.shift
   when "run_simple_transaction"
@@ -85,13 +85,13 @@ if __FILE__ == $PROGRAM_NAME
   when "batch_write"
     batch_write project_id: project
   else
-    puts <<-usage
-Usage: bundle exec ruby transactions_and_batched_writes.rb [command]
+    puts <<~USAGE
+      Usage: bundle exec ruby transactions_and_batched_writes.rb [command]
 
-Commands:
-  run_simple_transaction   Run a simple transaction.
-  return_info_transaction  Run a transaction and get information returned.
-  batch_write              Perform a batch write.
-    usage
+      Commands:
+        run_simple_transaction   Run a simple transaction.
+        return_info_transaction  Run a transaction and get information returned.
+        batch_write              Perform a batch write.
+    USAGE
   end
 end

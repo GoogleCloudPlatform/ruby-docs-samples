@@ -104,7 +104,7 @@ def set_topic_policy project_id:, topic_name:
   topic = pubsub.topic topic_name
   topic.policy do |policy|
     policy.add "roles/pubsub.publisher",
-      "serviceAccount:account_name@project_name.iam.gserviceaccount.com"
+               "serviceAccount:account_name@project_name.iam.gserviceaccount.com"
   end
   # [END pubsub_set_topic_policy]
 end
@@ -119,7 +119,7 @@ def test_topic_permissions project_id:, topic_name:
 
   topic       = pubsub.topic topic_name
   permissions = topic.test_permissions "pubsub.topics.attachSubscription",
-    "pubsub.topics.publish", "pubsub.topics.update"
+                                       "pubsub.topics.publish", "pubsub.topics.update"
 
   puts "Permission to attach subscription" if permissions.include? "pubsub.topics.attachSubscription"
   puts "Permission to publish" if permissions.include? "pubsub.topics.publish"
@@ -155,7 +155,7 @@ def create_push_subscription project_id:, topic_name:, subscription_name:, endpo
 
   topic        = pubsub.topic topic_name
   subscription = topic.subscribe subscription_name,
-    endpoint: endpoint
+                                 endpoint: endpoint
 
   puts "Push subscription #{subscription_name} created."
   # [END pubsub_create_push_subscription]
@@ -205,11 +205,8 @@ def publish_message_async project_id:, topic_name:
 
   topic = pubsub.topic topic_name
   topic.publish_async "This is a test message." do |result|
-    if result.succeeded?
-      puts "Message published asynchronously."
-    else
-      raise "Failed to publish the message."
-    end
+    raise "Failed to publish the message." unless result.succeeded?
+    puts "Message published asynchronously."
   end
 
   # Stop the async_publisher to send all queued messages immediately.
@@ -228,13 +225,10 @@ def publish_message_async_with_custom_attributes project_id:, topic_name:
   topic = pubsub.topic topic_name
   # Add two attributes, origin and username, to the message
   topic.publish_async "This is a test message.",
-                      origin: "ruby-sample",
+                      origin:   "ruby-sample",
                       username: "gcp" do |result|
-    if result.succeeded?
-      puts "Message with custom attributes published asynchronously."
-    else
-      raise "Failed to publish the message."
-    end
+    raise "Failed to publish the message." unless result.succeeded?
+    puts "Message with custom attributes published asynchronously."
   end
 
   # Stop the async_publisher to send all queued messages immediately.
@@ -253,8 +247,8 @@ def publish_messages_async_with_batch_settings project_id:, topic_name:
   # Start sending messages in one request once the size of all queued messages
   # reaches 1 MB or the number of queued messages reaches 20
   topic = pubsub.topic topic_name, async: {
-    :max_bytes => 1000000,
-    :max_messages => 20
+    max_bytes:    1_000_000,
+    max_messages: 20
   }
   10.times do |i|
     topic.publish_async "This is message \##{i}."
@@ -275,19 +269,16 @@ def publish_messages_async_with_concurrency_control project_id:, topic_name:
   pubsub = Google::Cloud::Pubsub.new project: project_id
 
   topic = pubsub.topic topic_name, async: {
-    :threads => {
+    threads: {
       # Use exactly one thread for publishing message and exactly one thread
       # for executing callbacks
-      :publish => 1,
-      :callback => 1
+      publish:  1,
+      callback: 1
     }
   }
   topic.publish_async "This is a test message." do |result|
-    if result.succeeded?
-      puts "Message published asynchronously."
-    else
-      raise "Failed to publish the message."
-    end
+    raise "Failed to publish the message." unless result.succeeded?
+    puts "Message published asynchronously."
   end
 
   # Stop the async_publisher to send all queued messages immediately.
@@ -295,7 +286,7 @@ def publish_messages_async_with_concurrency_control project_id:, topic_name:
   # [END pubsub_publisher_concurrency_control]
 end
 
-if __FILE__ == $PROGRAM_NAME
+if $PROGRAM_NAME == __FILE__
   case ARGV.shift
   when "create_topic"
     create_topic project_id: ARGV.shift,
@@ -318,12 +309,12 @@ if __FILE__ == $PROGRAM_NAME
     test_topic_permissions project_id: ARGV.shift,
                            topic_name: ARGV.shift
   when "create_pull_subscription"
-    create_pull_subscription project_id: ARGV.shift,
-                             topic_name: ARGV.shift,
+    create_pull_subscription project_id:        ARGV.shift,
+                             topic_name:        ARGV.shift,
                              subscription_name: ARGV.shift
   when "create_push_subscription"
-    create_push_subscription project_id: ARGV.shift,
-                             topic_name: ARGV.shift,
+    create_push_subscription project_id:        ARGV.shift,
+                             topic_name:        ARGV.shift,
                              subscription_name: ARGV.shift
   when "publish_message"
     publish_message project_id: ARGV.shift,
@@ -344,25 +335,25 @@ if __FILE__ == $PROGRAM_NAME
     publish_messages_async_with_concurrency_control project_id: ARGV.shift,
                                                     topic_name: ARGV.shift
   else
-    puts <<-usage
-Usage: bundle exec ruby topics.rb [command] [arguments]
+    puts <<~USAGE
+      Usage: bundle exec ruby topics.rb [command] [arguments]
 
-Commands:
-  create_topic                                    <project_id> <topic_name>                     Create a topic
-  list_topics                                     <project_id>                                  List topics in a project
-  list_topic_subscriptions                        <project_id> <topic_name>                     List subscriptions in a topic
-  delete_topic                                    <project_id> <topic_name>                     Delete topic policies
-  get_topic_policy                                <project_id> <topic_name>                     Get topic policies
-  set_topic_policy                                <project_id> <topic_name>                     Set topic policies
-  test_topic_permissions                          <project_id> <topic_name>                     Test topic permissions
-  create_pull_subscription                        <project_id> <topic_name> <subscription_name> Create a pull subscription
-  create_push_subscription                        <project_id> <topic_name> <subscription_name> Create a push subscription
-  publish_message                                 <project_id> <topic_name>                     Publish message
-  publish_messages_with_batch_settings            <project_id> <topic_name>                     Publish messages in batch
-  publish_message_async                           <project_id> <topic_name>                     Publish messages asynchronously
-  publish_message_async_with_custom_attributes    <project_id> <topic_name>                     Publish messages asynchronously with custom attributes
-  publish_messages_async_with_batch_settings      <project_id> <topic_name>                     Publish messages asynchronously in batch
-  publish_messages_async_with_concurrency_control <project_id> <topic_name>                     Publish messages asynchronously with concurrency control
-    usage
+      Commands:
+        create_topic                                    <project_id> <topic_name>                     Create a topic
+        list_topics                                     <project_id>                                  List topics in a project
+        list_topic_subscriptions                        <project_id> <topic_name>                     List subscriptions in a topic
+        delete_topic                                    <project_id> <topic_name>                     Delete topic policies
+        get_topic_policy                                <project_id> <topic_name>                     Get topic policies
+        set_topic_policy                                <project_id> <topic_name>                     Set topic policies
+        test_topic_permissions                          <project_id> <topic_name>                     Test topic permissions
+        create_pull_subscription                        <project_id> <topic_name> <subscription_name> Create a pull subscription
+        create_push_subscription                        <project_id> <topic_name> <subscription_name> Create a push subscription
+        publish_message                                 <project_id> <topic_name>                     Publish message
+        publish_messages_with_batch_settings            <project_id> <topic_name>                     Publish messages in batch
+        publish_message_async                           <project_id> <topic_name>                     Publish messages asynchronously
+        publish_message_async_with_custom_attributes    <project_id> <topic_name>                     Publish messages asynchronously with custom attributes
+        publish_messages_async_with_batch_settings      <project_id> <topic_name>                     Publish messages asynchronously in batch
+        publish_messages_async_with_concurrency_control <project_id> <topic_name>                     Publish messages asynchronously with concurrency control
+    USAGE
   end
 end

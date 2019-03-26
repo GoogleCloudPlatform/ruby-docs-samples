@@ -20,23 +20,22 @@ require_relative "../entity_type_management"
 require_relative "../entity_management"
 
 describe "Entity Management" do
-
   before do
     @project_id               = ENV["GOOGLE_CLOUD_PROJECT"]
     @entity_type_display_name = "fake_entity_type"
     @kind                     = :KIND_MAP
     @entity_value_1           = "fake_entity_for_testing_1"
     @entity_value_2           = "fake_entity_for_testing_2"
-    @synonyms                 = ["fake_synonym_for_testing_1",
-                                 "fake_synonym_for_testing_2"]
+    @synonyms                 = %w[fake_synonym_for_testing_1
+                                   fake_synonym_for_testing_2]
 
     hide do
-      clean_entity_types project_id: @project_id,
+      clean_entity_types project_id:   @project_id,
                          display_name: @entity_type_display_name
-      create_entity_type project_id: @project_id,
+      create_entity_type project_id:   @project_id,
                          display_name: @entity_type_display_name,
-                         kind: @kind
-      @entity_type_id = (get_entity_type_ids project_id: @project_id,
+                         kind:         @kind
+      @entity_type_id = (get_entity_type_ids project_id:   @project_id,
                                              display_name: @entity_type_display_name).first
     end
   end
@@ -49,9 +48,9 @@ describe "Entity Management" do
                     entity_value: @entity_value_2, synonyms: @synonyms
     end
 
-    expectation = expect {
+    expectation = expect do
       list_entities project_id: @project_id, entity_type_id: @entity_type_id
-    }
+    end
 
     expectation.to output(/#{@entity_value_1}/).to_stdout
     expectation.to output(/#{@entity_value_2}/).to_stdout
@@ -75,7 +74,7 @@ describe "Entity Management" do
 
   after do
     hide do
-      delete_entity_type project_id: @project_id,
+      delete_entity_type project_id:     @project_id,
                          entity_type_id: @entity_type_id
     end
   end

@@ -61,17 +61,16 @@ def detect_faces_gcs image_path:
   # [END vision_face_detection_gcs]
 end
 
-if __FILE__ == $PROGRAM_NAME
+if $PROGRAM_NAME == __FILE__
   image_path = ARGV.shift
 
   if !image_path
     puts <<~USAGE
-    Usage: ruby detect_faces.rb [image file path]
-
-    Example:
-      ruby detect_faces.rb image.png
-      ruby detect_faces.rb https://public-url/image.png
-      ruby detect_faces.rb gs://my-bucket/image.png
+      Usage: ruby detect_faces.rb [image file path]
+       Example:
+        ruby detect_faces.rb image.png
+        ruby detect_faces.rb https://public-url/image.png
+        ruby detect_faces.rb gs://my-bucket/image.png
     USAGE
   elsif image_path =~ URI::DEFAULT_PARSER.make_regexp
     detect_faces_gs image_path: image_path

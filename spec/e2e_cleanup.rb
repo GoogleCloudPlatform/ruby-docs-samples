@@ -11,11 +11,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require File.expand_path("../e2e", __FILE__)
+require File.expand_path("e2e", __dir__)
 
-if ARGV.size < 1
+if ARGV.empty?
   puts "usage: ruby spec/e2e_cleanup.rb TEST_DIR [BUILD_ID]"
   exit 1
 end
 
-E2E.cleanup(ARGV[0], ARGV[1])
+E2E.cleanup ARGV[0], ARGV[1]

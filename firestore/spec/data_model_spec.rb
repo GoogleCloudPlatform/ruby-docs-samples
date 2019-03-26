@@ -14,16 +14,15 @@ RSpec.configure do |config|
 end
 
 describe "Google Cloud Firestore API samples - Data Model" do
-
   before do
     @firestore_project = ENV["FIRESTORE_PROJECT_ID"]
   end
 
   # Capture and return STDOUT output by block
-  def capture &block
+  def capture
     real_stdout = $stdout
     $stdout = StringIO.new
-    block.call
+    yield
     $stdout.string
   ensure
     $stdout = real_stdout

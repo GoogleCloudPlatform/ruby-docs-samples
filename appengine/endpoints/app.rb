@@ -30,8 +30,8 @@ use Rack::Cors do
   allow do
     origins "*"
     resource "/auth/info/firebase",
-             :headers => :any,
-             :methods => [:get, :post, :options]
+             headers: :any,
+             methods: [:get, :post, :options]
   end
 end
 

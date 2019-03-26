@@ -24,7 +24,7 @@ def detect_labels image_path:
 
   # [START vision_label_detection_migration]
   response = image_annotator.label_detection(
-    image: image_path,
+    image:       image_path,
     max_results: 15 # optional, defaults to 10
   )
 
@@ -49,7 +49,7 @@ def detect_labels_gcs image_path:
   image_annotator = Google::Cloud::Vision::ImageAnnotator.new
 
   response = image_annotator.label_detection(
-    image: image_path,
+    image:       image_path,
     max_results: 15 # optional, defaults to 10
   )
 
@@ -68,7 +68,7 @@ def detect_labels_gcs_migration
   image_annotator = Google::Cloud::Vision::ImageAnnotator.new
 
   response = image_annotator.label_detection(
-    image: "gs://gapic-toolkit/President_Barack_Obama.jpg",
+    image:       "gs://gapic-toolkit/President_Barack_Obama.jpg",
     max_results: 15 # optional, defaults to 10
   )
 
@@ -81,17 +81,16 @@ def detect_labels_gcs_migration
   # [END image_annotator_labels_gcs_migration]
 end
 
-if __FILE__ == $PROGRAM_NAME
+if $PROGRAM_NAME == __FILE__
   image_path = ARGV.shift
 
   if !image_path
     puts <<~USAGE
-    Usage: ruby detect_labels.rb [image file path]
-
-    Example:
-      ruby detect_labels.rb image.png
-      ruby detect_labels.rb https://public-url/image.png
-      ruby detect_labels.rb gs://my-bucket/image.png
+      Usage: ruby detect_labels.rb [image file path]
+       Example:
+        ruby detect_labels.rb image.png
+        ruby detect_labels.rb https://public-url/image.png
+        ruby detect_labels.rb gs://my-bucket/image.png
     USAGE
   elsif image_path =~ URI::DEFAULT_PARSER.make_regexp
     detect_labels_gs image_path: image_path

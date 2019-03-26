@@ -18,7 +18,6 @@ require "google/cloud/dialogflow"
 require_relative "../context_management"
 
 describe "Context Management" do
-
   before do
     @project_id = ENV["GOOGLE_CLOUD_PROJECT"]
     @session_id = "fake_session_for_testing"

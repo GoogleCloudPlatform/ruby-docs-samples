@@ -15,7 +15,6 @@
 require "spec_helper"
 
 describe "Remove product from product set" do
-
   example "Remove product from product set" do
     snippet_filepath = get_snippet_filepath __FILE__
     temp_product = create_temp_product
@@ -30,5 +29,4 @@ describe "Remove product from product set" do
     product_list_after = Array(@client.list_products_in_product_set(temp_product_set.name))
     expect(product_list_after).to be_empty
   end
-
 end

@@ -15,7 +15,6 @@
 require "spec_helper"
 
 describe "Create product" do
-
   example "Create a new product" do
     snippet_filepath = get_snippet_filepath __FILE__
 
@@ -24,5 +23,4 @@ describe "Create product" do
     product_name = output.split.last
     expect(@client.get_product(product_name)).to be_truthy
   end
-
 end

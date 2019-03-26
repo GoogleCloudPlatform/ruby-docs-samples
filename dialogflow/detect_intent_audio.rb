@@ -15,8 +15,8 @@
 
 require "securerandom"
 
-def detect_intent_audio project_id:, session_id:, audio_file_path:,
-                        language_code:
+def detect_intent_audio(project_id:, session_id:, audio_file_path:,
+                        language_code:)
   # [START dialogflow_detect_intent_audio]
   # project_id = "Your Google Cloud project ID"
   # session_id = "mysession"
@@ -30,16 +30,16 @@ def detect_intent_audio project_id:, session_id:, audio_file_path:,
   puts "Session path: #{session}"
 
   begin
-    audio_file = File.open(audio_file_path, "rb")
+    audio_file = File.open audio_file_path, "rb"
     input_audio = audio_file.read
   ensure
     audio_file.close
   end
 
   audio_config = {
-    audio_encoding: :AUDIO_ENCODING_LINEAR_16,
-    sample_rate_hertz: 16000,
-    language_code: language_code
+    audio_encoding:    :AUDIO_ENCODING_LINEAR_16,
+    sample_rate_hertz: 16_000,
+    language_code:     language_code
   }
 
   query_input = { audio_config: audio_config }
@@ -55,24 +55,24 @@ def detect_intent_audio project_id:, session_id:, audio_file_path:,
 end
 
 
-if __FILE__ == $PROGRAM_NAME
+if $PROGRAM_NAME == __FILE__
   project_id = ENV["GOOGLE_CLOUD_PROJECT"]
   audio_file_path = ARGV.shift
 
   if audio_file_path
-    detect_intent_audio project_id: project_id,
-                        session_id: SecureRandom.uuid,
+    detect_intent_audio project_id:      project_id,
+                        session_id:      SecureRandom.uuid,
                         audio_file_path: audio_file_path,
-                        language_code:"en-US"
+                        language_code:   "en-US"
   else
-    puts <<-usage
-Usage: ruby detect_intent_audio.rb [audio_file_path]
+    puts <<~USAGE
+      Usage: ruby detect_intent_audio.rb [audio_file_path]
 
-Example:
-  ruby detect_intent_audio.rb resources/book_a_room.wav
+      Example:
+        ruby detect_intent_audio.rb resources/book_a_room.wav
 
-Environment variables:
-  GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
-    usage
+      Environment variables:
+        GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
+    USAGE
   end
 end

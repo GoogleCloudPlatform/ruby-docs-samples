@@ -18,7 +18,6 @@ require "spec_helper"
 
 
 describe "Load table from Orc file on GCS and replace existing table data" do
-
   before do
     @dataset = create_temp_dataset
   end
@@ -36,5 +35,4 @@ describe "Load table from Orc file on GCS and replace existing table data" do
     expect(output).to include(table.table_id)
     expect(output).to include("50 rows")
   end
-
 end

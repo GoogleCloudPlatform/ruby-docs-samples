@@ -45,7 +45,7 @@ def run_table_operations project_id, instance_id, table_id
   table = bigtable.table(
     instance_id,
     table_id,
-    view: :FULL,
+    view:           :FULL,
     perform_lookup: true
   )
   puts "Cluster states:"
@@ -112,7 +112,7 @@ def run_table_operations project_id, instance_id, table_id
   table = bigtable.table(
     instance_id,
     table_id,
-    view: :FULL,
+    view:           :FULL,
     perform_lookup: true
   )
   table.column_families.each do |f|
@@ -157,9 +157,9 @@ def delete_table project_id, instance_id, table_id
   puts "Table deleted: #{table.name}"
 end
 
-if __FILE__ == $PROGRAM_NAME
+if $PROGRAM_NAME == __FILE__
   project_id = ENV["GOOGLE_CLOUD_BIGTABLE_PROJECT"] ||
-    ENV["GOOGLE_CLOUD_PROJECT"]
+               ENV["GOOGLE_CLOUD_PROJECT"]
 
   case ARGV.shift
   when "run"
@@ -177,6 +177,6 @@ if __FILE__ == $PROGRAM_NAME
 
       Environment variables:
         GOOGLE_CLOUD_BIGTABLE_PROJECT or GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
-     USAGE
-   end
+    USAGE
+  end
 end

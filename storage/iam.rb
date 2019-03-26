@@ -89,21 +89,20 @@ def run_sample arguments
                              role:        arguments.shift,
                              member:      arguments.shift
   else
-    puts <<-usage
-Usage: bundle exec ruby iam.rb [command] [arguments]
+    puts <<~USAGE
+      Usage: bundle exec ruby iam.rb [command] [arguments]
 
-Commands:
-  view_bucket_iam_members  <bucket>                         View bucket-level IAM members
-  add_bucket_iam_member    <bucket> <iam_role> <iam_member> Add a bucket-level IAM member
-  remove_bucket_iam_member <bucket> <iam_role> <iam_member> Remove a bucket-level IAM member
+      Commands:
+        view_bucket_iam_members  <bucket>                         View bucket-level IAM members
+        add_bucket_iam_member    <bucket> <iam_role> <iam_member> Add a bucket-level IAM member
+        remove_bucket_iam_member <bucket> <iam_role> <iam_member> Remove a bucket-level IAM member
 
-Environment variables:
-  GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
-    usage
+      Environment variables:
+        GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
+    USAGE
   end
 end
 
-if __FILE__ == $PROGRAM_NAME
+if $PROGRAM_NAME == __FILE__
   run_sample ARGV
 end
-

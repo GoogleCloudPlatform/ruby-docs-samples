@@ -15,7 +15,6 @@
 require "spec_helper"
 
 describe "Delete product set" do
-
   example "Delete product set" do
     snippet_filepath = get_snippet_filepath __FILE__
     product_set = create_temp_product
@@ -24,8 +23,7 @@ describe "Delete product set" do
     output = `ruby #{snippet_filepath} #{@project_id} #{@location} #{product_set_id}`
 
     expect {
-      @client.get_product_set(product_set.name)
+      @client.get_product_set product_set.name
     }.to raise_error Google::Gax::RetryError
   end
-
 end

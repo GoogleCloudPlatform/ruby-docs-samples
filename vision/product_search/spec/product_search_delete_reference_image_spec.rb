@@ -15,7 +15,6 @@
 require "spec_helper"
 
 describe "Delete reference image" do
-
   example "Delete reference image" do
     snippet_filepath = get_snippet_filepath __FILE__
     product = create_temp_product
@@ -26,8 +25,7 @@ describe "Delete reference image" do
     output = `ruby #{snippet_filepath} #{@project_id} #{@location} #{product_id} #{reference_image_id}`
 
     expect {
-      @client.get_reference_image(reference_image.name)
+      @client.get_reference_image reference_image.name
     }.to raise_error Google::Gax::RetryError
   end
-
 end

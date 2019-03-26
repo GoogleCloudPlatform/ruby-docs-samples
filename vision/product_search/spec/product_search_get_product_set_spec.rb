@@ -15,7 +15,6 @@
 require "spec_helper"
 
 describe "Get product set" do
-
   example "Get product set" do
     snippet_filepath = get_snippet_filepath __FILE__
     product_set = create_temp_product_set
@@ -25,5 +24,4 @@ describe "Get product set" do
 
     expect(output).to include product_set.display_name
   end
-
 end
