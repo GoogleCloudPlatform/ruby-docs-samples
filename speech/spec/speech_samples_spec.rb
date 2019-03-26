@@ -18,7 +18,6 @@ require "google/cloud/speech"
 require "google/cloud/storage"
 
 describe "Google Cloud Speech API samples" do
-
   before do
     @bucket_name = ENV["GOOGLE_CLOUD_STORAGE_BUCKET"]
     @storage     = Google::Cloud::Storage.new
@@ -37,10 +36,10 @@ describe "Google Cloud Speech API samples" do
   end
 
   # Capture and return STDOUT output by block
-  def capture &block
+  def capture
     real_stdout = $stdout
     $stdout = StringIO.new
-    block.call
+    yield
     @captured_output = $stdout.string
   ensure
     $stdout = real_stdout

@@ -31,16 +31,16 @@ def main host, api_key, user
   puts "Greeting: #{message}"
 end
 
-if __FILE__ == $PROGRAM_NAME
+if $PROGRAM_NAME == __FILE__
   if ARGV.size < 2
-    puts <<-usage
-Usage: bundle exec ruby greeter_client.rb <host> <api_key> [greetee]
+    puts <<~USAGE
+      Usage: bundle exec ruby greeter_client.rb <host> <api_key> [greetee]
 
-Arguments:
-  host                 gRPC host to connect to, ex: localhost:50051
-  api_key              API key to add to request
-  greetee              Optional, Who to greet
-    usage
+      Arguments:
+        host                 gRPC host to connect to, ex: localhost:50051
+        api_key              API key to add to request
+        greetee              Optional, Who to greet
+    USAGE
   else
     host    = ARGV.shift
     api_key = ARGV.shift

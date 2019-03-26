@@ -18,7 +18,7 @@ require "capybara/rspec"
 
 describe "Google Analytics", type: :feature do
   Capybara.app = Sinatra::Application
-  
+
   it "can track visit event" do
     visit "/"
 

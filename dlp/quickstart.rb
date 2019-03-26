@@ -21,26 +21,26 @@ dlp = Google::Cloud::Dlp.new
 
 request_configuration = {
   # The types of information to match
-  info_types: [{ name: "PERSON_NAME" }, { name: "US_STATE" }],
+  info_types:     [{ name: "PERSON_NAME" }, { name: "US_STATE" }],
 
   # Only return results above a likelihood threshold (0 for all)
   min_likelihood: :LIKELIHOOD_UNSPECIFIED,
 
   # Limit the number of findings (0 for no limit)
-  limits: { max_findings_per_request: 0 },
+  limits:         { max_findings_per_request: 0 },
 
   # Whether to include the matching string in the response
-  include_quote: true
+  include_quote:  true
 }
 
 # The items to inspect
 item_to_inspect = { value: "Robert Frost" }
 
 # Run request
-parent = "projects/#{ENV["GOOGLE_CLOUD_PROJECT"]}"
+parent = "projects/#{ENV['GOOGLE_CLOUD_PROJECT']}"
 response = dlp.inspect_content parent,
-  inspect_config: request_configuration,
-  item: item_to_inspect
+                               inspect_config: request_configuration,
+                               item:           item_to_inspect
 
 # Print the results
 response.result.findings.each do |finding|

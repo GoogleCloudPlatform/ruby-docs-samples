@@ -72,12 +72,12 @@ def detect_document_text_async image_path:, output_path:
   image_annotator = Google::Cloud::Vision::ImageAnnotator.new
 
   operation = image_annotator.document_text_detection(
-    image: image_path,
-    async: true,
+    image:       image_path,
+    async:       true,
     max_results: 15, # optional, defaults to 10
     destination: output_path,
-    batch_size: 1, # optional, defaults to 10.
-    mime_type: "application/pdf"
+    batch_size:  1, # optional, defaults to 10.
+    mime_type:   "application/pdf"
   )
 
   operation.wait_until_done!
@@ -87,20 +87,19 @@ def detect_document_text_async image_path:, output_path:
   # [END vision_fulltext_detection_asynchronous]
 end
 
-if __FILE__ == $PROGRAM_NAME
+if $PROGRAM_NAME == __FILE__
   args = {
-    image_path: ARGV.shift,
+    image_path:  ARGV.shift,
     output_path: ARGV.shift
   }
 
   if args[:image_path].nil?
     puts <<~USAGE
-    Usage: ruby detect_document_text.rb [image file path]
-
-    Example:
-      ruby detect_document_text.rb image.png
-      ruby detect_document_text.rb https://public-url/image.png
-      ruby detect_document_text.rb gs://my-bucket/image.png
+      Usage: ruby detect_document_text.rb [image file path]
+       Example:
+        ruby detect_document_text.rb image.png
+        ruby detect_document_text.rb https://public-url/image.png
+        ruby detect_document_text.rb gs://my-bucket/image.png
     USAGE
   elsif args[:image_path] =~ URI::DEFAULT_PARSER.make_regexp
     detect_document_text_gcs args unless args[:output_path]

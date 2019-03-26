@@ -1,8 +1,8 @@
 source "https://rubygems.org"
 
-gem "sinatra"
 gem "json"
 gem "rack-cors"
+gem "sinatra"
 
 # Dependencies for ./clients/
 group :development do
@@ -12,6 +12,6 @@ end
 
 # Dependencies for ./spec/
 group :test do
-  gem "rspec"
   gem "rack-test"
+  gem "rspec"
 end

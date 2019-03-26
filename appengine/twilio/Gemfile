@@ -20,7 +20,7 @@ gem "twilio-ruby"
 # [END gae_flex_twilio_dependencies]
 
 group :test do
-  gem "rspec"
-  gem "rest-client"
   gem "rack-test"
+  gem "rest-client"
+  gem "rspec"
 end

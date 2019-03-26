@@ -16,23 +16,22 @@ require "rspec"
 require "google/cloud/bigquery/data_transfer"
 
 describe "BigQuery Data Transfer Quickstart" do
-
   it "lists data sources" do
     data_transfer = Google::Cloud::Bigquery::DataTransfer.new
     project_path = Google::Cloud::Bigquery::DataTransfer::V1::DataTransferServiceClient.project_path(
-      ENV["GOOGLE_CLOUD_PROJECT"])
+      ENV["GOOGLE_CLOUD_PROJECT"]
+    )
 
     expect(Google::Cloud::Bigquery::DataTransfer::V1::DataTransferServiceClient).to(
-      receive(:project_path).
-      with("YOUR_PROJECT_ID").
-      and_return(project_path))
+      receive(:project_path)
+      .with("YOUR_PROJECT_ID")
+      .and_return(project_path)
+    )
 
     expect {
       load File.expand_path("../quickstart.rb", __dir__)
     }.to output(
       /Supported Data Sources:\n/
     ).to_stdout
-   end
-
+  end
 end
-

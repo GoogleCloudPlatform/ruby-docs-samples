@@ -17,7 +17,7 @@ source "https://rubygems.org"
 gem "google-cloud-dialogflow"
 
 group :test do
+  gem "google-cloud-storage"
   gem "rspec"
   gem "rspec-retry"
-  gem "google-cloud-storage"
 end

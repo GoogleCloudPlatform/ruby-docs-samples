@@ -30,4 +30,3 @@ topic = pubsub.create_topic topic_name
 
 puts "Topic #{topic.name} created."
 # [END pubsub_quickstart_create_topic]
-

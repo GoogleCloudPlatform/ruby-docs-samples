@@ -57,12 +57,12 @@ describe "Datastore sample" do
   def create_task task_key
     task = datastore.entity task_key do |t|
       t["category"] = "Personal"
-      t["created"] = Time.utc(1999, 12, 31)
+      t["created"] = Time.utc 1999, 12, 31
       t["done"] = false
       t["priority"] = 4
       t["percent_complete"] = 10.0
       t["description"] = "A task description."
-      t["tag"] = ["fun", "programming"]
+      t["tag"] = %w[fun programming]
     end
     datastore.save task
   end
@@ -73,7 +73,7 @@ describe "Datastore sample" do
   end
 
   def delete_task_lists
-    datastore.delete(datastore.key("TaskList", "default"))
+    datastore.delete datastore.key("TaskList", "default")
   end
 
   def delete_accounts
@@ -100,8 +100,8 @@ describe "Datastore sample" do
 
     expect(task_key.kind).to eq("Task")
     expect(task_key.name).to eq("sampleTask")
-    expect(task_key.path).to eq([["TaskList", "default"],
-                                 ["Task", "sampleTask"]])
+    expect(task_key.path).to eq([%w[TaskList default],
+                                 %w[Task sampleTask]])
   end
 
   it "supports key_with_multilevel_parent" do
@@ -109,17 +109,17 @@ describe "Datastore sample" do
 
     expect(task_key.kind).to eq("Task")
     expect(task_key.name).to eq("sampleTask")
-    expect(task_key.path).to eq([["User", "alice"],
-                                 ["TaskList", "default"],
-                                 ["Task", "sampleTask"]])
+    expect(task_key.path).to eq([%w[User alice],
+                                 %w[TaskList default],
+                                 %w[Task sampleTask]])
   end
 
   it "supports entity_with_parent" do
     task = entity_with_parent
 
     expect(task.key.name).to eq("sampleTask")
-    expect(task.key.path).to eq([["TaskList", "default"],
-                                 ["Task", "sampleTask"]])
+    expect(task.key.path).to eq([%w[TaskList default],
+                                 %w[Task sampleTask]])
     expect(task.persisted?).to be(false)
     expect_basic_task task
   end
@@ -143,8 +143,8 @@ describe "Datastore sample" do
     task = array_value
 
     expect(task.properties.to_h.size).to eq(2)
-    expect(task["tags"]).to eq(["fun", "programming"])
-    expect(task["collaborators"]).to eq(["alice", "bob"])
+    expect(task["tags"]).to eq(%w[fun programming])
+    expect(task["collaborators"]).to eq(%w[alice bob])
   end
 
   it "supports basic_entity" do
@@ -335,7 +335,7 @@ describe "Datastore sample" do
     tasks = datastore.run query
 
     expect(tasks.empty?).to be(false)
-    expect(tasks.first["tag"]).to eq(["fun", "programming"])
+    expect(tasks.first["tag"]).to eq(%w[fun programming])
   end
 
   it "supports inequality_range" do
@@ -350,7 +350,7 @@ describe "Datastore sample" do
   it "throws when inequality_invalid" do
     query = inequality_invalid
 
-    expect { datastore.run(query) }.to raise_error(Google::Cloud::InvalidArgumentError)
+    expect { datastore.run query }.to raise_error(Google::Cloud::InvalidArgumentError)
   end
 
   it "supports equal_and_inequality_range" do
@@ -375,13 +375,13 @@ describe "Datastore sample" do
   it "supports inequality_sort_invalid_not_same" do
     query = inequality_sort_invalid_not_same
 
-    expect { datastore.run(query) }.to raise_error(Google::Cloud::InvalidArgumentError)
+    expect { datastore.run query }.to raise_error(Google::Cloud::InvalidArgumentError)
   end
 
   it "supports inequality_sort_invalid_not_first" do
     query = inequality_sort_invalid_not_first
 
-    expect { datastore.run(query) }.to raise_error(Google::Cloud::InvalidArgumentError)
+    expect { datastore.run query }.to raise_error(Google::Cloud::InvalidArgumentError)
   end
 
   it "supports limit" do
@@ -423,8 +423,8 @@ describe "Datastore sample" do
 
     task = exploding_properties
 
-    expect(task["tags"]).to eq(["fun", "programming", "learn"])
-    expect(task["collaborators"]).to eq(["alice", "bob", "charlie"])
+    expect(task["tags"]).to eq(%w[fun programming learn])
+    expect(task["collaborators"]).to eq(%w[alice bob charlie])
     expect(task["created"]).to eq(time_now)
   end
 

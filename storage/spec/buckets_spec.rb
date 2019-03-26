@@ -30,14 +30,13 @@ RSpec.configure do |config|
 end
 
 describe "Google Cloud Storage buckets sample" do
-
   before :all do
     @bucket_name = ENV["GOOGLE_CLOUD_STORAGE_BUCKET"]
     @storage     = Google::Cloud::Storage.new
     @project_id  = @storage.project
     @kms_key     = create_kms_key project_id: @project_id,
-                                  key_ring: ENV["GOOGLE_CLOUD_KMS_KEY_RING"],
-                                  key_name: ENV["GOOGLE_CLOUD_KMS_KEY_NAME"]
+                                  key_ring:   ENV["GOOGLE_CLOUD_KMS_KEY_RING"],
+                                  key_name:   ENV["GOOGLE_CLOUD_KMS_KEY_NAME"]
   end
 
   before do
@@ -46,11 +45,11 @@ describe "Google Cloud Storage buckets sample" do
   end
 
   after :all do
-    @storage.bucket(@bucket_name).requester_pays = false if @storage.bucket(@bucket_name)
+    @storage.bucket(@bucket_name).requester_pays = false if @storage.bucket @bucket_name
 
     # Other tests assume that this bucket exists,
     # so create it before exiting this spec suite
-    @storage.create_bucket @bucket_name unless @storage.bucket(@bucket_name)
+    @storage.create_bucket @bucket_name unless @storage.bucket @bucket_name
   end
 
   def delete_bucket!
@@ -78,7 +77,7 @@ describe "Google Cloud Storage buckets sample" do
     expect {
       disable_requester_pays project_id:  @project_id,
                              bucket_name: @bucket_name
-    }.to output{
+    }.to output {
       /Requester pays has been disabled for #{@bucket_name}/
     }.to_stdout
 
@@ -93,7 +92,7 @@ describe "Google Cloud Storage buckets sample" do
     expect {
       enable_requester_pays project_id:  @project_id,
                             bucket_name: @bucket_name
-    }.to output{
+    }.to output {
       /Requester pays has been enabled for #{@bucket_name}/
     }.to_stdout
 
@@ -108,7 +107,7 @@ describe "Google Cloud Storage buckets sample" do
     expect {
       get_requester_pays_status project_id:  @project_id,
                                 bucket_name: @bucket_name
-    }.to output{
+    }.to output {
       /Requester Pays is enabled for #{@bucket_name}/
     }.to_stdout
   end
@@ -167,8 +166,7 @@ describe "Google Cloud Storage buckets sample" do
       enable_default_kms_key project_id:      @project_id,
                              bucket_name:     @bucket_name,
                              default_kms_key: @kms_key
-
-    }.to output{
+    }.to output {
       /Default KMS key for #{@bucket_name} was set to #{@kms_key}/
     }.to_stdout
 
@@ -179,7 +177,7 @@ describe "Google Cloud Storage buckets sample" do
   end
 
   example "set and get a retention policy" do
-    skip("retention_period is not working")
+    skip "retention_period is not working"
     @storage.bucket(@bucket_name).retention_period = nil
     expect(@storage.bucket(@bucket_name).retention_period).to be nil
 
@@ -188,14 +186,14 @@ describe "Google Cloud Storage buckets sample" do
       set_retention_policy project_id:       @project_id,
                            bucket_name:      @bucket_name,
                            retention_period: retention_period
-    }.to output{
+    }.to output {
       /Retention period for #{@bucket_name} is now #{retention_period} seconds/
     }.to_stdout
 
     expect {
       get_retention_policy project_id:  @project_id,
                            bucket_name: @bucket_name
-    }.to output{
+    }.to output {
       /period: #{retention_period}/
     }.to_stdout
 
@@ -280,7 +278,7 @@ describe "Google Cloud Storage buckets sample" do
   example "create bucket" do
     delete_bucket!
 
-    expect(@storage.bucket @bucket_name).to be nil
+    expect(@storage.bucket(@bucket_name)).to be nil
 
     expect {
       create_bucket project_id:  @project_id,
@@ -289,13 +287,13 @@ describe "Google Cloud Storage buckets sample" do
       "Created bucket: #{@bucket_name}\n"
     ).to_stdout
 
-    expect(@storage.bucket @bucket_name).not_to be nil
+    expect(@storage.bucket(@bucket_name)).not_to be nil
   end
 
   example "create bucket with specified class and location" do
     delete_bucket!
 
-    expect(@storage.bucket @bucket_name).to be nil
+    expect(@storage.bucket(@bucket_name)).to be nil
 
     location      = "US"
     storage_class = "STANDARD"
@@ -328,7 +326,7 @@ describe "Google Cloud Storage buckets sample" do
 
     expect {
       list_bucket_labels project_id:  @project_id,
-                        bucket_name: @bucket_name
+                         bucket_name: @bucket_name
     }.to output(
       /#{label_key} = #{label_value}/
     ).to_stdout
@@ -342,10 +340,10 @@ describe "Google Cloud Storage buckets sample" do
     label_value = "add-label-value"
 
     bucket.update do |bucket_update|
-      bucket_update.labels = Hash.new
+      bucket_update.labels = ({})
     end
 
-    expect(@storage.bucket(@bucket_name).labels.key? label_key).to be false
+    expect(@storage.bucket(@bucket_name).labels.key?(label_key)).to be false
 
     expect {
       add_bucket_label project_id:  @project_id,
@@ -356,7 +354,7 @@ describe "Google Cloud Storage buckets sample" do
       "Added label #{label_key} with value #{label_value} to #{@bucket_name}\n"
     ).to_stdout
 
-    expect(@storage.bucket(@bucket_name).labels.key? label_key).to be true
+    expect(@storage.bucket(@bucket_name).labels.key?(label_key)).to be true
   end
 
   example "delete bucket label" do
@@ -370,7 +368,7 @@ describe "Google Cloud Storage buckets sample" do
       bucket_update.labels[label_key] = label_value
     end
 
-    expect(@storage.bucket(@bucket_name).labels.key? label_key).to be true
+    expect(@storage.bucket(@bucket_name).labels.key?(label_key)).to be true
 
     expect {
       delete_bucket_label project_id:  @project_id,
@@ -380,11 +378,11 @@ describe "Google Cloud Storage buckets sample" do
       "Deleted label #{label_key} from #{@bucket_name}\n"
     ).to_stdout
 
-    expect(@storage.bucket(@bucket_name).labels.key? label_key).to be false
+    expect(@storage.bucket(@bucket_name).labels.key?(label_key)).to be false
   end
 
   example "delete bucket" do
-    expect(@storage.bucket @bucket_name).not_to be nil
+    expect(@storage.bucket(@bucket_name)).not_to be nil
 
     expect {
       delete_bucket project_id: @project_id, bucket_name: @bucket_name
@@ -392,7 +390,6 @@ describe "Google Cloud Storage buckets sample" do
       "Deleted bucket: #{@bucket_name}\n"
     ).to_stdout
 
-    expect(@storage.bucket @bucket_name).to be nil
+    expect(@storage.bucket(@bucket_name)).to be nil
   end
-
 end

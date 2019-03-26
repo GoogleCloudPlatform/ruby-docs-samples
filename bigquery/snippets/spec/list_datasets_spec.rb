@@ -17,15 +17,13 @@ require "spec_helper"
 
 
 describe "List datasets" do
-
   example "list datasets in a project" do
     dataset1 = @bigquery.create_dataset "test_dataset1_#{Time.now.to_i}"
     dataset2 = @bigquery.create_dataset "test_dataset2_#{Time.now.to_i}"
-    @temp_datasets.push(dataset1, dataset2)
+    @temp_datasets.push dataset1, dataset2
 
     output = capture { list_datasets @bigquery.name }
     expect(output).to include(dataset1.dataset_id)
     expect(output).to include(dataset2.dataset_id)
   end
-
 end

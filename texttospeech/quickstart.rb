@@ -40,9 +40,9 @@ audio_config = { audio_encoding: "MP3" }
 response = client.synthesize_speech synthesis_input, voice, audio_config
 
 # The response's audio_content is binary.
-File.open("output.mp3", "wb") do |file|
+File.open "output.mp3", "wb" do |file|
   # Write the response to the output file.
-  file.write(response.audio_content)
+  file.write response.audio_content
 end
 
 puts "Audio content written to file 'output.mp3'"

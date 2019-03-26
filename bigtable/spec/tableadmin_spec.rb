@@ -5,7 +5,7 @@ require_relative "../tableadmin"
 
 describe "Google Cloud Bigtable instance Samples" do
   it "create table, run table admin operations and delete table" do
-    table_id = "test-table-#{SecureRandom.hex(8)}"
+    table_id = "test-table-#{SecureRandom.hex 8}"
 
     output = capture do
       run_table_operations @project_id, @instance_id, table_id

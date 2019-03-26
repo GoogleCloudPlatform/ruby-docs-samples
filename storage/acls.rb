@@ -212,70 +212,69 @@ def run_sample arguments
 
   case command
   when "print_bucket_acl"
-    print_bucket_acl project_id: project_id,
+    print_bucket_acl project_id:  project_id,
                      bucket_name: arguments.shift
   when "print_bucket_acl_for_user"
-    print_bucket_acl_for_user project_id: project_id,
+    print_bucket_acl_for_user project_id:  project_id,
                               bucket_name: arguments.shift,
-                              email: arguments.shift
+                              email:       arguments.shift
   when "add_bucket_owner"
-    add_bucket_owner project_id: project_id,
+    add_bucket_owner project_id:  project_id,
                      bucket_name: arguments.shift,
-                     email: arguments.shift
+                     email:       arguments.shift
   when "remove_bucket_acl"
-    remove_bucket_acl project_id: project_id,
+    remove_bucket_acl project_id:  project_id,
                       bucket_name: arguments.shift,
-                      email: arguments.shift
+                      email:       arguments.shift
   when "add_bucket_default_owner"
-    add_bucket_default_owner project_id: project_id,
+    add_bucket_default_owner project_id:  project_id,
                              bucket_name: arguments.shift,
-                             email: arguments.shift
+                             email:       arguments.shift
   when "remove_bucket_default_acl"
-    remove_bucket_default_acl project_id: project_id,
+    remove_bucket_default_acl project_id:  project_id,
                               bucket_name: arguments.shift,
-                              email: arguments.shift
+                              email:       arguments.shift
   when "print_file_acl"
-    print_file_acl project_id: project_id,
+    print_file_acl project_id:  project_id,
                    bucket_name: arguments.shift,
-                   file_name: arguments.shift
+                   file_name:   arguments.shift
   when "print_file_acl_for_user"
-    print_file_acl_for_user project_id: project_id,
+    print_file_acl_for_user project_id:  project_id,
                             bucket_name: arguments.shift,
-                            file_name: arguments.shift,
-                            email: arguments.shift
+                            file_name:   arguments.shift,
+                            email:       arguments.shift
   when "add_file_owner"
-    add_file_owner project_id: project_id,
+    add_file_owner project_id:  project_id,
                    bucket_name: arguments.shift,
-                   file_name: arguments.shift,
-                   email: arguments.shift
+                   file_name:   arguments.shift,
+                   email:       arguments.shift
   when "remove_file_acl"
-    remove_file_acl project_id: project_id,
+    remove_file_acl project_id:  project_id,
                     bucket_name: arguments.shift,
-                    file_name: arguments.shift,
-                    email: arguments.shift
+                    file_name:   arguments.shift,
+                    email:       arguments.shift
   else
-    puts <<-usage
-Usage: bundle exec ruby acls.rb [command] [arguments]
+    puts <<~USAGE
+      Usage: bundle exec ruby acls.rb [command] [arguments]
 
-Commands:
-  print_bucket_acl <bucket>                  Print bucket Access Control List
-  print_bucket_acl_for_user <bucket> <email> Print bucket ACL for an email
-  add_bucket_owner <bucket> <email>          Add a new OWNER to a bucket
-  remove_bucket_acl <bucket> <email>         Remove an entity from a bucket ACL
-  add_bucket_default_owner <bucket> <email>  Add a default OWNER for a bucket
-  remove_bucket_default_acl <bucket> <email> Remove an entity from default bucket ACL
-  print_file_acl <bucket> <file>             Print file ACL
-  print_file_acl_for_user <bucket> <file> <email> Print file ACL for an email
-  add_file_owner <bucket> <file> <email>          Add an OWNER to a file
-  remove_file_acl <bucket> <file> <email>         Remove an entity from a file ACL
+      Commands:
+        print_bucket_acl <bucket>                  Print bucket Access Control List
+        print_bucket_acl_for_user <bucket> <email> Print bucket ACL for an email
+        add_bucket_owner <bucket> <email>          Add a new OWNER to a bucket
+        remove_bucket_acl <bucket> <email>         Remove an entity from a bucket ACL
+        add_bucket_default_owner <bucket> <email>  Add a default OWNER for a bucket
+        remove_bucket_default_acl <bucket> <email> Remove an entity from default bucket ACL
+        print_file_acl <bucket> <file>             Print file ACL
+        print_file_acl_for_user <bucket> <file> <email> Print file ACL for an email
+        add_file_owner <bucket> <file> <email>          Add an OWNER to a file
+        remove_file_acl <bucket> <file> <email>         Remove an entity from a file ACL
 
-Environment variables:
-  GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
-    usage
+      Environment variables:
+        GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
+    USAGE
   end
 end
 
-if __FILE__ == $PROGRAM_NAME
+if $PROGRAM_NAME == __FILE__
   run_sample ARGV
 end
-

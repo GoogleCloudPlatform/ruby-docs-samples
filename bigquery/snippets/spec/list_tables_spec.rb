@@ -17,7 +17,6 @@ require "spec_helper"
 
 
 describe "List tables" do
-
   before do
     @dataset = create_temp_dataset
   end
@@ -30,5 +29,4 @@ describe "List tables" do
     expect(output).to include(table1.table_id)
     expect(output).to include(table2.table_id)
   end
-
 end

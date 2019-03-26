@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-def delete_job(project_id, location_id, job_name)
+def delete_job project_id, location_id, job_name
   # [START cloud_scheduler_create_job]
   require "google/cloud/scheduler"
 
@@ -25,10 +25,10 @@ def delete_job(project_id, location_id, job_name)
   # service_id = "my-serivce"
 
   # Construct the fully qualified location path.
-  job = client.job_path(project_id, location_id, job_name)
+  job = client.job_path project_id, location_id, job_name
 
   # Use the client to send the job deletion request.
-  client.delete_job(job)
+  client.delete_job job
 
   puts "Job deleted."
   # [END cloud_scheduler_create_job]

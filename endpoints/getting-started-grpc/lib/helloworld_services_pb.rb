@@ -16,19 +16,18 @@
 # limitations under the License.
 #
 
-require 'grpc'
-require 'helloworld_pb'
+require "grpc"
+require "helloworld_pb"
 
 module Helloworld
   module Greeter
     # The greeting service definition.
     class Service
-
       include GRPC::GenericService
 
       self.marshal_class_method = :encode
       self.unmarshal_class_method = :decode
-      self.service_name = 'helloworld.Greeter'
+      self.service_name = "helloworld.Greeter"
 
       # Sends a greeting
       rpc :SayHello, HelloRequest, HelloReply

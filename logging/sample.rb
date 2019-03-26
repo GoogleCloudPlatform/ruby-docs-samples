@@ -120,7 +120,7 @@ def write_log_entry_using_ruby_logger
   require "google/cloud/logging"
 
   logging  = Google::Cloud::Logging.new project: "my-gcp-project-id"
-  resource = logging.resource "gae_app", module_id: "default",
+  resource = logging.resource "gae_app", module_id:  "default",
                                          version_id: "20160101t163030"
 
   logger = logging.logger "my_application_log", resource

@@ -30,7 +30,6 @@ RSpec.configure do |config|
 end
 
 describe "Google Cloud Storage ACL sample" do
-
   before do
     @bucket_name     = ENV["GOOGLE_CLOUD_STORAGE_BUCKET"]
     @storage         = Google::Cloud::Storage.new
@@ -39,27 +38,23 @@ describe "Google Cloud Storage ACL sample" do
     @local_file_path = File.expand_path "resources/file.txt", __dir__
     @test_email      = "user-test@test.com"
 
-    if @bucket.nil?
-      @storage.create_bucket @bucket_name
-    end
+    @storage.create_bucket @bucket_name if @bucket.nil?
   end
 
   # Delete given file in Cloud Storage test bucket if it exists
   def delete_file storage_file_path
-    @bucket.file(storage_file_path).delete if @bucket.file storage_file_path
+    @bucket.file(storage_file_path)&.delete
   end
 
   def upload local_file_path, storage_file_path
-    unless @bucket.file storage_file_path
-      @bucket.create_file local_file_path, storage_file_path
-    end
+    @bucket.create_file local_file_path, storage_file_path unless @bucket.file storage_file_path
   end
 
   # Capture and return STDOUT output by block
-  def capture &block
+  def capture
     real_stdout = $stdout
     $stdout = StringIO.new
-    block.call
+    yield
     @captured_output = $stdout.string
   ensure
     $stdout = real_stdout
@@ -132,9 +127,7 @@ describe "Google Cloud Storage ACL sample" do
   end
 
   it "can add bucket default owner" do
-    if @bucket.default_acl.owners.include? @test_email
-      @bucket.default_acl.delete @test_email
-    end
+    @bucket.default_acl.delete @test_email if @bucket.default_acl.owners.include? @test_email
 
     expect(@bucket.default_acl.owners).not_to include @test_email
 
@@ -151,9 +144,7 @@ describe "Google Cloud Storage ACL sample" do
   end
 
   it "can remove bucket default acl" do
-    if @bucket.default_acl.owners.include? @test_email
-      @bucket.default_acl.delete @test_email
-    end
+    @bucket.default_acl.delete @test_email if @bucket.default_acl.owners.include? @test_email
 
     expect(@bucket.default_acl.owners).not_to include @test_email
 

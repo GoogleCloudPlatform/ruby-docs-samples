@@ -28,14 +28,14 @@ optparse = OptionParser.new do |opts|
           "Your API host, e.g. https://your-project.appspot.com.") do |host|
     options[:host] = host
   end
-  opts.on("-k", "--api_key KEY", "Your API key.") do |api_key|
+  opts.on "-k", "--api_key KEY", "Your API key." do |api_key|
     options[:api_key] = api_key
   end
   opts.on("-s", "--service_account_file FILE",
           "The path to your service account json file.") do |file_path|
     options[:service_account_file] = file_path
   end
-  opts.on("-m", "--message MESSAGE", "Message to echo.") do |message|
+  opts.on "-m", "--message MESSAGE", "Message to echo." do |message|
     options[:message] = message
   end
 end

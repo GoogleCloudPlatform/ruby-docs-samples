@@ -15,7 +15,6 @@
 require "spec_helper"
 
 describe "Get reference image" do
-
   example "Get reference image" do
     snippet_filepath = get_snippet_filepath __FILE__
     product = create_temp_product
@@ -27,5 +26,4 @@ describe "Get reference image" do
 
     expect(output).to include reference_image.uri
   end
-
 end

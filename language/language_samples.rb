@@ -184,7 +184,7 @@ def classify_text_from_cloud_storage_file storage_path:
 end
 
 
-if __FILE__ == $PROGRAM_NAME
+if $PROGRAM_NAME == __FILE__
 
   if ARGV.length == 1
     puts "Sentiment:"

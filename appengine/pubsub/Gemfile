@@ -14,12 +14,12 @@
 
 source "https://rubygems.org"
 
+gem "google-cloud-pubsub"
+gem "json"
 gem "sinatra"
 gem "slim"
-gem "json"
-gem "google-cloud-pubsub"
 
 group :test do
-  gem "rspec"
   gem "rack-test"
+  gem "rspec"
 end

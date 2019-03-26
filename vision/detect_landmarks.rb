@@ -63,17 +63,16 @@ def detect_landmarks_gcs image_path:
   # [END vision_landmark_detection_gcs]
 end
 
-if __FILE__ == $PROGRAM_NAME
+if $PROGRAM_NAME == __FILE__
   image_path = ARGV.shift
 
   if !image_path
     puts <<~USAGE
-    Usage: ruby detect_landmarks.rb [image file path]
-
-    Example:
-      ruby detect_landmarks.rb image.png
-      ruby detect_landmarks.rb https://public-url/image.png
-      ruby detect_landmarks.rb gs://my-bucket/image.png
+      Usage: ruby detect_landmarks.rb [image file path]
+       Example:
+        ruby detect_landmarks.rb image.png
+        ruby detect_landmarks.rb https://public-url/image.png
+        ruby detect_landmarks.rb gs://my-bucket/image.png
     USAGE
   elsif image_path =~ URI::DEFAULT_PARSER.make_regexp
     detect_landmarks_gcs image_path: image_path

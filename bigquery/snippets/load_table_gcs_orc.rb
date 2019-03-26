@@ -23,10 +23,10 @@ def load_table_gcs_orc dataset_id = "your_dataset_id"
   load_job = dataset.load_job table_id, gcs_uri, format: "orc"
   puts "Starting job #{load_job.job_id}"
 
-  load_job.wait_until_done!  # Waits for table load to complete.
+  load_job.wait_until_done! # Waits for table load to complete.
   puts "Job finished."
 
-  table = dataset.table(table_id)
+  table = dataset.table table_id
   puts "Loaded #{table.rows_count} rows to table #{table.id}"
 end
 # [END bigquery_load_table_gcs_orc]

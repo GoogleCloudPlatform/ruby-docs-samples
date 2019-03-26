@@ -19,7 +19,7 @@ def delete_dataset_and_contents dataset_id = "my_dataset_with_tables"
 
   # Use the force parameter to delete a dataset and its contents
   dataset = bigquery.dataset dataset_id
-  dataset.delete(force: true)
+  dataset.delete force: true
   puts "Dataset #{dataset_id} and contents deleted."
 end
 # [END bigquery_delete_dataset_and_contents]

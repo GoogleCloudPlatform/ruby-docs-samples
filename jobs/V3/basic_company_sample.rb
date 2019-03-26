@@ -23,11 +23,11 @@ def job_discovery_generate_company display_name:, headquarters_address:, externa
 
   jobs = Google::Apis::JobsV3
 
-  company_generated = jobs::Company.new display_name: display_name,
+  company_generated = jobs::Company.new display_name:         display_name,
                                         headquarters_address: headquarters_address,
-                                        external_id: external_id
+                                        external_id:          external_id
   puts "Company generated: #{company_generated.to_json}"
-  return company_generated
+  company_generated
   # [END job_discovery_generate_company]
 end
 
@@ -48,11 +48,11 @@ def job_discovery_create_company project_id:, company_to_be_created:
 
   begin
     create_company_request = jobs::CreateCompanyRequest.new company: company_to_be_created
-    company_created = talent_solution_client.create_company(project_id, create_company_request)
+    company_created = talent_solution_client.create_company project_id, create_company_request
     puts "Company created: #{company_created.to_json}"
     return company_created
-  rescue => e
-     puts "Exception occurred while creating company: #{e}"
+  rescue StandardError => e
+    puts "Exception occurred while creating company: #{e}"
   end
   # [END job_discovery_create_company]
 end
@@ -72,11 +72,11 @@ def job_discovery_get_company company_name:
   )
 
   begin
-    company_got = talent_solution_client.get_project_company(company_name)
+    company_got = talent_solution_client.get_project_company company_name
     puts "Company got: #{company_got.to_json}"
     return company_got
-  rescue => e
-      puts "Exception occurred while getting company: #{e}"
+  rescue StandardError => e
+    puts "Exception occurred while getting company: #{e}"
   end
   # [END job_discovery_get_company]
 end
@@ -98,12 +98,12 @@ def job_discovery_update_company company_name:, company_updated:
 
   begin
     update_company_request = jobs::UpdateCompanyRequest.new company: company_updated
-    company_updated = talent_solution_client.
-              patch_project_company(company_name, update_company_request)
+    company_updated = talent_solution_client
+                      .patch_project_company(company_name, update_company_request)
     puts "Company updated: #{company_updated.to_json}"
     return company_updated
-  rescue => e
-      puts "Exception occurred while updating company: #{e}"
+  rescue StandardError => e
+    puts "Exception occurred while updating company: #{e}"
   end
   # [END job_discovery_update_company]
 end
@@ -125,15 +125,15 @@ def job_discovery_update_company_with_field_mask company_name:, field_mask:, com
   )
 
   begin
-    update_company_request = jobs::UpdateCompanyRequest.new company: company_updated,
+    update_company_request = jobs::UpdateCompanyRequest.new company:     company_updated,
                                                             update_mask: field_mask
-    company_updated = talent_solution_client.
-              patch_project_company(company_name, update_company_request)
+    company_updated = talent_solution_client
+                      .patch_project_company(company_name, update_company_request)
     puts "Company updated with filedMask #{update_company_request.update_mask}. "
     puts "Updated company: #{company_updated.to_json}"
     return company_updated
-  rescue => e
-      puts "Exception occurred while updating company with fieldMask: #{e}"
+  rescue StandardError => e
+    puts "Exception occurred while updating company with fieldMask: #{e}"
   end
   # [END job_discovery_update_company_with_field_mask]
 end
@@ -153,61 +153,59 @@ def job_discovery_delete_company company_name:
   )
 
   begin
-    talent_solution_client.delete_project_company(company_name)
+    talent_solution_client.delete_project_company company_name
     puts "Company deleted. CompanyName: #{company_name}"
-  rescue => e
-      puts "Exception occurred while deleting company: #{e}"
+  rescue StandardError => e
+    puts "Exception occurred while deleting company: #{e}"
   end
   # [END job_discovery_delete_company]
 end
 
 def run_basic_company_sample arguments
   command = arguments.shift
-  default_project_id = "projects/#{ENV["GOOGLE_CLOUD_PROJECT"]}"
+  default_project_id = "projects/#{ENV['GOOGLE_CLOUD_PROJECT']}"
   user_input = arguments.shift
-  if command != "create_company"
-    company_name = "#{default_project_id}/companies/#{user_input}"
-  end
+  company_name = "#{default_project_id}/companies/#{user_input}" if command != "create_company"
 
   case command
   when "create_company"
     company_generated =
-      job_discovery_generate_company display_name: user_input,
-                                     external_id: arguments.shift,
+      job_discovery_generate_company display_name:         user_input,
+                                     external_id:          arguments.shift,
                                      headquarters_address: arguments.shift
     company_created =
       job_discovery_create_company company_to_be_created: company_generated,
-                                   project_id: default_project_id
+                                   project_id:            default_project_id
   when "get_company"
     job_discovery_get_company company_name: company_name
   when "update_company"
     company_to_be_updated = job_discovery_get_company company_name: company_name
     company_to_be_updated.display_name = "Updated name Google"
-    job_discovery_update_company company_name:company_name,
-                                 company_updated:company_to_be_updated
+    job_discovery_update_company company_name:    company_name,
+                                 company_updated: company_to_be_updated
   when "update_company_with_field_mask"
     company_to_be_updated = job_discovery_get_company company_name: company_name
     company_to_be_updated.display_name = "Updated name Google"
-    job_discovery_update_company_with_field_mask company_name:company_name,
-                                                 field_mask:"DisplayName",
-                                                 company_updated:company_to_be_updated
+    job_discovery_update_company_with_field_mask company_name:    company_name,
+                                                 field_mask:      "DisplayName",
+                                                 company_updated: company_to_be_updated
   when "delete_company"
-    job_discovery_delete_company company_name:company_name
+    job_discovery_delete_company company_name: company_name
   else
-  puts <<-usage
-Usage: bundle exec ruby basic_company_sample.rb [command] [arguments]
-Commands:
-  create_company                  <display_name> <external_id> <headquarters_address>      Create a company with display name and headquaters address
-  get_company                     <company_id>                                             Get company with name.
-  update_company                  <company_id>                                             Update a company.
-  update_company_with_field_mask  <company_id>                                             Update a company with field mask.
-  delete_company                  <company_id>                                             Delete a company.
-Environment variables:
-  GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
-    usage
+    puts <<~USAGE
+      Usage: bundle exec ruby basic_company_sample.rb [command] [arguments]
+      Commands:
+        create_company                  <display_name> <external_id> <headquarters_address>      Create a company with display name and headquaters address
+        get_company                     <company_id>                                             Get company with name.
+        update_company                  <company_id>                                             Update a company.
+        update_company_with_field_mask  <company_id>                                             Update a company with field mask.
+        delete_company                  <company_id>                                             Delete a company.
+      Environment variables:
+        GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
+    USAGE
   end
 end
 
-if __FILE__ == $PROGRAM_NAME
+if $PROGRAM_NAME == __FILE__
   run_basic_company_sample ARGV
 end

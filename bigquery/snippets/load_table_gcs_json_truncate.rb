@@ -14,10 +14,9 @@
 # [START bigquery_load_table_gcs_json_truncate]
 require "google/cloud/bigquery"
 
-def load_table_gcs_json_truncate(
-    dataset_id = "your_dataset_id",
-    table_id   = "your_table_id"
-  )
+def load_table_gcs_json_truncate(dataset_id = "your_dataset_id",
+                                 table_id   = "your_table_id")
+
   bigquery = Google::Cloud::Bigquery.new
   dataset  = bigquery.dataset dataset_id
   gcs_uri  = "gs://cloud-samples-data/bigquery/us-states/us-states.json"
@@ -28,10 +27,10 @@ def load_table_gcs_json_truncate(
                               write:  "truncate"
   puts "Starting job #{load_job.job_id}"
 
-  load_job.wait_until_done!  # Waits for table load to complete.
+  load_job.wait_until_done! # Waits for table load to complete.
   puts "Job finished."
 
-  table = dataset.table(table_id)
+  table = dataset.table table_id
   puts "Loaded #{table.rows_count} rows to table #{table.id}"
 end
 # [END bigquery_load_table_gcs_json_truncate]
