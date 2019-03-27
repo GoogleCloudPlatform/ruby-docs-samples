@@ -943,51 +943,52 @@ def update_using_batch_dml project_id:, instance_id:, database_id:
 end
 
 def usage
-    puts <<-USAGE
-Usage: bundle exec ruby spanner_samples.rb [command] [arguments]
+  puts <<~USAGE
 
-Commands:
-  create_database                    <instance_id> <database_id> Create Database
-  create_table_with_timestamp_column <instance_id> <database_id> Create table Performances with commit timestamp column
-  insert_data                        <instance_id> <database_id> Insert Data
-  insert_data_with_timestamp_column  <instance_id> <database_id> Inserts data into Performances table containing the commit timestamp column
-  query_data                         <instance_id> <database_id> Query Data
-  read_data                          <instance_id> <database_id> Read Data
-  read_stale_data                    <instance_id> <database_id> Read Stale Data
-  create_index                       <instance_id> <database_id> Create Index
-  create_storing_index               <instance_id> <database_id> Create Storing Index
-  add_column                         <instance_id> <database_id> Add Column
-  add_timestamp_column               <instance_id> <database_id> Alters existing Albums table, adding a commit timestamp column
-  update_data                        <instance_id> <database_id> Update Data
-  update_data_with_timestamp_column  <instance_id> <database_id> Updates two records in the altered table where the commit timestamp column was added
-  query_data_with_new_column         <instance_id> <database_id> Query Data with New Column
-  query_data_with_timestamp_column   <instance_id> <database_id> Queries data from altered table where the commit timestamp column was added
-  write_struct_data                  <instance_id> <database_id> Inserts sample data that can be used for STRUCT queries
-  query_with_struct                  <instance_id> <database_id> Queries data using a STRUCT paramater
-  query_with_array_of_struct         <instance_id> <database_id> Queries data using an array of STRUCT values as parameter
-  query_struct_field                 <instance_id> <database_id> Queries data by accessing field from a STRUCT parameter
-  query_nested_struct_field          <instance_id> <database_id> Queries data by accessing field from nested STRUCT parameters
-  query_data_with_index              <instance_id> <database_id> <start_title> <end_title> Query Data with Index
-  read_write_transaction             <instance_id> <database_id> Read-Write Transaction
-  read_data_with_index               <instance_id> <database_id> Read Data with Index
-  read_data_with_storing_index       <instance_id> <database_id> Read Data with Storing Index
-  read_only_transaction              <instance_id> <database_id> Read-Only Transaction
-  spanner_batch_client               <instance_id> <database_id> Use Spanner batch query with a thread pool
-  insert_using_dml                   <instance_id> <database_id> Insert Data using a DML statement.
-  update_using_dml                   <instance_id> <database_id> Update Data using a DML statement.
-  delete_using_dml                   <instance_id> <database_id> Delete Data using a DML statement.
-  update_using_dml_with_timestamp    <instance_id> <database_id> Update the timestamp value of specifc records using a DML statement.
-  write_and_read_using_dml           <instance_id> <database_id> Insert data using a DML statement and then read the inserted data.
-  update_using_dml_with_struct       <instance_id> <database_id> Update data using a DML statement combined with a Spanner struct.
-  write_using_dml                    <instance_id> <database_id> Insert multiple records using a DML statement.
-  write_with_transaction_using_dml   <instance_id> <database_id> Update data using a DML statement within a read-write transaction.
-  update_using_partitioned_dml       <instance_id> <database_id> Update multiple records using a partitioned DML statement.
-  delete_using_partitioned_dml       <instance_id> <database_id> Delete multiple records using a partitioned DML statement.
-  update_using_batch_dml             <instance_id> <database_id> Updates sample data in the database using Batch DML.
+    Usage: bundle exec ruby spanner_samples.rb [command] [arguments]
 
-Environment variables:
-  GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
-    USAGE
+    Commands:
+      create_database                    <instance_id> <database_id> Create Database
+      create_table_with_timestamp_column <instance_id> <database_id> Create table Performances with commit timestamp column
+      insert_data                        <instance_id> <database_id> Insert Data
+      insert_data_with_timestamp_column  <instance_id> <database_id> Inserts data into Performances table containing the commit timestamp column
+      query_data                         <instance_id> <database_id> Query Data
+      read_data                          <instance_id> <database_id> Read Data
+      read_stale_data                    <instance_id> <database_id> Read Stale Data
+      create_index                       <instance_id> <database_id> Create Index
+      create_storing_index               <instance_id> <database_id> Create Storing Index
+      add_column                         <instance_id> <database_id> Add Column
+      add_timestamp_column               <instance_id> <database_id> Alters existing Albums table, adding a commit timestamp column
+      update_data                        <instance_id> <database_id> Update Data
+      update_data_with_timestamp_column  <instance_id> <database_id> Updates two records in the altered table where the commit timestamp column was added
+      query_data_with_new_column         <instance_id> <database_id> Query Data with New Column
+      query_data_with_timestamp_column   <instance_id> <database_id> Queries data from altered table where the commit timestamp column was added
+      write_struct_data                  <instance_id> <database_id> Inserts sample data that can be used for STRUCT queries
+      query_with_struct                  <instance_id> <database_id> Queries data using a STRUCT paramater
+      query_with_array_of_struct         <instance_id> <database_id> Queries data using an array of STRUCT values as parameter
+      query_struct_field                 <instance_id> <database_id> Queries data by accessing field from a STRUCT parameter
+      query_nested_struct_field          <instance_id> <database_id> Queries data by accessing field from nested STRUCT parameters
+      query_data_with_index              <instance_id> <database_id> <start_title> <end_title> Query Data with Index
+      read_write_transaction             <instance_id> <database_id> Read-Write Transaction
+      read_data_with_index               <instance_id> <database_id> Read Data with Index
+      read_data_with_storing_index       <instance_id> <database_id> Read Data with Storing Index
+      read_only_transaction              <instance_id> <database_id> Read-Only Transaction
+      spanner_batch_client               <instance_id> <database_id> Use Spanner batch query with a thread pool
+      insert_using_dml                   <instance_id> <database_id> Insert Data using a DML statement.
+      update_using_dml                   <instance_id> <database_id> Update Data using a DML statement.
+      delete_using_dml                   <instance_id> <database_id> Delete Data using a DML statement.
+      update_using_dml_with_timestamp    <instance_id> <database_id> Update the timestamp value of specifc records using a DML statement.
+      write_and_read_using_dml           <instance_id> <database_id> Insert data using a DML statement and then read the inserted data.
+      update_using_dml_with_struct       <instance_id> <database_id> Update data using a DML statement combined with a Spanner struct.
+      write_using_dml                    <instance_id> <database_id> Insert multiple records using a DML statement.
+      write_with_transaction_using_dml   <instance_id> <database_id> Update data using a DML statement within a read-write transaction.
+      update_using_partitioned_dml       <instance_id> <database_id> Update multiple records using a partitioned DML statement.
+      delete_using_partitioned_dml       <instance_id> <database_id> Delete multiple records using a partitioned DML statement.
+      update_using_batch_dml             <instance_id> <database_id> Updates sample data in the database using Batch DML.
+
+    Environment variables:
+      GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
+  USAGE
 end
 
 def run_sample arguments
@@ -999,7 +1000,7 @@ def run_sample arguments
   commands = [
     "create_database", "create_table_with_timestamp_column", "insert_data",
     "insert_data_with_timestamp_column", "query_data",
-    "query_data_with_timestamp_column","read_data", "read_stale_data",
+    "query_data_with_timestamp_column", "read_data", "read_stale_data",
     "create_index", "create_storing_index", "add_column", "add_timestamp_column",
     "update_data", "query_data_with_new_column",
     "update_data_with_timestamp_column", "read_write_transaction",
