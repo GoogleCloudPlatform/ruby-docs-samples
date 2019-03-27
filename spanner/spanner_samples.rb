@@ -913,8 +913,38 @@ def delete_using_partitioned_dml project_id:, instance_id:, database_id:
   # [END spanner_dml_partitioned_delete]
 end
 
+def update_using_batch_dml project_id:, instance_id:, database_id:
+  # [START spanner_dml_batch_update]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+
+  spanner = Google::Cloud::Spanner.new project: project_id
+  client  = spanner.client instance_id, database_id
+
+  row_counts = nil
+  client.transaction do |transaction|
+    row_counts = transaction.batch_update do |b|
+      b.batch_update "INSERT INTO Albums "\
+        "(SingerId, AlbumId, AlbumTitle, MarketingBudget) "\
+        "VALUES (1, 3, 'Test Album Title', 10000)"
+      b.batch_update "UPDATE Albums "\
+        "SET MarketingBudget = MarketingBudget * 2 "\
+        "WHERE SingerId = 1 and AlbumId = 3"
+    end
+  end
+
+  statement_count = row_counts.count
+
+  puts "Executed #{statement_count} SQL statements using Batch DML."
+  # [END spanner_dml_batch_update]
+end
+
 def usage
   puts <<~USAGE
+
     Usage: bundle exec ruby spanner_samples.rb [command] [arguments]
 
     Commands:
@@ -954,6 +984,7 @@ def usage
       write_with_transaction_using_dml   <instance_id> <database_id> Update data using a DML statement within a read-write transaction.
       update_using_partitioned_dml       <instance_id> <database_id> Update multiple records using a partitioned DML statement.
       delete_using_partitioned_dml       <instance_id> <database_id> Delete multiple records using a partitioned DML statement.
+      update_using_batch_dml             <instance_id> <database_id> Updates sample data in the database using Batch DML.
 
     Environment variables:
       GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
@@ -966,7 +997,23 @@ def run_sample arguments
   database_id = arguments.shift
   project_id  = ENV["GOOGLE_CLOUD_PROJECT"]
 
-  commands = ["create_database", "create_table_with_timestamp_column", "insert_data", "insert_data_with_timestamp_column", "query_data", "query_data_with_timestamp_column", "read_data", "read_stale_data", "create_index", "create_storing_index", "add_column", "add_timestamp_column", "update_data", "query_data_with_new_column", "update_data_with_timestamp_column", "read_write_transaction", "query_data_with_index", "read_data_with_index", "read_data_with_storing_index", "read_only_transaction", "spanner_batch_client", "write_struct_data", "query_with_struct", "query_with_array_of_struct", "query_struct_field", "query_nested_struct_field", "insert_using_dml", "update_using_dml", "delete_using_dml", "update_using_dml_with_timestamp", "write_and_read_using_dml", "update_using_dml_with_struct", "write_using_dml", "write_with_transaction_using_dml", "update_using_partitioned_dml", "delete_using_partitioned_dml"]
+  commands = [
+    "create_database", "create_table_with_timestamp_column", "insert_data",
+    "insert_data_with_timestamp_column", "query_data",
+    "query_data_with_timestamp_column", "read_data", "read_stale_data",
+    "create_index", "create_storing_index", "add_column", "add_timestamp_column",
+    "update_data", "query_data_with_new_column",
+    "update_data_with_timestamp_column", "read_write_transaction",
+    "query_data_with_index", "read_data_with_index",
+    "read_data_with_storing_index", "read_only_transaction",
+    "spanner_batch_client", "write_struct_data", "query_with_struct",
+    "query_with_array_of_struct", "query_struct_field", "query_nested_struct_field",
+    "insert_using_dml", "update_using_dml", "delete_using_dml",
+    "update_using_dml_with_timestamp", "write_and_read_using_dml",
+    "update_using_dml_with_struct", "write_using_dml", "write_with_transaction_using_dml",
+    "update_using_partitioned_dml", "delete_using_partitioned_dml",
+    "update_using_batch_dml"
+  ]
   if command.eql?("query_data_with_index") && instance_id && database_id && arguments.size >= 2
     query_data_with_index project_id:  project_id,
                           instance_id: instance_id,
