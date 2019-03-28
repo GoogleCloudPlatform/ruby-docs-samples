@@ -26,7 +26,7 @@ def create_task project_id, location_id, queue_id, payload: nil, seconds: nil
   cloud_tasks = Google::Cloud::Tasks.new
 
   # Construct the fully qualified queue name.
-  parent = "projects/#{project_id}/locations/#{location_id}/queues/#{queue_id}"
+  parent = cloud_tasks.queue_path project_id, location_id, queue_id
 
   # Construct task.
   task = {
