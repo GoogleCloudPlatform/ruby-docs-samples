@@ -16,12 +16,11 @@ require "rspec"
 require "google/cloud/speech"
 
 describe "Speech Quickstart" do
-
   it "transcribes a sample audio.raw file" do
     speech = Google::Cloud::Speech.new
 
-    expect(Google::Cloud::Speech).to receive(:new).
-                                     and_return(speech)
+    expect(Google::Cloud::Speech).to receive(:new)
+      .and_return(speech)
 
     expect {
       load File.expand_path("../quickstart.rb", __dir__)
@@ -29,5 +28,4 @@ describe "Speech Quickstart" do
       "Transcription: how old is the Brooklyn Bridge\n"
     ).to_stdout
   end
-
 end

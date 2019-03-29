@@ -16,12 +16,15 @@ require "rspec"
 require "google/cloud/vision"
 
 describe "Vision Quickstart" do
-
   it "performs label detection on a sample image file" do
-    vision = Google::Cloud::Vision.new
-    expect(Google::Cloud::Vision).to receive(:new).
-                                     with(project: "YOUR_PROJECT_ID").
-                                     and_return(vision)
+    image_annotator = Google::Cloud::Vision::ImageAnnotator.new
+    expect(Google::Cloud::Vision::ImageAnnotator).to receive(:new)
+      .with(no_args)
+      .and_return(image_annotator).ordered
+
+    expect(Google::Cloud::Vision::ImageAnnotator).to receive(:new)
+      .with(version: :v1)
+      .and_return(image_annotator).ordered
 
     expect {
       load File.expand_path("../quickstart.rb", __dir__)
@@ -29,5 +32,4 @@ describe "Vision Quickstart" do
       /Labels:.*cat.*/m
     ).to_stdout
   end
-
 end

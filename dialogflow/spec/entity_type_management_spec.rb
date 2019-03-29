@@ -19,7 +19,6 @@ require "spec_helper"
 require_relative "../entity_type_management"
 
 describe "Entity Type Management" do
-
   before do
     @project_id               = ENV["GOOGLE_CLOUD_PROJECT"]
     @entity_type_display_name = "fake_entity_type_for_testing"
@@ -28,52 +27,52 @@ describe "Entity Type Management" do
 
   before :each do
     hide do
-      clean_entity_types project_id: @project_id,
+      clean_entity_types project_id:   @project_id,
                          display_name: @entity_type_display_name
     end
   end
 
   after :each do
     hide do
-      clean_entity_types project_id: @project_id,
+      clean_entity_types project_id:   @project_id,
                          display_name: @entity_type_display_name
     end
   end
 
   example "create entity type" do
     expect(
-      get_entity_type_ids(project_id: @project_id,
+      get_entity_type_ids(project_id:   @project_id,
                           display_name: @entity_type_display_name).size
     ).to eq(0)
 
     expect {
-      create_entity_type project_id: @project_id,
+      create_entity_type project_id:   @project_id,
                          display_name: @entity_type_display_name,
-                         kind: @kind
+                         kind:         @kind
     }.to output(
       /#{@entity_type_display_name}/
     ).to_stdout
 
     expect(
-      (get_entity_type_ids project_id: @project_id,
+      (get_entity_type_ids project_id:   @project_id,
                            display_name: @entity_type_display_name).size
     ).to eq(1)
   end
 
   example "delete entity type" do
     hide do
-      create_entity_type project_id: @project_id,
+      create_entity_type project_id:   @project_id,
                          display_name: @entity_type_display_name,
-                         kind: @kind
-      entity_type_ids = get_entity_type_ids project_id: @project_id,
+                         kind:         @kind
+      entity_type_ids = get_entity_type_ids project_id:   @project_id,
                                             display_name: @entity_type_display_name
       entity_type_ids.each do |entity_type_id|
-        delete_entity_type project_id: @project_id,
+        delete_entity_type project_id:     @project_id,
                            entity_type_id: entity_type_id
       end
     end
     expect(
-      (get_entity_type_ids project_id: @project_id,
+      (get_entity_type_ids project_id:   @project_id,
                            display_name: @entity_type_display_name).size
     ).to eq(0)
   end

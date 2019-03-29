@@ -30,7 +30,7 @@ post "/call/receive" do
   content_type :xml
 
   response = Twilio::TwiML::VoiceResponse.new do |r|
-    r.say(message: "Hello from Twilio!")
+    r.say message: "Hello from Twilio!"
   end
 
   response.to_s

@@ -18,11 +18,9 @@ require "google/cloud/storage"
 require_relative "../detect_logos"
 
 describe "Detect Logos" do
-
   before do
     @storage    = Google::Cloud::Storage.new
     @bucket     = @storage.bucket ENV["GOOGLE_CLOUD_STORAGE_BUCKET"]
-    @project_id = ENV["GOOGLE_CLOUD_PROJECT"]
   end
 
   # Returns full path to sample image included in repository for testing
@@ -32,10 +30,9 @@ describe "Detect Logos" do
 
   example "detect logos from local image file" do
     expect {
-      detect_logos project_id: @project_id,
-                   image_path: image_path("logos.png")
+      detect_logos image_path: image_path("logos.png")
     }.to output(
-      "Google\n"
+      /google/i
     ).to_stdout
   end
 
@@ -44,10 +41,9 @@ describe "Detect Logos" do
                                        "logos.png"
 
     expect {
-      detect_logos_gcs project_id: @project_id,
-                       image_path: storage_file.to_gs_url
+      detect_logos_gcs image_path: storage_file.to_gs_url
     }.to output(
-      "Google\n"
+      /google/i
     ).to_stdout
   end
 end

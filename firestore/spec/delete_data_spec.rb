@@ -16,7 +16,6 @@ RSpec.configure do |config|
 end
 
 describe "Google Cloud Firestore API samples - Delete Data" do
-
   before do
     @firestore_project = ENV["FIRESTORE_PROJECT_ID"]
     retrieve_create_examples project_id: @firestore_project
@@ -27,33 +26,33 @@ describe "Google Cloud Firestore API samples - Delete Data" do
   end
 
   # Capture and return STDOUT output by block
-  def capture &block
+  def capture
     real_stdout = $stdout
     $stdout = StringIO.new
-    block.call
+    yield
     $stdout.string
   ensure
     $stdout = real_stdout
   end
 
   example "delete_doc" do
-    output = capture {
+    output = capture do
       delete_doc project_id: @firestore_project
-    }
+    end
     expect(output).to include "Deleted the DC document in the cities collection."
   end
 
   example "delete_field" do
-    output = capture {
+    output = capture do
       delete_field project_id: @firestore_project
-    }
+    end
     expect(output).to include "Deleted the capital field from the BJ document in the cities collection."
   end
 
   example "delete_collection" do
-    output = capture {
+    output = capture do
       delete_collection project_id: @firestore_project
-    }
+    end
     expect(output).to include "Deleting document SF"
     expect(output).to include "Deleting document LA"
     expect(output).to include "Deleting document TOK"

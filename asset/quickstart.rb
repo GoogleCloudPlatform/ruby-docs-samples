@@ -12,9 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-def export_assets(project_id:, dump_file_path:)
+def export_assets project_id:, dump_file_path:
   # [START asset_quickstart_export_assets]
-  require 'google/cloud/asset'
+  require "google/cloud/asset"
 
   asset_service_client = Google::Cloud::Asset.new(version: :v1)
   # project_id = 'YOUR_PROJECT_ID'
@@ -42,9 +42,9 @@ def export_assets(project_id:, dump_file_path:)
   # [END asset_quickstart_export_assets]
 end
 
-def batch_get_history(project_id:, asset_names:)
+def batch_get_history project_id:, asset_names:
   # [START asset_quickstart_batch_get_assets_history]
-  require 'google/cloud/asset'
+  require "google/cloud/asset"
 
   # project_id = 'YOUR_PROJECT_ID'
   # asset names, e.g.: //storage.googleapis.com/[YOUR_BUCKET_NAME]

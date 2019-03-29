@@ -1,14 +1,14 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
-ENV['RAILS_ENV'] ||= "test"
-require File.expand_path "../../config/environment", __FILE__
+ENV["RAILS_ENV"] ||= "test"
+require File.expand_path "../config/environment", __dir__
 # Prevent database truncation if the environment is production
-abort("The Rails environment is running in production mode!") if Rails.env.production?
+abort "The Rails environment is running in production mode!" if Rails.env.production?
 require "spec_helper"
 require "rspec/rails"
 require "capybara/rspec"
 require "capybara/poltergeist"
 
-require File.expand_path "../../../../spec/e2e", __FILE__
+require File.expand_path "../../../spec/e2e", __dir__
 
 # Checks for pending migration and applies them before tests are run.
 ActiveRecord::Migration.maintain_test_schema!

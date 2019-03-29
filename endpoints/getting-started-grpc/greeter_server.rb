@@ -30,7 +30,7 @@ end
 
 # main starts an RpcServer that receives requests to GreeterServer at the sample
 # server port.
-SERVER_ADDRESS = "0.0.0.0:50051"
+SERVER_ADDRESS = "0.0.0.0:50051".freeze
 
 def main
   puts "Starting HelloWorld server using #{SERVER_ADDRESS}"
@@ -41,6 +41,6 @@ def main
   rpc_server.run_till_terminated
 end
 
-if __FILE__ == $PROGRAM_NAME
+if $PROGRAM_NAME == __FILE__
   main
 end

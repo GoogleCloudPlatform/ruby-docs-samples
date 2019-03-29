@@ -12,21 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe "cats/edit", type: :view do
-  before(:each) do
-    @cat = assign(:cat, Cat.create!(
-      :name => "Mr. Whiskers",
-      :age => 4
-    ))
+  before :each do
+    @cat = assign(
+      :cat, Cat.create!(name: "Mr. Whiskers", age: 4)
+    )
   end
 
   it "renders the edit cat form" do
     render
 
     assert_select "form[action=?][method=?]", cat_path(@cat), "post" do
-
       assert_select "input#cat_name[name=?]", "cat[name]"
 
       assert_select "input#cat_age[name=?]", "cat[age]"

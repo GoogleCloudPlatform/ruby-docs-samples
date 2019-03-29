@@ -28,4 +28,4 @@ require "google/cloud/error_reporting"
 use Google::Cloud::ErrorReporting::Middleware
 # [END error_reporting_middleware]
 
-run -> (env) { ["200", {"Content-Type" => "text/html"}, ["Hello world!"]] }
+run ->(_env) { ["200", { "Content-Type" => "text/html" }, ["Hello world!"]] }

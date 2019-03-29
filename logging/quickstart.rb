@@ -38,4 +38,3 @@ logging.write_entries entry
 
 puts "Logged #{entry.payload}"
 # [END logging_quickstart]
-

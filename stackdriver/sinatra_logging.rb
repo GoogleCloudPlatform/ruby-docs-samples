@@ -31,8 +31,8 @@ use Google::Cloud::Logging::Middleware
 # [END logging_middleware]
 
 get "/" do
-# [START logging_example]
+  # [START logging_example]
   logger.info "Hello World!"
   logger.error "Oh No!"
-# [END logging_example]
+  # [END logging_example]
 end

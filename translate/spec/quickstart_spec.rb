@@ -16,20 +16,17 @@ require "rspec"
 require "google/cloud/translate"
 
 describe "Translate Quickstart" do
-
   it "translates Hello, world! to Russian" do
     translate = Google::Cloud::Translate.new
-    expect(Google::Cloud::Translate).to receive(:new).
-                                        with(project: "YOUR_PROJECT_ID").
-                                        and_return(translate)
+    expect(Google::Cloud::Translate).to receive(:new)
+      .with(project: "YOUR_PROJECT_ID")
+      .and_return(translate)
 
     expect {
       load File.expand_path("../quickstart.rb", __dir__)
     }.to output(
-      "Text: Hello, world!\n"+
-      "Translation: Привет мир!\n"
+      "Text: Hello, world!\n" +
+      "Translation: Привет, мир!\n"
     ).to_stdout
   end
-
 end
-

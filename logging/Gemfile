@@ -17,8 +17,8 @@ source "https://rubygems.org"
 gem "google-cloud-logging"
 
 group :test do
+  gem "google-cloud-storage"
+  gem "rack-test"
   gem "rspec"
   gem "rspec-retry"
-  gem "rack-test"
-  gem "google-cloud-storage"
 end
