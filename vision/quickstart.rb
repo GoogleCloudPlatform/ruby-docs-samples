@@ -13,23 +13,32 @@
 # limitations under the License.
 
 # [START vision_quickstart]
+# [START vision_require]
 # Imports the Google Cloud client library
 require "google/cloud/vision"
-
-# Your Google Cloud Platform project ID
-project_id = "YOUR_PROJECT_ID"
+# [END vision_require]
 
 # Instantiates a client
-vision = Google::Cloud::Vision.new project: project_id
+# [START image_annotator_client_new]
+# [START image_annotator_labels]
+image_annotator = Google::Cloud::Vision::ImageAnnotator.new
+# [END image_annotator_client_new]
 
 # The name of the image file to annotate
 file_name = "./resources/cat.jpg"
 
 # Performs label detection on the image file
-labels = vision.image(file_name).labels
-
-puts "Labels:"
-labels.each do |label|
-  puts label.description
+response = image_annotator.label_detection image: file_name
+response.responses.each do |res|
+  puts "Labels:"
+  res.label_annotations.each do |label|
+    puts label.description
+  end
 end
 # [END vision_quickstart]
+# [END image_annotator_labels]
+
+# [START image_annotator_client_version]
+# Instantiates a client with a specified version
+image_annotator = Google::Cloud::Vision::ImageAnnotator.new version: :v1
+# [END image_annotator_client_version]

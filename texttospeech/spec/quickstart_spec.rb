@@ -15,7 +15,6 @@
 require "rspec"
 
 describe "Quickstart" do
-
   example "quickstart" do
     expect {
       load File.expand_path("../quickstart.rb", __dir__)
@@ -23,12 +22,11 @@ describe "Quickstart" do
       /Audio content written to file 'output.mp3'/
     ).to_stdout
 
-    output_filepath = File.expand_path("../output.mp3", __dir__)
+    output_filepath = File.expand_path "../output.mp3", __dir__
     expect(File.exist?(output_filepath)).to be true
     expect(File.size(output_filepath)).to be > 0
 
-    File.delete(output_filepath)
+    File.delete output_filepath
     expect(File.exist?(output_filepath)).to be false
   end
-
 end

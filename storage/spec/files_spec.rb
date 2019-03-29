@@ -33,14 +33,13 @@ RSpec.configure do |config|
 end
 
 describe "Google Cloud Storage files sample" do
-
   before do
     @bucket_name          = ENV["GOOGLE_CLOUD_STORAGE_BUCKET"]
     @storage              = Google::Cloud::Storage.new
     @project_id           = @storage.project
     @kms_key              = create_kms_key project_id: @project_id,
-                                           key_ring: ENV["GOOGLE_CLOUD_KMS_KEY_RING"],
-                                           key_name: ENV["GOOGLE_CLOUD_KMS_KEY_NAME"]
+                                           key_ring:   ENV["GOOGLE_CLOUD_KMS_KEY_RING"],
+                                           key_name:   ENV["GOOGLE_CLOUD_KMS_KEY_NAME"]
     @bucket               = @storage.bucket @bucket_name
     @storage_secondary    = Google::Cloud::Storage.new project_id:  ENV["GOOGLE_CLOUD_PROJECT_SECONDARY"],
                                                        credentials: ENV["GOOGLE_APPLICATION_CREDENTIALS_SECONDARY"]
@@ -48,9 +47,7 @@ describe "Google Cloud Storage files sample" do
     @local_file_path      = File.expand_path "resources/file.txt", __dir__
     @encryption_key       = generate_encryption_key
 
-    if @bucket.nil?
-      @storage.create_bucket @bucket_name
-    end
+    @storage.create_bucket @bucket_name if @bucket.nil?
 
     @bucket.policy do |policy|
       policy.add "roles/storage.objectViewer", "allUsers"
@@ -71,7 +68,7 @@ describe "Google Cloud Storage files sample" do
 
   # Delete given file in Cloud Storage test bucket if it exists
   def delete_file storage_file_path
-    @bucket.file(storage_file_path).delete if @bucket.file storage_file_path
+    @bucket.file(storage_file_path)&.delete
   end
 
   # Upload a local file to the Cloud Storage test bucket
@@ -95,10 +92,10 @@ describe "Google Cloud Storage files sample" do
   end
 
   # Capture and return STDOUT output by block
-  def capture &block
+  def capture
     real_stdout = $stdout
     $stdout = StringIO.new
-    block.call
+    yield
     @captured_output = $stdout.string
   ensure
     $stdout = real_stdout
@@ -117,14 +114,14 @@ describe "Google Cloud Storage files sample" do
 
     expect {
       generate_encryption_key_base64
-    }.to output{
+    }.to output {
       /Sample encryption key: #{encryption_key_base64}/
     }.to_stdout
   end
 
   it "can list files in a bucket" do
     upload @local_file_path, "file.txt"
-    expect(@bucket.file "file.txt").not_to be nil
+    expect(@bucket.file("file.txt")).not_to be nil
 
     expect {
       list_bucket_contents project_id:  @project_id,
@@ -154,7 +151,7 @@ describe "Google Cloud Storage files sample" do
 
   it "can upload a local file to a bucket" do
     delete_file "file.txt"
-    expect(@bucket.file "file.txt").to be nil
+    expect(@bucket.file("file.txt")).to be nil
 
     expect {
       upload_file project_id:        @project_id,
@@ -165,13 +162,13 @@ describe "Google Cloud Storage files sample" do
       /Uploaded .*file.txt/
     ).to_stdout
 
-    expect(@bucket.file "file.txt").not_to be nil
-    expect(storage_file_content "file.txt").to eq "Content of test file.txt\n"
+    expect(@bucket.file("file.txt")).not_to be nil
+    expect(storage_file_content("file.txt")).to eq "Content of test file.txt\n"
   end
 
   it "can upload a local file to a bucket with encryption key" do
     delete_file "file.txt"
-    expect(@bucket.file "file.txt").to be nil
+    expect(@bucket.file("file.txt")).to be nil
 
     expect {
       upload_encrypted_file project_id:        @project_id,
@@ -183,14 +180,14 @@ describe "Google Cloud Storage files sample" do
       "Uploaded file.txt with encryption key\n"
     ).to_stdout
 
-    expect(@bucket.file "file.txt").not_to be nil
-    expect(storage_file_content "file.txt", encryption_key: @encryption_key).
-        to eq "Content of test file.txt\n"
+    expect(@bucket.file("file.txt")).not_to be nil
+    expect(storage_file_content("file.txt", encryption_key: @encryption_key))
+      .to eq "Content of test file.txt\n"
   end
 
   it "can upload a local file to a bucket with kms key" do
     delete_file "file.txt"
-    expect(@bucket.file "file.txt").to be nil
+    expect(@bucket.file("file.txt")).to be nil
 
     expect {
       upload_with_kms_key project_id:        @project_id,
@@ -202,9 +199,9 @@ describe "Google Cloud Storage files sample" do
       /Uploaded file.txt and encrypted service side using #{@kms_key}/
     ).to_stdout
 
-    expect(@bucket.file "file.txt").not_to be nil
+    expect(@bucket.file("file.txt")).not_to be nil
     expect(@bucket.file("file.txt").kms_key).to include @kms_key
-    expect(storage_file_content "file.txt").to eq "Content of test file.txt\n"
+    expect(storage_file_content("file.txt")).to eq "Content of test file.txt\n"
   end
 
   it "can set custom metadata for a file" do
@@ -213,7 +210,7 @@ describe "Google Cloud Storage files sample" do
     content_type   = "text/plain"
 
     delete_file "file.txt"
-    expect(@bucket.file "file.txt").to be nil
+    expect(@bucket.file("file.txt")).to be nil
 
     upload @local_file_path, "file.txt"
 
@@ -237,12 +234,12 @@ describe "Google Cloud Storage files sample" do
   it "can download a file from a bucket" do
     begin
       delete_file "file.txt"
-      expect(@bucket.file "file.txt").to be nil
+      expect(@bucket.file("file.txt")).to be nil
 
       upload @local_file_path, "file.txt"
 
       local_file = Tempfile.new "cloud-storage-tests"
-      expect(File.size local_file.path).to eq 0
+      expect(File.size(local_file.path)).to eq 0
 
       expect {
         download_file project_id:  @project_id,
@@ -253,8 +250,8 @@ describe "Google Cloud Storage files sample" do
         "Downloaded file.txt\n"
       ).to_stdout
 
-      expect(File.size local_file.path).to be > 0
-      expect(File.read local_file.path).to eq(
+      expect(File.size(local_file.path)).to be > 0
+      expect(File.read(local_file.path)).to eq(
         "Content of test file.txt\n"
       )
     ensure
@@ -266,12 +263,12 @@ describe "Google Cloud Storage files sample" do
   it "can download a public readable file from a bucket" do
     begin
       delete_file "file.txt"
-      expect(@bucket.file "file.txt").to be nil
+      expect(@bucket.file("file.txt")).to be nil
 
       upload @local_file_path, "file.txt"
 
       local_file = Tempfile.new "cloud-storage-tests"
-      expect(File.size local_file.path).to eq 0
+      expect(File.size(local_file.path)).to eq 0
 
       expect {
         download_public_file bucket_name: @bucket_name,
@@ -279,8 +276,8 @@ describe "Google Cloud Storage files sample" do
                              local_path:  local_file.path
       }.to output("Downloaded file.txt\n").to_stdout
 
-      expect(File.size local_file.path).to be > 0
-      expect(File.read local_file.path).to eq(
+      expect(File.size(local_file.path)).to be > 0
+      expect(File.read(local_file.path)).to eq(
         "Content of test file.txt\n"
       )
     ensure
@@ -291,7 +288,7 @@ describe "Google Cloud Storage files sample" do
 
   it "can rename a file in a bucket" do
     delete_file "file.txt"
-    expect(@bucket.file "file.txt").to be nil
+    expect(@bucket.file("file.txt")).to be nil
 
     upload @local_file_path, "file.txt"
 
@@ -302,12 +299,12 @@ describe "Google Cloud Storage files sample" do
                   new_name:    "rename_file.txt"
     }.to output("file.txt has been renamed to rename_file.txt\n").to_stdout
 
-    expect(@bucket.file "rename_file.txt").not_to be nil
+    expect(@bucket.file("rename_file.txt")).not_to be nil
   end
 
   it "can copy a file" do
     delete_file "file.txt"
-    expect(@bucket.file "file.txt").to be nil
+    expect(@bucket.file("file.txt")).to be nil
 
     upload @local_file_path, "file.txt"
 
@@ -321,8 +318,8 @@ describe "Google Cloud Storage files sample" do
       "file.txt in #{@bucket_name} copied to copy_file.txt in #{@bucket_name}\n"
     ).to_stdout
 
-    expect(@bucket.file "copy_file.txt").not_to be nil
-    expect(@bucket.file "file.txt").not_to be nil
+    expect(@bucket.file("copy_file.txt")).not_to be nil
+    expect(@bucket.file("file.txt")).not_to be nil
   end
 
   it "can download a file from a bucket using requester pays" do
@@ -331,16 +328,16 @@ describe "Google Cloud Storage files sample" do
       expect(@storage.bucket(@bucket_name).requester_pays).to be true
 
       delete_file "file.txt"
-      expect(@bucket.file "file.txt").to be nil
+      expect(@bucket.file("file.txt")).to be nil
 
       upload @local_file_path, "file.txt"
 
       local_file = Tempfile.new "cloud-storage-tests"
-      expect(File.size local_file.path).to eq 0
+      expect(File.size(local_file.path)).to eq 0
 
-      expect(Google::Cloud::Storage).to receive(:new).
-                                        with(project_id: @project_id_secondary).
-                                        and_return @storage_secondary
+      expect(Google::Cloud::Storage).to receive(:new)
+        .with(project_id: @project_id_secondary)
+        .and_return @storage_secondary
 
       expect {
         download_file_requester_pays project_id:  @project_id_secondary,
@@ -351,8 +348,8 @@ describe "Google Cloud Storage files sample" do
         "Downloaded file.txt using billing project #{@project_id_secondary}\n"
       ).to_stdout
 
-      expect(File.size local_file.path).to be > 0
-      expect(File.read local_file.path).to eq(
+      expect(File.size(local_file.path)).to be > 0
+      expect(File.read(local_file.path)).to eq(
         "Content of test file.txt\n"
       )
     ensure
@@ -367,16 +364,16 @@ describe "Google Cloud Storage files sample" do
       expect(@storage.bucket(@bucket_name).requester_pays).to be true
 
       delete_file "file.txt"
-      expect(@bucket.file "file.txt").to be nil
+      expect(@bucket.file("file.txt")).to be nil
 
       upload @local_file_path, "file.txt"
 
       local_file = Tempfile.new "cloud-storage-tests"
-      expect(File.size local_file.path).to eq 0
+      expect(File.size(local_file.path)).to eq 0
 
-      expect(Google::Cloud::Storage).to receive(:new).
-                                        with(project_id: @project_id_secondary).
-                                        and_return @storage_secondary
+      expect(Google::Cloud::Storage).to receive(:new)
+        .with(project_id: @project_id_secondary)
+        .and_return @storage_secondary
 
       expect {
         download_file project_id:  @project_id_secondary,
@@ -385,7 +382,7 @@ describe "Google Cloud Storage files sample" do
                       file_name:   "file.txt"
       }.to raise_error Google::Cloud::InvalidArgumentError
 
-      expect(File.size local_file.path).to be 0
+      expect(File.size(local_file.path)).to be 0
     ensure
       local_file.close
       local_file.unlink
@@ -395,12 +392,12 @@ describe "Google Cloud Storage files sample" do
   it "can download an encrypted file from a bucket" do
     begin
       delete_file "file.txt"
-      expect(@bucket.file "file.txt").to be nil
+      expect(@bucket.file("file.txt")).to be nil
 
       upload @local_file_path, "file.txt", encryption_key: @encryption_key
 
       local_file = Tempfile.new "cloud-storage-encryption-tests"
-      expect(File.size local_file.path).to eq 0
+      expect(File.size(local_file.path)).to eq 0
 
       expect {
         download_encrypted_file project_id:        @project_id,
@@ -412,8 +409,8 @@ describe "Google Cloud Storage files sample" do
         "Downloaded encrypted file.txt\n"
       ).to_stdout
 
-      expect(File.size local_file.path).to be > 0
-      expect(File.read local_file.path).to eq "Content of test file.txt\n"
+      expect(File.size(local_file.path)).to be > 0
+      expect(File.read(local_file.path)).to eq "Content of test file.txt\n"
     ensure
       local_file.close
       local_file.unlink
@@ -423,12 +420,12 @@ describe "Google Cloud Storage files sample" do
   it "can't download an encrypted file from a bucket with wrong key" do
     begin
       delete_file "file.txt"
-      expect(@bucket.file "file.txt").to be nil
+      expect(@bucket.file("file.txt")).to be nil
 
       upload @local_file_path, "file.txt", encryption_key: @encryption_key
 
       local_file = Tempfile.new "cloud-storage-encryption-tests"
-      expect(File.size local_file.path).to eq 0
+      expect(File.size(local_file.path)).to eq 0
 
       expect {
         download_encrypted_file project_id:        @project_id,
@@ -438,7 +435,7 @@ describe "Google Cloud Storage files sample" do
                                 encryption_key:    generate_encryption_key
       }.to raise_error Google::Cloud::InvalidArgumentError
 
-      expect(File.size local_file.path).to eq 0
+      expect(File.size(local_file.path)).to eq 0
     ensure
       local_file.close
       local_file.unlink
@@ -447,7 +444,7 @@ describe "Google Cloud Storage files sample" do
 
   it "rotate encryption key for an encrypted file" do
     delete_file "file.txt"
-    expect(@bucket.file "file.txt").to be nil
+    expect(@bucket.file("file.txt")).to be nil
 
     upload @local_file_path, "file.txt", encryption_key: @encryption_key
 
@@ -463,13 +460,13 @@ describe "Google Cloud Storage files sample" do
       "The encryption key for file.txt in #{@bucket_name} was rotated.\n"
     ).to_stdout
 
-    expect(storage_file_content "file.txt", encryption_key: new_encryption_key).
-        to eq "Content of test file.txt\n"
+    expect(storage_file_content("file.txt", encryption_key: new_encryption_key))
+      .to eq "Content of test file.txt\n"
   end
 
   it "can generate a signed url for a file" do
     delete_file "file.txt"
-    expect(@bucket.file "file.txt").to be nil
+    expect(@bucket.file("file.txt")).to be nil
 
     upload @local_file_path, "file.txt"
 
@@ -491,7 +488,7 @@ describe "Google Cloud Storage files sample" do
   it "can set an event-based hold" do
     event_based_hold_file = "event-based-file.txt"
     delete_file event_based_hold_file
-    expect(@bucket.file event_based_hold_file).to be nil
+    expect(@bucket.file(event_based_hold_file)).to be nil
 
     upload @local_file_path, event_based_hold_file
 
@@ -512,7 +509,7 @@ describe "Google Cloud Storage files sample" do
   it "can release an event-based hold" do
     event_based_hold_file = "event-based-file.txt"
     delete_file event_based_hold_file
-    expect(@bucket.file event_based_hold_file).to be nil
+    expect(@bucket.file(event_based_hold_file)).to be nil
 
     upload @local_file_path, event_based_hold_file
     @bucket.file(event_based_hold_file).set_event_based_hold!
@@ -533,7 +530,7 @@ describe "Google Cloud Storage files sample" do
   it "can set a temporary hold" do
     temporary_hold_file = "temporary-hold-file.txt"
     delete_file temporary_hold_file
-    expect(@bucket.file temporary_hold_file).to be nil
+    expect(@bucket.file(temporary_hold_file)).to be nil
 
     upload @local_file_path, temporary_hold_file
 
@@ -554,7 +551,7 @@ describe "Google Cloud Storage files sample" do
   it "can release an temporary hold" do
     temporary_hold_file = "temporary-hold-file.txt"
     delete_file temporary_hold_file
-    expect(@bucket.file temporary_hold_file).to be nil
+    expect(@bucket.file(temporary_hold_file)).to be nil
 
     upload @local_file_path, temporary_hold_file
     @bucket.file(temporary_hold_file).set_temporary_hold!

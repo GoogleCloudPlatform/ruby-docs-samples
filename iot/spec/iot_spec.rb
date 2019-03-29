@@ -20,16 +20,15 @@ require "tempfile"
 require_relative "../iot"
 
 describe "Cloud IoT Core" do
-
   RSpec.configure do |config|
     original_stderr = $stderr
     original_stdout = $stdout
-    config.before(:all) do
+    config.before :all do
       # Redirect stderr and stdout
-      $stderr = File.open(File::NULL, "w")
-      $stdout = File.open(File::NULL, "w")
+      $stderr = File.open File::NULL, "w"
+      $stdout = File.open File::NULL, "w"
     end
-    config.after(:all) do
+    config.after :all do
       $stderr = original_stderr
       $stdout = original_stdout
     end
@@ -38,7 +37,7 @@ describe "Cloud IoT Core" do
   before do
     @project_id = ENV["GOOGLE_CLOUD_PROJECT"]
     @region     = "us-central1"
-    @seed       = SecureRandom.hex(8)
+    @seed       = SecureRandom.hex 8
     @topics     = []
   end
 
@@ -120,7 +119,7 @@ describe "Cloud IoT Core" do
       $get_iam_policy.call(
         project_id:  @project_id,
         location_id: @region,
-        registry_id: registry_name,
+        registry_id: registry_name
       )
     }.to output(
       /Binding set:/m
@@ -201,7 +200,7 @@ describe "Cloud IoT Core" do
         project_id:  @project_id,
         location_id: @region,
         registry_id: registry_name,
-        device_id:   device_id,
+        device_id:   device_id
       )
     }.to output(
       /Version \[1\]/m
@@ -211,7 +210,7 @@ describe "Cloud IoT Core" do
         project_id:  @project_id,
         location_id: @region,
         registry_id: registry_name,
-        device_id:   device_id,
+        device_id:   device_id
       )
     }.to output(
       /No state messages/m
@@ -323,7 +322,7 @@ describe "Cloud IoT Core" do
     expect {
       $list_registries.call(
         project_id:  @project_id,
-        location_id: @region,
+        location_id: @region
       )
     }.to output(
       /Registries:/m
@@ -334,12 +333,12 @@ describe "Cloud IoT Core" do
     unknown_regname = "some_unknown_registry"
     expect {
       $get_registry.call(
-        project_id:    @project_id,
-        location_id:   @region,
-        registry_id:   unknown_regname
+        project_id:  @project_id,
+        location_id: @region,
+        registry_id: unknown_regname
       )
     }.to raise_error(
-      /was not found/m
+      /notFound/m
     )
   end
 
@@ -348,13 +347,13 @@ describe "Cloud IoT Core" do
     unknown_devname = "some_unknown_device"
     expect {
       $get_device.call(
-        project_id:    @project_id,
-        location_id:   @region,
-        registry_id:   unknown_regname,
-        device_id:     unknown_devname
+        project_id:  @project_id,
+        location_id: @region,
+        registry_id: unknown_regname,
+        device_id:   unknown_devname
       )
     }.to raise_error(
-      /was not found/m
+      /notFound/m
     )
   end
 
@@ -362,12 +361,12 @@ describe "Cloud IoT Core" do
     unknown_regname = "some_unknown_registry"
     expect {
       $list_devices.call(
-        project_id:    @project_id,
-        location_id:   @region,
-        registry_id:   unknown_regname,
+        project_id:  @project_id,
+        location_id: @region,
+        registry_id: unknown_regname
       )
     }.to raise_error(
-      /was not found/m
+      /notFound/m
     )
   end
 
@@ -450,6 +449,204 @@ describe "Cloud IoT Core" do
     ).to_stdout
 
     # Clean up resources
+    $delete_device.call(
+      project_id:  @project_id,
+      location_id: @region,
+      registry_id: registry_name,
+      device_id:   device_id
+    )
+    $delete_registry.call(
+      project_id:  @project_id,
+      location_id: @region,
+      registry_id: registry_name
+    )
+  end
+
+  example "Send command to device" do
+    # Setup scenario
+    topic_name    = "A#{@seed}-iot_command"
+    registry_name = "A#{@seed}create_delete_test_command"
+    topic         = create_pubsub_topic topic_name
+    $create_registry.call(
+      project_id:   @project_id,
+      location_id:  @region,
+      registry_id:  registry_name,
+      pubsub_topic: topic.name
+    )
+    device_id = "command_device"
+    $create_rsa_device.call(
+      project_id:  @project_id,
+      location_id: @region,
+      registry_id: registry_name,
+      device_id:   device_id,
+      cert_path:   resource("rsa_cert.pem")
+    )
+
+    # Without a ruby-based device client, it's difficult to test positive; test
+    # that we see the expected error condition for sending a command to a
+    # non-connected device
+    expect {
+      $send_device_command.call(
+        project_id:  @project_id,
+        location_id: @region,
+        registry_id: registry_name,
+        device_id:   device_id,
+        data:        "test"
+      )
+    }.to raise_error(/not subscribed to the commands topic/m)
+
+    # Clean up resources
+    $delete_device.call(
+      project_id:  @project_id,
+      location_id: @region,
+      registry_id: registry_name,
+      device_id:   device_id
+    )
+    $delete_registry.call(
+      project_id:  @project_id,
+      location_id: @region,
+      registry_id: registry_name
+    )
+  end
+
+  example "List gateways" do
+    # Setup scenario
+    topic_name    = "A#{@seed}-iot_list_gateways"
+    registry_name = "A#{@seed}iot_list_gateways"
+    topic         = create_pubsub_topic topic_name
+
+    $create_registry.call(
+      project_id:   @project_id,
+      location_id:  @region,
+      registry_id:  registry_name,
+      pubsub_topic: topic.name
+    )
+
+    expect {
+      $list_gateways.call(
+        project_id:  @project_id,
+        location_id: @region,
+        registry_id: registry_name
+      )
+    }.to output(
+      /Gateways:/m
+    ).to_stdout
+
+    # Clean up resources
+    $delete_registry.call(
+      project_id:  @project_id,
+      location_id: @region,
+      registry_id: registry_name
+    )
+  end
+
+  example "Create delete gateway" do
+    # Setup scenario
+    gateway_id = "create_delete_me"
+    topic_name    = "A#{@seed}-iot_create_delete_gateway"
+    registry_name = "A#{@seed}iot_create_delete_gateway"
+    topic         = create_pubsub_topic topic_name
+
+    $create_registry.call(
+      project_id:   @project_id,
+      location_id:  @region,
+      registry_id:  registry_name,
+      pubsub_topic: topic.name
+    )
+
+    expect {
+      $create_gateway.call(
+        project_id:  @project_id,
+        location_id: @region,
+        registry_id: registry_name,
+        gateway_id:  gateway_id,
+        cert_path:   resource("rsa_cert.pem"),
+        alg:         "RS256"
+      )
+    }.to output(
+      /Gateway:/m
+    ).to_stdout
+
+    expect {
+      $delete_gateway.call(
+        project_id:  @project_id,
+        location_id: @region,
+        registry_id: registry_name,
+        gateway_id:  gateway_id
+      )
+    }.to output(
+      /Deleted gateway/m
+    ).to_stdout
+
+    # Clean up resources
+    $delete_registry.call(
+      project_id:  @project_id,
+      location_id: @region,
+      registry_id: registry_name
+    )
+  end
+
+  example "Bind list unbind device" do
+    # Setup scenario
+    device_id     = "bind_unbind_device"
+    gateway_id    = "bind_unbind_gateway"
+    topic_name    = "A#{@seed}-iot_create_delete_gateway"
+    registry_name = "A#{@seed}iot_create_delete_gateway"
+    topic         = create_pubsub_topic topic_name
+    $create_registry.call(
+      project_id:   @project_id,
+      location_id:  @region,
+      registry_id:  registry_name,
+      pubsub_topic: topic.name
+    )
+    $create_gateway.call(
+      project_id:  @project_id,
+      location_id: @region,
+      registry_id: registry_name,
+      gateway_id:  gateway_id,
+      cert_path:   resource("rsa_cert.pem"),
+      alg:         "RS256"
+    )
+    $create_rsa_device.call(
+      project_id:  @project_id,
+      location_id: @region,
+      registry_id: registry_name,
+      device_id:   device_id,
+      cert_path:   resource("rsa_cert.pem")
+    )
+
+    expect {
+      $bind_device_to_gateway.call(
+        project_id:  @project_id,
+        location_id: @region,
+        registry_id: registry_name,
+        gateway_id:  gateway_id,
+        device_id:   device_id
+      )
+      $list_devices_for_gateway.call(
+        project_id:  @project_id,
+        location_id: @region,
+        gateway_id:  gateway_id,
+        registry_id: registry_name
+      )
+      $unbind_device_from_gateway.call(
+        project_id:  @project_id,
+        location_id: @region,
+        gateway_id:  gateway_id,
+        registry_id: registry_name,
+        device_id:   device_id
+      )
+    }.to output(
+      /Devices/m
+    ).to_stdout
+
+    # Clean up resources
+    $delete_gateway.call(
+      project_id:  @project_id,
+      location_id: @region,
+      registry_id: registry_name,
+      gateway_id:  gateway_id
+    )
     $delete_device.call(
       project_id:  @project_id,
       location_id: @region,

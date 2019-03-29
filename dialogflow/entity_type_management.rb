@@ -16,13 +16,13 @@
 def list_entity_types project_id:
   # [START dialogflow_list_entity_types]
   # project_id = "Your Google Cloud project ID"
-  
+
   require "google/cloud/dialogflow"
 
   entity_types_client = Google::Cloud::Dialogflow::EntityTypes.new
   parent = entity_types_client.class.project_agent_path project_id
 
-  entity_types = entity_types_client.list_entity_types(parent)
+  entity_types = entity_types_client.list_entity_types parent
 
   entity_types.each do |entity_type|
     puts "Entity type name:         #{entity_type.name}"
@@ -32,13 +32,12 @@ def list_entity_types project_id:
   # [END dialogflow_list_entity_types]
 end
 
-
 def create_entity_type project_id:, display_name:, kind:
   # [START dialogflow_create_entity_type]
   # project_id = "Your Google Cloud project ID"
   # display_name = "New Display Name"
   # kind = :KIND_LIST
-  
+
   require "google/cloud/dialogflow"
 
   entity_types_client = Google::Cloud::Dialogflow::EntityTypes.new
@@ -51,12 +50,11 @@ def create_entity_type project_id:, display_name:, kind:
   # [END dialogflow_create_entity_type]
 end
 
-
 def delete_entity_type project_id:, entity_type_id:
   # [START dialogflow_delete_entity_type]
   # project_id = "Your Google Cloud project ID"
   # entity_type_id = "Existing Entity Type ID"
-  
+
   require "google/cloud/dialogflow"
 
   entity_types_client = Google::Cloud::Dialogflow::EntityTypes.new
@@ -69,29 +67,29 @@ def delete_entity_type project_id:, entity_type_id:
 end
 
 
-if __FILE__ == $PROGRAM_NAME
+if $PROGRAM_NAME == __FILE__
   project_id = ENV["GOOGLE_CLOUD_PROJECT"]
   case ARGV.shift
   when "list"
     list_entity_types project_id: project_id
   when "create"
-    create_entity_type project_id: project_id,
+    create_entity_type project_id:   project_id,
                        display_name: ARGV.shift,
-                       kind: (ARGV.shift or "KIND_MAP").to_sym
+                       kind:         (ARGV.shift || "KIND_MAP").to_sym
   when "delete"
-    delete_entity_type project_id: project_id,
+    delete_entity_type project_id:     project_id,
                        entity_type_id: ARGV.shift
   else
-    puts <<-usage
-Usage: ruby entity_type_management.rb [commang] [arguments]
+    puts <<~USAGE
+      Usage: ruby entity_type_management.rb [commang] [arguments]
 
-Commands:
-  list                                           List all entitiy types
-  create  <display_name> [KIND_MAP or KIND_LIST] Create a new entity type
-  delete  <entity_type_id>                       Delete an entity type
+      Commands:
+        list                                           List all entitiy types
+        create  <display_name> [KIND_MAP or KIND_LIST] Create a new entity type
+        delete  <entity_type_id>                       Delete an entity type
 
-Environment variables:
-  GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
-    usage
+      Environment variables:
+        GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
+    USAGE
   end
 end

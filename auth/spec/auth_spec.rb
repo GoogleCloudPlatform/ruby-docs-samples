@@ -45,7 +45,7 @@ describe "Google Cloud Storage buckets sample" do
   end
 
   it "explicit auth in compute engine to list buckets" do
-    env_object = double()
+    env_object = double
 
     expect(Google::Cloud).to receive(:env).and_return env_object
     expect(env_object).to receive(:project_id).and_return @project_id

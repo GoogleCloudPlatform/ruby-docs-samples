@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require File.expand_path("../../../../spec/e2e", __FILE__)
+require File.expand_path("../../../spec/e2e", __dir__)
 require "rspec"
 require "capybara/rspec"
 require "capybara/poltergeist"
@@ -23,15 +23,15 @@ describe "Cloud SQL on Google App Engine", type: :feature do
   before :all do
     skip "End-to-end tests skipped" unless E2E.run?
 
-    app_yaml = File.expand_path("../../app.yaml", __FILE__)
+    app_yaml = File.expand_path "../app.yaml", __dir__
 
-    configuration = File.read(app_yaml)
+    configuration = File.read app_yaml
     configuration.gsub! "[YOUR_USER]",                     ENV["MYSQL_USER"]
     configuration.gsub! "[YOUR_PASSWORD]",                 ENV["MYSQL_PASSWORD"]
     configuration.gsub! "[YOUR_DATABASE]",                 ENV["MYSQL_DATABASE"]
     configuration.gsub! "[YOUR_INSTANCE_CONNECTION_NAME]", ENV["MYSQL_INSTANCE_CONNECTION_NAME"]
 
-    File.write(app_yaml, configuration)
+    File.write app_yaml, configuration
 
     @url = E2E.url
   end

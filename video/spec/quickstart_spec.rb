@@ -23,4 +23,3 @@ describe "Video Intelligence API Quickstart" do
     ).to_stdout
   end
 end
-

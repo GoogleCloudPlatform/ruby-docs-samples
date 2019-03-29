@@ -31,7 +31,7 @@ def signed_url url:, key_name:, key:, expiration:
 
   # Determine which separator makes sense given a URL
   separator = "?"
-  separator = "&" if url.include? '?'
+  separator = "&" if url.include? "?"
 
   # Concatenate url with expected query parameters Expires and KeyName
   url = "#{url}#{separator}Expires=#{expiration_utc}&KeyName=#{key_name}"
@@ -45,21 +45,21 @@ def signed_url url:, key_name:, key:, expiration:
 end
 # [END signed_url]
 
-if __FILE__ == $PROGRAM_NAME
+if $PROGRAM_NAME == __FILE__
   if ARGV.count == 4
     puts signed_url url:        ARGV.shift,
                     key_name:   ARGV.shift,
                     key:        ARGV.shift,
                     expiration: Time.now + ARGV.shift.to_i
   else
-    puts <<-usage
-Usage: bundle exec ruby sign_url.rb <url> <key_name> <key> <expires_in>
+    puts <<~USAGE
+      Usage: bundle exec ruby sign_url.rb <url> <key_name> <key> <expires_in>
 
-Arguments:
-  url        - URL of the endpoint served by Cloud CDN
-  key_name   - Name of the signing key added to the Google Cloud Storage bucket or service
-  key        - Signing key as a urlsafe base64 encoded string
-  expires_in - Expire signed URL in number of seconds from current time
-    usage
+      Arguments:
+        url        - URL of the endpoint served by Cloud CDN
+        key_name   - Name of the signing key added to the Google Cloud Storage bucket or service
+        key        - Signing key as a urlsafe base64 encoded string
+        expires_in - Expire signed URL in number of seconds from current time
+    USAGE
   end
 end

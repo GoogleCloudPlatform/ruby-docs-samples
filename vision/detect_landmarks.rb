@@ -12,63 +12,71 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-def detect_landmarks project_id:, image_path:
+require "uri"
+
+def detect_landmarks image_path:
   # [START vision_landmark_detection]
-  # project_id = "Your Google Cloud project ID"
   # image_path = "Path to local image file, eg. './image.png'"
-  
+
   require "google/cloud/vision"
 
-  vision = Google::Cloud::Vision.new project: project_id
-  image  = vision.image image_path
+  image_annotator = Google::Cloud::Vision::ImageAnnotator.new
 
-  image.landmarks.each do |landmark|
-    puts landmark.description
+  # [START vision_landmark_detection_migration]
+  response = image_annotator.landmark_detection image: image_path
 
-    landmark.locations.each do |location|
-      puts "#{location.latitude}, #{location.longitude}"
+  response.responses.each do |res|
+    res.landmark_annotations.each do |landmark|
+      puts landmark.description
+
+      landmark.locations.each do |location|
+        puts "#{location.lat_lng.latitude}, #{location.lat_lng.longitude}"
+      end
     end
   end
+  # [END vision_landmark_detection_migration]
   # [END vision_landmark_detection]
 end
 
 # This method is a duplicate of the above method, but with a different
 # description of the 'image_path' variable, demonstrating the gs://bucket/file
 # GCS storage URI format.
-def detect_landmarks_gcs project_id:, image_path:
+def detect_landmarks_gcs image_path:
   # [START vision_landmark_detection_gcs]
-  # project_id = "Your Google Cloud project ID"
   # image_path = "Google Cloud Storage URI, eg. 'gs://my-bucket/image.png'"
-  
+
   require "google/cloud/vision"
 
-  vision = Google::Cloud::Vision.new project: project_id
-  image  = vision.image image_path
+  image_annotator = Google::Cloud::Vision::ImageAnnotator.new
 
-  image.landmarks.each do |landmark|
-    puts landmark.description
+  response = image_annotator.landmark_detection image: image_path
 
-    landmark.locations.each do |location|
-      puts "#{location.latitude}, #{location.longitude}"
+  response.responses.each do |res|
+    res.landmark_annotations.each do |landmark|
+      puts landmark.description
+
+      landmark.locations.each do |location|
+        puts "#{location.lat_lng.latitude}, #{location.lat_lng.longitude}"
+      end
     end
   end
   # [END vision_landmark_detection_gcs]
 end
 
-if __FILE__ == $PROGRAM_NAME
+if $PROGRAM_NAME == __FILE__
   image_path = ARGV.shift
-  project_id = ENV["GOOGLE_CLOUD_PROJECT"]
 
-  if image_path
-    detect_landmarks image_path: image_path, project_id: project_id
+  if !image_path
+    puts <<~USAGE
+      Usage: ruby detect_landmarks.rb [image file path]
+       Example:
+        ruby detect_landmarks.rb image.png
+        ruby detect_landmarks.rb https://public-url/image.png
+        ruby detect_landmarks.rb gs://my-bucket/image.png
+    USAGE
+  elsif image_path =~ URI::DEFAULT_PARSER.make_regexp
+    detect_landmarks_gcs image_path: image_path
   else
-    puts <<-usage
-Usage: ruby detect_landmarks.rb [image file path]
-
-Example:
-  ruby detect_landmarks.rb image.png
-  ruby detect_landmarks.rb https://public-url/image.png
-  ruby detect_landmarks.rb gs://my-bucket/image.png
-    usage
+    detect_landmarks image_path: image_path
   end
 end

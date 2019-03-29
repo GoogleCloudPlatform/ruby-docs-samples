@@ -136,7 +136,7 @@ def insert
   datastore = Google::Cloud::Datastore.new
 
   # [START datastore_insert]
-  datastore.transaction do |tx|
+  datastore.transaction do |_tx|
     task = datastore.entity "Task" do |t|
       t["category"] = "Personal"
       t["done"] = false
@@ -173,7 +173,7 @@ def update
   datastore.save task
 
   # [START datastore_update]
-  datastore.transaction do |tx|
+  datastore.transaction do |_tx|
     task = datastore.find "Task", "sampleTask"
     task["priority"] = 5
     datastore.save task
@@ -212,7 +212,7 @@ def batch_upsert
     t["description"] = "Integrate Cloud Datastore"
   end
 
-  tasks = datastore.save(task1, task2)
+  tasks = datastore.save task1, task2
   task_key1 = tasks[0].key
   task_key2 = tasks[1].key
   # [END datastore_batch_upsert]
@@ -246,10 +246,10 @@ def basic_query
   datastore = Google::Cloud::Datastore.new
 
   # [START datastore_basic_query]
-  query = datastore.query("Task").
-          where("done", "=", false).
-          where("priority", ">=", 4).
-          order("priority", :desc)
+  query = datastore.query("Task")
+                   .where("done", "=", false)
+                   .where("priority", ">=", 4)
+                   .order("priority", :desc)
   # [END datastore_basic_query]
 
   # [START datastore_run_query]
@@ -261,8 +261,8 @@ def property_filter
   datastore = Google::Cloud::Datastore.new
 
   # [START datastore_property_filter]
-  query = datastore.query("Task").
-          where("done", "=", false)
+  query = datastore.query("Task")
+                   .where("done", "=", false)
   # [END datastore_property_filter]
 end
 
@@ -270,9 +270,9 @@ def composite_filter
   datastore = Google::Cloud::Datastore.new
 
   # [START datastore_composite_filter]
-  query = datastore.query("Task").
-          where("done", "=", false).
-          where("priority", "=", 4)
+  query = datastore.query("Task")
+                   .where("done", "=", false)
+                   .where("priority", "=", 4)
   # [END datastore_composite_filter]
 end
 
@@ -280,8 +280,8 @@ def key_filter
   datastore = Google::Cloud::Datastore.new
 
   # [START datastore_key_filter]
-  query = datastore.query("Task").
-          where("__key__", ">", datastore.key("Task", "someTask"))
+  query = datastore.query("Task")
+                   .where("__key__", ">", datastore.key("Task", "someTask"))
   # [END datastore_key_filter]
 end
 
@@ -289,8 +289,8 @@ def ascending_sort
   datastore = Google::Cloud::Datastore.new
 
   # [START datastore_ascending_sort]
-  query = datastore.query("Task").
-          order("created", :asc)
+  query = datastore.query("Task")
+                   .order("created", :asc)
   # [END datastore_ascending_sort]
 end
 
@@ -298,8 +298,8 @@ def descending_sort
   datastore = Google::Cloud::Datastore.new
 
   # [START datastore_descending_sort]
-  query = datastore.query("Task").
-          order("created", :desc)
+  query = datastore.query("Task")
+                   .order("created", :desc)
   # [END datastore_descending_sort]
 end
 
@@ -307,9 +307,9 @@ def multi_sort
   datastore = Google::Cloud::Datastore.new
 
   # [START datastore_multi_sort]
-  query = datastore.query("Task").
-          order("priority", :desc).
-          order("created", :asc)
+  query = datastore.query("Task")
+                   .order("priority", :desc)
+                   .order("created", :asc)
   # [END datastore_multi_sort]
 end
 
@@ -319,7 +319,7 @@ def kindless_query
   last_seen_key = datastore.key "Task", "a"
   # [START datastore_kindless_query]
   query = Google::Cloud::Datastore::Query.new
-  query.where("__key__", ">", last_seen_key)
+  query.where "__key__", ">", last_seen_key
   # [END datastore_kindless_query]
 
   query
@@ -331,8 +331,8 @@ def ancestor_query
   # [START datastore_ancestor_query]
   ancestor_key = datastore.key "TaskList", "default"
 
-  query = datastore.query("Task").
-          ancestor(ancestor_key)
+  query = datastore.query("Task")
+                   .ancestor(ancestor_key)
   # [END datastore_ancestor_query]
 end
 
@@ -340,8 +340,8 @@ def projection_query
   datastore = Google::Cloud::Datastore.new
 
   # [START datastore_projection_query]
-  query = datastore.query("Task").
-          select("priority", "percent_complete")
+  query = datastore.query("Task")
+                   .select("priority", "percent_complete")
   # [END datastore_projection_query]
 
   # [START datastore_run_query_projection]
@@ -360,8 +360,8 @@ def keys_only_query
   datastore = Google::Cloud::Datastore.new
 
   # [START datastore_keys_only_query]
-  query = datastore.query("Task").
-          select("__key__")
+  query = datastore.query("Task")
+                   .select("__key__")
   # [END datastore_keys_only_query]
 
   keys = datastore.run(query).map(&:key)
@@ -371,11 +371,11 @@ def distinct_on_query
   datastore = Google::Cloud::Datastore.new
 
   # [START datastore_distinct_on_query]
-  query = datastore.query("Task").
-          select("category", "priority").
-          distinct_on("category").
-          order("category").
-          order("priority")
+  query = datastore.query("Task")
+                   .select("category", "priority")
+                   .distinct_on("category")
+                   .order("category")
+                   .order("priority")
   # [END datastore_distinct_on_query]
 end
 
@@ -383,9 +383,9 @@ def array_value_inequality_range
   datastore = Google::Cloud::Datastore.new
 
   # [START datastore_array_value_inequality_range]
-  query = datastore.query("Task").
-          where("tag", ">", "learn").
-          where("tag", "<", "math")
+  query = datastore.query("Task")
+                   .where("tag", ">", "learn")
+                   .where("tag", "<", "math")
   # [END datastore_array_value_inequality_range]
 end
 
@@ -393,9 +393,9 @@ def array_value_equality
   datastore = Google::Cloud::Datastore.new
 
   # [START datastore_array_value_equality]
-  query = datastore.query("Task").
-          where("tag", "=", "fun").
-          where("tag", "=", "programming")
+  query = datastore.query("Task")
+                   .where("tag", "=", "fun")
+                   .where("tag", "=", "programming")
   # [END datastore_array_value_equality]
 end
 
@@ -403,9 +403,9 @@ def inequality_range
   datastore = Google::Cloud::Datastore.new
 
   # [START datastore_inequality_range]
-  query = datastore.query("Task").
-          where("created", ">=", Time.utc(1990, 1, 1)).
-          where("created", "<", Time.utc(2000, 1, 1))
+  query = datastore.query("Task")
+                   .where("created", ">=", Time.utc(1990, 1, 1))
+                   .where("created", "<", Time.utc(2000, 1, 1))
   # [END datastore_inequality_range]
 end
 
@@ -413,9 +413,9 @@ def inequality_invalid
   datastore = Google::Cloud::Datastore.new
 
   # [START datastore_inequality_invalid]
-  query = datastore.query("Task").
-          where("created", ">=", Time.utc(1990, 1, 1)).
-          where("priority", ">", 3)
+  query = datastore.query("Task")
+                   .where("created", ">=", Time.utc(1990, 1, 1))
+                   .where("priority", ">", 3)
   # [END datastore_inequality_invalid]
 end
 
@@ -423,11 +423,11 @@ def equal_and_inequality_range
   datastore = Google::Cloud::Datastore.new
 
   # [START datastore_equal_and_inequality_range]
-  query = datastore.query("Task").
-          where("done", "=", false).
-          where("priority", "=", 4).
-          where("created", ">=", Time.utc(1990, 1, 1)).
-          where("created", "<", Time.utc(2000, 1, 1))
+  query = datastore.query("Task")
+                   .where("done", "=", false)
+                   .where("priority", "=", 4)
+                   .where("created", ">=", Time.utc(1990, 1, 1))
+                   .where("created", "<", Time.utc(2000, 1, 1))
   # [END datastore_equal_and_inequality_range]
 end
 
@@ -435,10 +435,10 @@ def inequality_sort
   datastore = Google::Cloud::Datastore.new
 
   # [START datastore_inequality_sort]
-  query = datastore.query("Task").
-          where("priority", ">", 3).
-          order("priority").
-          order("created")
+  query = datastore.query("Task")
+                   .where("priority", ">", 3)
+                   .order("priority")
+                   .order("created")
   # [END datastore_inequality_sort]
 end
 
@@ -446,9 +446,9 @@ def inequality_sort_invalid_not_same
   datastore = Google::Cloud::Datastore.new
 
   # [START datastore_inequality_sort_invalid_not_same]
-  query = datastore.query("Task").
-          where("priority", ">", 3).
-          order("created")
+  query = datastore.query("Task")
+                   .where("priority", ">", 3)
+                   .order("created")
   # [END datastore_inequality_sort_invalid_not_same]
 end
 
@@ -456,10 +456,10 @@ def inequality_sort_invalid_not_first
   datastore = Google::Cloud::Datastore.new
 
   # [START datastore_inequality_sort_invalid_not_first]
-  query = datastore.query("Task").
-          where("priority", ">", 3).
-          order("created").
-          order("priority")
+  query = datastore.query("Task")
+                   .where("priority", ">", 3)
+                   .order("created")
+                   .order("priority")
   # [END datastore_inequality_sort_invalid_not_first]
 end
 
@@ -467,25 +467,25 @@ def limit
   datastore = Google::Cloud::Datastore.new
 
   # [START datastore_limit]
-  query = datastore.query("Task").
-          limit(5)
+  query = datastore.query("Task")
+                   .limit(5)
   # [END datastore_limit]
 end
 
 def cursor_paging
   datastore = Google::Cloud::Datastore.new
 
+  # [START datastore_cursor_paging]
   page_size = 2
-  query = datastore.query("Task").
-          limit(page_size)
+  query = datastore.query("Task")
+                   .limit(page_size)
   tasks = datastore.run query
 
   page_cursor = tasks.cursor
 
-  # [START datastore_cursor_paging]
-  query = datastore.query("Task").
-          limit(page_size).
-          start(page_cursor)
+  query = datastore.query("Task")
+                   .limit(page_size)
+                   .start(page_cursor)
   # [END datastore_cursor_paging]
 end
 
@@ -493,8 +493,8 @@ def eventual_consistent_query
   # [START datastore_eventual_consistent_query]
   ancestor_key = datastore.key "TaskList", "default"
 
-  query = datastore.query("Task").
-          ancestor(ancestor_key)
+  query = datastore.query("Task")
+                   .ancestor(ancestor_key)
 
   tasks = datastore.run query, consistency: :eventual
   # [END datastore_eventual_consistent_query]
@@ -506,8 +506,8 @@ def unindexed_property_query
   datastore = Google::Cloud::Datastore.new
 
   # [START datastore_unindexed_property_query]
-  query = datastore.query("Task").
-          where("description", "=", "A task description.")
+  query = datastore.query("Task")
+                   .where("description", "=", "A task description.")
   # [END datastore_unindexed_property_query]
 end
 
@@ -570,9 +570,9 @@ def transactional_single_entity_group_read_only
   tasks_in_list = nil
   # [START datastore_transactional_single_entity_group_read_only]
   task_list_key = datastore.key "TaskList", "default"
-  datastore.transaction do |tx|
+  datastore.read_only_transaction do |tx|
     task_list = tx.find task_list_key
-    query = tx.query("Task").ancestor(task_list)
+    query = datastore.query("Task").ancestor(task_list)
     tasks_in_list = tx.run query
   end
   # [END datastore_transactional_single_entity_group_read_only]
@@ -583,10 +583,10 @@ def namespace_run_query
   datastore = Google::Cloud::Datastore.new
 
   # [START datastore_namespace_run_query]
-  query = datastore.query("__namespace__").
-          select("__key__").
-          where("__key__", ">=", datastore.key("__namespace__", "g")).
-          where("__key__", "<", datastore.key("__namespace__", "h"))
+  query = datastore.query("__namespace__")
+                   .select("__key__")
+                   .where("__key__", ">=", datastore.key("__namespace__", "g"))
+                   .where("__key__", "<", datastore.key("__namespace__", "h"))
 
   namespaces = datastore.run(query).map do |entity|
     entity.key.name
@@ -598,8 +598,8 @@ def kind_run_query
   datastore = Google::Cloud::Datastore.new
 
   # [START datastore_kind_run_query]
-  query = datastore.query("__kind__").
-          select("__key__")
+  query = datastore.query("__kind__")
+                   .select("__key__")
 
   kinds = datastore.run(query).map do |entity|
     entity.key.name
@@ -611,10 +611,10 @@ def property_run_query
   datastore = Google::Cloud::Datastore.new
 
   # [START datastore_property_run_query]
-  query = datastore.query("__property__").
-          select("__key__")
+  query = datastore.query("__property__")
+                   .select("__key__")
 
-  entities = datastore.run(query)
+  entities = datastore.run query
   properties_by_kind = entities.each_with_object({}) do |entity, memo|
     kind = entity.key.parent.name
     prop = entity.key.name
@@ -629,10 +629,10 @@ def property_by_kind_run_query
 
   # [START datastore_property_by_kind_run_query]
   ancestor_key = datastore.key "__kind__", "Task"
-  query = datastore.query("__property__").
-          ancestor(ancestor_key)
+  query = datastore.query("__property__")
+                   .ancestor(ancestor_key)
 
-  entities = datastore.run(query)
+  entities = datastore.run query
   representations = entities.each_with_object({}) do |entity, memo|
     property_name = entity.key.name
     property_types = entity["property_representation"]
@@ -646,11 +646,11 @@ def property_filtering_run_query
 
   # [START datastore_property_filtering_run_query]
   start_key = datastore.key [["__kind__", "Task"], ["__property__", "priority"]]
-  query = datastore.query("__property__").
-          select("__key__").
-          where("__key__", ">=", start_key)
+  query = datastore.query("__property__")
+                   .select("__key__")
+                   .where("__key__", ">=", start_key)
 
-  entities = datastore.run(query)
+  entities = datastore.run query
   properties_by_kind = entities.each_with_object({}) do |entity, memo|
     kind = entity.key.parent.name
     prop = entity.key.name

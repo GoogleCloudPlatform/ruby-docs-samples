@@ -28,18 +28,18 @@ class EnumeratorQueue
 
   # @private
   def each_item
-    return enum_for(:each_item) unless block_given?
+    return enum_for :each_item unless block_given?
     loop do
       r = @q.pop
       break if r.equal? @sentinel
-      fail r if r.is_a? Exception
+      raise r if r.is_a? Exception
       yield r
     end
   end
 end
 
-def detect_intent_stream project_id:, session_id:, audio_file_path:,
-                        language_code:
+def detect_intent_stream(project_id:, session_id:, audio_file_path:,
+                         language_code:)
   # [START dialogflow_detect_intent_streaming]
   # project_id = "Your Google Cloud project ID"
   # session_id = "mysession"
@@ -54,9 +54,9 @@ def detect_intent_stream project_id:, session_id:, audio_file_path:,
   puts "Session path: #{session}"
 
   audio_config = {
-    audio_encoding: :AUDIO_ENCODING_LINEAR_16,
-    sample_rate_hertz: 16000,
-    language_code: language_code
+    audio_encoding:    :AUDIO_ENCODING_LINEAR_16,
+    sample_rate_hertz: 16_000,
+    language_code:     language_code
   }
   query_input = { audio_config: audio_config }
   streaming_config = { session: session, query_input: query_input }
@@ -65,10 +65,10 @@ def detect_intent_stream project_id:, session_id:, audio_file_path:,
   completed = false
 
   # Use session_client as the sentinel to signal the end of queue
-  request_queue  = EnumeratorQueue.new(session_client)
+  request_queue = EnumeratorQueue.new session_client
 
   # The first request needs to be the configuration.
-  request_queue.push(streaming_config)
+  request_queue.push streaming_config
 
   # Consume the queue and process responses in a separate thread
   Thread.new do
@@ -89,45 +89,43 @@ def detect_intent_stream project_id:, session_id:, audio_file_path:,
 
   # While the main thread adds chunks of audio data to the queue
   begin
-    audio_file = File.open(audio_file_path, "rb")
-      while true
-        chunk = audio_file.read 4096
-        break if not chunk
-        request_queue.push({ input_audio: chunk})
-        sleep 0.5
-      end
+    audio_file = File.open audio_file_path, "rb"
+    loop do
+      chunk = audio_file.read 4096
+      break unless chunk
+      request_queue.push input_audio: chunk
+      sleep 0.5
+    end
   ensure
     audio_file.close
     # pushing the sentinel session_client to end the streaming queues
-    request_queue.push(session_client)
+    request_queue.push session_client
   end
 
   # Do not exit the main thread until the processing thread is completed
-  while not completed
-    sleep 1
-  end
+  sleep 1 until completed
   # [END dialogflow_detect_intent_streaming]
 end
 
 
-if __FILE__ == $PROGRAM_NAME
+if $PROGRAM_NAME == __FILE__
   project_id = ENV["GOOGLE_CLOUD_PROJECT"]
   audio_file_path = ARGV.shift
 
   if audio_file_path
-    detect_intent_stream project_id: project_id,
-                         session_id: SecureRandom.uuid,
+    detect_intent_stream project_id:      project_id,
+                         session_id:      SecureRandom.uuid,
                          audio_file_path: audio_file_path,
-                         language_code:"en-US"
+                         language_code:   "en-US"
   else
-    puts <<-usage
-Usage: ruby detect_intent_stream.rb [audio_file_path]
+    puts <<~USAGE
+      Usage: ruby detect_intent_stream.rb [audio_file_path]
 
-Example:
-  ruby detect_intent_stream.rb resources/book_a_room.wav
+      Example:
+        ruby detect_intent_stream.rb resources/book_a_room.wav
 
-Environment variables:
-  GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
-    usage
+      Environment variables:
+        GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
+    USAGE
   end
 end

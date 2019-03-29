@@ -17,7 +17,6 @@ require "rspec"
 require "google/cloud/datastore"
 
 describe "Datastore task list" do
-
   before :all do
     @project_id = ENV["GOOGLE_CLOUD_PROJECT"]
     @datastore  = Google::Cloud::Datastore.new project: @project_id
@@ -29,9 +28,9 @@ describe "Datastore task list" do
     delete_tasks
   end
 
-  def wait_until times: 5, delay: 10, &condition
+  def wait_until times: 5, delay: 10
     times.times do
-      return if condition.call
+      return if yield
     end
   end
 
@@ -75,7 +74,7 @@ describe "Datastore task list" do
     end
     @datastore.save task1, task2
 
-    query = @datastore.query("Task").order("created")
+    query = @datastore.query("Task").order "created"
     wait_until { @datastore.run(query).any? }
 
     expect { list_tasks }.to output(/Test 1/).to_stdout

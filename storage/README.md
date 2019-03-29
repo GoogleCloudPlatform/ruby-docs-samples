@@ -47,6 +47,9 @@ Commands:
   enable_default_event_based_hold  <bucket>                  Enable event-based hold for a bucket
   disable_default_event_based_hold <bucket>                  Disable event-based hold for a bucket
   get_default_event_based_hold     <bucket>                  Get state of event-based hold for a bucket
+  enable_bucket_policy_only        <bucket>                  Enable Bucket Policy Only for a bucket
+  disable_bucket_policy_only       <bucket>                  Disable Bucket Policy Only for a bucket
+  get_bucket_policy_only           <bucket>                  Get Bucket Policy Only for a bucket
 
 Environment variables:
   GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID

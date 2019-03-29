@@ -15,7 +15,7 @@
 require "rspec"
 require "rspec/retry"
 require "tempfile"
-require "google/apis/cloudkms_v1"
+require "google/cloud/kms/v1"
 require_relative "../kms"
 
 RSpec.configure do |config|
@@ -30,259 +30,190 @@ RSpec.configure do |config|
 end
 
 describe "Key Management Service" do
-
-  def create_service_client
-    kms_client = Google::Apis::CloudkmsV1::CloudKMSService.new
-    kms_client.authorization = Google::Auth.get_application_default(
-      "https://www.googleapis.com/auth/cloud-platform"
-    )
-    kms_client
-  end
+  CloudKMS = Google::Cloud::Kms::V1
 
   def create_test_key_ring project_id:, location_id:, key_ring_id:
-    kms_client = create_service_client
+    client = CloudKMS::KeyManagementServiceClient.new
+    location_path = CloudKMS::KeyManagementServiceClient.location_path project_id, location_id
 
-    resource = "projects/#{project_id}/locations/#{location_id}"
-
-    kms_client.create_project_location_key_ring(
-      resource,
-      Google::Apis::CloudkmsV1::KeyRing.new,
-      key_ring_id: key_ring_id
-    )
+    client.create_key_ring location_path, key_ring_id, nil
   end
 
   def get_test_key_ring project_id:, location_id:, key_ring_id:
-    kms_client = create_service_client
+    client = CloudKMS::KeyManagementServiceClient.new
+    key_ring_path = CloudKMS::KeyManagementServiceClient.key_ring_path(
+      project_id, location_id, key_ring_id
+    )
 
-    resource = "projects/#{project_id}/locations/#{location_id}/" +
-               "keyRings/#{key_ring_id}"
-
-    kms_client.get_project_location_key_ring resource
+    client.get_key_ring key_ring_path
   end
 
   def create_test_crypto_key project_id:, location_id:, key_ring_id:, crypto_key_id:
-    kms_client = create_service_client
-
-    resource = "projects/#{project_id}/locations/#{location_id}/" +
-               "keyRings/#{key_ring_id}"
-
-    kms_client.create_project_location_key_ring_crypto_key(
-      resource,
-      Google::Apis::CloudkmsV1::CryptoKey.new(
-        purpose: "ENCRYPT_DECRYPT"
-      ),
-      crypto_key_id: crypto_key_id
+    client = CloudKMS::KeyManagementServiceClient.new
+    key_ring_path = CloudKMS::KeyManagementServiceClient.key_ring_path(
+      project_id, location_id, key_ring_id
     )
+
+    crypto_key_spec = CloudKMS::CryptoKey.new
+    crypto_key_spec.purpose = CloudKMS::CryptoKey::CryptoKeyPurpose::ENCRYPT_DECRYPT
+
+    client.create_crypto_key key_ring_path, crypto_key_id, crypto_key_spec
   end
 
   def create_test_crypto_key_version project_id:, location_id:, key_ring_id:, crypto_key_id:
-    kms_client = create_service_client
-
-    resource = "projects/#{project_id}/locations/#{location_id}/" +
-               "keyRings/#{key_ring_id}/cryptoKeys/#{crypto_key_id}"
-
-    crypto_key_version = kms_client.create_project_location_key_ring_crypto_key_crypto_key_version(
-        resource,
-        Cloudkms::CryptoKey.new(purpose: "ENCRYPT_DECRYPT")
+    client = CloudKMS::KeyManagementServiceClient.new
+    crypto_key_path = CloudKMS::KeyManagementServiceClient.crypto_key_path(
+      project_id, location_id, key_ring_id, crypto_key_id
     )
+
+    client.create_crypto_key_version crypto_key_path, nil
   end
 
   def destroy_test_crypto_key_version project_id:, location_id:, key_ring_id:, crypto_key_id:, version_id:
-    kms_client = create_service_client
-
-    # The resource name of the location associated with the key ring
-    resource = "projects/#{project_id}/locations/#{location_id}/" +
-               "keyRings/#{key_ring_id}/cryptoKeys/#{crypto_key_id}/" +
-               "cryptoKeyVersions/#{version_id}"
+    client = CloudKMS::KeyManagementServiceClient.new
+    crypto_key_version_path = CloudKMS::KeyManagementServiceClient.crypto_key_version_path(
+      project_id, location_id, key_ring_id, crypto_key_id, version_id
+    )
 
     # Destroy specific version of the crypto key
-    kms_client.destroy_crypto_key_version(
-      resource,
-      Cloudkms::DestroyCryptoKeyVersionRequest.new
-    )
+    client.destroy_crypto_key_version crypto_key_version_path
   end
 
   def disable_test_crypto_key_version project_id:, location_id:, key_ring_id:, crypto_key_id:, version_id:
-    kms_client = create_service_client
-
-    resource = "projects/#{project_id}/locations/#{location_id}/" +
-             "keyRings/#{key_ring_id}/cryptoKeys/#{crypto_key_id}/" +
-             "cryptoKeyVersions/#{version_id}"
-
-    # Get a version of the crypto key
-    crypto_key_version = kms_client.get_project_location_key_ring_crypto_key_crypto_key_version resource
-
-    # Set the primary version state as disabled for update
-    crypto_key_version.state = "DISABLED"
-
-    # Disable the crypto key version
-    kms_client.patch_project_location_key_ring_crypto_key_crypto_key_version(
-      resource,
-      crypto_key_version, update_mask: "state"
+    client = CloudKMS::KeyManagementServiceClient.new
+    crypto_key_version_path = CloudKMS::KeyManagementServiceClient.crypto_key_version_path(
+      project_id, location_id, key_ring_id, crypto_key_id, version_id
     )
+
+    version = client.get_crypto_key_version crypto_key_version_path
+
+    # Set the version state to disabled for update
+    version.state = CloudKMS::CryptoKeyVersion::CryptoKeyVersionState::DISABLED
+    update_mask = Google::Protobuf::FieldMask.new
+    update_mask.paths << "state"
+
+    client.update_crypto_key_version version, update_mask
   end
 
   def get_test_crypto_key project_id:, location_id:, key_ring_id:, crypto_key_id:
-    kms_client = create_service_client
+    client = CloudKMS::KeyManagementServiceClient.new
+    crypto_key_path = CloudKMS::KeyManagementServiceClient.crypto_key_path(
+      project_id, location_id, key_ring_id, crypto_key_id
+    )
 
-    resource = "projects/#{project_id}/locations/#{location_id}/" +
-               "keyRings/#{key_ring_id}/cryptoKeys/#{crypto_key_id}"
-
-    kms_client.get_project_location_key_ring_crypto_key resource
+    client.get_crypto_key crypto_key_path
   end
 
   def get_test_crypto_key_version project_id:, location_id:, key_ring_id:, crypto_key_id:, version_id:
+    client = CloudKMS::KeyManagementServiceClient.new
+    crypto_key_version_path = CloudKMS::KeyManagementServiceClient.crypto_key_version_path(
+      project_id, location_id, key_ring_id, crypto_key_id, version_id
+    )
 
-    kms_client = create_service_client
-
-    name = "projects/#{project_id}/locations/#{location_id}/" +
-           "keyRings/#{key_ring_id}/cryptoKeys/#{crypto_key_id}/" +
-           "cryptoKeyVersions/#{version_id}"
-
-    kms_client.get_project_location_key_ring_crypto_key_crypto_key_version name
+    client.get_crypto_key_version crypto_key_version_path
   end
 
   def list_test_crypto_key_version project_id:, location_id:, key_ring_id:, crypto_key_id:
-    kms_client = create_service_client
-
-    resource = "projects/#{project_id}/locations/#{location_id}/" +
-               "keyRings/#{key_ring_id}/cryptoKeys/#{crypto_key_id}"
-
-    kms_client.list_project_location_key_ring_crypto_key_crypto_key_versions(
-        resource
+    client = CloudKMS::KeyManagementServiceClient.new
+    crypto_key_path = CloudKMS::KeyManagementServiceClient.crypto_key_path(
+      project_id, location_id, key_ring_id, crypto_key_id
     )
+
+    client.list_crypto_key_versions crypto_key_path
   end
 
   def list_test_key_rings project_id:, location_id:
-    kms_client = create_service_client
+    client = CloudKMS::KeyManagementServiceClient.new
+    location_path = CloudKMS::KeyManagementServiceClient.location_path project_id, location_id
 
-    resource = "projects/#{project_id}/locations/#{location_id}"
-
-    kms_client.list_project_location_key_rings resource
+    client.list_key_rings location_path
   end
 
   def get_test_crypto_key_policy project_id:, location_id:, key_ring_id:, crypto_key_id:
-    kms_client = create_service_client
+    client = CloudKMS::KeyManagementServiceClient.new
+    crypto_key_path = CloudKMS::KeyManagementServiceClient.crypto_key_path(
+      project_id, location_id, key_ring_id, crypto_key_id
+    )
 
-    resource = "projects/#{project_id}/locations/#{location_id}/" +
-               "keyRings/#{key_ring_id}/cryptoKeys/#{crypto_key_id}"
-
-    kms_client.get_project_location_key_ring_crypto_key_iam_policy resource
+    client.get_iam_policy crypto_key_path
   end
 
   def get_test_key_ring_policy project_id:, location_id:, key_ring_id:
-    kms_client = create_service_client
+    client = CloudKMS::KeyManagementServiceClient.new
+    key_ring_path = CloudKMS::KeyManagementServiceClient.key_ring_path(
+      project_id, location_id, key_ring_id
+    )
 
-    resource = "projects/#{project_id}/locations/#{location_id}/" +
-               "keyRings/#{key_ring_id}"
-
-    kms_client.get_project_location_key_ring_iam_policy resource
+    client.get_iam_policy key_ring_path
   end
 
   def add_test_member_to_crypto_key_policy project_id:, location_id:, key_ring_id:, crypto_key_id:, member:, role:
-    kms_client = create_service_client
+    client = CloudKMS::KeyManagementServiceClient.new
+    crypto_key_path = CloudKMS::KeyManagementServiceClient.crypto_key_path(
+      project_id, location_id, key_ring_id, crypto_key_id
+    )
 
-    resource = "projects/#{project_id}/locations/#{location_id}/" +
-               "keyRings/#{key_ring_id}/cryptoKeys/#{crypto_key_id}"
-
-    policy = kms_client.get_project_location_key_ring_crypto_key_iam_policy resource
+    policy = client.get_iam_policy crypto_key_path
 
     policy.bindings ||= []
-    policy.bindings << Google::Apis::CloudkmsV1::Binding.new(
-      members: [member],
-      role: role
-    )
+    policy.bindings << Google::Iam::V1::Binding.new(members: [member], role: role)
 
-    policy_request = Google::Apis::CloudkmsV1::SetIamPolicyRequest.new(
-      policy: policy
-    )
-
-    kms_client.set_crypto_key_iam_policy resource, policy_request
+    client.set_iam_policy crypto_key_path, policy
   end
 
   def add_test_member_to_key_ring_policy project_id:, location_id:, key_ring_id:, member:, role:
-    kms_client = create_service_client
-
-    policy = get_test_key_ring_policy(
-      project_id: project_id,
-      location_id: location_id,
-      key_ring_id: key_ring_id
+    client = CloudKMS::KeyManagementServiceClient.new
+    key_ring_path = CloudKMS::KeyManagementServiceClient.key_ring_path(
+      project_id, location_id, key_ring_id
     )
 
-    resource = "projects/#{project_id}/locations/#{location_id}/" +
-               "keyRings/#{key_ring_id}"
-
+    policy = client.get_iam_policy key_ring_path
 
     policy.bindings ||= []
-    policy.bindings << Google::Apis::CloudkmsV1::Binding.new(
-      members: [member],
-      role: role
-    )
+    policy.bindings << Google::Iam::V1::Binding.new(members: [member], role: role)
 
-    policy_request = Google::Apis::CloudkmsV1::SetIamPolicyRequest.new(
-      policy: policy
-    )
-
-    kms_client.set_key_ring_iam_policy resource, policy_request
+    client.set_iam_policy key_ring_path, policy
   end
 
   def remove_test_member_to_key_ring_policy project_id:, location_id:, key_ring_id:, member:, role:
-    kms_client = create_service_client
-
-    policy = get_test_key_ring_policy(
-      project_id: project_id,
-      location_id: location_id,
-      key_ring_id: key_ring_id
+    client = CloudKMS::KeyManagementServiceClient.new
+    key_ring_path = CloudKMS::KeyManagementServiceClient.key_ring_path(
+      project_id, location_id, key_ring_id
     )
 
-    resource = "projects/#{project_id}/locations/#{location_id}/" +
-               "keyRings/#{key_ring_id}"
+    policy = client.get_iam_policy key_ring_path
 
-    if policy.bindings
-      policy.bindings.delete_if do |binding|
-        binding.role.include?(role) && binding.members.include?(member)
-      end
+    policy.bindings&.delete_if do |binding|
+      binding.role == role && binding.members.include?(member)
     end
 
-    policy_request = Google::Apis::CloudkmsV1::SetIamPolicyRequest.new(
-      policy: policy
-    )
-
-    kms_client.set_key_ring_iam_policy resource, policy_request
+    client.set_iam_policy key_ring_path, policy
   end
 
   def encrypt_test_file project_id:, location_id:, key_ring_id:, crypto_key_id:, plaintext_file:, ciphertext_file:
-    kms_client = create_service_client
-
-    name = "projects/#{project_id}/locations/#{location_id}/" +
-           "keyRings/#{key_ring_id}/cryptoKeys/#{crypto_key_id}"
-
-    plaintext = File.read plaintext_file
-
-    request = Google::Apis::CloudkmsV1::EncryptRequest.new(
-      plaintext: plaintext
+    client = CloudKMS::KeyManagementServiceClient.new
+    crypto_key_path = CloudKMS::KeyManagementServiceClient.crypto_key_path(
+      project_id, location_id, key_ring_id, crypto_key_id
     )
 
-    response = kms_client.encrypt_crypto_key name, request
+    plaintext = File.open(plaintext_file, "rb", &:read)
 
-    File.write ciphertext_file, response.ciphertext
+    response = client.encrypt crypto_key_path, plaintext
+
+    File.open(ciphertext_file, "wb") { |f| f.write response.ciphertext }
   end
 
   def decrypt_test_file project_id:, location_id:, key_ring_id:, crypto_key_id:, ciphertext_file:, plaintext_file:
-    kms_client = create_service_client
-
-    name = "projects/#{project_id}/locations/#{location_id}/" +
-           "keyRings/#{key_ring_id}/cryptoKeys/#{crypto_key_id}"
-
-    ciphertext = File.read ciphertext_file
-
-    request = Google::Apis::CloudkmsV1::DecryptRequest.new(
-      ciphertext: ciphertext
+    client = CloudKMS::KeyManagementServiceClient.new
+    crypto_key_path = CloudKMS::KeyManagementServiceClient.crypto_key_path(
+      project_id, location_id, key_ring_id, crypto_key_id
     )
 
-    response = kms_client.decrypt_crypto_key name, request
+    ciphertext = File.open(ciphertext_file, "rb", &:read)
 
-    File.write plaintext_file, response.plaintext
+    response = client.decrypt crypto_key_path, ciphertext
+
+    File.open(plaintext_file, "wb") { |f| f.write response.plaintext }
   end
 
   before :all do
@@ -300,7 +231,7 @@ describe "Key Management Service" do
 
     @plaintext_file = File.expand_path "resources/file.txt", __dir__
 
-    # Note: All samples define a `Cloudkms` constant and cause
+    # Note: All samples define a `CloudKMS` constant and cause
     #       "already initialized constant" warnings. $VERBOSE is disabled to
     #       silence these warnings.
     $VERBOSE = nil
@@ -311,14 +242,14 @@ describe "Key Management Service" do
 
     expect {
       $create_key_ring.call(
-        project_id: @project_id,
+        project_id:  @project_id,
         location_id: @location_id,
         key_ring_id: key_ring_id
       )
     }.to output(/#{key_ring_id}/).to_stdout
 
     test_key_ring = get_test_key_ring(
-      project_id: @project_id,
+      project_id:  @project_id,
       location_id: @location_id,
       key_ring_id: key_ring_id
     )
@@ -331,17 +262,17 @@ describe "Key Management Service" do
 
     expect {
       $create_crypto_key.call(
-        project_id: @project_id,
-        location_id: @location_id,
-        key_ring_id: @key_ring_id,
+        project_id:    @project_id,
+        location_id:   @location_id,
+        key_ring_id:   @key_ring_id,
         crypto_key_id: test_crypto_key_id
       )
     }.to output(/#{test_crypto_key_id}/).to_stdout
 
     test_crypto_key = get_test_crypto_key(
-      project_id: @project_id,
-      location_id: @location_id,
-      key_ring_id: @key_ring_id,
+      project_id:    @project_id,
+      location_id:   @location_id,
+      key_ring_id:   @key_ring_id,
       crypto_key_id: test_crypto_key_id
     )
 
@@ -353,22 +284,22 @@ describe "Key Management Service" do
 
     expect {
       $encrypt.call(
-        project_id: @project_id,
-        location_id: @location_id,
-        key_ring_id: @key_ring_id,
-        crypto_key_id: @crypto_key_id,
-        plaintext_file: @plaintext_file,
+        project_id:      @project_id,
+        location_id:     @location_id,
+        key_ring_id:     @key_ring_id,
+        crypto_key_id:   @crypto_key_id,
+        plaintext_file:  @plaintext_file,
         ciphertext_file: temp_output.path
       )
     }.to output(/#{@plaintext_file}/).to_stdout
 
     decrypt_test_file(
-      project_id: @project_id,
-      location_id: @location_id,
-      key_ring_id: @key_ring_id,
-      crypto_key_id: @crypto_key_id,
+      project_id:      @project_id,
+      location_id:     @location_id,
+      key_ring_id:     @key_ring_id,
+      crypto_key_id:   @crypto_key_id,
       ciphertext_file: temp_output.path,
-      plaintext_file: temp_output.path
+      plaintext_file:  temp_output.path
     )
 
     plaintext = File.read temp_output.path
@@ -380,22 +311,22 @@ describe "Key Management Service" do
     temp_output = Tempfile.new "kms_encrypted_file"
 
     encrypt_test_file(
-      project_id: @project_id,
-      location_id: @location_id,
-      key_ring_id: @key_ring_id,
-      crypto_key_id: @crypto_key_id,
-      plaintext_file: @plaintext_file,
+      project_id:      @project_id,
+      location_id:     @location_id,
+      key_ring_id:     @key_ring_id,
+      crypto_key_id:   @crypto_key_id,
+      plaintext_file:  @plaintext_file,
       ciphertext_file: temp_output.path
     )
 
     expect {
       $decrypt.call(
-        project_id: @project_id,
-        location_id: @location_id,
-        key_ring_id: @key_ring_id,
-        crypto_key_id: @crypto_key_id,
+        project_id:      @project_id,
+        location_id:     @location_id,
+        key_ring_id:     @key_ring_id,
+        crypto_key_id:   @crypto_key_id,
         ciphertext_file: temp_output.path,
-        plaintext_file: temp_output.path
+        plaintext_file:  temp_output.path
       )
     }.to output(/#{temp_output.path}/).to_stdout
 
@@ -408,52 +339,52 @@ describe "Key Management Service" do
     test_crypto_key_id = "#{@project_id}-version-#{Time.now.to_i}"
 
     create_test_crypto_key(
-      project_id: @project_id,
-      location_id: @location_id,
-      key_ring_id: @key_ring_id,
+      project_id:    @project_id,
+      location_id:   @location_id,
+      key_ring_id:   @key_ring_id,
       crypto_key_id: test_crypto_key_id
     )
 
     before_version_list = list_test_crypto_key_version(
-      project_id: @project_id,
-      location_id: @location_id,
-      key_ring_id: @key_ring_id,
+      project_id:    @project_id,
+      location_id:   @location_id,
+      key_ring_id:   @key_ring_id,
       crypto_key_id: test_crypto_key_id
     )
 
     expect {
       $create_crypto_key_version.call(
-        project_id: @project_id,
-        location_id: @location_id,
-        key_ring_id: @key_ring_id,
+        project_id:    @project_id,
+        location_id:   @location_id,
+        key_ring_id:   @key_ring_id,
         crypto_key_id: test_crypto_key_id
       )
     }.to output(/Created version/).to_stdout
 
     after_version_list = list_test_crypto_key_version(
-      project_id: @project_id,
-      location_id: @location_id,
-      key_ring_id: @key_ring_id,
+      project_id:    @project_id,
+      location_id:   @location_id,
+      key_ring_id:   @key_ring_id,
       crypto_key_id: test_crypto_key_id
     )
 
-    expect(after_version_list.total_size).to be > before_version_list.total_size
+    expect(after_version_list.count).to be > before_version_list.count
   end
 
   it "can set a crypto key version as the primary version" do
     test_crypto_key_id = "#{@project_id}-primary-#{Time.now.to_i}"
 
     create_test_crypto_key(
-      project_id: @project_id,
-      location_id: @location_id,
-      key_ring_id: @key_ring_id,
+      project_id:    @project_id,
+      location_id:   @location_id,
+      key_ring_id:   @key_ring_id,
       crypto_key_id: test_crypto_key_id
     )
 
     crypto_key_version = create_test_crypto_key_version(
-      project_id: @project_id,
-      location_id: @location_id,
-      key_ring_id: @key_ring_id,
+      project_id:    @project_id,
+      location_id:   @location_id,
+      key_ring_id:   @key_ring_id,
       crypto_key_id: test_crypto_key_id
     )
 
@@ -461,18 +392,18 @@ describe "Key Management Service" do
 
     expect {
       $set_crypto_key_primary_version.call(
-        project_id: @project_id,
-        location_id: @location_id,
-        key_ring_id: @key_ring_id,
+        project_id:    @project_id,
+        location_id:   @location_id,
+        key_ring_id:   @key_ring_id,
         crypto_key_id: test_crypto_key_id,
-        version_id: version_id
+        version_id:    version_id
       )
     }.to output(/Set #{version_id} as primary version/).to_stdout
 
     crypto_key = get_test_crypto_key(
-      project_id: @project_id,
-      location_id: @location_id,
-      key_ring_id: @key_ring_id,
+      project_id:    @project_id,
+      location_id:   @location_id,
+      key_ring_id:   @key_ring_id,
       crypto_key_id: test_crypto_key_id
     )
 
@@ -483,52 +414,52 @@ describe "Key Management Service" do
     test_crypto_key_id = "#{@project_id}-enable-#{Time.now.to_i}"
 
     crypto_key = create_test_crypto_key(
-      project_id: @project_id,
-      location_id: @location_id,
-      key_ring_id: @key_ring_id,
+      project_id:    @project_id,
+      location_id:   @location_id,
+      key_ring_id:   @key_ring_id,
       crypto_key_id: test_crypto_key_id
     )
 
     version_id = "1" # first version is labeled 1
 
     disabled_crypto_key_version = disable_test_crypto_key_version(
-      project_id: @project_id,
-      location_id: @location_id,
-      key_ring_id: @key_ring_id,
+      project_id:    @project_id,
+      location_id:   @location_id,
+      key_ring_id:   @key_ring_id,
       crypto_key_id: test_crypto_key_id,
-      version_id: version_id
+      version_id:    version_id
     )
 
-    expect(disabled_crypto_key_version.state).to eq "DISABLED"
+    expect(disabled_crypto_key_version.state).to eq :DISABLED
 
     expect {
       $enable_crypto_key_version.call(
-        project_id: @project_id,
-        location_id: @location_id,
-        key_ring_id: @key_ring_id,
+        project_id:    @project_id,
+        location_id:   @location_id,
+        key_ring_id:   @key_ring_id,
         crypto_key_id: test_crypto_key_id,
-        version_id: version_id
+        version_id:    version_id
       )
     }.to output(/Enabled version #{version_id} of #{test_crypto_key_id}/).to_stdout
 
     crypto_key = get_test_crypto_key_version(
-      project_id: @project_id,
-      location_id: @location_id,
-      key_ring_id: @key_ring_id,
+      project_id:    @project_id,
+      location_id:   @location_id,
+      key_ring_id:   @key_ring_id,
       crypto_key_id: test_crypto_key_id,
-      version_id: version_id
+      version_id:    version_id
     )
 
-    expect(crypto_key.state).to eq "ENABLED"
+    expect(crypto_key.state).to eq :ENABLED
   end
 
   it "can disable a crypto key version" do
     test_crypto_key_id = "#{@project_id}-disable-#{Time.now.to_i}"
 
     crypto_key = create_test_crypto_key(
-      project_id: @project_id,
-      location_id: @location_id,
-      key_ring_id: @key_ring_id,
+      project_id:    @project_id,
+      location_id:   @location_id,
+      key_ring_id:   @key_ring_id,
       crypto_key_id: test_crypto_key_id
     )
 
@@ -536,75 +467,75 @@ describe "Key Management Service" do
 
     expect {
       $disable_crypto_key_version.call(
-        project_id: @project_id,
-        location_id: @location_id,
-        key_ring_id: @key_ring_id,
+        project_id:    @project_id,
+        location_id:   @location_id,
+        key_ring_id:   @key_ring_id,
         crypto_key_id: test_crypto_key_id,
-        version_id: version_id
+        version_id:    version_id
       )
     }.to output(/Disabled version #{version_id} of #{test_crypto_key_id}/).to_stdout
 
     crypto_key = get_test_crypto_key_version(
-      project_id: @project_id,
-      location_id: @location_id,
-      key_ring_id: @key_ring_id,
+      project_id:    @project_id,
+      location_id:   @location_id,
+      key_ring_id:   @key_ring_id,
       crypto_key_id: test_crypto_key_id,
-      version_id: version_id
+      version_id:    version_id
     )
 
-    expect(crypto_key.state).to eq "DISABLED"
+    expect(crypto_key.state).to eq :DISABLED
   end
 
   it "can restore a crypto key version" do
     test_crypto_key_id = "#{@project_id}-restore-#{Time.now.to_i}"
 
     crypto_key = create_test_crypto_key(
-      project_id: @project_id,
-      location_id: @location_id,
-      key_ring_id: @key_ring_id,
+      project_id:    @project_id,
+      location_id:   @location_id,
+      key_ring_id:   @key_ring_id,
       crypto_key_id: test_crypto_key_id
     )
 
     version_id = "1" # first version is labeled 1
 
     scheduled_crypto_key_version = destroy_test_crypto_key_version(
-      project_id: @project_id,
-      location_id: @location_id,
-      key_ring_id: @key_ring_id,
+      project_id:    @project_id,
+      location_id:   @location_id,
+      key_ring_id:   @key_ring_id,
       crypto_key_id: test_crypto_key_id,
-      version_id: version_id
+      version_id:    version_id
     )
 
-    expect(scheduled_crypto_key_version.state).to eq "DESTROY_SCHEDULED"
+    expect(scheduled_crypto_key_version.state).to eq :DESTROY_SCHEDULED
 
     expect {
       $restore_crypto_key_version.call(
-        project_id: @project_id,
-        location_id: @location_id,
-        key_ring_id: @key_ring_id,
+        project_id:    @project_id,
+        location_id:   @location_id,
+        key_ring_id:   @key_ring_id,
         crypto_key_id: test_crypto_key_id,
-        version_id: version_id
+        version_id:    version_id
       )
     }.to output(/Restored version #{version_id} of #{test_crypto_key_id}/).to_stdout
 
     crypto_key = get_test_crypto_key_version(
-      project_id: @project_id,
-      location_id: @location_id,
-      key_ring_id: @key_ring_id,
+      project_id:    @project_id,
+      location_id:   @location_id,
+      key_ring_id:   @key_ring_id,
       crypto_key_id: test_crypto_key_id,
-      version_id: version_id
+      version_id:    version_id
     )
 
-    expect(crypto_key.state).to eq "DISABLED"
+    expect(crypto_key.state).to eq :DISABLED
   end
 
   it "can destroy a crypto key version" do
     test_crypto_key_id = "#{@project_id}-destroy-#{Time.now.to_i}"
 
     crypto_key = create_test_crypto_key(
-      project_id: @project_id,
-      location_id: @location_id,
-      key_ring_id: @key_ring_id,
+      project_id:    @project_id,
+      location_id:   @location_id,
+      key_ring_id:   @key_ring_id,
       crypto_key_id: test_crypto_key_id
     )
 
@@ -612,41 +543,41 @@ describe "Key Management Service" do
 
     expect {
       $destroy_crypto_key_version.call(
-        project_id: @project_id,
-        location_id: @location_id,
-        key_ring_id: @key_ring_id,
+        project_id:    @project_id,
+        location_id:   @location_id,
+        key_ring_id:   @key_ring_id,
         crypto_key_id: test_crypto_key_id,
-        version_id: version_id
+        version_id:    version_id
       )
     }.to output(/Destroyed version #{version_id} of #{test_crypto_key_id}/).to_stdout
 
     crypto_key = get_test_crypto_key_version(
-      project_id: @project_id,
-      location_id: @location_id,
-      key_ring_id: @key_ring_id,
+      project_id:    @project_id,
+      location_id:   @location_id,
+      key_ring_id:   @key_ring_id,
       crypto_key_id: test_crypto_key_id,
-      version_id: version_id
+      version_id:    version_id
     )
 
-    expect(crypto_key.state).to eq "DESTROY_SCHEDULED"
+    expect(crypto_key.state).to eq :DESTROY_SCHEDULED
   end
 
   it "can add a member to a crypto key policy" do
     expect {
       $add_member_to_crypto_key_policy.call(
-        project_id: @project_id,
-        location_id: @location_id,
-        key_ring_id: @key_ring_id,
+        project_id:    @project_id,
+        location_id:   @location_id,
+        key_ring_id:   @key_ring_id,
         crypto_key_id: @crypto_key_id,
-        member: "user:test@test.com",
-        role: "roles/owner"
+        member:        "user:test@test.com",
+        role:          "roles/owner"
       )
     }.to output(/test@test.com/).to_stdout
 
     policy = get_test_crypto_key_policy(
-      project_id: @project_id,
-      location_id: @location_id,
-      key_ring_id: @key_ring_id,
+      project_id:    @project_id,
+      location_id:   @location_id,
+      key_ring_id:   @key_ring_id,
       crypto_key_id: @crypto_key_id
     )
 
@@ -659,25 +590,25 @@ describe "Key Management Service" do
     test_crypto_key_id = "#{@project_id}-remove-member-#{Time.now.to_i}"
 
     create_test_crypto_key(
-      project_id: @project_id,
-      location_id: @location_id,
-      key_ring_id: @key_ring_id,
+      project_id:    @project_id,
+      location_id:   @location_id,
+      key_ring_id:   @key_ring_id,
       crypto_key_id: test_crypto_key_id
     )
 
     add_test_member_to_crypto_key_policy(
-      project_id: @project_id,
-      location_id: @location_id,
-      key_ring_id: @key_ring_id,
+      project_id:    @project_id,
+      location_id:   @location_id,
+      key_ring_id:   @key_ring_id,
       crypto_key_id: test_crypto_key_id,
-      member: "user:test@test.com",
-      role: "roles/owner"
+      member:        "user:test@test.com",
+      role:          "roles/owner"
     )
 
     policy = get_test_crypto_key_policy(
-      project_id: @project_id,
-      location_id: @location_id,
-      key_ring_id: @key_ring_id,
+      project_id:    @project_id,
+      location_id:   @location_id,
+      key_ring_id:   @key_ring_id,
       crypto_key_id: test_crypto_key_id
     )
 
@@ -685,19 +616,19 @@ describe "Key Management Service" do
 
     expect {
       $remove_member_from_crypto_key_policy.call(
-        project_id: @project_id,
-        location_id: @location_id,
-        key_ring_id: @key_ring_id,
+        project_id:    @project_id,
+        location_id:   @location_id,
+        key_ring_id:   @key_ring_id,
         crypto_key_id: test_crypto_key_id,
-        member: "user:test@test.com",
-        role: "roles/owner"
+        member:        "user:test@test.com",
+        role:          "roles/owner"
       )
     }.to output(/test@test.com/).to_stdout
 
     policy = get_test_crypto_key_policy(
-      project_id: @project_id,
-      location_id: @location_id,
-      key_ring_id: @key_ring_id,
+      project_id:    @project_id,
+      location_id:   @location_id,
+      key_ring_id:   @key_ring_id,
       crypto_key_id: test_crypto_key_id
     )
 
@@ -710,15 +641,15 @@ describe "Key Management Service" do
 
   it "can add a member to a key ring policy" do
     remove_test_member_to_key_ring_policy(
-      project_id: @project_id,
+      project_id:  @project_id,
       location_id: @location_id,
       key_ring_id: @key_ring_id,
-      member: "serviceAccount:test-account@#{@project_id}.iam.gserviceaccount.com",
-      role: "roles/owner"
+      member:      "serviceAccount:test-account@#{@project_id}.iam.gserviceaccount.com",
+      role:        "roles/owner"
     )
 
     policy = get_test_key_ring_policy(
-      project_id: @project_id,
+      project_id:  @project_id,
       location_id: @location_id,
       key_ring_id: @key_ring_id
     )
@@ -731,16 +662,16 @@ describe "Key Management Service" do
 
     expect {
       $add_member_to_key_ring_policy.call(
-        project_id: @project_id,
+        project_id:  @project_id,
         location_id: @location_id,
         key_ring_id: @key_ring_id,
-        member: "serviceAccount:test-account@#{@project_id}.iam.gserviceaccount.com",
-        role: "roles/owner"
+        member:      "serviceAccount:test-account@#{@project_id}.iam.gserviceaccount.com",
+        role:        "roles/owner"
       )
     }.to output(/serviceAccount:test-account@#{@project_id}.iam.gserviceaccount.com/).to_stdout
 
     policy = get_test_key_ring_policy(
-      project_id: @project_id,
+      project_id:  @project_id,
       location_id: @location_id,
       key_ring_id: @key_ring_id
     )
@@ -752,20 +683,19 @@ describe "Key Management Service" do
 
   it "can get a key ring policy" do
     add_test_member_to_key_ring_policy(
-      project_id: @project_id,
+      project_id:  @project_id,
       location_id: @location_id,
       key_ring_id: @key_ring_id,
-      member: "serviceAccount:test-account@#{@project_id}.iam.gserviceaccount.com",
-      role: "roles/owner"
+      member:      "serviceAccount:test-account@#{@project_id}.iam.gserviceaccount.com",
+      role:        "roles/owner"
     )
 
     expect {
       $get_key_ring_policy.call(
-        project_id: @project_id,
+        project_id:  @project_id,
         location_id: @location_id,
         key_ring_id: @key_ring_id
       )
     }.to output(/serviceAccount:test-account@#{@project_id}.iam.gserviceaccount.com/).to_stdout
   end
 end
-

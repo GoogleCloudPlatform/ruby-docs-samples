@@ -17,7 +17,6 @@ require "rspec"
 require "google/cloud/spanner"
 
 describe "Spanner Quickstart" do
-
   it "outputs a 1" do
     if ENV["GOOGLE_CLOUD_SPANNER_TEST_INSTANCE"].nil? || ENV["GOOGLE_CLOUD_SPANNER_PROJECT"].nil?
       skip "GOOGLE_CLOUD_SPANNER_TEST_INSTANCE and/or GOOGLE_CLOUD_SPANNER_PROJECT not defined"
@@ -25,7 +24,7 @@ describe "Spanner Quickstart" do
 
     @project_id  = ENV["GOOGLE_CLOUD_SPANNER_PROJECT"]
     @instance_id = ENV["GOOGLE_CLOUD_SPANNER_TEST_INSTANCE"]
-    @seed        = SecureRandom.hex(8)
+    @seed        = SecureRandom.hex 8
     @database_id = "test_db_#{@seed}"
     @spanner     = Google::Cloud::Spanner.new project: @project_id
     @instance    = @spanner.instance @instance_id
@@ -41,13 +40,13 @@ describe "Spanner Quickstart" do
 
     @database_client = @spanner.client @instance_id, @database_id
 
-    expect(Google::Cloud::Spanner).to receive(:new).
-                                      with(project: "YOUR_PROJECT_ID").
-                                      and_return(@spanner)
+    expect(Google::Cloud::Spanner).to receive(:new)
+      .with(project: "YOUR_PROJECT_ID")
+      .and_return(@spanner)
 
-    expect(@spanner).to receive(:client).
-                       with("my-instance", "my-database").
-                       and_return(@database_client)
+    expect(@spanner).to receive(:client)
+      .with("my-instance", "my-database")
+      .and_return(@database_client)
 
     expect {
       load File.expand_path("../quickstart.rb", __dir__)
@@ -55,5 +54,4 @@ describe "Spanner Quickstart" do
 
     @instance.database(@database_id).drop
   end
-
 end

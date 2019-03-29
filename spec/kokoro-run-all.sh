@@ -38,6 +38,9 @@ done
 SCRIPT_DIRECTORY="$(dirname "$(realpath "$0")")"
 REPO_DIRECTORY="$(dirname "$SCRIPT_DIRECTORY")"
 
+# Set application credentials before using gimmeproj so it has access.
+export GOOGLE_APPLICATION_CREDENTIALS=$KOKORO_KEYSTORE_DIR/71386_kokoro-cloud-samples-ruby-test-0
+
 # Get a project from the project pool.
 # See https://github.com/GoogleCloudPlatform/golang-samples/tree/master/testing/gimmeproj.
 curl https://storage.googleapis.com/gimme-proj/linux_amd64/gimmeproj > /bin/gimmeproj
@@ -50,6 +53,10 @@ if [ -z "$GOOGLE_CLOUD_PROJECT" ]; then
 fi
 echo "Running tests in project $GOOGLE_CLOUD_PROJECT";
 trap "gimmeproj -project cloud-samples-ruby-test-kokoro done $GOOGLE_CLOUD_PROJECT" EXIT
+
+# Set application credentials to the project-specific account. Some APIs do not
+# allow the service account project and GOOGLE_CLOUD_PROJECT to be different.
+export GOOGLE_APPLICATION_CREDENTIALS=$KOKORO_KEYSTORE_DIR/71386_kokoro-$GOOGLE_CLOUD_PROJECT
 
 export FIRESTORE_PROJECT_ID=ruby-firestore
 export E2E_GOOGLE_CLOUD_PROJECT=cloud-samples-ruby-test-kokoro
@@ -122,7 +129,7 @@ if [[ $E2E = "true" ]]; then
   # Start Cloud SQL Proxy.
   /cloud_sql_proxy -dir=/cloudsql -credential_file=$GOOGLE_APPLICATION_CREDENTIALS &
   export CLOUD_SQL_PROXY_PROCESS_ID=$!
-  trap "kill $CLOUD_SQL_PROXY_PROCESS_ID" EXIT
+  trap "kill $CLOUD_SQL_PROXY_PROCESS_ID || true" EXIT
 fi
 
 # Capture failures
@@ -130,6 +137,8 @@ EXIT_STATUS=0 # everything passed
 function set_failed_status {
   EXIT_STATUS=1
 }
+
+(bundle update && bundle exec rubocop) || set_failed_status
 
 if [[ $RUN_ALL_TESTS = "1" ]]; then
   echo "Running all tests"
@@ -140,7 +149,7 @@ if [[ $RUN_ALL_TESTS = "1" ]]; then
     export TEST_DIR="$PRODUCT"
     pushd "$REPO_DIRECTORY/$PRODUCT/"
 
-    (bundle install && bundle exec rspec --format documentation) || set_failed_status
+    (bundle update && bundle exec rspec --format documentation) || set_failed_status
 
     if [[ $E2E = "true" ]]; then
       # Clean up deployed version
@@ -158,7 +167,7 @@ else
     export TEST_DIR="$PRODUCT"
     pushd "$REPO_DIRECTORY/$PRODUCT/"
 
-    (bundle install && bundle exec rspec --format documentation) || set_failed_status
+    (bundle update && bundle exec rspec --format documentation) || set_failed_status
 
     if [[ $E2E = "true" ]]; then
       # Clean up deployed version

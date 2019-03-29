@@ -15,11 +15,11 @@
 # [START gae_flex_mailgun_dependencies]
 source "https://rubygems.org"
 
-gem "sinatra"
 gem "mailgun-ruby"
+gem "sinatra"
 # [END gae_flex_mailgun_dependencies]
 
 group :test do
-  gem "rspec"
   gem "capybara"
+  gem "rspec"
 end

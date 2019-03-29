@@ -15,9 +15,25 @@
 require_relative "../app"
 require "rspec"
 require "rack/test"
+require "google/cloud/tasks"
 
 describe "CloudTasks", type: :feature do
   include Rack::Test::Methods
+
+  before :all do
+    GOOGLE_CLOUD_PROJECT = ENV["GOOGLE_CLOUD_PROJECT"]
+    LOCATION_ID          = "us-east1".freeze
+    QUEUE_ID             = "my-appengine-queue".freeze
+
+    client = Google::Cloud::Tasks.new
+    queue_path = "projects/#{GOOGLE_CLOUD_PROJECT}/locations/#{LOCATION_ID}/queues/#{QUEUE_ID}"
+
+    begin
+      client.get_queue queue_path
+    rescue StandardError
+      LOCATION_ID = "us-east4".freeze
+    end
+  end
 
   def app
     Sinatra::Application
@@ -34,17 +50,13 @@ describe "CloudTasks", type: :feature do
   end
 
   it "can create a task" do
-    current_directory = File.expand_path(File.dirname(__FILE__))
+    current_directory = __dir__
     snippet_filepath  = File.join current_directory, "..", "create_task.rb"
+    payload = "Hello"
 
-    GOOGLE_CLOUD_PROJECT = ENV["GOOGLE_CLOUD_PROJECT"]
-    LOCATION_ID          = "us-east4"
-    QUEUE_ID             = "my-appengine-queue"
-    payload              = "Hello"
-
-    output = `ruby #{snippet_filepath} #{GOOGLE_CLOUD_PROJECT} #{LOCATION_ID} #{QUEUE_ID} #{payload}`
+    output = `ruby #{snippet_filepath} #{GOOGLE_CLOUD_PROJECT} #{LOCATION_ID} \
+              #{QUEUE_ID} #{payload}`
 
     expect(output).to include "Created task"
-
   end
 end

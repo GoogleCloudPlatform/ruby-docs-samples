@@ -149,3 +149,12 @@ set in the
 
     Example:
       ruby draw_box_around_faces.rb images/face_no_surprise.png output-image.png
+
+### Object Localization Tutorial
+
+    Usage: ruby localize_objects.rb [image file path]
+
+    Example:
+      ruby localize_objects.rb image.png
+      ruby localize_objects.rb https://public-url/image.png
+      ruby localize_objects.rb gs://my-bucket/image.png

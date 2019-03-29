@@ -18,11 +18,9 @@ require "google/cloud/storage"
 require_relative "../detect_text"
 
 describe "Detect Text" do
-
   before do
     @storage    = Google::Cloud::Storage.new
     @bucket     = @storage.bucket ENV["GOOGLE_CLOUD_STORAGE_BUCKET"]
-    @project_id = ENV["GOOGLE_CLOUD_PROJECT"]
   end
 
   # Returns full path to sample image included in repository for testing
@@ -32,10 +30,9 @@ describe "Detect Text" do
 
   example "detect text from local image file" do
     expect {
-      detect_text project_id: @project_id,
-                  image_path: image_path("otter_crossing.jpg")
+      detect_text image_path: image_path("otter_crossing.jpg")
     }.to output(
-      "CAUTION\nOtters crossing\nfor next 6 miles\n"
+      /CAUTION\nOtters crossing\nfor next 6 miles\n/
     ).to_stdout
   end
 
@@ -44,10 +41,9 @@ describe "Detect Text" do
                                        "otter_crossing.jpg"
 
     expect {
-      detect_text_gcs project_id: @project_id,
-                      image_path: storage_file.to_gs_url
+      detect_text_gcs image_path: storage_file.to_gs_url
     }.to output(
-      "CAUTION\nOtters crossing\nfor next 6 miles\n"
+      /CAUTION\nOtters crossing\nfor next 6 miles\n/
     ).to_stdout
   end
 end

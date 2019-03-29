@@ -28,7 +28,6 @@ RSpec.configure do |config|
 end
 
 describe "Pub/Sub subscriptions sample" do
-
   before do
     @pubsub                 = Google::Cloud::Pubsub.new
     @project_id             = ENV["GOOGLE_CLOUD_PROJECT"]
@@ -47,11 +46,11 @@ describe "Pub/Sub subscriptions sample" do
 
   def cleanup!
     topic = @pubsub.topic @topic_name
-    topic.delete if topic
+    topic&.delete
     pull_subscription = @pubsub.subscription @pull_subscription_name
-    pull_subscription.delete if pull_subscription
+    pull_subscription&.delete
     push_subscription = @pubsub.subscription @push_subscription_name
-    push_subscription.delete if push_subscription
+    push_subscription&.delete
   end
 
   # Pub/Sub calls may not respond immediately.
@@ -67,7 +66,7 @@ describe "Pub/Sub subscriptions sample" do
 
   it "lists subscriptions" do
     topic = @pubsub.create_topic @topic_name
-    subscription = topic.subscribe @pull_subscription_name
+    topic.subscribe @pull_subscription_name
 
     expect {
       list_subscriptions project_id: @project_id
@@ -76,31 +75,31 @@ describe "Pub/Sub subscriptions sample" do
 
   it "updates push configuration" do
     topic = @pubsub.create_topic @topic_name
-    subscription = topic.subscribe @push_subscription_name,
-      endpoint: "https://#{@pubsub.project}.appspot.com/push"
+    topic.subscribe @push_subscription_name,
+                    endpoint: "https://#{@pubsub.project}.appspot.com/push"
 
     expect(@pubsub.subscription(@push_subscription_name)).not_to be nil
 
     expect {
-      update_push_configuration project_id: @project_id, 
+      update_push_configuration project_id:        @project_id,
                                 subscription_name: @push_subscription_name,
-                                new_endpoint: "https://#{@pubsub.project}.appspot.com/push_2"
+                                new_endpoint:      "https://#{@pubsub.project}.appspot.com/push_2"
     }.to output(/Push endpoint updated/).to_stdout
   end
 
   it "gets subscription policy" do
     topic = @pubsub.create_topic @topic_name
-    subscription = topic.subscribe @pull_subscription_name
+    topic.subscribe @pull_subscription_name
 
     expect {
-      get_subscription_policy project_id: @project_id, 
+      get_subscription_policy project_id:        @project_id,
                               subscription_name: @pull_subscription_name
     }.to output(/Subscription policy/).to_stdout
   end
 
   it "sets subscription policy" do
     topic = @pubsub.create_topic @topic_name
-    subscription = topic.subscribe @pull_subscription_name
+    topic.subscribe @pull_subscription_name
 
     expect_any_instance_of(Google::Cloud::Pubsub::Policy).to \
       receive(:add).with(
@@ -111,10 +110,10 @@ describe "Pub/Sub subscriptions sample" do
       end
 
     expect {
-      set_subscription_policy project_id: @project_id,
+      set_subscription_policy project_id:        @project_id,
                               subscription_name: @pull_subscription_name
-      }.not_to raise_error
-    
+    }.not_to raise_error
+
 
     expect(@pubsub.subscription(@pull_subscription_name).policy.roles).to \
       include("roles/pubsub.subscriber" => [@service_account])
@@ -122,17 +121,17 @@ describe "Pub/Sub subscriptions sample" do
 
   it "tests subscription permission" do
     topic = @pubsub.create_topic @topic_name
-    subscription = topic.subscribe @pull_subscription_name
+    topic.subscribe @pull_subscription_name
 
     expect {
-      test_subscription_permissions project_id: @project_id, 
+      test_subscription_permissions project_id:        @project_id,
                                     subscription_name: @pull_subscription_name
     }.to output(/Permission to consume\nPermission to update/).to_stdout
   end
 
   it "pulls message" do
     topic = @pubsub.create_topic @topic_name
-    subscription = topic.subscribe @pull_subscription_name
+    topic.subscribe @pull_subscription_name
 
     topic.publish "This is a test message."
 
@@ -140,7 +139,7 @@ describe "Pub/Sub subscriptions sample" do
 
     expect_with_retry do
       expect {
-        pull_messages project_id: @project_id, 
+        pull_messages project_id:        @project_id,
                       subscription_name: @pull_subscription_name
       }.to output(/Message pulled: This is a test message/).to_stdout
     end
@@ -148,59 +147,59 @@ describe "Pub/Sub subscriptions sample" do
 
   it "listens for messages" do
     topic = @pubsub.create_topic @topic_name
-    subscription = topic.subscribe @pull_subscription_name
+    topic.subscribe @pull_subscription_name
 
     topic.publish "This is a test message."
 
     expect {
-      listen_for_messages project_id: @project_id, 
+      listen_for_messages project_id:        @project_id,
                           subscription_name: @pull_subscription_name
     }.to output(/Received message: This is a test message/).to_stdout
   end
 
   it "listens for messages with custom attributes" do
     topic = @pubsub.create_topic @topic_name
-    subscription = topic.subscribe @pull_subscription_name
+    topic.subscribe @pull_subscription_name
 
     topic.publish "This is a test message.",
                   origin: "ruby-sample"
 
     expect {
-      listen_for_messages_with_custom_attributes project_id: @project_id,
+      listen_for_messages_with_custom_attributes project_id:        @project_id,
                                                  subscription_name: @pull_subscription_name
     }.to output(/origin: ruby-sample/).to_stdout
   end
 
   it "listens for messages with flow control" do
     topic = @pubsub.create_topic @topic_name
-    subscription = topic.subscribe @pull_subscription_name
+    topic.subscribe @pull_subscription_name
 
     topic.publish "This is a test message."
 
     expect {
-      listen_for_messages_with_flow_control project_id: @project_id, 
+      listen_for_messages_with_flow_control project_id:        @project_id,
                                             subscription_name: @pull_subscription_name
     }.to output(/Received message: This is a test message/).to_stdout
   end
 
   it "listens for messages with concurrency control" do
     topic = @pubsub.create_topic @topic_name
-    subscription = topic.subscribe @pull_subscription_name
+    topic.subscribe @pull_subscription_name
 
     topic.publish "This is a test message."
 
     expect {
-      listen_for_messages_with_concurrency_control project_id: @project_id,
+      listen_for_messages_with_concurrency_control project_id:        @project_id,
                                                    subscription_name: @pull_subscription_name
     }.to output(/Received message: This is a test message/).to_stdout
   end
 
   it "deletes subscription" do
     topic = @pubsub.create_topic @topic_name
-    subscription = topic.subscribe @pull_subscription_name
+    topic.subscribe @pull_subscription_name
 
     expect {
-      delete_subscription project_id: @project_id, 
+      delete_subscription project_id:        @project_id,
                           subscription_name: @pull_subscription_name
     }.to output(/Subscription #{@pull_subscription_name} deleted/).to_stdout
   end

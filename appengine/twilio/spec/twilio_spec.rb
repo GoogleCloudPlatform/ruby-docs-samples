@@ -27,8 +27,8 @@ describe "Twilio", type: :feature do
   it "can send SMS" do
     # Server will raise Twilio::REST::RequestError because Twilio account
     # information is fake
-      get "/sms/send", to: "+15551112222"
-      expect(last_response.status).to eq 500
+    get "/sms/send", to: "+15551112222"
+    expect(last_response.status).to eq 500
   end
 
   it "can receive SMS" do

@@ -3,3 +3,4 @@ client_secrets.json
 .bundle/
 vendor/
 .vscode/
+/Gemfile.lock

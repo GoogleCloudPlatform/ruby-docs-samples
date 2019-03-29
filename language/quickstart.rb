@@ -35,4 +35,3 @@ sentiment = response.document_sentiment
 puts "Text: #{text}"
 puts "Score: #{sentiment.score}, #{sentiment.magnitude}"
 # [END language_quickstart]
-

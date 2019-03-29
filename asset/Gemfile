@@ -13,13 +13,13 @@
 # limitations under the License.
 
 # [START asset_dependencies]
-source 'https://rubygems.org'
+source "https://rubygems.org"
 
-gem 'google-cloud-asset'
+gem "google-cloud-asset"
 # [END asset_dependencies]
 
 group :test do
-  gem 'google-cloud-storage'
-  gem 'rspec'
-  gem 'rspec-retry'
+  gem "google-cloud-storage"
+  gem "rspec"
+  gem "rspec-retry"
 end

@@ -13,17 +13,17 @@
 
 source "https://rubygems.org"
 
-gem "rails", "~> 5.0"
-gem "sass-rails"
-gem "uglifier"
 gem "coffee-rails"
 gem "jquery-rails"
+gem "rails", "~> 5.0"
+gem "sass-rails"
 gem "slim-rails"
+gem "uglifier"
 
 group :test do
-  gem "rspec-rails"
   gem "capybara"
   gem "poltergeist"
   gem "puma"
+  gem "rspec-rails"
   gem "therubyracer"
 end
