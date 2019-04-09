@@ -42,24 +42,24 @@ def detect_intent_texts project_id:, session_id:, texts:, language_code:
 end
 
 
-if __FILE__ == $PROGRAM_NAME
+if $PROGRAM_NAME == __FILE__
   project_id = ENV["GOOGLE_CLOUD_PROJECT"]
   texts = ARGV
 
   if texts.any?
-    detect_intent_texts project_id: project_id,
-                        session_id: SecureRandom.uuid,
-                        texts: texts,
-                        language_code:"en-US"
+    detect_intent_texts project_id:    project_id,
+                        session_id:    SecureRandom.uuid,
+                        texts:         texts,
+                        language_code: "en-US"
   else
-    puts <<-usage
-Usage: ruby detect_intent_texts.rb [texts]
+    puts <<~USAGE
+      Usage: ruby detect_intent_texts.rb [texts]
 
-Example:
-  ruby detect_intent_texts.rb "hello" "book a meeting room" "Mountain View"
+      Example:
+        ruby detect_intent_texts.rb "hello" "book a meeting room" "Mountain View"
 
-Environment variables:
-  GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
-    usage
+      Environment variables:
+        GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
+    USAGE
   end
 end

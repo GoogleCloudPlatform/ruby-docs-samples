@@ -12,17 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe CatsController, type: :controller do
-
-  let(:valid_attributes) {
+  let :valid_attributes do
     { name: "Ms. Tiger", age: 3 }
-  }
+  end
 
-  let(:invalid_attributes) {
+  let :invalid_attributes do
     { name: nil, age: nil }
-  }
+  end
 
   let(:valid_session) { {} }
 
@@ -37,7 +36,7 @@ RSpec.describe CatsController, type: :controller do
   describe "GET #show" do
     it "assigns the requested cat as @cat" do
       cat = Cat.create! valid_attributes
-      get :show, params: {id: cat.to_param}, session: valid_session
+      get :show, params: { id: cat.to_param }, session: valid_session
       expect(assigns(:cat)).to eq(cat)
     end
   end
@@ -52,7 +51,7 @@ RSpec.describe CatsController, type: :controller do
   describe "GET #edit" do
     it "assigns the requested cat as @cat" do
       cat = Cat.create! valid_attributes
-      get :edit, params: {id: cat.to_param}, session: valid_session
+      get :edit, params: { id: cat.to_param }, session: valid_session
       expect(assigns(:cat)).to eq(cat)
     end
   end
@@ -61,30 +60,30 @@ RSpec.describe CatsController, type: :controller do
     context "with valid params" do
       it "creates a new Cat" do
         expect {
-          post :create, params: {cat: valid_attributes}, session: valid_session
+          post :create, params: { cat: valid_attributes }, session: valid_session
         }.to change(Cat, :count).by(1)
       end
 
       it "assigns a newly created cat as @cat" do
-        post :create, params: {cat: valid_attributes}, session: valid_session
+        post :create, params: { cat: valid_attributes }, session: valid_session
         expect(assigns(:cat)).to be_a(Cat)
         expect(assigns(:cat)).to be_persisted
       end
 
       it "redirects to the created cat" do
-        post :create, params: {cat: valid_attributes}, session: valid_session
+        post :create, params: { cat: valid_attributes }, session: valid_session
         expect(response).to redirect_to(Cat.last)
       end
     end
 
     context "with invalid params" do
       it "assigns a newly created but unsaved cat as @cat" do
-        post :create, params: {cat: invalid_attributes}, session: valid_session
+        post :create, params: { cat: invalid_attributes }, session: valid_session
         expect(assigns(:cat)).to be_a_new(Cat)
       end
 
       it "re-renders the 'new' template" do
-        post :create, params: {cat: invalid_attributes}, session: valid_session
+        post :create, params: { cat: invalid_attributes }, session: valid_session
         expect(response).to render_template("new")
       end
     end
@@ -92,13 +91,13 @@ RSpec.describe CatsController, type: :controller do
 
   describe "PUT #update" do
     context "with valid params" do
-      let(:new_attributes) {
+      let :new_attributes do
         { name: "Mr. Whiskers", age: 4 }
-      }
+      end
 
       it "updates the requested cat" do
         cat = Cat.create! valid_attributes
-        put :update, params: {id: cat.to_param, cat: new_attributes}, session: valid_session
+        put :update, params: { id: cat.to_param, cat: new_attributes }, session: valid_session
         cat.reload
         expect(cat.name).to eq("Mr. Whiskers")
         expect(cat.age).to eq(4)
@@ -106,13 +105,13 @@ RSpec.describe CatsController, type: :controller do
 
       it "assigns the requested cat as @cat" do
         cat = Cat.create! valid_attributes
-        put :update, params: {id: cat.to_param, cat: valid_attributes}, session: valid_session
+        put :update, params: { id: cat.to_param, cat: valid_attributes }, session: valid_session
         expect(assigns(:cat)).to eq(cat)
       end
 
       it "redirects to the cat" do
         cat = Cat.create! valid_attributes
-        put :update, params: {id: cat.to_param, cat: valid_attributes}, session: valid_session
+        put :update, params: { id: cat.to_param, cat: valid_attributes }, session: valid_session
         expect(response).to redirect_to(cat)
       end
     end
@@ -120,13 +119,13 @@ RSpec.describe CatsController, type: :controller do
     context "with invalid params" do
       it "assigns the cat as @cat" do
         cat = Cat.create! valid_attributes
-        put :update, params: {id: cat.to_param, cat: invalid_attributes}, session: valid_session
+        put :update, params: { id: cat.to_param, cat: invalid_attributes }, session: valid_session
         expect(assigns(:cat)).to eq(cat)
       end
 
       it "re-renders the 'edit' template" do
         cat = Cat.create! valid_attributes
-        put :update, params: {id: cat.to_param, cat: invalid_attributes}, session: valid_session
+        put :update, params: { id: cat.to_param, cat: invalid_attributes }, session: valid_session
         expect(response).to render_template("edit")
       end
     end
@@ -136,15 +135,14 @@ RSpec.describe CatsController, type: :controller do
     it "destroys the requested cat" do
       cat = Cat.create! valid_attributes
       expect {
-        delete :destroy, params: {id: cat.to_param}, session: valid_session
+        delete :destroy, params: { id: cat.to_param }, session: valid_session
       }.to change(Cat, :count).by(-1)
     end
 
     it "redirects to the cats list" do
       cat = Cat.create! valid_attributes
-      delete :destroy, params: {id: cat.to_param}, session: valid_session
+      delete :destroy, params: { id: cat.to_param }, session: valid_session
       expect(response).to redirect_to(cats_url)
     end
   end
-
 end

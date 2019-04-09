@@ -21,18 +21,18 @@ require 'cgi'
 describe "CloudTasks", type: :feature do
   include Rack::Test::Methods
 
-  before(:all) do
+  before :all do
     GOOGLE_CLOUD_PROJECT = ENV["GOOGLE_CLOUD_PROJECT"]
-    LOCATION_ID          = "us-east1"
-    QUEUE_ID             = "my-appengine-queue"
+    LOCATION_ID          = "us-east1".freeze
+    QUEUE_ID             = "my-appengine-queue".freeze
 
     client = Google::Cloud::Tasks.new
     parent = client.queue_path GOOGLE_CLOUD_PROJECT, LOCATION_ID, QUEUE_ID
 
     begin
-      client.get_queue(queue_path)
-    rescue
-      LOCATION_ID = "us-east4"
+      client.get_queue queue_path
+    rescue StandardError
+      LOCATION_ID = "us-east4".freeze
     end
   end
 
@@ -51,7 +51,7 @@ describe "CloudTasks", type: :feature do
   end
 
   it "can create a task" do
-    current_directory = File.expand_path(File.dirname(__FILE__))
+    current_directory = __dir__
     snippet_filepath  = File.join current_directory, "..", "create_task.rb"
     payload = "Hello"
 

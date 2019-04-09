@@ -17,13 +17,12 @@ require "spec_helper"
 
 
 describe "Load table" do
-
   before do
     @dataset = create_temp_dataset
   end
 
   example "Load a new table from a local CSV file" do
-    file_path = File.expand_path("../resources/people.csv", __dir__)
+    file_path = File.expand_path "../resources/people.csv", __dir__
 
     output = capture { load_from_file @dataset.dataset_id, file_path }
 
@@ -31,5 +30,4 @@ describe "Load table" do
     expect(output).to include(table.table_id)
     expect(output).to include("2 rows")
   end
-
 end

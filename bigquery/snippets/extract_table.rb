@@ -14,11 +14,10 @@
 # [START bigquery_extract_table]
 require "google/cloud/bigquery"
 
-def extract_table(
-    bucket_name = "my-bucket",
-    dataset_id  = "my_dataset_id",
-    table_id    = "my_table_id"
-  )
+def extract_table(bucket_name = "my-bucket",
+                  dataset_id  = "my_dataset_id",
+                  table_id    = "my_table_id")
+
   bigquery = Google::Cloud::Bigquery.new
   dataset  = bigquery.dataset dataset_id
   table    = dataset.table    table_id
@@ -27,11 +26,11 @@ def extract_table(
   # your exported data will be larger than the 1 GB maximum value.
   destination_uri = "gs://#{bucket_name}/output-*.csv"
 
-  extract_job = table.extract_job(destination_uri) do |config|
+  extract_job = table.extract_job destination_uri do |config|
     # Location must match that of the source table.
     config.location = "US"
   end
-  extract_job.wait_until_done!  # Waits for the job to complete
+  extract_job.wait_until_done! # Waits for the job to complete
 
   puts "Exported #{table.id} to #{destination_uri}"
 end

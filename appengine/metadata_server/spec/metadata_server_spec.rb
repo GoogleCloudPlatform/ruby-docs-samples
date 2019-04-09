@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require File.expand_path("../../../../spec/e2e", __FILE__)
+require File.expand_path("../../../spec/e2e", __dir__)
 require "rspec"
 require "capybara/rspec"
 require "capybara/poltergeist"

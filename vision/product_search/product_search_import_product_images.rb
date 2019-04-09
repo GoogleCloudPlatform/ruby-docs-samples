@@ -15,10 +15,9 @@
 # [START vision_product_search_import_product_images]
 require "google/cloud/vision"
 
-def product_search_import_product_sets(
-  project_id = "your-project-id",
-  location   = "us-west1"
-)
+def product_search_import_product_sets(project_id = "your-project-id",
+                                       location = "us-west1")
+
   client = Google::Cloud::Vision::ProductSearch.new
 
   # A resource that represents Google Cloud Platform location.
@@ -32,9 +31,9 @@ def product_search_import_product_sets(
   }
 
   # Import the product sets from the input URI.
-  operation = client.import_product_sets(location_path, input_config)
+  operation = client.import_product_sets location_path, input_config
   puts "Processing operation name: #{operation.name}"
-  operation.wait_until_done!  # Waits for the operation to complete
+  operation.wait_until_done! # Waits for the operation to complete
 
   puts "Processing done."
 
@@ -44,7 +43,7 @@ def product_search_import_product_sets(
 
     # Check the status of reference image
     # `0` is the code for OK in google.rpc.Code.
-    if status.code == 0
+    if status.code.zero?
       reference_image = result.reference_images[index]
       puts reference_image.uri
     else
@@ -54,4 +53,4 @@ def product_search_import_product_sets(
 end
 # [END vision_product_search_import_product_images]
 
-product_search_import_product_sets *ARGV if $PROGRAM_NAME == __FILE__
+product_search_import_product_sets(*ARGV) if $PROGRAM_NAME == __FILE__

@@ -16,7 +16,6 @@ require_relative "../delete_dataset"
 require "spec_helper"
 
 describe "Delete dataset" do
-
   example "deletes a dataset" do
     bigquery = Google::Cloud::Bigquery.new
     dataset = bigquery.create_dataset "test_empty_dataset_#{Time.now.to_i}"
@@ -25,5 +24,4 @@ describe "Delete dataset" do
 
     expect(bigquery.dataset(dataset.dataset_id, skip_lookup: true).exists?).to be(false)
   end
-
 end

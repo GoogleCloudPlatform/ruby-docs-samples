@@ -32,7 +32,7 @@ def delete_field project_id:
   firestore = Google::Cloud::Firestore.new project_id: project_id
   # [START fs_delete_field]
   city_ref = firestore.doc "cities/BJ"
-  city_ref.update({ capital: firestore.field_delete })
+  city_ref.update capital: firestore.field_delete
   # [END fs_delete_field]
   puts "Deleted the capital field from the BJ document in the cities collection."
 end
@@ -54,7 +54,7 @@ def delete_collection project_id:
   puts "Finished deleting all documents from the collection."
 end
 
-if __FILE__ == $PROGRAM_NAME
+if $PROGRAM_NAME == __FILE__
   project = ENV["FIRESTORE_PROJECT_ID"]
   case ARGV.shift
   when "delete_doc"
@@ -64,13 +64,13 @@ if __FILE__ == $PROGRAM_NAME
   when "delete_collection"
     delete_collection project_id: project
   else
-    puts <<-usage
-Usage: bundle exec ruby delete_data.rb [command]
+    puts <<~USAGE
+      Usage: bundle exec ruby delete_data.rb [command]
 
-Commands:
-  delete_doc         Delete a document.
-  delete_field       Delete a field.
-  delete_collection  Delete an entire collection.
-    usage
+      Commands:
+        delete_doc         Delete a document.
+        delete_field       Delete a field.
+        delete_collection  Delete an entire collection.
+    USAGE
   end
 end

@@ -19,7 +19,6 @@ require "net/http"
 require "uri"
 
 describe "Google Cloud Video API sample" do
-
   before do
     @labels_file        = "cloud-samples-data/video/cat.mp4"
     @shots_file         = "cloud-samples-data/video/gbikes_dinosaur.mp4"
@@ -28,11 +27,11 @@ describe "Google Cloud Video API sample" do
   end
 
   it "can analyze labels from a gcs file" do
-   expect {
-     analyze_labels_gcs path: "gs://#{@labels_file}"
-   }.to output(
-     /Label description: animal/
-   ).to_stdout
+    expect {
+      analyze_labels_gcs path: "gs://#{@labels_file}"
+    }.to output(
+      /Label description: animal/
+    ).to_stdout
   end
 
   it "can analyze labels from a local file" do
@@ -135,4 +134,3 @@ describe "Google Cloud Video API sample" do
     end
   end
 end
-

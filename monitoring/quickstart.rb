@@ -18,7 +18,7 @@ def quickstart
   series.resource = resource
 
   point = Google::Monitoring::V3::Point.new
-  point.value = Google::Monitoring::V3::TypedValue.new(double_value: 3.14)
+  point.value = Google::Monitoring::V3::TypedValue.new double_value: 3.14
   now = Time.now
   end_time = Google::Protobuf::Timestamp.new seconds: now.to_i, nanos: now.usec
   point.interval = Google::Monitoring::V3::TimeInterval.new end_time: end_time

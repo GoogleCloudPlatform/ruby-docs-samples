@@ -15,10 +15,9 @@
 # [START vision_product_search_list_products]
 require "google/cloud/vision"
 
-def product_search_list_products(
-  project_id = "your-project-id",
-  location   = "us-west1"
-)
+def product_search_list_products(project_id = "your-project-id",
+                                 location = "us-west1")
+
   client = Google::Cloud::Vision::ProductSearch.new
 
   location_path = client.location_path project_id, location
@@ -30,4 +29,4 @@ def product_search_list_products(
 end
 # [END vision_product_search_list_products]
 
-product_search_list_products *ARGV if $PROGRAM_NAME == __FILE__
+product_search_list_products(*ARGV) if $PROGRAM_NAME == __FILE__

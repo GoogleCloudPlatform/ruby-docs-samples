@@ -28,4 +28,4 @@ require "google/cloud/trace"
 use Google::Cloud::Trace::Middleware
 # [END trace_middleware]
 
-run -> (env) { ["200", {"Content-Type" => "text/html"}, ["Hello world!"]] }
+run ->(_env) { ["200", { "Content-Type" => "text/html" }, ["Hello world!"]] }

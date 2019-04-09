@@ -30,10 +30,9 @@ RSpec.configure do |config|
 end
 
 describe "Logging sample" do
-
-  def wait_until &condition
-    1.upto(5) do |n|
-      return if condition.call
+  def wait_until
+    1.upto 5 do |n|
+      return if yield
       sleep 2**n
     end
     raise "Attempted to wait but Condition not met."
@@ -47,7 +46,7 @@ describe "Logging sample" do
   # Returns entries logged to "my_application_log" in the test project
   def my_application_log_entries
     @logging.entries(
-      filter: %Q{logName="#{my_application_log_name}"}
+      filter: %(logName="#{my_application_log_name}")
     )
   end
 
@@ -72,23 +71,23 @@ describe "Logging sample" do
   # Stub calls to Google::Cloud library to use our test project and storage buckets
   before :each do
     cleanup!
-    allow(Google::Cloud::Logging).to receive(:new).
-                                     with(project: "my-gcp-project-id").
-                                     and_return(@logging)
-    allow(Google::Cloud::Storage).to receive(:new).
-                                     with(project: "my-gcp-project-id").
-                                     and_return(@storage)
+    allow(Google::Cloud::Logging).to receive(:new)
+      .with(project: "my-gcp-project-id")
+      .and_return(@logging)
+    allow(Google::Cloud::Storage).to receive(:new)
+      .with(project: "my-gcp-project-id")
+      .and_return(@storage)
     allow(@storage).to receive(:create_bucket).and_return(@bucket)
-    allow(@storage).to receive(:bucket).with("my-logs-bucket").
-                       and_return(@bucket)
-    allow(@storage).to receive(:bucket).with("new-destination-bucket").
-                       and_return(@alt_bucket)
+    allow(@storage).to receive(:bucket).with("my-logs-bucket")
+                                       .and_return(@bucket)
+    allow(@storage).to receive(:bucket).with("new-destination-bucket")
+                                       .and_return(@alt_bucket)
   end
 
   # Delete log sink used by code samples if the test created one
   def cleanup!
     test_sink = @logging.sink "my-sink"
-    test_sink.delete if test_sink
+    test_sink&.delete
   end
 
   it "can create logging client" do
@@ -105,11 +104,11 @@ describe "Logging sample" do
   end
 
   it "can create log sink" do
-    expect(@logging.sink "my-sink").to be nil
+    expect(@logging.sink("my-sink")).to be nil
 
     create_log_sink
 
-    expect(@logging.sink "my-sink").not_to be nil
+    expect(@logging.sink("my-sink")).not_to be nil
   end
 
   it "can update log sink" do
@@ -141,15 +140,15 @@ describe "Logging sample" do
     # The code sample queries for entries for "gae_app" resources.
     # The test project may not have App Engine resources.
     # Instead, add a project log entry and change the filter string called.
-    allow(@logging).to receive(:entries).
-      with(filter: %Q{resource.type = "gae_app"}).
-      and_wrap_original do |m, *args|
+    allow(@logging).to receive(:entries)
+      .with(filter: %(resource.type = "gae_app"))
+      .and_wrap_original do |m, *_args|
         entries = []
 
-        wait_until {
-          entries = m.call filter: %Q{logName="#{my_application_log_name}"}
+        wait_until do
+          entries = m.call filter: %(logName="#{my_application_log_name}")
           entries.any?
-        }
+        end
 
         entries
       end
@@ -157,7 +156,7 @@ describe "Logging sample" do
     timestamp = "\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2} [^\\\\]+"
 
     expect { list_log_entries }.to output(
-      %r{\[#{timestamp}\] #{my_application_log_name} \"Log message}
+      /\[#{timestamp}\] #{my_application_log_name} \"Log message/
     ).to_stdout
   end
 
@@ -221,7 +220,7 @@ describe "Logging sample" do
     current_time = Time.now.to_f
 
     entries = @logging.entries(
-      filter: %Q{logName="#{my_application_log_name}"}
+      filter: %(logName="#{my_application_log_name}")
     )
     entry = entries.detect { |e| e.payload.include? "time #{current_time}" }
     expect(entry).to be nil

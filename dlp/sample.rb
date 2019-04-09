@@ -23,16 +23,16 @@ def inspect_string project_id: nil, content: nil, max_findings: 0
   dlp = Google::Cloud::Dlp.new
   inspect_config = {
     # The types of information to match
-    info_types: [{name: "PERSON_NAME"}, {name: "US_STATE"}],
+    info_types:     [{ name: "PERSON_NAME" }, { name: "US_STATE" }],
 
     # Only return results above a likelihood threshold (0 for all)
     min_likelihood: :POSSIBLE,
 
     # Limit the number of findings (0 for no limit)
-    limits: { max_findings_per_request: max_findings },
+    limits:         { max_findings_per_request: max_findings },
 
     # Whether to include the matching string in the response
-    include_quote: true
+    include_quote:  true
   }
 
   # The item to inspect
@@ -41,8 +41,8 @@ def inspect_string project_id: nil, content: nil, max_findings: 0
   # Run request
   parent = "projects/#{project_id}"
   response = dlp.inspect_content parent,
-    inspect_config: inspect_config,
-    item:           item_to_inspect
+                                 inspect_config: inspect_config,
+                                 item:           item_to_inspect
 
   # Print the results
   if response.result.findings.empty?
@@ -68,16 +68,16 @@ def inspect_file project_id: nil, filename: nil, max_findings: 0
   dlp = Google::Cloud::Dlp.new
   inspect_config = {
     # The types of information to match
-    info_types: [{name: "PERSON_NAME"}, {name: "PHONE_NUMBER"}],
+    info_types:     [{ name: "PERSON_NAME" }, { name: "PHONE_NUMBER" }],
 
     # Only return results above a likelihood threshold (0 for all)
     min_likelihood: :POSSIBLE,
 
     # Limit the number of findings (0 for no limit)
-    limits: { max_findings_per_request: max_findings },
+    limits:         { max_findings_per_request: max_findings },
 
     # Whether to include the matching string in the response
-    include_quote: true
+    include_quote:  true
   }
 
   # The item to inspect
@@ -87,8 +87,8 @@ def inspect_file project_id: nil, filename: nil, max_findings: 0
   # Run request
   parent = "projects/#{project_id}"
   response = dlp.inspect_content parent,
-    inspect_config: inspect_config,
-    item:           item_to_inspect
+                                 inspect_config: inspect_config,
+                                 item:           item_to_inspect
 
   # Print the results
   if response.result.findings.empty?
@@ -103,34 +103,34 @@ def inspect_file project_id: nil, filename: nil, max_findings: 0
   # [END dlp_inspect_file]
 end
 
-if __FILE__ == $PROGRAM_NAME
+if $PROGRAM_NAME == __FILE__
   project_id = ENV["GOOGLE_CLOUD_PROJECT"]
   command    = ARGV.shift
 
   case command
   when "inspect_string"
     inspect_string(
-      project_id: project_id,
-      content: ARGV.shift.to_s,
+      project_id:   project_id,
+      content:      ARGV.shift.to_s,
       max_findings: ARGV.shift.to_i
     )
   when "inspect_file"
     inspect_file(
-      project_id: project_id,
-      filename: ARGV.shift.to_s,
+      project_id:   project_id,
+      filename:     ARGV.shift.to_s,
       max_findings: ARGV.shift.to_i
     )
   else
-    puts <<-usage
-Usage: ruby sample.rb <command> [arguments]
+    puts <<~USAGE
+      Usage: ruby sample.rb <command> [arguments]
 
-Commands:
-  inspect_string <content> <max_findings> Inspect a string.
-  inspect_file <filename> <max_findings> Inspect a local file.
+      Commands:
+        inspect_string <content> <max_findings> Inspect a string.
+        inspect_file <filename> <max_findings> Inspect a local file.
 
-Environment variables:
-  GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
-  GOOGLE_APPLICATION_CREDENTIALS set to the path to your JSON credentials
-    usage
+      Environment variables:
+        GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
+        GOOGLE_APPLICATION_CREDENTIALS set to the path to your JSON credentials
+    USAGE
   end
 end

@@ -15,11 +15,11 @@
 # [START gae_flex_sendgrid_dependencies]
 source "https://rubygems.org"
 
-gem "sinatra"
 gem "sendgrid-ruby"
+gem "sinatra"
 # [END gae_flex_sendgrid_dependencies]
 
 group :test do
-  gem "rspec"
   gem "capybara"
+  gem "rspec"
 end

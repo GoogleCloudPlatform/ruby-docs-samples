@@ -13,7 +13,7 @@
 # limitations under the License.
 
 def speech_sync_recognize audio_file_path: nil
-# [START speech_transcribe_sync]
+  # [START speech_transcribe_sync]
   # audio_file_path = "Path to file on which to perform speech recognition"
 
   require "google/cloud/speech"
@@ -23,8 +23,8 @@ def speech_sync_recognize audio_file_path: nil
   # [START speech_ruby_migration_sync_response]
   audio_file = File.binread audio_file_path
   config     = { encoding:          :LINEAR16,
-                 sample_rate_hertz: 16000,
-                 language_code:     "en-US"   }
+                 sample_rate_hertz: 16_000,
+                 language_code:     "en-US" }
   audio      = { content: audio_file }
 
   response = speech.recognize config, audio
@@ -36,11 +36,11 @@ def speech_sync_recognize audio_file_path: nil
     puts "Transcription: #{alternative.transcript}"
   end
   # [END speech_ruby_migration_sync_response]
-# [END speech_transcribe_sync]
+  # [END speech_transcribe_sync]
 end
 
 def speech_sync_recognize_words audio_file_path: nil
-# [START speech_sync_recognize_words]
+  # [START speech_sync_recognize_words]
   # audio_file_path = "Path to file on which to perform speech recognition"
 
   require "google/cloud/speech"
@@ -50,7 +50,7 @@ def speech_sync_recognize_words audio_file_path: nil
   audio_file = File.binread audio_file_path
 
   config = { encoding:                 :LINEAR16,
-             sample_rate_hertz:        16000,
+             sample_rate_hertz:        16_000,
              language_code:            "en-US",
              enable_word_time_offsets: true }
   audio  = { content: audio_file }
@@ -64,17 +64,17 @@ def speech_sync_recognize_words audio_file_path: nil
     puts "Transcription: #{alternative.transcript}"
 
     alternative.words.each do |word|
-      start_time = word.start_time.seconds + word.start_time.nanos/1000000000.0
-      end_time   = word.end_time.seconds + word.end_time.nanos/1000000000.0
+      start_time = word.start_time.seconds + word.start_time.nanos / 1_000_000_000.0
+      end_time   = word.end_time.seconds + word.end_time.nanos / 1_000_000_000.0
 
       puts "Word: #{word.word} #{start_time} #{end_time}"
     end
   end
-# [END speech_sync_recognize_words]
+  # [END speech_sync_recognize_words]
 end
 
 def speech_sync_recognize_gcs storage_path: nil
-# [START speech_transcribe_sync_gcs]
+  # [START speech_transcribe_sync_gcs]
   # storage_path = "Path to file in Cloud Storage, eg. gs://bucket/audio.raw"
 
   require "google/cloud/speech"
@@ -83,8 +83,8 @@ def speech_sync_recognize_gcs storage_path: nil
 
   # [START speech_ruby_migration_config_gcs]
   config = { encoding:          :LINEAR16,
-             sample_rate_hertz: 16000,
-             language_code:     "en-US"   }
+             sample_rate_hertz: 16_000,
+             language_code:     "en-US" }
   audio  = { uri: storage_path }
 
   response = speech.recognize config, audio
@@ -96,11 +96,11 @@ def speech_sync_recognize_gcs storage_path: nil
   alternatives.each do |alternative|
     puts "Transcription: #{alternative.transcript}"
   end
-# [END speech_transcribe_sync_gcs]
+  # [END speech_transcribe_sync_gcs]
 end
 
 def speech_async_recognize audio_file_path: nil
-# [START speech_transcribe_async]
+  # [START speech_transcribe_async]
   # audio_file_path = "Path to file on which to perform speech recognition"
 
   require "google/cloud/speech"
@@ -111,8 +111,8 @@ def speech_async_recognize audio_file_path: nil
   # [START speech_ruby_migration_async_request]
   audio_file = File.binread audio_file_path
   config     = { encoding:          :LINEAR16,
-                 sample_rate_hertz: 16000,
-                 language_code:     "en-US"   }
+                 sample_rate_hertz: 16_000,
+                 language_code:     "en-US" }
   audio      = { content: audio_file }
 
   operation = speech.long_running_recognize config, audio
@@ -131,21 +131,21 @@ def speech_async_recognize audio_file_path: nil
     puts "Transcription: #{alternative.transcript}"
   end
   # [END speech_ruby_migration_async_response]
-# [END speech_transcribe_async]
+  # [END speech_transcribe_async]
 end
 
 def speech_async_recognize_gcs storage_path: nil
-# [START speech_transcribe_async_gcs]
+  # [START speech_transcribe_async_gcs]
   # storage_path = "Path to file in Cloud Storage, eg. gs://bucket/audio.raw"
 
   require "google/cloud/speech"
 
   speech = Google::Cloud::Speech.new
 
-  config     = { encoding:          :LINEAR16,
-                 sample_rate_hertz: 16000,
-                 language_code:     "en-US"   }
-  audio  = { uri: storage_path }
+  config = { encoding:          :LINEAR16,
+             sample_rate_hertz: 16_000,
+             language_code:     "en-US" }
+  audio = { uri: storage_path }
 
   operation = speech.long_running_recognize config, audio
 
@@ -161,11 +161,11 @@ def speech_async_recognize_gcs storage_path: nil
   alternatives.each do |alternative|
     puts "Transcription: #{alternative.transcript}"
   end
-# [END speech_transcribe_async_gcs]
+  # [END speech_transcribe_async_gcs]
 end
 
 def speech_async_recognize_gcs_words storage_path: nil
-# [START speech_transcribe_async_word_time_offsets_gcs]
+  # [START speech_transcribe_async_word_time_offsets_gcs]
   # storage_path = "Path to file in Cloud Storage, eg. gs://bucket/audio.raw"
 
   require "google/cloud/speech"
@@ -173,7 +173,7 @@ def speech_async_recognize_gcs_words storage_path: nil
   speech = Google::Cloud::Speech.new
 
   config = { encoding:                 :LINEAR16,
-             sample_rate_hertz:        16000,
+             sample_rate_hertz:        16_000,
              language_code:            "en-US",
              enable_word_time_offsets: true }
   audio  = { uri: storage_path }
@@ -193,17 +193,17 @@ def speech_async_recognize_gcs_words storage_path: nil
     puts "Transcription: #{alternative.transcript}"
 
     alternative.words.each do |word|
-      start_time = word.start_time.seconds + word.start_time.nanos/1000000000.0
-      end_time   = word.end_time.seconds + word.end_time.nanos/1000000000.0
+      start_time = word.start_time.seconds + word.start_time.nanos / 1_000_000_000.0
+      end_time   = word.end_time.seconds + word.end_time.nanos / 1_000_000_000.0
 
       puts "Word: #{word.word} #{start_time} #{end_time}"
     end
   end
-# [END speech_transcribe_async_word_time_offsets_gcs]
+  # [END speech_transcribe_async_word_time_offsets_gcs]
 end
 
 def speech_streaming_recognize audio_file_path: nil
-# [START speech_transcribe_streaming]
+  # [START speech_transcribe_streaming]
   # audio_file_path = "Path to file on which to perform speech recognition"
 
   require "google/cloud/speech"
@@ -215,19 +215,19 @@ def speech_streaming_recognize audio_file_path: nil
   audio_content  = File.binread audio_file_path
   bytes_total    = audio_content.size
   bytes_sent     = 0
-  chunk_size     = 32000
+  chunk_size     = 32_000
 
-  streaming_config = {config: {encoding:                :LINEAR16,
-                               sample_rate_hertz:       16000,
-                               language_code:           "en-US",
-                               enable_word_time_offsets: true     },
-                      interim_results: true}
+  streaming_config = { config:          { encoding:                 :LINEAR16,
+                                          sample_rate_hertz:        16_000,
+                                          language_code:            "en-US",
+                                          enable_word_time_offsets: true },
+                       interim_results: true }
 
   stream = speech.streaming_recognize streaming_config
 
   # Simulated streaming from a microphone
   # Stream bytes...
-  while bytes_sent < bytes_total do
+  while bytes_sent < bytes_total
     stream.send audio_content[bytes_sent, chunk_size]
     bytes_sent += chunk_size
     sleep 1
@@ -247,7 +247,7 @@ def speech_streaming_recognize audio_file_path: nil
     puts "Transcript: #{result.transcript}"
   end
   # [END speech_ruby_migration_streaming_response]
-# [END speech_transcribe_streaming]
+  # [END speech_transcribe_streaming]
 end
 
 def speech_transcribe_auto_punctuation audio_file_path: nil
@@ -300,7 +300,7 @@ def speech_transcribe_enhanced_model audio_file_path: nil
     sample_rate_hertz: 8000,
     language_code:     "en-US",
     use_enhanced:      true,
-    model:             'phone_call'
+    model:             "phone_call"
   }
 
   audio_file = File.binread audio_file_path
@@ -335,7 +335,7 @@ def speech_transcribe_model_selection file_path: nil, model: nil
 
   config = {
     encoding:          :LINEAR16,
-    sample_rate_hertz: 16000,
+    sample_rate_hertz: 16_000,
     language_code:     "en-US",
     model:             model
   }
@@ -362,8 +362,73 @@ def speech_transcribe_model_selection file_path: nil, model: nil
   # [END speech_transcribe_model_selection]
 end
 
-if __FILE__ == $PROGRAM_NAME
-  command    = ARGV.shift
+def speech_transcribe_multichannel audio_file_path: nil
+  # [START speech_transcribe_multichannel]
+  # audio_file_path = "path/to/audio.wav"
+
+  require "google/cloud/speech"
+
+  speech = Google::Cloud::Speech.new
+
+  config = {
+    encoding:                                :LINEAR16,
+    sample_rate_hertz:                       44_100,
+    language_code:                           "en-US",
+    audio_channel_count:                     2,
+    enable_separate_recognition_per_channel: true
+  }
+
+  audio_file = File.binread audio_file_path
+  audio      = { content: audio_file }
+
+  response = speech.recognize config, audio
+
+  results = response.results
+
+  results.each_with_index do |result, i|
+    alternative = result.alternatives.first
+    puts "-" * 20
+    puts "First alternative of result #{i}"
+    puts "Transcript: #{alternative.transcript}"
+    puts "Channel Tag: #{result.channel_tag}"
+  end
+  # [END speech_transcribe_multichannel]
+end
+
+def speech_transcribe_multichannel_gcs storage_path: nil
+  # [START speech_transcribe_multichannel_gcs]
+  # storage_path = "Path to file in Cloud Storage, eg. gs://bucket/audio.raw"
+
+  require "google/cloud/speech"
+
+  speech = Google::Cloud::Speech.new
+
+  config = {
+    encoding:                                :LINEAR16,
+    sample_rate_hertz:                       44_100,
+    language_code:                           "en-US",
+    audio_channel_count:                     2,
+    enable_separate_recognition_per_channel: true
+  }
+
+  audio = { uri: storage_path }
+
+  response = speech.recognize config, audio
+
+  results = response.results
+
+  results.each_with_index do |result, i|
+    alternative = result.alternatives.first
+    puts "-" * 20
+    puts "First alternative of result #{i}"
+    puts "Transcript: #{alternative.transcript}"
+    puts "Channel Tag: #{result.channel_tag}"
+  end
+  # [END speech_transcribe_multichannel_gcs]
+end
+
+if $PROGRAM_NAME == __FILE__
+  command = ARGV.shift
 
   case command
   when "recognize"
@@ -386,21 +451,27 @@ if __FILE__ == $PROGRAM_NAME
     speech_transcribe_enhanced_model audio_file_path: ARGV.first
   when "model_selection"
     speech_transcribe_model_selection file_path: ARGV.first, model: ARGV[1]
+  when "multichannel"
+    speech_transcribe_multichannel audio_file_path: ARGV.first
+  when "multichannel_gcs"
+    speech_transcribe_multichannel_gcs storage_path: ARGV.first
   else
-    puts <<-usage
-Usage: ruby speech_samples.rb <command> [arguments]
+    puts <<~USAGE
+      Usage: ruby speech_samples.rb <command> [arguments]
 
-Commands:
-  recognize                 <filename> Detects speech in a local audio file.
-  recognize_words           <filename> Detects speech in a local audio file with word offsets.
-  recognize_gcs             <gcsUri>   Detects speech in an audio file located in a Google Cloud Storage bucket.
-  async_recognize           <filename> Creates a job to detect speech in a local audio file, and waits for the job to complete.
-  async_recognize_gcs       <gcsUri>   Creates a job to detect speech in an audio file located in a Google Cloud Storage bucket, and waits for the job to complete.
-  async_recognize_gcs_words <gcsUri>   Creates a job to detect speech with wordsoffsets in an audio file located in a Google Cloud Storage bucket, and waits for the job to complete.
-  stream_recognize          <filename> Detects speech in a local audio file by streaming it to the Speech API.
-  auto_punctuation          <filename> Detects speech in a local audio file, including automatic punctuation in the transcript.
-  enhanced_model            <filename> Detects speech in a local audio file, using a model enhanced for phone call audio.
-  model_selection           <filename> Detects speech in a local file, using a specific model.
-    usage
+      Commands:
+        recognize                 <filename> Detects speech in a local audio file.
+        recognize_words           <filename> Detects speech in a local audio file with word offsets.
+        recognize_gcs             <gcsUri>   Detects speech in an audio file located in a Google Cloud Storage bucket.
+        async_recognize           <filename> Creates a job to detect speech in a local audio file, and waits for the job to complete.
+        async_recognize_gcs       <gcsUri>   Creates a job to detect speech in an audio file located in a Google Cloud Storage bucket, and waits for the job to complete.
+        async_recognize_gcs_words <gcsUri>   Creates a job to detect speech with wordsoffsets in an audio file located in a Google Cloud Storage bucket, and waits for the job to complete.
+        stream_recognize          <filename> Detects speech in a local audio file by streaming it to the Speech API.
+        auto_punctuation          <filename> Detects speech in a local audio file, including automatic punctuation in the transcript.
+        enhanced_model            <filename> Detects speech in a local audio file, using a model enhanced for phone call audio.
+        model_selection           <filename> Detects speech in a local file, using a specific model.
+        multichannel              <filename> Detects speech in separate channels in a local file.
+        multichannel_gcs          <gcsUri>   Detects speech in separate channels in an audio file located in a Google Cloud Storage bucket.
+    USAGE
   end
 end

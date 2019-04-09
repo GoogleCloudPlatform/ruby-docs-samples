@@ -16,12 +16,12 @@ require "rspec"
 require "google/cloud/bigquery"
 
 RSpec.configure do |config|
-  config.before(:all) do
+  config.before :all do
     @bigquery = Google::Cloud::Bigquery.new
     @temp_datasets = []
   end
 
-  config.after(:each) do
+  config.after :each do
     @temp_datasets.each do |dataset|
       dataset.delete force: true
     end
@@ -30,14 +30,14 @@ RSpec.configure do |config|
   def create_temp_dataset
     dataset = @bigquery.create_dataset "test_dataset_#{Time.now.to_i}"
     @temp_datasets << dataset
-    return dataset
+    dataset
   end
 
   # Capture and return STDOUT output by block
-  def capture &block
+  def capture
     real_stdout = $stdout
     $stdout = StringIO.new
-    block.call
+    yield
     $stdout.string
   ensure
     $stdout = real_stdout

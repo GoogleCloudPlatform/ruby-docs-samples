@@ -41,14 +41,13 @@ def get_entity_type_ids project_id:, display_name:
 end
 
 def clean_entity_types project_id:, display_name:
-  entity_type_ids = get_entity_type_ids project_id: project_id,
+  entity_type_ids = get_entity_type_ids project_id:   project_id,
                                         display_name: display_name
   entity_type_ids.each do |entity_type_id|
-    delete_entity_type project_id: project_id,
+    delete_entity_type project_id:     project_id,
                        entity_type_id: entity_type_id
   end
 end
-
 
 def get_intent_ids project_id:, display_name:
   intents_client = Google::Cloud::Dialogflow::Intents.new
@@ -64,11 +63,10 @@ def get_intent_ids project_id:, display_name:
 end
 
 # Capture and return STDOUT output by block
-def hide &block
+def hide
   real_stdout = $stdout
   $stdout = StringIO.new
-  block.call
+  yield
 ensure
   $stdout = real_stdout
 end
-

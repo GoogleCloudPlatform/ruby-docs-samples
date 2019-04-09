@@ -21,33 +21,32 @@ require_relative "../detect_intent_texts"
 require_relative "../entity_type_management"
 
 describe "Session Entity Type Management" do
-
   before do
     @project_id = ENV["GOOGLE_CLOUD_PROJECT"]
     @session_id = "fake_session_for_testing"
     @entity_type_display_name = "fake_display_name"
-    @entity_values = ["fake_entity_value_1", "fake_entity_value_2"]
+    @entity_values = %w[fake_entity_value_1 fake_entity_value_2]
   end
 
   before :each do
     hide do
-      clean_entity_types project_id: @project_id,
+      clean_entity_types project_id:   @project_id,
                          display_name: @entity_type_display_name
     end
   end
 
   after :each do
     hide do
-      clean_entity_types project_id: @project_id,
+      clean_entity_types project_id:   @project_id,
                          display_name: @entity_type_display_name
     end
   end
 
   def create_test_session_entity_type
     # create an entity type to be overridden
-    create_entity_type project_id: @project_id,
+    create_entity_type project_id:   @project_id,
                        display_name: @entity_type_display_name,
-                       kind: :KIND_MAP
+                       kind:         :KIND_MAP
 
     # create a session
     detect_intent_texts project_id:    @project_id,
@@ -55,19 +54,19 @@ describe "Session Entity Type Management" do
                         texts:         ["hi"],
                         language_code: "en-US"
 
-    create_session_entity_type project_id: @project_id,
-                               session_id: @session_id,
+    create_session_entity_type project_id:               @project_id,
+                               session_id:               @session_id,
                                entity_type_display_name: @entity_type_display_name,
-                               entity_values: @entity_values
+                               entity_values:            @entity_values
   end
 
   example "create session_entity_type" do
     hide do
       create_test_session_entity_type
     end
-    expectation = expect {
+    expectation = expect do
       list_session_entity_types project_id: @project_id, session_id: @session_id
-    }
+    end
 
     expectation.to output(/#{@session_id}/).to_stdout
     expectation.to output(/#{@entity_type_display_name}/).to_stdout
@@ -78,13 +77,13 @@ describe "Session Entity Type Management" do
   example "delete session_entity_type" do
     hide do
       create_test_session_entity_type
-      delete_session_entity_type project_id: @project_id,
-                     session_id: @session_id,
-                     entity_type_display_name: @entity_type_display_name
+      delete_session_entity_type project_id:               @project_id,
+                                 session_id:               @session_id,
+                                 entity_type_display_name: @entity_type_display_name
     end
-    expectation = expect {
+    expectation = expect do
       list_session_entity_types project_id: @project_id, session_id: @session_id
-    }
+    end
 
     expectation.not_to output(/#{@entity_type_display_name}/).to_stdout
     expectation.not_to output(/#{@entity_values[0]}/).to_stdout

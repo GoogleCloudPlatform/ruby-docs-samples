@@ -21,42 +21,37 @@ require "rspec"
 describe "Stackdriver uptime check" do
   before :all do
     @project_id = ENV["GOOGLE_CLOUD_PROJECT"]
-    if @project_id.nil? then
-      raise "Set the environment variable GOOGLE_CLOUD_PROJECT."
-    end
-    # Stackdriver projects are not 1-1 with Google cloud projects.  All the 
+    raise "Set the environment variable GOOGLE_CLOUD_PROJECT." if @project_id.nil?
+    # Stackdriver projects are not 1-1 with Google cloud projects.  All the
     # ruby test Google cloud projects use the same Stackdriver project.
-    if /cloud-samples-ruby-test-\d/.match(@project_id)
-      @project_id = "cloud-samples-ruby-test-1"
-    end
+    @project_id = "cloud-samples-ruby-test-1" if /cloud-samples-ruby-test-\d/.match(@project_id)
 
     # Delete all uptime checks before running tests.
     client = Google::Cloud::Monitoring::V3::UptimeCheck.new
-    project_name = Google::Cloud::Monitoring::V3::UptimeCheckServiceClient.project_path(@project_id)
-    configs = client.list_uptime_check_configs(project_name)
-    configs.each { |config| delete_uptime_check_config(config.name) }
+    project_name = Google::Cloud::Monitoring::V3::UptimeCheckServiceClient.project_path @project_id
+    configs = client.list_uptime_check_configs project_name
+    configs.each { |config| delete_uptime_check_config config.name }
 
-    @configs = [create_uptime_check_config(project_id:@project_id),
-      create_uptime_check_config(project_id:@project_id)]
+    @configs = [create_uptime_check_config(project_id: @project_id),
+                create_uptime_check_config(project_id: @project_id)]
   end
 
   after :all do
-    @configs.each { |config| delete_uptime_check_config(config.name)}
+    @configs.each { |config| delete_uptime_check_config config.name }
   end
 
   it "list_ips" do
-    expect { list_ips() }.to output(/Singapore/).to_stdout
+    expect { list_ips }.to output(/Singapore/).to_stdout
   end
 
   it "list_uptime_checks" do
-    expect { list_uptime_check_configs(@project_id) }.to output(Regexp.new(@configs[0].name)).to_stdout
+    expect { list_uptime_check_configs @project_id }.to output(Regexp.new(@configs[0].name)).to_stdout
   end
 
   it "update_uptime_checks" do
-    update_uptime_check_config(config_name: @configs[0].name, new_display_name: "Chicago")
-    expect { get_uptime_check_config(@configs[0].name) }.to output(/Chicago/).to_stdout
-    update_uptime_check_config(config_name: @configs[1].name, new_http_check_path: "https://example.appspot.com/")
-    expect { get_uptime_check_config(@configs[1].name) }.to output(/example.appspot.com/).to_stdout
+    update_uptime_check_config config_name: @configs[0].name, new_display_name: "Chicago"
+    expect { get_uptime_check_config @configs[0].name }.to output(/Chicago/).to_stdout
+    update_uptime_check_config config_name: @configs[1].name, new_http_check_path: "https://example.appspot.com/"
+    expect { get_uptime_check_config @configs[1].name }.to output(/example.appspot.com/).to_stdout
   end
-
 end

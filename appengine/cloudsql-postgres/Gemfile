@@ -22,9 +22,9 @@ gem "sequel"
 gem "sinatra"
 
 group :test do
-  gem "rspec"
   gem "capybara"
   gem "poltergeist"
   gem "rack-test"
+  gem "rspec"
   gem "sqlite3"
 end

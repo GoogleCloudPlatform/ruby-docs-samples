@@ -15,7 +15,6 @@
 require "spec_helper"
 
 describe "Get product" do
-
   example "Get product" do
     snippet_filepath = get_snippet_filepath __FILE__
     product = create_temp_product
@@ -25,5 +24,4 @@ describe "Get product" do
 
     expect(output).to include product.display_name
   end
-
 end

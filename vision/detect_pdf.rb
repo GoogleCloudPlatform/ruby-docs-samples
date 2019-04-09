@@ -24,11 +24,11 @@ def detect_pdf_gcs gcs_source_uri:, gcs_destination_uri:
   image_annotator = Google::Cloud::Vision::ImageAnnotator.new
 
   operation = image_annotator.document_text_detection(
-    image: gcs_source_uri,
-    mime_type: "application/pdf",
-    batch_size: 2,
+    image:       gcs_source_uri,
+    mime_type:   "application/pdf",
+    batch_size:  2,
     destination: gcs_destination_uri,
-    async: true
+    async:       true
   )
 
   puts "Waiting for the operation to finish."
@@ -54,7 +54,7 @@ def detect_pdf_gcs gcs_source_uri:, gcs_destination_uri:
   # the first two pages of the input file.
   output      = blob_list[0]
   json_string = output.download
-  response    = JSON.parse(json_string.string)
+  response    = JSON.parse json_string.string
 
   # The actual response for the first page of the input file.
   first_page_response = response["responses"][0]
@@ -68,7 +68,7 @@ def detect_pdf_gcs gcs_source_uri:, gcs_destination_uri:
   # [END vision_text_detection_pdf_gcs]
 end
 
-if __FILE__ == $PROGRAM_NAME
+if $PROGRAM_NAME == __FILE__
   if ARGV.size == 2
     detect_pdf_gcs gcs_source_uri:      ARGV.shift,
                    gcs_destination_uri: ARGV.shift

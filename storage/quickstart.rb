@@ -30,4 +30,3 @@ bucket = storage.create_bucket bucket_name
 
 puts "Bucket #{bucket.name} was created."
 # [END storage_quickstart]
-

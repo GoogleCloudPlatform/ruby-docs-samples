@@ -17,7 +17,7 @@ def list_entities project_id:, entity_type_id:
   # [START dialogflow_list_entities]
   # project_id = "Your Google Cloud project ID"
   # entity_type_id = "Existing Entity Type ID"
-  
+
   require "google/cloud/dialogflow"
 
   entity_types_client = Google::Cloud::Dialogflow::EntityTypes.new
@@ -32,14 +32,13 @@ def list_entities project_id:, entity_type_id:
   # [END dialogflow_list_entities]
 end
 
-
 def create_entity project_id:, entity_type_id:, entity_value:, synonyms:
   # [START dialogflow_create_entity]
   # project_id = "Your Google Cloud project ID"
   # entity_type_id = "Existing Entity Type ID"
   # entity_value = "New Entity Value"
   # synonyms = ["synonym1", "synonym2"]
-  
+
   require "google/cloud/dialogflow"
 
   entity_types_client = Google::Cloud::Dialogflow::EntityTypes.new
@@ -56,13 +55,12 @@ def create_entity project_id:, entity_type_id:, entity_value:, synonyms:
   # [END dialogflow_create_entity]
 end
 
-
 def delete_entity project_id:, entity_type_id:, entity_value:
   # [START dialogflow_delete_entity]
   # project_id = "Your Google Cloud project ID"
   # entity_type_id = "Existing Entity Type ID"
   # entity_value = "Existing Entity Value"
-  
+
   require "google/cloud/dialogflow"
 
   entity_types_client = Google::Cloud::Dialogflow::EntityTypes.new
@@ -75,35 +73,35 @@ def delete_entity project_id:, entity_type_id:, entity_value:
 end
 
 
-if __FILE__ == $PROGRAM_NAME
+if $PROGRAM_NAME == __FILE__
   project_id = ENV["GOOGLE_CLOUD_PROJECT"]
   case ARGV.shift
   when "list"
-    list_entities project_id: project_id,
+    list_entities project_id:     project_id,
                   entity_type_id: ARGV.shift
   when "create"
-    create_entity project_id: project_id,
+    create_entity project_id:     project_id,
                   entity_type_id: ARGV.shift,
-                  entity_value: ARGV.shift,
-                  synonyms: ARGV
+                  entity_value:   ARGV.shift,
+                  synonyms:       ARGV
   when "delete"
-    delete_entity project_id: project_id,
+    delete_entity project_id:     project_id,
                   entity_type_id: ARGV.shift,
-                  entity_value: ARGV.shift
+                  entity_value:   ARGV.shift
   else
-    puts <<-usage
-Usage: ruby entity_management.rb [commang] [arguments]
+    puts <<~USAGE
+      Usage: ruby entity_management.rb [commang] [arguments]
 
-Commands:
-  list    <entity_type_id> 
-    List all entities of an entity type
-  create  <entity_type_id> <entity_value> [<synonym1> [<synonym2> ...]]
-    Create a new entity of an entity type
-  delete  <entity_type_id> <entity_value> 
-    Delete an entity of an entity type
+      Commands:
+        list    <entity_type_id>
+          List all entities of an entity type
+        create  <entity_type_id> <entity_value> [<synonym1> [<synonym2> ...]]
+          Create a new entity of an entity type
+        delete  <entity_type_id> <entity_value>
+          Delete an entity of an entity type
 
-Environment variables:
-  GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
-    usage
+      Environment variables:
+        GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
+    USAGE
   end
 end

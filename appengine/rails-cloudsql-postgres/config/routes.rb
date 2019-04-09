@@ -15,10 +15,10 @@
 # [START cat_routes]
 Rails.application.routes.draw do
   resources :cats
-  get 'cats/index'
+  get "cats/index"
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-  root 'cats#index'
+  root "cats#index"
 end
 # [END cat_routes]
 
@@ -30,6 +30,5 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
 end
-# [END boilerplate]
+[END boilerplate]
 =end
-

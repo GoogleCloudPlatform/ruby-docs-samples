@@ -16,7 +16,6 @@ RSpec.configure do |config|
 end
 
 describe "Google Cloud Firestore API samples - Order Limit Data" do
-
   before do
     @firestore_project = ENV["FIRESTORE_PROJECT_ID"]
     retrieve_create_examples project_id: @firestore_project
@@ -27,19 +26,19 @@ describe "Google Cloud Firestore API samples - Order Limit Data" do
   end
 
   # Capture and return STDOUT output by block
-  def capture &block
+  def capture
     real_stdout = $stdout
     $stdout = StringIO.new
-    block.call
+    yield
     $stdout.string
   ensure
     $stdout = real_stdout
   end
 
   example "order_by_name_limit_query" do
-    output = capture {
+    output = capture do
       order_by_name_limit_query project_id: @firestore_project
-    }
+    end
     expect(output).to include "Document BJ returned by order by name with limit query."
     expect(output).to include "Document LA returned by order by name with limit query."
     expect(output).to include "Document SF returned by order by name with limit query."
@@ -48,9 +47,9 @@ describe "Google Cloud Firestore API samples - Order Limit Data" do
   end
 
   example "order_by_name_desc_limit_query" do
-    output = capture {
+    output = capture do
       order_by_name_desc_limit_query project_id: @firestore_project
-    }
+    end
     expect(output).to include "Document DC returned by order by name descending with limit query."
     expect(output).to include "Document TOK returned by order by name descending with limit query."
     expect(output).to include "Document SF returned by order by name descending with limit query."
@@ -59,9 +58,9 @@ describe "Google Cloud Firestore API samples - Order Limit Data" do
   end
 
   example "order_by_state_and_population_query" do
-    output = capture {
+    output = capture do
       order_by_state_and_population_query project_id: @firestore_project
-    }
+    end
     expect(output).to include "Document LA returned by order by state and descending population query."
     expect(output).to include "Document SF returned by order by state and descending population query."
     expect(output).to include "Document BJ returned by order by state and descending population query."
@@ -70,9 +69,9 @@ describe "Google Cloud Firestore API samples - Order Limit Data" do
   end
 
   example "where_order_by_limit_query" do
-    output = capture {
+    output = capture do
       where_order_by_limit_query project_id: @firestore_project
-    }
+    end
     expect(output).to include "Document LA returned by where order by limit query."
     expect(output).to include "Document TOK returned by where order by limit query."
     expect(output).not_to include "Document BJ returned by where order by limit query."
@@ -81,9 +80,9 @@ describe "Google Cloud Firestore API samples - Order Limit Data" do
   end
 
   example "range_order_by_query" do
-    output = capture {
+    output = capture do
       range_order_by_query project_id: @firestore_project
-    }
+    end
     expect(output).to include "Document LA returned by range with order by query."
     expect(output).to include "Document TOK returned by range with order by query."
     expect(output).to include "Document BJ returned by range with order by query."

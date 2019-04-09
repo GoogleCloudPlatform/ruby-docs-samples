@@ -22,7 +22,6 @@ require "google/cloud/tasks"
 # @param [String] payload The request body of your task.
 # @param [Integer] seconds The delay, in seconds, to process your task.
 def create_task project_id, location_id, queue_id, payload: nil, seconds: nil
-
   # Instantiates a client.
   client = Google::Cloud::Tasks.new
 
@@ -32,7 +31,7 @@ def create_task project_id, location_id, queue_id, payload: nil, seconds: nil
   # Construct task.
   task = {
     app_engine_http_request: {
-      http_method: "POST",
+      http_method:  "POST",
       relative_uri: "/log_payload"
     }
   }
@@ -53,13 +52,11 @@ def create_task project_id, location_id, queue_id, payload: nil, seconds: nil
   puts "Sending task #{task}"
   response = cloud_tasks.create_task parent, task
 
-  if response.name
-    puts "Created task #{response.name}"
-  end
+  puts "Created task #{response.name}" if response.name
 end
 # [END cloud_tasks_appengine_create_task]
 
-if __FILE__ == $PROGRAM_NAME
+if $PROGRAM_NAME == __FILE__
   project_id  = ARGV.shift
   location_id = ARGV.shift
   queue_id    = ARGV.shift
@@ -67,23 +64,23 @@ if __FILE__ == $PROGRAM_NAME
   seconds     = ARGV.shift
 
   if project_id && queue_id && location_id
-  create_task(
-    project_id,
-    location_id,
-    queue_id,
-    payload: payload,
-    seconds: seconds
-  )
+    create_task(
+      project_id,
+      location_id,
+      queue_id,
+      payload: payload,
+      seconds: seconds
+    )
   else
-    puts <<-usage
-Usage: ruby create_task.rb <GOOGLE_CLOUD_PROJECT> <LOCATION_ID> <QUEUE_ID> <payload> <seconds>
+    puts <<~USAGE
+      Usage: ruby create_task.rb <GOOGLE_CLOUD_PROJECT> <LOCATION_ID> <QUEUE_ID> <payload> <seconds>
 
-Environment variables:
-  GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
-  QUEUE_ID must be set to your Google App Engine queue ID
-  LOCATION_ID must be set to your Google App Engine location
-  GOOGLE_APPLICATION_CREDENTIALS set to the path to your JSON credentials
+      Environment variables:
+        GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
+        QUEUE_ID must be set to your Google App Engine queue ID
+        LOCATION_ID must be set to your Google App Engine location
+        GOOGLE_APPLICATION_CREDENTIALS set to the path to your JSON credentials
 
-    usage
+    USAGE
   end
 end

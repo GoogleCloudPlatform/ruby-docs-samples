@@ -15,7 +15,6 @@
 require "spec_helper"
 
 describe "Import product sets and retrieve reference images" do
-
   before do
     @product_set_id = "fake_product_set_id_for_testing"
     @temp_product_sets << @product_set_id
@@ -37,7 +36,7 @@ describe "Import product sets and retrieve reference images" do
 
     # Verify project set existence
     product_set_path = @client.product_set_path @project_id, @location, @product_set_id
-    product_set = @client.get_product_set(product_set_path)
+    product_set = @client.get_product_set product_set_path
     expect(product_set).to be_truthy
 
     # Verify product reference image URIs
@@ -49,5 +48,4 @@ describe "Import product sets and retrieve reference images" do
       expect(reference_image_uri).to include product_images[product_id]
     end
   end
-
 end

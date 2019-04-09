@@ -16,7 +16,6 @@ require_relative "../create_dataset"
 require "spec_helper"
 
 describe "Create dataset" do
-
   before do
     @dataset_id = "test_dataset_#{Time.now.to_i}"
   end
@@ -32,5 +31,4 @@ describe "Create dataset" do
   after do
     @bigquery.dataset(@dataset_id).delete
   end
-
 end

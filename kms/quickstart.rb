@@ -27,10 +27,10 @@ location_id = "global"
 client = CloudKMS::KeyManagementServiceClient.new
 
 # The resource name of the location associated with the key rings
-parent = CloudKMS::KeyManagementServiceClient.location_path(project_id, location_id)
+parent = CloudKMS::KeyManagementServiceClient.location_path project_id, location_id
 
 # Request list of key rings
-response = client.list_key_rings(parent)
+response = client.list_key_rings parent
 
 # List all key rings for your project
 puts "Key Rings: "

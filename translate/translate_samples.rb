@@ -95,44 +95,44 @@ def list_supported_language_names project_id:, language_code: "en"
   # [END translate_list_language_names]
 end
 
-if __FILE__ == $PROGRAM_NAME
+if $PROGRAM_NAME == __FILE__
   project_id = ENV["GOOGLE_CLOUD_PROJECT"]
   command    = ARGV.shift
 
   case command
   when "translate"
-    translate_text project_id: project_id,
+    translate_text project_id:    project_id,
                    language_code: ARGV.shift,
                    text:          ARGV.shift
   when "translate_premium"
-    translate_text_with_model project_id: project_id,
+    translate_text_with_model project_id:    project_id,
                               language_code: ARGV.shift,
                               text:          ARGV.shift
   when "detect_language"
     detect_language project_id: project_id,
-                    text: ARGV.shift
+                    text:       ARGV.shift
   when "list_codes"
     list_supported_language_codes project_id: project_id
   when "list_names"
-    list_supported_language_names project_id: project_id,
+    list_supported_language_names project_id:    project_id,
                                   language_code: ARGV.shift
   else
-    puts <<-usage
-Usage: ruby translate_samples.rb <command> [arguments]
+    puts <<~USAGE
+      Usage: ruby translate_samples.rb <command> [arguments]
 
-Commands:
-  translate           <desired-language-code> <text>
-  translate_premium   <desired-language-code> <text>
-  detect_language     <text>
-  list_names          <language-code-for-display>
-  list_codes
+      Commands:
+        translate           <desired-language-code> <text>
+        translate_premium   <desired-language-code> <text>
+        detect_language     <text>
+        list_names          <language-code-for-display>
+        list_codes
 
-Examples:
-  ruby translate_samples.rb translate fr "Hello World"
-  ruby translate_samples.rb translate_premium fr "Hello World"
-  ruby translate_samples.rb detect_language "Hello World"
-  ruby translate_samples.rb list_codes
-  ruby translate_samples.rb list_names en
-    usage
+      Examples:
+        ruby translate_samples.rb translate fr "Hello World"
+        ruby translate_samples.rb translate_premium fr "Hello World"
+        ruby translate_samples.rb detect_language "Hello World"
+        ruby translate_samples.rb list_codes
+        ruby translate_samples.rb list_names en
+    USAGE
   end
 end
