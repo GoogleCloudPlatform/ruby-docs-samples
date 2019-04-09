@@ -493,7 +493,7 @@ describe "Cloud IoT Core" do
         device_id:   device_id,
         data:        "test"
       )
-    }.to raise_error(/not subscribed to the commands topic/m)
+    }.to raise_error(/Device .* is not connected/m)
 
     # Clean up resources
     $delete_device.call(
