@@ -27,7 +27,7 @@ describe "CloudTasks", type: :feature do
     QUEUE_ID             = "my-appengine-queue"
 
     client = Google::Cloud::Tasks.new
-    queue_path = "projects/#{GOOGLE_CLOUD_PROJECT}/locations/#{LOCATION_ID}/queues/#{QUEUE_ID}"
+    parent = client.queue_path GOOGLE_CLOUD_PROJECT, LOCATION_ID, QUEUE_ID
 
     begin
       client.get_queue(queue_path)

@@ -28,7 +28,7 @@ def create_http_task project_id, location_id, queue_id, url, payload: nil, secon
   client = Google::Cloud::Tasks.new
 
   # Construct the fully qualified queue name.
-  parent = Google::Cloud::Tasks::V2beta3::CloudTasksClient.queue_path project_id, location_id, queue_id
+  parent = client.queue_path project_id, location_id, queue_id
 
   # Construct task.
   task = {
