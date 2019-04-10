@@ -23,7 +23,6 @@ require "google/cloud/tasks"
 # @param [String] payload The request body of your task.
 # @param [Integer] seconds The delay, in seconds, to process your task.
 def create_http_task project_id, location_id, queue_id, url, payload: nil, seconds: nil
-
   # Instantiates a client.
   client = Google::Cloud::Tasks.new
 
@@ -34,7 +33,7 @@ def create_http_task project_id, location_id, queue_id, url, payload: nil, secon
   task = {
     http_request: {
       http_method: "POST",
-      url: url
+      url:         url
     }
   }
 
@@ -60,7 +59,7 @@ def create_http_task project_id, location_id, queue_id, url, payload: nil, secon
 end
 # [END cloud_tasks_appengine_create_task]
 
-if __FILE__ == $PROGRAM_NAME
+if $PROGRAM_NAME == __FILE__
   project_id  = ARGV.shift
   location_id = ARGV.shift
   queue_id    = ARGV.shift
@@ -69,16 +68,16 @@ if __FILE__ == $PROGRAM_NAME
   seconds     = ARGV.shift
 
   if project_id && queue_id && location_id && url
-  create_http_task(
-    project_id,
-    location_id,
-    queue_id,
-    url,
-    payload: payload,
-    seconds: seconds
-  )
+    create_http_task(
+      project_id,
+      location_id,
+      queue_id,
+      url,
+      payload: payload,
+      seconds: seconds
+    )
   else
-    puts <<-usage
+    puts <<~USAGE
 Usage: ruby create_http_task.rb <GOOGLE_CLOUD_PROJECT> <LOCATION_ID> <QUEUE_ID> <URL> <payload> <seconds>
 
 Environment variables:
@@ -88,6 +87,6 @@ Environment variables:
   URL must be set to your HTTP request target.
   GOOGLE_APPLICATION_CREDENTIALS set to the path to your JSON credentials
 
-    usage
+    USAGE
   end
 end
