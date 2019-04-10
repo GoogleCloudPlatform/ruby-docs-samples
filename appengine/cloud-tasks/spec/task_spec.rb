@@ -23,17 +23,18 @@ describe "CloudTasks", type: :feature do
 
   before(:all) do
     GOOGLE_CLOUD_PROJECT = ENV["GOOGLE_CLOUD_PROJECT"]
-    LOCATION_ID          = "us-east1"
-    QUEUE_ID             = "my-appengine-queue"
+    location_id          = ENV["LOCATION_ID"] || "us-east1"
+    QUEUE_ID             = ENV["QUEUE_ID"] || "my-appengine-queue"
 
     client = Google::Cloud::Tasks.new
-    parent = client.queue_path GOOGLE_CLOUD_PROJECT, LOCATION_ID, QUEUE_ID
+    parent = client.queue_path GOOGLE_CLOUD_PROJECT, location_id, QUEUE_ID
 
     begin
-      client.get_queue(queue_path)
+      client.get_queue parent
     rescue
-      LOCATION_ID = "us-east4"
+      location_id = "us-east4"
     end
+    LOCATION_ID = location_id
   end
 
   def app

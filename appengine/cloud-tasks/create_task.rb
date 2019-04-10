@@ -51,7 +51,7 @@ def create_task project_id, location_id, queue_id, payload: nil, seconds: nil
 
   # Send create task request.
   puts "Sending task #{task}"
-  response = cloud_tasks.create_task parent, task
+  response = client.create_task parent, task
 
   if response.name
     puts "Created task #{response.name}"
