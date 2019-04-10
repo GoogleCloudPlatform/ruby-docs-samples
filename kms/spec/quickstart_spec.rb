@@ -47,17 +47,17 @@ describe "Key Management Service Quickstart" do
     test_key_rings = client.list_key_rings test_parent
 
     created = test_key_rings.any? do |key_ring|
-      key_ring.name.end_with?(test_key_ring_id)
+      key_ring.name.end_with? test_key_ring_id
     end
 
-    if !created
-      test_key_ring = client.create_key_ring(test_parent, test_key_ring_id, nil)
+    unless created
+      test_key_ring = client.create_key_ring test_parent, test_key_ring_id, nil
       expect(test_key_ring).not_to eq nil
       expect(test_key_ring.name).to include test_key_ring_id
     end
 
-    expect(CloudKMS::KeyManagementServiceClient).to receive(:location_path).
-                                                    and_return(test_parent)
+    expect(CloudKMS::KeyManagementServiceClient).to receive(:location_path)
+      .and_return(test_parent)
 
     expect {
       load File.expand_path("../quickstart.rb", __dir__)
@@ -66,4 +66,3 @@ describe "Key Management Service Quickstart" do
     ).to_stdout
   end
 end
-

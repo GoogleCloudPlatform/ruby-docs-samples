@@ -17,11 +17,9 @@ require "spec_helper"
 
 
 describe "Query" do
-
   example "Runs a standard SQL query" do
     output = capture { query }
-    rows = output.split("\n")
+    rows = output.split "\n"
     expect(rows.length).to eq 100
   end
-
 end

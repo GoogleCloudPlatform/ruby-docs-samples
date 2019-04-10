@@ -12,20 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-def export_assets(project_id:, dump_file_path:)
+def export_assets project_id:, dump_file_path:
   # [START asset_quickstart_export_assets]
-  require 'google/cloud/asset'
+  require "google/cloud/asset"
 
-  asset_service_client = Google::Cloud::Asset.new(version: :v1beta1)
+  asset_service_client = Google::Cloud::Asset.new version: :v1
   # project_id = 'YOUR_PROJECT_ID'
   # Assets dump file path, e.g.: gs://[YOUR_BUCKET]/[YOUR_ASSETS_FILE]
   # dump_file_path = 'YOUR_ASSET_DUMP_FILE_PATH'
   formatted_parent =
-    Google::Cloud::Asset::V1beta1::AssetServiceClient.project_path(
+    Google::Cloud::Asset::V1::AssetServiceClient.project_path(
       project_id
     )
-  output_config = Google::Cloud::Asset::V1beta1::OutputConfig.new(
-    gcs_destination: Google::Cloud::Asset::V1beta1::GcsDestination.new(
+  output_config = Google::Cloud::Asset::V1::OutputConfig.new(
+    gcs_destination: Google::Cloud::Asset::V1::GcsDestination.new(
       uri: dump_file_path
     )
   )
@@ -42,22 +42,22 @@ def export_assets(project_id:, dump_file_path:)
   # [END asset_quickstart_export_assets]
 end
 
-def batch_get_history(project_id:, asset_names:)
+def batch_get_history project_id:, asset_names:
   # [START asset_quickstart_batch_get_assets_history]
-  require 'google/cloud/asset'
+  require "google/cloud/asset"
 
   # project_id = 'YOUR_PROJECT_ID'
   # asset names, e.g.: //storage.googleapis.com/[YOUR_BUCKET_NAME]
   # asset_names = [ASSET_NAMES, COMMMA_DELIMTTED]
   formatted_parent =
-    Google::Cloud::Asset::V1beta1::AssetServiceClient.project_path(project_id)
+    Google::Cloud::Asset::V1::AssetServiceClient.project_path project_id
 
   content_type = :RESOURCE
-  read_time_window = Google::Cloud::Asset::V1beta1::TimeWindow.new(
+  read_time_window = Google::Cloud::Asset::V1::TimeWindow.new(
     start_time: Google::Protobuf::Timestamp.new(seconds: Time.now.getutc.to_i)
   )
 
-  asset_service_client = Google::Cloud::Asset.new(version: :v1beta1)
+  asset_service_client = Google::Cloud::Asset.new version: :v1
   response = asset_service_client.batch_get_assets_history(
     formatted_parent, content_type, read_time_window, asset_names: asset_names
   )

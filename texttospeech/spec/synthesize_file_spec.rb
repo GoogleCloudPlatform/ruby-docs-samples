@@ -17,7 +17,6 @@ require "rspec"
 require_relative "../synthesize_file"
 
 describe "Synthesize File" do
-
   example "synthesizes text file" do
     expect {
       synthesize_text_file text_file: "resources/hello.txt"
@@ -25,11 +24,11 @@ describe "Synthesize File" do
       /Audio content written to file/
     ).to_stdout
 
-    output_filepath = File.expand_path("../output.mp3", __dir__)
+    output_filepath = File.expand_path "../output.mp3", __dir__
     expect(File.exist?(output_filepath)).to be true
     expect(File.size(output_filepath)).to be > 0
 
-    File.delete(output_filepath)
+    File.delete output_filepath
     expect(File.exist?(output_filepath)).to be false
   end
 
@@ -40,12 +39,11 @@ describe "Synthesize File" do
       /Audio content written to file/
     ).to_stdout
 
-    output_filepath = File.expand_path("../output.mp3", __dir__)
+    output_filepath = File.expand_path "../output.mp3", __dir__
     expect(File.exist?(output_filepath)).to be true
     expect(File.size(output_filepath)).to be > 0
 
-    File.delete(output_filepath)
+    File.delete output_filepath
     expect(File.exist?(output_filepath)).to be false
   end
-
 end

@@ -33,8 +33,8 @@ audio_file = File.binread file_name
 
 # The audio file's encoding and sample rate
 config = { encoding:          :LINEAR16,
-           sample_rate_hertz: 16000,
-           language_code:     "en-US"   }
+           sample_rate_hertz: 16_000,
+           language_code:     "en-US" }
 audio  = { content: audio_file }
 
 # Detects speech in the audio file
@@ -50,4 +50,3 @@ results.first.alternatives.each do |alternatives|
   puts "Transcription: #{alternatives.transcript}"
 end
 # [END speech_quickstart]
-

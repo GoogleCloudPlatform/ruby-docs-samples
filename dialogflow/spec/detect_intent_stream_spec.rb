@@ -18,7 +18,6 @@ require "google/cloud/dialogflow"
 require_relative "../detect_intent_stream"
 
 describe "Detect Intent Stream" do
-
   before do
     @project_id      = ENV["GOOGLE_CLOUD_PROJECT"]
     @session_id      = "session-for-testing"
@@ -28,10 +27,10 @@ describe "Detect Intent Stream" do
 
   example "detect intent from stream" do
     expect {
-      detect_intent_stream project_id: @project_id,
-                           session_id: @session_id,
+      detect_intent_stream project_id:      @project_id,
+                           session_id:      @session_id,
                            audio_file_path: @audio_file_path,
-                           language_code: @language_code
+                           language_code:   @language_code
     }.to output(
       /What date?/
     ).to_stdout

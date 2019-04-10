@@ -21,7 +21,7 @@ def product_search_create_product project_id = "your-project-id"
   client = Google::Cloud::Vision::ProductSearch.new
 
   # A resource that represents Google Cloud Platform location.
-  location      = "us-west1"  # specify a compute region name
+  location      = "us-west1" # specify a compute region name
   location_path = client.location_path project_id, location
 
   # Create a product with the product specification in the region.
@@ -41,4 +41,4 @@ def product_search_create_product project_id = "your-project-id"
 end
 # [END vision_product_search_create_product]
 
-product_search_create_product *ARGV if $PROGRAM_NAME == __FILE__
+product_search_create_product(*ARGV) if $PROGRAM_NAME == __FILE__

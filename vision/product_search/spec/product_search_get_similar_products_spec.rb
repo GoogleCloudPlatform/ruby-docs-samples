@@ -15,12 +15,11 @@
 require "spec_helper"
 
 describe "Get similar products" do
-
   before do
     @snippet_filepath = get_snippet_filepath __FILE__
     @product_category = "apparel"
     @image_file_path = File.expand_path(
-      File.join @current_directory, "..", "resources", "shoes_1.jpg"
+      File.join(@current_directory, "..", "resources", "shoes_1.jpg")
     )
     # This filter has extra quotes to ensure the command is passed with quotes
     @filter = "'style = womens'"
@@ -38,7 +37,7 @@ describe "Get similar products" do
       @filter
     ]
 
-    output = `ruby #{sample_params.join(" ")}`
+    output = `ruby #{sample_params.join " "}`
 
     expect(output).to include "Product set has not been indexed."
   end
@@ -58,9 +57,10 @@ describe "Get similar products" do
       }
     }
     operation = @client.import_product_sets @location_path, input_config
-    operation.wait_until_done!  # Waits for the operation to complete
+    operation.wait_until_done! # Waits for the operation to complete
     import_snippet_file_path = File.join(
-      @current_directory, "..", "product_search_import_product_images.rb")
+      @current_directory, "..", "product_search_import_product_images.rb"
+    )
     `ruby #{import_snippet_file_path} #{@project_id} #{@location}`
 
     indexed_product_set_id = "indexed_product_set_id_for_testing"
@@ -74,9 +74,8 @@ describe "Get similar products" do
       @filter
     ]
 
-    output = `ruby #{sample_params.join(" ")}`
+    output = `ruby #{sample_params.join " "}`
 
     expect(output).to include "shoes_1"
   end
-
 end

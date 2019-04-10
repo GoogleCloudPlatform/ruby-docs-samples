@@ -47,7 +47,9 @@ For instructions regarding development environment setup, please visit [the docu
    Contributor License Agreement (see details above).
 1. Fork the desired repo, develop and test your code changes.
 1. Ensure that your code adheres to the existing style in the sample to which
-   you are contributing.
+   you are contributing and that running `bundle exec rubocop` from the root
+   directory passes. Running `bundle exec rubocop -a` will attempt to autofix
+   all style issues. Use with caution as it may break things.
 1. Ensure that your code has an appropriate set of unit tests which all pass.
 1. Submit a pull request.
 
@@ -183,7 +185,7 @@ def create_bucket project_id:, bucket_name:
   # ...
 end
 
-if __FILE__ == $PROGRAM_NAME
+if $PROGRAM_NAME == __FILE__
   command = ARGV.shift
 
   case command
@@ -191,15 +193,15 @@ if __FILE__ == $PROGRAM_NAME
     create_bucket project_id:  ENV["GOOGLE_CLOUD_PROJECT"],
                   bucket_name: ARGV.first
   else
-   puts <<-usage
-Usage: bundle exec ruby buckets.rb [command] [arguments]
+    puts <<~USAGE
+      Usage: bundle exec ruby buckets.rb [command] [arguments]
 
-Commands:
-  create <bucket>    Create a new bucket with the provided name
+      Commands:
+      create <bucket>    Create a new bucket with the provided name
 
-Environment variables:
-  GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
-   usage
+      Environment variables:
+      GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
+    USAGE
   end
 end
 ```

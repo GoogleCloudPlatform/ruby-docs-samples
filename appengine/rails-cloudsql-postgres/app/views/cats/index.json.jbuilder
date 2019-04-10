@@ -12,4 +12,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-json.array! @cats, partial: 'cats/cat', as: :cat
+json.array! @cats, partial: "cats/cat", as: :cat

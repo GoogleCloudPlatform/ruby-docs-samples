@@ -15,13 +15,13 @@
 # [START gae_flex_storage_dependencies]
 source "https://rubygems.org"
 
-gem "sinatra"
 gem "google-cloud-storage"
+gem "sinatra"
 # [END gae_flex_storage_dependencies]
 
 group :test do
-  gem "rspec"
   gem "capybara"
   gem "poltergeist"
   gem "puma"
+  gem "rspec"
 end

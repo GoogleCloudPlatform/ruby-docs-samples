@@ -21,7 +21,7 @@ require 'cgi'
 describe "CloudTasks", type: :feature do
   include Rack::Test::Methods
 
-  before(:all) do
+  before :all do
     GOOGLE_CLOUD_PROJECT = ENV["GOOGLE_CLOUD_PROJECT"]
     location_id          = ENV["LOCATION_ID"] || "us-east1"
     QUEUE_ID             = ENV["QUEUE_ID"] || "my-appengine-queue"
@@ -52,7 +52,7 @@ describe "CloudTasks", type: :feature do
   end
 
   it "can create a task" do
-    current_directory = File.expand_path(File.dirname(__FILE__))
+    current_directory = __dir__
     snippet_filepath  = File.join current_directory, "..", "create_task.rb"
     payload = "Hello"
 

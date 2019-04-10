@@ -15,12 +15,12 @@
 # [START gae_flex_redislabs_memcache_dependencies]
 source "https://rubygems.org"
 
-gem "sinatra"
 gem "memcache-client"
+gem "sinatra"
 # [END gae_flex_redislabs_memcache_dependencies]
 
 group :test do
-  gem "rspec"
   gem "capybara"
   gem "poltergeist"
+  gem "rspec"
 end

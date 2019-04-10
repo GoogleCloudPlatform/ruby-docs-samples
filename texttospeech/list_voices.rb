@@ -40,6 +40,4 @@ def list_voices
   # [END tts_list_voices]
 end
 
-if __FILE__ == $PROGRAM_NAME
-  list_voices
-end
+list_voices if $PROGRAM_NAME == __FILE__

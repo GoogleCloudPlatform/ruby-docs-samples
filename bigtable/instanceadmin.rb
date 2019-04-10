@@ -34,8 +34,8 @@ def create_prod_instance project_id, instance_id, cluster_id, cluster_location
   job = bigtable.create_instance(
     instance_id,
     display_name: "Sample production instance",
-    labels: { "env": "production" },
-    type: :PRODUCTION # Optional as default type is :PRODUCTION
+    labels:       { "env": "production" },
+    type:         :PRODUCTION # Optional as default type is :PRODUCTION
   ) do |clusters|
     clusters.add cluster_id, cluster_location, nodes: 3, storage_type: :SSD
   end
@@ -74,8 +74,8 @@ def create_dev_instance project_id, instance_id, cluster_id, cluster_location
   job = bigtable.create_instance(
     instance_id,
     display_name: "Sample development instance",
-    labels: { "env": "development" },
-    type: :DEVELOPMENT
+    labels:       { "env": "development" },
+    type:         :DEVELOPMENT
   ) do |clusters|
     clusters.add cluster_id, cluster_location, storage_type: :HDD
   end
@@ -85,7 +85,6 @@ def create_dev_instance project_id, instance_id, cluster_id, cluster_location
   puts "Created development instance: #{instance_id}"
   # [END bigtable_create_dev_instance]
 end
-
 
 def delete_instance project_id, instance_id
   bigtable = Google::Cloud::Bigtable.new project_id: project_id
@@ -113,7 +112,7 @@ def add_cluster project_id, instance_id, cluster_id, cluster_location
   job = instance.create_cluster(
     cluster_id,
     cluster_location,
-    nodes: 3,
+    nodes:        3,
     storage_type: :SSD
   )
 
@@ -136,9 +135,9 @@ def delete_cluster project_id, instance_id, cluster_id
   puts "Cluster deleted: #{cluster.cluster_id}"
 end
 
-if __FILE__ == $PROGRAM_NAME
+if $PROGRAM_NAME == __FILE__
   project_id = ENV["GOOGLE_CLOUD_BIGTABLE_PROJECT"] ||
-    ENV["GOOGLE_CLOUD_PROJECT"]
+               ENV["GOOGLE_CLOUD_PROJECT"]
 
   case ARGV.shift
   when "run"
@@ -153,20 +152,17 @@ if __FILE__ == $PROGRAM_NAME
     create_dev_instance project_id, ARGV.shift, ARGV.shift, ARGV.shift
   else
     puts <<~USAGE
-       Usage: bundle exec ruby instanceadmin.rb [command] [arguments]
-
+      Usage: bundle exec ruby instanceadmin.rb [command] [arguments]
        Commands:
-       run          <instance_id> <cluster_id> <cluster_location>   Creates an Instance(type: PRODUCTION) and run basic instance-operations
-       add-cluster  <instance_id> <cluster_id> cluster_location     Add Cluster
-       del-cluster  <instance_id> <cluster_id>                      Delete the Cluster
-       del-instance <instance_id>                                   Delete the Instance
-       dev-instance <instance_id> <cluster_id> <cluster_location>   Create Development Instance
-
+      run          <instance_id> <cluster_id> <cluster_location>   Creates an Instance(type: PRODUCTION) and run basic instance-operations
+      add-cluster  <instance_id> <cluster_id> cluster_location     Add Cluster
+      del-cluster  <instance_id> <cluster_id>                      Delete the Cluster
+      del-instance <instance_id>                                   Delete the Instance
+      dev-instance <instance_id> <cluster_id> <cluster_location>   Create Development Instance
        Environment variables:
-        GOOGLE_CLOUD_BIGTABLE_PROJECT or GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
-
+       GOOGLE_CLOUD_BIGTABLE_PROJECT or GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
        Cluster Locations:
-        https://cloud.google.com/bigtable/docs/locations
-     USAGE
+       https://cloud.google.com/bigtable/docs/locations
+    USAGE
   end
 end

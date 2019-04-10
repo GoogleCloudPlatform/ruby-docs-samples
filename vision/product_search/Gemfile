@@ -17,6 +17,6 @@ source "https://rubygems.org"
 gem "google-cloud-vision"
 
 group :test do
-  gem "rspec"
   gem "rack-test"
+  gem "rspec"
 end

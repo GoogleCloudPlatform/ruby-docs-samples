@@ -17,12 +17,10 @@ require "rspec"
 require_relative "../list_voices"
 
 describe "List Voices" do
-
   example "lists voices" do
     result = expect { list_voices }
     result.to output(/en-US/).to_stdout
     result.to output(/SSML Voice Gender: MALE/).to_stdout
     result.to output(/SSML Voice Gender: FEMALE/).to_stdout
   end
-
 end

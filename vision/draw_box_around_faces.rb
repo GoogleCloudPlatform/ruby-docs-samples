@@ -58,16 +58,15 @@ def draw_box_around_faces path_to_image_file:, path_to_output_file:
 end
 
 # [START vision_face_detection_tutorial_run_application]
-if __FILE__ == $PROGRAM_NAME
+if $PROGRAM_NAME == __FILE__
   if ARGV.size == 2
     draw_box_around_faces path_to_image_file:  ARGV.shift,
                           path_to_output_file: ARGV.shift
   else
     puts <<~USAGE
-    Usage: ruby draw_box_around_faces.rb [input-file] [output-file]
-
-    Example:
-      ruby draw_box_around_faces.rb images/face.png output-image.png
+      Usage: ruby draw_box_around_faces.rb [input-file] [output-file]
+       Example:
+        ruby draw_box_around_faces.rb images/face.png output-image.png
     USAGE
   end
 end

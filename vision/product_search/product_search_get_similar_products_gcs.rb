@@ -15,14 +15,13 @@
 # [START vision_product_search_get_similar_products_gcs]
 require "google/cloud/vision"
 
-def product_search_get_similar_products_gcs(
-  project_id       = "your-project-id",
-  location         = "us-west1",
-  product_set_id   = "your-product-set-id",
-  product_category = "apparel",
-  gcs_uri          = "gs://cloud-samples-data/vision/product_search/shoes_1.jpg",
-  filter           = "(color = red OR color = blue) AND style = kids"
-)
+def product_search_get_similar_products_gcs(project_id = "your-project-id",
+                                            location         = "us-west1",
+                                            product_set_id   = "your-product-set-id",
+                                            product_category = "apparel",
+                                            gcs_uri          = "gs://cloud-samples-data/vision/product_search/shoes_1.jpg",
+                                            filter           = "(color = red OR color = blue) AND style = kids")
+
   product_search_client  = Google::Cloud::Vision::ProductSearch.new
   image_annotator_client = Google::Cloud::Vision::ImageAnnotator.new
 
@@ -32,7 +31,7 @@ def product_search_get_similar_products_gcs(
 
   product_set = product_search_client.get_product_set product_set_path
 
-  if product_set.index_time.seconds == 0
+  if product_set.index_time.seconds.zero?
     puts "Product set has not been indexed. Please wait and try again."
     return
   end
@@ -71,4 +70,4 @@ def product_search_get_similar_products_gcs(
 end
 # [END vision_product_search_get_similar_products_gcs]
 
-product_search_get_similar_products_gcs *ARGV if $PROGRAM_NAME == __FILE__
+product_search_get_similar_products_gcs(*ARGV) if $PROGRAM_NAME == __FILE__

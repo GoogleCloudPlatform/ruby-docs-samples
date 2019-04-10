@@ -15,7 +15,6 @@
 require "spec_helper"
 
 describe "Update product labels" do
-
   example "Update product labels" do
     snippet_filepath = get_snippet_filepath __FILE__
     temp_product = create_temp_product
@@ -26,7 +25,5 @@ describe "Update product labels" do
 
     temp_product = @client.get_product temp_product.name
     expect(temp_product.product_labels.first.value).to eq "green"
-
   end
-
 end

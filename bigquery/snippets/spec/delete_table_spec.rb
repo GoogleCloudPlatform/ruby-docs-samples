@@ -16,7 +16,6 @@ require_relative "../delete_table"
 require "spec_helper"
 
 describe "Delete table" do
-
   before do
     @dataset = create_temp_dataset
   end
@@ -28,5 +27,4 @@ describe "Delete table" do
 
     expect(@dataset.table(table.table_id, skip_lookup: true).exists?).to be(false)
   end
-
 end

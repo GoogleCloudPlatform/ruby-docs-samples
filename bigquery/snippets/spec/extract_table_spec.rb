@@ -18,12 +18,11 @@ require "spec_helper"
 require "google/cloud/storage"
 
 describe "Extract table" do
-
   before do
     @storage = Google::Cloud::Storage.new
     @bucket = @storage.create_bucket "test_bucket_#{Time.now.to_i}"
     @dataset = create_temp_dataset
-    file_path = File.expand_path("../resources/people.csv", __dir__)
+    file_path = File.expand_path "../resources/people.csv", __dir__
     load_from_file @dataset.dataset_id, file_path
     @table = @dataset.tables.first
   end
@@ -37,10 +36,7 @@ describe "Extract table" do
   end
 
   after do
-    @bucket.files.each do |file|
-      file.delete
-    end
+    @bucket.files.each(&:delete)
     @bucket.delete
   end
-
 end

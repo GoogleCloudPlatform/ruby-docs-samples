@@ -15,7 +15,6 @@ RSpec.configure do |config|
 end
 
 describe "Google Cloud Firestore API samples - Query Data" do
-
   before do
     @firestore_project = ENV["FIRESTORE_PROJECT_ID"]
     query_create_examples project_id: @firestore_project
@@ -26,26 +25,26 @@ describe "Google Cloud Firestore API samples - Query Data" do
   end
 
   # Capture and return STDOUT output by block
-  def capture &block
+  def capture
     real_stdout = $stdout
     $stdout = StringIO.new
-    block.call
+    yield
     $stdout.string
   ensure
     $stdout = real_stdout
   end
 
   example "query_create_examples" do
-    output = capture {
+    output = capture do
       query_create_examples project_id: @firestore_project
-    }
+    end
     expect(output).to include "Added example cities data to the cities collection."
   end
 
   example "create_query_state" do
-    output = capture {
+    output = capture do
       create_query_state project_id: @firestore_project
-    }
+    end
     expect(output).to include "Document LA returned by query state=CA."
     expect(output).to include "Document SF returned by query state=CA."
     expect(output).not_to include "Document BJ returned by query state=CA."
@@ -54,9 +53,9 @@ describe "Google Cloud Firestore API samples - Query Data" do
   end
 
   example "create_query_capital" do
-    output = capture {
+    output = capture do
       create_query_capital project_id: @firestore_project
-    }
+    end
     expect(output).to include "Document BJ returned by query capital=true."
     expect(output).to include "Document TOK returned by query capital=true."
     expect(output).to include "Document DC returned by query capital=true."
@@ -65,9 +64,9 @@ describe "Google Cloud Firestore API samples - Query Data" do
   end
 
   example "simple_queries" do
-    output = capture {
+    output = capture do
       simple_queries project_id: @firestore_project
-    }
+    end
     expect(output).to include "Document LA returned by query state=CA."
     expect(output).to include "Document SF returned by query state=CA."
     expect(output).not_to include "Document BJ returned by query state=CA."
@@ -86,9 +85,9 @@ describe "Google Cloud Firestore API samples - Query Data" do
   end
 
   example "chained_query" do
-    output = capture {
+    output = capture do
       chained_query project_id: @firestore_project
-    }
+    end
     expect(output).to include "Document SF returned by query state=CA and name=San Francisco."
     expect(output).not_to include "Document LA returned by query state=CA and name=San Francisco."
     expect(output).not_to include "Document DC returned by query state=CA and name=San Francisco."
@@ -97,9 +96,9 @@ describe "Google Cloud Firestore API samples - Query Data" do
   end
 
   example "composite_index_chained_query" do
-    output = capture {
+    output = capture do
       composite_index_chained_query project_id: @firestore_project
-    }
+    end
     expect(output).to include "Document SF returned by query state=CA and population<1000000."
     expect(output).not_to include "Document LA returned by query state=CA and population<1000000."
     expect(output).not_to include "Document DC returned by query state=CA and population<1000000."
@@ -108,9 +107,9 @@ describe "Google Cloud Firestore API samples - Query Data" do
   end
 
   example "range_query" do
-    output = capture {
+    output = capture do
       range_query project_id: @firestore_project
-    }
+    end
     expect(output).to include "Document SF returned by query CA<=state<=IN."
     expect(output).to include "Document LA returned by query CA<=state<=IN."
     expect(output).not_to include "Document DC returned by query CA<=state<=IN."

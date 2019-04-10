@@ -24,7 +24,7 @@ def detect_text image_path:
 
   # [START vision_text_detection_migration]
   response = image_annotator.text_detection(
-    image: image_path,
+    image:       image_path,
     max_results: 1 # optional, defaults to 10
   )
 
@@ -49,7 +49,7 @@ def detect_text_gcs image_path:
   image_annotator = Google::Cloud::Vision::ImageAnnotator.new
 
   response = image_annotator.text_detection(
-    image: image_path,
+    image:       image_path,
     max_results: 1 # optional, defaults to 10
   )
 
@@ -61,17 +61,16 @@ def detect_text_gcs image_path:
   # [END vision_text_detection_gcs]
 end
 
-if __FILE__ == $PROGRAM_NAME
+if $PROGRAM_NAME == __FILE__
   image_path = ARGV.shift
 
   if !image_path
     puts <<~USAGE
-    Usage: ruby detect_text.rb [image file path]
-
-    Example:
-      ruby detect_text.rb image.png
-      ruby detect_text.rb https://public-url/image.png
-      ruby detect_text.rb gs://my-bucket/image.png
+      Usage: ruby detect_text.rb [image file path]
+       Example:
+        ruby detect_text.rb image.png
+        ruby detect_text.rb https://public-url/image.png
+        ruby detect_text.rb gs://my-bucket/image.png
     USAGE
   elsif image_path =~ URI::DEFAULT_PARSER.make_regexp
     detect_text_gs image_path: image_path
