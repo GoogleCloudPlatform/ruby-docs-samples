@@ -78,14 +78,13 @@ if $PROGRAM_NAME == __FILE__
     )
   else
     puts <<~USAGE
-Usage: ruby create_http_task.rb <GOOGLE_CLOUD_PROJECT> <LOCATION_ID> <QUEUE_ID> <URL> <payload> <seconds>
+      Usage: ruby create_task.rb <GOOGLE_CLOUD_PROJECT> <LOCATION_ID> <QUEUE_ID> <payload> <seconds>
 
-Environment variables:
-  GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
-  QUEUE_ID must be set to your Google App Engine queue ID
-  LOCATION_ID must be set to your Google App Engine location
-  URL must be set to your HTTP request target.
-  GOOGLE_APPLICATION_CREDENTIALS set to the path to your JSON credentials
+      Environment variables:
+        GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
+        QUEUE_ID must be set to your Google App Engine queue ID
+        LOCATION_ID must be set to your Google App Engine location
+        GOOGLE_APPLICATION_CREDENTIALS set to the path to your JSON credentials
 
     USAGE
   end
