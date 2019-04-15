@@ -16,7 +16,7 @@ require_relative "../app"
 require "rspec"
 require "rack/test"
 require "google/cloud/tasks"
-require 'cgi'
+require "cgi"
 
 describe "CloudTasks", type: :feature do
   include Rack::Test::Methods
