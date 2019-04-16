@@ -99,4 +99,18 @@ a second argument:
 ruby create_task.rb $GOOGLE_CLOUD_PROJECT $LOCATION_ID $QUEUE_ID hello 30
 ```
 
+### Using HTTP Push Queues
+Set an environment variable for the endpoint to your task handler. This is an
+example url to send requests to the App Engine task handler:
+
+```
+export URL=https://${GOOGLE_CLOUD_PROJECT}.appspot.com/log_payload
+```
+Running the sample will create a task and send the task to the specific URL
+endpoint, with a payload specified:
+
+```
+ruby create_http_task.rb $GOOGLE_CLOUD_PROJECT $LOCATION_ID $QUEUE_ID $URL hello
+```
+
 [appengine-flex]: https://cloud.google.com/appengine/docs/flexible/ruby
