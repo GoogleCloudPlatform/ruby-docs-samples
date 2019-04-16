@@ -40,8 +40,8 @@ describe "CloudTasks", type: :feature do
     current_directory = File.expand_path(File.dirname(__FILE__))
     snippet_filepath  = File.join current_directory, "..", "create_http_task.rb"
 
-    output = `ruby #{snippet_filepath} #{GOOGLE_CLOUD_PROJECT} #{LOCATION_ID} \
-            #{QUEUE_ID} #{"http://test"}`
+    output = `ruby #{snippet_filepath} #{LOCATION_ID} #{QUEUE_ID} \
+            #{"http://example.com/log_payload"}`
 
     expect(output).to include "Created task"
   end

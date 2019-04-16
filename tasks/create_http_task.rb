@@ -61,8 +61,8 @@ end
 
 if $PROGRAM_NAME == __FILE__
   project_id  = ENV["GOOGLE_CLOUD_PROJECT"]
-  location_id = ENV["LOCATION_ID"]
-  queue_id    = ENV["QUEUE_ID"]
+  location_id = ARGV.shift
+  queue_id    = ARGV.shift
   url         = ARGV.shift
   payload     = ARGV.shift
   seconds     = ARGV.shift
@@ -78,12 +78,10 @@ if $PROGRAM_NAME == __FILE__
     )
   else
     puts <<~USAGE
-      Usage: ruby create_http_task.rb <URL> <payload> <seconds>
+      Usage: ruby create_http_task.rb <LOCATION_ID> <QUEUE_ID> <URL> <payload> <seconds>
 
       Environment variables:
         GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
-        QUEUE_ID must be set to your Google App Engine queue ID
-        LOCATION_ID must be set to your Google App Engine location
         GOOGLE_APPLICATION_CREDENTIALS set to the path to your JSON credentials
 
     USAGE
