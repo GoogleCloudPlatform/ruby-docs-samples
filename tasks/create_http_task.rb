@@ -60,9 +60,9 @@ end
 # [END cloud_tasks_appengine_create_task]
 
 if $PROGRAM_NAME == __FILE__
-  project_id  = ARGV.shift
-  location_id = ARGV.shift
-  queue_id    = ARGV.shift
+  project_id  = ENV["GOOGLE_CLOUD_PROJECT"]
+  location_id = ENV["LOCATION_ID"]
+  queue_id    = ENV["QUEUE_ID"]
   url         = ARGV.shift
   payload     = ARGV.shift
   seconds     = ARGV.shift
@@ -78,7 +78,7 @@ if $PROGRAM_NAME == __FILE__
     )
   else
     puts <<~USAGE
-      Usage: ruby create_task.rb <GOOGLE_CLOUD_PROJECT> <LOCATION_ID> <QUEUE_ID> <payload> <seconds>
+      Usage: ruby create_http_task.rb <URL> <payload> <seconds>
 
       Environment variables:
         GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID

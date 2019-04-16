@@ -1,25 +1,9 @@
 # Ruby Google Cloud Tasks sample for Google App Engine
 
-This sample application shows how to use [Google Cloud Tasks](https://cloud.google.com/cloud-tasks/)
-on Google App Engine [flexible environment][appengine-flex].
+This sample application shows how to use [Google Cloud Tasks](https://cloud.google.com/cloud-tasks/).
 
-App Engine queues push tasks to an App Engine HTTP target. This directory
-contains both the App Engine app to deploy, as well as the snippets to run
-locally to push tasks to it, which could also be called on App Engine.
-
-`create_task.rb` is a simple command-line program to create tasks to be pushed to
-the App Engine app.
-
-`app.rb` is the main App Engine app. This app serves as an endpoint to
-receive App Engine task attempts.
-
-`app.yaml` configures the app for App Engine Ruby flexible
-environment.
-
-* [Setup](#setup)
-* [Running locally](#running-locally)
-* [Deploying to App Engine](#deploying-to-app-engine)
-* [Running the tests](#running-the-tests)
+`create_http_task.rb` is a simple command-line program to create tasks with an
+HTTP target.
 
 ## Setup
 
@@ -79,25 +63,6 @@ location is "us-central1").
 ```
 export LOCATION_ID=us-central1
 ```
-### Using App Engine Push Queues
-Create a task, targeted at the `/log_payload` endpoint, with a payload specified:
-
-```
-ruby create_task.rb $GOOGLE_CLOUD_PROJECT $LOCATION_ID $QUEUE_ID hello
-```
-
-The App Engine app serves as a target for the push requests. It has an
-endpoint `/log_payload` that reads the payload (i.e., the request body) of the
-HTTP POST request and logs it. The log output can be viewed with:
-
-    gcloud app logs read
-
-Create a task that will be scheduled for a time in the future using the
-a second argument:
-
-```
-ruby create_task.rb $GOOGLE_CLOUD_PROJECT $LOCATION_ID $QUEUE_ID hello 30
-```
 
 ### Using HTTP Push Queues
 Set an environment variable for the endpoint to your task handler. This is an
@@ -110,7 +75,7 @@ Running the sample will create a task and send the task to the specific URL
 endpoint, with a payload specified:
 
 ```
-ruby create_http_task.rb $GOOGLE_CLOUD_PROJECT $LOCATION_ID $QUEUE_ID $URL hello
+ruby create_http_task.rb $URL
 ```
 
 [appengine-flex]: https://cloud.google.com/appengine/docs/flexible/ruby
