@@ -19,9 +19,10 @@ require "google/cloud/tasks"
 # @param [String] project_id Your Google Cloud Project ID.
 # @param [String] location_id Your Google Cloud Project Location ID.
 # @param [String] queue_id Your Google Cloud App Engine Queue ID.
+# @param [String] url The full path to sent the task request to.
 # @param [String] payload The request body of your task.
 # @param [Integer] seconds The delay, in seconds, to process your task.
-def create_task project_id, location_id, queue_id, payload: nil, seconds: nil
+def create_http_task project_id, location_id, queue_id, url, payload: nil, seconds: nil
   # Instantiates a client.
   client = Google::Cloud::Tasks.new
 
@@ -30,15 +31,15 @@ def create_task project_id, location_id, queue_id, payload: nil, seconds: nil
 
   # Construct task.
   task = {
-    app_engine_http_request: {
-      http_method:  "POST",
-      relative_uri: "/log_payload"
+    http_request: {
+      http_method: "POST",
+      url:         url
     }
   }
 
   # Add payload to task body.
   if payload
-    task[:app_engine_http_request][:body] = payload
+    task[:http_request][:body] = payload
   end
 
   # Add scheduled time to task.
@@ -52,33 +53,35 @@ def create_task project_id, location_id, queue_id, payload: nil, seconds: nil
   puts "Sending task #{task}"
   response = client.create_task parent, task
 
-  puts "Created task #{response.name}" if response.name
+  if response.name
+    puts "Created task #{response.name}"
+  end
 end
 # [END cloud_tasks_appengine_create_task]
 
 if $PROGRAM_NAME == __FILE__
-  project_id  = ARGV.shift
+  project_id  = ENV["GOOGLE_CLOUD_PROJECT"]
   location_id = ARGV.shift
   queue_id    = ARGV.shift
+  url         = ARGV.shift
   payload     = ARGV.shift
   seconds     = ARGV.shift
 
-  if project_id && queue_id && location_id
-    create_task(
+  if project_id && queue_id && location_id && url
+    create_http_task(
       project_id,
       location_id,
       queue_id,
+      url,
       payload: payload,
       seconds: seconds
     )
   else
     puts <<~USAGE
-      Usage: ruby create_task.rb <GOOGLE_CLOUD_PROJECT> <LOCATION_ID> <QUEUE_ID> <payload> <seconds>
+      Usage: ruby create_http_task.rb <LOCATION_ID> <QUEUE_ID> <URL> <payload> <seconds>
 
       Environment variables:
         GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
-        QUEUE_ID must be set to your Google App Engine queue ID
-        LOCATION_ID must be set to your Google App Engine location
         GOOGLE_APPLICATION_CREDENTIALS set to the path to your JSON credentials
 
     USAGE
