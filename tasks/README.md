@@ -75,7 +75,7 @@ Running the sample will create a task and send the task to the specific URL
 endpoint, with a payload specified:
 
 ```
-ruby create_http_task.rb $URL
+ruby create_http_task.rb $LOCATION_ID $QUEUE_ID $URL
 ```
 
 [appengine-flex]: https://cloud.google.com/appengine/docs/flexible/ruby
