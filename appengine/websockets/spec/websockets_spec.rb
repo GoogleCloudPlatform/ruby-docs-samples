@@ -14,22 +14,21 @@
 
 require_relative "../app.rb"
 require "rspec"
-require 'capybara/rspec'
-require 'capybara-webkit'
+require "capybara/rspec"
+require "capybara/poltergeist"
+
+Capybara.javascript_driver = :poltergeist
+
 Capybara.app = Sinatra::Application
 
 Capybara.register_server :thin do |app, port, host|
-  require 'rack/handler/thin'
+  require "rack/handler/thin"
   Rack::Handler::Thin.run(app, :Port => port, :Host => host)
-end
-
-Capybara::Webkit.configure do |config|
-  config.allow_url("https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js")
 end
 
 Capybara.server = :thin
 
-describe "Websockets Sample", type: :feature, js: true, driver: :webkit do
+describe "Websockets Sample", type: :feature, js: true do
 
   it "returns HTML" do
     visit "/"
@@ -37,11 +36,11 @@ describe "Websockets Sample", type: :feature, js: true, driver: :webkit do
     expect(page).to have_content 'Chat'
   end
 
-  it "responds to chat commands" do
+  it "responds to chat" do
     visit "/"
-    fill_in 'chat-text', with: 'test chat text'
-    click_button 'Send'
+    fill_in "chat-text", with: "test chat text"
+    click_button "Send"
 
-    expect(page).to have_content 'test chat text'
+    expect(page).to have_content "test chat text"
   end
 end
