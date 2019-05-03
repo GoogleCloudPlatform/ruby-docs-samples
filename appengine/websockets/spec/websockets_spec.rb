@@ -14,25 +14,34 @@
 
 require_relative "../app.rb"
 require "rspec"
-require "rack/test"
+require 'capybara/rspec'
+require 'capybara-webkit'
+Capybara.app = Sinatra::Application
 
-describe "WebSockets" do
-  include Rack::Test::Methods
+Capybara.register_server :thin do |app, port, host|
+  require 'rack/handler/thin'
+  Rack::Handler::Thin.run(app, :Port => port, :Host => host)
+end
 
-  def app
-    Sinatra::Application
+Capybara::Webkit.configure do |config|
+  config.allow_url("https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js")
+end
+
+Capybara.server = :thin
+
+describe "Websockets Sample", type: :feature, js: true, driver: :webkit do
+
+  it "returns HTML" do
+    visit "/"
+
+    expect(page).to have_content 'Chat'
   end
 
-  before :all do
+  it "responds to chat commands" do
+    visit "/"
+    fill_in 'chat-text', with: 'test chat text'
+    click_button 'Send'
+
+    expect(page).to have_content 'test chat text'
   end
-
-  it "returns what we expect" do
-    get "/"
-
-    expect(last_response.body).to include("Chat")
-  end
-
-  after :all do
-  end
-
 end
