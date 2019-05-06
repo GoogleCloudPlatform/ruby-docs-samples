@@ -1,15 +1,15 @@
 # [START gae_flex_websocket_dependencies]
 source "https://rubygems.org"
 
-gem "sinatra"
 gem "faye-websocket"
+gem "sinatra"
 
 gem "thin"
 # [END gae_flex_websocket_dependencies]
 
 group :test do
+  gem "capybara"
+  gem "poltergeist"
   gem "rack-test"
   gem "rspec"
-  gem "capybara"
-  gem 'poltergeist'
 end

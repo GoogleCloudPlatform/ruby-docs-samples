@@ -17,7 +17,7 @@ require "sinatra"
 require "faye/websocket"
 require "thin"
 
-Faye::WebSocket.load_adapter('thin')
+Faye::WebSocket.load_adapter "thin"
 
 $all_clients = []
 
@@ -26,22 +26,22 @@ get "/" do
 end
 
 get "/chat" do
-  if Faye::WebSocket.websocket?(request.env)
-    ws = Faye::WebSocket.new(request.env)
+  if Faye::WebSocket.websocket? request.env
+    ws = Faye::WebSocket.new request.env
 
-    ws.on(:open) do |event|
-      $all_clients.push(ws)
+    ws.on :open do
+      $all_clients.push ws
     end
 
-    ws.on(:message) do |msg|
+    ws.on :message do |msg|
       # Send the message to every connected client (including self)
       $all_clients.each do |client|
-        client.send(msg.data)
+        client.send msg.data
       end
     end
 
-    ws.on(:close) do |event|
-      $all_clients.delete(ws)
+    ws.on :close do
+      $all_clients.delete ws
     end
 
     # Return async Rack response
