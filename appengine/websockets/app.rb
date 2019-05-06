@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# rubocop:disable Style/GlobalVars
+
 # [START gae_flex_websockets]
 require "sinatra"
 require "faye/websocket"
@@ -19,6 +21,10 @@ require "thin"
 
 Faye::WebSocket.load_adapter "thin"
 
+# For the purposes of this example, use a global variable to keep track of
+# all connected clients in order to send chat messages. This approach limits
+# us to a single server and a single process; a more robust solution would be
+# to pass messages via e.g. Cloud Memorystore or Cloud Pub/Sub.
 $all_clients = []
 
 get "/" do
