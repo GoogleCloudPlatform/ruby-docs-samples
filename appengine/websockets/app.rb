@@ -58,3 +58,4 @@ get "/chat" do
 end
 
 # [END gae_flex_websockets]
+# rubocop:enable Style/GlobalVars
