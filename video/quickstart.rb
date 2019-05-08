@@ -17,7 +17,7 @@ require "google/cloud/video_intelligence"
 
 video_client = Google::Cloud::VideoIntelligence.new
 features     = [:LABEL_DETECTION]
-path         = "gs://demomaker/cat.mp4"
+path         = "gs://cloud-samples-data/video/cat.mp4"
 
 # Register a callback during the method call
 operation = video_client.annotate_video input_uri: path, features: features do |operation|
