@@ -18,7 +18,10 @@ require "google/cloud/talent"
 
 # [START job_search_create_job_custom_attributes]
 
-# Create Job with Custom Attributes
+ # Create Job with Custom Attributes
+ #
+ # @param project_id {String} Your Google Cloud Project ID
+ # @param tenant_id {String} Identifier of the Tenantd
 def sample_create_job(project_id, tenant_id, company_name, requisition_id, language_code)
   # [START job_search_create_job_custom_attributes_core]
   # Instantiate a client

@@ -12,23 +12,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# DO NOT EDIT! This is a generated sample ("RequestPagedAll",  "job_search_custom_ranking_search")
+# DO NOT EDIT! This is a generated sample ("RequestPagedAll",  "job_search_histogram_search")
 
 require "google/cloud/talent"
 
-# [START job_search_custom_ranking_search]
+# [START job_search_histogram_search]
 
- # Search Jobs using custom rankings
+ # Search Jobs with histogram queries
  #
- # @param project_id {String} Your Google Cloud Project ID
- # @param tenant_id {String} Identifier of the Tenantd
-def sample_search_jobs(project_id, tenant_id)
-  # [START job_search_custom_ranking_search_core]
+ # @param query {String} Histogram query
+ # More info on histogram facets, constants, and built-in functions:
+ # https://godoc.org/google.golang.org/genproto/googleapis/cloud/talent/v4beta1#SearchJobsRequest
+def sample_search_jobs(project_id, tenant_id, query)
+  # [START job_search_histogram_search_core]
   # Instantiate a client
   job_client = Google::Cloud::Talent::JobService.new version: :v4beta1
 
   # project_id = "Your Google Cloud Project ID"
   # tenant_id = "Your Tenant ID (using tenancy is optional)"
+  # query = "count(base_compensation, [bucket(12, 20)])"
   formatted_parent = job_client.class.tenant_path(project_id, tenant_id)
   domain = "www.example.com"
   session_id = "Hashed session identifier"
@@ -38,10 +40,8 @@ def sample_search_jobs(project_id, tenant_id)
     session_id: session_id,
     user_id: user_id
   }
-  importance_level = :EXTREME
-  ranking_expression = "(someFieldLong + 25) * 0.25"
-  custom_ranking_info = { importance_level: importance_level, ranking_expression: ranking_expression }
-  order_by = "custom_ranking desc"
+  histogram_queries_element = { histogram_query: query }
+  histogram_queries = [histogram_queries_element]
 
   # Iterate over all results.
   job_client.search_jobs(formatted_parent, request_metadata, custom_ranking_info: custom_ranking_info, order_by: order_by).each do |element|
@@ -52,9 +52,9 @@ def sample_search_jobs(project_id, tenant_id)
     puts "Job title: #{job.title}"
   end
 
-  # [END job_search_custom_ranking_search_core]
+  # [END job_search_histogram_search_core]
 end
-# [END job_search_custom_ranking_search]
+# [END job_search_histogram_search]
 
 
 require "optparse"
@@ -63,13 +63,15 @@ if $0 == __FILE__
 
   project_id = "Your Google Cloud Project ID"
   tenant_id = "Your Tenant ID (using tenancy is optional)"
+  query = "count(base_compensation, [bucket(12, 20)])"
 
   ARGV.options do |opts|
     opts.on("--project_id=val") { |val| project_id = val }
     opts.on("--tenant_id=val") { |val| tenant_id = val }
+    opts.on("--query=val") { |val| query = val }
     opts.parse!
   end
 
 
-  sample_search_jobs(project_id, tenant_id)
+  sample_search_jobs(project_id, tenant_id, query)
 end

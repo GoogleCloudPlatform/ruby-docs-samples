@@ -18,7 +18,10 @@ require "google/cloud/talent"
 
 # [START job_search_autocomplete_job_title]
 
-# Complete job title given partial text (autocomplete)
+ # Complete job title given partial text (autocomplete)
+ #
+ # @param project_id {String} Your Google Cloud Project ID
+ # @param tenant_id {String} Identifier of the Tenantd
 def sample_complete_query(project_id, tenant_id, query, num_results, language_code)
   # [START job_search_autocomplete_job_title_core]
   # Instantiate a client

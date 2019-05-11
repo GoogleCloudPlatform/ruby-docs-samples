@@ -18,7 +18,10 @@ require "google/cloud/talent"
 
 # [START job_search_list_jobs]
 
-# List Jobs
+ # List Jobs
+ #
+ # @param project_id {String} Your Google Cloud Project ID
+ # @param tenant_id {String} Identifier of the Tenant
 def sample_list_jobs(project_id, tenant_id, filter)
   # [START job_search_list_jobs_core]
   # Instantiate a client

@@ -18,7 +18,10 @@ require "google/cloud/talent"
 
 # [START job_search_create_job]
 
-# Create Job
+ # Create Job
+ #
+ # @param project_id {String} Your Google Cloud Project ID
+ # @param tenant_id {String} Identifier of the Tenant
 def sample_create_job(project_id, tenant_id, company_name, requisition_id, title, description, job_application_url, address_one, address_two, language_code)
   # [START job_search_create_job_core]
   # Instantiate a client
