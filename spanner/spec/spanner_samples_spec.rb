@@ -226,7 +226,7 @@ describe "Google Cloud Spanner API samples" do
                                  instance_id: @instance.instance_id,
                                  database_id: database.database_id
     end
-    expect(captured_output).to match /6\n7/
+    expect(captured_output).to match /8\n7\n6/
   end
 
   example "query struct field" do
@@ -976,6 +976,12 @@ describe "Google Cloud Spanner API samples" do
     singers = client.execute("SELECT * FROM Singers").rows.to_a
     expect(singers.count).to eq 9
     expect(singers.find { |s| s[:FirstName] == "Dylan" }).not_to be nil
+
+    expect {
+      query_with_parameter project_id:  @project_id,
+                      instance_id: @instance.instance_id,
+                      database_id: database.database_id
+    }.to output("12 Melissa Garcia\n").to_stdout
   end
 
   example "write with transaction using dml (successful transfer)" do

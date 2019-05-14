@@ -836,6 +836,29 @@ def write_using_dml project_id:, instance_id:, database_id:
   # [END spanner_dml_getting_started_insert]
 end
 
+def query_with_parameter project_id:, instance_id:, database_id:
+  # [START spanner_query_with_parameter]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+
+  spanner = Google::Cloud::Spanner.new project: project_id
+  client  = spanner.client instance_id, database_id
+
+  sql_query = "SELECT SingerId, FirstName, LastName
+               FROM Singers WHERE LastName = @last_name"
+
+  params      = { last_name: "Garcia" }
+  param_types = { last_name: :STRING }
+
+  client.execute(sql_query, params: params, types: param_types).rows.each do |row|
+    puts "#{row[:SingerId]} #{row[:FirstName]} #{row[:LastName]}"
+  end
+  # [END spanner_query_with_parameter]
+end
+
 def write_with_transaction_using_dml project_id:, instance_id:, database_id:
   # [START spanner_dml_getting_started_update]
   # project_id  = "Your Google Cloud project ID"
@@ -981,6 +1004,7 @@ def usage
       write_and_read_using_dml           <instance_id> <database_id> Insert data using a DML statement and then read the inserted data.
       update_using_dml_with_struct       <instance_id> <database_id> Update data using a DML statement combined with a Spanner struct.
       write_using_dml                    <instance_id> <database_id> Insert multiple records using a DML statement.
+      query_with_parameter               <instance_id> <database_id> Query record inserted using DML with a query parameter.
       write_with_transaction_using_dml   <instance_id> <database_id> Update data using a DML statement within a read-write transaction.
       update_using_partitioned_dml       <instance_id> <database_id> Update multiple records using a partitioned DML statement.
       delete_using_partitioned_dml       <instance_id> <database_id> Delete multiple records using a partitioned DML statement.
@@ -1010,9 +1034,9 @@ def run_sample arguments
     "query_with_array_of_struct", "query_struct_field", "query_nested_struct_field",
     "insert_using_dml", "update_using_dml", "delete_using_dml",
     "update_using_dml_with_timestamp", "write_and_read_using_dml",
-    "update_using_dml_with_struct", "write_using_dml", "write_with_transaction_using_dml",
-    "update_using_partitioned_dml", "delete_using_partitioned_dml",
-    "update_using_batch_dml"
+    "update_using_dml_with_struct", "write_using_dml", "query_with_parameter",
+    "write_with_transaction_using_dml", "update_using_partitioned_dml",
+    "delete_using_partitioned_dml", "update_using_batch_dml"
   ]
   if command.eql?("query_data_with_index") && instance_id && database_id && arguments.size >= 2
     query_data_with_index project_id:  project_id,
