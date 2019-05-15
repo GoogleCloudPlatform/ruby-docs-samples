@@ -11,14 +11,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START cloud_tasks_appengine_create_task]
+# [START cloud_tasks_create_http_task]
 require "google/cloud/tasks"
 
-# Create an App Engine Task
+# Create a Task with an HTTP Target
 #
 # @param [String] project_id Your Google Cloud Project ID.
 # @param [String] location_id Your Google Cloud Project Location ID.
-# @param [String] queue_id Your Google Cloud App Engine Queue ID.
+# @param [String] queue_id Your Google Cloud Tasks Queue ID.
 # @param [String] url The full path to sent the task request to.
 # @param [String] payload The request body of your task.
 # @param [Integer] seconds The delay, in seconds, to process your task.
@@ -57,7 +57,7 @@ def create_http_task project_id, location_id, queue_id, url, payload: nil, secon
     puts "Created task #{response.name}"
   end
 end
-# [END cloud_tasks_appengine_create_task]
+# [END cloud_tasks_create_http_task]
 
 if $PROGRAM_NAME == __FILE__
   project_id  = ENV["GOOGLE_CLOUD_PROJECT"]
