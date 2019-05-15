@@ -23,7 +23,7 @@ describe "CloudTasks", type: :feature do
   before :all do
     GOOGLE_CLOUD_PROJECT = ENV["GOOGLE_CLOUD_PROJECT"]
     location_id          = ENV["LOCATION_ID"] || "us-east1"
-    QUEUE_ID             = "my-appengine-queue".freeze
+    QUEUE_ID             = "my-queue".freeze
 
     client = Google::Cloud::Tasks.new
     parent = client.queue_path GOOGLE_CLOUD_PROJECT, location_id, QUEUE_ID
@@ -41,7 +41,7 @@ describe "CloudTasks", type: :feature do
     snippet_filepath  = File.join current_directory, "..", "create_http_task.rb"
 
     output = `ruby #{snippet_filepath} #{LOCATION_ID} #{QUEUE_ID} \
-            #{"http://example.com/log_payload"}`
+            #{"http://example.com/taskhandler"}`
 
     expect(output).to include "Created task"
   end
