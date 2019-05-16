@@ -80,4 +80,4 @@ DEPENDENCIES
   rspec-retry
 
 BUNDLED WITH
-   1.17.0
+   2.0.1
