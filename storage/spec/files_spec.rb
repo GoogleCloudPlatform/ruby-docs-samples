@@ -500,9 +500,7 @@ describe "Google Cloud Storage files sample" do
     expect(@captured_output).to include "Generated GET signed url:"
 
     signed_url_from_output = @captured_output.scan(/http.*$/).first
-
     file_contents = Net::HTTP.get URI(signed_url_from_output)
-
     expect(file_contents).to include "Content of test file.txt"
   end
 

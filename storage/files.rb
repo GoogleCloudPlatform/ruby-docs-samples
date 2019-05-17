@@ -390,14 +390,14 @@ def generate_signed_get_url_v4 project_id:, bucket_name:, file_name:
   # [START storage_generate_signed_url_v4]
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
-  # file_name   = "Name of a file in the Cloud Storage bucket"
+  # file_name   = "Name of a file in the Google Cloud Storage bucket"
   require "google/cloud/storage"
 
   storage = Google::Cloud::Storage.new project_id: project_id
-  five_min_from_now = 5 * 60
+  storage_expiry_time = 5 * 60 # 5 minutes
 
   url = storage.signed_url bucket_name, file_name, method: "GET",
-                           expires: five_min_from_now, version: :v4
+                           expires: storage_expiry_time, version: :v4
 
   puts "Generated GET signed url:"
   puts url
@@ -414,10 +414,10 @@ def generate_signed_put_url_v4 project_id:, bucket_name:, file_name:
   require "google/cloud/storage"
 
   storage = Google::Cloud::Storage.new project_id: project_id
-  five_min_from_now = 5 * 60
+  storage_expiry_time = 5 * 60 # 5 minutes
 
   url = storage.signed_url bucket_name, file_name, method: "PUT",
-                           expires: five_min_from_now, version: :v4,
+                           expires: storage_expiry_time, version: :v4,
                            headers: { "Content-Type" => "text/plain" }
   puts "Generated PUT signed URL:"
   puts url
