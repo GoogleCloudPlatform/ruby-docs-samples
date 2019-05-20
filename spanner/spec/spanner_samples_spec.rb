@@ -979,8 +979,8 @@ describe "Google Cloud Spanner API samples" do
 
     expect {
       query_with_parameter project_id:  @project_id,
-                      instance_id: @instance.instance_id,
-                      database_id: database.database_id
+                           instance_id: @instance.instance_id,
+                           database_id: database.database_id
     }.to output("12 Melissa Garcia\n").to_stdout
   end
 

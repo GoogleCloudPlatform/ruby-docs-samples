@@ -848,7 +848,8 @@ def query_with_parameter project_id:, instance_id:, database_id:
   client  = spanner.client instance_id, database_id
 
   sql_query = "SELECT SingerId, FirstName, LastName
-               FROM Singers WHERE LastName = @last_name"
+               FROM Singers 
+               WHERE LastName = @last_name"
 
   params      = { last_name: "Garcia" }
   param_types = { last_name: :STRING }
