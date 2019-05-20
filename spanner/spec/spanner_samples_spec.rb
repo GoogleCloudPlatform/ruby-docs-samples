@@ -226,7 +226,7 @@ describe "Google Cloud Spanner API samples" do
                                  instance_id: @instance.instance_id,
                                  database_id: database.database_id
     end
-    expect(captured_output).to match /6\n7/
+    expect(captured_output).to match /8\n7\n6\n/
   end
 
   example "query struct field" do
