@@ -82,6 +82,7 @@ environment variable to the path to the key file, for example:
       write_and_read_using_dml           <instance_id> <database_id> Insert data using a DML statement and then read the inserted data.
       update_using_dml_with_struct       <instance_id> <database_id> Update data using a DML statement combined with a Spanner struct.
       write_using_dml                    <instance_id> <database_id> Insert multiple records using a DML statement.
+      query_with_parameter               <instance_id> <database_id> Query record inserted using DML with a query parameter.
       write_with_transaction_using_dml   <instance_id> <database_id> Update data using a DML statement within a read-write transaction.
       update_using_partitioned_dml       <instance_id> <database_id> Update multiple records using a partitioned DML statement.
       delete_using_partitioned_dml       <instance_id> <database_id> Delete multiple records using a partitioned DML statement.
