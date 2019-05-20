@@ -976,6 +976,12 @@ describe "Google Cloud Spanner API samples" do
     singers = client.execute("SELECT * FROM Singers").rows.to_a
     expect(singers.count).to eq 9
     expect(singers.find { |s| s[:FirstName] == "Dylan" }).not_to be nil
+
+    expect {
+      query_with_parameter project_id:  @project_id,
+                           instance_id: @instance.instance_id,
+                           database_id: database.database_id
+    }.to output("12 Melissa Garcia\n").to_stdout
   end
 
   example "write with transaction using dml (successful transfer)" do
