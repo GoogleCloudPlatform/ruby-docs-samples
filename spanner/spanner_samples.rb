@@ -849,10 +849,10 @@ def query_with_parameter project_id:, instance_id:, database_id:
 
   sql_query = "SELECT SingerId, FirstName, LastName
                FROM Singers
-               WHERE LastName = @last_name"
+               WHERE LastName = @lastName"
 
-  params      = { last_name: "Garcia" }
-  param_types = { last_name: :STRING }
+  params      = { lastName: "Garcia" }
+  param_types = { lastName: :STRING }
 
   client.execute(sql_query, params: params, types: param_types).rows.each do |row|
     puts "#{row[:SingerId]} #{row[:FirstName]} #{row[:LastName]}"
