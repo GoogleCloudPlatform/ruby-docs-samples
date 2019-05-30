@@ -1,6 +1,6 @@
 # Google App Engine Ruby Samples
 
-These are samples for using Ruby on the Google App Engine flexible environment.
+These are samples for using Ruby on the Google App Engine standard environment.
 They are referenced from the [docs](https://cloud.google.com/appengine/docs).
 
 See our other [Google Cloud Platform github repos](https://github.com/GoogleCloudPlatform)
@@ -27,7 +27,7 @@ services.
 
 1. Open a sample folder, install dependencies, and run the sample:
 
-        cd appengine/<sample-folder>/
+        cd appengine-standard/<sample-folder>/
         bundle install
         bundle exec ruby app.rb -p 8080
 
