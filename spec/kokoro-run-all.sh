@@ -8,7 +8,6 @@
 #    are modified, in which case all tests will be run.
 #  * Nightly runs will run all tests.
 
-set -x -e -u -o pipefail
 
 # Print out Ruby version
 ruby --version
@@ -34,6 +33,8 @@ do
     exit 1
   fi
 done
+
+set -x -e -u -o pipefail
 
 SCRIPT_DIRECTORY="$(dirname "$(realpath "$0")")"
 REPO_DIRECTORY="$(dirname "$SCRIPT_DIRECTORY")"
