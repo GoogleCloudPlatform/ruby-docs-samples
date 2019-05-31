@@ -8,7 +8,6 @@
 #    are modified, in which case all tests will be run.
 #  * Nightly runs will run all tests.
 
-set -x -e -u -o pipefail
 
 # Print out Ruby version
 ruby --version
@@ -19,14 +18,14 @@ source $KOKORO_GFILE_DIR/secrets.sh
 # https://github.com/bundler/bundler/issues/6154
 export BUNDLE_GEMFILE=
 
-for REQUIRED_VARIABLE in                   \
-  GOOGLE_CLOUD_PROJECT                     \
-  GOOGLE_APPLICATION_CREDENTIALS           \
-  GOOGLE_CLOUD_STORAGE_BUCKET              \
-  ALTERNATE_GOOGLE_CLOUD_STORAGE_BUCKET    \
-  GOOGLE_CLOUD_PROJECT_SECONDARY           \
-  GOOGLE_APPLICATION_CREDENTIALS_SECONDARY \
-  GOOGLE_CLOUD_KMS_KEY_NAME                \
+for REQUIRED_VARIABLE in
+  GOOGLE_CLOUD_PROJECT
+  GOOGLE_APPLICATION_CREDENTIALS
+  GOOGLE_CLOUD_STORAGE_BUCKET
+  ALTERNATE_GOOGLE_CLOUD_STORAGE_BUCKET
+  GOOGLE_CLOUD_PROJECT_SECONDARY
+  GOOGLE_APPLICATION_CREDENTIALS_SECONDARY
+  GOOGLE_CLOUD_KMS_KEY_NAME
   GOOGLE_CLOUD_KMS_KEY_RING
 do
   if [[ -z "${REQUIRED_VARIABLE:-}" ]]; then
@@ -34,6 +33,8 @@ do
     exit 1
   fi
 done
+
+set -x -e -u -o pipefail
 
 SCRIPT_DIRECTORY="$(dirname "$(realpath "$0")")"
 REPO_DIRECTORY="$(dirname "$SCRIPT_DIRECTORY")"
@@ -57,6 +58,12 @@ trap "gimmeproj -project cloud-samples-ruby-test-kokoro done $GOOGLE_CLOUD_PROJE
 # Set application credentials to the project-specific account. Some APIs do not
 # allow the service account project and GOOGLE_CLOUD_PROJECT to be different.
 export GOOGLE_APPLICATION_CREDENTIALS=$KOKORO_KEYSTORE_DIR/71386_kokoro-$GOOGLE_CLOUD_PROJECT
+export GOOGLE_APPLICATION_CREDENTIALS_SECONDARY=$KOKORO_KEYSTORE_DIR/71386_kokoro-cloud-samples-ruby-test-0
+
+# Make sure the secondary service account is different than the normal account.
+if [[ $GOOGLE_CLOUD_PROJECT = "cloud-samples-ruby-test-0" ]]; then
+  export GOOGLE_APPLICATION_CREDENTIALS_SECONDARY=$KOKORO_KEYSTORE_DIR/71386_kokoro-cloud-samples-ruby-test-1
+fi
 
 export FIRESTORE_PROJECT_ID=ruby-firestore
 export E2E_GOOGLE_CLOUD_PROJECT=cloud-samples-ruby-test-kokoro
