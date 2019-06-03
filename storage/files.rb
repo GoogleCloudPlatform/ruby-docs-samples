@@ -403,7 +403,7 @@ def generate_signed_get_url_v4 project_id:, bucket_name:, file_name:
   puts url
   puts "You can use this URL with any user agent, for example:"
   puts "curl #{url}"
-  # [END generate_signed_url]
+  # [END storage_generate_signed_url_v4]
 end
 
 def generate_signed_put_url_v4 project_id:, bucket_name:, file_name:
