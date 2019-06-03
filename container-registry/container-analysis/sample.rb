@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 $LOAD_PATH.unshift('./google-cloud-containeranalysis/lib')
 
 def create_note(note_id, project_id)
@@ -24,16 +23,16 @@ def create_note(note_id, project_id)
   container_analysis = Google::Cloud::Devtools::Containeranalysis
 
   # Initialize the client
-  grafeas_v1_beta1_client = container_analysis::GrafeasV1Beta1.
-    new(version: :v1beta1)
+  grafeas_v1_beta1_client = container_analysis::GrafeasV1Beta1
+                            .new(version: :v1beta1)
 
   formatted_parent = container_analysis::V1beta1::GrafeasV1Beta1Client
                      .project_path(project_id)
-  note = {vulnerability: {}}
+  note = { vulnerability: {} }
   response = grafeas_v1_beta1_client
              .create_note(formatted_parent, note_id, note)
   ## [END containeranalysis_create_note]
-  return response
+  response
 end
 
 def delete_note(note_id, project_id)
@@ -52,14 +51,14 @@ def delete_note(note_id, project_id)
                      .note_path(project_id, note_id)
   response = grafeas_v1_beta1_client.delete_note(formatted_parent)
   # [END containeranalysis_delete_note]
-  return response
+  response
 end
 
 def create_occurrence(resource_url, note_id, occurrence_project, note_project)
   # [START containeranalysis_create_occurrence]
-  # resource_url       = "The URL of the resource associated with the 
+  # resource_url       = "The URL of the resource associated with the
   #                       occurrence. eg https://gcr.io/project/image@sha256:1
-  # note_id            = "The identifier of the note associated with the 
+  # note_id            = "The identifier of the note associated with the
   #                       occurrence"
   # occurrence_project = "The Google Cloud project ID for the new occurrence"
   # note_project       = "The Google Cloud project ID of the associated note"
@@ -75,17 +74,19 @@ def create_occurrence(resource_url, note_id, occurrence_project, note_project)
   formatted_project = container_analysis::V1beta1::GrafeasV1Beta1Client
                       .project_path(occurrence_project)
 
-  occurrence = {note_name: formatted_note, vulnerability: {}, resource:{uri: resource_url}}
+  occurrence = { note_name: formatted_note,
+                 vulnerability: {},
+                 resource: { uri: resource_url } }
 
   response = grafeas_v1_beta1_client
              .create_occurrence(formatted_project, occurrence)
   # [END containeranalysis_create_occurrence]
-  return response
+  response
 end
 
 def delete_occurrence(occurrence_id, project_id)
   # [START containeranalysis_delete_occurrence]
-  # occurrence_id = "The API-generated identifier associated with the 
+  # occurrence_id = "The API-generated identifier associated with the
   #                  occurrence"
   # project_id    = "The Google Cloud project ID of the occurrence to delete"
 
@@ -101,7 +102,6 @@ def delete_occurrence(occurrence_id, project_id)
   grafeas_v1_beta1_client.delete_occurrence(formatted_parent)
   # [END containeranalysis_delete_occurrence]
 end
-
 
 def get_note(note_id, project_id)
   # [START containeranalysis_get_note]
@@ -119,12 +119,12 @@ def get_note(note_id, project_id)
                    .note_path(project_id, note_id)
   response = grafeas_v1_beta1_client.get_note(formatted_note)
   # [END containeranalysis_get_note]
-  return response
+  response
 end
 
 def get_occurrence(occurrence_id, project_id)
   # [START containeranalysis_get_occurrence]
-  # occurrence_id = "The API-generated identifier associated with the 
+  # occurrence_id = "The API-generated identifier associated with the
   #                  occurrence"
   # project_id    = "The Google Cloud project ID of the occurrence to retrieve"
 
@@ -139,7 +139,7 @@ def get_occurrence(occurrence_id, project_id)
                      .occurrence_path(project_id, occurrence_id)
   response = grafeas_v1_beta1_client.get_occurrence(formatted_parent)
   # [END containeranalysis_get_occurrence]
-  return response
+  response
 end
 
 def get_occurrences_for_image(resource_url, project_id)
@@ -147,7 +147,7 @@ def get_occurrences_for_image(resource_url, project_id)
   # Initialize the client
   # resource_url = "The URL of the resource associated with the occurrence.
   #                 eg. https://gcr.io/project/image@sha256:123"
-  # project_id    = "The Google Cloud project ID of the occurrences to 
+  # project_id    = "The Google Cloud project ID of the occurrences to
   #                  retrieve"
 
   require 'google/cloud/devtools/containeranalysis'
@@ -161,14 +161,15 @@ def get_occurrences_for_image(resource_url, project_id)
                      .project_path(project_id)
   filter = "resourceUrl = \"#{resource_url}\""
   count = 0
-  grafeas_v1_beta1_client.list_occurrences(formatted_parent, filter:filter).each do |occurrence|
-     # Process occurrence here
-     puts occurrence
-     count = count + 1
+  grafeas_v1_beta1_client.list_occurrences(formatted_parent, filter: filter)
+                         .each do |occurrence|
+    # Process occurrence here
+    puts occurrence
+    count += 1
   end
   puts "Found #{count} occurrences"
   # [END containeranalysis_occurrences_for_image]
-  return count
+  count
 end
 
 def get_occurrences_for_note(note_id, project_id)
@@ -186,14 +187,15 @@ def get_occurrences_for_note(note_id, project_id)
   formatted_note = container_analysis::V1beta1::GrafeasV1Beta1Client
                    .note_path(project_id, note_id)
   count = 0
-  grafeas_v1_beta1_client.list_note_occurrences(formatted_note).each do |occurrence|
-     # Process occurrence here
-     puts occurrence
-     count = count + 1
+  grafeas_v1_beta1_client.list_note_occurrences(formatted_note)
+                         .each do |occurrence|
+    # Process occurrence here
+    puts occurrence
+    count += 1
   end
   puts "Found #{count} occurrences"
   # [END containeranalysis_occurrences_for_image]
-  return count
+  count
 end
 
 def get_discovery_info(resource_url, project_id)
@@ -212,9 +214,10 @@ def get_discovery_info(resource_url, project_id)
   formatted_parent = container_analysis::V1beta1::GrafeasV1Beta1Client
                      .project_path(project_id)
   filter = "kind = \"DISCOVERY\" AND resourceUrl = \"#{resource_url}\""
-  grafeas_v1_beta1_client.list_occurrences(formatted_parent, filter:filter).each do |occurrence|
-     # Process discovery occurrence here
-     puts occurrence
+  grafeas_v1_beta1_client.list_occurrences(formatted_parent, filter: filter)
+                         .each do |occurrence|
+    # Process discovery occurrence here
+    puts occurrence
   end
   # [END containeranalysis_discovery_info]
 end
@@ -222,14 +225,14 @@ end
 def occurrence_pubsub(subscription_id, timeout_seconds, project_id)
   # [START containeranalysis_pubsub]
   # subscription_id = "A user-specified identifier for the new subscription"
-  # timeout_seconds = "The number of seconds to listen for new Pub/Sub 
+  # timeout_seconds = "The number of seconds to listen for new Pub/Sub
   #                    messages"
   # project_id      = "Your Google Cloud project ID"
 
-  require "google/cloud/pubsub"
+  require 'google/cloud/pubsub'
 
   pubsub = Google::Cloud::Pubsub.new project: project_id
-  topic = pubsub.topic "container-analysis-occurrences-v1beta1"
+  topic = pubsub.topic 'container-analysis-occurrences-v1beta1'
   subscription = topic.subscribe subscription_id
 
   count = 0
@@ -246,7 +249,7 @@ def occurrence_pubsub(subscription_id, timeout_seconds, project_id)
   subscription.delete
   # Print and return the total number of Pub/Sub messages received
   puts "Total Messges Received: #{count}"
-  return count
+  count
   # [END containeranalysis_pubsub]
 end
 
@@ -254,7 +257,7 @@ def poll_discovery_finished(resource_url, timeout_seconds, project_id)
   # [START containeranalysis_poll_discovery_occurrence_finished]
   # resource_url    = "The URL of the resource associated with the occurrence.
   #                    eg. https://gcr.io/project/image@sha256:123"
-  # timeout_seconds = "The number of seconds to wait for the discovery 
+  # timeout_seconds = "The number of seconds to wait for the discovery
   #                    occurrence"
   # project_id      = "Your Google Cloud project ID"
 
@@ -271,9 +274,11 @@ def poll_discovery_finished(resource_url, timeout_seconds, project_id)
 
   # Find the discovery occurrence using a filter string
   discovery_occurrence = nil
-  while discovery_occurrence == nil do
+  while discovery_occurrence.nil?
     begin
-      filter = "resourceUrl=\"#{resource_url}\" AND noteProjectId=\"goog-analysis\" AND noteId=\"PACKAGE_VULNERABILITY\""
+      filter = "resourceUrl=\"#{resource_url}\" " \
+               'AND noteProjectId="goog-analysis "' \
+               'AND noteId="PACKAGE_VULNERABILITY"'
       # [END containeranalysis_poll_discovery_occurrence_finished]i
       # The above filter isn't testable, since it looks for occurrences in a
       # locked down project. Fall back to a more permissive filter for testing
@@ -281,23 +286,23 @@ def poll_discovery_finished(resource_url, timeout_seconds, project_id)
       # [START containeranalysis_poll_discovery_occurrence_finished]
       # Only the discovery occurrence should be returned for the given filter
       discovery_occurrence = grafeas_v1_beta1_client
-                             .list_occurrences(formatted_parent, filter:filter)
+                             .list_occurrences(formatted_parent, filter: filter)
                              .first
     rescue StandardError # If there is an error, keep trying until the deadline
     ensure
       # check for timeout
       sleep 1
       if Time.now > deadline
-        raise RuntimeError, 'Timeout while retrieving discovery occurrence.'
+        raise 'Timeout while retrieving discovery occurrence.'
       end
     end
   end
 
   # Wait for the discovery occurrence to enter a terminal state
   status = Grafeas::V1beta1::Discovery::Discovered::AnalysisStatus::PENDING
-  while (status != :FINISHED_SUCCESS &&
-           status != :FINISHED_FAILED &&
-           status != :FINISHED_UNSUPPORTED) do
+  while status != :FINISHED_SUCCESS &&
+        status != :FINISHED_FAILED &&
+        status != :FINISHED_UNSUPPORTED
     # Update occurrence
     begin
       updated = grafeas_v1_beta1_client
@@ -308,14 +313,14 @@ def poll_discovery_finished(resource_url, timeout_seconds, project_id)
       # check for timeout
       sleep 1
       if Time.now > deadline
-        raise RuntimeError, 'Timeout while retrieving discovery occurrence.'
+        raise 'Timeout while retrieving discovery occurrence.'
       end
     end
   end
   puts "Found discovery occurrence #{updated.name}."
   puts "Status: #{updated.discovered.discovered.analysis_status}"
   # [END containeranalysis_poll_discovery_occurrence_finished]
-  return updated
+  updated
 end
 
 def find_vulnerabilities_for_image(resource_url, project_id)
