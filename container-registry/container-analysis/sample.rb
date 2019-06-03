@@ -310,11 +310,11 @@ def find_high_severity_vulnerabilities_for_image resource_url:, project_id:
 
   formatted_parent = containerAnalysis::V1beta1::GrafeasV1Beta1Client.project_path(project_id)
   filter = "resourceUrl = \"#{resource_url}\" AND kind = \"VULNERABILITY\""
-  vulnerability_list = grafeas_v1_beta1_client.list_occurrences(formatted_parent, filter:filter)
+  vulnerability_list = grafeas_v1_beta1_client.list_occurrences(formatted_parent, filter: filter)
   # Filter the list to include only "high" and "critical" vulnerabilities
-  high_severity_list = vulnerability_list.select{ |item| 
-    item.vulnerability.severity == :HIGH || item.vulnerability.severity == :CRITICAL  
-  }
+  vulnerability_list.select do |item|
+    item.vulnerability.severity == :HIGH ||
+      item.vulnerability.severity == :CRITICAL
+  end
   # [END containeranalysis_filter_vulnerability_occurrences]
-  return high_severity_list
 end
