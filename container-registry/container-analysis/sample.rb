@@ -15,7 +15,7 @@
 
 $LOAD_PATH.unshift('./google-cloud-containeranalysis/lib')
 
-def create_note note_id:, project_id:
+def create_note(note_id, project_id)
   # [START containeranalysis_create_note]
   # note_id    = "A user-specified identifier for the note"
   # project_id = "Your Google Cloud project ID"
@@ -33,7 +33,7 @@ def create_note note_id:, project_id:
   return response
 end
 
-def delete_note note_id:, project_id:
+def delete_note(note_id, project_id)
   # [START containeranalysis_delete_note]
   # note_id    = "The identifier for the note to delete"
   # project_id = "The Google Cloud project ID of the note to delete"
@@ -50,7 +50,7 @@ def delete_note note_id:, project_id:
   return response
 end
 
-def create_occurrence resource_url:, note_id:, occurrence_project:, note_project:
+def create_occurrence(resource_url, note_id, occurrence_project, note_project)
   # [START containeranalysis_create_occurrence]
   # resource_url       = "The URL of the resource associated with the occurrence, eg. https://gcr.io/project/image@sha256:123"
   # note_id            = "The identifier of the note associated with the occurrence"
@@ -72,7 +72,7 @@ def create_occurrence resource_url:, note_id:, occurrence_project:, note_project
   return response
 end
 
-def delete_occurrence occurrence_id:, project_id:
+def delete_occurrence(occurrence_id, project_id)
   # [START containeranalysis_delete_occurrence]
   # occurrence_id = "The API-generated identifier associated with the occurrence"
   # project_id    = "The Google Cloud project ID of the occurrence to delete"
@@ -89,7 +89,7 @@ def delete_occurrence occurrence_id:, project_id:
 end
 
 
-def get_note note_id:, project_id:
+def get_note(note_id, project_id)
   # [START containeranalysis_get_note]
   # note_id    = "The identifier for the note to retrieve"
   # project_id = "The Google Cloud project ID of the note to retrieve"
@@ -106,7 +106,7 @@ def get_note note_id:, project_id:
   return response
 end
 
-def get_occurrence occurrence_id:, project_id:
+def get_occurrence(occurrence_id, project_id)
   # [START containeranalysis_get_occurrence]
   # occurrence_id = "The API-generated identifier associated with the occurrence"
   # project_id    = "The Google Cloud project ID of the occurrence to retrieve"
@@ -123,7 +123,7 @@ def get_occurrence occurrence_id:, project_id:
   return response
 end
 
-def get_occurrences_for_image resource_url:, project_id:
+def get_occurrences_for_image(resource_url, project_id)
   # [START containeranalysis_occurrences_for_image]
   # Initialize the client
   # resource_url = "The URL of the resource associated with the occurrence, eg. https://gcr.io/project/image@sha256:123"
@@ -148,7 +148,7 @@ def get_occurrences_for_image resource_url:, project_id:
   return count
 end
 
-def get_occurrences_for_note note_id:, project_id:
+def get_occurrences_for_note(note_id, project_id)
   # [START containeranalysis_occurrences_for_note]
   # note_id    = "The identifier for the note to query"
   # project_id = "The Google Cloud project ID of the occurrences to retrieve"
@@ -171,7 +171,7 @@ def get_occurrences_for_note note_id:, project_id:
   return count
 end
 
-def get_discovery_info resource_url:, project_id:
+def get_discovery_info(resource_url, project_id)
   # [START containeranalysis_discovery_info]
   # resource_url = "The URL of the resource associated with the occurrence, eg. https://gcr.io/project/image@sha256:123"
   # project_id   = "The Google Cloud project ID of the occurrences to retrieve"
@@ -191,7 +191,7 @@ def get_discovery_info resource_url:, project_id:
   # [END containeranalysis_discovery_info]
 end
 
-def occurrence_pubsub subscription_id:, timeout_seconds:, project_id:
+def occurrence_pubsub(subscription_id, timeout_seconds, project_id)
   # [START containeranalysis_pubsub]
   # subscription_id = "A user-specified identifier for the new subscription"
   # timeout_seconds = "The number of seconds to listen for new Pub/Sub messages"
@@ -221,7 +221,7 @@ def occurrence_pubsub subscription_id:, timeout_seconds:, project_id:
   # [END containeranalysis_pubsub]
 end
 
-def poll_discovery_finished resource_url:, timeout_seconds:, project_id:
+def poll_discovery_finished(resource_url, timeout_seconds, project_id)
   # [START containeranalysis_poll_discovery_occurrence_finished]
   # resource_url    = "The URL of the resource associated with the occurrence, eg. https://gcr.io/project/image@sha256:123"
   # timeout_seconds = "The number of seconds to wait for the discovery occurrence"
@@ -279,7 +279,7 @@ def poll_discovery_finished resource_url:, timeout_seconds:, project_id:
   return updated
 end
 
-def find_vulnerabilities_for_image resource_url:, project_id:
+def find_vulnerabilities_for_image(resource_url, project_id)
   # [START containeranalysis_vulnerability_occurrences_for_image]
   # resource_url = "The URL of the resource associated with the occurrence, eg. https://gcr.io/project/image@sha256:123"
   # project_id   = "The Google Cloud project ID of the vulnerabilities to retrieve"
@@ -297,7 +297,7 @@ def find_vulnerabilities_for_image resource_url:, project_id:
   return occurrence_list
 end
 
-def find_high_severity_vulnerabilities_for_image resource_url:, project_id:
+def find_high_severity_vulnerabilities_for_image(resource_url, project_id)
   # [START containeranalysis_filter_vulnerability_occurrences]
   # resource_url = "The URL of the resource associated with the occurrence, eg. https://gcr.io/project/image@sha256:123"
   # project_id   = "The Google Cloud project ID of the vulnerabilities to retrieve"
