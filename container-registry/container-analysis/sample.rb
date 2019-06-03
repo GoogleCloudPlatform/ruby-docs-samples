@@ -12,14 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-$LOAD_PATH.unshift('./google-cloud-containeranalysis/lib')
+$LOAD_PATH.unshift("./google-cloud-containeranalysis/lib")
 
 def create_note(note_id, project_id)
   # [START containeranalysis_create_note]
   # note_id    = "A user-specified identifier for the note"
   # project_id = "Your Google Cloud project ID"
 
-  require 'google/cloud/devtools/containeranalysis'
+  require "google/cloud/devtools/containeranalysis"
   container_analysis = Google::Cloud::Devtools::Containeranalysis
 
   # Initialize the client
@@ -40,7 +40,7 @@ def delete_note(note_id, project_id)
   # note_id    = "The identifier for the note to delete"
   # project_id = "The Google Cloud project ID of the note to delete"
 
-  require 'google/cloud/devtools/containeranalysis'
+  require "google/cloud/devtools/containeranalysis"
   container_analysis = Google::Cloud::Devtools::Containeranalysis
 
   # Initialize the client
@@ -63,7 +63,7 @@ def create_occurrence(resource_url, note_id, occurrence_project, note_project)
   # occurrence_project = "The Google Cloud project ID for the new occurrence"
   # note_project       = "The Google Cloud project ID of the associated note"
 
-  require 'google/cloud/devtools/containeranalysis'
+  require "google/cloud/devtools/containeranalysis"
   container_analysis = Google::Cloud::Devtools::Containeranalysis
 
   # Initialize the client
@@ -90,7 +90,7 @@ def delete_occurrence(occurrence_id, project_id)
   #                  occurrence"
   # project_id    = "The Google Cloud project ID of the occurrence to delete"
 
-  require 'google/cloud/devtools/containeranalysis'
+  require "google/cloud/devtools/containeranalysis"
   container_analysis = Google::Cloud::Devtools::Containeranalysis
 
   # Initialize the client
@@ -108,7 +108,7 @@ def get_note(note_id, project_id)
   # note_id    = "The identifier for the note to retrieve"
   # project_id = "The Google Cloud project ID of the note to retrieve"
 
-  require 'google/cloud/devtools/containeranalysis'
+  require "google/cloud/devtools/containeranalysis"
   container_analysis = Google::Cloud::Devtools::Containeranalysis
 
   # Initialize the client
@@ -128,7 +128,7 @@ def get_occurrence(occurrence_id, project_id)
   #                  occurrence"
   # project_id    = "The Google Cloud project ID of the occurrence to retrieve"
 
-  require 'google/cloud/devtools/containeranalysis'
+  require "google/cloud/devtools/containeranalysis"
   container_analysis = Google::Cloud::Devtools::Containeranalysis
 
   # Initialize the client
@@ -150,7 +150,7 @@ def get_occurrences_for_image(resource_url, project_id)
   # project_id    = "The Google Cloud project ID of the occurrences to
   #                  retrieve"
 
-  require 'google/cloud/devtools/containeranalysis'
+  require "google/cloud/devtools/containeranalysis"
   container_analysis = Google::Cloud::Devtools::Containeranalysis
 
   # Initialize the client
@@ -177,7 +177,7 @@ def get_occurrences_for_note(note_id, project_id)
   # note_id    = "The identifier for the note to query"
   # project_id = "The Google Cloud project ID of the occurrences to retrieve"
 
-  require 'google/cloud/devtools/containeranalysis'
+  require "google/cloud/devtools/containeranalysis"
   container_analysis = Google::Cloud::Devtools::Containeranalysis
 
   # Initialize the client
@@ -204,7 +204,7 @@ def get_discovery_info(resource_url, project_id)
   #                 eg. https://gcr.io/project/image@sha256:123"
   # project_id   = "The Google Cloud project ID of the occurrences to retrieve"
 
-  require 'google/cloud/devtools/containeranalysis'
+  require "google/cloud/devtools/containeranalysis"
   container_analysis = Google::Cloud::Devtools::Containeranalysis
 
   # Initialize the client
@@ -229,10 +229,10 @@ def occurrence_pubsub(subscription_id, timeout_seconds, project_id)
   #                    messages"
   # project_id      = "Your Google Cloud project ID"
 
-  require 'google/cloud/pubsub'
+  require "google/cloud/pubsub"
 
   pubsub = Google::Cloud::Pubsub.new project: project_id
-  topic = pubsub.topic 'container-analysis-occurrences-v1beta1'
+  topic = pubsub.topic "container-analysis-occurrences-v1beta1"
   subscription = topic.subscribe subscription_id
 
   count = 0
@@ -261,7 +261,7 @@ def poll_discovery_finished(resource_url, timeout_seconds, project_id)
   #                    occurrence"
   # project_id      = "Your Google Cloud project ID"
 
-  require 'google/cloud/devtools/containeranalysis'
+  require "google/cloud/devtools/containeranalysis"
   container_analysis = Google::Cloud::Devtools::Containeranalysis
 
   deadline = Time.now + timeout_seconds
@@ -276,11 +276,11 @@ def poll_discovery_finished(resource_url, timeout_seconds, project_id)
   discovery_occurrence = nil
   while discovery_occurrence.nil?
     begin
-      filter = "resourceUrl=\"#{resource_url}\" " \
+      filter = 'resourceUrl="#{resource_url}" ' \
                'AND noteProjectId="goog-analysis "' \
                'AND noteId="PACKAGE_VULNERABILITY"'
       # [END containeranalysis_poll_discovery_occurrence_finished]i
-      # The above filter isn't testable, since it looks for occurrences in a
+      # The above filter isn"t testable, since it looks for occurrences in a
       # locked down project. Fall back to a more permissive filter for testing
       filter = "kind = \"DISCOVERY\" AND resourceUrl = \"#{resource_url}\""
       # [START containeranalysis_poll_discovery_occurrence_finished]
@@ -293,7 +293,7 @@ def poll_discovery_finished(resource_url, timeout_seconds, project_id)
       # check for timeout
       sleep 1
       if Time.now > deadline
-        raise 'Timeout while retrieving discovery occurrence.'
+        raise "Timeout while retrieving discovery occurrence."
       end
     end
   end
@@ -313,7 +313,7 @@ def poll_discovery_finished(resource_url, timeout_seconds, project_id)
       # check for timeout
       sleep 1
       if Time.now > deadline
-        raise 'Timeout while retrieving discovery occurrence.'
+        raise "Timeout while retrieving discovery occurrence."
       end
     end
   end
@@ -329,7 +329,7 @@ def find_vulnerabilities_for_image(resource_url, project_id)
   #                eg. https://gcr.io/project/image@sha256:123"
   # project_id   = "The Google Cloud project ID of the vulnerabilities to find"
 
-  require 'google/cloud/devtools/containeranalysis'
+  require "google/cloud/devtools/containeranalysis"
   container_analysis = Google::Cloud::Devtools::Containeranalysis
 
   # Initialize the client
@@ -349,7 +349,7 @@ def find_high_severity_vulnerabilities_for_image(resource_url, project_id)
   #                 eg. https://gcr.io/project/image@sha256:123"
   # project_id   = "The Google Cloud project ID of the vulnerabilities to find"
 
-  require 'google/cloud/devtools/containeranalysis'
+  require "google/cloud/devtools/containeranalysis"
   container_analysis = Google::Cloud::Devtools::Containeranalysis
 
   # Initialize the client
