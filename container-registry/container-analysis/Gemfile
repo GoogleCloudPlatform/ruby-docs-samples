@@ -13,11 +13,11 @@
 # limitations under the License.
 
 source "https://rubygems.org"
-gem "public_suffix", "= 3.0.3"
-gem "google-cloud-pubsub", "~> 0.35.0"
 
 gem "google-cloud-devtools-containeranalysis",
-  path: "google-cloud-containeranalysis"
+    path: "google-cloud-containeranalysis"
+gem "google-cloud-pubsub", "~> 0.35.0"
+gem "public_suffix", "= 3.0.3"
 
 group :test do
   gem "rspec"
