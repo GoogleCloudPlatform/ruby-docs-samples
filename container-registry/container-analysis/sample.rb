@@ -12,9 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-$LOAD_PATH.unshift("./google-cloud-containeranalysis/lib")
+$LOAD_PATH.unshift "./google-cloud-containeranalysis/lib"
 
-def create_note(note_id, project_id)
+def create_note note_id:, project_id:
   # [START containeranalysis_create_note]
   # note_id    = "A user-specified identifier for the note"
   # project_id = "Your Google Cloud project ID"
@@ -35,7 +35,7 @@ def create_note(note_id, project_id)
   response
 end
 
-def delete_note(note_id, project_id)
+def delete_note note_id:, project_id:
   # [START containeranalysis_delete_note]
   # note_id    = "The identifier for the note to delete"
   # project_id = "The Google Cloud project ID of the note to delete"
@@ -49,12 +49,12 @@ def delete_note(note_id, project_id)
 
   formatted_parent = container_analysis::V1beta1::GrafeasV1Beta1Client
                      .note_path(project_id, note_id)
-  response = grafeas_v1_beta1_client.delete_note(formatted_parent)
+  response = grafeas_v1_beta1_client.delete_note formatted_parent
   # [END containeranalysis_delete_note]
   response
 end
 
-def create_occurrence(resource_url, note_id, occurrence_project, note_project)
+def create_occurrence resource_url:, note_id:, occurrence_project:, note_project:
   # [START containeranalysis_create_occurrence]
   # resource_url       = "The URL of the resource associated with the
   #                       occurrence. eg https://gcr.io/project/image@sha256:1
@@ -74,9 +74,9 @@ def create_occurrence(resource_url, note_id, occurrence_project, note_project)
   formatted_project = container_analysis::V1beta1::GrafeasV1Beta1Client
                       .project_path(occurrence_project)
 
-  occurrence = { note_name: formatted_note,
+  occurrence = { note_name:     formatted_note,
                  vulnerability: {},
-                 resource: { uri: resource_url } }
+                 resource:      { uri: resource_url } }
 
   response = grafeas_v1_beta1_client
              .create_occurrence(formatted_project, occurrence)
@@ -84,7 +84,7 @@ def create_occurrence(resource_url, note_id, occurrence_project, note_project)
   response
 end
 
-def delete_occurrence(occurrence_id, project_id)
+def delete_occurrence occurrence_id:, project_id:
   # [START containeranalysis_delete_occurrence]
   # occurrence_id = "The API-generated identifier associated with the
   #                  occurrence"
@@ -99,11 +99,11 @@ def delete_occurrence(occurrence_id, project_id)
 
   formatted_parent = container_analysis::V1beta1::GrafeasV1Beta1Client
                      .occurrence_path(project_id, occurrence_id)
-  grafeas_v1_beta1_client.delete_occurrence(formatted_parent)
+  grafeas_v1_beta1_client.delete_occurrence formatted_parent
   # [END containeranalysis_delete_occurrence]
 end
 
-def get_note(note_id, project_id)
+def get_note note_id:, project_id:
   # [START containeranalysis_get_note]
   # note_id    = "The identifier for the note to retrieve"
   # project_id = "The Google Cloud project ID of the note to retrieve"
@@ -117,12 +117,12 @@ def get_note(note_id, project_id)
 
   formatted_note = container_analysis::V1beta1::GrafeasV1Beta1Client
                    .note_path(project_id, note_id)
-  response = grafeas_v1_beta1_client.get_note(formatted_note)
+  response = grafeas_v1_beta1_client.get_note formatted_note
   # [END containeranalysis_get_note]
   response
 end
 
-def get_occurrence(occurrence_id, project_id)
+def get_occurrence occurrence_id:, project_id:
   # [START containeranalysis_get_occurrence]
   # occurrence_id = "The API-generated identifier associated with the
   #                  occurrence"
@@ -137,12 +137,12 @@ def get_occurrence(occurrence_id, project_id)
 
   formatted_parent = container_analysis::V1beta1::GrafeasV1Beta1Client
                      .occurrence_path(project_id, occurrence_id)
-  response = grafeas_v1_beta1_client.get_occurrence(formatted_parent)
+  response = grafeas_v1_beta1_client.get_occurrence formatted_parent
   # [END containeranalysis_get_occurrence]
   response
 end
 
-def get_occurrences_for_image(resource_url, project_id)
+def get_occurrences_for_image resource_url:, project_id:
   # [START containeranalysis_occurrences_for_image]
   # Initialize the client
   # resource_url = "The URL of the resource associated with the occurrence.
@@ -172,7 +172,7 @@ def get_occurrences_for_image(resource_url, project_id)
   count
 end
 
-def get_occurrences_for_note(note_id, project_id)
+def get_occurrences_for_note note_id:, project_id:
   # [START containeranalysis_occurrences_for_note]
   # note_id    = "The identifier for the note to query"
   # project_id = "The Google Cloud project ID of the occurrences to retrieve"
@@ -198,7 +198,7 @@ def get_occurrences_for_note(note_id, project_id)
   count
 end
 
-def get_discovery_info(resource_url, project_id)
+def get_discovery_info resource_url:, project_id:
   # [START containeranalysis_discovery_info]
   # resource_url = "The URL of the resource associated with the occurrence.
   #                 eg. https://gcr.io/project/image@sha256:123"
@@ -222,7 +222,7 @@ def get_discovery_info(resource_url, project_id)
   # [END containeranalysis_discovery_info]
 end
 
-def occurrence_pubsub(subscription_id, timeout_seconds, project_id)
+def occurrence_pubsub subscription_id:, timeout_seconds:, project_id:
   # [START containeranalysis_pubsub]
   # subscription_id = "A user-specified identifier for the new subscription"
   # timeout_seconds = "The number of seconds to listen for new Pub/Sub
@@ -253,7 +253,7 @@ def occurrence_pubsub(subscription_id, timeout_seconds, project_id)
   # [END containeranalysis_pubsub]
 end
 
-def poll_discovery_finished(resource_url, timeout_seconds, project_id)
+def poll_discovery_finished resource_url:, timeout_seconds:, project_id:
   # [START containeranalysis_poll_discovery_occurrence_finished]
   # resource_url    = "The URL of the resource associated with the occurrence.
   #                    eg. https://gcr.io/project/image@sha256:123"
@@ -289,6 +289,7 @@ def poll_discovery_finished(resource_url, timeout_seconds, project_id)
                              .list_occurrences(formatted_parent, filter: filter)
                              .first
     rescue StandardError # If there is an error, keep trying until the deadline
+      puts "discovery occurrence not yet found"
     ensure
       # check for timeout
       sleep 1
@@ -309,6 +310,7 @@ def poll_discovery_finished(resource_url, timeout_seconds, project_id)
                 .get_occurrence(discovery_occurrence.name)
       status = updated.discovered.discovered.analysis_status
     rescue StandardError # If there is an error, keep trying until the deadline
+      puts "discovery occurrence not yet in terminal state"
     ensure
       # check for timeout
       sleep 1
@@ -323,7 +325,7 @@ def poll_discovery_finished(resource_url, timeout_seconds, project_id)
   updated
 end
 
-def find_vulnerabilities_for_image(resource_url, project_id)
+def find_vulnerabilities_for_image resource_url:, project_id:
   # [START containeranalysis_vulnerability_occurrences_for_image]
   # resource_url = "The URL of the resource associated with the occurrence
   #                eg. https://gcr.io/project/image@sha256:123"
@@ -339,11 +341,11 @@ def find_vulnerabilities_for_image(resource_url, project_id)
   formatted_parent = container_analysis::V1beta1::GrafeasV1Beta1Client
                      .project_path(project_id)
   filter = "resourceUrl = \"#{resource_url}\" AND kind = \"VULNERABILITY\""
-  grafeas_v1_beta1_client.list_occurrences(formatted_parent, filter: filter)
+  grafeas_v1_beta1_client.list_occurrences formatted_parent, filter: filter
   # [END containeranalysis_vulnerability_occurrences_for_image]
 end
 
-def find_high_severity_vulnerabilities_for_image(resource_url, project_id)
+def find_high_severity_vulnerabilities_for_image resource_url:, project_id:
   # [START containeranalysis_filter_vulnerability_occurrences]
   # resource_url = "The URL of the resource associated with the occurrence,
   #                 eg. https://gcr.io/project/image@sha256:123"

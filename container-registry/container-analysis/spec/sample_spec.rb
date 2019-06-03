@@ -31,7 +31,7 @@ describe "Container Analysis API samples" do
     @note_id = "note-" + uuid + "-" + test_name
     @image_url = "https://gcr.io/" + test_name + "/" + uuid
     @project_id = "sanche-testing-project"
-    @note_obj = create_note(@note_id, @project_id)
+    @note_obj = create_note project_id: @project_id, note_id: @note_id
     @try_limit = 10
     @sleep_time = 1
     @subscription_id = "occurrence-subscription-" + uuid
@@ -40,21 +40,21 @@ describe "Container Analysis API samples" do
 
   after do
     begin
-      delete_note(@note_id, @project_id)
+      delete_note project_id: @project_id, note_id: @note_id
     rescue
     end
   end
 
   example "test create note" do
     # note should be created as part of set up. verify that it succeeded
-    result_note = get_note(@note_id, @project_id)
+    result_note = get_note project_id: @project_id, note_id: @note_id
     expect(result_note.name).to eq(@note_obj.name)
   end
 
   example "test delete note" do
-    delete_note(@note_id, @project_id)
+    delete_note project_id: @project_id, note_id: @note_id
     begin
-      get_note(@note_id, @project_id)
+      get_note project_id: @project_id, note_id: @note_id
       # get_note should throw exception. Test fails
       assert(false)
     rescue Google::Gax::RetryError
@@ -64,23 +64,28 @@ describe "Container Analysis API samples" do
   end
 
   example "test create occurrence" do
-    result = create_occurrence(@image_url, @note_id, @project_id, @project_id)
+    result = create_occurrence resource_url: @image_url, 
+                               note_id: @note_id,
+                               occurrence_project: @project_id,
+                               note_project: @project_id
     expect(result).not_to be_nil
     expect(result.resource.uri).to eq(@image_url)
 
     occurrence_id = Pathname.new(result.name).basename.to_s
-    retrieved = get_occurrence(occurrence_id, @project_id)
+    retrieved = get_occurrence occurrence_id: occurrence_id, project_id: @project_id
     expect(retrieved).not_to be_nil
     expect(retrieved.name).to eq(result.name)
   end
 
   example "test delete occurrence" do
-    created = create_occurrence(@image_url, @note_id, @project_id, @project_id)
-
+    created = create_occurrence resource_url: @image_url, 
+                                note_id: @note_id,
+                                occurrence_project: @project_id,
+                                note_project: @project_id
     occurrence_id = Pathname.new(created.name).basename.to_s
-    delete_occurrence(occurrence_id, @project_id)
+    delete_occurrence occurrence_id: occurrence_id, project_id: @project_id
     begin
-      get_occurrence(occurrence_id, @project_id)
+      get_occurrence occurrence_id: occurrence_id, project_id: @project_id
       # get_occurrence should throw exception on deleted occurrence. Test fails
       assert(false)
     rescue Google::Gax::RetryError
@@ -90,28 +95,34 @@ describe "Container Analysis API samples" do
   end
 
   example "test occurrences for image" do
-    count = get_occurrences_for_image(@image_url, @project_id)
+    count = get_occurrences_for_image resource_url: @image_url, project_id: @project_id
     expect(count).to eq(0)
 
-    create_occurrence(@image_url, @note_id, @project_id, @project_id)
+    create_occurrence resource_url: @image_url, 
+                      note_id: @note_id,
+                      occurrence_project: @project_id,
+                      note_project: @project_id
     try = 0
     while count != 1 and try < @try_limit
       sleep @sleep_time
-      count = get_occurrences_for_image(@image_url, @project_id)
+      count = get_occurrences_for_image resource_url: @image_url, project_id: @project_id
       try += 1
     end
     expect(count).to eq(1)
   end
 
   example "test occurrences for note" do
-    count = get_occurrences_for_note(@note_id, @project_id)
+    count = get_occurrences_for_note note_id: @note_id, project_id: @project_id
     expect(count).to eq(0)
 
-    create_occurrence(@image_url, @note_id, @project_id, @project_id)
+    create_occurrence resource_url: @image_url, 
+                      note_id: @note_id,
+                      occurrence_project: @project_id,
+                      note_project: @project_id
     try = 0
     while count != 1 and try < @try_limit
       sleep @sleep_time
-      count = get_occurrences_for_note(@note_id, @project_id)
+      count = get_occurrences_for_note note_id: @note_id, project_id: @project_id
       try += 1
     end
     expect(count).to eq(1)
@@ -122,7 +133,7 @@ describe "Container Analysis API samples" do
     count = -1
     # empty the pubsub queue
     while count != 0 and try < @try_limit
-      count = occurrence_pubsub(@subscription_id, 5, @project_id)
+      count = occurrence_pubsub subscription_id: @subscription_id, timeout_seconds: 5, project_id: @project_id
       try += 1
     end
     expect(count).to eq(0)
@@ -133,15 +144,20 @@ describe "Container Analysis API samples" do
     while count != total_num and try < @try_limit
       # start the pubsub function listening in its own thread
       t2 = Thread.new{
-        Thread.current[:output] = occurrence_pubsub(@subscription_id, (total_num*@sleep_time)+10, @project_id)
+        Thread.current[:output] = occurrence_pubsub subscription_id: @subscription_id, 
+                                                    timeout_seconds: (total_num*@sleep_time)+10,
+                                                    project_id: @project_id
       }
       sleep 5
       # create a number of test occurrences
       (1..total_num).each do |counter|
-          created = create_occurrence(@image_url, @note_id, @project_id, @project_id)
+          created = create_occurrence resource_url: @image_url, 
+                                      note_id: @note_id,
+                                      occurrence_project: @project_id,
+                                      note_project: @project_id
           sleep @sleep_time
           occurrence_id = Pathname.new(created.name).basename.to_s
-          delete_occurrence(occurrence_id, @project_id)
+          delete_occurrence occurrence_id: occurrence_id, project_id: @project_id
       end
       # check to ensure the numbers match
       t2.join
@@ -152,7 +168,9 @@ describe "Container Analysis API samples" do
 
   example "test polling discovery occurrence" do
     begin
-      poll_discovery_finished(@image_url, 5, @project_id)
+      poll_discovery_finished resource_url: @image_url,
+                              project_id: @project_id,
+                              timeout_seconds: 5
       # expect poll to fil when resource has no discovery occurrence
       assert(false)
     rescue RuntimeError
@@ -174,28 +192,34 @@ describe "Container Analysis API samples" do
                   resource:{uri: @image_url}}
     created = grafeas_v1_beta1_client.create_occurrence(formatted_project, occurrence)
 
+
     # poll again
-    found = poll_discovery_finished(@image_url, 5, @project_id)
+    found = poll_discovery_finished resource_url: @image_url,
+                                    project_id: @project_id,
+                                    timeout_seconds: 5
     expect(found.name).to eq(created.name)
     expect(found.discovered.discovered.analysis_status).to eq(:FINISHED_SUCCESS)
 
     # clean up
     occurrence_id = Pathname.new(created.name).basename.to_s
-    delete_occurrence(occurrence_id, @project_id)
-    delete_note(note_id, @project_id)
+    delete_occurrence occurrence_id: occurrence_id, project_id: @project_id
+    delete_note project_id: @project_id, note_id: note_id
   end
 
   example "test find vulnerabilities" do
-    result_list = find_vulnerabilities_for_image(@image_url, @project_id)
+    result_list = find_vulnerabilities_for_image resource_url: @image_url, project_id: @project_id
     c = result_list.count
     expect(c).to eq(0)
 
     # create vulnerability occurrence
-    create_occurrence(@image_url, @note_id, @project_id, @project_id)
+    create_occurrence resource_url: @image_url, 
+                      note_id: @note_id,
+                      occurrence_project: @project_id,
+                      note_project: @project_id
     try = 0
     while c != 1 and try < @try_limit
       sleep @sleep_time
-      result_list = find_vulnerabilities_for_image(@image_url, @project_id)
+      result_list = find_vulnerabilities_for_image resource_url: @image_url, project_id: @project_id
       c = result_list.count
       try += 1
     end
@@ -203,13 +227,16 @@ describe "Container Analysis API samples" do
   end
 
   example "test find high severity vulnerabilities" do
-    result_list = find_high_severity_vulnerabilities_for_image(@image_url, @project_id)
+    result_list = find_high_severity_vulnerabilities_for_image resource_url: @image_url, project_id: @project_id
     sleep 1
     expect(result_list.count).to eq(0)
  
     # create vulnerability occurrence
-    create_occurrence(@image_url, @note_id, @project_id, @project_id)
-    result_list = find_high_severity_vulnerabilities_for_image(@image_url, @project_id)
+    create_occurrence resource_url: @image_url, 
+                      note_id: @note_id,
+                      occurrence_project: @project_id,
+                      note_project: @project_id
+    result_list = find_high_severity_vulnerabilities_for_image resource_url: @image_url, project_id: @project_id
     sleep 1
     expect(result_list.count).to eq(0)
 
@@ -230,7 +257,7 @@ describe "Container Analysis API samples" do
     c = 0
     while c != 1 and try < @try_limit
       sleep @sleep_time
-      result_list = find_high_severity_vulnerabilities_for_image(@image_url, @project_id)
+      result_list = find_high_severity_vulnerabilities_for_image resource_url: @image_url, project_id: @project_id
       c = result_list.count
       try += 1
     end
