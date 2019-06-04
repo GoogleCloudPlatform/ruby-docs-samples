@@ -18,7 +18,7 @@ source $KOKORO_GFILE_DIR/secrets.sh
 # https://github.com/bundler/bundler/issues/6154
 export BUNDLE_GEMFILE=
 
-for REQUIRED_VARIABLE in
+for REQUIRED_VARIABLE in \
   GOOGLE_CLOUD_KMS_KEY_NAME \
   GOOGLE_CLOUD_KMS_KEY_RING
 do
