@@ -1,0 +1,80 @@
+# Copyright 2019 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# DO NOT EDIT! This is a generated sample ("LongRunningRequestAsync",  "vision_async_batch_annotate_images")
+
+require "google/cloud/vision"
+
+# [START vision_async_batch_annotate_images]
+
+# Perform async batch image annotation
+def sample_async_batch_annotate_images(input_image_uri, output_uri)
+  # [START vision_async_batch_annotate_images_core]
+  # Instantiate a client
+  image_annotator_client = Google::Cloud::Vision::ImageAnnotator.new version: :v1
+
+  # input_image_uri = "gs://cloud-samples-data/vision/label/woman.jpg"
+  # output_uri = "gs://your-bucket/prefix/"
+  source = { image_uri: input_image_uri }
+  image = { source: source }
+  type = :LABEL_DETECTION
+  features_element = { type: type }
+  type_2 = :TEXT_DETECTION
+  features_element_2 = { type: type_2 }
+  type_3 = :IMAGE_PROPERTIES
+  features_element_3 = { type: type_3 }
+  features = [features_element, features_element_2, features_element_3]
+  requests_element = { image: image, features: features }
+  requests = [requests_element]
+  gcs_destination = { uri: output_uri }
+
+  # The max number of responses to output in each JSON file
+  batch_size = 2
+  output_config = { gcs_destination: gcs_destination, batch_size: batch_size }
+
+  # Make the long-running operation request
+  operation = image_annotator_client.async_batch_annotate_images(requests, output_config)
+
+  # Block until operation complete
+  operation.wait_until_done!
+
+  raise operation.results.message if operation.error?
+
+  response = operation.response
+
+  # The output is written to GCS with the provided output_uri as prefix
+  gcs_output_uri = response.output_config.gcs_destination.uri
+  puts "Output written to GCS with prefix: #{gcs_output_uri}"
+
+  # [END vision_async_batch_annotate_images_core]
+end
+# [END vision_async_batch_annotate_images]
+
+
+require "optparse"
+
+if $0 == __FILE__
+
+  input_image_uri = "gs://cloud-samples-data/vision/label/woman.jpg"
+  output_uri = "gs://your-bucket/prefix/"
+
+  ARGV.options do |opts|
+    opts.on("--input_image_uri=val") { |val| input_image_uri = val }
+    opts.on("--output_uri=val") { |val| output_uri = val }
+    opts.parse!
+  end
+
+
+  sample_async_batch_annotate_images(input_image_uri, output_uri)
+end
