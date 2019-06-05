@@ -248,7 +248,7 @@ def occurrence_pubsub subscription_id:, timeout_seconds:, project_id:
   subscriber.stop.wait!
   subscription.delete
   # Print and return the total number of Pub/Sub messages received
-  puts "Total Messges Received: #{count}"
+  puts "Total Messages Received: #{count}"
   count
   # [END containeranalysis_pubsub]
 end
