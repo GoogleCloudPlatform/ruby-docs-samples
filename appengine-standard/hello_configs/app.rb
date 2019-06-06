@@ -19,7 +19,7 @@ get "/" do
   <<~HTML
     <h1>Hello World!</h1>
     <img src="images/cloud.png">
-    <p>The environment is #{ENV["APP_ENV"] || "unknown"}.</p>
+    <p>The environment is #{ENV['APP_ENV'] || 'unknown'}.</p>
   HTML
 end
 # [END gae_standard_configs_app]

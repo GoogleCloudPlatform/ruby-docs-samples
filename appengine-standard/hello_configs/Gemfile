@@ -15,8 +15,8 @@
 # [START gae_standard_configs_dependencies]
 source "https://rubygems.org"
 
-gem "sinatra", "~> 2.0"
 gem "puma", "~> 3.12"
+gem "sinatra", "~> 2.0"
 # [END gae_standard_configs_dependencies]
 
 group :test do
