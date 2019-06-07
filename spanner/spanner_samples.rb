@@ -503,17 +503,18 @@ def read_write_transaction project_id:, instance_id:, database_id:
 
   require "google/cloud/spanner"
 
-  spanner = Google::Cloud::Spanner.new project: project_id
-  client  = spanner.client instance_id, database_id
+  spanner         = Google::Cloud::Spanner.new project: project_id
+  client          = spanner.client instance_id, database_id
+  transfer_amount = 200_000
 
   client.transaction do |transaction|
     first_album  = transaction.read("Albums", [:MarketingBudget], keys: [[1, 1]]).rows.first
     second_album = transaction.read("Albums", [:MarketingBudget], keys: [[2, 2]]).rows.first
 
-    raise "The second album does not have enough funds to transfer" if second_album[:MarketingBudget] < 300_000
+    raise "The second album does not have enough funds to transfer" if second_album[:MarketingBudget] < transfer_amount
 
-    new_first_album_budget  = first_album[:MarketingBudget] + 200_000
-    new_second_album_budget = second_album[:MarketingBudget] - 200_000
+    new_first_album_budget  = first_album[:MarketingBudget] + transfer_amount
+    new_second_album_budget = second_album[:MarketingBudget] - transfer_amount
 
     transaction.update "Albums", [
       { SingerId: 1, AlbumId: 1, MarketingBudget: new_first_album_budget  },
@@ -868,8 +869,9 @@ def write_with_transaction_using_dml project_id:, instance_id:, database_id:
 
   require "google/cloud/spanner"
 
-  spanner = Google::Cloud::Spanner.new project: project_id
-  client  = spanner.client instance_id, database_id
+  spanner         = Google::Cloud::Spanner.new project: project_id
+  client          = spanner.client instance_id, database_id
+  transfer_amount = 200_000
 
   client.transaction do |transaction|
     first_album = transaction.execute(
@@ -880,10 +882,10 @@ def write_with_transaction_using_dml project_id:, instance_id:, database_id:
       "SELECT MarketingBudget from Albums
       WHERE SingerId = 2 and AlbumId = 2"
     ).rows.first
-    raise "The first album does not have enough funds to transfer" if first_album[:MarketingBudget] < 300_000
+    raise "The second album does not have enough funds to transfer" if second_album[:MarketingBudget] < transfer_amount
 
-    new_second_album_budget = second_album[:MarketingBudget] + 200_000
-    new_first_album_budget  = first_album[:MarketingBudget] - 200_000
+    new_first_album_budget  = first_album[:MarketingBudget] + transfer_amount
+    new_second_album_budget = second_album[:MarketingBudget] - transfer_amount
 
     transaction.execute_update(
       "UPDATE Albums SET MarketingBudget = @albumBudget WHERE SingerId = 1 and AlbumId = 1",
