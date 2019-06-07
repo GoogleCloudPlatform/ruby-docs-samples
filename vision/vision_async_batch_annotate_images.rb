@@ -14,6 +14,11 @@
 
 # DO NOT EDIT! This is a generated sample ("LongRunningRequestAsync",  "vision_async_batch_annotate_images")
 
+# sample-metadata
+#   title: Async Batch Image Annotation
+#   description: Perform async batch image annotation
+#   bundle exec ruby samples/v1/vision_async_batch_annotate_images.rb [--input_image_uri "gs://cloud-samples-data/vision/label/wakeupcat.jpg"] [--output_uri "gs://your-bucket/prefix/"]
+
 require "google/cloud/vision"
 
 # [START vision_async_batch_annotate_images]
@@ -24,17 +29,15 @@ def sample_async_batch_annotate_images(input_image_uri, output_uri)
   # Instantiate a client
   image_annotator_client = Google::Cloud::Vision::ImageAnnotator.new version: :v1
 
-  # input_image_uri = "gs://cloud-samples-data/vision/label/woman.jpg"
+  # input_image_uri = "gs://cloud-samples-data/vision/label/wakeupcat.jpg"
   # output_uri = "gs://your-bucket/prefix/"
   source = { image_uri: input_image_uri }
   image = { source: source }
   type = :LABEL_DETECTION
   features_element = { type: type }
-  type_2 = :TEXT_DETECTION
+  type_2 = :IMAGE_PROPERTIES
   features_element_2 = { type: type_2 }
-  type_3 = :IMAGE_PROPERTIES
-  features_element_3 = { type: type_3 }
-  features = [features_element, features_element_2, features_element_3]
+  features = [features_element, features_element_2]
   requests_element = { image: image, features: features }
   requests = [requests_element]
   gcs_destination = { uri: output_uri }
@@ -66,7 +69,7 @@ require "optparse"
 
 if $0 == __FILE__
 
-  input_image_uri = "gs://cloud-samples-data/vision/label/woman.jpg"
+  input_image_uri = "gs://cloud-samples-data/vision/label/wakeupcat.jpg"
   output_uri = "gs://your-bucket/prefix/"
 
   ARGV.options do |opts|

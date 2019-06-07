@@ -14,6 +14,11 @@
 
 # DO NOT EDIT! This is a generated sample ("Request",  "vision_batch_annotate_files")
 
+# sample-metadata
+#   title:
+#   description: Perform batch file annotation
+#   bundle exec ruby samples/v1/vision_batch_annotate_files.rb [--file_path "resources/kafka.pdf"]
+
 require "google/cloud/vision"
 
 # [START vision_batch_annotate_files]

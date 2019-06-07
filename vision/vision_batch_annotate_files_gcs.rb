@@ -14,25 +14,32 @@
 
 # DO NOT EDIT! This is a generated sample ("Request",  "vision_batch_annotate_files_gcs")
 
+# sample-metadata
+#   title:
+#   description: Perform batch file annotation
+#   bundle exec ruby samples/v1/vision_batch_annotate_files_gcs.rb [--storage_uri "gs://cloud-samples-data/vision/document_understanding/kafka.pdf"]
+
 require "google/cloud/vision"
 
 # [START vision_batch_annotate_files_gcs]
 
-# Perform batch file annotation
-def sample_batch_annotate_files(gcs_uri)
+ # Perform batch file annotation
+ #
+ # @param storage_uri {String} Cloud Storage URI to source image in the format gs://[bucket]/[file]
+def sample_batch_annotate_files(storage_uri)
   # [START vision_batch_annotate_files_gcs_core]
   # Instantiate a client
   image_annotator_client = Google::Cloud::Vision::ImageAnnotator.new version: :v1
 
-  # gcs_uri = "gs://cloud-samples-data/vision/document_understanding/kafka.pdf"
-  gcs_source = { uri: gcs_uri }
+  # storage_uri = "gs://cloud-samples-data/vision/document_understanding/kafka.pdf"
+  gcs_source = { uri: storage_uri }
   input_config = { gcs_source: gcs_source }
   type = :DOCUMENT_TEXT_DETECTION
   features_element = { type: type }
   features = [features_element]
 
-  # The service can process up to 5 pages per document file. Here we specify the first, second, and
-  # last page of the document to be processed.
+  # The service can process up to 5 pages per document file.
+  # Here we specify the first, second, and last page of the document to be processed.
   pages_element = 1
   pages_element_2 = 2
   pages_element_3 = -1
@@ -49,7 +56,6 @@ def sample_batch_annotate_files(gcs_uri)
     puts "Full text: #{image_response.full_text_annotation.text}"
     image_response.full_text_annotation.pages.each do |page|
       page.blocks.each do |block|
-        # The service also returns the bounding boxes for blocks, paragraphs, words, and symbols.
         puts "\nBlock confidence: #{block.confidence}"
         block.paragraphs.each do |par|
           puts "\tParagraph confidence: #{par.confidence}"
@@ -73,13 +79,13 @@ require "optparse"
 
 if $0 == __FILE__
 
-  gcs_uri = "gs://cloud-samples-data/vision/document_understanding/kafka.pdf"
+  storage_uri = "gs://cloud-samples-data/vision/document_understanding/kafka.pdf"
 
   ARGV.options do |opts|
-    opts.on("--gcs_uri=val") { |val| gcs_uri = val }
+    opts.on("--storage_uri=val") { |val| storage_uri = val }
     opts.parse!
   end
 
 
-  sample_batch_annotate_files(gcs_uri)
+  sample_batch_annotate_files(storage_uri)
 end
