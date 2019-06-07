@@ -88,7 +88,7 @@ CHANGED_DIRS_ARRAY=($CHANGED_DIRS)
 for index in "${!CHANGED_DIRS_ARRAY[@]}"; do
   [[ -d "${CHANGED_DIRS_ARRAY[$index]}" ]] || unset -v "CHANGED_DIRS_ARRAY[$index]"
 done
-CHANGED_DIRS = "${CHANGED_DIRS_ARRAY[*]}"
+CHANGED_DIRS="${CHANGED_DIRS_ARRAY[*]}"
 
 # The appengine directory has many subdirectories. Only test the modified ones.
 if [[ $CHANGED_DIRS =~ "appengine" ]]; then
