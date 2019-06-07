@@ -1,6 +1,6 @@
 # Google App Engine Ruby Samples
 
-These are samples for using Ruby on the Google App Engine flexible environment.
+These are samples for using Ruby on Google App Engine.
 They are referenced from the [docs](https://cloud.google.com/appengine/docs).
 
 See our other [Google Cloud Platform github repos](https://github.com/GoogleCloudPlatform)
