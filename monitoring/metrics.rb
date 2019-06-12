@@ -66,7 +66,7 @@ def list_time_series project_id:
   interval = Google::Monitoring::V3::TimeInterval.new
   now = Time.now
   interval.end_time = Google::Protobuf::Timestamp.new seconds: now.to_i, nanos: now.usec
-  interval.start_time = Google::Protobuf::Timestamp.new seconds: now.to_i - 300, nanos: now.usec
+  interval.start_time = Google::Protobuf::Timestamp.new seconds: now.to_i - 1200, nanos: now.usec
 
   results = client.list_time_series(
     project_name,
@@ -88,7 +88,7 @@ def list_time_series_header project_id:
   interval = Google::Monitoring::V3::TimeInterval.new
   now = Time.now
   interval.end_time = Google::Protobuf::Timestamp.new seconds: now.to_i, nanos: now.usec
-  interval.start_time = Google::Protobuf::Timestamp.new seconds: now.to_i - 300, nanos: now.usec
+  interval.start_time = Google::Protobuf::Timestamp.new seconds: now.to_i - 1200, nanos: now.usec
 
   results = client.list_time_series(
     project_name,
@@ -110,10 +110,10 @@ def list_time_series_aggregate project_id:
   interval = Google::Monitoring::V3::TimeInterval.new
   now = Time.now
   interval.end_time = Google::Protobuf::Timestamp.new seconds: now.to_i, nanos: now.usec
-  interval.start_time = Google::Protobuf::Timestamp.new seconds: now.to_i - 300, nanos: now.usec
+  interval.start_time = Google::Protobuf::Timestamp.new seconds: now.to_i - 1200, nanos: now.usec
 
   aggregation = Google::Monitoring::V3::Aggregation.new(
-    alignment_period:   { seconds: 300 },
+    alignment_period:   { seconds: 1200 },
     per_series_aligner: Google::Monitoring::V3::Aggregation::Aligner::ALIGN_MEAN
   )
 
@@ -139,10 +139,10 @@ def list_time_series_reduce project_id:
   interval = Google::Monitoring::V3::TimeInterval.new
   now = Time.now
   interval.end_time = Google::Protobuf::Timestamp.new seconds: now.to_i, nanos: now.usec
-  interval.start_time = Google::Protobuf::Timestamp.new seconds: now.to_i - 300, nanos: now.usec
+  interval.start_time = Google::Protobuf::Timestamp.new seconds: now.to_i - 1200, nanos: now.usec
 
   aggregation = Google::Monitoring::V3::Aggregation.new(
-    alignment_period:     { seconds: 300 },
+    alignment_period:     { seconds: 1200 },
     per_series_aligner:   Google::Monitoring::V3::Aggregation::Aligner::ALIGN_MEAN,
     cross_series_reducer: Google::Monitoring::V3::Aggregation::Reducer::REDUCE_MEAN,
     group_by_fields:      ["resource.zone"]
