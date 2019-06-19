@@ -582,12 +582,12 @@ describe "Google Cloud Spanner API samples" do
                  instance_id: @instance.instance_id,
                  database_id: database.database_id
 
-      # Second Album(2, 2) needs at least $300,000 to transfer successfully
+      # Second Album(2, 2) needs at least $200,000 to transfer successfully
       # to Album(1, 1). This should transfer successfully.
       client.commit do |c|
         c.update "Albums", [
           { SingerId: 1, AlbumId: 1, MarketingBudget: 100_000 },
-          { SingerId: 2, AlbumId: 2, MarketingBudget: 300_000 }
+          { SingerId: 2, AlbumId: 2, MarketingBudget: 500_000 }
         ]
       end
     end
@@ -604,7 +604,7 @@ describe "Google Cloud Spanner API samples" do
     second_album = client.read("Albums", [:MarketingBudget], keys: [[2, 2]]).rows.first
 
     expect(first_album[:MarketingBudget]).to  eq 300_000
-    expect(second_album[:MarketingBudget]).to eq 100_000
+    expect(second_album[:MarketingBudget]).to eq 300_000
   end
 
   example "read/write transaction (not enough funds)" do
@@ -623,12 +623,12 @@ describe "Google Cloud Spanner API samples" do
                  instance_id: @instance.instance_id,
                  database_id: database.database_id
 
-      # Second Album(2, 2) needs at least $300,000 to transfer successfully
+      # Second Album(2, 2) needs at least $200,000 to transfer successfully
       # to Album(1, 1). Without enough funds, an exception should be raised.
       client.commit do |c|
         c.update "Albums", [
           { SingerId: 1, AlbumId: 1, MarketingBudget: 100_000 },
-          { SingerId: 2, AlbumId: 2, MarketingBudget: 299_999 }
+          { SingerId: 2, AlbumId: 2, MarketingBudget: 199_999 }
         ]
       end
     end
@@ -1000,12 +1000,12 @@ describe "Google Cloud Spanner API samples" do
                  instance_id: @instance.instance_id,
                  database_id: database.database_id
 
-      # First Album(1, 1) needs at least $300,000 to transfer successfully
-      # to Album(2, 2). This should transfer successfully.
+      # First Album(2, 2) needs at least $200,000 to transfer successfully
+      # to Album(1, 1). This should transfer successfully.
       client.commit do |c|
         c.update "Albums", [
-          { SingerId: 1, AlbumId: 1, MarketingBudget: 300_000 },
-          { SingerId: 2, AlbumId: 2, MarketingBudget: 100_000 }
+          { SingerId: 1, AlbumId: 1, MarketingBudget: 100_000 },
+          { SingerId: 2, AlbumId: 2, MarketingBudget: 500_000 }
         ]
       end
     end
@@ -1019,7 +1019,7 @@ describe "Google Cloud Spanner API samples" do
     first_album  = client.read("Albums", [:MarketingBudget], keys: [[1, 1]]).rows.first
     second_album = client.read("Albums", [:MarketingBudget], keys: [[2, 2]]).rows.first
 
-    expect(first_album[:MarketingBudget]).to  eq 100_000
+    expect(first_album[:MarketingBudget]).to  eq 300_000
     expect(second_album[:MarketingBudget]).to eq 300_000
   end
 
