@@ -21,6 +21,7 @@ def load_from_file(dataset_id = "your_dataset_id",
   dataset  = bigquery.dataset dataset_id
   table_id = "new_table_id"
 
+  # Infer the config.location based on the location of the referenced dataset.
   load_job = dataset.load_job table_id, file_path do |config|
     config.skip_leading = 1
     config.autodetect   = true
