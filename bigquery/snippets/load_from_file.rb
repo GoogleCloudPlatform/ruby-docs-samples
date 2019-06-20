@@ -21,11 +21,10 @@ def load_from_file(dataset_id = "your_dataset_id",
   dataset  = bigquery.dataset dataset_id
   table_id = "new_table_id"
 
+  # Infer the config.location based on the location of the referenced dataset.
   load_job = dataset.load_job table_id, file_path do |config|
     config.skip_leading = 1
     config.autodetect   = true
-    # Must match the destination dataset location.
-    config.location     = "US"
   end
   load_job.wait_until_done! # Waits for table load to complete.
 
