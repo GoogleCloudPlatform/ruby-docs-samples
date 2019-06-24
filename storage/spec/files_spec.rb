@@ -485,6 +485,52 @@ describe "Google Cloud Storage files sample" do
     expect(file_contents).to include "Content of test file.txt"
   end
 
+  it "can generate a v4 get signed url for a file" do
+    delete_file "file.txt"
+    expect(@bucket.file("file.txt")).to be nil
+
+    upload @local_file_path, "file.txt"
+
+    capture do
+      generate_signed_get_url_v4 project_id:  @project_id,
+                                 bucket_name: @bucket_name,
+                                 file_name:   "file.txt"
+    end
+
+    expect(@captured_output).to include "Generated GET signed url:"
+
+    signed_url_from_output = @captured_output.scan(/http.*$/).first
+    file_contents = Net::HTTP.get URI(signed_url_from_output)
+    expect(file_contents).to include "Content of test file.txt"
+  end
+
+  it "can generate a v4 put signed url for a file" do
+    delete_file "file.txt"
+    expect(@bucket.file("file.txt")).to be nil
+
+    capture do
+      generate_signed_put_url_v4 project_id:  @project_id,
+                                 bucket_name: @bucket_name,
+                                 file_name:   "file.txt"
+    end
+
+    expect(@captured_output).to include "Generated PUT signed URL:"
+
+    signed_url_from_output = @captured_output.scan(/http.*$/).first
+
+    uri = URI.parse(signed_url_from_output)
+    http = Net::HTTP.new(uri.host)
+    request = Net::HTTP::Put.new(uri.request_uri)
+    request.body = File.read(@local_file_path)
+    request['Content-Type'] = "text/plain"
+    request['Content-Length'] = File.size(@local_file_path)
+
+    response = http.request(request)
+
+    expect(response.code).to eq("200")
+    expect(@bucket.file("file.txt")).to exist
+  end
+
   it "can set an event-based hold" do
     event_based_hold_file = "event-based-file.txt"
     delete_file event_based_hold_file

@@ -386,6 +386,46 @@ def generate_signed_url project_id:, bucket_name:, file_name:
   # [END generate_signed_url]
 end
 
+def generate_signed_get_url_v4 project_id:, bucket_name:, file_name:
+  # [START storage_generate_signed_url_v4]
+  # project_id  = "Your Google Cloud project ID"
+  # bucket_name = "Your Google Cloud Storage bucket name"
+  # file_name   = "Name of a file in the Google Cloud Storage bucket"
+  require "google/cloud/storage"
+
+  storage = Google::Cloud::Storage.new project_id: project_id
+  storage_expiry_time = 5 * 60 # 5 minutes
+
+  url = storage.signed_url bucket_name, file_name, method: "GET",
+                           expires: storage_expiry_time, version: :v4
+
+  puts "Generated GET signed url:"
+  puts url
+  puts "You can use this URL with any user agent, for example:"
+  puts "curl #{url}"
+  # [END storage_generate_signed_url_v4]
+end
+
+def generate_signed_put_url_v4 project_id:, bucket_name:, file_name:
+  # [START storage_generate_upload_signed_url_v4]
+  # project_id  = "Your Google Cloud project ID"
+  # bucket_name = "Your Google Cloud Storage bucket name"
+  # file_name   = "Name of a file in the Cloud Storage bucket"
+  require "google/cloud/storage"
+
+  storage = Google::Cloud::Storage.new project_id: project_id
+  storage_expiry_time = 5 * 60 # 5 minutes
+
+  url = storage.signed_url bucket_name, file_name, method: "PUT",
+                           expires: storage_expiry_time, version: :v4,
+                           headers: { "Content-Type" => "text/plain" }
+  puts "Generated PUT signed URL:"
+  puts url
+  puts "You can use this URL with any user agent, for example:"
+  puts "curl -X PUT -H 'Content-Type: text/plain' --upload-file my-file '#{url}'"
+  # [END storage_generate_upload_signed_url_v4]
+end
+
 def set_event_based_hold project_id:, bucket_name:, file_name:
   # [START storage_set_event_based_hold]
   # project_id  = "Your Google Cloud project ID"
@@ -538,6 +578,14 @@ def run_sample arguments
     generate_signed_url project_id:  project_id,
                         bucket_name: arguments.shift,
                         file_name:   arguments.shift
+  when "generate_signed_get_url_v4"
+    generate_signed_get_url_v4 project_id:  project_id,
+                               bucket_name: arguments.shift,
+                               file_name:   arguments.shift
+  when "generate_signed_put_url_v4"
+    generate_signed_put_url_v4 project_id:  project_id,
+                               bucket_name: arguments.shift,
+                               file_name:   arguments.shift
   when "set_event_based_hold"
     set_event_based_hold project_id:  project_id,
                          bucket_name: arguments.shift,
@@ -574,7 +622,9 @@ def run_sample arguments
         make_public  <bucket> <file>                                      Make a file in a bucket public
         rename       <bucket> <file> <new>                                Rename a file in a bucket
         copy <srcBucket> <srcFile> <destBucket> <destFile>                Copy file to other bucket
-        generate_signed_url <bucket> <file>                               Generate a signed url for a file
+        generate_signed_url <bucket> <file>                               Generate a V2 signed url for a file
+        generate_signed_get_url_v4 <bucket> <file>                        Generate a V4 signed get url for a file
+        generate_signed_put_url_v4 <bucket> <file>                        Generate a V4 signed put url for a file
         set_event_based_hold     <bucket> <file>                          Set an event-based hold on a file
         release_event_based_hold <bucket> <file>                          Relase an event-based hold on a file
         set_temporary_hold       <bucket> <file>                          Set a temporary hold on a file
