@@ -277,7 +277,7 @@ def poll_discovery_finished resource_url:, timeout_seconds:, project_id:
   while discovery_occurrence.nil?
     begin
       filter = 'resourceUrl="#{resource_url}" ' \
-               'AND noteProjectId="goog-analysis "' \
+               'AND noteProjectId="goog-analysis" ' \
                'AND noteId="PACKAGE_VULNERABILITY"'
       # [END containeranalysis_poll_discovery_occurrence_finished]i
       # The above filter isn"t testable, since it looks for occurrences in a
