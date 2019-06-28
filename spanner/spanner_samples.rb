@@ -1053,7 +1053,7 @@ def query_with_array project_id:, instance_id:, database_id:
                WHERE AvailableDate in UNNEST(@available_dates)"
 
   params      = { available_dates: example_array }
-  param_types = { available_dates: [:DATE]}
+  param_types = { available_dates: [:DATE] }
 
   client.execute(sql_query, params: params, types: param_types).rows.each do |row|
     puts "#{row[:VenueId]} #{row[:VenueName]} #{row[:AvailableDate]}"
@@ -1096,7 +1096,7 @@ def query_with_bytes project_id:, instance_id:, database_id:
   spanner = Google::Cloud::Spanner.new project: project_id
   client  = spanner.client instance_id, database_id
 
-  example_bytes = StringIO.new("Hello World 1")
+  example_bytes = StringIO.new "Hello World 1"
   sql_query = "SELECT VenueId, VenueName FROM Venues
                WHERE VenueInfo = @venue_info"
 
@@ -1310,7 +1310,7 @@ def run_sample arguments
     "update_using_dml_with_timestamp", "write_and_read_using_dml",
     "update_using_dml_with_struct", "write_using_dml", "query_with_parameter",
     "write_with_transaction_using_dml", "update_using_partitioned_dml",
-    "delete_using_partitioned_dml", "update_using_batch_dml", 
+    "delete_using_partitioned_dml", "update_using_batch_dml",
     "create_table_with_datatypes", "write_datatypes_data",
     "query_with_array", "query_with_bool", "query_with_bytes", "query_with_date",
     "query_with_float", "query_with_int", "query_with_string",
