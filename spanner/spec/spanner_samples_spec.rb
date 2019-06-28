@@ -62,6 +62,14 @@ describe "Google Cloud Spanner API samples" do
     end
   end
 
+  def create_venues_table
+    capture do
+      create_table_with_datatypes project_id:  @project_id,
+                                  instance_id: @instance.instance_id,
+                                  database_id: @database_id
+    end
+  end
+
   # Capture and return STDOUT output by block
   def capture
     real_stdout = $stdout
@@ -1116,5 +1124,220 @@ describe "Google Cloud Spanner API samples" do
 
     album  = client.read("Albums", [:MarketingBudget], keys: [[1,3]]).rows.first
     expect(album[:MarketingBudget]).to  eq 20_000
+  end
+
+  example "create table with supported datatypes columns" do
+    database = create_singers_albums_database
+
+    expect(@instance.databases.map(&:database_id)).to include @database_id
+
+    capture do
+      create_table_with_datatypes project_id:  @project_id,
+                                  instance_id: @instance.instance_id,
+                                  database_id: @database_id
+    end
+
+    expect(captured_output).to include(
+      "Waiting for update database operation to complete"
+    )
+    expect(captured_output).to include(
+      "Created table Venues in #{@database_id}"
+    )
+
+    data_definition_statements = database.ddl force: true
+    expect(data_definition_statements.size).to eq 3
+    expect(data_definition_statements.last).to include "CREATE TABLE Venues"
+  end
+
+  example "insert datatypes data" do
+    database = create_singers_albums_database
+    create_venues_table
+
+    client = @spanner.client @instance.instance_id, database.database_id
+
+    expect(client.execute("SELECT * FROM Venues").rows.count).to eq 0
+
+    expect {
+      write_datatypes_data project_id:  @project_id,
+                           instance_id: @instance.instance_id,
+                           database_id: database.database_id
+    }.to output("Inserted data\n").to_stdout
+
+    venues = client.execute("SELECT * FROM Venues").rows.to_a
+    expect(venues.count).to eq 3
+  end
+
+  example "query data with array" do
+    database = create_singers_albums_database
+    create_venues_table
+
+    client   = @spanner.client @instance.instance_id, database.database_id
+
+    capture do
+      write_datatypes_data project_id:  @project_id,
+                           instance_id: @instance.instance_id,
+                           database_id: database.database_id
+    end
+
+    capture do
+      query_with_array project_id:  @project_id,
+                       instance_id: @instance.instance_id,
+                       database_id: database.database_id
+    end
+
+    expect(captured_output).to include "19 Venue 19 2020-11-01"
+    expect(captured_output).to include "42 Venue 42 2020-10-01"
+  end
+
+  example "query data with bool" do
+    database = create_singers_albums_database
+    create_venues_table
+
+    client   = @spanner.client @instance.instance_id, database.database_id
+
+    capture do
+      write_datatypes_data project_id:  @project_id,
+                           instance_id: @instance.instance_id,
+                           database_id: database.database_id
+    end
+
+    capture do
+      query_with_bool project_id:  @project_id,
+                      instance_id: @instance.instance_id,
+                      database_id: database.database_id
+    end
+
+    expect(captured_output).to include "19 Venue 19 true"
+  end
+
+  example "query data with bytes" do
+    database = create_singers_albums_database
+    create_venues_table
+
+    client   = @spanner.client @instance.instance_id, database.database_id
+
+    capture do
+      write_datatypes_data project_id:  @project_id,
+                           instance_id: @instance.instance_id,
+                           database_id: database.database_id
+    end
+
+    capture do
+      query_with_bytes project_id:  @project_id,
+                      instance_id: @instance.instance_id,
+                      database_id: database.database_id
+    end
+
+    expect(captured_output).to include "4 Venue 4"
+  end
+
+  example "query data with date" do
+    database = create_singers_albums_database
+    create_venues_table
+
+    client   = @spanner.client @instance.instance_id, database.database_id
+
+    capture do
+      write_datatypes_data project_id:  @project_id,
+                           instance_id: @instance.instance_id,
+                           database_id: database.database_id
+    end
+
+    capture do
+      query_with_date project_id:  @project_id,
+                      instance_id: @instance.instance_id,
+                      database_id: database.database_id
+    end
+
+    expect(captured_output).to include "4 Venue 4 2018-09-02"
+    expect(captured_output).to include "42 Venue 42 2018-10-01"
+  end
+
+  example "query data with float" do
+    database = create_singers_albums_database
+    create_venues_table
+
+    client   = @spanner.client @instance.instance_id, database.database_id
+
+    capture do
+      write_datatypes_data project_id:  @project_id,
+                           instance_id: @instance.instance_id,
+                           database_id: database.database_id
+    end
+
+    capture do
+      query_with_float project_id:  @project_id,
+                      instance_id: @instance.instance_id,
+                      database_id: database.database_id
+    end
+
+    expect(captured_output).to include "4 Venue 4 0.8"
+    expect(captured_output).to include "19 Venue 19 0.9"
+  end
+
+  example "query data with int" do
+    database = create_singers_albums_database
+    create_venues_table
+
+    client   = @spanner.client @instance.instance_id, database.database_id
+
+    capture do
+      write_datatypes_data project_id:  @project_id,
+                           instance_id: @instance.instance_id,
+                           database_id: database.database_id
+    end
+
+    capture do
+      query_with_int project_id:  @project_id,
+                      instance_id: @instance.instance_id,
+                      database_id: database.database_id
+    end
+
+    expect(captured_output).to include "19 Venue 19 6300"
+    expect(captured_output).to include "42 Venue 42 3000"
+  end
+
+  example "query data with string" do
+    database = create_singers_albums_database
+    create_venues_table
+
+    client   = @spanner.client @instance.instance_id, database.database_id
+
+    capture do
+      write_datatypes_data project_id:  @project_id,
+                           instance_id: @instance.instance_id,
+                           database_id: database.database_id
+    end
+
+    capture do
+      query_with_string project_id:  @project_id,
+                      instance_id: @instance.instance_id,
+                      database_id: database.database_id
+    end
+
+    expect(captured_output).to include "42 Venue 42"
+  end
+
+  example "query data with timestamp" do
+    database = create_singers_albums_database
+    create_venues_table
+
+    client   = @spanner.client @instance.instance_id, database.database_id
+
+    capture do
+      write_datatypes_data project_id:  @project_id,
+                           instance_id: @instance.instance_id,
+                           database_id: database.database_id
+    end
+
+    capture do
+      query_with_timestamp project_id:  @project_id,
+                      instance_id: @instance.instance_id,
+                      database_id: database.database_id
+    end
+
+    expect(captured_output).to include "4 Venue 4"
+    expect(captured_output).to include "19 Venue 19"
+    expect(captured_output).to include "42 Venue 42"
   end
 end
