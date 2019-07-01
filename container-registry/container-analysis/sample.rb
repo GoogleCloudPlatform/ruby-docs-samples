@@ -21,7 +21,7 @@ def create_note note_id:, project_id:
   require "grafeas"
 
   # Initialize the client
-  client = Grafeas.new version: :v1
+  client = Grafeas.new
 
   formatted_parent = Grafeas::V1::GrafeasClient.project_path project_id
   note = {
@@ -35,6 +35,7 @@ def create_note note_id:, project_id:
     }
   }
   response = client.create_note formatted_parent, note_id, note
+  puts response.name
   ## [END containeranalysis_create_note]
   response
 end
@@ -47,12 +48,11 @@ def delete_note note_id:, project_id:
   require "grafeas"
 
   # Initialize the client
-  client = Grafeas.new version: :v1
+  client = Grafeas.new
 
   formatted_parent = Grafeas::V1::GrafeasClient.note_path project_id, note_id
-  response = client.delete_note formatted_parent
+  client.delete_note formatted_parent
   # [END containeranalysis_delete_note]
-  response
 end
 
 def create_occurrence resource_url:, note_id:, occurrence_project:, note_project:
@@ -67,7 +67,7 @@ def create_occurrence resource_url:, note_id:, occurrence_project:, note_project
   require "grafeas"
 
   # Initialize the client
-  client = Grafeas.new version: :v1
+  client = Grafeas.new
   formatted_note = Grafeas::V1::GrafeasClient.note_path note_project, note_id
   formatted_project = Grafeas::V1::GrafeasClient.project_path occurrence_project
 
@@ -85,6 +85,7 @@ def create_occurrence resource_url:, note_id:, occurrence_project:, note_project
   }
 
   response = client.create_occurrence formatted_project, occurrence
+  puts response.name
   # [END containeranalysis_create_occurrence]
   response
 end
@@ -98,7 +99,7 @@ def delete_occurrence occurrence_id:, project_id:
   require "grafeas"
 
   # Initialize the client
-  client = Grafeas.new version: :v1
+  client = Grafeas.new
 
   formatted_parent = Grafeas::V1::GrafeasClient.occurrence_path project_id, occurrence_id
   client.delete_occurrence formatted_parent
@@ -113,10 +114,11 @@ def get_note note_id:, project_id:
   require "grafeas"
 
   # Initialize the client
-  client = Grafeas.new version: :v1
+  client = Grafeas.new
 
   formatted_note = Grafeas::V1::GrafeasClient.note_path project_id, note_id
   response = client.get_note formatted_note
+  puts response.name
   # [END containeranalysis_get_note]
   response
 end
@@ -130,10 +132,11 @@ def get_occurrence occurrence_id:, project_id:
   require "grafeas"
 
   # Initialize the client
-  client = Grafeas.new version: :v1
+  client = Grafeas.new
 
   formatted_parent = Grafeas::V1::GrafeasClient.occurrence_path project_id, occurrence_id
   response = client.get_occurrence formatted_parent
+  puts response.name
   # [END containeranalysis_get_occurrence]
   response
 end
@@ -149,7 +152,7 @@ def get_occurrences_for_image resource_url:, project_id:
   require "grafeas"
 
   # Initialize the client
-  client = Grafeas.new version: :v1
+  client = Grafeas.new
 
   formatted_parent = Grafeas::V1::GrafeasClient.project_path project_id
   filter = "resourceUrl = \"#{resource_url}\""
@@ -172,7 +175,7 @@ def get_occurrences_for_note note_id:, project_id:
   require "grafeas"
 
   # Initialize the client
-  client = Grafeas.new version: :v1
+  client = Grafeas.new
 
   formatted_note = Grafeas::V1::GrafeasClient.note_path project_id, note_id
   count = 0
@@ -195,7 +198,7 @@ def get_discovery_info resource_url:, project_id:
   require "grafeas"
 
   # Initialize the client
-  client = Grafeas.new version: :v1
+  client = Grafeas.new
 
   formatted_parent = Grafeas::V1::GrafeasClient.project_path project_id
   filter = "kind = \"DISCOVERY\" AND resourceUrl = \"#{resource_url}\""
@@ -250,7 +253,7 @@ def poll_discovery_finished resource_url:, timeout_seconds:, project_id:
   deadline = Time.now + timeout_seconds
 
   # Initialize the client
-  client = Grafeas.new version: :v1
+  client = Grafeas.new
   formatted_parent = Grafeas::V1::GrafeasClient.project_path project_id
 
   # Find the discovery occurrence using a filter string
@@ -312,7 +315,7 @@ def find_vulnerabilities_for_image resource_url:, project_id:
   require "grafeas"
 
   # Initialize the client
-  client = Grafeas.new version: :v1
+  client = Grafeas.new
 
   formatted_parent = Grafeas::V1::GrafeasClient.project_path project_id
   filter = "resourceUrl = \"#{resource_url}\" AND kind = \"VULNERABILITY\""
@@ -329,7 +332,7 @@ def find_high_severity_vulnerabilities_for_image resource_url:, project_id:
   require "grafeas"
 
   # Initialize the client
-  client = Grafeas.new version: :v1
+  client = Grafeas.new
 
   formatted_parent = Grafeas::V1::GrafeasClient.project_path project_id
   filter = "resourceUrl = \"#{resource_url}\" AND kind = \"VULNERABILITY\""
