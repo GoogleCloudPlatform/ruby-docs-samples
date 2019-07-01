@@ -28,13 +28,12 @@ def create_note note_id:, project_id:
     details: [
         affected_cpe_uri: 'your-uri-here',
         affected_package: 'your-package-here',
-        min_affected_version: { kind: Grafeas::V1::Version::VersionKind::MINIMUM },
-        fixed_version: { kind: Grafeas::V1::Version::VersionKind::MAXIMUM }
+        min_affected_version: { kind: :MINIMUM },
+        fixed_version: { kind: :MAXIMUM }
       ]
     } 
   }
-  response = client
-             .create_note(formatted_parent, note_id, note)
+  response = client.create_note(formatted_parent, note_id, note)
   ## [END containeranalysis_create_note]
   response
 end
@@ -77,14 +76,13 @@ def create_occurrence resource_url:, note_id:, occurrence_project:, note_project
                    package_issue: [
                      affected_cpe_uri: 'your-uri-here',
                      affected_package: 'your-package-here',
-                     min_affected_version: { kind: Grafeas::V1::Version::VersionKind::MINIMUM },
-                     fixed_version: { kind: Grafeas::V1::Version::VersionKind::MAXIMUM }
+                     min_affected_version: { kind: :MINIMUM },
+                     fixed_version: { kind: :MAXIMUM }
                    ]
                  },
               }
 
-  response = client
-             .create_occurrence(formatted_project, occurrence)
+  response = client.create_occurrence(formatted_project, occurrence)
   # [END containeranalysis_create_occurrence]
   response
 end
@@ -154,8 +152,7 @@ def get_occurrences_for_image resource_url:, project_id:
   formatted_parent = Grafeas::V1::GrafeasClient.project_path(project_id)
   filter = "resourceUrl = \"#{resource_url}\""
   count = 0
-  client.list_occurrences(formatted_parent, filter: filter)
-                         .each do |occurrence|
+  client.list_occurrences(formatted_parent, filter: filter).each do |occurrence|
     # Process occurrence here
     puts occurrence
     count += 1
@@ -177,8 +174,7 @@ def get_occurrences_for_note note_id:, project_id:
 
   formatted_note = Grafeas::V1::GrafeasClient.note_path(project_id, note_id)
   count = 0
-  client.list_note_occurrences(formatted_note)
-                         .each do |occurrence|
+  client.list_note_occurrences(formatted_note).each do |occurrence|
     # Process occurrence here
     puts occurrence
     count += 1
@@ -201,8 +197,7 @@ def get_discovery_info resource_url:, project_id:
 
   formatted_parent = Grafeas::V1::GrafeasClient.project_path(project_id)
   filter = "kind = \"DISCOVERY\" AND resourceUrl = \"#{resource_url}\""
-  client.list_occurrences(formatted_parent, filter: filter)
-                         .each do |occurrence|
+  client.list_occurrences(formatted_parent, filter: filter).each do |occurrence|
     # Process discovery occurrence here
     puts occurrence
   end
@@ -269,9 +264,7 @@ def poll_discovery_finished resource_url:, timeout_seconds:, project_id:
       filter = "kind = \"DISCOVERY\" AND resourceUrl = \"#{resource_url}\""
       # [START containeranalysis_poll_discovery_occurrence_finished]
       # Only the discovery occurrence should be returned for the given filter
-      discovery_occurrence = client
-                             .list_occurrences(formatted_parent, filter: filter)
-                             .first
+      discovery_occurrence = client.list_occurrences(formatted_parent, filter: filter).first
     rescue StandardError # If there is an error, keep trying until the deadline
       puts "discovery occurrence not yet found"
     ensure
@@ -342,8 +335,7 @@ def find_high_severity_vulnerabilities_for_image resource_url:, project_id:
                        .list_occurrences(formatted_parent, filter: filter)
   # Filter the list to include only "high" and "critical" vulnerabilities
   vulnerability_list.select do |item|
-    item.vulnerability.severity == :HIGH ||
-      item.vulnerability.severity == :CRITICAL
+    item.vulnerability.severity == :HIGH || item.vulnerability.severity == :CRITICAL
   end
   # [END containeranalysis_filter_vulnerability_occurrences]
 end
