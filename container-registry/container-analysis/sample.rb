@@ -21,19 +21,20 @@ def create_note note_id:, project_id:
   require "grafeas"
 
   # Initialize the client
-  client = Grafeas.new(version: :v1)
+  client = Grafeas.new version: :v1
 
-  formatted_parent = Grafeas::V1::GrafeasClient.project_path(project_id)
-  note = { vulnerability: {
-    details: [
-        affected_cpe_uri: 'your-uri-here',
-        affected_package: 'your-package-here',
+  formatted_parent = Grafeas::V1::GrafeasClient.project_path project_id
+  note = {
+    vulnerability: {
+      details: [
+        affected_cpe_uri:     "your-uri-here",
+        affected_package:     "your-package-here",
         min_affected_version: { kind: :MINIMUM },
-        fixed_version: { kind: :MAXIMUM }
+        fixed_version:        { kind: :MAXIMUM }
       ]
-    } 
+    }
   }
-  response = client.create_note(formatted_parent, note_id, note)
+  response = client.create_note formatted_parent, note_id, note
   ## [END containeranalysis_create_note]
   response
 end
@@ -46,9 +47,9 @@ def delete_note note_id:, project_id:
   require "grafeas"
 
   # Initialize the client
-  client = Grafeas.new(version: :v1)
+  client = Grafeas.new version: :v1
 
-  formatted_parent = Grafeas::V1::GrafeasClient.note_path(project_id, note_id)
+  formatted_parent = Grafeas::V1::GrafeasClient.note_path project_id, note_id
   response = client.delete_note formatted_parent
   # [END containeranalysis_delete_note]
   response
@@ -66,23 +67,24 @@ def create_occurrence resource_url:, note_id:, occurrence_project:, note_project
   require "grafeas"
 
   # Initialize the client
-  client = Grafeas.new(version: :v1)
-  formatted_note = Grafeas::V1::GrafeasClient.note_path(note_project, note_id)
-  formatted_project = Grafeas::V1::GrafeasClient.project_path(occurrence_project)
+  client = Grafeas.new version: :v1
+  formatted_note = Grafeas::V1::GrafeasClient.note_path note_project, note_id
+  formatted_project = Grafeas::V1::GrafeasClient.project_path occurrence_project
 
-  occurrence = { note_name:     formatted_note,
-                 resource_uri: resource_url,
-                 vulnerability: {
-                   package_issue: [
-                     affected_cpe_uri: 'your-uri-here',
-                     affected_package: 'your-package-here',
-                     min_affected_version: { kind: :MINIMUM },
-                     fixed_version: { kind: :MAXIMUM }
-                   ]
-                 },
-              }
+  occurrence = {
+    note_name:     formatted_note,
+    resource_uri:  resource_url,
+    vulnerability: {
+      package_issue: [
+        affected_cpe_uri:     "your-uri-here:",
+        affected_package:     "your-package-here",
+        min_affected_version: { kind: :MINIMUM },
+        fixed_version:        { kind: :MAXIMUM }
+      ]
+    }
+  }
 
-  response = client.create_occurrence(formatted_project, occurrence)
+  response = client.create_occurrence formatted_project, occurrence
   # [END containeranalysis_create_occurrence]
   response
 end
@@ -96,9 +98,9 @@ def delete_occurrence occurrence_id:, project_id:
   require "grafeas"
 
   # Initialize the client
-  client = Grafeas.new(version: :v1)
+  client = Grafeas.new version: :v1
 
-  formatted_parent = Grafeas::V1::GrafeasClient.occurrence_path(project_id, occurrence_id)
+  formatted_parent = Grafeas::V1::GrafeasClient.occurrence_path project_id, occurrence_id
   client.delete_occurrence formatted_parent
   # [END containeranalysis_delete_occurrence]
 end
@@ -111,9 +113,9 @@ def get_note note_id:, project_id:
   require "grafeas"
 
   # Initialize the client
-  client = Grafeas.new(version: :v1)
+  client = Grafeas.new version: :v1
 
-  formatted_note = Grafeas::V1::GrafeasClient.note_path(project_id, note_id)
+  formatted_note = Grafeas::V1::GrafeasClient.note_path project_id, note_id
   response = client.get_note formatted_note
   # [END containeranalysis_get_note]
   response
@@ -128,9 +130,9 @@ def get_occurrence occurrence_id:, project_id:
   require "grafeas"
 
   # Initialize the client
-  client = Grafeas.new(version: :v1)
+  client = Grafeas.new version: :v1
 
-  formatted_parent = Grafeas::V1::GrafeasClient.occurrence_path(project_id, occurrence_id)
+  formatted_parent = Grafeas::V1::GrafeasClient.occurrence_path project_id, occurrence_id
   response = client.get_occurrence formatted_parent
   # [END containeranalysis_get_occurrence]
   response
@@ -147,9 +149,9 @@ def get_occurrences_for_image resource_url:, project_id:
   require "grafeas"
 
   # Initialize the client
-  client = Grafeas.new(version: :v1)
+  client = Grafeas.new version: :v1
 
-  formatted_parent = Grafeas::V1::GrafeasClient.project_path(project_id)
+  formatted_parent = Grafeas::V1::GrafeasClient.project_path project_id
   filter = "resourceUrl = \"#{resource_url}\""
   count = 0
   client.list_occurrences(formatted_parent, filter: filter).each do |occurrence|
@@ -170,9 +172,9 @@ def get_occurrences_for_note note_id:, project_id:
   require "grafeas"
 
   # Initialize the client
-  client = Grafeas.new(version: :v1)
+  client = Grafeas.new version: :v1
 
-  formatted_note = Grafeas::V1::GrafeasClient.note_path(project_id, note_id)
+  formatted_note = Grafeas::V1::GrafeasClient.note_path project_id, note_id
   count = 0
   client.list_note_occurrences(formatted_note).each do |occurrence|
     # Process occurrence here
@@ -193,9 +195,9 @@ def get_discovery_info resource_url:, project_id:
   require "grafeas"
 
   # Initialize the client
-  client = Grafeas.new(version: :v1)
+  client = Grafeas.new version: :v1
 
-  formatted_parent = Grafeas::V1::GrafeasClient.project_path(project_id)
+  formatted_parent = Grafeas::V1::GrafeasClient.project_path project_id
   filter = "kind = \"DISCOVERY\" AND resourceUrl = \"#{resource_url}\""
   client.list_occurrences(formatted_parent, filter: filter).each do |occurrence|
     # Process discovery occurrence here
@@ -248,8 +250,8 @@ def poll_discovery_finished resource_url:, timeout_seconds:, project_id:
   deadline = Time.now + timeout_seconds
 
   # Initialize the client
-  client = Grafeas.new(version: :v1)
-  formatted_parent = Grafeas::V1::GrafeasClient.project_path(project_id)
+  client = Grafeas.new version: :v1
+  formatted_parent = Grafeas::V1::GrafeasClient.project_path project_id
 
   # Find the discovery occurrence using a filter string
   discovery_occurrence = nil
@@ -283,7 +285,7 @@ def poll_discovery_finished resource_url:, timeout_seconds:, project_id:
         status != :FINISHED_UNSUPPORTED
     # Update occurrence
     begin
-      updated = client.get_occurrence(discovery_occurrence.name)
+      updated = client.get_occurrence discovery_occurrence.name
       status = updated.discovery.analysis_status
     rescue StandardError # If there is an error, keep trying until the deadline
       puts "discovery occurrence not yet in terminal state"
@@ -310,9 +312,9 @@ def find_vulnerabilities_for_image resource_url:, project_id:
   require "grafeas"
 
   # Initialize the client
-  client = Grafeas.new(version: :v1)
+  client = Grafeas.new version: :v1
 
-  formatted_parent = Grafeas::V1::GrafeasClient.project_path(project_id)
+  formatted_parent = Grafeas::V1::GrafeasClient.project_path project_id
   filter = "resourceUrl = \"#{resource_url}\" AND kind = \"VULNERABILITY\""
   client.list_occurrences formatted_parent, filter: filter
   # [END containeranalysis_vulnerability_occurrences_for_image]
@@ -327,9 +329,9 @@ def find_high_severity_vulnerabilities_for_image resource_url:, project_id:
   require "grafeas"
 
   # Initialize the client
-  client = Grafeas.new(version: :v1)
+  client = Grafeas.new version: :v1
 
-  formatted_parent = Grafeas::V1::GrafeasClient.project_path(project_id)
+  formatted_parent = Grafeas::V1::GrafeasClient.project_path project_id
   filter = "resourceUrl = \"#{resource_url}\" AND kind = \"VULNERABILITY\""
   vulnerability_list = client
                        .list_occurrences(formatted_parent, filter: filter)
