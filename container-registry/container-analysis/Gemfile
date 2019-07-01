@@ -14,7 +14,6 @@
 
 source "https://rubygems.org"
 
-gem "google-cloud-container_analysis", "~> 0.1.0"
 gem "google-cloud-pubsub", "~> 0.35.0"
 gem "grafeas-client", "~> 0.1.0"
 gem "public_suffix", "= 3.0.3"
