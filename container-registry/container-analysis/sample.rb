@@ -290,9 +290,8 @@ def poll_discovery_finished resource_url:, timeout_seconds:, project_id:
         status != :FINISHED_UNSUPPORTED
     # Update occurrence
     begin
-      updated = client
-                .get_occurrence(discovery_occurrence.name)
-      status = updated.discovered.discovered.analysis_status
+      updated = client.get_occurrence(discovery_occurrence.name)
+      status = updated.discovery.analysis_status
     rescue StandardError # If there is an error, keep trying until the deadline
       puts "discovery occurrence not yet in terminal state"
     ensure
@@ -304,7 +303,7 @@ def poll_discovery_finished resource_url:, timeout_seconds:, project_id:
     end
   end
   puts "Found discovery occurrence #{updated.name}."
-  puts "Status: #{updated.discovered.discovered.analysis_status}"
+  puts "Status: #{updated.discovery.analysis_status}"
   # [END containeranalysis_poll_discovery_occurrence_finished]
   updated
 end

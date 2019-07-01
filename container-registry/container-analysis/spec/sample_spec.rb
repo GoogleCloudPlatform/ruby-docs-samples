@@ -185,10 +185,10 @@ describe "Container Analysis API samples" do
       note_name: formatted_note,
       resource_uri: @image_url,
       discovery: {
-        analysis_status: :FINISHED_SUCCESS, 
+        analysis_status: :FINISHED_SUCCESS,
       },
     }
-    client.create_occurrence(formatted_project, occurrence)
+    created = client.create_occurrence(formatted_project, occurrence)
 
 
     # poll again
@@ -196,7 +196,7 @@ describe "Container Analysis API samples" do
                                     project_id: @project_id,
                                     timeout_seconds: 5
     expect(found.name).to eq(created.name)
-    expect(found.discovered.discovered.analysis_status).to eq(:FINISHED_SUCCESS)
+    expect(found.discovery.analysis_status).to eq(:FINISHED_SUCCESS)
 
     # clean up
     occurrence_id = Pathname.new(created.name).basename.to_s
