@@ -12,18 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-$LOAD_PATH.unshift('./google-cloud-containeranalysis/lib')
-require "google/cloud/devtools/containeranalysis"
+require "grafeas"
 require_relative "../sample"
 require "rspec"
 require "google/gax/grpc"
 require "pathname"
 require 'securerandom'
 
-ContainerAnalysis = Google::Cloud::Devtools::Containeranalysis
-
 describe "Container Analysis API samples" do
-  let(:client) { ContainerAnalysis::GrafeasV1Beta1.new(version: :v1beta1) }
+  let(:client) { Grafeas.new(version: :v1) }
 
   before do |example|
     test_name = example.description.tr(' ', '-')
@@ -69,7 +66,7 @@ describe "Container Analysis API samples" do
                                occurrence_project: @project_id,
                                note_project: @project_id
     expect(result).not_to be_nil
-    expect(result.resource.uri).to eq(@image_url)
+    expect(result.resource_uri).to eq(@image_url)
 
     occurrence_id = Pathname.new(result.name).basename.to_s
     retrieved = get_occurrence occurrence_id: occurrence_id, project_id: @project_id
@@ -180,17 +177,18 @@ describe "Container Analysis API samples" do
 
     # create discovery occurrence
     note_id = "discovery-note-" + @uuid
-    grafeas_v1_beta1_client = ContainerAnalysis::GrafeasV1Beta1.new(version: :v1beta1)
-    formatted_project = ContainerAnalysis::V1beta1::GrafeasV1Beta1Client.project_path(@project_id)
-    note = {discovery: {}}
-    grafeas_v1_beta1_client.create_note(formatted_project, note_id, note)
-    formatted_note = ContainerAnalysis::V1beta1::GrafeasV1Beta1Client.note_path(@project_id, note_id)
-    occurrence = {note_name: formatted_note, 
-                  discovered: {
-                    discovered: {analysis_status: :FINISHED_SUCCESS}, 
-                  },
-                  resource:{uri: @image_url}}
-    created = grafeas_v1_beta1_client.create_occurrence(formatted_project, occurrence)
+    formatted_project = Grafeas::V1::GrafeasClient.project_path(@project_id)
+    note = {discovery: {analysis_kind: :DISCOVERY}}
+    client.create_note(formatted_project, note_id, note)
+    formatted_note = Grafeas::V1::GrafeasClient.note_path(@project_id, note_id)
+    occurrence = {
+      note_name: formatted_note,
+      resource_uri: @image_url,
+      discovery: {
+        analysis_status: :FINISHED_SUCCESS, 
+      },
+    }
+    client.create_occurrence(formatted_project, occurrence)
 
 
     # poll again
@@ -242,15 +240,38 @@ describe "Container Analysis API samples" do
 
     # create critical secerity occurrence
     note_id = "severe-note-" + @uuid
-    grafeas_v1_beta1_client = ContainerAnalysis::GrafeasV1Beta1.new(version: :v1beta1)
-    formatted_project = ContainerAnalysis::V1beta1::GrafeasV1Beta1Client.project_path(@project_id)
+    formatted_project = Grafeas::V1::GrafeasClient.project_path(@project_id)
     note = {vulnerability: {severity: :CRITICAL}}
-    grafeas_v1_beta1_client.create_note(formatted_project, note_id, note)
-    formatted_note = ContainerAnalysis::V1beta1::GrafeasV1Beta1Client.note_path(@project_id, note_id)
+    note = { 
+      vulnerability: {
+        severity: :CRITICAL,
+        details: [
+            affected_cpe_uri: 'your-uri-here',
+            affected_package: 'your-package-here',
+            min_affected_version: { kind: Grafeas::V1::Version::VersionKind::MINIMUM },
+            fixed_version: { kind: Grafeas::V1::Version::VersionKind::MAXIMUM }
+          ],
+        } 
+      }
+    client.create_note(formatted_project, note_id, note)
+    formatted_note = Grafeas::V1::GrafeasClient.note_path(@project_id, note_id)
     occurrence = {note_name: formatted_note, 
                   vulnerability: {severity: :CRITICAL},
                   resource:{uri: @image_url}}
-    grafeas_v1_beta1_client.create_occurrence(formatted_project, occurrence)
+    occurrence = { 
+      note_name:     formatted_note,
+      resource_uri: @image_url,
+      vulnerability: {
+        severity: :CRITICAL,
+        package_issue: [
+          affected_cpe_uri: 'your-uri-here',
+          affected_package: 'your-package-here',
+          min_affected_version: { kind: Grafeas::V1::Version::VersionKind::MINIMUM },
+          fixed_version: { kind: Grafeas::V1::Version::VersionKind::MAXIMUM }
+        ]
+      }
+    }
+    client.create_occurrence(formatted_project, occurrence)
 
     # try again
     try = 0

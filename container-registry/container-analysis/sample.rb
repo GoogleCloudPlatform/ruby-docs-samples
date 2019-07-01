@@ -12,24 +12,28 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-$LOAD_PATH.unshift "./google-cloud-containeranalysis/lib"
 
 def create_note note_id:, project_id:
   # [START containeranalysis_create_note]
   # note_id    = "A user-specified identifier for the note"
   # project_id = "Your Google Cloud project ID"
 
-  require "google/cloud/devtools/containeranalysis"
-  container_analysis = Google::Cloud::Devtools::Containeranalysis
+  require "grafeas"
 
   # Initialize the client
-  grafeas_v1_beta1_client = container_analysis::GrafeasV1Beta1
-                            .new(version: :v1beta1)
+  client = Grafeas.new(version: :v1)
 
-  formatted_parent = container_analysis::V1beta1::GrafeasV1Beta1Client
-                     .project_path(project_id)
-  note = { vulnerability: {} }
-  response = grafeas_v1_beta1_client
+  formatted_parent = Grafeas::V1::GrafeasClient.project_path(project_id)
+  note = { vulnerability: {
+    details: [
+        affected_cpe_uri: 'your-uri-here',
+        affected_package: 'your-package-here',
+        min_affected_version: { kind: Grafeas::V1::Version::VersionKind::MINIMUM },
+        fixed_version: { kind: Grafeas::V1::Version::VersionKind::MAXIMUM }
+      ]
+    } 
+  }
+  response = client
              .create_note(formatted_parent, note_id, note)
   ## [END containeranalysis_create_note]
   response
@@ -40,16 +44,13 @@ def delete_note note_id:, project_id:
   # note_id    = "The identifier for the note to delete"
   # project_id = "The Google Cloud project ID of the note to delete"
 
-  require "google/cloud/devtools/containeranalysis"
-  container_analysis = Google::Cloud::Devtools::Containeranalysis
+  require "grafeas"
 
   # Initialize the client
-  grafeas_v1_beta1_client = container_analysis::GrafeasV1Beta1
-                            .new(version: :v1beta1)
+  client = Grafeas.new(version: :v1)
 
-  formatted_parent = container_analysis::V1beta1::GrafeasV1Beta1Client
-                     .note_path(project_id, note_id)
-  response = grafeas_v1_beta1_client.delete_note formatted_parent
+  formatted_parent = Grafeas::V1::GrafeasClient.note_path(project_id, note_id)
+  response = client.delete_note formatted_parent
   # [END containeranalysis_delete_note]
   response
 end
@@ -63,22 +64,26 @@ def create_occurrence resource_url:, note_id:, occurrence_project:, note_project
   # occurrence_project = "The Google Cloud project ID for the new occurrence"
   # note_project       = "The Google Cloud project ID of the associated note"
 
-  require "google/cloud/devtools/containeranalysis"
-  container_analysis = Google::Cloud::Devtools::Containeranalysis
+  require "grafeas"
 
   # Initialize the client
-  grafeas_v1_beta1_client = container_analysis::GrafeasV1Beta1
-                            .new(version: :v1beta1)
-  formatted_note = container_analysis::V1beta1::GrafeasV1Beta1Client
-                   .note_path(note_project, note_id)
-  formatted_project = container_analysis::V1beta1::GrafeasV1Beta1Client
-                      .project_path(occurrence_project)
+  client = Grafeas.new(version: :v1)
+  formatted_note = Grafeas::V1::GrafeasClient.note_path(note_project, note_id)
+  formatted_project = Grafeas::V1::GrafeasClient.project_path(occurrence_project)
 
   occurrence = { note_name:     formatted_note,
-                 vulnerability: {},
-                 resource:      { uri: resource_url } }
+                 resource_uri: resource_url,
+                 vulnerability: {
+                   package_issue: [
+                     affected_cpe_uri: 'your-uri-here',
+                     affected_package: 'your-package-here',
+                     min_affected_version: { kind: Grafeas::V1::Version::VersionKind::MINIMUM },
+                     fixed_version: { kind: Grafeas::V1::Version::VersionKind::MAXIMUM }
+                   ]
+                 },
+              }
 
-  response = grafeas_v1_beta1_client
+  response = client
              .create_occurrence(formatted_project, occurrence)
   # [END containeranalysis_create_occurrence]
   response
@@ -90,16 +95,13 @@ def delete_occurrence occurrence_id:, project_id:
   #                  occurrence"
   # project_id    = "The Google Cloud project ID of the occurrence to delete"
 
-  require "google/cloud/devtools/containeranalysis"
-  container_analysis = Google::Cloud::Devtools::Containeranalysis
+  require "grafeas"
 
   # Initialize the client
-  grafeas_v1_beta1_client = container_analysis::GrafeasV1Beta1
-                            .new(version: :v1beta1)
+  client = Grafeas.new(version: :v1)
 
-  formatted_parent = container_analysis::V1beta1::GrafeasV1Beta1Client
-                     .occurrence_path(project_id, occurrence_id)
-  grafeas_v1_beta1_client.delete_occurrence formatted_parent
+  formatted_parent = Grafeas::V1::GrafeasClient.occurrence_path(project_id, occurrence_id)
+  client.delete_occurrence formatted_parent
   # [END containeranalysis_delete_occurrence]
 end
 
@@ -108,16 +110,13 @@ def get_note note_id:, project_id:
   # note_id    = "The identifier for the note to retrieve"
   # project_id = "The Google Cloud project ID of the note to retrieve"
 
-  require "google/cloud/devtools/containeranalysis"
-  container_analysis = Google::Cloud::Devtools::Containeranalysis
+  require "grafeas"
 
   # Initialize the client
-  grafeas_v1_beta1_client = container_analysis::GrafeasV1Beta1
-                            .new(version: :v1beta1)
+  client = Grafeas.new(version: :v1)
 
-  formatted_note = container_analysis::V1beta1::GrafeasV1Beta1Client
-                   .note_path(project_id, note_id)
-  response = grafeas_v1_beta1_client.get_note formatted_note
+  formatted_note = Grafeas::V1::GrafeasClient.note_path(project_id, note_id)
+  response = client.get_note formatted_note
   # [END containeranalysis_get_note]
   response
 end
@@ -128,16 +127,13 @@ def get_occurrence occurrence_id:, project_id:
   #                  occurrence"
   # project_id    = "The Google Cloud project ID of the occurrence to retrieve"
 
-  require "google/cloud/devtools/containeranalysis"
-  container_analysis = Google::Cloud::Devtools::Containeranalysis
+  require "grafeas"
 
   # Initialize the client
-  grafeas_v1_beta1_client = container_analysis::GrafeasV1Beta1
-                            .new(version: :v1beta1)
+  client = Grafeas.new(version: :v1)
 
-  formatted_parent = container_analysis::V1beta1::GrafeasV1Beta1Client
-                     .occurrence_path(project_id, occurrence_id)
-  response = grafeas_v1_beta1_client.get_occurrence formatted_parent
+  formatted_parent = Grafeas::V1::GrafeasClient.occurrence_path(project_id, occurrence_id)
+  response = client.get_occurrence formatted_parent
   # [END containeranalysis_get_occurrence]
   response
 end
@@ -150,18 +146,15 @@ def get_occurrences_for_image resource_url:, project_id:
   # project_id    = "The Google Cloud project ID of the occurrences to
   #                  retrieve"
 
-  require "google/cloud/devtools/containeranalysis"
-  container_analysis = Google::Cloud::Devtools::Containeranalysis
+  require "grafeas"
 
   # Initialize the client
-  grafeas_v1_beta1_client = container_analysis::GrafeasV1Beta1
-                            .new(version: :v1beta1)
+  client = Grafeas.new(version: :v1)
 
-  formatted_parent = container_analysis::V1beta1::GrafeasV1Beta1Client
-                     .project_path(project_id)
+  formatted_parent = Grafeas::V1::GrafeasClient.project_path(project_id)
   filter = "resourceUrl = \"#{resource_url}\""
   count = 0
-  grafeas_v1_beta1_client.list_occurrences(formatted_parent, filter: filter)
+  client.list_occurrences(formatted_parent, filter: filter)
                          .each do |occurrence|
     # Process occurrence here
     puts occurrence
@@ -177,17 +170,14 @@ def get_occurrences_for_note note_id:, project_id:
   # note_id    = "The identifier for the note to query"
   # project_id = "The Google Cloud project ID of the occurrences to retrieve"
 
-  require "google/cloud/devtools/containeranalysis"
-  container_analysis = Google::Cloud::Devtools::Containeranalysis
+  require "grafeas"
 
   # Initialize the client
-  grafeas_v1_beta1_client = container_analysis::GrafeasV1Beta1
-                            .new(version: :v1beta1)
+  client = Grafeas.new(version: :v1)
 
-  formatted_note = container_analysis::V1beta1::GrafeasV1Beta1Client
-                   .note_path(project_id, note_id)
+  formatted_note = Grafeas::V1::GrafeasClient.note_path(project_id, note_id)
   count = 0
-  grafeas_v1_beta1_client.list_note_occurrences(formatted_note)
+  client.list_note_occurrences(formatted_note)
                          .each do |occurrence|
     # Process occurrence here
     puts occurrence
@@ -204,17 +194,14 @@ def get_discovery_info resource_url:, project_id:
   #                 eg. https://gcr.io/project/image@sha256:123"
   # project_id   = "The Google Cloud project ID of the occurrences to retrieve"
 
-  require "google/cloud/devtools/containeranalysis"
-  container_analysis = Google::Cloud::Devtools::Containeranalysis
+  require "grafeas"
 
   # Initialize the client
-  grafeas_v1_beta1_client = container_analysis::GrafeasV1Beta1
-                            .new(version: :v1beta1)
+  client = Grafeas.new(version: :v1)
 
-  formatted_parent = container_analysis::V1beta1::GrafeasV1Beta1Client
-                     .project_path(project_id)
+  formatted_parent = Grafeas::V1::GrafeasClient.project_path(project_id)
   filter = "kind = \"DISCOVERY\" AND resourceUrl = \"#{resource_url}\""
-  grafeas_v1_beta1_client.list_occurrences(formatted_parent, filter: filter)
+  client.list_occurrences(formatted_parent, filter: filter)
                          .each do |occurrence|
     # Process discovery occurrence here
     puts occurrence
@@ -261,16 +248,13 @@ def poll_discovery_finished resource_url:, timeout_seconds:, project_id:
   #                    occurrence"
   # project_id      = "Your Google Cloud project ID"
 
-  require "google/cloud/devtools/containeranalysis"
-  container_analysis = Google::Cloud::Devtools::Containeranalysis
+  require "grafeas"
 
   deadline = Time.now + timeout_seconds
 
   # Initialize the client
-  grafeas_v1_beta1_client = container_analysis::GrafeasV1Beta1
-                            .new(version: :v1beta1)
-  formatted_parent = container_analysis::V1beta1::GrafeasV1Beta1Client
-                     .project_path(project_id)
+  client = Grafeas.new(version: :v1)
+  formatted_parent = Grafeas::V1::GrafeasClient.project_path(project_id)
 
   # Find the discovery occurrence using a filter string
   discovery_occurrence = nil
@@ -285,7 +269,7 @@ def poll_discovery_finished resource_url:, timeout_seconds:, project_id:
       filter = "kind = \"DISCOVERY\" AND resourceUrl = \"#{resource_url}\""
       # [START containeranalysis_poll_discovery_occurrence_finished]
       # Only the discovery occurrence should be returned for the given filter
-      discovery_occurrence = grafeas_v1_beta1_client
+      discovery_occurrence = client
                              .list_occurrences(formatted_parent, filter: filter)
                              .first
     rescue StandardError # If there is an error, keep trying until the deadline
@@ -300,13 +284,13 @@ def poll_discovery_finished resource_url:, timeout_seconds:, project_id:
   end
 
   # Wait for the discovery occurrence to enter a terminal state
-  status = Grafeas::V1beta1::Discovery::Discovered::AnalysisStatus::PENDING
+  status = Grafeas::V1::DiscoveryOccurrence::AnalysisStatus::PENDING
   while status != :FINISHED_SUCCESS &&
         status != :FINISHED_FAILED &&
         status != :FINISHED_UNSUPPORTED
     # Update occurrence
     begin
-      updated = grafeas_v1_beta1_client
+      updated = client
                 .get_occurrence(discovery_occurrence.name)
       status = updated.discovered.discovered.analysis_status
     rescue StandardError # If there is an error, keep trying until the deadline
@@ -331,17 +315,14 @@ def find_vulnerabilities_for_image resource_url:, project_id:
   #                eg. https://gcr.io/project/image@sha256:123"
   # project_id   = "The Google Cloud project ID of the vulnerabilities to find"
 
-  require "google/cloud/devtools/containeranalysis"
-  container_analysis = Google::Cloud::Devtools::Containeranalysis
+  require "grafeas"
 
   # Initialize the client
-  grafeas_v1_beta1_client = container_analysis::GrafeasV1Beta1
-                            .new(version: :v1beta1)
+  client = Grafeas.new(version: :v1)
 
-  formatted_parent = container_analysis::V1beta1::GrafeasV1Beta1Client
-                     .project_path(project_id)
+  formatted_parent = Grafeas::V1::GrafeasClient.project_path(project_id)
   filter = "resourceUrl = \"#{resource_url}\" AND kind = \"VULNERABILITY\""
-  grafeas_v1_beta1_client.list_occurrences formatted_parent, filter: filter
+  client.list_occurrences formatted_parent, filter: filter
   # [END containeranalysis_vulnerability_occurrences_for_image]
 end
 
@@ -351,17 +332,14 @@ def find_high_severity_vulnerabilities_for_image resource_url:, project_id:
   #                 eg. https://gcr.io/project/image@sha256:123"
   # project_id   = "The Google Cloud project ID of the vulnerabilities to find"
 
-  require "google/cloud/devtools/containeranalysis"
-  container_analysis = Google::Cloud::Devtools::Containeranalysis
+  require "grafeas"
 
   # Initialize the client
-  grafeas_v1_beta1_client = container_analysis::GrafeasV1Beta1
-                            .new(version: :v1beta1)
+  client = Grafeas.new(version: :v1)
 
-  formatted_parent = container_analysis::V1beta1::GrafeasV1Beta1Client
-                     .project_path(project_id)
+  formatted_parent = Grafeas::V1::GrafeasClient.project_path(project_id)
   filter = "resourceUrl = \"#{resource_url}\" AND kind = \"VULNERABILITY\""
-  vulnerability_list = grafeas_v1_beta1_client
+  vulnerability_list = client
                        .list_occurrences(formatted_parent, filter: filter)
   # Filter the list to include only "high" and "critical" vulnerabilities
   vulnerability_list.select do |item|
