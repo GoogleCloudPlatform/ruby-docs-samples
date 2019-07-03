@@ -27,7 +27,7 @@ describe "Container Analysis API samples" do
     uuid = SecureRandom.uuid
     @note_id = "note-" + uuid + "-" + test_name
     @image_url = "https://gcr.io/" + test_name + "/" + uuid
-    @project_id = "sanche-testing-project"
+    @project_id = ENV["GOOGLE_CLOUD_PROJECT"]
     @note_obj = create_note project_id: @project_id, note_id: @note_id
     @try_limit = 10
     @sleep_time = 1
