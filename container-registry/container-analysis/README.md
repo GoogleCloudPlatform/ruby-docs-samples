@@ -46,12 +46,3 @@ export GOOGLE_CLOUD_PROJECT="YOUR_PROJECT_ID"
 ```
 bundle exec rspec spec/sample_spec.rb
 ```
-
-## Contributing changes
-
-* See [CONTRIBUTING.md](../CONTRIBUTING.md)
-
-## Licensing
-
-* See [LICENSE](../LICENSE)
-
