@@ -25,26 +25,26 @@ These samples show how to use the [Google Cloud Container Analysis Client Librar
 1.  **Clone the repo** and cd into this directory
 
 ```
-    $ git clone https://github.com/GoogleCloudPlatform/ruby-docs-samples
-    $ cd ruby-docs-samples/container-registry/container-analysis
+git clone https://github.com/GoogleCloudPlatform/ruby-docs-samples
+cd ruby-docs-samples/container-registry/container-analysis
 ```
 
 1. **Install Dependencies** via [Bundler](https://bundler.io).
 
 ```
-    $ bundle install
+bundle install
 ```
 
 1. **Set Environment Variables**
 
 ```
-    $ export GOOGLE_CLOUD_PROJECT="YOUR_PROJECT_ID"
+export GOOGLE_CLOUD_PROJECT="YOUR_PROJECT_ID"
 ```
 
 1. **Run tests**
 
 ```
-    $ bundle exec rspec spec/sample_spec.rb
+bundle exec rspec spec/sample_spec.rb
 ```
 
 ## Contributing changes
