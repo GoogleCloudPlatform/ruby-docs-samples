@@ -274,13 +274,13 @@ describe "Container Analysis API samples" do
     client.create_occurrence(formatted_project, occurrence)
 
     # try again
-    try = 0
-    c = 0
-    while c != 1 and try < @try_limit
+    retry_count = 0
+    vulnerability_count = 0
+    while vulnerability_count != 1 and retry_count < @try_limit
       sleep @sleep_time
       result_list = find_high_severity_vulnerabilities_for_image resource_url: @image_url, project_id: @project_id
-      c = result_list.count
-      try += 1
+      vulnerability_count = result_list.count
+      retry_count += 1
     end
     expect(result_list.count).to eq(1)
   end

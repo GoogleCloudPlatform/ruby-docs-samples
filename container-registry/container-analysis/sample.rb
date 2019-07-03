@@ -144,7 +144,6 @@ end
 
 def get_occurrences_for_image resource_url:, project_id:
   # [START containeranalysis_occurrences_for_image]
-  # Initialize the client
   # resource_url = "The URL of the resource associated with the occurrence.
   #                 e.g. https://gcr.io/project/image@sha256:123"
   # project_id    = "The Google Cloud project ID of the occurrences to
