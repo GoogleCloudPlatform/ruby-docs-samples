@@ -58,7 +58,8 @@ end
 def create_occurrence resource_url:, note_id:, occurrence_project:, note_project:
   # [START containeranalysis_create_occurrence]
   # resource_url       = "The URL of the resource associated with the
-  #                       occurrence. eg https://gcr.io/project/image@sha256:1
+  #                       occurrence.
+  #                       e.g. https://gcr.io/project/image@sha256:123
   # note_id            = "The identifier of the note associated with the
   #                       occurrence"
   # occurrence_project = "The Google Cloud project ID for the new occurrence"
@@ -145,7 +146,7 @@ def get_occurrences_for_image resource_url:, project_id:
   # [START containeranalysis_occurrences_for_image]
   # Initialize the client
   # resource_url = "The URL of the resource associated with the occurrence.
-  #                 eg. https://gcr.io/project/image@sha256:123"
+  #                 e.g. https://gcr.io/project/image@sha256:123"
   # project_id    = "The Google Cloud project ID of the occurrences to
   #                  retrieve"
 
@@ -192,7 +193,7 @@ end
 def get_discovery_info resource_url:, project_id:
   # [START containeranalysis_discovery_info]
   # resource_url = "The URL of the resource associated with the occurrence.
-  #                 eg. https://gcr.io/project/image@sha256:123"
+  #                 e.g. https://gcr.io/project/image@sha256:123"
   # project_id   = "The Google Cloud project ID of the occurrences to retrieve"
 
   require "grafeas"
@@ -243,7 +244,7 @@ end
 def poll_discovery_finished resource_url:, timeout_seconds:, project_id:
   # [START containeranalysis_poll_discovery_occurrence_finished]
   # resource_url    = "The URL of the resource associated with the occurrence.
-  #                    eg. https://gcr.io/project/image@sha256:123"
+  #                    e.g. https://gcr.io/project/image@sha256:123"
   # timeout_seconds = "The number of seconds to wait for the discovery
   #                    occurrence"
   # project_id      = "Your Google Cloud project ID"
@@ -309,7 +310,7 @@ end
 def find_vulnerabilities_for_image resource_url:, project_id:
   # [START containeranalysis_vulnerability_occurrences_for_image]
   # resource_url = "The URL of the resource associated with the occurrence
-  #                eg. https://gcr.io/project/image@sha256:123"
+  #                e.g. https://gcr.io/project/image@sha256:123"
   # project_id   = "The Google Cloud project ID of the vulnerabilities to find"
 
   require "grafeas"
@@ -326,7 +327,7 @@ end
 def find_high_severity_vulnerabilities_for_image resource_url:, project_id:
   # [START containeranalysis_filter_vulnerability_occurrences]
   # resource_url = "The URL of the resource associated with the occurrence,
-  #                 eg. https://gcr.io/project/image@sha256:123"
+  #                 e.g. https://gcr.io/project/image@sha256:123"
   # project_id   = "The Google Cloud project ID of the vulnerabilities to find"
 
   require "grafeas"
