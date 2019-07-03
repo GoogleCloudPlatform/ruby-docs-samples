@@ -273,7 +273,7 @@ describe "Container Analysis API samples" do
     }
     client.create_occurrence(formatted_project, occurrence)
 
-    # try again
+    # Retry until we find an image with a high severity vulnerability
     retry_count = 0
     vulnerability_count = 0
     while vulnerability_count != 1 and retry_count < @try_limit

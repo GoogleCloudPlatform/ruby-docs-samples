@@ -18,31 +18,32 @@ retrieve additional metadata for their customers' images, such as packages insta
 These samples show how to use the [Google Cloud Container Analysis Client Library](https://cloud.google.com/container-registry/docs/reference/libraries).
 
 ## Build and Run
-1.  **Enable APIs** - [Enable the KMS API](https://console.cloud.google.com/flows/enableapi?apiid=containeranalysis.googleapis.com)
+1.  **Enable APIs**
+    - [Enable the Container Analysis API](https://console.cloud.google.com/flows/enableapi?apiid=containeranalysis.googleapis.com)
     and create a new project or select an existing project.
 1.  **Install and Initialize Cloud SDK**
-    Follow instructions from the available [quickstarts](https://cloud.google.com/sdk/docs/quickstarts)
+    - Follow instructions from the available [quickstarts](https://cloud.google.com/sdk/docs/quickstarts)
 1.  **Clone the repo** and cd into this directory
 
-```
-git clone https://github.com/GoogleCloudPlatform/ruby-docs-samples
-cd ruby-docs-samples/container-registry/container-analysis
-```
+    ```
+    git clone https://github.com/GoogleCloudPlatform/ruby-docs-samples
+    cd ruby-docs-samples/container-registry/container-analysis
+    ```
 
 1. **Install Dependencies** via [Bundler](https://bundler.io).
 
-```
-bundle install
-```
+    ```
+    bundle install
+    ```
 
 1. **Set Environment Variables**
 
-```
-export GOOGLE_CLOUD_PROJECT="YOUR_PROJECT_ID"
-```
+    ```
+    export GOOGLE_CLOUD_PROJECT="YOUR_PROJECT_ID"
+    ```
 
 1. **Run tests**
 
-```
-bundle exec rspec spec/sample_spec.rb
-```
+    ```
+    bundle exec rspec spec/sample_spec.rb
+    ```

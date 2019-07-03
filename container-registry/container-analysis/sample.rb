@@ -93,8 +93,7 @@ end
 
 def delete_occurrence occurrence_id:, project_id:
   # [START containeranalysis_delete_occurrence]
-  # occurrence_id = "The API-generated identifier associated with the
-  #                  occurrence"
+  # occurrence_id = "The API-generated ID associated with the occurrence"
   # project_id    = "The Google Cloud project ID of the occurrence to delete"
 
   require "grafeas"
@@ -126,8 +125,7 @@ end
 
 def get_occurrence occurrence_id:, project_id:
   # [START containeranalysis_get_occurrence]
-  # occurrence_id = "The API-generated identifier associated with the
-  #                  occurrence"
+  # occurrence_id = "The API-generated ID associated with the occurrence"
   # project_id    = "The Google Cloud project ID of the occurrence to retrieve"
 
   require "grafeas"
@@ -219,7 +217,7 @@ def occurrence_pubsub subscription_id:, timeout_seconds:, project_id:
   require "google/cloud/pubsub"
 
   pubsub = Google::Cloud::Pubsub.new project: project_id
-  topic = pubsub.topic "container-analysis-occurrences-v1beta1"
+  topic = pubsub.topic "container-analysis-occurrences-v1"
   subscription = topic.subscribe subscription_id
 
   count = 0
