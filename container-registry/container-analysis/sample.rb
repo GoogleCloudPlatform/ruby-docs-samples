@@ -217,7 +217,7 @@ def occurrence_pubsub subscription_id:, timeout_seconds:, project_id:
   require "google/cloud/pubsub"
 
   pubsub = Google::Cloud::Pubsub.new project: project_id
-  topic = pubsub.topic "container-analysis-occurrences-v1beta1"
+  topic = pubsub.topic "container-analysis-occurrences-v1"
   subscription = topic.subscribe subscription_id
 
   count = 0

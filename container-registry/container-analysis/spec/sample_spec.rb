@@ -15,6 +15,7 @@
 require "grafeas"
 require_relative "../sample"
 require "rspec"
+require "google/cloud/pubsub"
 require "google/gax/grpc"
 require "pathname"
 require 'securerandom'
@@ -126,6 +127,14 @@ describe "Container Analysis API samples" do
   end
 
   example "test occurrence pubsub" do
+    # create topic if needed
+    pubsub = Google::Cloud::Pubsub.new project: @project_id
+    topic_name = "container-analysis-occurrences-v1"
+    topic = pubsub.topic topic_name
+    if not topic or not topic.exists
+      pubsub.create_topic topic_name
+    end
+
     try = 0
     count = -1
     # empty the pubsub queue
