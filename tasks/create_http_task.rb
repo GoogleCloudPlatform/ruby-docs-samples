@@ -12,7 +12,7 @@
 # limitations under the License.
 
 # [START cloud_tasks_create_http_task]
-require "google/cloud/tasks"
+require "google/cloud/tasks/v2beta3"
 
 # Create a Task with an HTTP Target
 #
@@ -24,7 +24,7 @@ require "google/cloud/tasks"
 # @param [Integer] seconds The delay, in seconds, to process your task.
 def create_http_task project_id, location_id, queue_id, url, payload: nil, seconds: nil
   # Instantiates a client.
-  client = Google::Cloud::Tasks.new
+  client = Google::Cloud::Tasks::V2beta3.new
 
   # Construct the fully qualified queue name.
   parent = client.queue_path project_id, location_id, queue_id
