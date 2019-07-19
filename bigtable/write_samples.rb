@@ -23,14 +23,14 @@ def write_simple project_id, instance_id, table_id
 
   #  [START bigtable_writes_simple]
   table = bigtable.table instance_id, table_id
-  $COLUMN_FAMILY = "stats_summary"
+  column_family = "stats_summary"
   timestamp = Time.now.to_i * 1000
 
   rowkey = "phone#4c410523#20190501"
   entry = table.new_mutation_entry(rowkey)
-               .set_cell($COLUMN_FAMILY, "connected_cell", 1, timestamp: timestamp)
-               .set_cell($COLUMN_FAMILY, "connected_wifi", 1, timestamp: timestamp)
-               .set_cell($COLUMN_FAMILY, "os_build", "PQ2A.190405.003", timestamp: timestamp)
+               .set_cell(column_family, "connected_cell", 1, timestamp: timestamp)
+               .set_cell(column_family, "connected_wifi", 1, timestamp: timestamp)
+               .set_cell(column_family, "os_build", "PQ2A.190405.003", timestamp: timestamp)
 
   table.mutate_row entry
   puts "Successfully wrote row #{rowkey}"
@@ -42,16 +42,16 @@ def write_batch project_id, instance_id, table_id
 
   #  [START bigtable_writes_batch]
   table = bigtable.table instance_id, table_id
-  $COLUMN_FAMILY = "stats_summary"
+  column_family = "stats_summary"
   timestamp = Time.now.to_i * 1000
 
   entries = []
   entries << table.new_mutation_entry("tablet#a0b81f74#20190501")
-             .set_cell($COLUMN_FAMILY, "connected_cell", 1, timestamp: timestamp)
-                  .set_cell($COLUMN_FAMILY, "os_build", "12155.0.0-rc1", timestamp: timestamp)
+             .set_cell(column_family, "connected_cell", 1, timestamp: timestamp)
+                  .set_cell(column_family, "os_build", "12155.0.0-rc1", timestamp: timestamp)
   entries << table.new_mutation_entry("tablet#a0b81f74#20190502")
-             .set_cell($COLUMN_FAMILY, "connected_cell", 1, timestamp: timestamp)
-                  .set_cell($COLUMN_FAMILY, "os_build", "12155.0.0-rc6", timestamp: timestamp)
+             .set_cell(column_family, "connected_cell", 1, timestamp: timestamp)
+                  .set_cell(column_family, "os_build", "12155.0.0-rc6", timestamp: timestamp)
 
   results = table.mutate_rows entries
   puts "Successfully wrote #{results.length} rows"
@@ -63,13 +63,13 @@ def write_increment project_id, instance_id, table_id
 
   #  [START bigtable_writes_increment]
   table = bigtable.table instance_id, table_id
-  $COLUMN_FAMILY = "stats_summary"
+  column_family = "stats_summary"
 
   rowkey = "phone#4c410523#20190501"
-  decrementRule = table.new_read_modify_write_rule($COLUMN_FAMILY, "connected_wifi")
-                       .increment(-1)
+  decrement_rule = table.new_read_modify_write_rule(column_family, "connected_wifi")
+                        .increment(-1)
 
-  row = table.read_modify_write_row rowkey, decrementRule
+  row = table.read_modify_write_row rowkey, decrement_rule
   puts "Successfully updated row #{row.key}"
   #  [END bigtable_writes_increment]
 end
@@ -79,18 +79,18 @@ def write_conditional project_id, instance_id, table_id
 
   #  [START bigtable_writes_conditional]
   table = bigtable.table instance_id, table_id
-  $COLUMN_FAMILY = "stats_summary"
+  column_family = "stats_summary"
   timestamp = Time.now.to_i * 1000
 
   rowkey = "phone#4c410523#20190501"
   predicate_filter = Google::Cloud::Bigtable::RowFilter.chain
-                                                       .family($COLUMN_FAMILY)
+                                                       .family(column_family)
                                                        .qualifier("os_build")
                                                        .value("PQ2A\\..*")
 
   on_match_mutations = Google::Cloud::Bigtable::MutationEntry.new
   on_match_mutations.set_cell(
-    $COLUMN_FAMILY,
+    column_family,
     "os_name",
     "android",
     timestamp: timestamp
