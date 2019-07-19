@@ -1094,10 +1094,11 @@ def query_with_bytes project_id:, instance_id:, database_id:
   spanner = Google::Cloud::Spanner.new project: project_id
   client  = spanner.client instance_id, database_id
 
+  example_bytes = StringIO.new "Hello World 1"
   sql_query = "SELECT VenueId, VenueName FROM Venues
                WHERE VenueInfo = @venue_info"
 
-  params      = { venue_info: StringIO.new "Hello World 1" }
+  params      = { venue_info: example_bytes }
   param_types = { venue_info: :BYTES }
 
   client.execute(sql_query, params: params, types: param_types).rows.each do |row|
