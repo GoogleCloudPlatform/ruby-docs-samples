@@ -1047,12 +1047,11 @@ def query_with_array project_id:, instance_id:, database_id:
   spanner = Google::Cloud::Spanner.new project: project_id
   client  = spanner.client instance_id, database_id
 
-  example_array = ["2020-10-01", "2020-11-01"]
   sql_query = "SELECT VenueId, VenueName, AvailableDate FROM Venues v,
                UNNEST(v.AvailableDates) as AvailableDate
                WHERE AvailableDate in UNNEST(@available_dates)"
 
-  params      = { available_dates: example_array }
+  params      = { available_dates: ["2020-10-01", "2020-11-01"] }
   param_types = { available_dates: [:DATE] }
 
   client.execute(sql_query, params: params, types: param_types).rows.each do |row|
@@ -1072,11 +1071,10 @@ def query_with_bool project_id:, instance_id:, database_id:
   spanner = Google::Cloud::Spanner.new project: project_id
   client  = spanner.client instance_id, database_id
 
-  example_bool = true
   sql_query = "SELECT VenueId, VenueName, OutdoorVenue FROM Venues
                WHERE OutdoorVenue = @outdoor_venue"
 
-  params      = { outdoor_venue: example_bool }
+  params      = { outdoor_venue: true }
   param_types = { outdoor_venue: :BOOL }
 
   client.execute(sql_query, params: params, types: param_types).rows.each do |row|
@@ -1096,11 +1094,10 @@ def query_with_bytes project_id:, instance_id:, database_id:
   spanner = Google::Cloud::Spanner.new project: project_id
   client  = spanner.client instance_id, database_id
 
-  example_bytes = StringIO.new "Hello World 1"
   sql_query = "SELECT VenueId, VenueName FROM Venues
                WHERE VenueInfo = @venue_info"
 
-  params      = { venue_info: example_bytes }
+  params      = { venue_info: StringIO.new "Hello World 1" }
   param_types = { venue_info: :BYTES }
 
   client.execute(sql_query, params: params, types: param_types).rows.each do |row|
@@ -1120,11 +1117,10 @@ def query_with_date project_id:, instance_id:, database_id:
   spanner = Google::Cloud::Spanner.new project: project_id
   client  = spanner.client instance_id, database_id
 
-  example_date = "2019-01-01"
   sql_query = "SELECT VenueId, VenueName, LastContactDate FROM Venues
                WHERE LastContactDate < @last_contact_date"
 
-  params      = { last_contact_date: example_date }
+  params      = { last_contact_date: "2019-01-01" }
   param_types = { last_contact_date: :DATE }
 
   client.execute(sql_query, params: params, types: param_types).rows.each do |row|
@@ -1144,11 +1140,10 @@ def query_with_float project_id:, instance_id:, database_id:
   spanner = Google::Cloud::Spanner.new project: project_id
   client  = spanner.client instance_id, database_id
 
-  example_float = 0.8
   sql_query = "SELECT VenueId, VenueName, PopularityScore FROM Venues
                WHERE PopularityScore > @popularity_score"
 
-  params      = { popularity_score: example_float }
+  params      = { popularity_score: 0.8 }
   param_types = { popularity_score: :FLOAT64 }
 
   client.execute(sql_query, params: params, types: param_types).rows.each do |row|
@@ -1168,11 +1163,10 @@ def query_with_int project_id:, instance_id:, database_id:
   spanner = Google::Cloud::Spanner.new project: project_id
   client  = spanner.client instance_id, database_id
 
-  example_int = 3_000
   sql_query = "SELECT VenueId, VenueName, Capacity FROM Venues
                WHERE Capacity >= @capacity"
 
-  params      = { capacity: example_int }
+  params      = { capacity: 3_000 }
   param_types = { capacity: :INT64 }
 
   client.execute(sql_query, params: params, types: param_types).rows.each do |row|
@@ -1192,11 +1186,10 @@ def query_with_string project_id:, instance_id:, database_id:
   spanner = Google::Cloud::Spanner.new project: project_id
   client  = spanner.client instance_id, database_id
 
-  example_string = "Venue 42"
   sql_query = "SELECT VenueId, VenueName FROM Venues
                WHERE VenueName = @venue_name"
 
-  params      = { venue_name: example_string }
+  params      = { venue_name: "Venue 42" }
   param_types = { venue_name: :STRING }
 
   client.execute(sql_query, params: params, types: param_types).rows.each do |row|
@@ -1216,11 +1209,10 @@ def query_with_timestamp project_id:, instance_id:, database_id:
   spanner = Google::Cloud::Spanner.new project: project_id
   client  = spanner.client instance_id, database_id
 
-  example_timestamp = DateTime.now
   sql_query = "SELECT VenueId, VenueName, LastUpdateTime FROM Venues
                WHERE LastUpdateTime < @last_update_time"
 
-  params      = { last_update_time: example_timestamp }
+  params      = { last_update_time: DateTime.now }
   param_types = { last_update_time: :TIMESTAMP }
 
   client.execute(sql_query, params: params, types: param_types).rows.each do |row|
