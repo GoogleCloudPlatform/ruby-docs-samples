@@ -1210,10 +1210,11 @@ def query_with_timestamp project_id:, instance_id:, database_id:
   spanner = Google::Cloud::Spanner.new project: project_id
   client  = spanner.client instance_id, database_id
 
+  example_timestamp = DateTime.now
   sql_query = "SELECT VenueId, VenueName, LastUpdateTime FROM Venues
                WHERE LastUpdateTime < @last_update_time"
 
-  params      = { last_update_time: DateTime.now }
+  params      = { last_update_time: example_timestamp }
   param_types = { last_update_time: :TIMESTAMP }
 
   client.execute(sql_query, params: params, types: param_types).rows.each do |row|
