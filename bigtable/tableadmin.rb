@@ -43,10 +43,10 @@ def run_table_operations project_id, instance_id, table_id
   puts "Get table and print details:"
   # [START bigtable_get_table_metadata]
   table = bigtable.table(
-      instance_id,
-      table_id,
-      view: :FULL,
-      perform_lookup: true
+    instance_id,
+    table_id,
+    view:           :FULL,
+    perform_lookup: true
   )
   puts "Cluster states:"
   table.cluster_states.each do |stats|
@@ -114,10 +114,10 @@ def run_table_operations project_id, instance_id, table_id
   puts "Printing name and GC Rule for all column families"
   # [START bigtable_list_column_families]
   table = bigtable.table(
-      instance_id,
-      table_id,
-      view: :FULL,
-      perform_lookup: true
+    instance_id,
+    table_id,
+    view:           :FULL,
+    perform_lookup: true
   )
   table.column_families.each do |f|
     puts "Column family name: #{f.name}"
@@ -163,7 +163,7 @@ end
 
 if $PROGRAM_NAME == __FILE__
   project_id = ENV["GOOGLE_CLOUD_BIGTABLE_PROJECT"] ||
-      ENV["GOOGLE_CLOUD_PROJECT"]
+               ENV["GOOGLE_CLOUD_PROJECT"]
 
   case ARGV.shift
   when "run"
