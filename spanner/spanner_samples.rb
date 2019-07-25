@@ -968,6 +968,261 @@ def update_using_batch_dml project_id:, instance_id:, database_id:
   # [END spanner_dml_batch_update]
 end
 
+def create_table_with_datatypes project_id:, instance_id:, database_id:
+  # [START spanner_create_table_with_datatypes]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+
+  spanner = Google::Cloud::Spanner.new project: project_id
+  client  = spanner.database instance_id, database_id
+
+  job = client.update statements: [
+    "CREATE TABLE Venues (
+      VenueId         INT64 NOT NULL,
+      VenueName       STRING(100),
+      VenueInfo       BYTES(MAX),
+      Capacity        INT64,
+      AvailableDates  ARRAY<DATE>,
+      LastContactDate DATE,
+      OutdoorVenue    BOOL,
+      PopularityScore FLOAT64,
+      LastUpdateTime  TIMESTAMP NOT NULL OPTIONS (allow_commit_timestamp=true)
+     ) PRIMARY KEY (VenueId)"
+  ]
+
+  puts "Waiting for update database operation to complete"
+
+  job.wait_until_done!
+
+  puts "Created table Venues in #{database_id}"
+  # [END spanner_create_table_with_datatypes]
+end
+
+def write_datatypes_data project_id:, instance_id:, database_id:
+  # [START spanner_insert_datatypes_data]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+
+  spanner = Google::Cloud::Spanner.new project: project_id
+  client  = spanner.client instance_id, database_id
+
+  # Get commit_timestamp
+  commit_timestamp = client.commit_timestamp
+
+  client.commit do |c|
+    c.insert "Venues", [
+      { VenueId: 4, VenueName: "Venue 4", VenueInfo: StringIO.new("Hello World 1"),
+        Capacity: 1_800, AvailableDates: ["2020-12-01", "2020-12-02", "2020-12-03"],
+        LastContactDate: "2018-09-02", OutdoorVenue: false, PopularityScore: 0.85543,
+        LastUpdateTime: commit_timestamp },
+      { VenueId: 19, VenueName: "Venue 19", VenueInfo: StringIO.new("Hello World 2"),
+        Capacity: 6_300, AvailableDates: ["2020-11-01", "2020-11-05", "2020-11-15"],
+        LastContactDate: "2019-01-15", OutdoorVenue: true, PopularityScore: 0.98716,
+        LastUpdateTime: commit_timestamp },
+      { VenueId: 42, VenueName: "Venue 42", VenueInfo: StringIO.new("Hello World 3"),
+        Capacity: 3_000, AvailableDates: ["2020-10-01", "2020-10-07"],
+        LastContactDate: "2018-10-01", OutdoorVenue: false, PopularityScore: 0.72598,
+        LastUpdateTime: commit_timestamp }
+    ]
+  end
+
+  puts "Inserted data"
+  # [END spanner_insert_datatypes_data]
+end
+
+def query_with_array project_id:, instance_id:, database_id:
+  # [START spanner_query_with_array_parameter]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+
+  spanner = Google::Cloud::Spanner.new project: project_id
+  client  = spanner.client instance_id, database_id
+
+  sql_query = "SELECT VenueId, VenueName, AvailableDate FROM Venues v,
+               UNNEST(v.AvailableDates) as AvailableDate
+               WHERE AvailableDate in UNNEST(@available_dates)"
+
+  params      = { available_dates: ["2020-10-01", "2020-11-01"] }
+  param_types = { available_dates: [:DATE] }
+
+  client.execute(sql_query, params: params, types: param_types).rows.each do |row|
+    puts "#{row[:VenueId]} #{row[:VenueName]} #{row[:AvailableDate]}"
+  end
+  # [END spanner_query_with_array_parameter]
+end
+
+def query_with_bool project_id:, instance_id:, database_id:
+  # [START spanner_query_with_bool_parameter]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+
+  spanner = Google::Cloud::Spanner.new project: project_id
+  client  = spanner.client instance_id, database_id
+
+  sql_query = "SELECT VenueId, VenueName, OutdoorVenue FROM Venues
+               WHERE OutdoorVenue = @outdoor_venue"
+
+  params      = { outdoor_venue: true }
+  param_types = { outdoor_venue: :BOOL }
+
+  client.execute(sql_query, params: params, types: param_types).rows.each do |row|
+    puts "#{row[:VenueId]} #{row[:VenueName]} #{row[:OutdoorVenue]}"
+  end
+  # [END spanner_query_with_bool_parameter]
+end
+
+def query_with_bytes project_id:, instance_id:, database_id:
+  # [START spanner_query_with_bytes_parameter]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+
+  spanner = Google::Cloud::Spanner.new project: project_id
+  client  = spanner.client instance_id, database_id
+
+  example_bytes = StringIO.new "Hello World 1"
+  sql_query = "SELECT VenueId, VenueName FROM Venues
+               WHERE VenueInfo = @venue_info"
+
+  params      = { venue_info: example_bytes }
+  param_types = { venue_info: :BYTES }
+
+  client.execute(sql_query, params: params, types: param_types).rows.each do |row|
+    puts "#{row[:VenueId]} #{row[:VenueName]}"
+  end
+  # [END spanner_query_with_bytes_parameter]
+end
+
+def query_with_date project_id:, instance_id:, database_id:
+  # [START spanner_query_with_date_parameter]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+
+  spanner = Google::Cloud::Spanner.new project: project_id
+  client  = spanner.client instance_id, database_id
+
+  sql_query = "SELECT VenueId, VenueName, LastContactDate FROM Venues
+               WHERE LastContactDate < @last_contact_date"
+
+  params      = { last_contact_date: "2019-01-01" }
+  param_types = { last_contact_date: :DATE }
+
+  client.execute(sql_query, params: params, types: param_types).rows.each do |row|
+    puts "#{row[:VenueId]} #{row[:VenueName]} #{row[:LastContactDate]}"
+  end
+  # [END spanner_query_with_date_parameter]
+end
+
+def query_with_float project_id:, instance_id:, database_id:
+  # [START spanner_query_with_float_parameter]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+
+  spanner = Google::Cloud::Spanner.new project: project_id
+  client  = spanner.client instance_id, database_id
+
+  sql_query = "SELECT VenueId, VenueName, PopularityScore FROM Venues
+               WHERE PopularityScore > @popularity_score"
+
+  params      = { popularity_score: 0.8 }
+  param_types = { popularity_score: :FLOAT64 }
+
+  client.execute(sql_query, params: params, types: param_types).rows.each do |row|
+    puts "#{row[:VenueId]} #{row[:VenueName]} #{row[:PopularityScore]}"
+  end
+  # [END spanner_query_with_float_parameter]
+end
+
+def query_with_int project_id:, instance_id:, database_id:
+  # [START spanner_query_with_int_parameter]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+
+  spanner = Google::Cloud::Spanner.new project: project_id
+  client  = spanner.client instance_id, database_id
+
+  sql_query = "SELECT VenueId, VenueName, Capacity FROM Venues
+               WHERE Capacity >= @capacity"
+
+  params      = { capacity: 3_000 }
+  param_types = { capacity: :INT64 }
+
+  client.execute(sql_query, params: params, types: param_types).rows.each do |row|
+    puts "#{row[:VenueId]} #{row[:VenueName]} #{row[:Capacity]}"
+  end
+  # [END spanner_query_with_int_parameter]
+end
+
+def query_with_string project_id:, instance_id:, database_id:
+  # [START spanner_query_with_string_parameter]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+
+  spanner = Google::Cloud::Spanner.new project: project_id
+  client  = spanner.client instance_id, database_id
+
+  sql_query = "SELECT VenueId, VenueName FROM Venues
+               WHERE VenueName = @venue_name"
+
+  params      = { venue_name: "Venue 42" }
+  param_types = { venue_name: :STRING }
+
+  client.execute(sql_query, params: params, types: param_types).rows.each do |row|
+    puts "#{row[:VenueId]} #{row[:VenueName]}"
+  end
+  # [END spanner_query_with_string_parameter]
+end
+
+def query_with_timestamp project_id:, instance_id:, database_id:
+  # [START spanner_query_with_timestamp_parameter]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+
+  spanner = Google::Cloud::Spanner.new project: project_id
+  client  = spanner.client instance_id, database_id
+
+  example_timestamp = DateTime.now
+  sql_query = "SELECT VenueId, VenueName, LastUpdateTime FROM Venues
+               WHERE LastUpdateTime < @last_update_time"
+
+  params      = { last_update_time: example_timestamp }
+  param_types = { last_update_time: :TIMESTAMP }
+
+  client.execute(sql_query, params: params, types: param_types).rows.each do |row|
+    puts "#{row[:VenueId]} #{row[:VenueName]} #{row[:LastUpdateTime]}"
+  end
+  # [END spanner_query_with_timestamp_parameter]
+end
+
 def usage
   puts <<~USAGE
 
@@ -1012,6 +1267,16 @@ def usage
       update_using_partitioned_dml       <instance_id> <database_id> Update multiple records using a partitioned DML statement.
       delete_using_partitioned_dml       <instance_id> <database_id> Delete multiple records using a partitioned DML statement.
       update_using_batch_dml             <instance_id> <database_id> Updates sample data in the database using Batch DML.
+      create_table_with_datatypes        <instance_id> <database_id> Create table Venues with supported datatype columns.
+      write_datatypes_data               <instance_id> <database_id> Inserts sample data that can be used for datatype queries.
+      query_with_array                   <instance_id> <database_id> Queries data using an ARRAY parameter.
+      query_with_bool                    <instance_id> <database_id> Queries data using a BOOL parameter.
+      query_with_bytes                   <instance_id> <database_id> Queries data using a BYTES parameter.
+      query_with_date                    <instance_id> <database_id> Queries data using a DATE parameter.
+      query_with_float                   <instance_id> <database_id> Queries data using a FLOAT64 parameter.
+      query_with_int                     <instance_id> <database_id> Queries data using a INT64 parameter.
+      query_with_string                  <instance_id> <database_id> Queries data using a STRING parameter.
+      query_with_timestamp               <instance_id> <database_id> Queries data using a TIMESTAMP parameter.
 
     Environment variables:
       GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
@@ -1039,7 +1304,11 @@ def run_sample arguments
     "update_using_dml_with_timestamp", "write_and_read_using_dml",
     "update_using_dml_with_struct", "write_using_dml", "query_with_parameter",
     "write_with_transaction_using_dml", "update_using_partitioned_dml",
-    "delete_using_partitioned_dml", "update_using_batch_dml"
+    "delete_using_partitioned_dml", "update_using_batch_dml",
+    "create_table_with_datatypes", "write_datatypes_data",
+    "query_with_array", "query_with_bool", "query_with_bytes", "query_with_date",
+    "query_with_float", "query_with_int", "query_with_string",
+    "query_with_timestamp"
   ]
   if command.eql?("query_data_with_index") && instance_id && database_id && arguments.size >= 2
     query_data_with_index project_id:  project_id,
