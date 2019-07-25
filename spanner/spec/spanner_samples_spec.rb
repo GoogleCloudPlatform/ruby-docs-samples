@@ -178,7 +178,6 @@ describe "Google Cloud Spanner API samples" do
 
   example "query data" do
     database = create_singers_albums_database
-    client   = @spanner.client @instance.instance_id, database.database_id
 
     # Ignore the following capture block
     capture do
@@ -203,7 +202,6 @@ describe "Google Cloud Spanner API samples" do
 
   example "query with struct" do
     database = create_singers_albums_database
-    client = @spanner.client @instance.instance_id, database.database_id
 
     capture do
       write_struct_data project_id:  @project_id,
@@ -221,7 +219,6 @@ describe "Google Cloud Spanner API samples" do
 
   example "query with array of struct" do
     database = create_singers_albums_database
-    client = @spanner.client @instance.instance_id, database.database_id
 
     capture do
       write_struct_data project_id:  @project_id,
@@ -239,7 +236,6 @@ describe "Google Cloud Spanner API samples" do
 
   example "query struct field" do
     database = create_singers_albums_database
-    client = @spanner.client @instance.instance_id, database.database_id
 
     capture do
       write_struct_data project_id:  @project_id,
@@ -257,7 +253,6 @@ describe "Google Cloud Spanner API samples" do
 
   example "query nested struct field" do
     database = create_singers_albums_database
-    client = @spanner.client @instance.instance_id, database.database_id
 
     capture do
       write_struct_data project_id:  @project_id,
@@ -273,9 +268,8 @@ describe "Google Cloud Spanner API samples" do
     expect(captured_output).to match /6\nImagination\n9\nImagination/
   end
 
-  example "query data_with_timestamp_column" do
+  example "query data with timestamp column" do
     database = create_singers_albums_database
-    client   = @spanner.client @instance.instance_id, database.database_id
 
     # Ignore the following capture block
     capture do
@@ -312,7 +306,6 @@ describe "Google Cloud Spanner API samples" do
 
   example "read data" do
     database = create_singers_albums_database
-    client   = @spanner.client @instance.instance_id, database.database_id
 
     # Ignore the following capture block
     capture do
@@ -337,7 +330,6 @@ describe "Google Cloud Spanner API samples" do
 
   example "read stale data" do
     database = create_singers_albums_database
-    client   = @spanner.client @instance.instance_id, database.database_id
 
     # Ignore the following capture block
     capture do
@@ -541,7 +533,6 @@ describe "Google Cloud Spanner API samples" do
 
   example "query data with new column" do
     database = create_singers_albums_database
-    client   = @spanner.client @instance.instance_id, database.database_id
 
     # Ignore the following capture block
     capture do
@@ -650,7 +641,6 @@ describe "Google Cloud Spanner API samples" do
 
   example "query data with index" do
     database = create_singers_albums_database
-    client   = @spanner.client @instance.instance_id, database.database_id
 
     # Ignore the following capture block
     capture do
@@ -682,7 +672,6 @@ describe "Google Cloud Spanner API samples" do
 
   example "read data with index" do
     database = create_singers_albums_database
-    client   = @spanner.client @instance.instance_id, database.database_id
 
     # Ignore the following capture block
     capture do
@@ -714,7 +703,6 @@ describe "Google Cloud Spanner API samples" do
 
   example "read data with storing index" do
     database = create_singers_albums_database
-    client   = @spanner.client @instance.instance_id, database.database_id
 
     # Ignore the following capture block
     capture do
@@ -746,7 +734,6 @@ describe "Google Cloud Spanner API samples" do
 
   example "read only transaction" do
     database = create_singers_albums_database
-    client   = @spanner.client @instance.instance_id, database.database_id
 
     # Ignore the following capture block
     capture do
@@ -768,7 +755,6 @@ describe "Google Cloud Spanner API samples" do
 
   example "batch client read partitions across threads" do
     database = create_singers_albums_database
-    client   = @spanner.client @instance.instance_id, database.database_id
 
     # Ignore the following capture block
     capture do
@@ -1167,12 +1153,11 @@ describe "Google Cloud Spanner API samples" do
     expect(venues.count).to eq 3
   end
 
-  example "query data with array" do
+  example "query data with datatypes" do
     database = create_singers_albums_database
     create_venues_table
 
-    client   = @spanner.client @instance.instance_id, database.database_id
-
+   # Ignore the following capture block
     capture do
       write_datatypes_data project_id:  @project_id,
                            instance_id: @instance.instance_id,
@@ -1187,19 +1172,6 @@ describe "Google Cloud Spanner API samples" do
 
     expect(captured_output).to include "19 Venue 19 2020-11-01"
     expect(captured_output).to include "42 Venue 42 2020-10-01"
-  end
-
-  example "query data with bool" do
-    database = create_singers_albums_database
-    create_venues_table
-
-    client   = @spanner.client @instance.instance_id, database.database_id
-
-    capture do
-      write_datatypes_data project_id:  @project_id,
-                           instance_id: @instance.instance_id,
-                           database_id: database.database_id
-    end
 
     capture do
       query_with_bool project_id:  @project_id,
@@ -1208,19 +1180,6 @@ describe "Google Cloud Spanner API samples" do
     end
 
     expect(captured_output).to include "19 Venue 19 true"
-  end
-
-  example "query data with bytes" do
-    database = create_singers_albums_database
-    create_venues_table
-
-    client   = @spanner.client @instance.instance_id, database.database_id
-
-    capture do
-      write_datatypes_data project_id:  @project_id,
-                           instance_id: @instance.instance_id,
-                           database_id: database.database_id
-    end
 
     capture do
       query_with_bytes project_id:  @project_id,
@@ -1229,19 +1188,6 @@ describe "Google Cloud Spanner API samples" do
     end
 
     expect(captured_output).to include "4 Venue 4"
-  end
-
-  example "query data with date" do
-    database = create_singers_albums_database
-    create_venues_table
-
-    client   = @spanner.client @instance.instance_id, database.database_id
-
-    capture do
-      write_datatypes_data project_id:  @project_id,
-                           instance_id: @instance.instance_id,
-                           database_id: database.database_id
-    end
 
     capture do
       query_with_date project_id:  @project_id,
@@ -1251,20 +1197,7 @@ describe "Google Cloud Spanner API samples" do
 
     expect(captured_output).to include "4 Venue 4 2018-09-02"
     expect(captured_output).to include "42 Venue 42 2018-10-01"
-  end
-
-  example "query data with float" do
-    database = create_singers_albums_database
-    create_venues_table
-
-    client   = @spanner.client @instance.instance_id, database.database_id
-
-    capture do
-      write_datatypes_data project_id:  @project_id,
-                           instance_id: @instance.instance_id,
-                           database_id: database.database_id
-    end
-
+    
     capture do
       query_with_float project_id:  @project_id,
                       instance_id: @instance.instance_id,
@@ -1273,20 +1206,7 @@ describe "Google Cloud Spanner API samples" do
 
     expect(captured_output).to include "4 Venue 4 0.8"
     expect(captured_output).to include "19 Venue 19 0.9"
-  end
-
-  example "query data with int" do
-    database = create_singers_albums_database
-    create_venues_table
-
-    client   = @spanner.client @instance.instance_id, database.database_id
-
-    capture do
-      write_datatypes_data project_id:  @project_id,
-                           instance_id: @instance.instance_id,
-                           database_id: database.database_id
-    end
-
+    
     capture do
       query_with_int project_id:  @project_id,
                       instance_id: @instance.instance_id,
@@ -1295,19 +1215,6 @@ describe "Google Cloud Spanner API samples" do
 
     expect(captured_output).to include "19 Venue 19 6300"
     expect(captured_output).to include "42 Venue 42 3000"
-  end
-
-  example "query data with string" do
-    database = create_singers_albums_database
-    create_venues_table
-
-    client   = @spanner.client @instance.instance_id, database.database_id
-
-    capture do
-      write_datatypes_data project_id:  @project_id,
-                           instance_id: @instance.instance_id,
-                           database_id: database.database_id
-    end
 
     capture do
       query_with_string project_id:  @project_id,
@@ -1316,19 +1223,6 @@ describe "Google Cloud Spanner API samples" do
     end
 
     expect(captured_output).to include "42 Venue 42"
-  end
-
-  example "query data with timestamp" do
-    database = create_singers_albums_database
-    create_venues_table
-
-    client   = @spanner.client @instance.instance_id, database.database_id
-
-    capture do
-      write_datatypes_data project_id:  @project_id,
-                           instance_id: @instance.instance_id,
-                           database_id: database.database_id
-    end
 
     capture do
       query_with_timestamp project_id:  @project_id,
