@@ -76,8 +76,8 @@ def get_requester_pays_status project_id:, bucket_name:
   # [END get_requester_pays_status]
 end
 
-def disable_bucket_policy_only project_id:, bucket_name:
-  # [START storage_disable_bucket_policy_only]
+def disable_uniform_bucket_level_access project_id:, bucket_name:
+  # [START storage_disable_uniform_bucket_level_access]
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Name of your Google Cloud Storage bucket"
 
@@ -86,14 +86,14 @@ def disable_bucket_policy_only project_id:, bucket_name:
   storage = Google::Cloud::Storage.new project_id: project_id
   bucket  = storage.bucket bucket_name
 
-  bucket.policy_only = false
+  bucket.uniform_bucket_level_access = false
 
-  puts "Bucket Policy Only was disabled for #{bucket_name}."
-  # [END storage_disable_bucket_policy_only]
+  puts "Uniform bucket-level access was disabled for #{bucket_name}."
+  # [END storage_disable_uniform_bucket_level_access]
 end
 
-def enable_bucket_policy_only project_id:, bucket_name:
-  # [START storage_enable_bucket_policy_only]
+def enable_uniform_bucket_level_access project_id:, bucket_name:
+  # [START storage_enable_uniform_bucket_level_access]
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Name of your Google Cloud Storage bucket"
 
@@ -102,14 +102,14 @@ def enable_bucket_policy_only project_id:, bucket_name:
   storage = Google::Cloud::Storage.new project_id: project_id
   bucket  = storage.bucket bucket_name
 
-  bucket.policy_only = true
+  bucket.uniform_bucket_level_access = true
 
-  puts "Bucket Policy Only was enabled for #{bucket_name}."
-  # [END storage_enable_bucket_policy_only]
+  puts "Uniform bucket-level access was enabled for #{bucket_name}."
+  # [END storage_enable_uniform_bucket_level_access]
 end
 
-def get_bucket_policy_only project_id:, bucket_name:
-  # [START storage_get_bucket_policy_only]
+def get_uniform_bucket_level_access project_id:, bucket_name:
+  # [START storage_get_uniform_bucket_level_access]
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Name of your Google Cloud Storage bucket"
 
@@ -118,13 +118,13 @@ def get_bucket_policy_only project_id:, bucket_name:
   storage = Google::Cloud::Storage.new project_id: project_id
   bucket  = storage.bucket bucket_name
 
-  if bucket.policy_only?
-    puts "Bucket Policy Only is enabled for #{bucket_name}."
-    puts "Bucket will be locked on #{bucket.policy_only_locked_at}."
+  if bucket.uniform_bucket_level_access?
+    puts "Uniform bucket-level access is enabled for #{bucket_name}."
+    puts "Bucket will be locked on #{bucket.uniform_bucket_level_access_locked_at}."
   else
-    puts "Bucket Policy Only is disabled for #{bucket_name}."
+    puts "Uniform bucket-level access is disabled for #{bucket_name}."
   end
-  # [END storage_get_bucket_policy_only]
+  # [END storage_get_uniform_bucket_level_access]
 end
 
 def enable_default_kms_key project_id:, bucket_name:, default_kms_key:
@@ -439,41 +439,41 @@ if $PROGRAM_NAME == __FILE__
   when "get_default_event_based_hold"
     get_default_event_based_hold project_id:  project_id,
                                  bucket_name: ARGV.shift
-  when "enable_bucket_policy_only"
-    enable_bucket_policy_only project_id:  project_id,
-                              bucket_name: ARGV.shift
-  when "disable_bucket_policy_only"
-    disable_bucket_policy_only project_id:  project_id,
-                               bucket_name: ARGV.shift
-  when "get_bucket_policy_only"
-    get_bucket_policy_only project_id:  project_id,
-                           bucket_name: ARGV.shift
+  when "enable_uniform_bucket_level_access"
+    enable_uniform_bucket_level_access project_id:  project_id,
+                                       bucket_name: ARGV.shift
+  when "disable_uniform_bucket_level_access"
+    disable_uniform_bucket_level_access project_id:  project_id,
+                                        bucket_name: ARGV.shift
+  when "get_uniform_bucket_level_access"
+    get_uniform_bucket_level_access project_id:  project_id,
+                                    bucket_name: ARGV.shift
   else
     puts <<~USAGE
       Usage: bundle exec ruby buckets.rb [command] [arguments]
 
       Commands:
         list                                                                 List all buckets in the authenticated project
-        enable_requester_pays            <bucket>                            Enable requester pays for a bucket
-        disable_requester_pays           <bucket>                            Disable requester pays for a bucket
-        check_requester_pays             <bucket>                            Check status of requester pays for a bucket
-        enable_default_kms_key           <bucket> <kms_key>                  Enable default KMS encryption for bucket
-        create                           <bucket>                            Create a new bucket with default storage class and location
-        create                           <bucket> <location> <storage_class> Create a new bucket with specific storage class and location
-        list_bucket_labels               <bucket>                            List bucket labels
-        add_bucket_label                 <bucket> <label_key> <label_value>  Add bucket label
-        delete_bucket_label              <bucket> <label_key>                Delete bucket label
-        delete                           <bucket>                            Delete bucket with the provided name
-        set_retention_policy             <bucket> <retention_period>         Set a retention policy on bucket with a retention period determined in seconds
-        remove_retention_policy          <bucket>                            Remove a retention policy from a bucket if policy is not locked
-        lock_retention_policy            <bucket>                            Lock retention policy
-        get_retention_policy             <bucket>                            Get retention policy for a bucket
-        enable_default_event_based_hold  <bucket>                            Enable event-based hold for a bucket
-        disable_default_event_based_hold <bucket>                            Disable event-based hold for a bucket
-        get_default_event_based_hold     <bucket>                            Get state of event-based hold for a bucket
-        enable_bucket_policy_only        <bucket>                            Enable Bucket Policy Only for a bucket
-        disable_bucket_policy_only       <bucket>                            Disable Bucket Policy Only for a bucket
-        get_bucket_policy_only           <bucket>                            Get Bucket Policy Only for a bucket
+        enable_requester_pays               <bucket>                            Enable requester pays for a bucket
+        disable_requester_pays              <bucket>                            Disable requester pays for a bucket
+        check_requester_pays                <bucket>                            Check status of requester pays for a bucket
+        enable_default_kms_key              <bucket> <kms_key>                  Enable default KMS encryption for bucket
+        create                              <bucket>                            Create a new bucket with default storage class and location
+        create                              <bucket> <location> <storage_class> Create a new bucket with specific storage class and location
+        list_bucket_labels                  <bucket>                            List bucket labels
+        add_bucket_label                    <bucket> <label_key> <label_value>  Add bucket label
+        delete_bucket_label                 <bucket> <label_key>                Delete bucket label
+        delete                              <bucket>                            Delete bucket with the provided name
+        set_retention_policy                <bucket> <retention_period>         Set a retention policy on bucket with a retention period determined in seconds
+        remove_retention_policy             <bucket>                            Remove a retention policy from a bucket if policy is not locked
+        lock_retention_policy               <bucket>                            Lock retention policy
+        get_retention_policy                <bucket>                            Get retention policy for a bucket
+        enable_default_event_based_hold     <bucket>                            Enable event-based hold for a bucket
+        disable_default_event_based_hold    <bucket>                            Disable event-based hold for a bucket
+        get_default_event_based_hold        <bucket>                            Get state of event-based hold for a bucket
+        enable_uniform_bucket_level_access  <bucket>                            Enable uniform bucket-level access for a bucket
+        disable_uniform_bucket_level_access <bucket>                            Disable uniform bucket-level access for a bucket
+        get_uniform_bucket_level_access     <bucket>                            Get uniform bucket-level access for a bucket
 
       Environment variables:
         GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
