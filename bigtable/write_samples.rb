@@ -24,7 +24,7 @@ def write_simple project_id, instance_id, table_id
   #  [START bigtable_writes_simple]
   table = bigtable.table instance_id, table_id
   column_family = "stats_summary"
-  timestamp = Time.now.to_i * 1000
+  timestamp = (Time.now.to_f * 1000000).round(-3)
 
   rowkey = "phone#4c410523#20190501"
   entry = table.new_mutation_entry(rowkey)
@@ -43,7 +43,7 @@ def write_batch project_id, instance_id, table_id
   #  [START bigtable_writes_batch]
   table = bigtable.table instance_id, table_id
   column_family = "stats_summary"
-  timestamp = Time.now.to_i * 1000
+  timestamp = (Time.now.to_f * 1000000).round(-3)
 
   entries = []
   entries << table.new_mutation_entry("tablet#a0b81f74#20190501")
@@ -80,7 +80,7 @@ def write_conditional project_id, instance_id, table_id
   #  [START bigtable_writes_conditional]
   table = bigtable.table instance_id, table_id
   column_family = "stats_summary"
-  timestamp = Time.now.to_i * 1000
+  timestamp = (Time.now.to_f * 1000000).round(-3)
 
   rowkey = "phone#4c410523#20190501"
   predicate_filter = Google::Cloud::Bigtable::RowFilter.chain
