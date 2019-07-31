@@ -44,7 +44,7 @@ greetings.each_with_index do |value, i|
     column_family,
     column_qualifier,
     value,
-    timestamp: (Time.now.to_f * 1000000).round(-3)
+    timestamp: (Time.now.to_f * 1_000_000).round { -3 }
   )
 
   table.mutate_row entry
