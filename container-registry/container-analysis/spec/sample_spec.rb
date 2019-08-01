@@ -131,7 +131,7 @@ describe "Container Analysis API samples" do
     pubsub = Google::Cloud::Pubsub.new project: @project_id
     topic_name = "container-analysis-occurrences-v1"
     topic = pubsub.topic topic_name
-    if not topic or not topic.exists
+    if not topic or not topic.exists?
       pubsub.create_topic topic_name
     end
 
