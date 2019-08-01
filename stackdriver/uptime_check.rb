@@ -80,7 +80,7 @@ def get_uptime_check_config config_name
 
   client = Google::Cloud::Monitoring::V3::UptimeCheck.new
   config = client.get_uptime_check_config config_name
-  pp config.to_hash
+  pp config.to_h
   config
 end
 # [END monitoring_uptime_check_get]
