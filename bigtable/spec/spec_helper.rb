@@ -18,27 +18,31 @@ require "google/cloud/bigtable"
 RSpec.configure do |config|
   config.before :all do
     @project_id = ENV["GOOGLE_CLOUD_BIGTABLE_PROJECT"] ||
-                  ENV["GOOGLE_CLOUD_PROJECT"]
+        ENV["GOOGLE_CLOUD_PROJECT"]
 
     skip "GOOGLE_CLOUD_BIGTABLE_PROJECT or GOOGLE_CLOUD_PROJECT not defined" if @project_id.nil?
 
     @bigtable = Google::Cloud::Bigtable.new project_id: @project_id
 
     @instance_id = ENV["GOOGLE_CLOUD_BIGTABLE_TEST_INSTANCE"] ||
-                   "ruby-samples-test"
+        "ruby-samples-test"
     @cluser_id = "ruby-cluster-test"
-    @cluster_location = ENV["GOOGLE_CLOUD_BIGTABLE_TEST_ZONE"] || "us-east1-b"
+    @cluster_location = ENV["GOOGLE_CLOUD_BIGTABLE_TEST_ZONE"] ||
+        "us-central1-c"
 
     @instance = create_test_instance(
-      @bigtable,
-      @instance_id,
-      @cluser_id,
-      @cluster_location
+        @bigtable,
+        @instance_id,
+        @cluser_id,
+        @cluster_location
     )
   end
 
   config.after :all do
-    @instance&.delete
+    # Only delete the instance if it was created for the test.
+    if @instance_id == "ruby-samples-test"
+      @instance&.delete
+    end
   end
 
   # Capture and return STDOUT output by block
@@ -59,9 +63,9 @@ def create_test_instance bigtable, instance_id, cluster_id, cluster_location
     p "Creating instance #{instance_id} in zone #{cluster_location}."
 
     job = bigtable.create_instance(
-      instance_id,
-      display_name: "Ruby Bigtable Example Tests",
-      labels:       { env: "test" }
+        instance_id,
+        display_name: "Ruby Bigtable Example Tests",
+        labels: {env: "test"}
     ) do |clusters|
       clusters.add cluster_id, cluster_location, nodes: 3
     end
