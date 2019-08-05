@@ -21,12 +21,11 @@ require "google/cloud/bigtable"
 def write_simple project_id, instance_id, table_id
   bigtable = Google::Cloud::Bigtable.new project_id: project_id
 
+  # rubocop:disable MethodCallWithArgsParentheses
   #  [START bigtable_writes_simple]
   table = bigtable.table instance_id, table_id
   column_family = "stats_summary"
-  # rubocop:disable MethodCallWithArgsParentheses
   timestamp = (Time.now.to_f * 1_000_000).round(-3)
-  # rubocop:enable MethodCallWithArgsParentheses
 
   rowkey = "phone#4c410523#20190501"
   entry = table.new_mutation_entry(rowkey)
@@ -37,17 +36,17 @@ def write_simple project_id, instance_id, table_id
   table.mutate_row entry
   puts "Successfully wrote row #{rowkey}"
   #  [END bigtable_writes_simple]
+  # rubocop:enable MethodCallWithArgsParentheses
 end
 
 def write_batch project_id, instance_id, table_id
   bigtable = Google::Cloud::Bigtable.new project_id: project_id
 
+  # rubocop:disable MethodCallWithArgsParentheses
   #  [START bigtable_writes_batch]
   table = bigtable.table instance_id, table_id
   column_family = "stats_summary"
-  # rubocop:disable MethodCallWithArgsParentheses
   timestamp = (Time.now.to_f * 1_000_000).round(-3)
-  # rubocop:enable MethodCallWithArgsParentheses
 
   entries = []
   entries << table.new_mutation_entry("tablet#a0b81f74#20190501")
@@ -60,6 +59,7 @@ def write_batch project_id, instance_id, table_id
   results = table.mutate_rows entries
   puts "Successfully wrote #{results.length} rows"
   #  [END bigtable_writes_batch]
+  # rubocop:enable MethodCallWithArgsParentheses
 end
 
 def write_increment project_id, instance_id, table_id
@@ -81,12 +81,11 @@ end
 def write_conditional project_id, instance_id, table_id
   bigtable = Google::Cloud::Bigtable.new project_id: project_id
 
+  # rubocop:disable MethodCallWithArgsParentheses
   #  [START bigtable_writes_conditional]
   table = bigtable.table instance_id, table_id
   column_family = "stats_summary"
-  # rubocop:disable MethodCallWithArgsParentheses
   timestamp = (Time.now.to_f * 1_000_000).round(-3)
-  # rubocop:enable MethodCallWithArgsParentheses
 
   rowkey = "phone#4c410523#20190501"
   predicate_filter = Google::Cloud::Bigtable::RowFilter.chain
@@ -110,6 +109,7 @@ def write_conditional project_id, instance_id, table_id
 
   puts "Successfully updated row's os_name: #{response}"
   #  [END bigtable_writes_conditional]
+  # rubocop:enable MethodCallWithArgsParentheses
 end
 
 if $PROGRAM_NAME == __FILE__
