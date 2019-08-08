@@ -17,7 +17,7 @@ require "json"
 # [START run_pubsub_server_setup]
 require "sinatra"
 
-set :bind, '0.0.0.0'
+set :bind, "0.0.0.0"
 # [END run_pubsub_server_setup]
 
 # [START run_pubsub_handler]
