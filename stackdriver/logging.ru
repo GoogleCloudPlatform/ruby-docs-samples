@@ -28,4 +28,4 @@ require "google/cloud/logging"
 use Google::Cloud::Logging::Middleware
 # [END logging_middleware]
 
-run -> (env) { ["200", {"Content-Type" => "text/html"}, ["Hello world!"]] }
+run ->(_env) { ["200", { "Content-Type" => "text/html" }, ["Hello world!"]] }

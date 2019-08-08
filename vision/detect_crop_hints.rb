@@ -61,17 +61,16 @@ def detect_crop_hints_gcs image_path:
   # [END vision_crop_hint_detection_gcs]
 end
 
-if __FILE__ == $PROGRAM_NAME
+if $PROGRAM_NAME == __FILE__
   image_path = ARGV.shift
 
   if !image_path
     puts <<~USAGE
-    Usage: ruby detect_crop_hints.rb [image file path]
-
-    Example:
-      ruby detect_crop_hints.rb image.png
-      ruby detect_crop_hints.rb https://public-url/image.png
-      ruby detect_crop_hints.rb gs://my-bucket/image.png
+      Usage: ruby detect_crop_hints.rb [image file path]
+       Example:
+        ruby detect_crop_hints.rb image.png
+        ruby detect_crop_hints.rb https://public-url/image.png
+        ruby detect_crop_hints.rb gs://my-bucket/image.png
     USAGE
   elsif image_path =~ URI::DEFAULT_PARSER.make_regexp
     detect_crop_hints_gcs image_path: image_path

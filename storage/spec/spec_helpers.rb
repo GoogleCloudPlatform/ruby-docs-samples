@@ -1,7 +1,6 @@
 require "google/apis/cloudkms_v1"
 
 def create_kms_key project_id:, key_ring:, key_name:
-
   kms_client = Google::Apis::CloudkmsV1::CloudKMSService.new
   kms_client.authorization = Google::Auth.get_application_default(
     "https://www.googleapis.com/auth/cloud-platform"
@@ -12,8 +11,8 @@ def create_kms_key project_id:, key_ring:, key_name:
 
   kms_client.get_project_location_key_ring(
     key_ring_resource
-  ) do |result, err|
-    if !err.nil?
+  ) do |_result, err|
+    unless err.nil?
       kms_client.create_project_location_key_ring(
         resource,
         Google::Apis::CloudkmsV1::KeyRing.new,
@@ -24,8 +23,8 @@ def create_kms_key project_id:, key_ring:, key_name:
 
   kms_client.get_project_location_key_ring_crypto_key(
     key_resource
-  ) do |result, err|
-    if !err.nil?
+  ) do |_result, err|
+    unless err.nil?
       kms_client.create_project_location_key_ring_crypto_key(
         key_ring_resource,
         Google::Apis::CloudkmsV1::CryptoKey.new(
@@ -37,5 +36,4 @@ def create_kms_key project_id:, key_ring:, key_name:
   end
 
   key_resource
-
 end

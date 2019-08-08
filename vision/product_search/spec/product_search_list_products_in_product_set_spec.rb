@@ -15,7 +15,6 @@
 require "spec_helper"
 
 describe "List products in product set" do
-
   example "List products in product set" do
     snippet_filepath = get_snippet_filepath __FILE__
     products = Array.new(2) { create_temp_product }
@@ -27,5 +26,4 @@ describe "List products in product set" do
     output_products = output.split("\n").select { |line| line.include? "projects/" }
     expect(output_products.length).to eq 2
   end
-
 end

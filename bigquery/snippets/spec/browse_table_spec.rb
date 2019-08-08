@@ -16,11 +16,9 @@ require_relative "../browse_table"
 require "spec_helper"
 
 describe "Browse table" do
-
   example "lists first 10 rows of table" do
     output = capture { browse_table }
-    rows = output.split("\n")
+    rows = output.split "\n"
     expect(rows.length).to eq 10
   end
-
 end

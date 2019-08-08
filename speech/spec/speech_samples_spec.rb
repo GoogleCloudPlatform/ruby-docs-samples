@@ -18,7 +18,6 @@ require "google/cloud/speech"
 require "google/cloud/storage"
 
 describe "Google Cloud Speech API samples" do
-
   before do
     @bucket_name = ENV["GOOGLE_CLOUD_STORAGE_BUCKET"]
     @storage     = Google::Cloud::Storage.new
@@ -29,15 +28,18 @@ describe "Google Cloud Speech API samples" do
     # Path to RAW audio file with sample rate of 16000 using LINEAR16 encoding
     @audio_file_path = File.expand_path "../resources/audio.raw", __dir__
 
+    # Path to WAV audio file with sample rate of 44100 using LINEAR16 encoding with 2 channels
+    @multi_file_path = File.expand_path "../resources/multi.wav", __dir__
+
     # Expected transcript of spoken English recorded in the audio.raw file
     @audio_file_transcript = "how old is the Brooklyn Bridge"
   end
 
   # Capture and return STDOUT output by block
-  def capture &block
+  def capture
     real_stdout = $stdout
     $stdout = StringIO.new
-    block.call
+    yield
     @captured_output = $stdout.string
   ensure
     $stdout = real_stdout
@@ -61,7 +63,7 @@ describe "Google Cloud Speech API samples" do
     expect(captured_output).to include "Word: is 0.6 0.8"
     expect(captured_output).to include "Word: the 0.8 0.9"
     expect(captured_output).to include "Word: Brooklyn 0.9 1.1"
-    expect(captured_output).to include "Word: Bridge 1.1 1.5"
+    expect(captured_output).to include "Word: Bridge 1.1 1.4"
   end
 
   example "transcribe audio file from GCS" do
@@ -103,7 +105,7 @@ describe "Google Cloud Speech API samples" do
     expect(captured_output).to include "Word: is 0.6 0.8"
     expect(captured_output).to include "Word: the 0.8 0.9"
     expect(captured_output).to include "Word: Brooklyn 0.9 1.1"
-    expect(captured_output).to include "Word: Bridge 1.1 1.5"
+    expect(captured_output).to include "Word: Bridge 1.1 1.4"
   end
 
   example "streaming operation to transcribe audio file" do
@@ -133,5 +135,21 @@ describe "Google Cloud Speech API samples" do
     expect {
       speech_transcribe_model_selection file_path: video_file_path, model: "video"
     }.to output(/the weather outside is sunny/).to_stdout
+  end
+
+  example "transcribe audio file with multichannel" do
+    audio_file_path = File.expand_path "../resources/multi.wav", __dir__
+    expect {
+      speech_transcribe_multichannel audio_file_path: audio_file_path
+    }.to output(/how are you doing/).to_stdout
+  end
+
+  example "transcribe audio file with multichannel from GCS" do
+    file = @bucket.upload_file @multi_file_path, "multi.wav"
+    path = "gs://#{file.bucket}/multi.wav"
+
+    expect {
+      speech_transcribe_multichannel_gcs storage_path: path
+    }.to output(/how are you doing/).to_stdout
   end
 end

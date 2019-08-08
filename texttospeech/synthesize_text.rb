@@ -32,9 +32,9 @@ def synthesize_text text:
   response = client.synthesize_speech input_text, voice, audio_config
 
   # The response's audio_content is binary.
-  File.open("output.mp3", "wb") do |file|
+  File.open "output.mp3", "wb" do |file|
     # Write the response to the output file.
-    file.write(response.audio_content)
+    file.write response.audio_content
   end
 
   puts "Audio content written to file 'output.mp3'"
@@ -61,16 +61,16 @@ def synthesize_ssml ssml:
   response = client.synthesize_speech input_text, voice, audio_config
 
   # The response's audio_content is binary.
-  File.open("output.mp3", "wb") do |file|
+  File.open "output.mp3", "wb" do |file|
     # Write the response to the output file.
-    file.write(response.audio_content)
+    file.write response.audio_content
   end
 
   puts "Audio content written to file 'output.mp3'"
   # [END tts_synthesize_ssml]
 end
 
-if __FILE__ == $PROGRAM_NAME
+if $PROGRAM_NAME == __FILE__
   command = ARGV.shift
   text    = ARGV.shift
 
@@ -79,12 +79,12 @@ if __FILE__ == $PROGRAM_NAME
   elsif command == "ssml"
     synthesize_text ssml: text
   else
-    puts <<-usage
-Usage: ruby synthesize_text.rb (text TEXT | ssml SSML)
+    puts <<~USAGE
+      Usage: ruby synthesize_text.rb (text TEXT | ssml SSML)
 
-Example:
-  ruby synthesize_text.rb text "hello"
-  ruby synthesize_text.rb ssml "<speak>Hello there.</speak>"
-    usage
+      Example:
+        ruby synthesize_text.rb text "hello"
+        ruby synthesize_text.rb ssml "<speak>Hello there.</speak>"
+    USAGE
   end
 end

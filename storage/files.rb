@@ -58,8 +58,8 @@ def generate_encryption_key_base64
   # [END generate_encryption_key_base64]
 end
 
-def upload_file project_id:, bucket_name:, local_file_path:,
-                storage_file_path: nil
+def upload_file(project_id:, bucket_name:, local_file_path:,
+                storage_file_path: nil)
   # [START upload_file]
   # project_id        = "Your Google Cloud project ID"
   # bucket_name       = "Your Google Cloud Storage bucket name"
@@ -77,8 +77,8 @@ def upload_file project_id:, bucket_name:, local_file_path:,
   # [END upload_file]
 end
 
-def upload_encrypted_file project_id:, bucket_name:, local_file_path:,
-                          storage_file_path: nil, encryption_key:
+def upload_encrypted_file(project_id:, bucket_name:, local_file_path:,
+                          storage_file_path: nil, encryption_key:)
   # [START upload_encrypted_file]
   # project_id        = "Your Google Cloud project ID"
   # bucket_name       = "Your Google Cloud Storage bucket name"
@@ -99,8 +99,8 @@ def upload_encrypted_file project_id:, bucket_name:, local_file_path:,
   # [END upload_encrypted_file]
 end
 
-def upload_with_kms_key project_id:, bucket_name:, local_file_path:,
-                          storage_file_path: nil, kms_key:
+def upload_with_kms_key(project_id:, bucket_name:, local_file_path:,
+                        storage_file_path: nil, kms_key:)
   # [START storage_upload_with_kms_key]
   # project_id        = "Your Google Cloud project ID"
   # bucket_name       = "Your Google Cloud Storage bucket name"
@@ -177,8 +177,8 @@ def download_file_requester_pays project_id:, bucket_name:, file_name:, local_pa
   # [END download_file_requester_pays]
 end
 
-def download_encrypted_file project_id:, bucket_name:, storage_file_path:,
-                            local_file_path:, encryption_key:
+def download_encrypted_file(project_id:, bucket_name:, storage_file_path:,
+                            local_file_path:, encryption_key:)
   # [START download_encrypted_file]
   # project_id     = "Your Google Cloud project ID"
   # bucket_name    = "Your Google Cloud Storage bucket name"
@@ -239,7 +239,7 @@ def list_file_details project_id:, bucket_name:, file_name:
   puts "Generation: #{file.generation}"
   puts "Metageneration: #{file.metageneration}"
   puts "Etag: #{file.etag}"
-  puts "Owners: #{file.acl.owners.join ","}"
+  puts "Owners: #{file.acl.owners.join ','}"
   puts "Crc32c: #{file.crc32c}"
   puts "md5_hash: #{file.md5}"
   puts "Cache-control: #{file.cache_control}"
@@ -323,8 +323,8 @@ def rename_file project_id:, bucket_name:, file_name:, new_name:
   # [END rename_file]
 end
 
-def copy_file project_id:, source_bucket_name:, source_file_name:,
-                             dest_bucket_name:,   dest_file_name:
+def copy_file(project_id:, source_bucket_name:, source_file_name:,
+              dest_bucket_name:, dest_file_name:)
   # [START copy_file]
   # project_id         = "Your Google Cloud project ID"
   # source_bucket_name = "Source bucket to copy file from"
@@ -346,8 +346,8 @@ def copy_file project_id:, source_bucket_name:, source_file_name:,
   # [END copy_file]
 end
 
-def rotate_encryption_key project_id:, bucket_name:, file_name:,
-                          current_encryption_key:, new_encryption_key:
+def rotate_encryption_key(project_id:, bucket_name:, file_name:,
+                          current_encryption_key:, new_encryption_key:)
   # [START rotate_encryption_key]
   # project_id             = "Your Google Cloud project ID"
   # bucket_name            = "Your Google Cloud Storage bucket name"
@@ -384,6 +384,46 @@ def generate_signed_url project_id:, bucket_name:, file_name:
 
   puts "The signed url for #{file_name} is #{url}"
   # [END generate_signed_url]
+end
+
+def generate_signed_get_url_v4 project_id:, bucket_name:, file_name:
+  # [START storage_generate_signed_url_v4]
+  # project_id  = "Your Google Cloud project ID"
+  # bucket_name = "Your Google Cloud Storage bucket name"
+  # file_name   = "Name of a file in the Google Cloud Storage bucket"
+  require "google/cloud/storage"
+
+  storage = Google::Cloud::Storage.new project_id: project_id
+  storage_expiry_time = 5 * 60 # 5 minutes
+
+  url = storage.signed_url bucket_name, file_name, method: "GET",
+                           expires: storage_expiry_time, version: :v4
+
+  puts "Generated GET signed url:"
+  puts url
+  puts "You can use this URL with any user agent, for example:"
+  puts "curl #{url}"
+  # [END storage_generate_signed_url_v4]
+end
+
+def generate_signed_put_url_v4 project_id:, bucket_name:, file_name:
+  # [START storage_generate_upload_signed_url_v4]
+  # project_id  = "Your Google Cloud project ID"
+  # bucket_name = "Your Google Cloud Storage bucket name"
+  # file_name   = "Name of a file in the Cloud Storage bucket"
+  require "google/cloud/storage"
+
+  storage = Google::Cloud::Storage.new project_id: project_id
+  storage_expiry_time = 5 * 60 # 5 minutes
+
+  url = storage.signed_url bucket_name, file_name, method: "PUT",
+                           expires: storage_expiry_time, version: :v4,
+                           headers: { "Content-Type" => "text/plain" }
+  puts "Generated PUT signed URL:"
+  puts url
+  puts "You can use this URL with any user agent, for example:"
+  puts "curl -X PUT -H 'Content-Type: text/plain' --upload-file my-file '#{url}'"
+  # [END storage_generate_upload_signed_url_v4]
 end
 
 def set_event_based_hold project_id:, bucket_name:, file_name:
@@ -538,6 +578,14 @@ def run_sample arguments
     generate_signed_url project_id:  project_id,
                         bucket_name: arguments.shift,
                         file_name:   arguments.shift
+  when "generate_signed_get_url_v4"
+    generate_signed_get_url_v4 project_id:  project_id,
+                               bucket_name: arguments.shift,
+                               file_name:   arguments.shift
+  when "generate_signed_put_url_v4"
+    generate_signed_put_url_v4 project_id:  project_id,
+                               bucket_name: arguments.shift,
+                               file_name:   arguments.shift
   when "set_event_based_hold"
     set_event_based_hold project_id:  project_id,
                          bucket_name: arguments.shift,
@@ -555,37 +603,39 @@ def run_sample arguments
                            bucket_name: arguments.shift,
                            file_name:   arguments.shift
   else
-    puts <<-usage
-Usage: bundle exec ruby files.rb [command] [arguments]
+    puts <<~USAGE
+      Usage: bundle exec ruby files.rb [command] [arguments]
 
-Commands:
-  list                 <bucket>                                     List all files in the bucket
-  upload               <bucket> <file> <dest_path>                  Upload local file to a bucket
-  encrypted_upload     <bucket> <file> <dest_path> <encryption_key> Upload local file as an encrypted file to a bucket
-  kms_upload           <bucket> <file> <dest_path> <kms_key>        Upload local file and encrypt service side using a KMS key
-  download             <bucket> <file> <path>                       Download a file from a bucket
-  download_public_file <bucket> <file> <path>                       Download a publically accessible file from a bucket
-  encrypted_download <bucket> <file> <path> <encryption_key>        Download an encrypted file from a bucket
-  download_with_requester_pays <project> <bucket> <file> <path>     Download a file from a requester pays enabled bucket
-  rotate_encryption_key <bucket> <file> <base64_current_encryption_key> <base64_new_encryption_key> Update encryption key of an encrypted file.
-  generate_encryption_key                                           Generate a sample encryption key
-  delete       <bucket> <file>                                      Delete a file from a bucket
-  metadata     <bucket> <file>                                      Display metadata for a file in a bucket
-  make_public  <bucket> <file>                                      Make a file in a bucket public
-  rename       <bucket> <file> <new>                                Rename a file in a bucket
-  copy <srcBucket> <srcFile> <destBucket> <destFile>                Copy file to other bucket
-  generate_signed_url <bucket> <file>                               Generate a signed url for a file
-  set_event_based_hold     <bucket> <file>                          Set an event-based hold on a file
-  release_event_based_hold <bucket> <file>                          Relase an event-based hold on a file
-  set_temporary_hold       <bucket> <file>                          Set a temporary hold on a file
-  release_temporary_hold   <bucket> <file>                          Release a temporary hold on a file
+      Commands:
+        list                 <bucket>                                     List all files in the bucket
+        upload               <bucket> <file> <dest_path>                  Upload local file to a bucket
+        encrypted_upload     <bucket> <file> <dest_path> <encryption_key> Upload local file as an encrypted file to a bucket
+        kms_upload           <bucket> <file> <dest_path> <kms_key>        Upload local file and encrypt service side using a KMS key
+        download             <bucket> <file> <path>                       Download a file from a bucket
+        download_public_file <bucket> <file> <path>                       Download a publically accessible file from a bucket
+        encrypted_download <bucket> <file> <path> <encryption_key>        Download an encrypted file from a bucket
+        download_with_requester_pays <project> <bucket> <file> <path>     Download a file from a requester pays enabled bucket
+        rotate_encryption_key <bucket> <file> <base64_current_encryption_key> <base64_new_encryption_key> Update encryption key of an encrypted file.
+        generate_encryption_key                                           Generate a sample encryption key
+        delete       <bucket> <file>                                      Delete a file from a bucket
+        metadata     <bucket> <file>                                      Display metadata for a file in a bucket
+        make_public  <bucket> <file>                                      Make a file in a bucket public
+        rename       <bucket> <file> <new>                                Rename a file in a bucket
+        copy <srcBucket> <srcFile> <destBucket> <destFile>                Copy file to other bucket
+        generate_signed_url <bucket> <file>                               Generate a V2 signed url for a file
+        generate_signed_get_url_v4 <bucket> <file>                        Generate a V4 signed get url for a file
+        generate_signed_put_url_v4 <bucket> <file>                        Generate a V4 signed put url for a file
+        set_event_based_hold     <bucket> <file>                          Set an event-based hold on a file
+        release_event_based_hold <bucket> <file>                          Relase an event-based hold on a file
+        set_temporary_hold       <bucket> <file>                          Set a temporary hold on a file
+        release_temporary_hold   <bucket> <file>                          Release a temporary hold on a file
 
-Environment variables:
-  GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
-    usage
+      Environment variables:
+        GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
+    USAGE
   end
 end
 
-if __FILE__ == $PROGRAM_NAME
+if $PROGRAM_NAME == __FILE__
   run_sample ARGV
 end

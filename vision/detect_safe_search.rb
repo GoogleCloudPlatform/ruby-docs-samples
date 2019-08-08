@@ -63,17 +63,16 @@ def detect_safe_search_gcs image_path:
   # [END vision_safe_search_detection_gcs]
 end
 
-if __FILE__ == $PROGRAM_NAME
+if $PROGRAM_NAME == __FILE__
   image_path = ARGV.shift
 
   if !image_path
     puts <<~USAGE
-    Usage: ruby detect_safe_search.rb [image file path]
-
-    Example:
-      ruby detect_safe_search.rb image.png
-      ruby detect_safe_search.rb https://public-url/image.png
-      ruby detect_safe_search.rb gs://my-bucket/image.png
+      Usage: ruby detect_safe_search.rb [image file path]
+       Example:
+        ruby detect_safe_search.rb image.png
+        ruby detect_safe_search.rb https://public-url/image.png
+        ruby detect_safe_search.rb gs://my-bucket/image.png
     USAGE
   elsif image_path =~ URI::DEFAULT_PARSER.make_regexp
     detect_safe_search_gs image_path: image_path

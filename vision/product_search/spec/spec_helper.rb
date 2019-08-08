@@ -16,8 +16,8 @@ require "rspec"
 require "google/cloud/vision"
 
 RSpec.configure do |config|
-  config.before(:all) do
-    @current_directory = File.expand_path(File.dirname(__FILE__))
+  config.before :all do
+    @current_directory = __dir__
     @client = Google::Cloud::Vision::ProductSearch.new
     @project_id = ENV["GOOGLE_CLOUD_PROJECT"]
     @location = "us-west1"
@@ -30,42 +30,42 @@ RSpec.configure do |config|
     @temp_product_sets = []
   end
 
-  config.after(:each) do
+  config.after :each do
     @temp_products.each do |product|
-      if product.is_a? String
-        product_path = @client.product_path(
-          @project_id, @location, product
-        )
-      else
-        product_path = product.name
-      end
+      product_path = if product.is_a? String
+                       @client.product_path(
+                         @project_id, @location, product
+                       )
+                     else
+                       product.name
+                     end
       @client.delete_product product_path
     end
     @temp_product_sets.each do |product_set|
-      if product_set.is_a? String
-        product_set_path = @client.product_set_path(
-          @project_id, @location, product_set
-        )
-      else
-        product_set_path = product_set.name
-      end
+      product_set_path = if product_set.is_a? String
+                           @client.product_set_path(
+                             @project_id, @location, product_set
+                           )
+                         else
+                           product_set.name
+                         end
       @client.delete_product_set product_set_path
     end
   end
 
   def create_temp_product
     product = {
-      display_name: "test_product_#{Time.now.to_i}",
+      display_name:     "test_product_#{Time.now.to_i}",
       product_category: "apparel"
     }
     product = @client.create_product @location_path, product
     @temp_products << product
-    return product
+    product
   end
 
   def create_temp_reference_image product, uri = nil
     image_uri = uri || @image_uris[0]
-    @client.create_reference_image product.name, { uri: image_uri }
+    @client.create_reference_image product.name, uri: image_uri
   end
 
   def create_temp_product_set products = []
@@ -77,7 +77,7 @@ RSpec.configure do |config|
     products.each do |product|
       @client.add_product_to_product_set product_set.name, product.name
     end
-    return product_set
+    product_set
   end
 
   def get_id resource
@@ -91,5 +91,4 @@ RSpec.configure do |config|
       File.basename(test_filepath).sub("_spec", "")
     )
   end
-
 end

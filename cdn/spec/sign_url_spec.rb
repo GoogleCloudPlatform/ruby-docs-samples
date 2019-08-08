@@ -18,10 +18,10 @@ require "rspec"
 describe "Google Cloud CDN signed url" do
   it "Signs a test URL" do
     expect(
-      signed_url url:        "http://www.example.com/",
+      signed_url(url:        "http://www.example.com/",
                  key_name:   "my-key",
                  key:        "nZtRohdNF9m3cKM24IcK4w==",
-                 expiration: Time.gm(2021, 11, 6)
+                 expiration: Time.gm(2021, 11, 6))
     ).to eq "http://www.example.com/?Expires=1636156800&KeyName=my-key&Signature=fHM540uiAcrzc7yw3W3Ci0FUtsw="
   end
 end

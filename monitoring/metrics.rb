@@ -7,11 +7,11 @@ def create_metric_descriptor project_id:
   # [START monitoring_create_metric]
   client = Google::Cloud::Monitoring::Metric.new
   project_name = Google::Cloud::Monitoring::V3::MetricServiceClient.project_path project_id
-  
+
   descriptor = Google::Api::MetricDescriptor.new(
-    type: "custom.googleapis.com/my_metric#{random_suffix}",
+    type:        "custom.googleapis.com/my_metric#{random_suffix}",
     metric_kind: Google::Api::MetricDescriptor::MetricKind::GAUGE,
-    value_type: Google::Api::MetricDescriptor::ValueType::DOUBLE,
+    value_type:  Google::Api::MetricDescriptor::ValueType::DOUBLE,
     description: "This is a simple example of a custom metric."
   )
 
@@ -66,7 +66,7 @@ def list_time_series project_id:
   interval = Google::Monitoring::V3::TimeInterval.new
   now = Time.now
   interval.end_time = Google::Protobuf::Timestamp.new seconds: now.to_i, nanos: now.usec
-  interval.start_time = Google::Protobuf::Timestamp.new seconds: now.to_i - 300, nanos: now.usec
+  interval.start_time = Google::Protobuf::Timestamp.new seconds: now.to_i - 1200, nanos: now.usec
 
   results = client.list_time_series(
     project_name,
@@ -88,7 +88,7 @@ def list_time_series_header project_id:
   interval = Google::Monitoring::V3::TimeInterval.new
   now = Time.now
   interval.end_time = Google::Protobuf::Timestamp.new seconds: now.to_i, nanos: now.usec
-  interval.start_time = Google::Protobuf::Timestamp.new seconds: now.to_i - 300, nanos: now.usec
+  interval.start_time = Google::Protobuf::Timestamp.new seconds: now.to_i - 1200, nanos: now.usec
 
   results = client.list_time_series(
     project_name,
@@ -110,10 +110,10 @@ def list_time_series_aggregate project_id:
   interval = Google::Monitoring::V3::TimeInterval.new
   now = Time.now
   interval.end_time = Google::Protobuf::Timestamp.new seconds: now.to_i, nanos: now.usec
-  interval.start_time = Google::Protobuf::Timestamp.new seconds: now.to_i - 300, nanos: now.usec
+  interval.start_time = Google::Protobuf::Timestamp.new seconds: now.to_i - 1200, nanos: now.usec
 
   aggregation = Google::Monitoring::V3::Aggregation.new(
-    alignment_period: { seconds: 300 },
+    alignment_period:   { seconds: 1200 },
     per_series_aligner: Google::Monitoring::V3::Aggregation::Aligner::ALIGN_MEAN
   )
 
@@ -139,13 +139,13 @@ def list_time_series_reduce project_id:
   interval = Google::Monitoring::V3::TimeInterval.new
   now = Time.now
   interval.end_time = Google::Protobuf::Timestamp.new seconds: now.to_i, nanos: now.usec
-  interval.start_time = Google::Protobuf::Timestamp.new seconds: now.to_i - 300, nanos: now.usec
+  interval.start_time = Google::Protobuf::Timestamp.new seconds: now.to_i - 1200, nanos: now.usec
 
   aggregation = Google::Monitoring::V3::Aggregation.new(
-    alignment_period: { seconds: 300 },
-    per_series_aligner: Google::Monitoring::V3::Aggregation::Aligner::ALIGN_MEAN,
+    alignment_period:     { seconds: 1200 },
+    per_series_aligner:   Google::Monitoring::V3::Aggregation::Aligner::ALIGN_MEAN,
     cross_series_reducer: Google::Monitoring::V3::Aggregation::Reducer::REDUCE_MEAN,
-    group_by_fields: ["resource.zone"]
+    group_by_fields:      ["resource.zone"]
   )
 
   results = client.list_time_series(
@@ -205,7 +205,7 @@ def get_metric_descriptor metric_name:
   # [END monitoring_get_descriptor]
 end
 
-if __FILE__ == $PROGRAM_NAME
+if $PROGRAM_NAME == __FILE__
   case ARGV.shift
   when "create_metric_descriptor"
     create_metric_descriptor project_id: ARGV.shift

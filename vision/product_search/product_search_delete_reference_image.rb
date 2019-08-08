@@ -16,11 +16,12 @@
 require "google/cloud/vision"
 
 def product_search_delete_reference_image(
-  project_id = "your-project-id",
-  location   = "us-west1",
-  product_id = "your-product-id",
-  image_id   = "your-image-id"
-)
+    project_id = "your-project-id",
+    location   = "us-west1",
+    product_id = "your-product-id",
+    image_id   = "your-image-id"
+  )
+
   client = Google::Cloud::Vision::ProductSearch.new
 
   reference_image_path = client.reference_image_path(
@@ -33,4 +34,4 @@ def product_search_delete_reference_image(
 end
 # [END vision_product_search_delete_reference_image]
 
-product_search_delete_reference_image *ARGV if $PROGRAM_NAME == __FILE__
+product_search_delete_reference_image(*ARGV) if $PROGRAM_NAME == __FILE__

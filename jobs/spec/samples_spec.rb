@@ -41,17 +41,16 @@ end
 
 # Start verifying
 describe "Cloud Job Discovery Samples" do
-
   before do
     $stdout = StringIO.new
-    @default_project_id = "projects/#{ENV["GOOGLE_CLOUD_PROJECT"]}"
+    @default_project_id = "projects/#{ENV['GOOGLE_CLOUD_PROJECT']}"
   end
 
   # Capture and return STDOUT output by block
-  def capture &block
+  def capture
     real_stdout = $stdout
     $stdout = StringIO.new
-    block.call
+    yield
     @captured_output = $stdout.string
   ensure
     $stdout = real_stdout
@@ -59,59 +58,59 @@ describe "Cloud Job Discovery Samples" do
 
   attr_reader :captured_output
 
-# verify basic_company_sample.rb
+  # verify basic_company_sample.rb
   it "basic_company_sample" do
     capture do
       company_generated =
-        job_discovery_generate_company display_name: "Google",
-                                       external_id: "externalId: Google #{SecureRandom.hex}",
+        job_discovery_generate_company display_name:         "Google",
+                                       external_id:          "externalId: Google #{SecureRandom.hex}",
                                        headquarters_address: "1600 Amphitheatre Parkway " +
                                                              "Mountain View, CA 94043"
       company_created =
         job_discovery_create_company company_to_be_created: company_generated,
-                                     project_id: @default_project_id
-      company_got  = job_discovery_get_company company_name: company_created.name
+                                     project_id:            @default_project_id
+      company_got = job_discovery_get_company company_name: company_created.name
       company_created.display_name = "Updated name Google"
-      company_updated = job_discovery_update_company company_name: company_created.name,
+      company_updated = job_discovery_update_company company_name:    company_created.name,
                                                      company_updated: company_created
       company_created.display_name = "Updated name with field mask Google"
       company_updated_with_field_mask =
-        job_discovery_update_company_with_field_mask company_name: company_created.name,
-                                                     field_mask: "DisplayName",
+        job_discovery_update_company_with_field_mask company_name:    company_created.name,
+                                                     field_mask:      "DisplayName",
                                                      company_updated: company_created
-      job_discovery_delete_company company_name:company_created.name
+      job_discovery_delete_company company_name: company_created.name
       # Verify status of job service
       expect(company_created).not_to be nil
       expect(company_got).not_to be nil
       expect(company_updated.display_name).to eq "Updated name Google"
       expect(company_updated_with_field_mask.display_name).to eq "Updated name with field mask Google"
-      company_after_delete  = job_discovery_get_company company_name: company_created.name
+      company_after_delete = job_discovery_get_company company_name: company_created.name
       expect(company_after_delete).to be nil
     end
   end
-# verify basic_job_sample.rb
+  # verify basic_job_sample.rb
   it "basic_job_sample" do
     capture do
       company_generated =
-        job_discovery_generate_company display_name: "Google",
-                                       external_id: "externalId: Google #{SecureRandom.hex}",
+        job_discovery_generate_company display_name:         "Google",
+                                       external_id:          "externalId: Google #{SecureRandom.hex}",
                                        headquarters_address: "1600 Amphitheatre Parkway " +
                                                              "Mountain View, CA 94043"
       company_created =
         job_discovery_create_company company_to_be_created: company_generated,
-                                     project_id: @default_project_id
-      job_generated = job_discovery_generate_job company_name: company_created.name,
+                                     project_id:            @default_project_id
+      job_generated = job_discovery_generate_job company_name:   company_created.name,
                                                  requisition_id: "#{company_created.name} #{SecureRandom.hex}"
       job_created = job_discovery_create_job job_to_be_created: job_generated,
-                                             project_id: @default_project_id
+                                             project_id:        @default_project_id
       job_got = job_discovery_get_job job_name: job_created.name
       job_created.description = "Updated description"
-      job_updated = job_discovery_update_job job_name: job_created.name,
+      job_updated = job_discovery_update_job job_name:          job_created.name,
                                              job_to_be_updated: job_created
       job_created.title = "Updated title software Engineer"
       job_updated_with_field_mask =
-        job_discovery_update_job_with_field_mask job_name: job_created.name,
-                                                 field_mask: "title",
+        job_discovery_update_job_with_field_mask job_name:          job_created.name,
+                                                 field_mask:        "title",
                                                  job_to_be_updated: job_created
       job_discovery_delete_job job_name: job_created.name
       job_discovery_delete_company company_name: company_created.name
@@ -120,32 +119,32 @@ describe "Cloud Job Discovery Samples" do
       expect(job_got).not_to be nil
       expect(job_updated.description).to eq "Updated description"
       expect(job_updated_with_field_mask.title).to eq "Updated title software Engineer"
-      job_after_delete  = job_discovery_get_job job_name: job_created.name
+      job_after_delete = job_discovery_get_job job_name: job_created.name
       expect(job_after_delete).to be nil
     end
   end
-# verify auto_complete_sample.rb
+  # verify auto_complete_sample.rb
   it "auto_complete_sample" do
     capture do
       company_generated =
-        job_discovery_generate_company display_name: "Google",
-                                       external_id: "externalId: Google #{SecureRandom.hex}",
+        job_discovery_generate_company display_name:         "Google",
+                                       external_id:          "externalId: Google #{SecureRandom.hex}",
                                        headquarters_address: "1600 Amphitheatre Parkway " +
                                                              "Mountain View, CA 94043"
       company_created =
         job_discovery_create_company company_to_be_created: company_generated,
-                                     project_id: @default_project_id
-      job_generated = job_discovery_generate_job company_name: company_created.name,
+                                     project_id:            @default_project_id
+      job_generated = job_discovery_generate_job company_name:   company_created.name,
                                                  requisition_id: "#{company_created.name} #{SecureRandom.hex}"
       job_generated.title = "software enginner"
       job_created = job_discovery_create_job job_to_be_created: job_generated,
-                                             project_id: @default_project_id
+                                             project_id:        @default_project_id
       title_auto_complete_result = job_discovery_job_title_auto_complete company_name: company_created.name,
-                                                                         query: "sof",
-                                                                         project_id: @default_project_id
+                                                                         query:        "sof",
+                                                                         project_id:   @default_project_id
       default_auto_complete_result = job_discovery_default_auto_complete company_name: company_created.name,
-                                                                         query: "sof",
-                                                                         project_id: @default_project_id
+                                                                         query:        "sof",
+                                                                         project_id:   @default_project_id
       job_discovery_delete_job job_name: job_created.name
       job_discovery_delete_company company_name: company_created.name
       # Verify status of job service
@@ -153,20 +152,20 @@ describe "Cloud Job Discovery Samples" do
       expect(default_auto_complete_result.completion_results).not_to be nil
     end
   end
-# verify batch_operation_sample.rb
+  # verify batch_operation_sample.rb
   it "batch_operation_sample" do
-    job_names = Array.new
+    job_names = []
     capture do
       company_generated =
-        job_discovery_generate_company display_name: "Google",
-                                       external_id: "externalId: Google #{SecureRandom.hex}",
+        job_discovery_generate_company display_name:         "Google",
+                                       external_id:          "externalId: Google #{SecureRandom.hex}",
                                        headquarters_address: "1600 Amphitheatre Parkway " +
                                                              "Mountain View, CA 94043"
       company_created =
         job_discovery_create_company company_to_be_created: company_generated,
-                                     project_id: @default_project_id
+                                     project_id:            @default_project_id
       jobs_created = job_discovery_batch_create_jobs company_name: company_created.name,
-                                                     project_id: @default_project_id
+                                                     project_id:   @default_project_id
       jobs_created.each do |job|
         job.description = job.description + " updated"
       end
@@ -193,58 +192,55 @@ describe "Cloud Job Discovery Samples" do
       end
     end
   end
-# verify commute_search_sample.rb
+  # verify commute_search_sample.rb
   it "commute_search_sample" do
     capture do
       company_generated =
-        job_discovery_generate_company display_name: "Google",
-                                       external_id: "externalId: Google #{SecureRandom.hex}",
+        job_discovery_generate_company display_name:         "Google",
+                                       external_id:          "externalId: Google #{SecureRandom.hex}",
                                        headquarters_address: "1600 Amphitheatre Parkway " +
                                                              "Mountain View, CA 94043"
       company_created =
         job_discovery_create_company company_to_be_created: company_generated,
-                                     project_id: @default_project_id
-      job_generated = job_discovery_generate_job company_name: company_created.name,
+                                     project_id:            @default_project_id
+      job_generated = job_discovery_generate_job company_name:   company_created.name,
                                                  requisition_id: "#{company_created.name} #{SecureRandom.hex}"
       job_created = job_discovery_create_job job_to_be_created: job_generated,
-                                             project_id: @default_project_id
+                                             project_id:        @default_project_id
       sleep 60
       location = company_created.derived_info.headquarters_location.lat_lng
-      commute_search_result = job_discovery_commute_search commute_method: "DRIVING",
-                                                           travel_duration: "1000s",
+      commute_search_result = job_discovery_commute_search commute_method:    "DRIVING",
+                                                           travel_duration:   "1000s",
                                                            start_coordinates: location,
-                                                           project_id: @default_project_id
+                                                           project_id:        @default_project_id
       job_discovery_delete_job job_name: job_created.name
       job_discovery_delete_company company_name: company_created.name
       expect(commute_search_result).not_to be nil
     end
   end
-# verify custom_attribute_sample.rb
+  # verify custom_attribute_sample.rb
   it "custom_attribute_sample" do
     capture do
       company_generated =
-        job_discovery_generate_company display_name: "Google",
-                                       external_id: "externalId: Google #{SecureRandom.hex}",
+        job_discovery_generate_company display_name:         "Google",
+                                       external_id:          "externalId: Google #{SecureRandom.hex}",
                                        headquarters_address: "1600 Amphitheatre Parkway " +
                                                              "Mountain View, CA 94043"
       company_created =
         job_discovery_create_company company_to_be_created: company_generated,
-                                     project_id: @default_project_id
+                                     project_id:            @default_project_id
       job_generated =
-        job_discovery_generate_job_with_custom_attribute company_name: company_created.name,
+        job_discovery_generate_job_with_custom_attribute company_name:   company_created.name,
                                                          requisition_id: "#{company_created.name} #{SecureRandom.hex}"
       job_created = job_discovery_create_job job_to_be_created: job_generated,
-                                             project_id: @default_project_id
+                                             project_id:        @default_project_id
       sleep 10
       long_filter_result =
-        job_discovery_filters_on_long_value_custom_attribute project_id: @default_project_id,
-                                                             company_name: company_created.name
+        job_discovery_filters_on_long_value_custom_attribute project_id:   @default_project_id
       string_filter_result =
-        job_discovery_filters_on_string_value_custom_attribute project_id: @default_project_id,
-                                                               company_name: company_created.name
+        job_discovery_filters_on_string_value_custom_attribute project_id:   @default_project_id
       multi_filters_result =
-        job_discovery_filters_on_multi_custom_attributes project_id: @default_project_id,
-                                                         company_name: company_created.name
+        job_discovery_filters_on_multi_custom_attributes project_id:   @default_project_id
       job_discovery_delete_job job_name: job_created.name
       job_discovery_delete_company company_name: company_created.name
       expect(long_filter_result.matching_jobs).not_to be nil
@@ -252,95 +248,95 @@ describe "Cloud Job Discovery Samples" do
       expect(multi_filters_result.matching_jobs).not_to be nil
     end
   end
-# verify email_alert_search_sample.rb
+  # verify email_alert_search_sample.rb
   it "email_alert_search_sample" do
     capture do
       company_generated =
-        job_discovery_generate_company display_name: "Google",
-                                       external_id: "externalId: Google #{SecureRandom.hex}",
+        job_discovery_generate_company display_name:         "Google",
+                                       external_id:          "externalId: Google #{SecureRandom.hex}",
                                        headquarters_address: "1600 Amphitheatre Parkway " +
                                                              "Mountain View, CA 94043"
       company_created =
         job_discovery_create_company company_to_be_created: company_generated,
-                                     project_id: @default_project_id
+                                     project_id:            @default_project_id
       job_generated =
-        job_discovery_generate_job_with_custom_attribute company_name: company_created.name,
+        job_discovery_generate_job_with_custom_attribute company_name:   company_created.name,
                                                          requisition_id: "#{company_created.name} #{SecureRandom.hex}"
       job_created = job_discovery_create_job job_to_be_created: job_generated,
-                                             project_id: @default_project_id
+                                             project_id:        @default_project_id
       sleep 10
       email_alert_search_result =
-        job_discovery_email_alert_search project_id: @default_project_id,
+        job_discovery_email_alert_search project_id:   @default_project_id,
                                          company_name: company_created.name
       job_discovery_delete_job job_name: job_created.name
       job_discovery_delete_company company_name: company_created.name
       expect(email_alert_search_result.matching_jobs).not_to be nil
     end
   end
-# verify featured_job_sample.rb
+  # verify featured_job_sample.rb
   it "featured_job_sample" do
     capture do
       company_generated =
-        job_discovery_generate_company display_name: "Google",
-                                       external_id: "externalId: Google #{SecureRandom.hex}",
+        job_discovery_generate_company display_name:         "Google",
+                                       external_id:          "externalId: Google #{SecureRandom.hex}",
                                        headquarters_address: "1600 Amphitheatre Parkway " +
                                                              "Mountain View, CA 94043"
       company_created =
         job_discovery_create_company company_to_be_created: company_generated,
-                                     project_id: @default_project_id
+                                     project_id:            @default_project_id
       job_generated =
-        job_discovery_generate_featured_job company_name: company_created.name,
+        job_discovery_generate_featured_job company_name:   company_created.name,
                                             requisition_id: "#{company_created.name} #{SecureRandom.hex}"
       job_generated.title = "Lab Technician"
       job_created = job_discovery_create_job job_to_be_created: job_generated,
-                                             project_id: @default_project_id
+                                             project_id:        @default_project_id
       sleep 10
       search_result = job_discovery_featured_jobs_search company_name: company_created.name,
-                                                         query: "Lab",
-                                                         project_id: @default_project_id
+                                                         query:        "Lab",
+                                                         project_id:   @default_project_id
       job_discovery_delete_job job_name: job_created.name
       job_discovery_delete_company company_name: company_created.name
       expect(search_result.matching_jobs).not_to be nil
     end
   end
-# verify filter_search_sample.rb
+  # verify filter_search_sample.rb
   it "filter_search_sample" do
     capture do
       company_generated =
-        job_discovery_generate_company display_name: "Google",
-                                       external_id: "externalId: Google #{SecureRandom.hex}",
+        job_discovery_generate_company display_name:         "Google",
+                                       external_id:          "externalId: Google #{SecureRandom.hex}",
                                        headquarters_address: "1600 Amphitheatre Parkway " +
                                                              "Mountain View, CA 94043"
       company_created =
         job_discovery_create_company company_to_be_created: company_generated,
-                                     project_id: @default_project_id
-      job_generated = job_discovery_generate_job company_name: company_created.name,
+                                     project_id:            @default_project_id
+      job_generated = job_discovery_generate_job company_name:   company_created.name,
                                                  requisition_id: "#{company_created.name} #{SecureRandom.hex}"
       job_created = job_discovery_create_job job_to_be_created: job_generated,
-                                             project_id: @default_project_id
+                                             project_id:        @default_project_id
       sleep 10
       keyword_search_result = job_discovery_basic_keyword_search company_name: company_created.name,
-                                                                 query: job_created.title,
-                                                                 project_id: @default_project_id
+                                                                 query:        job_created.title,
+                                                                 project_id:   @default_project_id
       filter_search_result = job_discovery_category_filter_search company_name: company_created.name,
-                                                                  categories: job_created.derived_info.job_categories,
-                                                                  project_id: @default_project_id
-      employment_search_result = job_discovery_employment_types_filter_search company_name: company_created.name,
+                                                                  categories:   job_created.derived_info.job_categories,
+                                                                  project_id:   @default_project_id
+      employment_search_result = job_discovery_employment_types_filter_search company_name:     company_created.name,
                                                                               employment_types: job_created.employment_types,
-                                                                              project_id: @default_project_id
+                                                                              project_id:       @default_project_id
       date_search_result = job_discovery_date_range_filter_search company_name: company_created.name,
-                                                                  start_time: "1980-01-15T01:30:15.01Z",
-                                                                  end_time: "2099-01-15T01:30:15.01Z",
-                                                                  project_id: @default_project_id
-      code_search_result = job_discovery_language_code_filter_search company_name: company_created.name,
+                                                                  start_time:   "1980-01-15T01:30:15.01Z",
+                                                                  end_time:     "2099-01-15T01:30:15.01Z",
+                                                                  project_id:   @default_project_id
+      code_search_result = job_discovery_language_code_filter_search company_name:   company_created.name,
                                                                      language_codes: ["en-Us"],
-                                                                     project_id: @default_project_id
+                                                                     project_id:     @default_project_id
       name_search_result = job_discovery_company_display_name_search company_display_names: ["Google"],
-                                                                     project_id: @default_project_id
+                                                                     project_id:            @default_project_id
       compensation_search_result = job_discovery_compensation_search company_name: company_created.name,
-                                                                     min_unit: 0,
-                                                                     max_unit: 100,
-                                                                     project_id: @default_project_id
+                                                                     min_unit:     0,
+                                                                     max_unit:     100,
+                                                                     project_id:   @default_project_id
       job_discovery_delete_job job_name: job_created.name
       job_discovery_delete_company company_name: company_created.name
       expect(keyword_search_result.matching_jobs).not_to be nil
@@ -352,71 +348,71 @@ describe "Cloud Job Discovery Samples" do
       expect(compensation_search_result.matching_jobs).not_to be nil
     end
   end
-# verify histogram_sample.rb
+  # verify histogram_sample.rb
   it "histogram_sample" do
     capture do
       company_generated =
-        job_discovery_generate_company display_name: "Google",
-                                       external_id: "externalId: Google #{SecureRandom.hex}",
+        job_discovery_generate_company display_name:         "Google",
+                                       external_id:          "externalId: Google #{SecureRandom.hex}",
                                        headquarters_address: "1600 Amphitheatre Parkway " +
                                                              "Mountain View, CA 94043"
       company_created =
         job_discovery_create_company company_to_be_created: company_generated,
-                                     project_id: @default_project_id
-      job_generated = job_discovery_generate_job company_name: company_created.name,
+                                     project_id:            @default_project_id
+      job_generated = job_discovery_generate_job company_name:   company_created.name,
                                                  requisition_id: "#{company_created.name} #{SecureRandom.hex}"
       job_created = job_discovery_create_job job_to_be_created: job_generated,
-                                             project_id: @default_project_id
+                                             project_id:        @default_project_id
       sleep 10
       search_result = job_discovery_histogram_search company_name: company_created.name,
-                                                     project_id: @default_project_id
+                                                     project_id:   @default_project_id
       job_discovery_delete_job job_name: job_created.name
       job_discovery_delete_company company_name: company_created.name
       expect(search_result.matching_jobs).not_to be nil
     end
   end
-# verify location_search_sample.rb
+  # verify location_search_sample.rb
   it "location_search_sample" do
     begin
       company_generated =
-        job_discovery_generate_company display_name: "Google",
-                                       external_id: "externalId: Google #{SecureRandom.hex}",
+        job_discovery_generate_company display_name:         "Google",
+                                       external_id:          "externalId: Google #{SecureRandom.hex}",
                                        headquarters_address: "1600 Amphitheatre Parkway " +
                                                              "Mountain View, CA 94043"
       company_created =
         job_discovery_create_company company_to_be_created: company_generated,
-                                     project_id: @default_project_id
-      job_generated1 = job_discovery_generate_job company_name: company_created.name,
+                                     project_id:            @default_project_id
+      job_generated1 = job_discovery_generate_job company_name:   company_created.name,
                                                   requisition_id: "#{company_created.name} #{SecureRandom.hex}"
-      job_generated1.addresses =["Mountain View, CA"]
+      job_generated1.addresses = ["Mountain View, CA"]
       job_created1 = job_discovery_create_job job_to_be_created: job_generated1,
-                                              project_id: @default_project_id
-      job_generated1 = job_discovery_generate_job company_name: company_created.name,
+                                              project_id:        @default_project_id
+      job_generated1 = job_discovery_generate_job company_name:   company_created.name,
                                                   requisition_id: "#{company_created.name} #{SecureRandom.hex}"
       job_generated2.addresses = ["Sunnyvale, CA"]
       job_created2 = job_discovery_create_job job_to_be_created: job_generated2,
-                                              project_id: @default_project_id
+                                              project_id:        @default_project_id
       sleep 10
       basic_search_result = job_discovery_basic_location_search company_name: company_created.name,
-                                                                location: "Mountain View, CA",
-                                                                distance: 0.5,
-                                                                project_id: @default_project_id
+                                                                location:     "Mountain View, CA",
+                                                                distance:     0.5,
+                                                                project_id:   @default_project_id
       keyword_search_result = job_discovery_keyword_location_search company_name: company_created.name,
-                                                                    location: "Mountain View, CA",
-                                                                    distance: 0.5,
-                                                                    keyword: "Lab",
-                                                                    project_id: @default_project_id
+                                                                    location:     "Mountain View, CA",
+                                                                    distance:     0.5,
+                                                                    keyword:      "Lab",
+                                                                    project_id:   @default_project_id
       city_search_result = job_discovery_city_location_search company_name: company_created.name,
-                                                              city: "Mountain View, CA",
-                                                              project_id: @default_project_id
+                                                              city:         "Mountain View, CA",
+                                                              project_id:   @default_project_id
       multi_search_result = job_discovery_multi_location_search company_name: company_created.name,
-                                                                location1: "Mountain View, CA",
-                                                                distance1: 0.5,
-                                                                city2: "Sunnyvale",
-                                                                project_id: @default_project_id
+                                                                location1:    "Mountain View, CA",
+                                                                distance1:    0.5,
+                                                                city2:        "Sunnyvale",
+                                                                project_id:   @default_project_id
       broadening_search_result = job_discovery_broadening_location_search company_name: company_created.name,
-                                                                          city: "Sunnyvale",
-                                                                          project_id: @default_project_id
+                                                                          city:         "Sunnyvale",
+                                                                          project_id:   @default_project_id
       job_discovery_delete_job job_name: job_created1.name
       job_discovery_delete_job job_name: job_created2.name
       job_discovery_delete_company company_name: company_created.name
@@ -425,7 +421,7 @@ describe "Cloud Job Discovery Samples" do
       expect(city_search_result.matching_jobs).not_to be nil
       expect(multi_result.matching_jobs).not_to be nil
       expect(broadening_result.matching_jobs).not_to be nil
-    rescue
+    rescue StandardError
       puts "location_search_sample not all succeeded"
     ensure
       $stdout = StringIO.new

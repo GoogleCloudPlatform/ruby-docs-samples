@@ -21,7 +21,7 @@ def start_at_field_query_cursor project_id:
 
   cities_ref = firestore.col "cities"
   # [START fs_start_at_field_query_cursor]
-  query = cities_ref.order("population").start_at(1000000)
+  query = cities_ref.order("population").start_at(1_000_000)
   # [END fs_start_at_field_query_cursor]
   query.get do |city|
     puts "Document #{city.document_id} returned by start at population 1000000 field query cursor."
@@ -35,7 +35,7 @@ def end_at_field_query_cursor project_id:
 
   cities_ref = firestore.col "cities"
   # [START fs_end_at_field_query_cursor]
-  query = cities_ref.order("population").end_at(1000000)
+  query = cities_ref.order("population").end_at(1_000_000)
   # [END fs_end_at_field_query_cursor]
   query.get do |city|
     puts "Document #{city.document_id} returned by end at population 1000000 field query cursor."
@@ -86,7 +86,7 @@ def multiple_cursor_conditions project_id:
   end
 end
 
-if __FILE__ == $PROGRAM_NAME
+if $PROGRAM_NAME == __FILE__
   project = ENV["FIRESTORE_PROJECT_ID"]
   case ARGV.shift
   when "start_at_field_query_cursor"
@@ -98,14 +98,14 @@ if __FILE__ == $PROGRAM_NAME
   when "multiple_cursor_conditions"
     multiple_cursor_conditions project_id: project
   else
-    puts <<-usage
-Usage: bundle exec ruby paginate_data.rb [command]
+    puts <<~USAGE
+      Usage: bundle exec ruby paginate_data.rb [command]
 
-Commands:
-  start_at_field_query_cursor  Define field start point for a query.
-  end_at_field_query_cursor    Define field end point for a query.
-  paginated_query_cursor       Paginate using query cursors.
-  multiple_cursor_conditions   Set multiple cursor conditions.
-    usage
+      Commands:
+        start_at_field_query_cursor  Define field start point for a query.
+        end_at_field_query_cursor    Define field end point for a query.
+        paginated_query_cursor       Paginate using query cursors.
+        multiple_cursor_conditions   Set multiple cursor conditions.
+    USAGE
   end
 end

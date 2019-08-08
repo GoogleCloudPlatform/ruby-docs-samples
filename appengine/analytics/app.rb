@@ -26,15 +26,17 @@ def track_event category, action, label, value
   # with particular user, device, or browser instance.
   client_id = "555"
 
-  Net::HTTP.post_form URI("http://www.google-analytics.com/collect"),
-    v: "1",               # API Version
+  Net::HTTP.post_form(
+    URI("http://www.google-analytics.com/collect"),
+    v:   "1",             # API Version
     tid: GA_TRACKING_ID,  # Tracking ID / Property ID
     cid: client_id,       # Client ID
-    t: "event",           # Event hit type
-    ec: category,         # Event category
-    ea: action,           # Event action
-    el: label,            # Event label
-    ev: value             # Event value
+    t:   "event",         # Event hit type
+    ec:  category,        # Event category
+    ea:  action,          # Event action
+    el:  label,           # Event label
+    ev:  value            # Event value
+  )
 end
 
 get "/" do

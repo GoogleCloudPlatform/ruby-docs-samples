@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#[START gae_flex_datastore_app]
+# [START gae_flex_datastore_app]
 require "digest/sha2"
 require "sinatra"
 require "google/cloud/datastore"
@@ -40,4 +40,4 @@ get "/" do
   content_type "text/plain"
   status 200
 end
-#[END gae_flex_datastore_app]
+# [END gae_flex_datastore_app]

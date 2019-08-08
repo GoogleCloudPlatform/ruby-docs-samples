@@ -15,11 +15,10 @@
 # [START vision_product_search_list_reference_images]
 require "google/cloud/vision"
 
-def product_search_list_reference_images(
-  project_id = "your-project-id",
-  location   = "us-west1",
-  product_id = "your-product-id"
-)
+def product_search_list_reference_images(project_id = "your-project-id",
+                                         location   = "us-west1",
+                                         product_id = "your-product-id")
+
   client = Google::Cloud::Vision::ProductSearch.new
 
   product_path = client.product_path project_id, location, product_id
@@ -31,4 +30,4 @@ def product_search_list_reference_images(
 end
 # [END vision_product_search_list_reference_images]
 
-product_search_list_reference_images *ARGV if $PROGRAM_NAME == __FILE__
+product_search_list_reference_images(*ARGV) if $PROGRAM_NAME == __FILE__

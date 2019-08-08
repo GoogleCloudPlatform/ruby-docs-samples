@@ -15,7 +15,6 @@
 require "spec_helper"
 
 describe "List reference images" do
-
   example "List reference images" do
     snippet_filepath = get_snippet_filepath __FILE__
     product = create_temp_product
@@ -27,5 +26,4 @@ describe "List reference images" do
     output_reference_images = output.split("\n").select { |line| line.include? "projects/" }
     expect(output_reference_images.length).to eq 2
   end
-
 end

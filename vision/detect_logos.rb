@@ -55,17 +55,16 @@ def detect_logos_gcs image_path:
   # [END vision_logo_detection_gcs]
 end
 
-if __FILE__ == $PROGRAM_NAME
+if $PROGRAM_NAME == __FILE__
   image_path = ARGV.shift
 
   if !image_path
     puts <<~USAGE
-    Usage: ruby detect_logos.rb [image file path]
-
-    Example:
-      ruby detect_logos.rb image.png
-      ruby detect_logos.rb https://public-url/image.png
-      ruby detect_logos.rb gs://my-bucket/image.png
+      Usage: ruby detect_logos.rb [image file path]
+       Example:
+        ruby detect_logos.rb image.png
+        ruby detect_logos.rb https://public-url/image.png
+        ruby detect_logos.rb gs://my-bucket/image.png
     USAGE
   elsif image_path =~ URI::DEFAULT_PARSER.make_regexp
     detect_logos_gs image_path: image_path

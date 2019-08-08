@@ -16,23 +16,25 @@ require_relative "../app"
 require "rspec"
 require "rack/test"
 require "google/cloud/tasks"
+require "cgi"
 
 describe "CloudTasks", type: :feature do
   include Rack::Test::Methods
 
-  before(:all) do
+  before :all do
     GOOGLE_CLOUD_PROJECT = ENV["GOOGLE_CLOUD_PROJECT"]
-    LOCATION_ID          = "us-east1"
-    QUEUE_ID             = "my-appengine-queue"
+    location_id          = ENV["LOCATION_ID"] || "us-east1"
+    QUEUE_ID             = "my-appengine-queue".freeze
 
     client = Google::Cloud::Tasks.new
-    queue_path = "projects/#{GOOGLE_CLOUD_PROJECT}/locations/#{LOCATION_ID}/queues/#{QUEUE_ID}"
+    parent = client.queue_path GOOGLE_CLOUD_PROJECT, location_id, QUEUE_ID
 
     begin
-      client.get_queue(queue_path)
-    rescue
-      LOCATION_ID = "us-east4"
+      client.get_queue parent
+    rescue StandardError
+      location_id = "us-east4"
     end
+    LOCATION_ID = location_id.freeze
   end
 
   def app
@@ -50,7 +52,7 @@ describe "CloudTasks", type: :feature do
   end
 
   it "can create a task" do
-    current_directory = File.expand_path(File.dirname(__FILE__))
+    current_directory = __dir__
     snippet_filepath  = File.join current_directory, "..", "create_task.rb"
     payload = "Hello"
 
@@ -58,6 +60,5 @@ describe "CloudTasks", type: :feature do
               #{QUEUE_ID} #{payload}`
 
     expect(output).to include "Created task"
-
   end
 end

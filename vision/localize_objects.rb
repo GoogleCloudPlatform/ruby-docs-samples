@@ -88,22 +88,21 @@ def localize_objects_uri image_path:
   # [END vision_localize_objects_gcs]
 end
 
-if __FILE__ == $PROGRAM_NAME
+if $PROGRAM_NAME == __FILE__
   image_path = ARGV.shift
 
   if !image_path
     puts <<~USAGE
-    Usage: ruby localize_objects.rb [image file path]
-
-    Example:
-      ruby localize_objects.rb image.png
-      ruby localize_objects.rb https://public-url/image.png
-      ruby localize_objects.rb gs://my-bucket/image.png
+      Usage: ruby localize_objects.rb [image file path]
+       Example:
+        ruby localize_objects.rb image.png
+        ruby localize_objects.rb https://public-url/image.png
+        ruby localize_objects.rb gs://my-bucket/image.png
     USAGE
   elsif image_path =~ URI::DEFAULT_PARSER.make_regexp
     image_uri = URI(image_path)
     if image_uri.scheme == "gs"
-      localize_objects_gs image_path: image_path 
+      localize_objects_gs image_path: image_path
     else
       localize_object_uri image_path: image_path
     end

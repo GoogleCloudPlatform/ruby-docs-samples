@@ -79,7 +79,7 @@ Usage:
 
 Example:
 
-    bundle exec ruby create_topic YOUR-PROJECT-ID new_topic
+    bundle exec ruby topics.rb create_topic YOUR-PROJECT-ID new_topic
 
     Topic new_topic created.
 
@@ -107,7 +107,7 @@ Usage:
 
 Example:
 
-    bundle exec ruby list_subscriptions YOUR-PROJECT-ID
+    bundle exec ruby subscriptions.rb list_subscriptions YOUR-PROJECT-ID
 
     Subscriptions:
     YOUR-SUBSCRIPTION

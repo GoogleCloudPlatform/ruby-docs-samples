@@ -33,4 +33,3 @@ translation = translate.translate text, to: target
 puts "Text: #{text}"
 puts "Translation: #{translation}"
 # [END translate_quickstart]
-

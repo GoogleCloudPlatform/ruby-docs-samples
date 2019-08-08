@@ -1,7 +1,7 @@
 # Google App Engine Ruby Samples
 
-These are samples for using Ruby on Google App Engine Managed VMs. These
-samples are referenced from the [docs](https://cloud.google.com/appengine/docs).
+These are samples for using Ruby on Google App Engine.
+They are referenced from the [docs](https://cloud.google.com/appengine/docs).
 
 See our other [Google Cloud Platform github repos](https://github.com/GoogleCloudPlatform)
 for sample applications and scaffolding for other frameworks and use cases.

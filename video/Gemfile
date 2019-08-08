@@ -17,7 +17,6 @@ source "https://rubygems.org"
 gem "google-cloud-video_intelligence"
 
 group :test do
-  gem "rspec"
   gem "google-cloud-storage"
+  gem "rspec"
 end
-

@@ -15,7 +15,6 @@
 require "spec_helper"
 
 describe "Create reference image" do
-
   example "Create reference image" do
     snippet_filepath = get_snippet_filepath __FILE__
     product = create_temp_product
@@ -28,5 +27,4 @@ describe "Create reference image" do
     reference_images_after = Array(@client.list_reference_images(product.name))
     expect(reference_images_after.length).to eq 1
   end
-
 end

@@ -5,7 +5,6 @@ require "google/cloud/language"
 require "google/cloud/storage"
 
 describe "Google Cloud Natural Language API samples" do
-
   before do
     @bucket_name = ENV["GOOGLE_CLOUD_STORAGE_BUCKET"]
     @storage     = Google::Cloud::Storage.new
@@ -18,7 +17,7 @@ describe "Google Cloud Natural Language API samples" do
   after do
     @uploaded.each do |file_name|
       file = @bucket.file file_name
-      file.delete if file
+      file&.delete
     end
   end
 
@@ -35,10 +34,10 @@ describe "Google Cloud Natural Language API samples" do
   end
 
   # Capture and return STDOUT output by block
-  def capture &block
+  def capture
     real_stdout = $stdout
     $stdout = StringIO.new
-    block.call
+    yield
     $stdout.string
   ensure
     $stdout = real_stdout
@@ -57,7 +56,6 @@ describe "Google Cloud Natural Language API samples" do
     expect {
       sentiment_from_text text_content: negative_text
     }.to output(negative_output).to_stdout
-
   end
 
   example "sentence-level sentiment from text" do
@@ -73,7 +71,6 @@ describe "Google Cloud Natural Language API samples" do
     expect {
       sentiment_from_text text_content: negative_text
     }.to output(negative_output).to_stdout
-
   end
 
   example "document sentiment from a file in Google Cloud Storage" do
@@ -115,31 +112,31 @@ describe "Google Cloud Natural Language API samples" do
   end
 
   example "entities from text" do
-    output = capture {
+    output = capture do
       entities_from_text text_content: "Alice wrote a book. Bob likes the book."
-    }
+    end
 
     expect(output).to include "Alice PERSON"
     expect(output).to include "Bob PERSON"
   end
 
   example "entities with metadata from text" do
-    output = capture {
+    output = capture do
       entities_from_text text_content: "William Shakespeare is great."
-    }
+    end
 
     expect(output).to include "Entity William Shakespeare PERSON"
-    expect(output).to match /wikipedia.org\/wiki\/.*Shakespeare/
+    expect(output).to match %r{wikipedia.org/wiki/.*Shakespeare}
   end
 
   example "entities from a file in Google Cloud Storage" do
     upload "entities.txt", "Alice wrote a book. Bob likes the book."
 
-    output = capture {
+    output = capture do
       entities_from_cloud_storage_file(
         storage_path: "gs://#{@bucket_name}/entities.txt"
       )
-    }
+    end
 
     expect(output).to include "Alice PERSON"
     expect(output).to include "Bob PERSON"
@@ -148,22 +145,22 @@ describe "Google Cloud Natural Language API samples" do
   example "entities with metadata from a file in Google Cloud Storage" do
     upload "entities.txt", "William Shakespeare is great."
 
-    output = capture {
+    output = capture do
       entities_from_cloud_storage_file(
         storage_path: "gs://#{@bucket_name}/entities.txt"
       )
-    }
+    end
 
     expect(output).to include "Entity William Shakespeare PERSON"
-    expect(output).to match /wikipedia.org\/wiki\/.*Shakespeare/
+    expect(output).to match %r{wikipedia.org/wiki/.*Shakespeare}
   end
 
   example "syntax from text" do
-    output = capture {
+    output = capture do
       syntax_from_text(
         text_content: "I am Fox Tall. The porcupine stole my pickup truck."
       )
-    }
+    end
 
     expect(output).to include "Sentences: 2"
     expect(output).to include "Tokens: 12"
@@ -175,11 +172,11 @@ describe "Google Cloud Natural Language API samples" do
   example "syntax from a file stored in Google Cloud Storage" do
     upload "syntax.txt", "I am Fox Tall. The porcupine stole my pickup truck."
 
-    output = capture {
+    output = capture do
       syntax_from_cloud_storage_file(
         storage_path: "gs://#{@bucket_name}/syntax.txt"
       )
-    }
+    end
 
     expect(output).to include "Sentences: 2"
     expect(output).to include "Tokens: 12"
@@ -189,25 +186,25 @@ describe "Google Cloud Natural Language API samples" do
   end
 
   example "Classify text" do
-    output = capture {
-      classify_text text_content: "Google, headquartered in Mountain View, unveiled "  +
-                                  "the new Android phone at the Consumer Electronic "  +
+    output = capture do
+      classify_text text_content: "Google, headquartered in Mountain View, unveiled "  \
+                                  "the new Android phone at the Consumer Electronic "  \
                                   "Show Sundar Pichai said in his keynote that users " +
                                   "love their new Android phones."
-    }
+    end
 
     expect(output).to include "Computers & Electronics Confidence"
   end
 
   example "Classify text from a file stored in Google Cloud Storage" do
-    upload "classify.txt", "Google, headquartered in Mountain View, unveiled "  +
-                           "the new Android phone at the Consumer Electronic "  +
+    upload "classify.txt", "Google, headquartered in Mountain View, unveiled "  \
+                           "the new Android phone at the Consumer Electronic "  \
                            "Show Sundar Pichai said in his keynote that users " +
                            "love their new Android phones."
 
-    output = capture {
+    output = capture do
       classify_text_from_cloud_storage_file storage_path: "gs://#{@bucket_name}/classify.txt"
-    }
+    end
 
     expect(output).to include "Computers & Electronics Confidence"
   end

@@ -17,7 +17,7 @@ require "sinatra"
 require "memcache"
 
 memcached_address = ENV["MEMCACHE_PORT_11211_TCP_ADDR"] || "localhost"
-memcached_port    = ENV["MEMCACHE_PORT_11211_TCP_PORT"] || 11211
+memcached_port    = ENV["MEMCACHE_PORT_11211_TCP_PORT"] || 11_211
 
 memcache = MemCache.new "#{memcached_address}:#{memcached_port}"
 

@@ -8,7 +8,6 @@
 #    are modified, in which case all tests will be run.
 #  * Nightly runs will run all tests.
 
-set -x -e -u -o pipefail
 
 # Print out Ruby version
 ruby --version
@@ -19,14 +18,8 @@ source $KOKORO_GFILE_DIR/secrets.sh
 # https://github.com/bundler/bundler/issues/6154
 export BUNDLE_GEMFILE=
 
-for REQUIRED_VARIABLE in                   \
-  GOOGLE_CLOUD_PROJECT                     \
-  GOOGLE_APPLICATION_CREDENTIALS           \
-  GOOGLE_CLOUD_STORAGE_BUCKET              \
-  ALTERNATE_GOOGLE_CLOUD_STORAGE_BUCKET    \
-  GOOGLE_CLOUD_PROJECT_SECONDARY           \
-  GOOGLE_APPLICATION_CREDENTIALS_SECONDARY \
-  GOOGLE_CLOUD_KMS_KEY_NAME                \
+for REQUIRED_VARIABLE in \
+  GOOGLE_CLOUD_KMS_KEY_NAME \
   GOOGLE_CLOUD_KMS_KEY_RING
 do
   if [[ -z "${REQUIRED_VARIABLE:-}" ]]; then
@@ -34,6 +27,8 @@ do
     exit 1
   fi
 done
+
+set -x -e -u -o pipefail
 
 SCRIPT_DIRECTORY="$(dirname "$(realpath "$0")")"
 REPO_DIRECTORY="$(dirname "$SCRIPT_DIRECTORY")"
@@ -53,6 +48,9 @@ if [ -z "$GOOGLE_CLOUD_PROJECT" ]; then
 fi
 echo "Running tests in project $GOOGLE_CLOUD_PROJECT";
 trap "gimmeproj -project cloud-samples-ruby-test-kokoro done $GOOGLE_CLOUD_PROJECT" EXIT
+
+export GOOGLE_CLOUD_PROJECT_SECONDARY=cloud-samples-ruby-test-second
+export GOOGLE_APPLICATION_CREDENTIALS_SECONDARY=$KOKORO_GFILE_DIR/cloud-samples-ruby-test-second-ede32e88c59c.json
 
 # Set application credentials to the project-specific account. Some APIs do not
 # allow the service account project and GOOGLE_CLOUD_PROJECT to be different.
@@ -84,6 +82,13 @@ cd github/ruby-docs-samples/
 
 # CHANGED_DIRS is the list of top-level directories that changed. CHANGED_DIRS will be empty when run on master.
 CHANGED_DIRS=$(git --no-pager diff --name-only HEAD $(git merge-base HEAD master) | grep "/" | cut -d/ -f1 | sort | uniq || true)
+
+# Filter out any nonexisting directories. This handles the case when a directory is removed.
+CHANGED_DIRS_ARRAY=($CHANGED_DIRS)
+for index in "${!CHANGED_DIRS_ARRAY[@]}"; do
+  [[ -d "${CHANGED_DIRS_ARRAY[$index]}" ]] || unset -v "CHANGED_DIRS_ARRAY[$index]"
+done
+CHANGED_DIRS="${CHANGED_DIRS_ARRAY[*]}"
 
 # The appengine directory has many subdirectories. Only test the modified ones.
 if [[ $CHANGED_DIRS =~ "appengine" ]]; then
@@ -138,6 +143,8 @@ function set_failed_status {
   EXIT_STATUS=1
 }
 
+(bundle update && bundle exec rubocop) || set_failed_status
+
 if [[ $RUN_ALL_TESTS = "1" ]]; then
   echo "Running all tests"
   SPEC_DIRS=$(find * -type d -name 'spec' -path "*/*" -not -path "*vendor/*" -exec dirname {} \; | sort | uniq)
@@ -147,7 +154,7 @@ if [[ $RUN_ALL_TESTS = "1" ]]; then
     export TEST_DIR="$PRODUCT"
     pushd "$REPO_DIRECTORY/$PRODUCT/"
 
-    (bundle install && bundle exec rspec --format documentation) || set_failed_status
+    (bundle update && bundle exec rspec --format documentation) || set_failed_status
 
     if [[ $E2E = "true" ]]; then
       # Clean up deployed version
@@ -165,7 +172,7 @@ else
     export TEST_DIR="$PRODUCT"
     pushd "$REPO_DIRECTORY/$PRODUCT/"
 
-    (bundle install && bundle exec rspec --format documentation) || set_failed_status
+    (bundle update && bundle exec rspec --format documentation) || set_failed_status
 
     if [[ $E2E = "true" ]]; then
       # Clean up deployed version

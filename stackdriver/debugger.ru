@@ -28,5 +28,4 @@ require "google/cloud/debugger"
 use Google::Cloud::Debugger::Middleware
 # [END debugger_middleware]
 
-run ->(env) { ["200", {"Content-Type" => "text/html"}, ["Hello world!"]] }
-
+run ->(_env) { ["200", { "Content-Type" => "text/html" }, ["Hello world!"]] }

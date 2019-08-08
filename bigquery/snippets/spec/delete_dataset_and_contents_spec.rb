@@ -16,7 +16,6 @@ require_relative "../delete_dataset_and_contents"
 require "spec_helper"
 
 describe "Delete dataset containing tables" do
-
   example "deletes a dataset and its contents" do
     bigquery = Google::Cloud::Bigquery.new
     dataset = bigquery.create_dataset "test_dataset_w_table_#{Time.now.to_i}"
@@ -26,5 +25,4 @@ describe "Delete dataset containing tables" do
 
     expect(bigquery.dataset(dataset .dataset_id, skip_lookup: true).exists?).to be(false)
   end
-
 end

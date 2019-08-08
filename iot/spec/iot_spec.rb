@@ -20,16 +20,15 @@ require "tempfile"
 require_relative "../iot"
 
 describe "Cloud IoT Core" do
-
   RSpec.configure do |config|
     original_stderr = $stderr
     original_stdout = $stdout
-    config.before(:all) do
+    config.before :all do
       # Redirect stderr and stdout
-      $stderr = File.open(File::NULL, "w")
-      $stdout = File.open(File::NULL, "w")
+      $stderr = File.open File::NULL, "w"
+      $stdout = File.open File::NULL, "w"
     end
-    config.after(:all) do
+    config.after :all do
       $stderr = original_stderr
       $stdout = original_stdout
     end
@@ -38,7 +37,7 @@ describe "Cloud IoT Core" do
   before do
     @project_id = ENV["GOOGLE_CLOUD_PROJECT"]
     @region     = "us-central1"
-    @seed       = SecureRandom.hex(8)
+    @seed       = SecureRandom.hex 8
     @topics     = []
   end
 
@@ -120,7 +119,7 @@ describe "Cloud IoT Core" do
       $get_iam_policy.call(
         project_id:  @project_id,
         location_id: @region,
-        registry_id: registry_name,
+        registry_id: registry_name
       )
     }.to output(
       /Binding set:/m
@@ -201,7 +200,7 @@ describe "Cloud IoT Core" do
         project_id:  @project_id,
         location_id: @region,
         registry_id: registry_name,
-        device_id:   device_id,
+        device_id:   device_id
       )
     }.to output(
       /Version \[1\]/m
@@ -211,7 +210,7 @@ describe "Cloud IoT Core" do
         project_id:  @project_id,
         location_id: @region,
         registry_id: registry_name,
-        device_id:   device_id,
+        device_id:   device_id
       )
     }.to output(
       /No state messages/m
@@ -323,7 +322,7 @@ describe "Cloud IoT Core" do
     expect {
       $list_registries.call(
         project_id:  @project_id,
-        location_id: @region,
+        location_id: @region
       )
     }.to output(
       /Registries:/m
@@ -334,12 +333,12 @@ describe "Cloud IoT Core" do
     unknown_regname = "some_unknown_registry"
     expect {
       $get_registry.call(
-        project_id:    @project_id,
-        location_id:   @region,
-        registry_id:   unknown_regname
+        project_id:  @project_id,
+        location_id: @region,
+        registry_id: unknown_regname
       )
     }.to raise_error(
-      /was not found/m
+      /notFound/m
     )
   end
 
@@ -348,13 +347,13 @@ describe "Cloud IoT Core" do
     unknown_devname = "some_unknown_device"
     expect {
       $get_device.call(
-        project_id:    @project_id,
-        location_id:   @region,
-        registry_id:   unknown_regname,
-        device_id:     unknown_devname
+        project_id:  @project_id,
+        location_id: @region,
+        registry_id: unknown_regname,
+        device_id:   unknown_devname
       )
     }.to raise_error(
-      /was not found/m
+      /notFound/m
     )
   end
 
@@ -362,12 +361,12 @@ describe "Cloud IoT Core" do
     unknown_regname = "some_unknown_registry"
     expect {
       $list_devices.call(
-        project_id:    @project_id,
-        location_id:   @region,
-        registry_id:   unknown_regname,
+        project_id:  @project_id,
+        location_id: @region,
+        registry_id: unknown_regname
       )
     }.to raise_error(
-      /was not found/m
+      /notFound/m
     )
   end
 
@@ -486,15 +485,15 @@ describe "Cloud IoT Core" do
     # Without a ruby-based device client, it's difficult to test positive; test
     # that we see the expected error condition for sending a command to a
     # non-connected device
-    expect{
+    expect {
       $send_device_command.call(
         project_id:  @project_id,
         location_id: @region,
         registry_id: registry_name,
         device_id:   device_id,
-        data:  "test"
+        data:        "test"
       )
-    }.to raise_error(/not subscribed to the commands topic/m)
+    }.to raise_error(/Device .* is not connected/m)
 
     # Clean up resources
     $delete_device.call(
@@ -573,7 +572,7 @@ describe "Cloud IoT Core" do
         project_id:  @project_id,
         location_id: @region,
         registry_id: registry_name,
-        gateway_id: gateway_id
+        gateway_id:  gateway_id
       )
     }.to output(
       /Deleted gateway/m
@@ -622,7 +621,7 @@ describe "Cloud IoT Core" do
         location_id: @region,
         registry_id: registry_name,
         gateway_id:  gateway_id,
-        device_id:   device_id,
+        device_id:   device_id
       )
       $list_devices_for_gateway.call(
         project_id:  @project_id,
@@ -635,7 +634,7 @@ describe "Cloud IoT Core" do
         location_id: @region,
         gateway_id:  gateway_id,
         registry_id: registry_name,
-        device_id:   device_id,
+        device_id:   device_id
       )
     }.to output(
       /Devices/m
@@ -652,7 +651,7 @@ describe "Cloud IoT Core" do
       project_id:  @project_id,
       location_id: @region,
       registry_id: registry_name,
-      device_id:   device_id,
+      device_id:   device_id
     )
     $delete_registry.call(
       project_id:  @project_id,
