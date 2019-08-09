@@ -154,12 +154,19 @@ if [[ $RUN_ALL_TESTS = "1" ]]; then
     export TEST_DIR="$PRODUCT"
     pushd "$REPO_DIRECTORY/$PRODUCT/"
 
+    start_time="$(date -u +%s)"
+
     (bundle update && bundle exec rspec --format documentation) || set_failed_status
 
     if [[ $E2E = "true" ]]; then
       # Clean up deployed version
       bundle exec ruby "$REPO_DIRECTORY/spec/e2e_cleanup.rb" "$TEST_DIR" "$BUILD_ID"
     fi
+
+    end_time="$(date -u +%s)"
+    elapsed="$(($end_time - $start_time))"
+    echo "Tests for $PRODUCT took $elapsed seconds"
+
     popd
   done
 else
@@ -172,12 +179,19 @@ else
     export TEST_DIR="$PRODUCT"
     pushd "$REPO_DIRECTORY/$PRODUCT/"
 
+    start_time="$(date -u +%s)"
+
     (bundle update && bundle exec rspec --format documentation) || set_failed_status
 
     if [[ $E2E = "true" ]]; then
       # Clean up deployed version
       bundle exec ruby "$REPO_DIRECTORY/spec/e2e_cleanup.rb" "$TEST_DIR" "$BUILD_ID"
     fi
+
+    end_time="$(date -u +%s)"
+    elapsed="$(($end_time - $start_time))"
+    echo "Tests for $PRODUCT took $elapsed seconds"
+
     popd
   done
 fi
