@@ -20,7 +20,7 @@ def list_hmac_keys project_id:
 
   storage = Google::Cloud::Storage.new project_id: project_id
 
-  hmac_keys = storage.hmac_keys
+  hmac_keys = storage.hmac_keys project_id: project_id
 
   puts "HMAC Keys:"
   hmac_keys.all do |hmac_key|
@@ -45,7 +45,7 @@ def create_hmac_key project_id:, service_account_email:
 
   storage = Google::Cloud::Storage.new project_id: project_id
 
-  hmac_key = storage.create_hmac_key service_account_email
+  hmac_key = storage.create_hmac_key service_account_email, project_id: project_id
 
   puts "The base64 encoded secret is: #{hmac_key.secret}"
   puts "Do not miss that secret, there is no API to recover it."
