@@ -127,3 +127,21 @@ Environment variables:
   GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
 ```
 
+### Cloud Storage Service Account HMAC Key Management
+
+**Usage:** `bundle exec ruby hmac.rb [commmand] [arguments]`
+
+```
+Usage: bundle exec ruby hmac.rb [command] [arguments]
+
+Commands:
+  list_hmac_keys                               List all HMAC keys for a project
+  create_hmac_key     <serviceAccountEmail>    Create HMAC Key
+  get_hmac_key        <accessId>               Get HMAC Key metadata
+  activate_hmac_key   <accessId>               Activate an HMAC Key
+  deactivate_hmac_key <accessId>               Deactivate an HMAC Key
+  delete_hmac_key     <accessId>               Delete a deactivated HMAC key
+
+Environment variables:
+  GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
+```
