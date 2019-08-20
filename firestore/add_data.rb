@@ -186,7 +186,7 @@ def update_document_increment project_id:
   # project_id = "Your Google Cloud Project ID"
 
   firestore = Google::Cloud::Firestore.new project_id: project_id
-  firestore.doc("cities/dc").set(
+  firestore.doc("cities/DC").set(
       name:       "Washington D.C.",
       state:      nil,
       country:    "USA",
@@ -194,8 +194,8 @@ def update_document_increment project_id:
       population: 680_000
   )
   # [START fs_update_document_increment]
-  city_ref = firestore.doc "cities/dc"
-  city_ref.update population: Google::Cloud::Firestore::FieldValue.increment(50)
+  city_ref = firestore.doc "cities/DC"
+  city_ref.update population: firestore.field_increment(50)
   # [END fs_update_document_increment]
   puts "Updated the population of the DC document in the cities collection."
 end
