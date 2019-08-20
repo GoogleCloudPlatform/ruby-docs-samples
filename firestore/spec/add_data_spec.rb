@@ -100,4 +100,12 @@ describe "Google Cloud Firestore API samples - Add Data" do
     end
     expect(output).to include "Updated the timestamp field of the new-city-id document in the cities collection."
   end
+
+  example "update_document_increment" do
+    output = capture do
+      set_requires_id project_id: @firestore_project
+      update_document_increment project_id: @firestore_project
+    end
+    expect(output).to include "Updated the population of the DC document in the cities collection."
+  end
 end

@@ -168,11 +168,36 @@ def update_server_timestamp project_id:
   # project_id = "Your Google Cloud Project ID"
 
   firestore = Google::Cloud::Firestore.new project_id: project_id
+  firestore.doc("cities/new-city-id").set(
+    name:       "new city",
+    state:      nil,
+    country:    "country",
+    capital:    false,
+    population: 85
+  )
   # [START fs_update_server_timestamp]
   city_ref = firestore.doc "cities/new-city-id"
   city_ref.update timestamp: firestore.field_server_time
   # [END fs_update_server_timestamp]
   puts "Updated the timestamp field of the new-city-id document in the cities collection."
+end
+
+def update_document_increment project_id:
+  # project_id = "Your Google Cloud Project ID"
+
+  firestore = Google::Cloud::Firestore.new project_id: project_id
+  firestore.doc("cities/DC").set(
+    name:       "Washington D.C.",
+    state:      nil,
+    country:    "USA",
+    capital:    true,
+    population: 680_000
+  )
+  # [START fs_update_document_increment]
+  city_ref = firestore.doc "cities/DC"
+  city_ref.update population: firestore.field_increment(50)
+  # [END fs_update_document_increment]
+  puts "Updated the population of the DC document in the cities collection."
 end
 
 if $PROGRAM_NAME == __FILE__
@@ -196,6 +221,8 @@ if $PROGRAM_NAME == __FILE__
     update_nested_fields project_id: project
   when "update_server_timestamp"
     update_server_timestamp project_id: project
+  when "update_document_increment"
+    update_document_increment project_id: project
   else
     puts <<~USAGE
       Usage: bundle exec ruby add_data.rb [command]
@@ -210,6 +237,7 @@ if $PROGRAM_NAME == __FILE__
         update_doc                  Update a document.
         update_nested_fields        Update fields in nested data.
         update_server_timestamp     Update field with server timestamp.
+        update_document_increment   Update a document number field using Increment.
     USAGE
   end
 end
