@@ -169,11 +169,11 @@ def update_server_timestamp project_id:
 
   firestore = Google::Cloud::Firestore.new project_id: project_id
   firestore.doc("cities/new-city-id").set(
-      name:       "new city",
-      state:      nil,
-      country:    "country",
-      capital:    false,
-      population: 85
+    name:       "new city",
+    state:      nil,
+    country:    "country",
+    capital:    false,
+    population: 85
   )
   # [START fs_update_server_timestamp]
   city_ref = firestore.doc "cities/new-city-id"
@@ -187,11 +187,11 @@ def update_document_increment project_id:
 
   firestore = Google::Cloud::Firestore.new project_id: project_id
   firestore.doc("cities/DC").set(
-      name:       "Washington D.C.",
-      state:      nil,
-      country:    "USA",
-      capital:    true,
-      population: 680_000
+    name:       "Washington D.C.",
+    state:      nil,
+    country:    "USA",
+    capital:    true,
+    population: 680_000
   )
   # [START fs_update_document_increment]
   city_ref = firestore.doc "cities/DC"
