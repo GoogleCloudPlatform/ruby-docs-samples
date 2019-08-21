@@ -73,7 +73,7 @@ describe "Google Cloud Storage buckets sample" do
     expect {
       list_bucket_details project_id: @project_id, bucket_name: @bucket_name
     }.to output(
-      /Name: #{bucket.name}/
+      /#{@bucket_name}/
     ).to_stdout
   end
 
