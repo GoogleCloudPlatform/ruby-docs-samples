@@ -50,7 +50,7 @@ describe "Google Cloud Storage buckets sample" do
   end
 
   def create_test_hmac_key
-    hmac_key = @storage.create_hmac_key @service_account_email
+    hmac_key = @storage.create_hmac_key @service_account_email, project_id: @project_id
     hmac_key.access_id
   end
 
