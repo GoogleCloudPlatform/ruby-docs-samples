@@ -30,6 +30,7 @@ Usage: bundle exec ruby buckets.rb [command] [arguments]
 
 Commands:
   list                                                       List all buckets in the authenticated project
+  metadata               <bucket>                            Display metadata for a bucket
   enable_requester_pays  <bucket>                            Enable requester pays for a bucket
   disable_requester_pays <bucket>                            Disable requester pays for a bucket
   check_requester_pays   <bucket>                            Check status of requester pays for a bucket
