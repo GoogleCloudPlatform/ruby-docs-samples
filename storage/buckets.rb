@@ -421,7 +421,7 @@ if $PROGRAM_NAME == __FILE__
   when "list"
     list_buckets project_id: project_id
   when "metadata"
-    list_bucket_details project_id: project_id,
+    list_bucket_details project_id:  project_id,
                         bucket_name: ARGV.shift
   when "create"
     if ARGV.size == 1
