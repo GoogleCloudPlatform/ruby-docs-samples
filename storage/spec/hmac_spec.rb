@@ -33,7 +33,7 @@ describe "Google Cloud Storage buckets sample" do
   before :all do
     @storage               = Google::Cloud::Storage.new
     @project_id            = @storage.project
-    @service_account_email = ENV["STORAGE_HMAC_KEY_SERVICE_ACCOUNT"]
+    @service_account_email = "#{@project_id}@appspot.gserviceaccount.com"
     delete_all_hmac_keys!
     @access_id = create_test_hmac_key
   end
