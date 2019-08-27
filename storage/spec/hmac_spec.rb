@@ -29,7 +29,7 @@ RSpec.configure do |config|
   config.default_sleep_interval = 10
 end
 
-describe "Google Cloud Storage buckets sample" do
+describe "Storage HMAC SA sample" do
   before :all do
     @storage               = Google::Cloud::Storage.new
     @project_id            = @storage.project
@@ -44,8 +44,10 @@ describe "Google Cloud Storage buckets sample" do
 
   def delete_all_hmac_keys!
     @storage.hmac_keys.all do |hmac_key|
-        hmac_key.inactive!
-        hmac_key.delete!
+        if hmac_key.active?
+          hmac_key.inactive!
+          hmac_key.delete!
+        end
     end
   end
 
