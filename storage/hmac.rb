@@ -20,6 +20,7 @@ def list_hmac_keys project_id:
 
   storage = Google::Cloud::Storage.new project_id: project_id
 
+  # By default Storage#hmac_keys uses the Storage client project_id
   hmac_keys = storage.hmac_keys project_id: project_id
 
   puts "HMAC Keys:"
@@ -45,6 +46,7 @@ def create_hmac_key project_id:, service_account_email:
 
   storage = Google::Cloud::Storage.new project_id: project_id
 
+  # By default Storage#create_hmac_key uses the Storage client project_id
   hmac_key = storage.create_hmac_key service_account_email, project_id: project_id
 
   puts "The base64 encoded secret is: #{hmac_key.secret}"
@@ -69,7 +71,8 @@ def get_hmac_key project_id:, access_id:
 
   storage = Google::Cloud::Storage.new project_id: project_id
 
-  hmac_key = storage.hmac_key access_id
+  # By default Storage#hmac_keys uses the Storage client project_id
+  hmac_key = storage.hmac_key access_id, project_id: project_id
 
   puts "The HMAC key metadata is:"
   puts "Key ID:     #{hmac_key.id}"
@@ -91,7 +94,9 @@ def activate_hmac_key project_id:, access_id:
 
   storage = Google::Cloud::Storage.new project_id: project_id
 
-  hmac_key = storage.hmac_key access_id
+  # By default Storage#hmac_keys uses the Storage client project_id
+  hmac_key = storage.hmac_key access_id, project_id: project_id
+
   hmac_key.active!
 
   puts "The HMAC key is now active."
@@ -115,7 +120,9 @@ def deactivate_hmac_key project_id:, access_id:
 
   storage = Google::Cloud::Storage.new project_id: project_id
 
-  hmac_key = storage.hmac_key access_id
+  # By default Storage#hmac_keys uses the Storage client project_id
+  hmac_key = storage.hmac_key access_id, project_id: project_id
+
   hmac_key.inactive!
 
   puts "The HMAC key is now inactive."
@@ -139,7 +146,9 @@ def delete_hmac_key project_id:, access_id:
 
   storage = Google::Cloud::Storage.new project_id: project_id
 
-  hmac_key = storage.hmac_key access_id
+  # By default Storage#hmac_keys uses the Storage client project_id
+  hmac_key = storage.hmac_key access_id, project_id: project_id
+
   hmac_key.delete!
 
   puts "The key is deleted, though it may still appear in Client#hmac_keys results."
