@@ -15,6 +15,7 @@
 # [START vision_product_search_purge_orphan_products]
 require "google/cloud/vision"
 
+# Delete all products not in any product sets.
 def product_search_purge_orphan_products(project_id = "your-project-id",
                                          location   = "us-west1")
 
