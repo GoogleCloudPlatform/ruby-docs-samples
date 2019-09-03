@@ -23,6 +23,7 @@ describe "Purge orphan products" do
 
     output = `ruby #{snippet_filepath} #{@project_id} #{@location}`
 
+    # Verify product was deleted
     expect {
       @client.get_product temp_product.name
     }.to raise_error Google::Gax::RetryError
