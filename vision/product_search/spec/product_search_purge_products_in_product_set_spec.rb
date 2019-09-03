@@ -26,6 +26,10 @@ describe "Purge products in product set" do
 
     output = `ruby #{snippet_filepath} #{@project_id} #{@location} #{temp_product_set_id}`
 
+    product_list_after = Array(@client.list_products_in_product_set(temp_product_set.name))
+    expect(product_list_after.length).to eq 0
+    
+    # Verify product was deleted
     expect {
       @client.get_product temp_product.name
     }.to raise_error Google::Gax::RetryError
