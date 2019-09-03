@@ -15,6 +15,7 @@
 # [START vision_product_search_purge_products_in_product_set]
 require "google/cloud/vision"
 
+# Delete all products in a product set.
 def product_search_purge_products_in_product_set(project_id     = "your-project-id",
                                                  location       = "us-west1",
                                                  product_set_id = "your-product-set-id")
