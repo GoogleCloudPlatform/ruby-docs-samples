@@ -25,14 +25,8 @@ def list_hmac_keys project_id:
 
   puts "HMAC Keys:"
   hmac_keys.all do |hmac_key|
-    puts "The HMAC key metadata is:"
-    puts "Key ID:     #{hmac_key.id}"
-    puts "Access ID:  #{hmac_key.access_id}"
-    puts "Project ID: #{hmac_key.project_id}"
-    puts "Active:     #{hmac_key.active?}"
-    puts "Created At: #{hmac_key.created_at}"
-    puts "Updated At: #{hmac_key.updated_at}"
-    puts "Etag:       #{hmac_key.etag}"
+    puts "Service Account Email: #{hmac_key.service_account_email}"
+    puts "Access ID: #{hmac_key.access_id}"
   end
   # [END storage_list_hmac_keys]
 end
@@ -52,13 +46,14 @@ def create_hmac_key project_id:, service_account_email:
   puts "The base64 encoded secret is: #{hmac_key.secret}"
   puts "Do not miss that secret, there is no API to recover it."
   puts "\nThe HMAC key metadata is:"
-  puts "Key ID:     #{hmac_key.id}"
-  puts "Access ID:  #{hmac_key.access_id}"
-  puts "Project ID: #{hmac_key.project_id}"
-  puts "Active:     #{hmac_key.active?}"
-  puts "Created At: #{hmac_key.created_at}"
-  puts "Updated At: #{hmac_key.updated_at}"
-  puts "Etag:       #{hmac_key.etag}"
+  puts "Key ID:                #{hmac_key.id}"
+  puts "Service Account Email: #{hmac_key.service_account_email}"
+  puts "Access ID:             #{hmac_key.access_id}"
+  puts "Project ID:            #{hmac_key.project_id}"
+  puts "Active:                #{hmac_key.active?}"
+  puts "Created At:            #{hmac_key.created_at}"
+  puts "Updated At:            #{hmac_key.updated_at}"
+  puts "Etag:                  #{hmac_key.etag}"
   # [END storage_create_hmac_key]
 end
 
@@ -75,13 +70,14 @@ def get_hmac_key project_id:, access_id:
   hmac_key = storage.hmac_key access_id, project_id: project_id
 
   puts "The HMAC key metadata is:"
-  puts "Key ID:     #{hmac_key.id}"
-  puts "Access ID:  #{hmac_key.access_id}"
-  puts "Project ID: #{hmac_key.project_id}"
-  puts "Active:     #{hmac_key.active?}"
-  puts "Created At: #{hmac_key.created_at}"
-  puts "Updated At: #{hmac_key.updated_at}"
-  puts "Etag:       #{hmac_key.etag}"
+  puts "Key ID:                #{hmac_key.id}"
+  puts "Service Account Email: #{hmac_key.service_account_email}"
+  puts "Access ID:             #{hmac_key.access_id}"
+  puts "Project ID:            #{hmac_key.project_id}"
+  puts "Active:                #{hmac_key.active?}"
+  puts "Created At:            #{hmac_key.created_at}"
+  puts "Updated At:            #{hmac_key.updated_at}"
+  puts "Etag:                  #{hmac_key.etag}"
   # [END storage_get_hmac_key]
 end
 
@@ -101,13 +97,14 @@ def activate_hmac_key project_id:, access_id:
 
   puts "The HMAC key is now active."
   puts "The HMAC key metadata is:"
-  puts "Key ID:     #{hmac_key.id}"
-  puts "Access ID:  #{hmac_key.access_id}"
-  puts "Project ID: #{hmac_key.project_id}"
-  puts "Active:     #{hmac_key.active?}"
-  puts "Created At: #{hmac_key.created_at}"
-  puts "Updated At: #{hmac_key.updated_at}"
-  puts "Etag:       #{hmac_key.etag}"
+  puts "Key ID:                #{hmac_key.id}"
+  puts "Service Account Email: #{hmac_key.service_account_email}"
+  puts "Access ID:             #{hmac_key.access_id}"
+  puts "Project ID:            #{hmac_key.project_id}"
+  puts "Active:                #{hmac_key.active?}"
+  puts "Created At:            #{hmac_key.created_at}"
+  puts "Updated At:            #{hmac_key.updated_at}"
+  puts "Etag:                  #{hmac_key.etag}"
   # [END storage_activate_hmac_key]
 end
 
@@ -127,13 +124,14 @@ def deactivate_hmac_key project_id:, access_id:
 
   puts "The HMAC key is now inactive."
   puts "The HMAC key metadata is:"
-  puts "Key ID:     #{hmac_key.id}"
-  puts "Access ID:  #{hmac_key.access_id}"
-  puts "Project ID: #{hmac_key.project_id}"
-  puts "Active:     #{hmac_key.active?}"
-  puts "Created At: #{hmac_key.created_at}"
-  puts "Updated At: #{hmac_key.updated_at}"
-  puts "Etag:       #{hmac_key.etag}"
+  puts "Key ID:                #{hmac_key.id}"
+  puts "Service Account Email: #{hmac_key.service_account_email}"
+  puts "Access ID:             #{hmac_key.access_id}"
+  puts "Project ID:            #{hmac_key.project_id}"
+  puts "Active:                #{hmac_key.active?}"
+  puts "Created At:            #{hmac_key.created_at}"
+  puts "Updated At:            #{hmac_key.updated_at}"
+  puts "Etag:                  #{hmac_key.etag}"
   # [END storage_deactivate_hmac_key]
 end
 
