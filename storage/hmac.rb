@@ -23,9 +23,7 @@ def list_hmac_keys project_id:
   # By default Storage#hmac_keys uses the Storage client project_id
   hmac_keys = storage.hmac_keys project_id: project_id
 
-  puts "HMAC Keys:"
   hmac_keys.all do |hmac_key|
-    puts "The HMAC key metadata is:"
     puts "Service Account Email: #{hmac_key.service_account_email}"
     puts "Access ID: #{hmac_key.access_id}"
   end
