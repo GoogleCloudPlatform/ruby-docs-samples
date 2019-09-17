@@ -26,13 +26,8 @@ def list_hmac_keys project_id:
   puts "HMAC Keys:"
   hmac_keys.all do |hmac_key|
     puts "The HMAC key metadata is:"
-    puts "Key ID:     #{hmac_key.id}"
-    puts "Access ID:  #{hmac_key.access_id}"
-    puts "Project ID: #{hmac_key.project_id}"
-    puts "Active:     #{hmac_key.active?}"
-    puts "Created At: #{hmac_key.created_at}"
-    puts "Updated At: #{hmac_key.updated_at}"
-    puts "Etag:       #{hmac_key.etag}"
+    puts "Service Account Email: #{hmac_key.service_account_email}"
+    puts "Access ID: #{hmac_key.access_id}"
   end
   # [END storage_list_hmac_keys]
 end
