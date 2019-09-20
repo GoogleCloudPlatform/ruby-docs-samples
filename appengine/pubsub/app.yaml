@@ -16,10 +16,10 @@ runtime: ruby
 env: flex
 entrypoint: bundle exec ruby app.rb
 
-# [START gae_flex_pubsub_yaml]
+# [START gae_pubsub_yaml]
 env_variables:
     PUBSUB_TOPIC: <your-topic-name>
     # This token is used to verify that requests originate from your
     # application. It can be any sufficiently random string.
     PUBSUB_VERIFICATION_TOKEN: <your-token>
-# [END gae_flex_pubsub_yaml]
+# [END gae_pubsub_yaml]
