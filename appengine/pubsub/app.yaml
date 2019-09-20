@@ -15,6 +15,7 @@
 runtime: ruby
 env: flex
 entrypoint: bundle exec ruby app.rb
+instance_class: F2
 
 # [START gae_pubsub_yaml]
 env_variables:
