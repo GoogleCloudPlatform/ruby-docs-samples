@@ -19,6 +19,10 @@ runtime: ruby
 env_variables:
   SECRET_KEY_BASE: [SECRET_KEY]
   RAILS_ENV: production
+  INSTANCE_CONNECTION_NAME: [<MY-PROJECT>:<INSTANCE-REGION>:<INSTANCE-NAME>]
+  MYSQL_USER: [MY_DB_USER]
+  MYSQL_PASS: [MY_DB_PASS]
+  MYSQL_DATABASE: [MY_DB]
 
 beta_settings:
   cloud_sql_instances: [YOUR_INSTANCE_CONNECTION_NAME]

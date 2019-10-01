@@ -34,7 +34,6 @@ test:
   <<: *default
   database: db/development.sqlite3
 
-# [START production]
 production:
   adapter: mysql2
   pool: 5
@@ -43,4 +42,3 @@ production:
   password: <%= ENV["MYSQL_PASSWORD"] %>
   database: <%= ENV.fetch("MYSQL_DATABASE") { "vote_production" } %>
   socket:   "/cloudsql/<%= ENV["INSTANCE_CONNECTION_NAME"] %>"
-# [END production]
