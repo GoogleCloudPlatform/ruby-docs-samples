@@ -54,20 +54,10 @@ Next, setup install the requirements:
 bundle install
 ```
 
-The app is setup to use sqlite3 for development and testing environments. To use your mysql instance, set rails to use production mode:
-```bash
-export RAILS_ENV=production
-```
-
 Then, setup and seed the database:
 ```bash
 bundle exec rails db:setup
 bundle exec rails db:seed
-```
-
-Next, precompile the assets:
-```bash
-bundle exec rails assets:precompile
 ```
 
 Finally, start the application:
@@ -75,7 +65,7 @@ Finally, start the application:
 bundle exec rails s
 ```
 
-Navigate towards `http://127.0.0.1:3000` to verify your application is running correctly.
+Navigate towards `http://localhost:3000` to verify your application is running correctly.
 
 ## Google App Engine Flexible
 
