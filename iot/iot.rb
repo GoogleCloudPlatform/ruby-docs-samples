@@ -651,7 +651,7 @@ $send_device_command = lambda do |project_id:, location_id:, registry_id:, devic
   command_req.binary_data = data
 
   # Set configuration for the provided device
-  iot_client.send_project_location_registry_group_device_command_to_device resource, command_req
+  iot_client.send_project_location_registry_device_command_to_device resource, command_req
 
   puts "Command sent!"
   # [END iot_send_command]
