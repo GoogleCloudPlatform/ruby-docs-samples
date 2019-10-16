@@ -23,13 +23,17 @@ class VotesController < ApplicationController
   end
 
   def create
+    # [START cloud_sql_mysql_activerecord_connection]
     @vote = Vote.new candidate: candidate
 
+    # ActiveRecord creates and executes your SQL and automatically
+    # handles the opening and closing of the database connection.
     if @vote.save
       render json: "Vote successfully cast for \"#{@vote.candidate}\" at #{@vote.time_cast} PST!"
     else
       render json: @vote.errors, status: :unprocessable_entity
     end
+    # [END cloud_sql_mysql_activerecord_connection]
   end
 
   private

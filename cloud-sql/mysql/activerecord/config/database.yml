@@ -12,26 +12,32 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START cloud_sql_mysql_activerecord_config]
+# [START cloud_sql_mysql_activerecord_create]
 development:
   adapter: mysql2
   # [START_EXCLUDE]
-  # [START cloud_sql_mysql_activerecord_pool]
+  # [START cloud_sql_mysql_activerecord_limit]
   # 'pool' is the maximum number of permanent connections to keep.
   pool: 5
-  # [END cloud_sql_mysql_activerecord_pool]
+  # [END cloud_sql_mysql_activerecord_limit]
   # [START cloud_sql_mysql_activerecord_timeout]
   # 'timeout' is the maximum number of seconds to wait when retrieving a
   # new connection from the pool. After the specified amount of time, an
-  # exception will be thrown.
+  # ActiveRecord::ConnectionTimeoutError will be raised.
   timeout: 5000
   # [END cloud_sql_mysql_activerecord_timeout]
+
+  # [START cloud_sql_mysql_activerecord_backoff]
+  # ActiveRecord automatically uses delays between failed connection attempts,
+  # but provides no arguments for configuration.
+  # [END cloud_sql_mysql_activerecord_backoff]
+  
   # [END_EXCLUDE]
   username: <%= ENV["MYSQL_USERNAME"] %>
   password: <%= ENV["MYSQL_PASSWORD"] %>
   database: <%= ENV.fetch("MYSQL_DATABASE") { "vote_development" } %>
   socket:   "/cloudsql/<%= ENV["INSTANCE_CONNECTION_NAME"] %>"
-# [END cloud_sql_mysql_sqlalchemy_create]
+# [END cloud_sql_mysql_activerecord_create]
 
 
 # Warning: The database defined as "test" will be erased and
