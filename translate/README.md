@@ -40,6 +40,15 @@ set in the
 
     `export GOOGLE_CLOUD_PROJECT="YOUR-PROJECT-ID"`
 
+### Set AutoML Translation Model ID
+
+To run the V3 tests that use an AutoML Translation Model, set the
+*AUTOML_TRANSLATION_MODEL_ID* environment variable to the model ID
+you want to use to translate your content. See
+[Using the AutoML API](https://cloud.google.com/translate/automl/docs/predict#using_the).
+
+    `export AUTOML_TRANSLATION_MODEL_ID="YOUR-MODEL-ID"`
+
 ### Install Dependencies
 
 1. Install the [Bundler](http://bundler.io/) gem.
@@ -48,15 +57,37 @@ set in the
 
     `bundle install`
 
-## Run samples
+## Run all samples
+
+Run all samples:
+
+    bundle exec rspec
+
+Run only the V3 samples:
+
+    bundle exec rspec spec/translate_v3_samples_spec.rb
+
+Run one specific V3 sample:
+
+    bundle exec rspec -t translate_v3_translate_text
+
+Run a group of V3 samples that share the same example description:
+
+    bundle exec rspec -e "Translating Text"
+
+Some samples require additional environment variables:
+
+    AUTOML_TRANSLATION_MODEL_ID=TRL123 TRANSLATE_BUCKET=trnslt bundle exec rspec
+
+## Run samples (old)
 
 Run the sample:
 
-    bundle exec ruby translate_samples.rb
+    bundle exec ruby translate_v2_samples.rb
 
 Usage:
 
-  Usage: ruby translate_samples.rb <command> [arguments]
+  Usage: ruby translate_v2_samples.rb <command> [arguments]
 
   Commands:
     translate       <desired-language-code> <text>
@@ -66,7 +97,7 @@ Usage:
 
   Examples:
 
-    ruby translate_samples.rb translate fr "Hello World"
-    ruby translate_samples.rb detect_language "Hello World"
-    ruby translate_samples.rb list_codes
-    ruby translate_samples.rb list_names en
+    ruby translate_v2_samples.rb translate fr "Hello World"
+    ruby translate_v2_samples.rb detect_language "Hello World"
+    ruby translate_v2_samples.rb list_codes
+    ruby translate_v2_samples.rb list_names en
