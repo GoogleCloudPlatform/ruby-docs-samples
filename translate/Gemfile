@@ -14,7 +14,9 @@
 
 source "https://rubygems.org"
 
-gem "google-cloud-translate"
+# TODO: Remove the custom location when translate 2.0 is released
+gem "google-cloud-translate", github: "blowmage/google-cloud-ruby", branch: "translate/v3"
+gem "rake"
 
 group :test do
   gem "rspec"

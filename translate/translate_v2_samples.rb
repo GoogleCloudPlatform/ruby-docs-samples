@@ -20,7 +20,7 @@ def translate_text project_id:, text:, language_code:
 
   require "google/cloud/translate"
 
-  translate   = Google::Cloud::Translate.new project: project_id
+  translate   = Google::Cloud::Translate.new version: :v2, project_id: project_id
   translation = translate.translate text, to: language_code
 
   puts "Translated '#{text}' to '#{translation.text.inspect}'"
@@ -36,7 +36,7 @@ def translate_text_with_model project_id:, text:, language_code:
 
   require "google/cloud/translate"
 
-  translate   = Google::Cloud::Translate.new project: project_id
+  translate   = Google::Cloud::Translate.new version: :v2, project_id: project_id
   translation = translate.translate text, to: language_code, model: "nmt"
 
   puts "Translated '#{text}' to '#{translation.text.inspect}'"
@@ -51,7 +51,7 @@ def detect_language project_id:, text:
 
   require "google/cloud/translate"
 
-  translate = Google::Cloud::Translate.new project: project_id
+  translate = Google::Cloud::Translate.new version: :v2, project_id: project_id
   detection = translate.detect text
 
   puts "'#{text}' detected as language: #{detection.language}"
@@ -65,7 +65,7 @@ def list_supported_language_codes project_id:
 
   require "google/cloud/translate"
 
-  translate = Google::Cloud::Translate.new project: project_id
+  translate = Google::Cloud::Translate.new version: :v2, project_id: project_id
   languages = translate.languages
 
   puts "Supported language codes:"
@@ -85,7 +85,7 @@ def list_supported_language_names project_id:, language_code: "en"
 
   require "google/cloud/translate"
 
-  translate = Google::Cloud::Translate.new project: project_id
+  translate = Google::Cloud::Translate.new version: :v2, project_id: project_id
   languages = translate.languages language_code
 
   puts "Supported languages:"
@@ -118,7 +118,7 @@ if $PROGRAM_NAME == __FILE__
                                   language_code: ARGV.shift
   else
     puts <<~USAGE
-      Usage: ruby translate_samples.rb <command> [arguments]
+      Usage: ruby translate_v2_samples.rb <command> [arguments]
 
       Commands:
         translate           <desired-language-code> <text>
@@ -128,11 +128,11 @@ if $PROGRAM_NAME == __FILE__
         list_codes
 
       Examples:
-        ruby translate_samples.rb translate fr "Hello World"
-        ruby translate_samples.rb translate_premium fr "Hello World"
-        ruby translate_samples.rb detect_language "Hello World"
-        ruby translate_samples.rb list_codes
-        ruby translate_samples.rb list_names en
+        ruby translate_v2_samples.rb translate fr "Hello World"
+        ruby translate_v2_samples.rb translate_premium fr "Hello World"
+        ruby translate_v2_samples.rb detect_language "Hello World"
+        ruby translate_v2_samples.rb list_codes
+        ruby translate_v2_samples.rb list_names en
     USAGE
   end
 end

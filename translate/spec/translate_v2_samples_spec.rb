@@ -12,13 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require_relative "../translate_samples"
+require_relative "../translate_v2_samples"
 require "rspec"
 require "google/cloud/translate"
 
 describe "Google Translate API samples" do
   before do
-    @project_id = Google::Cloud::Translate.new.project
+    @project_id = Google::Cloud::Translate.new(version: :v2).project
   end
 
   # Capture and return STDOUT output by block
