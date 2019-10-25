@@ -30,7 +30,7 @@ def translate_v3_batch_translate_text_with_glossary
       input_uri: input_uri
     },
     # Optional. Can be "text/plain" or "text/html".
-    mime_type: "text/plain"
+    mime_type:  "text/plain"
   }
   output_config = {
     gcs_destination: {
@@ -45,9 +45,10 @@ def translate_v3_batch_translate_text_with_glossary
     )
   }
 
-  operation = client.batch_translate_text \
+  operation = client.batch_translate_text(
     parent, source_lang, [target_lang], [input_config], output_config,
     glossaries: glossaries
+  )
 
   # Wait until the long running operation is done
   operation.wait_until_done!

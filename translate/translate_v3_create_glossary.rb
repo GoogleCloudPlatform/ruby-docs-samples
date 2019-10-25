@@ -27,11 +27,11 @@ def translate_v3_create_glossary
 
   parent = client.class.location_path project_id, location_id
   glossary = {
-    name: client.class.glossary_path(project_2, location_id, glossary_id),
+    name:               client.class.glossary_path(project_2, location_id, glossary_id),
     language_codes_set: {
       language_codes: ["en", "ja"]
     },
-    input_config: {
+    input_config:       {
       gcs_source: {
         input_uri: input_uri
       }

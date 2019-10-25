@@ -38,10 +38,13 @@ def translate_v3_translate_text_with_glossary_and_model
   mime_type = "text/plain"
   parent = client.class.location_path project_id, location_id
 
-  response = client.translate_text contents, target_language, parent,
+  response = client.translate_text(
+    contents, target_language, parent,
     source_language_code: source_language,
-    model: model, glossary_config: glossary_config,
-    mime_type: mime_type
+    model:                model,
+    glossary_config:      glossary_config,
+    mime_type:            mime_type
+  )
 
   # Display the translation for each input text provided
   response.translations.each do |translation|

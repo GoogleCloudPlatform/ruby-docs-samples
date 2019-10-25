@@ -30,7 +30,7 @@ def translate_v3_batch_translate_text
       input_uri: input_uri
     },
     # Optional. Can be "text/plain" or "text/html".
-    mime_type: "text/plain"
+    mime_type:  "text/plain"
   }
   output_config = {
     gcs_destination: {
@@ -39,8 +39,9 @@ def translate_v3_batch_translate_text
   }
   parent = client.class.location_path project_id, location_id
 
-  operation = client.batch_translate_text \
+  operation = client.batch_translate_text(
     parent, source_lang, [target_lang], [input_config], output_config
+  )
 
   # Wait until the long running operation is done
   operation.wait_until_done!

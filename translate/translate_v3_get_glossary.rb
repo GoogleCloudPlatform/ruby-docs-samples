@@ -22,7 +22,7 @@ def translate_v3_get_glossary
   location_id = "[LOCATION ID]"
   glossary_id = "[YOUR_GLOSSARY_ID]"
 
-  name = client.class.glossary_path(project_id, location_id, glossary_id)
+  name = client.class.glossary_path project_id, location_id, glossary_id
 
   response = client.get_glossary name
 
