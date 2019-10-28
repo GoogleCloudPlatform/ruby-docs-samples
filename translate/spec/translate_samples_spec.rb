@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require_relative "../translate_v2_samples"
+require_relative "../translate_samples"
 require "rspec"
 require "google/cloud/translate"
 

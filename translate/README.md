@@ -83,11 +83,11 @@ Some samples require additional environment variables:
 
 Run the sample:
 
-    bundle exec ruby translate_v2_samples.rb
+    bundle exec ruby translate_samples.rb
 
 Usage:
 
-  Usage: ruby translate_v2_samples.rb <command> [arguments]
+  Usage: ruby translate_samples.rb <command> [arguments]
 
   Commands:
     translate       <desired-language-code> <text>
@@ -97,7 +97,7 @@ Usage:
 
   Examples:
 
-    ruby translate_v2_samples.rb translate fr "Hello World"
-    ruby translate_v2_samples.rb detect_language "Hello World"
-    ruby translate_v2_samples.rb list_codes
-    ruby translate_v2_samples.rb list_names en
+    ruby translate_samples.rb translate fr "Hello World"
+    ruby translate_samples.rb detect_language "Hello World"
+    ruby translate_samples.rb list_codes
+    ruby translate_samples.rb list_names en

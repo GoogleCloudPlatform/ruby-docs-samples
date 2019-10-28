@@ -118,7 +118,7 @@ if $PROGRAM_NAME == __FILE__
                                   language_code: ARGV.shift
   else
     puts <<~USAGE
-      Usage: ruby translate_v2_samples.rb <command> [arguments]
+      Usage: ruby translate_samples.rb <command> [arguments]
 
       Commands:
         translate           <desired-language-code> <text>
@@ -128,11 +128,11 @@ if $PROGRAM_NAME == __FILE__
         list_codes
 
       Examples:
-        ruby translate_v2_samples.rb translate fr "Hello World"
-        ruby translate_v2_samples.rb translate_premium fr "Hello World"
-        ruby translate_v2_samples.rb detect_language "Hello World"
-        ruby translate_v2_samples.rb list_codes
-        ruby translate_v2_samples.rb list_names en
+        ruby translate_samples.rb translate fr "Hello World"
+        ruby translate_samples.rb translate_premium fr "Hello World"
+        ruby translate_samples.rb detect_language "Hello World"
+        ruby translate_samples.rb list_codes
+        ruby translate_samples.rb list_names en
     USAGE
   end
 end
