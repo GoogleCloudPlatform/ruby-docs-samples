@@ -13,7 +13,7 @@
 # limitations under the License.
 
 def translate_v3_detect_language
-  # [START translate_v3_get_glossary]
+  # [START translate_v3_detect_language]
   require "google/cloud/translate"
 
   client = Google::Cloud::Translate.new
@@ -37,5 +37,5 @@ def translate_v3_detect_language
     # Confidence of detection result for this language
     puts "Confidence: #{language.confidence}"
   end
-  # [END translate_v3_get_glossary]
+  # [END translate_v3_detect_language]
 end
