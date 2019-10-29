@@ -18,7 +18,7 @@ require "google/cloud/translate"
 
 describe "Google Translate API samples" do
   before do
-    @project_id = Google::Cloud::Translate.new.project
+    @project_id = Google::Cloud::Translate.new(version: :v2).project
   end
 
   # Capture and return STDOUT output by block

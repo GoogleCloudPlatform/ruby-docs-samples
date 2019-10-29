@@ -17,9 +17,9 @@ require "google/cloud/translate"
 
 describe "Translate Quickstart" do
   it "translates Hello, world! to Russian" do
-    translate = Google::Cloud::Translate.new
+    translate = Google::Cloud::Translate.new version: :v2
     expect(Google::Cloud::Translate).to receive(:new)
-      .with(project: "YOUR_PROJECT_ID")
+      .with(project: "YOUR_PROJECT_ID", version: :v2)
       .and_return(translate)
 
     expect {

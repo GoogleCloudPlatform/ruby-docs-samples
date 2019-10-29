@@ -20,7 +20,7 @@ def translate_text project_id:, text:, language_code:
 
   require "google/cloud/translate"
 
-  translate   = Google::Cloud::Translate.new project: project_id
+  translate   = Google::Cloud::Translate.new version: :v2, project_id: project_id
   translation = translate.translate text, to: language_code
 
   puts "Translated '#{text}' to '#{translation.text.inspect}'"
@@ -36,7 +36,7 @@ def translate_text_with_model project_id:, text:, language_code:
 
   require "google/cloud/translate"
 
-  translate   = Google::Cloud::Translate.new project: project_id
+  translate   = Google::Cloud::Translate.new version: :v2, project_id: project_id
   translation = translate.translate text, to: language_code, model: "nmt"
 
   puts "Translated '#{text}' to '#{translation.text.inspect}'"
@@ -51,7 +51,7 @@ def detect_language project_id:, text:
 
   require "google/cloud/translate"
 
-  translate = Google::Cloud::Translate.new project: project_id
+  translate = Google::Cloud::Translate.new version: :v2, project_id: project_id
   detection = translate.detect text
 
   puts "'#{text}' detected as language: #{detection.language}"
@@ -65,7 +65,7 @@ def list_supported_language_codes project_id:
 
   require "google/cloud/translate"
 
-  translate = Google::Cloud::Translate.new project: project_id
+  translate = Google::Cloud::Translate.new version: :v2, project_id: project_id
   languages = translate.languages
 
   puts "Supported language codes:"
@@ -85,7 +85,7 @@ def list_supported_language_names project_id:, language_code: "en"
 
   require "google/cloud/translate"
 
-  translate = Google::Cloud::Translate.new project: project_id
+  translate = Google::Cloud::Translate.new version: :v2, project_id: project_id
   languages = translate.languages language_code
 
   puts "Supported languages:"
