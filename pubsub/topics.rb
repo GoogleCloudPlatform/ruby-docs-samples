@@ -22,7 +22,7 @@ def create_topic project_id:, topic_name:
 
   pubsub = Google::Cloud::Pubsub.new project: project_id
 
-  topic  = pubsub.create_topic topic_name
+  topic = pubsub.create_topic topic_name
 
   puts "Topic #{topic.name} created."
   # [END pubsub_create_topic]

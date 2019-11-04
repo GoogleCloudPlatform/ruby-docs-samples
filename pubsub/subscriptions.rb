@@ -202,8 +202,8 @@ def listen_for_messages_with_error_handler project_id:, subscription_name:
     # messages does not quit
     sleep 60
     subscriber.stop.wait!
-  rescue Exception => ex
-    puts "Exception #{ex.inspect}: #{ex.message}"
+  rescue Exception => e
+    puts "Exception #{e.inspect}: #{e.message}"
     raise "Stopped listening for messages."
   end
   # [END pubsub_subscriber_error_listener]

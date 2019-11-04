@@ -47,8 +47,8 @@ post "/send/email" do
     response = sendgrid.client.mail._("send").post(request_body: mail.to_json)
 
     "Email sent. #{response.status_code} #{response.body}"
-  rescue Exception => ex
-    "An error occurred: #{ex.message}"
+  rescue Exception => e
+    "An error occurred: #{e.message}"
   end
 end
 # [END gae_flex_sendgrid]

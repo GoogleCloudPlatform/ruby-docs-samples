@@ -40,8 +40,8 @@ get "/raise" do
 
   begin
     raise "Raise an exception for Error Reporting."
-  rescue StandardError => exception
-    Google::Cloud::ErrorReporting.report exception
+  rescue StandardError => e
+    Google::Cloud::ErrorReporting.report e
   end
   # [END error_reporting_exception]
 end

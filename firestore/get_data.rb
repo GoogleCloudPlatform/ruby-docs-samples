@@ -64,7 +64,7 @@ def get_document project_id:
 
   firestore = Google::Cloud::Firestore.new project_id: project_id
   # [START fs_get_document]
-  doc_ref  = firestore.doc "cities/SF"
+  doc_ref = firestore.doc "cities/SF"
   snapshot = doc_ref.get
   if snapshot.exists?
     puts "#{snapshot.document_id} data: #{snapshot.data}."

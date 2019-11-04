@@ -20,8 +20,6 @@ require "google/cloud/bigtable"
 
 def write_simple project_id, instance_id, table_id
   bigtable = Google::Cloud::Bigtable.new project_id: project_id
-
-  # rubocop:disable MethodCallWithArgsParentheses
   #  [START bigtable_writes_simple]
   table = bigtable.table instance_id, table_id
   column_family = "stats_summary"
@@ -36,13 +34,10 @@ def write_simple project_id, instance_id, table_id
   table.mutate_row entry
   puts "Successfully wrote row #{rowkey}"
   #  [END bigtable_writes_simple]
-  # rubocop:enable MethodCallWithArgsParentheses
 end
 
 def write_batch project_id, instance_id, table_id
   bigtable = Google::Cloud::Bigtable.new project_id: project_id
-
-  # rubocop:disable MethodCallWithArgsParentheses
   #  [START bigtable_writes_batch]
   table = bigtable.table instance_id, table_id
   column_family = "stats_summary"
@@ -50,16 +45,15 @@ def write_batch project_id, instance_id, table_id
 
   entries = []
   entries << table.new_mutation_entry("tablet#a0b81f74#20190501")
-             .set_cell(column_family, "connected_cell", 1, timestamp: timestamp)
+                  .set_cell(column_family, "connected_cell", 1, timestamp: timestamp)
                   .set_cell(column_family, "os_build", "12155.0.0-rc1", timestamp: timestamp)
   entries << table.new_mutation_entry("tablet#a0b81f74#20190502")
-             .set_cell(column_family, "connected_cell", 1, timestamp: timestamp)
+                  .set_cell(column_family, "connected_cell", 1, timestamp: timestamp)
                   .set_cell(column_family, "os_build", "12155.0.0-rc6", timestamp: timestamp)
 
   results = table.mutate_rows entries
   puts "Successfully wrote #{results.length} rows"
   #  [END bigtable_writes_batch]
-  # rubocop:enable MethodCallWithArgsParentheses
 end
 
 def write_increment project_id, instance_id, table_id
@@ -80,8 +74,6 @@ end
 
 def write_conditional project_id, instance_id, table_id
   bigtable = Google::Cloud::Bigtable.new project_id: project_id
-
-  # rubocop:disable MethodCallWithArgsParentheses
   #  [START bigtable_writes_conditional]
   table = bigtable.table instance_id, table_id
   column_family = "stats_summary"
@@ -109,7 +101,6 @@ def write_conditional project_id, instance_id, table_id
 
   puts "Successfully updated row's os_name: #{response}"
   #  [END bigtable_writes_conditional]
-  # rubocop:enable MethodCallWithArgsParentheses
 end
 
 if $PROGRAM_NAME == __FILE__
