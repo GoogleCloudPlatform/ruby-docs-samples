@@ -15,13 +15,38 @@
 require "rspec"
 require "google/cloud/storage"
 
+require_relative "spec_helper"
 require_relative "../detect_crop_hints"
 
-describe "Detect Crop Hints" do
-  before do
-    @storage    = Google::Cloud::Storage.new
-    @bucket     = @storage.bucket ENV["GOOGLE_CLOUD_STORAGE_BUCKET"]
+require "google/cloud/vision/#{version}"
+
+class AnnotatorMock < Google::Cloud::Vision.const_get(version.capitalize)::ImageAnnotatorClient
+  def initialize *args
+    super
+
+    @batch_annotate_images = proc do |*_args|
+      require "google/cloud/vision/#{version}"
+
+      Google::Cloud::Vision.const_get(version.capitalize)::BatchAnnotateImagesResponse.new(
+        responses: [
+          Google::Cloud::Vision.const_get(version.capitalize)::AnnotateImageResponse.new(
+            crop_hints_annotation: Google::Cloud::Vision.const_get(version.capitalize)::CropHintsAnnotation.new(
+              crop_hints: [
+                Google::Cloud::Vision.const_get(version.capitalize)::CropHint.new(
+                  bounding_poly: Google::Cloud::Vision.const_get(version.capitalize)::BoundingPoly.new(
+                    vertices: [Google::Cloud::Vision.const_get(version.capitalize)::Vertex.new(x: 1234, y: 1234)]
+                  )
+                )
+              ]
+            )
+          )
+        ]
+      )
+    end
   end
+end
+
+describe "Detect Crop Hints" do
 
   # Returns full path to sample image included in repository for testing
   def image_path filename
@@ -29,21 +54,20 @@ describe "Detect Crop Hints" do
   end
 
   example "detect crop hints from local image file" do
-    expect {
+    allow(Google::Cloud::Vision.const_get(version.capitalize)::ImageAnnotatorClient).to receive(:new).and_return(AnnotatorMock.new)
+    expect do
       detect_crop_hints image_path: image_path("otter_crossing.jpg")
-    }.to output(
-      /0, 0/
+    end.to output(
+      /1234, 1234/
     ).to_stdout
   end
 
   example "detect crop hints from image file in Google Cloud Storage" do
-    storage_file = @bucket.upload_file image_path("otter_crossing.jpg"),
-                                       "otter_crossing.jpg"
-
-    expect {
-      detect_crop_hints_gcs image_path: storage_file.to_gs_url
-    }.to output(
-      /0, 0/
+    allow(Google::Cloud::Vision.const_get(version.capitalize)::ImageAnnotatorClient).to receive(:new).and_return(AnnotatorMock.new)
+    expect do
+      detect_crop_hints_gcs image_path: "gs://my-bucket/image.png"
+    end.to output(
+      /1234, 1234/
     ).to_stdout
   end
 end
