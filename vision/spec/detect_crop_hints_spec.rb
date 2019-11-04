@@ -13,7 +13,6 @@
 # limitations under the License.
 
 require "rspec"
-require "google/cloud/storage"
 
 require_relative "spec_helper"
 require_relative "../detect_crop_hints"
@@ -25,8 +24,6 @@ class AnnotatorMock < Google::Cloud::Vision.const_get(version.capitalize)::Image
     super
 
     @batch_annotate_images = proc do |*_args|
-      require "google/cloud/vision/#{version}"
-
       Google::Cloud::Vision.const_get(version.capitalize)::BatchAnnotateImagesResponse.new(
         responses: [
           Google::Cloud::Vision.const_get(version.capitalize)::AnnotateImageResponse.new(
