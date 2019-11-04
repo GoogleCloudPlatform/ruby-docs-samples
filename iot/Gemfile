@@ -14,7 +14,7 @@
 
 source "https://rubygems.org"
 
-gem "google-api-client", "~> 0.27.0"
+gem "google-api-client", "~> 0.32.1"
 gem "google-cloud-pubsub", "~>0.33.2"
 
 group :test do

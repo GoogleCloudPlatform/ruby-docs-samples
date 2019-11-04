@@ -1,0 +1,9 @@
+<li class="collection-item avatar">
+  <% @icon_class = vote.candidate == "TABS" ? "green" : "blue" %>
+  <% @icon_type = vote.candidate == "TABS" ? "keyboard_tab" : "space_bar" %>
+  <i class="material-icons circle <%= @icon_class %>"><%= @icon_type %></i>
+    <span class="title">
+        A vote for <b><%= vote.candidate %></b>
+    </span>
+    <p>was cast on <%= vote.date_cast %> at <%= vote.time_cast %></p>
+</li>

@@ -74,6 +74,7 @@ environment variable to the path to the key file, for example:
       update_doc                  Update a document.
       update_nested_fields        Update fields in nested data.
       update_server_timestamp     Update field with server timestamp.
+      update_document_increment   Update a document number field using Increment.
 
 ## Run Query Data
 

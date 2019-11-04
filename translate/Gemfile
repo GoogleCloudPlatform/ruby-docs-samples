@@ -14,7 +14,9 @@
 
 source "https://rubygems.org"
 
-gem "google-cloud-translate"
+gem "google-cloud-storage"
+gem "google-cloud-translate", "~> 2.0"
+gem "rake"
 
 group :test do
   gem "rspec"

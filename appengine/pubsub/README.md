@@ -50,11 +50,18 @@ curl -i --data @sample_message.json "localhost:4567/pubsub/push?token=<your-toke
 
 ## Deploy
 
-Put topic and token in `app.yaml`, then:
+To deploy to the App Engine **standard environment**, put topic and token in `app.standard.yaml`, then:
 
 ```
-gcloud app deploy
+gcloud app deploy app.standard.yaml
 ```
+
+To deploy to the App Engine **flexible environment**, put topic and token in `app.yaml`, then:
+
+```
+gcloud app deploy app.yaml
+```
+
 
 ## Test
 
