@@ -20,7 +20,7 @@ require "google/cloud/translate"
 project_id = "YOUR_PROJECT_ID"
 
 # Instantiates a client
-translate = Google::Cloud::Translate.new project: project_id
+translate = Google::Cloud::Translate.new version: :v2, project: project_id
 
 # The text to translate
 text = "Hello, world!"

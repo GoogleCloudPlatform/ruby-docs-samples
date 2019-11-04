@@ -60,8 +60,8 @@ def run_table_operations project_id, instance_id, table_id
   # Create a column family with GC policy : maximum age
   # where age = current time minus cell timestamp
   # NOTE: Age value must be atleast 1 millisecond
-  gc_rule = Google::Cloud::Bigtable::GcRule.max_age 60 * 60 * 24 * 5
-  family = table.column_family("cf1", gc_rule).create
+  max_age_rule = Google::Cloud::Bigtable::GcRule.max_age 60 * 60 * 24 * 5
+  family = table.column_family("cf1", max_age_rule).create
   # [END bigtable_create_family_gc_max_age]
   puts "Created column family with max age GC rule: #{family.name}"
 
@@ -69,8 +69,8 @@ def run_table_operations project_id, instance_id, table_id
   # [START bigtable_create_family_gc_max_versions]
   # Create a column family with GC policy : most recent N versions
   # where 1 = most recent version
-  gc_rule = Google::Cloud::Bigtable::GcRule.max_versions 3
-  family = table.column_family("cf2", gc_rule).create
+  max_versions_rule = Google::Cloud::Bigtable::GcRule.max_versions 2
+  family = table.column_family("cf2", max_versions_rule).create
   # [END bigtable_create_family_gc_max_versions]
   puts "Created column family with max versions GC rule: #{family.name}"
 
@@ -78,8 +78,9 @@ def run_table_operations project_id, instance_id, table_id
   # [START bigtable_create_family_gc_union]
   # Create a column family with GC policy to drop data that matches at least
   # one condition
-  gc_rule = Google::Cloud::Bigtable::GcRule.max_age 60 * 60 * 24 * 5
-  union_gc_rule = Google::Cloud::Bigtable::GcRule.union gc_rule
+  max_age_rule = Google::Cloud::Bigtable::GcRule.max_age 60 * 60 * 24 * 5
+  max_versions_rule = Google::Cloud::Bigtable::GcRule.max_versions 2
+  union_gc_rule = Google::Cloud::Bigtable::GcRule.union max_age_rule, max_versions_rule
   family = table.column_family("cf3", union_gc_rule).create
   # [END bigtable_create_family_gc_union]
   puts "Created column family with union GC rule: #{family.name}"
@@ -88,8 +89,9 @@ def run_table_operations project_id, instance_id, table_id
   # [START bigtable_create_family_gc_intersection]
   # Create a column family with GC policy to drop data that matches at least
   # one condition
-  gc_rule = Google::Cloud::Bigtable::GcRule.max_age 60 * 60 * 24 * 5
-  intersection_gc_rule = Google::Cloud::Bigtable::GcRule.intersection gc_rule
+  max_age_rule = Google::Cloud::Bigtable::GcRule.max_age 60 * 60 * 24 * 5
+  max_versions_rule = Google::Cloud::Bigtable::GcRule.max_versions 2
+  intersection_gc_rule = Google::Cloud::Bigtable::GcRule.intersection max_age_rule, max_versions_rule
   family = table.column_family("cf4", intersection_gc_rule).create
   # [END bigtable_create_family_gc_intersection]
   puts "Created column family with intersect GC rule: #{family.name}"
@@ -100,9 +102,11 @@ def run_table_operations project_id, instance_id, table_id
   # Drop cells that are either older than the 10 recent versions
   # OR
   # Drop cells that are older than a month AND older than the 2 recent versions
-  gc_rule1 = Google::Cloud::Bigtable::GcRule.max_age 60 * 60 * 24 * 30
-  gc_rule2 = Google::Cloud::Bigtable::GcRule.max_versions 2
-  nested_gc_rule = Google::Cloud::Bigtable::GcRule.union gc_rule1, gc_rule2
+  max_versions_rule1 = Google::Cloud::Bigtable::GcRule.max_versions 10
+  max_age_rule = Google::Cloud::Bigtable::GcRule.max_age 60 * 60 * 24 * 5
+  max_versions_rule2 = Google::Cloud::Bigtable::GcRule.max_versions 2
+  intersection_gc_rule = Google::Cloud::Bigtable::GcRule.intersection max_age_rule, max_versions_rule2
+  nested_gc_rule = Google::Cloud::Bigtable::GcRule.union max_versions_rule1, intersection_gc_rule
   # [END bigtable_create_family_gc_nested]
   family = table.column_family("cf5", nested_gc_rule).create
   puts "Created column family with a nested GC rule: #{family.name}"

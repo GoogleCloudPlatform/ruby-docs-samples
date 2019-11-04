@@ -43,6 +43,7 @@ def return_info_transaction project_id:
     new_population = tx.get(city_ref).data[:population] + 1
     if new_population < 1_000_000
       tx.update city_ref, population: new_population
+      true
     else
       false
     end

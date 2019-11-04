@@ -69,6 +69,14 @@ describe "Google Cloud Storage buckets sample" do
     ).to_stdout
   end
 
+  example "list details" do
+    expect {
+      list_bucket_details project_id: @project_id, bucket_name: @bucket_name
+    }.to output(
+      /#{@bucket_name}/
+    ).to_stdout
+  end
+
   example "disable requester pays" do
     @storage.bucket(@bucket_name).requester_pays = true
 
