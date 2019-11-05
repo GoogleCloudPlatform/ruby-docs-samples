@@ -33,13 +33,13 @@ def job_discovery_basic_keyword_search project_id:, company_name:, query:
                                                                    session_id: "HashedSessionId",
                                                                    domain:     "www.google.com"
 
-  # Perform a search for analyst  related jobs
-  job_query                            = jobs::JobQuery.new query: query
-  job_query.company_names              = [company_name] unless company_name.nil?
-  search_jobs_request                  = jobs::SearchJobsRequest.new request_metadata: request_metadata,
-                                                                     job_query:        job_query,
-                                                                     search_mode:      "JOB_SEARCH"
-  search_jobs_response                 = talent_solution_client.search_jobs project_id, search_jobs_request
+  # Perform a search for analyst related jobs
+  job_query               = jobs::JobQuery.new query: query
+  job_query.company_names = [company_name] unless company_name.nil?
+  search_jobs_request     = jobs::SearchJobsRequest.new request_metadata: request_metadata,
+                                                        job_query:        job_query,
+                                                        search_mode:      "JOB_SEARCH"
+  search_jobs_response    = talent_solution_client.search_jobs project_id, search_jobs_request
   puts search_jobs_response.to_json
   search_jobs_response
   # [END job_discovery_basic_keyword_search]
