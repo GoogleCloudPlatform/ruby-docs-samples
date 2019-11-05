@@ -15,8 +15,10 @@
 # [START vision_product_search_list_product_sets]
 require "google/cloud/vision"
 
-def product_search_list_product_sets(project_id = "your-project-id",
-                                     location = "us-west1")
+def product_search_list_product_sets(
+  project_id = "your-project-id",
+  location   = "us-west1"
+)
 
   client = Google::Cloud::Vision::ProductSearch.new
 

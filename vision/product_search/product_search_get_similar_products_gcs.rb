@@ -15,12 +15,14 @@
 # [START vision_product_search_get_similar_products_gcs]
 require "google/cloud/vision"
 
-def product_search_get_similar_products_gcs(project_id = "your-project-id",
-                                            location         = "us-west1",
-                                            product_set_id   = "your-product-set-id",
-                                            product_category = "apparel",
-                                            gcs_uri          = "gs://cloud-samples-data/vision/product_search/shoes_1.jpg",
-                                            filter           = "(color = red OR color = blue) AND style = kids")
+def product_search_get_similar_products_gcs(
+  project_id       = "your-project-id",
+  location         = "us-west1",
+  product_set_id   = "your-product-set-id",
+  product_category = "apparel",
+  gcs_uri          = "gs://cloud-samples-data/vision/product_search/shoes_1.jpg",
+  filter           = "(color = red OR color = blue) AND style = kids"
+)
 
   product_search_client  = Google::Cloud::Vision::ProductSearch.new
   image_annotator_client = Google::Cloud::Vision::ImageAnnotator.new

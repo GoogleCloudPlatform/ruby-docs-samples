@@ -16,8 +16,10 @@
 require "google/cloud/vision"
 
 # Delete all products not in any product sets.
-def product_search_purge_orphan_products(project_id = "your-project-id",
-                                         location   = "us-west1")
+def product_search_purge_orphan_products(
+  project_id = "your-project-id",
+  location   = "us-west1"
+)
 
   client = Google::Cloud::Vision::ProductSearch.new
 

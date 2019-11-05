@@ -15,12 +15,14 @@
 # [START vision_product_search_get_similar_products]
 require "google/cloud/vision"
 
-def product_search_get_similar_products(project_id = "your-project-id",
-                                        location         = "us-west1",
-                                        product_set_id   = "your-product-set-id",
-                                        product_category = "apparel",
-                                        file_path        = "path/to/product_image.jpg",
-                                        filter           = "(color = red OR color = blue) AND style = kids")
+def product_search_get_similar_products(
+  project_id       = "your-project-id",
+  location         = "us-west1",
+  product_set_id   = "your-product-set-id",
+  product_category = "apparel",
+  file_path        = "path/to/product_image.jpg",
+  filter           = "(color = red OR color = blue) AND style = kids"
+)
 
   product_search_client  = Google::Cloud::Vision::ProductSearch.new
   image_annotator_client = Google::Cloud::Vision::ImageAnnotator.new

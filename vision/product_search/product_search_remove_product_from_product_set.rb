@@ -15,10 +15,12 @@
 # [START vision_product_search_remove_product_from_product_set]
 require "google/cloud/vision"
 
-def product_search_remove_product_from_product_set(project_id = "your-project-id",
-                                                   location       = "us-west1",
-                                                   product_set_id = "your-product-set-id",
-                                                   product_id     = "your-product-id")
+def product_search_remove_product_from_product_set(
+  project_id     = "your-project-id",
+  location       = "us-west1",
+  product_set_id = "your-product-set-id",
+  product_id     = "your-product-id"
+)
 
   client = Google::Cloud::Vision::ProductSearch.new
 

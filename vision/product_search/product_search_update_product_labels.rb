@@ -15,9 +15,11 @@
 # [START vision_product_search_update_product_labels]
 require "google/cloud/vision"
 
-def product_search_update_product_labels(project_id = "your-project-id",
-                                         location   = "us-west1",
-                                         product_id = "your-product-id")
+def product_search_update_product_labels(
+  project_id = "your-project-id",
+  location   = "us-west1",
+  product_id = "your-product-id"
+)
 
   client = Google::Cloud::Vision::ProductSearch.new
 
