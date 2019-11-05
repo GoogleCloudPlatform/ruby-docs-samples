@@ -57,7 +57,7 @@ def batch_get_history project_id:, asset_names:
   read_time_window = Google::Cloud::Asset::V1::TimeWindow.new(
     start_time: Google::Protobuf::Timestamp.new(seconds: Time.now.getutc.to_i)
   )
-  
+
   response = asset_service_client.batch_get_assets_history(
     formatted_parent, content_type, read_time_window, asset_names: asset_names
   )
