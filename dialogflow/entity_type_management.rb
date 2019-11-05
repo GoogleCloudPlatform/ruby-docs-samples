@@ -20,7 +20,7 @@ def list_entity_types project_id:
   require "google/cloud/dialogflow"
 
   entity_types_client = Google::Cloud::Dialogflow::EntityTypes.new
-  parent = entity_types_client.class.project_agent_path project_id
+  parent              = entity_types_client.class.project_agent_path project_id
 
   entity_types = entity_types_client.list_entity_types parent
 
@@ -41,10 +41,10 @@ def create_entity_type project_id:, display_name:, kind:
   require "google/cloud/dialogflow"
 
   entity_types_client = Google::Cloud::Dialogflow::EntityTypes.new
-  parent = entity_types_client.class.project_agent_path project_id
+  parent              = entity_types_client.class.project_agent_path project_id
 
   entity_type = { display_name: display_name, kind: kind }
-  response = entity_types_client.create_entity_type parent, entity_type
+  response    = entity_types_client.create_entity_type parent, entity_type
 
   puts "Entity type created with display name: #{response.display_name}"
   # [END dialogflow_create_entity_type]
@@ -58,7 +58,7 @@ def delete_entity_type project_id:, entity_type_id:
   require "google/cloud/dialogflow"
 
   entity_types_client = Google::Cloud::Dialogflow::EntityTypes.new
-  entity_type_path = entity_types_client.class.entity_type_path project_id, entity_type_id
+  entity_type_path    = entity_types_client.class.entity_type_path project_id, entity_type_id
 
   entity_types_client.delete_entity_type entity_type_path
 

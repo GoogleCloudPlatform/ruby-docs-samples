@@ -20,7 +20,7 @@ def list_intents project_id:
   require "google/cloud/dialogflow"
 
   intents_client = Google::Cloud::Dialogflow::Intents.new
-  parent = intents_client.class.project_agent_path project_id
+  parent         = intents_client.class.project_agent_path project_id
 
   intents = intents_client.list_intents parent
 
@@ -55,9 +55,9 @@ def create_intent(project_id:, display_name:, message_text:,
   require "google/cloud/dialogflow"
 
   intents_client = Google::Cloud::Dialogflow::Intents.new
-  parent = intents_client.class.project_agent_path project_id
+  parent         = intents_client.class.project_agent_path project_id
 
-  intent = {
+  intent   = {
     display_name:     display_name,
     messages:         [{ text: { text: [message_text] } }],
     training_phrases: training_phrases_parts.map do |part|
@@ -80,7 +80,7 @@ def delete_intent project_id:, intent_id:
   require "google/cloud/dialogflow"
 
   intents_client = Google::Cloud::Dialogflow::Intents.new
-  intent_path = intents_client.class.intent_path project_id, intent_id
+  intent_path    = intents_client.class.intent_path project_id, intent_id
 
   intents_client.delete_intent intent_path
 

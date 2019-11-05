@@ -18,7 +18,7 @@ def translate_v3_delete_glossary
 
   client = Google::Cloud::Translate.new
 
-  project_id = "[Google Cloud Project ID]"
+  project_id  = "[Google Cloud Project ID]"
   location_id = "[LOCATION ID]"
   glossary_id = "[YOUR_GLOSSARY_ID]"
 

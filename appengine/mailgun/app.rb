@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-MAILGUN_API_KEY = ENV["MAILGUN_API_KEY"]
+MAILGUN_API_KEY     = ENV["MAILGUN_API_KEY"]
 MAILGUN_DOMAIN_NAME = ENV["MAILGUN_DOMAIN_NAME"]
 
 require "sinatra"

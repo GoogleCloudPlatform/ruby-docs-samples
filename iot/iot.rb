@@ -26,8 +26,8 @@ $create_registry = lambda do |project_id:, location_id:, registry_id:, pubsub_to
   require "google/apis/cloudiot_v1"
 
   # Initialize the client and authenticate with the specified scope
-  Cloudiot   = Google::Apis::CloudiotV1
-  iot_client = Cloudiot::CloudIotService.new
+  Cloudiot                 = Google::Apis::CloudiotV1
+  iot_client               = Cloudiot::CloudIotService.new
   iot_client.authorization = Google::Auth.get_application_default(
     "https://www.googleapis.com/auth/cloud-platform"
   )
@@ -35,9 +35,9 @@ $create_registry = lambda do |project_id:, location_id:, registry_id:, pubsub_to
   # The project / location where the registry is created.
   parent = "projects/#{project_id}/locations/#{location_id}"
 
-  registry = Cloudiot::DeviceRegistry.new
-  registry.id = registry_id
-  registry.event_notification_configs = [Cloudiot::EventNotificationConfig.new]
+  registry                                                 = Cloudiot::DeviceRegistry.new
+  registry.id                                              = registry_id
+  registry.event_notification_configs                      = [Cloudiot::EventNotificationConfig.new]
   registry.event_notification_configs[0].pubsub_topic_name = pubsub_topic
 
   registry = iot_client.create_project_location_registry(
@@ -57,8 +57,8 @@ $delete_registry = lambda do |project_id:, location_id:, registry_id:|
   require "google/apis/cloudiot_v1"
 
   # Initialize the client and authenticate with the specified scope
-  Cloudiot   = Google::Apis::CloudiotV1
-  iot_client = Cloudiot::CloudIotService.new
+  Cloudiot                 = Google::Apis::CloudiotV1
+  iot_client               = Cloudiot::CloudIotService.new
   iot_client.authorization = Google::Auth.get_application_default(
     "https://www.googleapis.com/auth/cloud-platform"
   )
@@ -80,8 +80,8 @@ $get_iam_policy = lambda do |project_id:, location_id:, registry_id:|
   require "google/apis/cloudiot_v1"
 
   # Initialize the client and authenticate with the specified scope
-  Cloudiot   = Google::Apis::CloudiotV1
-  iot_client = Cloudiot::CloudIotService.new
+  Cloudiot                 = Google::Apis::CloudiotV1
+  iot_client               = Cloudiot::CloudIotService.new
   iot_client.authorization = Google::Auth.get_application_default(
     "https://www.googleapis.com/auth/cloud-platform"
   )
@@ -114,8 +114,8 @@ $get_registry = lambda do |project_id:, location_id:, registry_id:|
   require "google/apis/cloudiot_v1"
 
   # Initialize the client and authenticate with the specified scope
-  Cloudiot   = Google::Apis::CloudiotV1
-  iot_client = Cloudiot::CloudIotService.new
+  Cloudiot                 = Google::Apis::CloudiotV1
+  iot_client               = Cloudiot::CloudIotService.new
   iot_client.authorization = Google::Auth.get_application_default(
     "https://www.googleapis.com/auth/cloud-platform"
   )
@@ -150,8 +150,8 @@ $list_registries = lambda do |project_id:, location_id:|
   require "google/apis/cloudiot_v1"
 
   # Initialize the client and authenticate with the specified scope
-  Cloudiot   = Google::Apis::CloudiotV1
-  iot_client = Cloudiot::CloudIotService.new
+  Cloudiot                 = Google::Apis::CloudiotV1
+  iot_client               = Cloudiot::CloudIotService.new
   iot_client.authorization = Google::Auth.get_application_default(
     "https://www.googleapis.com/auth/cloud-platform"
   )
@@ -184,8 +184,8 @@ $set_iam_policy = lambda do |project_id:, location_id:, registry_id:, member:, r
   require "google/apis/cloudiot_v1"
 
   # Initialize the client and authenticate with the specified scope
-  Cloudiot   = Google::Apis::CloudiotV1
-  iot_client = Cloudiot::CloudIotService.new
+  Cloudiot                 = Google::Apis::CloudiotV1
+  iot_client               = Cloudiot::CloudIotService.new
   iot_client.authorization = Google::Auth.get_application_default(
     "https://www.googleapis.com/auth/cloud-platform"
   )
@@ -194,9 +194,9 @@ $set_iam_policy = lambda do |project_id:, location_id:, registry_id:, member:, r
   parent   = "projects/#{project_id}/locations/#{location_id}"
   resource = "#{parent}/registries/#{registry_id}"
 
-  request = Google::Apis::CloudiotV1::SetIamPolicyRequest.new
-  policy  = Google::Apis::CloudiotV1::Policy.new
-  binding = Google::Apis::CloudiotV1::Binding.new
+  request         = Google::Apis::CloudiotV1::SetIamPolicyRequest.new
+  policy          = Google::Apis::CloudiotV1::Policy.new
+  binding         = Google::Apis::CloudiotV1::Binding.new
   binding.members = [member]
   binding.role    = role
   policy.bindings = [binding]
@@ -229,8 +229,8 @@ $create_es_device = lambda do |project_id:, location_id:, registry_id:, device_i
   require "google/apis/cloudiot_v1"
 
   # Initialize the client and authenticate with the specified scope
-  Cloudiot   = Google::Apis::CloudiotV1
-  iot_client = Cloudiot::CloudIotService.new
+  Cloudiot                 = Google::Apis::CloudiotV1
+  iot_client               = Cloudiot::CloudIotService.new
   iot_client.authorization = Google::Auth.get_application_default(
     "https://www.googleapis.com/auth/cloud-platform"
   )
@@ -238,14 +238,14 @@ $create_es_device = lambda do |project_id:, location_id:, registry_id:, device_i
   # The resource name of the location associated with the project
   parent = "projects/#{project_id}/locations/#{location_id}/registries/#{registry_id}"
 
-  device = Cloudiot::Device.new
+  device    = Cloudiot::Device.new
   device.id = device_id
 
-  pubkey = Google::Apis::CloudiotV1::PublicKeyCredential.new
-  pubkey.key = File.read cert_path
+  pubkey        = Google::Apis::CloudiotV1::PublicKeyCredential.new
+  pubkey.key    = File.read cert_path
   pubkey.format = "ES256_PEM"
 
-  cred = Google::Apis::CloudiotV1::DeviceCredential.new
+  cred            = Google::Apis::CloudiotV1::DeviceCredential.new
   cred.public_key = pubkey
 
   device.credentials = [cred]
@@ -272,8 +272,8 @@ $create_rsa_device = lambda do |project_id:, location_id:, registry_id:, device_
   require "google/apis/cloudiot_v1"
 
   # Initialize the client and authenticate with the specified scope
-  Cloudiot   = Google::Apis::CloudiotV1
-  iot_client = Cloudiot::CloudIotService.new
+  Cloudiot                 = Google::Apis::CloudiotV1
+  iot_client               = Cloudiot::CloudIotService.new
   iot_client.authorization = Google::Auth.get_application_default(
     "https://www.googleapis.com/auth/cloud-platform"
   )
@@ -281,13 +281,13 @@ $create_rsa_device = lambda do |project_id:, location_id:, registry_id:, device_
   # The resource name of the location associated with the project
   parent = "projects/#{project_id}/locations/#{location_id}/registries/#{registry_id}"
 
-  credential = Google::Apis::CloudiotV1::DeviceCredential.new
-  credential.public_key = Google::Apis::CloudiotV1::PublicKeyCredential.new
+  credential                   = Google::Apis::CloudiotV1::DeviceCredential.new
+  credential.public_key        = Google::Apis::CloudiotV1::PublicKeyCredential.new
   credential.public_key.format = "RSA_X509_PEM"
-  credential.public_key.key = File.read cert_path
+  credential.public_key.key    = File.read cert_path
 
-  device = Cloudiot::Device.new
-  device.id = device_id
+  device             = Cloudiot::Device.new
+  device.id          = device_id
   device.credentials = [credential]
 
   # Create the device
@@ -311,8 +311,8 @@ $create_unauth_device = lambda do |project_id:, location_id:, registry_id:, devi
   require "google/apis/cloudiot_v1"
 
   # Initialize the client and authenticate with the specified scope
-  Cloudiot   = Google::Apis::CloudiotV1
-  iot_client = Cloudiot::CloudIotService.new
+  Cloudiot                 = Google::Apis::CloudiotV1
+  iot_client               = Cloudiot::CloudIotService.new
   iot_client.authorization = Google::Auth.get_application_default(
     "https://www.googleapis.com/auth/cloud-platform"
   )
@@ -320,7 +320,7 @@ $create_unauth_device = lambda do |project_id:, location_id:, registry_id:, devi
   # The resource name of the location associated with the project
   parent = "projects/#{project_id}/locations/#{location_id}/registries/#{registry_id}"
 
-  device = Cloudiot::Device.new
+  device    = Cloudiot::Device.new
   device.id = device_id
 
   # Create the device
@@ -344,14 +344,14 @@ $delete_device = lambda do |project_id:, location_id:, registry_id:, device_id:|
   require "google/apis/cloudiot_v1"
 
   # Initialize the client and authenticate with the specified scope
-  Cloudiot   = Google::Apis::CloudiotV1
-  iot_client = Cloudiot::CloudIotService.new
+  Cloudiot                 = Google::Apis::CloudiotV1
+  iot_client               = Cloudiot::CloudIotService.new
   iot_client.authorization = Google::Auth.get_application_default(
     "https://www.googleapis.com/auth/cloud-platform"
   )
 
   # The resource name of the location associated with the project
-  parent = "projects/#{project_id}/locations/#{location_id}"
+  parent      = "projects/#{project_id}/locations/#{location_id}"
   device_path = "#{parent}/registries/#{registry_id}/devices/#{device_id}"
 
   # Delete the device
@@ -372,8 +372,8 @@ $list_devices = lambda do |project_id:, location_id:, registry_id:|
   require "google/apis/cloudiot_v1"
 
   # Initialize the client and authenticate with the specified scope
-  Cloudiot   = Google::Apis::CloudiotV1
-  iot_client = Cloudiot::CloudIotService.new
+  Cloudiot                 = Google::Apis::CloudiotV1
+  iot_client               = Cloudiot::CloudIotService.new
   iot_client.authorization = Google::Auth.get_application_default(
     "https://www.googleapis.com/auth/cloud-platform"
   )
@@ -405,14 +405,14 @@ $get_device = lambda do |project_id:, location_id:, registry_id:, device_id:|
   require "google/apis/cloudiot_v1"
 
   # Initialize the client and authenticate with the specified scope
-  Cloudiot   = Google::Apis::CloudiotV1
-  iot_client = Cloudiot::CloudIotService.new
+  Cloudiot                 = Google::Apis::CloudiotV1
+  iot_client               = Cloudiot::CloudIotService.new
   iot_client.authorization = Google::Auth.get_application_default(
     "https://www.googleapis.com/auth/cloud-platform"
   )
 
   # The resource name of the location associated with the project
-  parent = "projects/#{project_id}/locations/#{location_id}"
+  parent   = "projects/#{project_id}/locations/#{location_id}"
   resource = "#{parent}/registries/#{registry_id}/devices/#{device_id}"
 
   # List the devices in the provided region
@@ -444,8 +444,8 @@ $get_device_configs = lambda do |project_id:, location_id:, registry_id:, device
   require "google/apis/cloudiot_v1"
 
   # Initialize the client and authenticate with the specified scope
-  Cloudiot   = Google::Apis::CloudiotV1
-  iot_client = Cloudiot::CloudIotService.new
+  Cloudiot                 = Google::Apis::CloudiotV1
+  iot_client               = Cloudiot::CloudIotService.new
   iot_client.authorization = Google::Auth.get_application_default(
     "https://www.googleapis.com/auth/cloud-platform"
   )
@@ -474,8 +474,8 @@ $get_device_states = lambda do |project_id:, location_id:, registry_id:, device_
   require "google/apis/cloudiot_v1"
 
   # Initialize the client and authenticate with the specified scope
-  Cloudiot   = Google::Apis::CloudiotV1
-  iot_client = Cloudiot::CloudIotService.new
+  Cloudiot                 = Google::Apis::CloudiotV1
+  iot_client               = Cloudiot::CloudIotService.new
   iot_client.authorization = Google::Auth.get_application_default(
     "https://www.googleapis.com/auth/cloud-platform"
   )
@@ -509,24 +509,24 @@ $patch_es_device = lambda do |project_id:, location_id:, registry_id:, device_id
   require "google/apis/cloudiot_v1"
 
   # Initialize the client and authenticate with the specified scope
-  Cloudiot   = Google::Apis::CloudiotV1
-  iot_client = Cloudiot::CloudIotService.new
+  Cloudiot                 = Google::Apis::CloudiotV1
+  iot_client               = Cloudiot::CloudIotService.new
   iot_client.authorization = Google::Auth.get_application_default(
     "https://www.googleapis.com/auth/cloud-platform"
   )
 
   # The resource name of the location associated with the project
   parent = "projects/#{project_id}/locations/#{location_id}/registries/#{registry_id}"
-  path = "#{parent}/devices/#{device_id}"
+  path   = "#{parent}/devices/#{device_id}"
 
-  pubkey = Google::Apis::CloudiotV1::PublicKeyCredential.new
-  pubkey.key = File.read cert_path
+  pubkey        = Google::Apis::CloudiotV1::PublicKeyCredential.new
+  pubkey.key    = File.read cert_path
   pubkey.format = "ES256_PEM"
 
-  cred = Google::Apis::CloudiotV1::DeviceCredential.new
+  cred            = Google::Apis::CloudiotV1::DeviceCredential.new
   cred.public_key = pubkey
 
-  device = Cloudiot::Device.new
+  device             = Cloudiot::Device.new
   device.credentials = [cred]
 
   # Patch the device
@@ -559,8 +559,8 @@ $patch_rsa_device = lambda do |project_id:, location_id:, registry_id:, device_i
   require "google/apis/cloudiot_v1"
 
   # Initialize the client and authenticate with the specified scope
-  Cloudiot   = Google::Apis::CloudiotV1
-  iot_client = Cloudiot::CloudIotService.new
+  Cloudiot                 = Google::Apis::CloudiotV1
+  iot_client               = Cloudiot::CloudIotService.new
   iot_client.authorization = Google::Auth.get_application_default(
     "https://www.googleapis.com/auth/cloud-platform"
   )
@@ -569,12 +569,12 @@ $patch_rsa_device = lambda do |project_id:, location_id:, registry_id:, device_i
   parent = "projects/#{project_id}/locations/#{location_id}/registries/#{registry_id}"
   path   = "#{parent}/devices/#{device_id}"
 
-  credential = Google::Apis::CloudiotV1::DeviceCredential.new
-  credential.public_key = Google::Apis::CloudiotV1::PublicKeyCredential.new
+  credential                   = Google::Apis::CloudiotV1::DeviceCredential.new
+  credential.public_key        = Google::Apis::CloudiotV1::PublicKeyCredential.new
   credential.public_key.format = "RSA_X509_PEM"
-  credential.public_key.key = File.read cert_path
+  credential.public_key.key    = File.read cert_path
 
-  device = Cloudiot::Device.new
+  device             = Cloudiot::Device.new
   device.credentials = [credential]
 
   # Create the device
@@ -607,8 +607,8 @@ $send_device_config = lambda do |project_id:, location_id:, registry_id:, device
   require "google/apis/cloudiot_v1"
 
   # Initialize the client and authenticate with the specified scope
-  Cloudiot   = Google::Apis::CloudiotV1
-  iot_client = Cloudiot::CloudIotService.new
+  Cloudiot                 = Google::Apis::CloudiotV1
+  iot_client               = Cloudiot::CloudIotService.new
   iot_client.authorization = Google::Auth.get_application_default(
     "https://www.googleapis.com/auth/cloud-platform"
   )
@@ -617,7 +617,7 @@ $send_device_config = lambda do |project_id:, location_id:, registry_id:, device
   parent   = "projects/#{project_id}/locations/#{location_id}"
   resource = "#{parent}/registries/#{registry_id}/devices/#{device_id}"
 
-  config = Cloudiot::DeviceConfig.new
+  config             = Cloudiot::DeviceConfig.new
   config.binary_data = data
 
   # Set configuration for the provided device
@@ -637,8 +637,8 @@ $send_device_command = lambda do |project_id:, location_id:, registry_id:, devic
   require "google/apis/cloudiot_v1"
 
   # Initialize the client and authenticate with the specified scope
-  Cloudiot   = Google::Apis::CloudiotV1
-  iot_client = Cloudiot::CloudIotService.new
+  Cloudiot                 = Google::Apis::CloudiotV1
+  iot_client               = Cloudiot::CloudIotService.new
   iot_client.authorization = Google::Auth.get_application_default(
     "https://www.googleapis.com/auth/cloud-platform"
   )
@@ -647,7 +647,7 @@ $send_device_command = lambda do |project_id:, location_id:, registry_id:, devic
   parent   = "projects/#{project_id}/locations/#{location_id}"
   resource = "#{parent}/registries/#{registry_id}/devices/#{device_id}"
 
-  command_req = Cloudiot::SendCommandToDeviceRequest.new
+  command_req             = Cloudiot::SendCommandToDeviceRequest.new
   command_req.binary_data = data
 
   # Set configuration for the provided device
@@ -668,8 +668,8 @@ $bind_device_to_gateway = lambda do |project_id:, location_id:, registry_id:, ga
   require "google/apis/cloudiot_v1"
 
   # Initialize the client and authenticate with the specified scope
-  Cloudiot   = Google::Apis::CloudiotV1
-  iot_client = Cloudiot::CloudIotService.new
+  Cloudiot                 = Google::Apis::CloudiotV1
+  iot_client               = Cloudiot::CloudIotService.new
   iot_client.authorization = Google::Auth.get_application_default(
     "https://www.googleapis.com/auth/cloud-platform"
   )
@@ -677,9 +677,9 @@ $bind_device_to_gateway = lambda do |project_id:, location_id:, registry_id:, ga
   # The resource name of the location associated with the project
   parent = "projects/#{project_id}/locations/#{location_id}/registries/#{registry_id}"
 
-  bind_req = Google::Apis::CloudiotV1::BindDeviceToGatewayRequest.new
+  bind_req            = Google::Apis::CloudiotV1::BindDeviceToGatewayRequest.new
   bind_req.gateway_id = gateway_id
-  bind_req.device_id = device_id
+  bind_req.device_id  = device_id
 
   res = iot_client.bind_registry_device_to_gateway parent, bind_req
   puts "Device bound"
@@ -697,8 +697,8 @@ $unbind_device_from_gateway = lambda do |project_id:, location_id:, registry_id:
   require "google/apis/cloudiot_v1"
 
   # Initialize the client and authenticate with the specified scope
-  Cloudiot   = Google::Apis::CloudiotV1
-  iot_client = Cloudiot::CloudIotService.new
+  Cloudiot                 = Google::Apis::CloudiotV1
+  iot_client               = Cloudiot::CloudIotService.new
   iot_client.authorization = Google::Auth.get_application_default(
     "https://www.googleapis.com/auth/cloud-platform"
   )
@@ -706,9 +706,9 @@ $unbind_device_from_gateway = lambda do |project_id:, location_id:, registry_id:
   # The resource name of the location associated with the project
   parent = "projects/#{project_id}/locations/#{location_id}/registries/#{registry_id}"
 
-  unbind_req = Google::Apis::CloudiotV1::UnbindDeviceFromGatewayRequest.new
+  unbind_req            = Google::Apis::CloudiotV1::UnbindDeviceFromGatewayRequest.new
   unbind_req.gateway_id = gateway_id
-  unbind_req.device_id = device_id
+  unbind_req.device_id  = device_id
 
   res = iot_client.unbind_registry_device_from_gateway parent, unbind_req
   puts "Device unbound"
@@ -727,8 +727,8 @@ $create_gateway = lambda do |project_id:, location_id:, registry_id:, gateway_id
   require "google/apis/cloudiot_v1"
 
   # Initialize the client and authenticate with the specified scope
-  Cloudiot   = Google::Apis::CloudiotV1
-  iot_client = Cloudiot::CloudIotService.new
+  Cloudiot                 = Google::Apis::CloudiotV1
+  iot_client               = Cloudiot::CloudIotService.new
   iot_client.authorization = Google::Auth.get_application_default(
     "https://www.googleapis.com/auth/cloud-platform"
   )
@@ -736,7 +736,7 @@ $create_gateway = lambda do |project_id:, location_id:, registry_id:, gateway_id
   # The resource name of the location associated with the project
   parent = "projects/#{project_id}/locations/#{location_id}/registries/#{registry_id}"
 
-  device = Cloudiot::Device.new
+  device    = Cloudiot::Device.new
   device.id = gateway_id
 
   certificate_format = if alg == "ES256"
@@ -745,17 +745,17 @@ $create_gateway = lambda do |project_id:, location_id:, registry_id:, gateway_id
                          "RSA_X509_PEM"
                        end
 
-  pubkey = Google::Apis::CloudiotV1::PublicKeyCredential.new
-  pubkey.key = File.read cert_path
+  pubkey        = Google::Apis::CloudiotV1::PublicKeyCredential.new
+  pubkey.key    = File.read cert_path
   pubkey.format = certificate_format
 
-  cred = Google::Apis::CloudiotV1::DeviceCredential.new
+  cred            = Google::Apis::CloudiotV1::DeviceCredential.new
   cred.public_key = pubkey
 
   device.credentials = [cred]
 
-  gateway_config = Google::Apis::CloudiotV1::GatewayConfig.new
-  gateway_config.gateway_type = "GATEWAY"
+  gateway_config                     = Google::Apis::CloudiotV1::GatewayConfig.new
+  gateway_config.gateway_type        = "GATEWAY"
   gateway_config.gateway_auth_method = "ASSOCIATION_ONLY"
 
   device.gateway_config = gateway_config
@@ -781,14 +781,14 @@ $delete_gateway = lambda do |project_id:, location_id:, registry_id:, gateway_id
   require "google/apis/cloudiot_v1"
 
   # Initialize the client and authenticate with the specified scope
-  Cloudiot   = Google::Apis::CloudiotV1
-  iot_client = Cloudiot::CloudIotService.new
+  Cloudiot                 = Google::Apis::CloudiotV1
+  iot_client               = Cloudiot::CloudIotService.new
   iot_client.authorization = Google::Auth.get_application_default(
     "https://www.googleapis.com/auth/cloud-platform"
   )
 
   # The resource name of the location associated with the project
-  parent = "projects/#{project_id}/locations/#{location_id}"
+  parent      = "projects/#{project_id}/locations/#{location_id}"
   device_path = "#{parent}/registries/#{registry_id}/devices/#{gateway_id}"
 
   # TODO: unbind all devices?
@@ -812,8 +812,8 @@ $list_devices_for_gateway = lambda do |project_id:, location_id:, registry_id:, 
   require "google/apis/cloudiot_v1"
 
   # Initialize the client and authenticate with the specified scope
-  Cloudiot   = Google::Apis::CloudiotV1
-  iot_client = Cloudiot::CloudIotService.new
+  Cloudiot                 = Google::Apis::CloudiotV1
+  iot_client               = Cloudiot::CloudIotService.new
   iot_client.authorization = Google::Auth.get_application_default(
     "https://www.googleapis.com/auth/cloud-platform"
   )
@@ -844,8 +844,8 @@ $list_gateways = lambda do |project_id:, location_id:, registry_id:|
   require "google/apis/cloudiot_v1"
 
   # Initialize the client and authenticate with the specified scope
-  Cloudiot   = Google::Apis::CloudiotV1
-  iot_client = Cloudiot::CloudIotService.new
+  Cloudiot                 = Google::Apis::CloudiotV1
+  iot_client               = Cloudiot::CloudIotService.new
   iot_client.authorization = Google::Auth.get_application_default(
     "https://www.googleapis.com/auth/cloud-platform"
   )

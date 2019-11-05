@@ -145,7 +145,7 @@ def speech_async_recognize_gcs storage_path: nil
   config = { encoding:          :LINEAR16,
              sample_rate_hertz: 16_000,
              language_code:     "en-US" }
-  audio = { uri: storage_path }
+  audio  = { uri: storage_path }
 
   operation = speech.long_running_recognize config, audio
 

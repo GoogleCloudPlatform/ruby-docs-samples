@@ -14,5 +14,5 @@ end
 
 module Helloworld
   HelloRequest = Google::Protobuf::DescriptorPool.generated_pool.lookup("helloworld.HelloRequest").msgclass
-  HelloReply = Google::Protobuf::DescriptorPool.generated_pool.lookup("helloworld.HelloReply").msgclass
+  HelloReply   = Google::Protobuf::DescriptorPool.generated_pool.lookup("helloworld.HelloReply").msgclass
 end

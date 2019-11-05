@@ -93,12 +93,12 @@ def write_log_entry
 
   logging = Google::Cloud::Logging.new project: "my-gcp-project-id"
 
-  entry = logging.entry
-  entry.log_name = "my_application_log"
-  entry.payload  = "Log message"
-  entry.severity = :NOTICE
-  entry.resource.type = "gae_app"
-  entry.resource.labels[:module_id] = "default"
+  entry                              = logging.entry
+  entry.log_name                     = "my_application_log"
+  entry.payload                      = "Log message"
+  entry.severity                     = :NOTICE
+  entry.resource.type                = "gae_app"
+  entry.resource.labels[:module_id]  = "default"
   entry.resource.labels[:version_id] = "20160101t163030"
 
   logging.write_entries entry

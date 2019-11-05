@@ -18,14 +18,14 @@ def translate_v3_batch_translate_text
 
   client = Google::Cloud::Translate.new
 
-  input_uri = "gs://cloud-samples-data/text.txt"
-  output_uri = "gs://YOUR_BUCKET_ID/path_to_store_results/"
-  project_id = "[Google Cloud Project ID]"
+  input_uri   = "gs://cloud-samples-data/text.txt"
+  output_uri  = "gs://YOUR_BUCKET_ID/path_to_store_results/"
+  project_id  = "[Google Cloud Project ID]"
   location_id = "us-central1"
   source_lang = "en"
   target_lang = "ja"
 
-  input_config = {
+  input_config  = {
     gcs_source: {
       input_uri: input_uri
     },
@@ -37,7 +37,7 @@ def translate_v3_batch_translate_text
       output_uri_prefix: output_uri
     }
   }
-  parent = client.class.location_path project_id, location_id
+  parent        = client.class.location_path project_id, location_id
 
   operation = client.batch_translate_text(
     parent, source_lang, [target_lang], [input_config], output_config

@@ -84,11 +84,11 @@ begin
   response = RestClient.get url, Authorization: "Bearer #{jwt}"
   puts response.code
   puts response.body
-rescue StandardError => ex
-  if ex.respond_to? :response
-    puts ex.response.code
-    puts ex.response.body
+rescue StandardError => e
+  if e.respond_to? :response
+    puts e.response.code
+    puts e.response.body
   else
-    puts ex
+    puts e
   end
 end

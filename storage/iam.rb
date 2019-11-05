@@ -20,7 +20,7 @@ def view_bucket_iam_members project_id:, bucket_name:
   require "google/cloud/storage"
 
   storage = Google::Cloud::Storage.new project_id: project_id
-  bucket = storage.bucket bucket_name
+  bucket  = storage.bucket bucket_name
 
   policy = bucket.policy
 
@@ -40,7 +40,7 @@ def add_bucket_iam_member project_id:, bucket_name:, role:, member:
   require "google/cloud/storage"
 
   storage = Google::Cloud::Storage.new project_id: project_id
-  bucket = storage.bucket bucket_name
+  bucket  = storage.bucket bucket_name
 
   bucket.policy do |policy|
     policy.add role, member
@@ -60,7 +60,7 @@ def remove_bucket_iam_member project_id:, bucket_name:, role:, member:
   require "google/cloud/storage"
 
   storage = Google::Cloud::Storage.new project_id: project_id
-  bucket = storage.bucket bucket_name
+  bucket  = storage.bucket bucket_name
 
   bucket.policy do |policy|
     policy.remove role, member

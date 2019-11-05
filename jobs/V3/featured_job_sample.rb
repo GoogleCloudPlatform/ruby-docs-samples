@@ -22,20 +22,20 @@ def job_discovery_generate_featured_job company_name:, requisition_id:
   # Instantiate the client
   jobs = Google::Apis::JobsV3
 
-  talent_solution_client = jobs::CloudTalentSolutionService.new
+  talent_solution_client               = jobs::CloudTalentSolutionService.new
   # @see
   # https://developers.google.com/identity/protocols/application-default-credentials#callingruby
   talent_solution_client.authorization = Google::Auth.get_application_default(
     "https://www.googleapis.com/auth/jobs"
   )
 
-  application_info = jobs::ApplicationInfo.new uris: ["http://careers.google.com"]
-  job_generated = jobs::Job.new requisition_id:   requisition_id,
-                                title:            " Lab Technician",
-                                company_name:     company_name,
-                                application_info: application_info,
-                                description:      "Design, develop, test, deploy, " +
-                                                  "maintain and improve software."
+  application_info              = jobs::ApplicationInfo.new uris: ["http://careers.google.com"]
+  job_generated                 = jobs::Job.new requisition_id:   requisition_id,
+                                                title:            " Lab Technician",
+                                                company_name:     company_name,
+                                                application_info: application_info,
+                                                description:      "Design, develop, test, deploy, " +
+                                                                  "maintain and improve software."
   # Featured job is the job with positive promotion value
   job_generated.promotion_value = 2
   puts "Featured Job generated: #{job_generated.to_json}"
@@ -52,7 +52,7 @@ def job_discovery_featured_jobs_search project_id:, company_name:, query:
   # Instantiate the client
   jobs = Google::Apis::JobsV3
 
-  talent_solution_client = jobs::CloudTalentSolutionService.new
+  talent_solution_client               = jobs::CloudTalentSolutionService.new
   # @see
   # https://developers.google.com/identity/protocols/application-default-credentials#callingruby
   talent_solution_client.authorization = Google::Auth.get_application_default(
@@ -65,7 +65,7 @@ def job_discovery_featured_jobs_search project_id:, company_name:, query:
                                                domain:     "www.google.com"
 
   # Perform a search for analyst  related jobs
-  job_query = jobs::JobQuery.new query: query
+  job_query               = jobs::JobQuery.new query: query
   job_query.company_names = [company_name] unless company_name.nil?
 
   search_jobs_request = jobs::SearchJobsRequest.new request_metadata: request_metadata,
@@ -83,17 +83,17 @@ def run_featured_job_sample arguments
   require_relative "basic_company_sample"
   require_relative "basic_job_sample"
 
-  command = arguments.shift
+  command            = arguments.shift
   default_project_id = "projects/#{ENV['GOOGLE_CLOUD_PROJECT']}"
-  company_name = "#{default_project_id}/companies/#{arguments.shift}"
+  company_name       = "#{default_project_id}/companies/#{arguments.shift}"
 
   case command
   when "create_featured_job"
     job_generated_test =
       job_discovery_generate_featured_job company_name:   company_name,
                                           requisition_id: arguments.shift
-    job_created_test = job_discovery_create_job job_to_be_created: job_generated_test,
-                                                project_id:        default_project_id
+    job_created_test   = job_discovery_create_job job_to_be_created: job_generated_test,
+                                                  project_id:        default_project_id
   when "featured_jobs_search"
     job_discovery_featured_jobs_search company_name: company_name,
                                        query:        arguments.shift,

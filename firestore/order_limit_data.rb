@@ -21,7 +21,7 @@ def order_by_name_limit_query project_id:
 
   cities_ref = firestore.col "cities"
   # [START fs_order_by_name_limit_query]
-  query = cities_ref.order("name").limit(3)
+  query      = cities_ref.order("name").limit(3)
   # [END fs_order_by_name_limit_query]
   query.get do |city|
     puts "Document #{city.document_id} returned by order by name with limit query."
@@ -35,7 +35,7 @@ def order_by_name_desc_limit_query project_id:
 
   cities_ref = firestore.col "cities"
   # [START fs_order_by_name_desc_limit_query]
-  query = cities_ref.order("name", "desc").limit(3)
+  query      = cities_ref.order("name", "desc").limit(3)
   # [END fs_order_by_name_desc_limit_query]
   query.get do |city|
     puts "Document #{city.document_id} returned by order by name descending with limit query."
@@ -49,7 +49,7 @@ def order_by_state_and_population_query project_id:
 
   cities_ref = firestore.col "cities"
   # [START fs_order_by_state_and_population_query]
-  query = cities_ref.order("state").order("population", "desc")
+  query      = cities_ref.order("state").order("population", "desc")
   # [END fs_order_by_state_and_population_query]
   query.get do |city|
     puts "Document #{city.document_id} returned by order by state and descending population query."
@@ -63,7 +63,7 @@ def where_order_by_limit_query project_id:
 
   cities_ref = firestore.col "cities"
   # [START fs_where_order_by_limit_query]
-  query = cities_ref.where("population", ">", 2_500_000).order("population").limit(2)
+  query      = cities_ref.where("population", ">", 2_500_000).order("population").limit(2)
   # [END fs_where_order_by_limit_query]
   query.get do |city|
     puts "Document #{city.document_id} returned by where order by limit query."
@@ -77,7 +77,7 @@ def range_order_by_query project_id:
 
   cities_ref = firestore.col "cities"
   # [START fs_range_order_by_query]
-  query = cities_ref.where("population", ">", 2_500_000).order("population")
+  query      = cities_ref.where("population", ">", 2_500_000).order("population")
   # [END fs_range_order_by_query]
   query.get do |city|
     puts "Document #{city.document_id} returned by range with order by query."
@@ -91,7 +91,7 @@ def invalid_range_order_by_query project_id:
 
   cities_ref = firestore.col "cities"
   # [START fs_invalid_range_order_by_query]
-  query = cities_ref.where("population", ">", 2_500_000).order("country")
+  query      = cities_ref.where("population", ">", 2_500_000).order("country")
   # [END fs_invalid_range_order_by_query]
 end
 

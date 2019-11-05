@@ -17,8 +17,8 @@ require "json"
 require "base64"
 
 post "/push" do
-  message = JSON.parse request.body.read
-  data = Base64.decode64 message["message"]["data"]
+  message         = JSON.parse request.body.read
+  data            = Base64.decode64 message["message"]["data"]
   logger.info "Pushed Message: #{data}"
   response.status = 204
 end

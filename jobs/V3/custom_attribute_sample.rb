@@ -19,23 +19,23 @@ def job_discovery_generate_job_with_custom_attribute company_name:, requisition_
 
   require "google/apis/jobs_v3"
 
-  jobs = Google::Apis::JobsV3
-  talent_solution_client = jobs::CloudTalentSolutionService.new
+  jobs                                 = Google::Apis::JobsV3
+  talent_solution_client               = jobs::CloudTalentSolutionService.new
   # @see
   # https://developers.google.com/identity/protocols/application-default-credentials#callingruby
   talent_solution_client.authorization = Google::Auth.get_application_default(
     "https://www.googleapis.com/auth/jobs"
   )
   # Constructs custom attributes map
-  custom_attributes = {}
+  custom_attributes                    = {}
   # First custom attribute
-  custom_attributes["someFieldName1"] = jobs::CustomAttribute.new string_values: ["value1"],
-                                                                  filterable:    true
+  custom_attributes["someFieldName1"]  = jobs::CustomAttribute.new string_values: ["value1"],
+                                                                   filterable:    true
   # Second custom attribute
-  custom_attributes["someFieldName2"] = jobs::CustomAttribute.new long_values: [256],
-                                                                  filterable:  true
+  custom_attributes["someFieldName2"]  = jobs::CustomAttribute.new long_values: [256],
+                                                                   filterable:  true
   # Creates job with custom attributes
-  job_generated =
+  job_generated                        =
     jobs::Job.new requisition_id:    requisition_id,
                   title:             " Lab Technician",
                   company_name:      company_name,
@@ -54,23 +54,23 @@ def job_discovery_filters_on_long_value_custom_attribute project_id:
 
   require "google/apis/jobs_v3"
 
-  jobs = Google::Apis::JobsV3
-  talent_solution_client = jobs::CloudTalentSolutionService.new
+  jobs                                 = Google::Apis::JobsV3
+  talent_solution_client               = jobs::CloudTalentSolutionService.new
   # @see https://developers.google.com/identity/protocols/application-default-credentials#callingruby
   talent_solution_client.authorization = Google::Auth.get_application_default(
     "https://www.googleapis.com/auth/jobs"
   )
   # Make sure to set the request_metadata the same as the associated search request
-  request_metadata = jobs::RequestMetadata.new user_id:    "HashedUserId",
-                                               session_id: "HashedSessionId",
-                                               domain:     "www.google.com"
+  request_metadata                     = jobs::RequestMetadata.new user_id:    "HashedUserId",
+                                                                   session_id: "HashedSessionId",
+                                                                   domain:     "www.google.com"
   # Perform a search for analyst  related jobs
-  custom_attribute_filter = "(255 <= someFieldName2) AND (someFieldName2 <= 257)"
-  job_query = jobs::JobQuery.new custom_attribute_filter: custom_attribute_filter
-  search_jobs_request = jobs::SearchJobsRequest.new request_metadata: request_metadata,
-                                                    job_query:        job_query,
-                                                    job_view:         "JOB_VIEW_FULL"
-  search_jobs_response = talent_solution_client.search_jobs project_id, search_jobs_request
+  custom_attribute_filter              = "(255 <= someFieldName2) AND (someFieldName2 <= 257)"
+  job_query                            = jobs::JobQuery.new custom_attribute_filter: custom_attribute_filter
+  search_jobs_request                  = jobs::SearchJobsRequest.new request_metadata: request_metadata,
+                                                                     job_query:        job_query,
+                                                                     job_view:         "JOB_VIEW_FULL"
+  search_jobs_response                 = talent_solution_client.search_jobs project_id, search_jobs_request
 
   puts search_jobs_response.to_json
   search_jobs_response
@@ -83,8 +83,8 @@ def job_discovery_filters_on_string_value_custom_attribute project_id:
 
   require "google/apis/jobs_v3"
 
-  jobs = Google::Apis::JobsV3
-  talent_solution_client = jobs::CloudTalentSolutionService.new
+  jobs                                 = Google::Apis::JobsV3
+  talent_solution_client               = jobs::CloudTalentSolutionService.new
   # @see https://developers.google.com/identity/protocols/application-default-credentials#callingruby
   talent_solution_client.authorization = Google::Auth.get_application_default(
     "https://www.googleapis.com/auth/jobs"
@@ -96,10 +96,10 @@ def job_discovery_filters_on_string_value_custom_attribute project_id:
                                                domain:     "www.google.com"
 
   # Perform a search for analyst  related jobs
-  job_query = jobs::JobQuery.new custom_attribute_filter: "NOT EMPTY(someFieldName1)"
-  search_jobs_request = jobs::SearchJobsRequest.new request_metadata: request_metadata,
-                                                    job_query:        job_query,
-                                                    job_view:         "JOB_VIEW_FULL"
+  job_query            = jobs::JobQuery.new custom_attribute_filter: "NOT EMPTY(someFieldName1)"
+  search_jobs_request  = jobs::SearchJobsRequest.new request_metadata: request_metadata,
+                                                     job_query:        job_query,
+                                                     job_view:         "JOB_VIEW_FULL"
   search_jobs_response = talent_solution_client.search_jobs project_id, search_jobs_request
 
   puts search_jobs_response.to_json
@@ -113,8 +113,8 @@ def job_discovery_filters_on_multi_custom_attributes project_id:
 
   require "google/apis/jobs_v3"
 
-  jobs = Google::Apis::JobsV3
-  talent_solution_client = jobs::CloudTalentSolutionService.new
+  jobs                                 = Google::Apis::JobsV3
+  talent_solution_client               = jobs::CloudTalentSolutionService.new
   # @see
   # https://developers.google.com/identity/protocols/application-default-credentials#callingruby
   talent_solution_client.authorization = Google::Auth.get_application_default(
@@ -122,16 +122,16 @@ def job_discovery_filters_on_multi_custom_attributes project_id:
   )
 
   # Make sure to set the request_metadata the same as the associated search request
-  request_metadata = jobs::RequestMetadata.new user_id:    "HashedUserId",
-                                               session_id: "HashedSessionId",
-                                               domain:     "www.google.com"
+  request_metadata        = jobs::RequestMetadata.new user_id:    "HashedUserId",
+                                                      session_id: "HashedSessionId",
+                                                      domain:     "www.google.com"
   custom_attribute_filter = "NOT EMPTY(someFieldName1) "\
     "AND ((255 <= someFieldName2) OR (someFieldName2 <= 213))"
-  job_query = jobs::JobQuery.new custom_attribute_filter: custom_attribute_filter
-  search_jobs_request = jobs::SearchJobsRequest.new request_metadata: request_metadata,
-                                                    job_query:        job_query,
-                                                    job_view:         "JOB_VIEW_FULL"
-  search_jobs_response = talent_solution_client.search_jobs project_id, search_jobs_request
+  job_query               = jobs::JobQuery.new custom_attribute_filter: custom_attribute_filter
+  search_jobs_request     = jobs::SearchJobsRequest.new request_metadata: request_metadata,
+                                                        job_query:        job_query,
+                                                        job_view:         "JOB_VIEW_FULL"
+  search_jobs_response    = talent_solution_client.search_jobs project_id, search_jobs_request
 
   puts search_jobs_response.to_json
   search_jobs_response
@@ -142,7 +142,7 @@ def run_custom_attribute_sample arguments
   require_relative "basic_company_sample"
   require_relative "basic_job_sample"
 
-  command = arguments.shift
+  command            = arguments.shift
   default_project_id = "projects/#{ENV['GOOGLE_CLOUD_PROJECT']}"
 
   company_name = "#{default_project_id}/companies/#{arguments.shift}"

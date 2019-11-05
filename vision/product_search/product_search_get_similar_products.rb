@@ -41,7 +41,7 @@ def product_search_get_similar_products(project_id = "your-project-id",
     product_categories: [product_category],
     filter:             filter
   }
-  image_context = { product_search_params: product_search_params }
+  image_context         = { product_search_params: product_search_params }
 
   response = image_annotator_client.product_search_detection(
     image:         file_path,

@@ -20,26 +20,26 @@ def job_discovery_email_alert_search project_id:, company_name:
   require "google/apis/jobs_v3"
 
   # Instantiate the client
-  jobs = Google::Apis::JobsV3
-  talent_solution_client = jobs::CloudTalentSolutionService.new
+  jobs                                 = Google::Apis::JobsV3
+  talent_solution_client               = jobs::CloudTalentSolutionService.new
   # @see
   # https://developers.google.com/identity/protocols/application-default-credentials#callingruby
   talent_solution_client.authorization = Google::Auth.get_application_default(
     "https://www.googleapis.com/auth/jobs"
   )
   # Make sure to set the request_metadata the same as the associated search request
-  request_metadata = jobs::RequestMetadata.new user_id:    "HashedUserId",
-                                               session_id: "HashedSessionId",
-                                               domain:     "www.google.com"
+  request_metadata                     = jobs::RequestMetadata.new user_id:    "HashedUserId",
+                                                                   session_id: "HashedSessionId",
+                                                                   domain:     "www.google.com"
 
   # Perform a search for analyst  related jobs
-  job_query = jobs::JobQuery.new
-  job_query.company_names = [company_name] unless company_name.nil?
-  search_jobs_request = jobs::SearchJobsRequest.new request_metadata: request_metadata,
-                                                    job_query:        job_query,
-                                                    search_mode:      "JOB_SEARCH"
-  search_jobs_response = talent_solution_client.search_project_job_for_alert(project_id,
-                                                                             search_jobs_request)
+  job_query                            = jobs::JobQuery.new
+  job_query.company_names              = [company_name] unless company_name.nil?
+  search_jobs_request                  = jobs::SearchJobsRequest.new request_metadata: request_metadata,
+                                                                     job_query:        job_query,
+                                                                     search_mode:      "JOB_SEARCH"
+  search_jobs_response                 = talent_solution_client.search_project_job_for_alert(project_id,
+                                                                                             search_jobs_request)
   puts search_jobs_response.to_json
   search_jobs_response
   # [END job_discovery_email_alert_search]
@@ -49,9 +49,9 @@ def run_email_alert_search_sample arguments
   require_relative "basic_company_sample"
   require_relative "basic_job_sample"
 
-  command = arguments.shift
+  command            = arguments.shift
   default_project_id = "projects/#{ENV['GOOGLE_CLOUD_PROJECT']}"
-  company_name = "#{default_project_id}/companies/#{arguments.shift}"
+  company_name       = "#{default_project_id}/companies/#{arguments.shift}"
 
   case command
   when "email_alert_search"

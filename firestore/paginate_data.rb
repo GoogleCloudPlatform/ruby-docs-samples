@@ -17,11 +17,11 @@ require "google/cloud/firestore"
 def start_at_field_query_cursor project_id:
   # project_id = "Your Google Cloud Project ID"
 
-  firestore  = Google::Cloud::Firestore.new project_id: project_id
+  firestore = Google::Cloud::Firestore.new project_id: project_id
 
   cities_ref = firestore.col "cities"
   # [START fs_start_at_field_query_cursor]
-  query = cities_ref.order("population").start_at(1_000_000)
+  query      = cities_ref.order("population").start_at(1_000_000)
   # [END fs_start_at_field_query_cursor]
   query.get do |city|
     puts "Document #{city.document_id} returned by start at population 1000000 field query cursor."
@@ -31,11 +31,11 @@ end
 def end_at_field_query_cursor project_id:
   # project_id = "Your Google Cloud Project ID"
 
-  firestore  = Google::Cloud::Firestore.new project_id: project_id
+  firestore = Google::Cloud::Firestore.new project_id: project_id
 
   cities_ref = firestore.col "cities"
   # [START fs_end_at_field_query_cursor]
-  query = cities_ref.order("population").end_at(1_000_000)
+  query      = cities_ref.order("population").end_at(1_000_000)
   # [END fs_end_at_field_query_cursor]
   query.get do |city|
     puts "Document #{city.document_id} returned by end at population 1000000 field query cursor."
@@ -45,7 +45,7 @@ end
 def paginated_query_cursor project_id:
   # project_id = "Your Google Cloud Project ID"
 
-  firestore = Google::Cloud::Firestore.new project_id: project_id
+  firestore   = Google::Cloud::Firestore.new project_id: project_id
   # [START fs_paginated_query_cursor]
   cities_ref  = firestore.col "cities"
   first_query = cities_ref.order("population").limit(3)
@@ -68,12 +68,12 @@ end
 def multiple_cursor_conditions project_id:
   # project_id = "Your Google Cloud Project ID"
 
-  firestore  = Google::Cloud::Firestore.new project_id: project_id
+  firestore = Google::Cloud::Firestore.new project_id: project_id
 
   cities_ref = firestore.col "cities"
   # [START fs_multiple_cursor_conditions]
   # Will return all Springfields
-  query1 = firestore.col("cities").order("name").order("state").start_at("Springfield")
+  query1     = firestore.col("cities").order("name").order("state").start_at("Springfield")
 
   # Will return "Springfield, Missouri" and "Springfield, Wisconsin"
   query2 = firestore.col("cities").order("name").order("state").start_at(["Springfield", "Missouri"])

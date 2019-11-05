@@ -18,8 +18,8 @@ def translate_v3_get_supported_languages_for_target
 
   client = Google::Cloud::Translate.new
 
-  project_id = "[Google Cloud Project ID]"
-  location_id = "[LOCATION ID]"
+  project_id    = "[Google Cloud Project ID]"
+  location_id   = "[LOCATION ID]"
   language_code = "en"
 
   parent = client.class.location_path project_id, location_id

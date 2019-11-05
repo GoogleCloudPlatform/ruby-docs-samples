@@ -25,11 +25,11 @@ project_id = "YOUR_PROJECT_ID"
 logging = Google::Cloud::Logging.new project: project_id
 
 # Prepares a log entry
-entry = logging.entry
+entry               = logging.entry
 # The data to log
-entry.payload = "Hello, world!"
+entry.payload       = "Hello, world!"
 # The name of the log to write to
-entry.log_name = "my-log"
+entry.log_name      = "my-log"
 # The resource associated with the data
 entry.resource.type = "global"
 

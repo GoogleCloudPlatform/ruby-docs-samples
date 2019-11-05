@@ -19,8 +19,8 @@ def job_discovery_histogram_search project_id:, company_name:
   require "google/apis/jobs_v3"
 
   # Instantiate the client
-  jobs = Google::Apis::JobsV3
-  talent_solution_client = jobs::CloudTalentSolutionService.new
+  jobs                                 = Google::Apis::JobsV3
+  talent_solution_client               = jobs::CloudTalentSolutionService.new
   # @see
   # https://developers.google.com/identity/protocols/application-default-credentials#callingruby
   talent_solution_client.authorization = Google::Auth.get_application_default(
@@ -35,15 +35,15 @@ def job_discovery_histogram_search project_id:, company_name:
   custom_attribute_histogram_request =
     jobs::CustomAttributeHistogramRequest.new key:                    "someFieldName1",
                                               string_value_histogram: true
-  histogram_facets =
+  histogram_facets                   =
     jobs::HistogramFacets.new simple_histogram_facets:           ["COMPANY_ID"],
                               custom_attribute_histogram_facets: [custom_attribute_histogram_request]
   # Perform a search for analyst  related jobs
-  job_query = jobs::JobQuery.new company_names: [company_name]
+  job_query                          = jobs::JobQuery.new company_names: [company_name]
 
-  search_jobs_request = jobs::SearchJobsRequest.new request_metadata: request_metadata,
-                                                    job_query:        job_query,
-                                                    histogram_facets: histogram_facets
+  search_jobs_request  = jobs::SearchJobsRequest.new request_metadata: request_metadata,
+                                                     job_query:        job_query,
+                                                     histogram_facets: histogram_facets
   search_jobs_response = talent_solution_client.search_jobs project_id, search_jobs_request
 
   puts search_jobs_response.to_json
@@ -54,9 +54,9 @@ end
 def run_histogram_sample arguments
   require_relative "basic_company_sample"
 
-  command = arguments.shift
+  command            = arguments.shift
   default_project_id = "projects/#{ENV['GOOGLE_CLOUD_PROJECT']}"
-  company_name = "#{default_project_id}/companies/#{arguments.shift}"
+  company_name       = "#{default_project_id}/companies/#{arguments.shift}"
 
   case command
   when "histogram_search"

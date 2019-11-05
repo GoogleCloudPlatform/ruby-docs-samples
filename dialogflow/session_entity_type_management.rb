@@ -23,7 +23,7 @@ def list_session_entity_types project_id:, session_id:
   require "google/cloud/dialogflow"
 
   session_entity_types_client = Google::Cloud::Dialogflow::SessionEntityTypes.new
-  session_path = session_entity_types_client.class.session_path project_id, session_id
+  session_path                = session_entity_types_client.class.session_path project_id, session_id
 
   session_entity_types = session_entity_types_client.list_session_entity_types session_path
 
@@ -49,8 +49,8 @@ def create_session_entity_type(project_id:, session_id:,
   require "google/cloud/dialogflow"
 
   session_entity_types_client = Google::Cloud::Dialogflow::SessionEntityTypes.new
-  session_path = session_entity_types_client.class.session_path project_id, session_id
-  session_entity_type_name = session_entity_types_client.class.session_entity_type_path project_id, session_id, entity_type_display_name
+  session_path                = session_entity_types_client.class.session_path project_id, session_id
+  session_entity_type_name    = session_entity_types_client.class.session_entity_type_path project_id, session_id, entity_type_display_name
 
   # Here we use the entity value as the only synonym.
   entities = entity_values.map { |entity_value| { value: entity_value, synonyms: [entity_value] } }
@@ -78,7 +78,7 @@ def delete_session_entity_type(project_id:, session_id:,
   require "google/cloud/dialogflow"
 
   session_entity_types_client = Google::Cloud::Dialogflow::SessionEntityTypes.new
-  session_entity_type_name = session_entity_types_client.class.session_entity_type_path project_id, session_id, entity_type_display_name
+  session_entity_type_name    = session_entity_types_client.class.session_entity_type_path project_id, session_id, entity_type_display_name
 
   session_entity_types_client.delete_session_entity_type session_entity_type_name
 

@@ -18,14 +18,14 @@ def translate_v3_create_glossary
 
   client = Google::Cloud::Translate.new
 
-  project_id = "[Google Cloud Project ID]"
+  project_id  = "[Google Cloud Project ID]"
   location_id = "[LOCATION ID]"
   glossary_id = "[YOUR_GLOSSARY_ID]"
 
   project_2 = "[Your Google Cloud Project ID]"
   input_uri = "gs://translation_samples_beta/glossaries/glossary.csv"
 
-  parent = client.class.location_path project_id, location_id
+  parent   = client.class.location_path project_id, location_id
   glossary = {
     name:               client.class.glossary_path(project_2, location_id, glossary_id),
     language_codes_set: {

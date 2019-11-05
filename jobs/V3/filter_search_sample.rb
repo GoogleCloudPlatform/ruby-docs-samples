@@ -21,25 +21,25 @@ def job_discovery_basic_keyword_search project_id:, company_name:, query:
   require "google/apis/jobs_v3"
 
   # Instantiate the client
-  jobs = Google::Apis::JobsV3
-  talent_solution_client = jobs::CloudTalentSolutionService.new
+  jobs                                 = Google::Apis::JobsV3
+  talent_solution_client               = jobs::CloudTalentSolutionService.new
   # @see
   # https://developers.google.com/identity/protocols/application-default-credentials#callingruby
   talent_solution_client.authorization = Google::Auth.get_application_default(
     "https://www.googleapis.com/auth/jobs"
   )
   # Make sure to set the request_metadata the same as the associated search request
-  request_metadata = jobs::RequestMetadata.new user_id:    "HashedUserId",
-                                               session_id: "HashedSessionId",
-                                               domain:     "www.google.com"
+  request_metadata                     = jobs::RequestMetadata.new user_id:    "HashedUserId",
+                                                                   session_id: "HashedSessionId",
+                                                                   domain:     "www.google.com"
 
   # Perform a search for analyst  related jobs
-  job_query = jobs::JobQuery.new query: query
-  job_query.company_names = [company_name] unless company_name.nil?
-  search_jobs_request = jobs::SearchJobsRequest.new request_metadata: request_metadata,
-                                                    job_query:        job_query,
-                                                    search_mode:      "JOB_SEARCH"
-  search_jobs_response = talent_solution_client.search_jobs project_id, search_jobs_request
+  job_query                            = jobs::JobQuery.new query: query
+  job_query.company_names              = [company_name] unless company_name.nil?
+  search_jobs_request                  = jobs::SearchJobsRequest.new request_metadata: request_metadata,
+                                                                     job_query:        job_query,
+                                                                     search_mode:      "JOB_SEARCH"
+  search_jobs_response                 = talent_solution_client.search_jobs project_id, search_jobs_request
   puts search_jobs_response.to_json
   search_jobs_response
   # [END job_discovery_basic_keyword_search]
@@ -53,25 +53,25 @@ def job_discovery_category_filter_search project_id:, company_name:, categories:
 
   require "google/apis/jobs_v3"
   # Instantiate the client
-  jobs = Google::Apis::JobsV3
-  talent_solution_client = jobs::CloudTalentSolutionService.new
+  jobs                                 = Google::Apis::JobsV3
+  talent_solution_client               = jobs::CloudTalentSolutionService.new
   # @see
   # https://developers.google.com/identity/protocols/application-default-credentials#callingruby
   talent_solution_client.authorization = Google::Auth.get_application_default(
     "https://www.googleapis.com/auth/jobs"
   )
   # Make sure to set the request_metadata the same as the associated search request
-  request_metadata = jobs::RequestMetadata.new user_id:    "HashedUserId",
-                                               session_id: "HashedSessionId",
-                                               domain:     "http://careers.google.com"
+  request_metadata                     = jobs::RequestMetadata.new user_id:    "HashedUserId",
+                                                                   session_id: "HashedSessionId",
+                                                                   domain:     "http://careers.google.com"
 
   # Perform a search for analyst  related jobs
-  job_query = jobs::JobQuery.new job_categories: Array.new(categories)
-  job_query.company_names = [company_name] unless company_name.nil?
-  search_jobs_request = jobs::SearchJobsRequest.new request_metadata: request_metadata,
-                                                    job_query:        job_query,
-                                                    search_mode:      "JOB_SEARCH"
-  search_jobs_response = talent_solution_client.search_jobs project_id, search_jobs_request
+  job_query                            = jobs::JobQuery.new job_categories: Array.new(categories)
+  job_query.company_names              = [company_name] unless company_name.nil?
+  search_jobs_request                  = jobs::SearchJobsRequest.new request_metadata: request_metadata,
+                                                                     job_query:        job_query,
+                                                                     search_mode:      "JOB_SEARCH"
+  search_jobs_response                 = talent_solution_client.search_jobs project_id, search_jobs_request
   puts search_jobs_response.to_json
   search_jobs_response
   # [END job_discovery_category_filter_search]
@@ -86,25 +86,25 @@ def job_discovery_employment_types_filter_search project_id:, company_name:, emp
   require "google/apis/jobs_v3"
 
   # Instantiate the client
-  jobs = Google::Apis::JobsV3
-  talent_solution_client = jobs::CloudTalentSolutionService.new
+  jobs                                 = Google::Apis::JobsV3
+  talent_solution_client               = jobs::CloudTalentSolutionService.new
   # @see
   # https://developers.google.com/identity/protocols/application-default-credentials#callingruby
   talent_solution_client.authorization = Google::Auth.get_application_default(
     "https://www.googleapis.com/auth/jobs"
   )
   # Make sure to set the request_metadata the same as the associated search request
-  request_metadata = jobs::RequestMetadata.new user_id:    "HashedUserId",
-                                               session_id: "HashedSessionId",
-                                               domain:     "http://careers.google.com"
+  request_metadata                     = jobs::RequestMetadata.new user_id:    "HashedUserId",
+                                                                   session_id: "HashedSessionId",
+                                                                   domain:     "http://careers.google.com"
 
   # Perform a search for analyst  related jobs
-  job_query = jobs::JobQuery.new employment_types: employment_types
-  job_query.company_names = [company_name] unless company_name.nil?
-  search_jobs_request = jobs::SearchJobsRequest.new request_metadata: request_metadata,
-                                                    job_query:        job_query,
-                                                    search_mode:      "JOB_SEARCH"
-  search_jobs_response = talent_solution_client.search_jobs project_id, search_jobs_request
+  job_query                            = jobs::JobQuery.new employment_types: employment_types
+  job_query.company_names              = [company_name] unless company_name.nil?
+  search_jobs_request                  = jobs::SearchJobsRequest.new request_metadata: request_metadata,
+                                                                     job_query:        job_query,
+                                                                     search_mode:      "JOB_SEARCH"
+  search_jobs_response                 = talent_solution_client.search_jobs project_id, search_jobs_request
   puts search_jobs_response.to_json
   search_jobs_response
   # [END job_discovery_employment_types_filter_search]
@@ -119,27 +119,27 @@ def job_discovery_date_range_filter_search project_id:, company_name:, start_tim
 
   require "google/apis/jobs_v3"
   # Instantiate the client
-  jobs = Google::Apis::JobsV3
-  talent_solution_client = jobs::CloudTalentSolutionService.new
+  jobs                                 = Google::Apis::JobsV3
+  talent_solution_client               = jobs::CloudTalentSolutionService.new
   # @see
   # https://developers.google.com/identity/protocols/application-default-credentials#callingruby
   talent_solution_client.authorization = Google::Auth.get_application_default(
     "https://www.googleapis.com/auth/jobs"
   )
   # Make sure to set the request_metadata the same as the associated search request
-  request_metadata = jobs::RequestMetadata.new user_id:    "HashedUserId",
-                                               session_id: "HashedSessionId",
-                                               domain:     "http://careers.google.com"
+  request_metadata                     = jobs::RequestMetadata.new user_id:    "HashedUserId",
+                                                                   session_id: "HashedSessionId",
+                                                                   domain:     "http://careers.google.com"
 
   # Perform a search for analyst  related jobs
-  timestamp_range = jobs::TimestampRange.new start_time: start_time,
-                                             end_time:   end_time
-  job_query = jobs::JobQuery.new publish_time_range: timestamp_range,
-                                 company_names:      [company_name]
-  search_jobs_request = jobs::SearchJobsRequest.new request_metadata: request_metadata,
-                                                    job_query:        job_query,
-                                                    search_mode:      "JOB_SEARCH"
-  search_jobs_response = talent_solution_client.search_jobs project_id, search_jobs_request
+  timestamp_range                      = jobs::TimestampRange.new start_time: start_time,
+                                                                  end_time:   end_time
+  job_query                            = jobs::JobQuery.new publish_time_range: timestamp_range,
+                                                            company_names:      [company_name]
+  search_jobs_request                  = jobs::SearchJobsRequest.new request_metadata: request_metadata,
+                                                                     job_query:        job_query,
+                                                                     search_mode:      "JOB_SEARCH"
+  search_jobs_response                 = talent_solution_client.search_jobs project_id, search_jobs_request
 
   puts search_jobs_response.to_json
   search_jobs_response
@@ -155,25 +155,25 @@ def job_discovery_language_code_filter_search project_id:, company_name:, langua
   require "google/apis/jobs_v3"
 
   # Instantiate the client
-  jobs = Google::Apis::JobsV3
-  talent_solution_client = jobs::CloudTalentSolutionService.new
+  jobs                                 = Google::Apis::JobsV3
+  talent_solution_client               = jobs::CloudTalentSolutionService.new
   # @see
   # https://developers.google.com/identity/protocols/application-default-credentials#callingruby
   talent_solution_client.authorization = Google::Auth.get_application_default(
     "https://www.googleapis.com/auth/jobs"
   )
   # Make sure to set the request_metadata the same as the associated search request
-  request_metadata = jobs::RequestMetadata.new user_id:    "HashedUserId",
-                                               session_id: "HashedSessionId",
-                                               domain:     "http://careers.google.com"
+  request_metadata                     = jobs::RequestMetadata.new user_id:    "HashedUserId",
+                                                                   session_id: "HashedSessionId",
+                                                                   domain:     "http://careers.google.com"
 
   # Perform a search for analyst  related jobs
-  job_query = jobs::JobQuery.new language_codes: language_codes,
-                                 company_names:  [company_name]
-  search_jobs_request = jobs::SearchJobsRequest.new request_metadata: request_metadata,
-                                                    job_query:        job_query,
-                                                    search_mode:      "JOB_SEARCH"
-  search_jobs_response = talent_solution_client.search_jobs project_id, search_jobs_request
+  job_query                            = jobs::JobQuery.new language_codes: language_codes,
+                                                            company_names:  [company_name]
+  search_jobs_request                  = jobs::SearchJobsRequest.new request_metadata: request_metadata,
+                                                                     job_query:        job_query,
+                                                                     search_mode:      "JOB_SEARCH"
+  search_jobs_response                 = talent_solution_client.search_jobs project_id, search_jobs_request
 
   puts search_jobs_response.to_json
   search_jobs_response
@@ -188,22 +188,22 @@ def job_discovery_company_display_name_search project_id:, company_display_names
   require "google/apis/jobs_v3"
 
   # Instantiate the client
-  jobs = Google::Apis::JobsV3
-  talent_solution_client = jobs::CloudTalentSolutionService.new
+  jobs                                 = Google::Apis::JobsV3
+  talent_solution_client               = jobs::CloudTalentSolutionService.new
   # @see https://developers.google.com/identity/protocols/application-default-credentials#callingruby
   talent_solution_client.authorization = Google::Auth.get_application_default(
     "https://www.googleapis.com/auth/jobs"
   )
   # Make sure to set the request_metadata the same as the associated search request
-  request_metadata = jobs::RequestMetadata.new user_id:    "HashedUserId",
-                                               session_id: "HashedSessionId",
-                                               domain:     "http://careers.google.com"
+  request_metadata                     = jobs::RequestMetadata.new user_id:    "HashedUserId",
+                                                                   session_id: "HashedSessionId",
+                                                                   domain:     "http://careers.google.com"
   # Perform a search for analyst  related jobs
-  job_query = jobs::JobQuery.new company_display_names: Array.new(company_display_names)
-  search_jobs_request = jobs::SearchJobsRequest.new request_metadata: request_metadata,
-                                                    job_query:        job_query,
-                                                    search_mode:      "JOB_SEARCH"
-  search_jobs_response = talent_solution_client.search_jobs project_id, search_jobs_request
+  job_query                            = jobs::JobQuery.new company_display_names: Array.new(company_display_names)
+  search_jobs_request                  = jobs::SearchJobsRequest.new request_metadata: request_metadata,
+                                                                     job_query:        job_query,
+                                                                     search_mode:      "JOB_SEARCH"
+  search_jobs_response                 = talent_solution_client.search_jobs project_id, search_jobs_request
 
   puts search_jobs_response.to_json
   search_jobs_response
@@ -219,38 +219,38 @@ def job_discovery_compensation_search project_id:, company_name:, min_unit:, max
 
   require "google/apis/jobs_v3"
   # Instantiate the client
-  jobs = Google::Apis::JobsV3
-  talent_solution_client = jobs::CloudTalentSolutionService.new
+  jobs                                 = Google::Apis::JobsV3
+  talent_solution_client               = jobs::CloudTalentSolutionService.new
   # @see https://developers.google.com/identity/protocols/application-default-credentials#callingruby
   talent_solution_client.authorization = Google::Auth.get_application_default(
     "https://www.googleapis.com/auth/jobs"
   )
   # Make sure to set the request_metadata the same as the associated search request
-  request_metadata = jobs::RequestMetadata.new user_id:    "HashedUserId",
-                                               session_id: "HashedSessionId",
-                                               domain:     "http://careers.google.com"
+  request_metadata                     = jobs::RequestMetadata.new user_id:    "HashedUserId",
+                                                                   session_id: "HashedSessionId",
+                                                                   domain:     "http://careers.google.com"
   # Search jobs that pay between min_unit and max_unit (USD/hour)
-  compensation_range = jobs::CompensationRange.new max_compensation: (
+  compensation_range                   = jobs::CompensationRange.new max_compensation: (
                                                      jobs::Money.new currency_code: "USD",
                                                                      units:         max_unit,
                                                                      nanos:         500_000_000
                                                    ),
-                                                   min_compensation: (
+                                                                     min_compensation: (
                                                      jobs::Money.new currency_code: "USD",
                                                                      units:         min_unit,
                                                                      nanos:         0
                                                    )
-  compensation_filter = jobs::CompensationFilter.new type:  "UNIT_AND_AMOUNT",
-                                                     units: ["HOURLY"],
-                                                     range: compensation_range
+  compensation_filter                  = jobs::CompensationFilter.new type:  "UNIT_AND_AMOUNT",
+                                                                      units: ["HOURLY"],
+                                                                      range: compensation_range
   # Perform a search for analyst  related jobs
-  job_query = jobs::JobQuery.new compensation_filter: compensation_filter,
-                                 company_names:       [company_name]
+  job_query                            = jobs::JobQuery.new compensation_filter: compensation_filter,
+                                                            company_names:       [company_name]
 
-  search_jobs_request = jobs::SearchJobsRequest.new request_metadata: request_metadata,
-                                                    job_query:        job_query,
-                                                    search_mode:      "JOB_SEARCH"
-  search_jobs_response = talent_solution_client.search_jobs project_id, search_jobs_request
+  search_jobs_request                  = jobs::SearchJobsRequest.new request_metadata: request_metadata,
+                                                                     job_query:        job_query,
+                                                                     search_mode:      "JOB_SEARCH"
+  search_jobs_response                 = talent_solution_client.search_jobs project_id, search_jobs_request
 
   puts search_jobs_response.to_json
   search_jobs_response
@@ -261,10 +261,10 @@ def run_filter_search_sample arguments
   require_relative "basic_company_sample"
   require_relative "basic_job_sample"
 
-  command = arguments.shift
+  command            = arguments.shift
   default_project_id = "projects/#{ENV['GOOGLE_CLOUD_PROJECT']}"
-  company_name = "#{default_project_id}/companies/#{arguments.shift}" if command != "company_display_name_search"
-  user_input_array = arguments.shift.split "," if ["category_filter_search", "employment_types_filter_search", "language_code_filter_search", "company_display_name_search"].include? command
+  company_name       = "#{default_project_id}/companies/#{arguments.shift}" if command != "company_display_name_search"
+  user_input_array   = arguments.shift.split "," if ["category_filter_search", "employment_types_filter_search", "language_code_filter_search", "company_display_name_search"].include? command
 
   case command
   when "basic_keyword_search"

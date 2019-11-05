@@ -20,16 +20,16 @@ def job_discovery_job_title_auto_complete project_id:, company_name:, query:
 
   require "google/apis/jobs_v3"
 
-  jobs = Google::Apis::JobsV3
-  talent_solution_client = jobs::CloudTalentSolutionService.new
+  jobs                                 = Google::Apis::JobsV3
+  talent_solution_client               = jobs::CloudTalentSolutionService.new
   talent_solution_client.authorization = Google::Auth.get_application_default(
     "https://www.googleapis.com/auth/jobs"
   )
 
-  page_size = 10
-  type = "JOB_TITLE"
+  page_size     = 10
+  type          = "JOB_TITLE"
   language_code = "en-US"
-  result = talent_solution_client.complete_project(
+  result        = talent_solution_client.complete_project(
     project_id, company_name: company_name, page_size: page_size, query: query,
       language_code: language_code, type: type
   ) do |result, err|
@@ -51,15 +51,15 @@ def job_discovery_default_auto_complete project_id:, company_name:, query:
 
   require "google/apis/jobs_v3"
 
-  jobs = Google::Apis::JobsV3
-  talent_solution_client = jobs::CloudTalentSolutionService.new
+  jobs                                 = Google::Apis::JobsV3
+  talent_solution_client               = jobs::CloudTalentSolutionService.new
   talent_solution_client.authorization = Google::Auth.get_application_default(
     "https://www.googleapis.com/auth/jobs"
   )
 
-  page_size = 10
+  page_size     = 10
   language_code = "en-US"
-  result = talent_solution_client.complete_project(
+  result        = talent_solution_client.complete_project(
     project_id, company_name: company_name, page_size: page_size, query: query,
     language_code: language_code
   ) do |result, err|
@@ -73,9 +73,9 @@ def job_discovery_default_auto_complete project_id:, company_name:, query:
 end
 
 def run_auto_complete_sample arguments
-  command = arguments.shift
+  command            = arguments.shift
   default_project_id = "projects/#{ENV['GOOGLE_CLOUD_PROJECT']}"
-  company_name = "#{default_project_id}/companies/#{arguments.shift}"
+  company_name       = "#{default_project_id}/companies/#{arguments.shift}"
 
   case command
   when "job_title_auto_complete"

@@ -21,10 +21,10 @@ def translate_v3_translate_text
   project = "[Google Cloud Project ID]"
 
   # The content to translate in string format
-  contents = ["Hello, world!"]
+  contents        = ["Hello, world!"]
   # Required. The BCP-47 language code to use for translation.
   target_language = "fr"
-  parent = client.class.location_path project, "global"
+  parent          = client.class.location_path project, "global"
 
   response = client.translate_text contents, target_language, parent
 

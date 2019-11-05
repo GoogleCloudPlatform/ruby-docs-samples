@@ -18,12 +18,12 @@ def translate_v3_detect_language
 
   client = Google::Cloud::Translate.new
 
-  project_id = "[Google Cloud Project ID]"
+  project_id  = "[Google Cloud Project ID]"
   location_id = "[LOCATION ID]"
   # The text string for performing language detection
-  content = "Hello, world!"
+  content     = "Hello, world!"
   # Optional. Can be "text/plain" or "text/html".
-  mime_type = "text/plain"
+  mime_type   = "text/plain"
 
   parent = client.class.location_path project_id, location_id
 

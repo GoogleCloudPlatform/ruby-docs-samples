@@ -43,8 +43,8 @@ def create_task project_id, location_id, queue_id, payload: nil, seconds: nil
 
   # Add scheduled time to task.
   if seconds
-    timestamp = Google::Protobuf::Timestamp.new
-    timestamp.seconds = Time.now.to_i + seconds.to_i
+    timestamp            = Google::Protobuf::Timestamp.new
+    timestamp.seconds    = Time.now.to_i + seconds.to_i
     task[:schedule_time] = timestamp
   end
 

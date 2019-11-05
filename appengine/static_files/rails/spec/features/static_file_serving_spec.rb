@@ -14,7 +14,7 @@
 require "spec_helper"
 
 Capybara.default_driver = :poltergeist
-Capybara.server = :puma, { Silent: true }
+Capybara.server         = :puma, { Silent: true }
 
 feature "Serving static files" do
   scenario "compiling stylesheets" do

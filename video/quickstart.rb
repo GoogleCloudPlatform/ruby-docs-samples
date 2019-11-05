@@ -36,7 +36,7 @@ operation = video_client.annotate_video input_uri: path, features: features do |
     label.segments.each do |segment|
       start_time = (segment.segment.start_time_offset.seconds +
                      segment.segment.start_time_offset.nanos / 1e9)
-      end_time =   (segment.segment.end_time_offset.seconds +
+      end_time   =   (segment.segment.end_time_offset.seconds +
                      segment.segment.end_time_offset.nanos / 1e9)
 
       puts "Segment: #{start_time} to #{end_time}"

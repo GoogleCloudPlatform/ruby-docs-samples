@@ -20,7 +20,7 @@ def delete_doc project_id:
 
   firestore = Google::Cloud::Firestore.new project_id: project_id
   # [START fs_delete_doc]
-  city_ref = firestore.doc "cities/DC"
+  city_ref  = firestore.doc "cities/DC"
   city_ref.delete
   # [END fs_delete_doc]
   puts "Deleted the DC document in the cities collection."
@@ -31,7 +31,7 @@ def delete_field project_id:
 
   firestore = Google::Cloud::Firestore.new project_id: project_id
   # [START fs_delete_field]
-  city_ref = firestore.doc "cities/BJ"
+  city_ref  = firestore.doc "cities/BJ"
   city_ref.update capital: firestore.field_delete
   # [END fs_delete_field]
   puts "Deleted the capital field from the BJ document in the cities collection."
@@ -40,7 +40,7 @@ end
 def delete_collection project_id:
   # project_id = "Your Google Cloud Project ID"
 
-  firestore = Google::Cloud::Firestore.new project_id: project_id
+  firestore  = Google::Cloud::Firestore.new project_id: project_id
   # [START fs_delete_collection]
   cities_ref = firestore.col "cities"
   query      = cities_ref

@@ -20,11 +20,11 @@ def export_assets project_id:, dump_file_path:
   # project_id = 'YOUR_PROJECT_ID'
   # Assets dump file path, e.g.: gs://[YOUR_BUCKET]/[YOUR_ASSETS_FILE]
   # dump_file_path = 'YOUR_ASSET_DUMP_FILE_PATH'
-  formatted_parent =
+  formatted_parent     =
     Google::Cloud::Asset::V1::AssetServiceClient.project_path(
       project_id
     )
-  output_config = Google::Cloud::Asset::V1::OutputConfig.new(
+  output_config        = Google::Cloud::Asset::V1::OutputConfig.new(
     gcs_destination: Google::Cloud::Asset::V1::GcsDestination.new(
       uri: dump_file_path
     )
@@ -53,7 +53,7 @@ def batch_get_history project_id:, asset_names:
 
   formatted_parent = asset_service_client.project_path project_id
 
-  content_type = :RESOURCE
+  content_type     = :RESOURCE
   read_time_window = Google::Cloud::Asset::V1::TimeWindow.new(
     start_time: Google::Protobuf::Timestamp.new(seconds: Time.now.getutc.to_i)
   )

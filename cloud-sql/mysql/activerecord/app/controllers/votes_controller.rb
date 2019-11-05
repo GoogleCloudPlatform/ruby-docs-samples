@@ -17,8 +17,8 @@ class VotesController < ApplicationController
   skip_before_action :verify_authenticity_token
 
   def index
-    @tab_count = Vote.tab_count
-    @space_count = Vote.space_count
+    @tab_count    = Vote.tab_count
+    @space_count  = Vote.space_count
     @recent_votes = Vote.last(5).reverse
   end
 

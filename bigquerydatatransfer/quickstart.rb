@@ -21,7 +21,7 @@ project_id = "YOUR_PROJECT_ID"
 
 # Instantiate a client
 BigQueryDataTransfer = Google::Cloud::Bigquery::DataTransfer # Alias the module
-data_transfer = BigQueryDataTransfer.new
+data_transfer        = BigQueryDataTransfer.new
 
 # Get the full path to your project.
 project_path = BigQueryDataTransfer::V1::DataTransferServiceClient.project_path(

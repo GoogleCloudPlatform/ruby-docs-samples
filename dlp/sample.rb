@@ -20,7 +20,7 @@ def inspect_string project_id: nil, content: nil, max_findings: 0
 
   require "google/cloud/dlp"
 
-  dlp = Google::Cloud::Dlp.new
+  dlp            = Google::Cloud::Dlp.new
   inspect_config = {
     # The types of information to match
     info_types:     [{ name: "PERSON_NAME" }, { name: "US_STATE" }],
@@ -39,7 +39,7 @@ def inspect_string project_id: nil, content: nil, max_findings: 0
   item_to_inspect = { value: content }
 
   # Run request
-  parent = "projects/#{project_id}"
+  parent   = "projects/#{project_id}"
   response = dlp.inspect_content parent,
                                  inspect_config: inspect_config,
                                  item:           item_to_inspect
@@ -65,7 +65,7 @@ def inspect_file project_id: nil, filename: nil, max_findings: 0
 
   require "google/cloud/dlp"
 
-  dlp = Google::Cloud::Dlp.new
+  dlp            = Google::Cloud::Dlp.new
   inspect_config = {
     # The types of information to match
     info_types:     [{ name: "PERSON_NAME" }, { name: "PHONE_NUMBER" }],
@@ -81,11 +81,11 @@ def inspect_file project_id: nil, filename: nil, max_findings: 0
   }
 
   # The item to inspect
-  file = File.open filename, "rb"
+  file            = File.open filename, "rb"
   item_to_inspect = { byte_item: { type: :BYTES_TYPE_UNSPECIFIED, data: file.read } }
 
   # Run request
-  parent = "projects/#{project_id}"
+  parent   = "projects/#{project_id}"
   response = dlp.inspect_content parent,
                                  inspect_config: inspect_config,
                                  item:           item_to_inspect

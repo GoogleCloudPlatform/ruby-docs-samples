@@ -19,30 +19,30 @@ def job_discovery_batch_create_jobs project_id:, company_name:
 
   require "google/apis/jobs_v3"
 
-  jobs = Google::Apis::JobsV3
-  talent_solution_client = jobs::CloudTalentSolutionService.new
+  jobs                                 = Google::Apis::JobsV3
+  talent_solution_client               = jobs::CloudTalentSolutionService.new
   # @see https://developers.google.com/identity/protocols/application-default-credentials#callingruby
   talent_solution_client.authorization = Google::Auth.get_application_default(
     "https://www.googleapis.com/auth/jobs"
   )
 
-  jobs_created = []
-  job_generated1 = jobs::Job.new requisition_id:   "Job: #{company_name} 1",
-                                 title:            " Lab Technician",
-                                 company_name:     company_name,
-                                 employment_types: ["FULL_TIME"],
-                                 language_code:    "en-US",
-                                 application_info:
-                                                   (jobs::ApplicationInfo.new uris: ["http://careers.google.com"]),
-                                 description:      "Design and improve software."
-  job_generated2 = jobs::Job.new requisition_id:   "Job: #{company_name} 2",
-                                 title:            "Systems Administrator",
-                                 company_name:     company_name,
-                                 employment_types: ["FULL_TIME"],
-                                 language_code:    "en-US",
-                                 application_info:
-                                                   (jobs::ApplicationInfo.new uris: ["http://careers.google.com"]),
-                                 description:      "System Administrator for software."
+  jobs_created        = []
+  job_generated1      = jobs::Job.new requisition_id:   "Job: #{company_name} 1",
+                                      title:            " Lab Technician",
+                                      company_name:     company_name,
+                                      employment_types: ["FULL_TIME"],
+                                      language_code:    "en-US",
+                                      application_info:
+                                                        (jobs::ApplicationInfo.new uris: ["http://careers.google.com"]),
+                                      description:      "Design and improve software."
+  job_generated2      = jobs::Job.new requisition_id:   "Job: #{company_name} 2",
+                                      title:            "Systems Administrator",
+                                      company_name:     company_name,
+                                      employment_types: ["FULL_TIME"],
+                                      language_code:    "en-US",
+                                      application_info:
+                                                        (jobs::ApplicationInfo.new uris: ["http://careers.google.com"]),
+                                      description:      "System Administrator for software."
 
   create_job_request1 = jobs::CreateJobRequest.new job: job_generated1
   create_job_request2 = jobs::CreateJobRequest.new job: job_generated2
@@ -75,15 +75,15 @@ def job_discovery_batch_update_jobs job_to_be_updated:
 
   require "google/apis/jobs_v3"
 
-  jobs = Google::Apis::JobsV3
-  talent_solution_client = jobs::CloudTalentSolutionService.new
+  jobs                                 = Google::Apis::JobsV3
+  talent_solution_client               = jobs::CloudTalentSolutionService.new
   # @see
   # https://developers.google.com/identity/protocols/application-default-credentials#callingruby
   talent_solution_client.authorization = Google::Auth.get_application_default(
     "https://www.googleapis.com/auth/jobs"
   )
 
-  jobs_updated = []
+  jobs_updated        = []
   update_job_requests = []
   job_to_be_updated.each do |job|
     request = jobs::UpdateJobRequest.new job: job
@@ -114,15 +114,15 @@ def job_discovery_batch_update_jobs_with_mask job_to_be_updated:
 
   require "google/apis/jobs_v3"
 
-  jobs = Google::Apis::JobsV3
-  talent_solution_client = jobs::CloudTalentSolutionService.new
+  jobs                                 = Google::Apis::JobsV3
+  talent_solution_client               = jobs::CloudTalentSolutionService.new
   # @see
   # https://developers.google.com/identity/protocols/application-default-credentials#callingruby
   talent_solution_client.authorization = Google::Auth.get_application_default(
     "https://www.googleapis.com/auth/jobs"
   )
 
-  jobs_updated = []
+  jobs_updated                  = []
   update_job_with_mask_requests = []
   job_to_be_updated.each do |job|
     request = jobs::UpdateJobRequest.new job:         job,
@@ -153,8 +153,8 @@ def job_discovery_batch_delete_jobs job_to_be_deleted:
   # job_to_be_deleted = "Name of the jobs to be deleted"
   require "google/apis/jobs_v3"
 
-  jobs = Google::Apis::JobsV3
-  talent_solution_client = jobs::CloudTalentSolutionService.new
+  jobs                                 = Google::Apis::JobsV3
+  talent_solution_client               = jobs::CloudTalentSolutionService.new
   # @see
   # https://developers.google.com/identity/protocols/application-default-credentials#callingruby
   talent_solution_client.authorization = Google::Auth.get_application_default(
@@ -187,7 +187,7 @@ def job_discovery_list_jobs project_id:, company_name:
 
   jobs = Google::Apis::JobsV3
 
-  talent_solution_client = jobs::CloudTalentSolutionService.new
+  talent_solution_client               = jobs::CloudTalentSolutionService.new
   talent_solution_client.authorization = Google::Auth.get_application_default(
     "https://www.googleapis.com/auth/jobs"
   )
@@ -203,12 +203,12 @@ def job_discovery_list_jobs project_id:, company_name:
 end
 
 def run_batch_operation_sample arguments
-  command = arguments.shift
+  command            = arguments.shift
   default_project_id = "projects/#{ENV['GOOGLE_CLOUD_PROJECT']}"
-  user_input = arguments.shift
-  company_name = "#{default_project_id}/companies/#{user_input}"
-  jobs_created = []
-  job_names = []
+  user_input         = arguments.shift
+  company_name       = "#{default_project_id}/companies/#{user_input}"
+  jobs_created       = []
+  job_names          = []
   case command
   when "batch_create_jobs"
     jobs_created = job_discovery_batch_create_jobs company_name: company_name,
@@ -216,16 +216,16 @@ def run_batch_operation_sample arguments
   when "batch_update_jobs"
     list_job_response = job_discovery_list_jobs company_name: company_name,
                                                 project_id:   default_project_id
-    jobs_got = list_job_response.jobs
+    jobs_got          = list_job_response.jobs
     jobs_got.each do |job|
-      job.title = job.title + " updated"
+      job.title       = job.title + " updated"
       job.description = job.description + " updated"
     end
     job_discovery_batch_update_jobs job_to_be_updated: jobs_got
   when "batch_update_jobs_with_mask"
     list_job_response = job_discovery_list_jobs company_name: company_name,
                                                 project_id:   default_project_id
-    jobs_got = list_job_response.jobs
+    jobs_got          = list_job_response.jobs
     jobs_got.each do |job|
       job.title = job.title + " updated with mask"
     end
@@ -233,7 +233,7 @@ def run_batch_operation_sample arguments
   when "batch_delete_jobs"
     list_job_response = job_discovery_list_jobs company_name: company_name,
                                                 project_id:   default_project_id
-    jobs_got = list_job_response.jobs
+    jobs_got          = list_job_response.jobs
     jobs_got.each do |job|
       job_names.push job.name
     end

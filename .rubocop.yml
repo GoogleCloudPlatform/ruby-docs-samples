@@ -3,6 +3,10 @@ inherit_gem:
 AllCops:
   Exclude:
     - "**/spec/**"
+Layout/ExtraSpacing:
+  ForceEqualSignAlignment: true
+Layout/SpaceAroundOperators:
+  Enabled: false
 Lint/RescueException:
   Exclude:
     - "pubsub/subscriptions.rb"

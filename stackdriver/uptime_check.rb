@@ -32,9 +32,9 @@ end
 def create_uptime_check_config project_id: nil, host_name: nil, display_name: nil
   require "google/cloud/monitoring/v3"
 
-  client = Google::Cloud::Monitoring::V3::UptimeCheck.new
+  client       = Google::Cloud::Monitoring::V3::UptimeCheck.new
   project_name = Google::Cloud::Monitoring::V3::UptimeCheckServiceClient.project_path project_id
-  config = {
+  config       = {
     display_name:       display_name.nil? ? "New uptime check" : display_name,
     monitored_resource: {
       type:   "uptime_url",
@@ -44,8 +44,8 @@ def create_uptime_check_config project_id: nil, host_name: nil, display_name: ni
     timeout:            { seconds: 10 },
     period:             { seconds: 300 }
   }
-  client = Google::Cloud::Monitoring::V3::UptimeCheck.new
-  new_config = client.create_uptime_check_config project_name, config
+  client       = Google::Cloud::Monitoring::V3::UptimeCheck.new
+  new_config   = client.create_uptime_check_config project_name, config
   puts new_config.name
   new_config
 end
@@ -66,9 +66,9 @@ end
 def list_uptime_check_configs project_id
   require "google/cloud/monitoring/v3"
 
-  client = Google::Cloud::Monitoring::V3::UptimeCheck.new
+  client       = Google::Cloud::Monitoring::V3::UptimeCheck.new
   project_name = Google::Cloud::Monitoring::V3::UptimeCheckServiceClient.project_path project_id
-  configs = client.list_uptime_check_configs project_name
+  configs      = client.list_uptime_check_configs project_name
 
   configs.each { |config| puts config.name }
 end
@@ -89,8 +89,8 @@ end
 def update_uptime_check_config config_name: nil, new_display_name: nil, new_http_check_path: nil
   require "google/cloud/monitoring/v3"
 
-  client = Google::Cloud::Monitoring::V3::UptimeCheck.new
-  config = { name: config_name }
+  client     = Google::Cloud::Monitoring::V3::UptimeCheck.new
+  config     = { name: config_name }
   field_mask = { paths: [] }
   unless new_display_name.to_s.empty?
     field_mask[:paths].push "display_name"

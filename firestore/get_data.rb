@@ -17,7 +17,7 @@ require "google/cloud/firestore"
 def retrieve_create_examples project_id:
   # project_id = "Your Google Cloud Project ID"
 
-  firestore = Google::Cloud::Firestore.new project_id: project_id
+  firestore  = Google::Cloud::Firestore.new project_id: project_id
   # [START fs_retrieve_create_examples]
   cities_ref = firestore.col "cities"
   cities_ref.doc("SF").set(
@@ -64,8 +64,8 @@ def get_document project_id:
 
   firestore = Google::Cloud::Firestore.new project_id: project_id
   # [START fs_get_document]
-  doc_ref  = firestore.doc "cities/SF"
-  snapshot = doc_ref.get
+  doc_ref   = firestore.doc "cities/SF"
+  snapshot  = doc_ref.get
   if snapshot.exists?
     puts "#{snapshot.document_id} data: #{snapshot.data}."
   else
@@ -77,7 +77,7 @@ end
 def get_multiple_docs project_id:
   # project_id = "Your Google Cloud Project ID"
 
-  firestore = Google::Cloud::Firestore.new project_id: project_id
+  firestore  = Google::Cloud::Firestore.new project_id: project_id
   # [START fs_get_multiple_docs]
   cities_ref = firestore.col "cities"
 
@@ -92,7 +92,7 @@ end
 def get_all_docs project_id:
   # project_id = "Your Google Cloud Project ID"
 
-  firestore = Google::Cloud::Firestore.new project_id: project_id
+  firestore  = Google::Cloud::Firestore.new project_id: project_id
   # [START fs_get_all_docs]
   cities_ref = firestore.col "cities"
   cities_ref.get do |city|
@@ -106,7 +106,7 @@ def add_subcollection project_id:
 
   firestore = Google::Cloud::Firestore.new project_id: project_id
   # [START fs_add_subcollection]
-  city_ref = firestore.doc "cities/SF"
+  city_ref  = firestore.doc "cities/SF"
 
   subcollection_ref = city_ref.col "neighborhoods"
 
@@ -120,7 +120,7 @@ def list_subcollections project_id:
 
   firestore = Google::Cloud::Firestore.new project_id: project_id
   # [START fs_list_subcollections]
-  city_ref = firestore.doc "cities/SF"
+  city_ref  = firestore.doc "cities/SF"
   city_ref.cols do |col|
     puts col.collection_id
   end

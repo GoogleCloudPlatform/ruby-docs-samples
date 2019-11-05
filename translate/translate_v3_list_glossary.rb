@@ -18,7 +18,7 @@ def translate_v3_list_glossary
 
   client = Google::Cloud::Translate.new
 
-  project_id = "[Google Cloud Project ID]"
+  project_id  = "[Google Cloud Project ID]"
   location_id = "[LOCATION ID]"
 
   parent = client.class.location_path project_id, location_id

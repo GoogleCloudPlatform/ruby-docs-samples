@@ -393,7 +393,7 @@ def generate_signed_get_url_v4 project_id:, bucket_name:, file_name:
   # file_name   = "Name of a file in the Google Cloud Storage bucket"
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage             = Google::Cloud::Storage.new project_id: project_id
   storage_expiry_time = 5 * 60 # 5 minutes
 
   url = storage.signed_url bucket_name, file_name, method: "GET",
@@ -413,7 +413,7 @@ def generate_signed_put_url_v4 project_id:, bucket_name:, file_name:
   # file_name   = "Name of a file in the Cloud Storage bucket"
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage             = Google::Cloud::Storage.new project_id: project_id
   storage_expiry_time = 5 * 60 # 5 minutes
 
   url = storage.signed_url bucket_name, file_name, method: "PUT",

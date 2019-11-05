@@ -23,7 +23,7 @@ def list_contexts project_id:, session_id:
   require "google/cloud/dialogflow"
 
   contexts_client = Google::Cloud::Dialogflow::Contexts.new
-  session_path = contexts_client.class.session_path project_id, session_id
+  session_path    = contexts_client.class.session_path project_id, session_id
 
   contexts = contexts_client.list_contexts session_path
 
@@ -52,10 +52,10 @@ def create_context project_id:, session_id:, context_id:
   require "google/cloud/dialogflow"
 
   contexts_client = Google::Cloud::Dialogflow::Contexts.new
-  session_path = contexts_client.class.session_path project_id, session_id
-  context_name = contexts_client.class.context_path project_id, session_id,
-                                                    context_id
-  lifespan_count = 1
+  session_path    = contexts_client.class.session_path project_id, session_id
+  context_name    = contexts_client.class.context_path project_id, session_id,
+                                                       context_id
+  lifespan_count  = 1
 
   context = { name: context_name, lifespan_count: lifespan_count }
 
@@ -73,8 +73,8 @@ def delete_context project_id:, session_id:, context_id:
   require "google/cloud/dialogflow"
 
   contexts_client = Google::Cloud::Dialogflow::Contexts.new
-  context_path = contexts_client.class.context_path project_id, session_id,
-                                                    context_id
+  context_path    = contexts_client.class.context_path project_id, session_id,
+                                                       context_id
 
   contexts_client.delete_context context_path
 

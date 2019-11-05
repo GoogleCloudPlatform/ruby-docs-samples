@@ -16,7 +16,7 @@
 require "google/apis/jobs_v2"
 
 # Instantiate the client
-Jobs = Google::Apis::JobsV2
+Jobs        = Google::Apis::JobsV2
 jobs_client = Jobs::JobServiceService.new
 
 # @see https://developers.google.com/identity/protocols/application-default-credentials#callingruby

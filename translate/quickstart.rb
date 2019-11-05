@@ -23,7 +23,7 @@ project_id = "YOUR_PROJECT_ID"
 translate = Google::Cloud::Translate.new version: :v2, project: project_id
 
 # The text to translate
-text = "Hello, world!"
+text   = "Hello, world!"
 # The target language
 target = "ru"
 

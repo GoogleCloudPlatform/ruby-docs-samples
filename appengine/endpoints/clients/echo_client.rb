@@ -49,18 +49,18 @@ end
 
 options[:message] = "Hello echo message" unless options[:message]
 
-url = "#{options[:host]}/echo?key=#{options[:api_key]}"
+url  = "#{options[:host]}/echo?key=#{options[:api_key]}"
 body = { message: options[:message] }.to_json
 
 begin
   response = RestClient.post url, body
   puts response.code
   puts response.body
-rescue StandardError => ex
-  if ex.respond_to? :response
-    puts ex.response.code
-    puts ex.response.body
+rescue StandardError => e
+  if e.respond_to? :response
+    puts e.response.code
+    puts e.response.body
   else
-    puts ex
+    puts e
   end
 end

@@ -18,14 +18,14 @@ def translate_v3_batch_translate_text_with_glossary_and_model
 
   client = Google::Cloud::Translate.new
 
-  input_uri = "gs://cloud-samples-data/text.txt"
-  output_uri = "gs://YOUR_BUCKET_ID/path_to_store_results/"
-  project_id = "[Google Cloud Project ID]"
+  input_uri   = "gs://cloud-samples-data/text.txt"
+  output_uri  = "gs://YOUR_BUCKET_ID/path_to_store_results/"
+  project_id  = "[Google Cloud Project ID]"
   location_id = "us-central1"
   source_lang = "en"
   target_lang = "ja"
 
-  input_config = {
+  input_config  = {
     gcs_source: {
       input_uri: input_uri
     },
@@ -37,12 +37,12 @@ def translate_v3_batch_translate_text_with_glossary_and_model
       output_uri_prefix: output_uri
     }
   }
-  parent = client.class.location_path project_id, location_id
+  parent        = client.class.location_path project_id, location_id
   # The models to use for translation. Map's key is target language code.
-  models = {
+  models        = {
     target_lang => "projects/[PROJECT_ID]/locations/[LOCATION]/models/[YOUR_MODEL_ID]"
   }
-  glossaries = {
+  glossaries    = {
     target_lang => Google::Cloud::Translate::V3::TranslateTextGlossaryConfig.new(
       # Required. Specifies the glossary used for this translation.
       glossary: "projects/[PROJECT_ID]/locations/[LOCATION]/glossaries/[YOUR_GLOSSARY_ID]"

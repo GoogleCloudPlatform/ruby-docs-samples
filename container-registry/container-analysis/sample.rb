@@ -24,7 +24,7 @@ def create_note note_id:, project_id:
   client = Grafeas.new
 
   formatted_parent = Grafeas::V1::GrafeasClient.project_path project_id
-  note = {
+  note             = {
     vulnerability: {
       details: [
         affected_cpe_uri:     "your-uri-here",
@@ -34,7 +34,7 @@ def create_note note_id:, project_id:
       ]
     }
   }
-  response = client.create_note formatted_parent, note_id, note
+  response         = client.create_note formatted_parent, note_id, note
   puts response.name
   ## [END containeranalysis_create_note]
   response
@@ -68,8 +68,8 @@ def create_occurrence resource_url:, note_id:, occurrence_project:, note_project
   require "grafeas"
 
   # Initialize the client
-  client = Grafeas.new
-  formatted_note = Grafeas::V1::GrafeasClient.note_path note_project, note_id
+  client            = Grafeas.new
+  formatted_note    = Grafeas::V1::GrafeasClient.note_path note_project, note_id
   formatted_project = Grafeas::V1::GrafeasClient.project_path occurrence_project
 
   occurrence = {
@@ -117,7 +117,7 @@ def get_note note_id:, project_id:
   client = Grafeas.new
 
   formatted_note = Grafeas::V1::GrafeasClient.note_path project_id, note_id
-  response = client.get_note formatted_note
+  response       = client.get_note formatted_note
   puts response.name
   # [END containeranalysis_get_note]
   response
@@ -134,7 +134,7 @@ def get_occurrence occurrence_id:, project_id:
   client = Grafeas.new
 
   formatted_parent = Grafeas::V1::GrafeasClient.occurrence_path project_id, occurrence_id
-  response = client.get_occurrence formatted_parent
+  response         = client.get_occurrence formatted_parent
   puts response.name
   # [END containeranalysis_get_occurrence]
   response
@@ -153,8 +153,8 @@ def get_occurrences_for_image resource_url:, project_id:
   client = Grafeas.new
 
   formatted_parent = Grafeas::V1::GrafeasClient.project_path project_id
-  filter = "resourceUrl = \"#{resource_url}\""
-  count = 0
+  filter           = "resourceUrl = \"#{resource_url}\""
+  count            = 0
   client.list_occurrences(formatted_parent, filter: filter).each do |occurrence|
     # Process occurrence here
     puts occurrence
@@ -176,7 +176,7 @@ def get_occurrences_for_note note_id:, project_id:
   client = Grafeas.new
 
   formatted_note = Grafeas::V1::GrafeasClient.note_path project_id, note_id
-  count = 0
+  count          = 0
   client.list_note_occurrences(formatted_note).each do |occurrence|
     # Process occurrence here
     puts occurrence
@@ -199,7 +199,7 @@ def get_discovery_info resource_url:, project_id:
   client = Grafeas.new
 
   formatted_parent = Grafeas::V1::GrafeasClient.project_path project_id
-  filter = "kind = \"DISCOVERY\" AND resourceUrl = \"#{resource_url}\""
+  filter           = "kind = \"DISCOVERY\" AND resourceUrl = \"#{resource_url}\""
   client.list_occurrences(formatted_parent, filter: filter).each do |occurrence|
     # Process discovery occurrence here
     puts occurrence
@@ -216,11 +216,11 @@ def occurrence_pubsub subscription_id:, timeout_seconds:, project_id:
 
   require "google/cloud/pubsub"
 
-  pubsub = Google::Cloud::Pubsub.new project: project_id
-  topic = pubsub.topic "container-analysis-occurrences-v1"
+  pubsub       = Google::Cloud::Pubsub.new project: project_id
+  topic        = pubsub.topic "container-analysis-occurrences-v1"
   subscription = topic.subscribe subscription_id
 
-  count = 0
+  count      = 0
   subscriber = subscription.listen do |received_message|
     count += 1
     # Process incoming occurrence here
@@ -251,20 +251,20 @@ def poll_discovery_finished resource_url:, timeout_seconds:, project_id:
   deadline = Time.now + timeout_seconds
 
   # Initialize the client
-  client = Grafeas.new
+  client           = Grafeas.new
   formatted_parent = Grafeas::V1::GrafeasClient.project_path project_id
 
   # Find the discovery occurrence using a filter string
   discovery_occurrence = nil
   while discovery_occurrence.nil?
     begin
-      filter = 'resourceUrl="#{resource_url}" ' \
+      filter               = 'resourceUrl="#{resource_url}" ' \
                'AND noteProjectId="goog-analysis" ' \
                'AND noteId="PACKAGE_VULNERABILITY"'
       # [END containeranalysis_poll_discovery_occurrence_finished]i
       # The above filter isn"t testable, since it looks for occurrences in a
       # locked down project. Fall back to a more permissive filter for testing
-      filter = "kind = \"DISCOVERY\" AND resourceUrl = \"#{resource_url}\""
+      filter               = "kind = \"DISCOVERY\" AND resourceUrl = \"#{resource_url}\""
       # [START containeranalysis_poll_discovery_occurrence_finished]
       # Only the discovery occurrence should be returned for the given filter
       discovery_occurrence = client.list_occurrences(formatted_parent, filter: filter).first
@@ -287,7 +287,7 @@ def poll_discovery_finished resource_url:, timeout_seconds:, project_id:
     # Update occurrence
     begin
       updated = client.get_occurrence discovery_occurrence.name
-      status = updated.discovery.analysis_status
+      status  = updated.discovery.analysis_status
     rescue StandardError # If there is an error, keep trying until the deadline
       puts "discovery occurrence not yet in terminal state"
     ensure
@@ -316,7 +316,7 @@ def find_vulnerabilities_for_image resource_url:, project_id:
   client = Grafeas.new
 
   formatted_parent = Grafeas::V1::GrafeasClient.project_path project_id
-  filter = "resourceUrl = \"#{resource_url}\" AND kind = \"VULNERABILITY\""
+  filter           = "resourceUrl = \"#{resource_url}\" AND kind = \"VULNERABILITY\""
   client.list_occurrences formatted_parent, filter: filter
   # [END containeranalysis_vulnerability_occurrences_for_image]
 end
@@ -332,8 +332,8 @@ def find_high_severity_vulnerabilities_for_image resource_url:, project_id:
   # Initialize the client
   client = Grafeas.new
 
-  formatted_parent = Grafeas::V1::GrafeasClient.project_path project_id
-  filter = "resourceUrl = \"#{resource_url}\" AND kind = \"VULNERABILITY\""
+  formatted_parent   = Grafeas::V1::GrafeasClient.project_path project_id
+  filter             = "resourceUrl = \"#{resource_url}\" AND kind = \"VULNERABILITY\""
   vulnerability_list = client
                        .list_occurrences(formatted_parent, filter: filter)
   # Filter the list to include only "high" and "critical" vulnerabilities

@@ -5,10 +5,10 @@ require "google/cloud/bigtable"
 # [END bigtable_hw_imports]
 
 # [START bigtable_hw_connect]
-project_id = "YOUR_PROJECT_ID"
-table_id = "Hello-Bigtable"
-instance_id = "my-instance"
-column_family = "cf"
+project_id       = "YOUR_PROJECT_ID"
+table_id         = "Hello-Bigtable"
+instance_id      = "my-instance"
+column_family    = "cf"
 column_qualifier = "greeting"
 
 bigtable = Google::Cloud::Bigtable.new project_id: project_id

@@ -125,7 +125,7 @@ end
 def delete_cluster project_id, instance_id, cluster_id
   bigtable = Google::Cloud::Bigtable.new project_id: project_id
   instance = bigtable.instance instance_id
-  cluster = instance.cluster cluster_id
+  cluster  = instance.cluster cluster_id
   puts "Deleting Cluster: #{cluster_id}"
 
   # [START bigtable_delete_cluster]

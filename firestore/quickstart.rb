@@ -29,7 +29,7 @@ def add_data_1 project_id:
 
   firestore = Google::Cloud::Firestore.new project_id: project_id
   # [START fs_add_data_1]
-  doc_ref = firestore.doc "users/alovelace"
+  doc_ref   = firestore.doc "users/alovelace"
 
   doc_ref.set(
     first: "Ada",
@@ -46,7 +46,7 @@ def add_data_2 project_id:
 
   firestore = Google::Cloud::Firestore.new project_id: project_id
   # [START fs_add_data_2]
-  doc_ref = firestore.doc "users/aturing"
+  doc_ref   = firestore.doc "users/aturing"
 
   doc_ref.set(
     first:  "Alan",

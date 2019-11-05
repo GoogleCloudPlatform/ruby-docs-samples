@@ -26,11 +26,11 @@ def detect_intent_audio(project_id:, session_id:, audio_file_path:,
   require "google/cloud/dialogflow"
 
   session_client = Google::Cloud::Dialogflow::Sessions.new
-  session = session_client.class.session_path project_id, session_id
+  session        = session_client.class.session_path project_id, session_id
   puts "Session path: #{session}"
 
   begin
-    audio_file = File.open audio_file_path, "rb"
+    audio_file  = File.open audio_file_path, "rb"
     input_audio = audio_file.read
   ensure
     audio_file.close
@@ -44,7 +44,7 @@ def detect_intent_audio(project_id:, session_id:, audio_file_path:,
 
   query_input = { audio_config: audio_config }
 
-  response = session_client.detect_intent session, query_input, input_audio: input_audio
+  response     = session_client.detect_intent session, query_input, input_audio: input_audio
   query_result = response.query_result
 
   puts "Query text:        #{query_result.query_text}"
@@ -56,7 +56,7 @@ end
 
 
 if $PROGRAM_NAME == __FILE__
-  project_id = ENV["GOOGLE_CLOUD_PROJECT"]
+  project_id      = ENV["GOOGLE_CLOUD_PROJECT"]
   audio_file_path = ARGV.shift
 
   if audio_file_path

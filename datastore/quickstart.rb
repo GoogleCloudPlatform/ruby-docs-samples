@@ -23,9 +23,9 @@ project_id = "YOUR_PROJECT_ID"
 datastore = Google::Cloud::Datastore.new project: project_id
 
 # The kind for the new entity
-kind = "Task"
+kind     = "Task"
 # The name/ID for the new entity
-name = "sampletask1"
+name     = "sampletask1"
 # The Cloud Datastore key for the new entity
 task_key = datastore.key kind, name
 

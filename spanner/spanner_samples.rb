@@ -663,7 +663,7 @@ def spanner_batch_client project_id:, instance_id:, database_id:
   # Collect statistics for batch query
   average_records_per_partition = 0.0
   if total_partitions != 0
-    average_records_per_partition = total_records.value.to_f / total_partitions.to_f
+    average_records_per_partition = total_records.value / total_partitions.to_f
   end
 
   puts "Total Partitions: #{total_partitions}"
@@ -702,8 +702,8 @@ def update_using_dml project_id:, instance_id:, database_id:
 
   require "google/cloud/spanner"
 
-  spanner = Google::Cloud::Spanner.new project: project_id
-  client  = spanner.client instance_id, database_id
+  spanner   = Google::Cloud::Spanner.new project: project_id
+  client    = spanner.client instance_id, database_id
   row_count = 0
 
   client.transaction do |transaction|
@@ -726,8 +726,8 @@ def delete_using_dml project_id:, instance_id:, database_id:
 
   require "google/cloud/spanner"
 
-  spanner = Google::Cloud::Spanner.new project: project_id
-  client  = spanner.client instance_id, database_id
+  spanner   = Google::Cloud::Spanner.new project: project_id
+  client    = spanner.client instance_id, database_id
   row_count = 0
 
   client.transaction do |transaction|
@@ -748,8 +748,8 @@ def update_using_dml_with_timestamp project_id:, instance_id:, database_id:
 
   require "google/cloud/spanner"
 
-  spanner = Google::Cloud::Spanner.new project: project_id
-  client  = spanner.client instance_id, database_id
+  spanner   = Google::Cloud::Spanner.new project: project_id
+  client    = spanner.client instance_id, database_id
   row_count = 0
 
   client.transaction do |transaction|
@@ -770,8 +770,8 @@ def write_and_read_using_dml project_id:, instance_id:, database_id:
 
   require "google/cloud/spanner"
 
-  spanner = Google::Cloud::Spanner.new project: project_id
-  client  = spanner.client instance_id, database_id
+  spanner   = Google::Cloud::Spanner.new project: project_id
+  client    = spanner.client instance_id, database_id
   row_count = 0
 
   client.transaction do |transaction|
@@ -794,9 +794,9 @@ def update_using_dml_with_struct project_id:, instance_id:, database_id:
 
   require "google/cloud/spanner"
 
-  spanner = Google::Cloud::Spanner.new project: project_id
-  client  = spanner.client instance_id, database_id
-  row_count = 0
+  spanner     = Google::Cloud::Spanner.new project: project_id
+  client      = spanner.client instance_id, database_id
+  row_count   = 0
   name_struct = { FirstName: "Timothy", LastName: "Campbell" }
 
   client.transaction do |transaction|
@@ -819,8 +819,8 @@ def write_using_dml project_id:, instance_id:, database_id:
 
   require "google/cloud/spanner"
 
-  spanner = Google::Cloud::Spanner.new project: project_id
-  client  = spanner.client instance_id, database_id
+  spanner   = Google::Cloud::Spanner.new project: project_id
+  client    = spanner.client instance_id, database_id
   row_count = 0
 
   client.transaction do |transaction|
@@ -874,7 +874,7 @@ def write_with_transaction_using_dml project_id:, instance_id:, database_id:
   transfer_amount = 200_000
 
   client.transaction do |transaction|
-    first_album = transaction.execute(
+    first_album  = transaction.execute(
       "SELECT MarketingBudget from Albums
        WHERE SingerId = 1 and AlbumId = 1"
     ).rows.first
@@ -1095,11 +1095,11 @@ def query_with_bytes project_id:, instance_id:, database_id:
   client  = spanner.client instance_id, database_id
 
   example_bytes = StringIO.new "Hello World 1"
-  sql_query = "SELECT VenueId, VenueName FROM Venues
+  sql_query     = "SELECT VenueId, VenueName FROM Venues
                WHERE VenueInfo = @venue_info"
 
-  params      = { venue_info: example_bytes }
-  param_types = { venue_info: :BYTES }
+  params        = { venue_info: example_bytes }
+  param_types   = { venue_info: :BYTES }
 
   client.execute(sql_query, params: params, types: param_types).rows.each do |row|
     puts "#{row[:VenueId]} #{row[:VenueName]}"
@@ -1211,11 +1211,11 @@ def query_with_timestamp project_id:, instance_id:, database_id:
   client  = spanner.client instance_id, database_id
 
   example_timestamp = DateTime.now
-  sql_query = "SELECT VenueId, VenueName, LastUpdateTime FROM Venues
+  sql_query         = "SELECT VenueId, VenueName, LastUpdateTime FROM Venues
                WHERE LastUpdateTime < @last_update_time"
 
-  params      = { last_update_time: example_timestamp }
-  param_types = { last_update_time: :TIMESTAMP }
+  params            = { last_update_time: example_timestamp }
+  param_types       = { last_update_time: :TIMESTAMP }
 
   client.execute(sql_query, params: params, types: param_types).rows.each do |row|
     puts "#{row[:VenueId]} #{row[:VenueName]} #{row[:LastUpdateTime]}"

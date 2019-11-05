@@ -22,7 +22,7 @@ class EnumeratorQueue
 
   # @private
   def initialize sentinel
-    @q = Queue.new
+    @q        = Queue.new
     @sentinel = sentinel
   end
 
@@ -50,15 +50,15 @@ def detect_intent_stream(project_id:, session_id:, audio_file_path:,
   require "monitor"
 
   session_client = Google::Cloud::Dialogflow::Sessions.new
-  session = session_client.class.session_path project_id, session_id
+  session        = session_client.class.session_path project_id, session_id
   puts "Session path: #{session}"
 
-  audio_config = {
+  audio_config     = {
     audio_encoding:    :AUDIO_ENCODING_LINEAR_16,
     sample_rate_hertz: 16_000,
     language_code:     language_code
   }
-  query_input = { audio_config: audio_config }
+  query_input      = { audio_config: audio_config }
   streaming_config = { session: session, query_input: query_input }
 
   # To signal the main thread when all responses have been processed
@@ -109,7 +109,7 @@ end
 
 
 if $PROGRAM_NAME == __FILE__
-  project_id = ENV["GOOGLE_CLOUD_PROJECT"]
+  project_id      = ENV["GOOGLE_CLOUD_PROJECT"]
   audio_file_path = ARGV.shift
 
   if audio_file_path

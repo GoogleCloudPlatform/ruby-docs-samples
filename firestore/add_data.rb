@@ -20,7 +20,7 @@ def set_document project_id:
 
   firestore = Google::Cloud::Firestore.new project_id: project_id
   # [START fs_set_document]
-  city_ref = firestore.doc "cities/LA"
+  city_ref  = firestore.doc "cities/LA"
 
   data = {
     name:    "Los Angeles",
@@ -38,7 +38,7 @@ def update_create_if_missing project_id:
 
   firestore = Google::Cloud::Firestore.new project_id: project_id
   # [START fs_update_create_if_missing]
-  city_ref = firestore.doc "cities/LA"
+  city_ref  = firestore.doc "cities/LA"
   city_ref.set({ capital: false }, merge: true)
   # [END fs_update_create_if_missing]
   puts "Merged data into the LA document in the cities collection."
@@ -49,7 +49,7 @@ def set_document_data_types project_id:
 
   firestore = Google::Cloud::Firestore.new project_id: project_id
   # [START fs_set_document_data_types]
-  doc_ref = firestore.doc "data/one"
+  doc_ref   = firestore.doc "data/one"
 
   data = {
     stringExample:  "Hello, World!",
@@ -74,7 +74,7 @@ def set_requires_id project_id:
 
   firestore = Google::Cloud::Firestore.new project_id: project_id
 
-  data = {
+  data     = {
     name:    "Phuket",
     country: "Thailand"
   }
@@ -90,7 +90,7 @@ def add_doc_data_with_auto_id project_id:
 
   firestore = Google::Cloud::Firestore.new project_id: project_id
   # [START fs_add_doc_data_with_auto_id]
-  data = {
+  data      = {
     name:    "Tokyo",
     country: "Japan"
   }
@@ -107,7 +107,7 @@ def add_doc_data_after_auto_id project_id:
 
   firestore = Google::Cloud::Firestore.new project_id: project_id
 
-  data = {
+  data       = {
     name:    "Moscow",
     country: "Russia"
   }
@@ -129,7 +129,7 @@ def update_doc project_id:
 
   doc_ref = firestore.doc "cities/DC"
 
-  data = {
+  data     = {
     name:    "Washington D.C.",
     country: "USA"
   }
@@ -176,7 +176,7 @@ def update_server_timestamp project_id:
     population: 85
   )
   # [START fs_update_server_timestamp]
-  city_ref = firestore.doc "cities/new-city-id"
+  city_ref  = firestore.doc "cities/new-city-id"
   city_ref.update timestamp: firestore.field_server_time
   # [END fs_update_server_timestamp]
   puts "Updated the timestamp field of the new-city-id document in the cities collection."
@@ -194,7 +194,7 @@ def update_document_increment project_id:
     population: 680_000
   )
   # [START fs_update_document_increment]
-  city_ref = firestore.doc "cities/DC"
+  city_ref  = firestore.doc "cities/DC"
   city_ref.update population: firestore.field_increment(50)
   # [END fs_update_document_increment]
   puts "Updated the population of the DC document in the cities collection."

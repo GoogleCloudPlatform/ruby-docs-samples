@@ -41,8 +41,8 @@ def draw_box_around_faces path_to_image_file:, path_to_output_file:
       x2 = annotation.bounding_poly.vertices[2].x.to_i
       y2 = annotation.bounding_poly.vertices[2].y.to_i
 
-      photo = Magick::Image.read(path_to_image_file).first
-      draw = Magick::Draw.new
+      photo       = Magick::Image.read(path_to_image_file).first
+      draw        = Magick::Draw.new
       draw.stroke = "green"
       draw.stroke_width 5
       draw.fill_opacity 0

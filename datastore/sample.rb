@@ -61,9 +61,9 @@ def entity_with_parent
   task_key = datastore.key [["TaskList", "default"], ["Task", "sampleTask"]]
 
   task = datastore.entity task_key do |t|
-    t["category"] = "Personal"
-    t["done"] = false
-    t["priority"] = 4
+    t["category"]    = "Personal"
+    t["done"]        = false
+    t["priority"]    = 4
     t["description"] = "Learn Cloud Datastore"
   end
   # [END datastore_entity_with_parent]
@@ -76,12 +76,12 @@ def properties
 
   # [START datastore_properties]
   task = datastore.entity "Task" do |t|
-    t["category"] = "Personal"
-    t["created"] = Time.now
-    t["done"] = false
-    t["priority"] = 4
+    t["category"]         = "Personal"
+    t["created"]          = Time.now
+    t["done"]             = false
+    t["priority"]         = 4
     t["percent_complete"] = 10.0
-    t["description"] = "Learn Cloud Datastore"
+    t["description"]      = "Learn Cloud Datastore"
     t.exclude_from_indexes! "description", true
   end
   # [END datastore_properties]
@@ -94,7 +94,7 @@ def array_value
 
   # [START datastore_array_value]
   task = datastore.entity "Task", "sampleTask" do |t|
-    t["tags"] = ["fun", "programming"]
+    t["tags"]          = ["fun", "programming"]
     t["collaborators"] = ["alice", "bob"]
   end
   # [END datastore_array_value]
@@ -105,9 +105,9 @@ def basic_entity
 
   # [START datastore_basic_entity]
   task = datastore.entity "Task" do |t|
-    t["category"] = "Personal"
-    t["done"] = false
-    t["priority"] = 4
+    t["category"]    = "Personal"
+    t["done"]        = false
+    t["priority"]    = 4
     t["description"] = "Learn Cloud Datastore"
   end
   # [END datastore_basic_entity]
@@ -120,9 +120,9 @@ def upsert
 
   # [START datastore_upsert]
   task = datastore.entity "Task", "sampleTask" do |t|
-    t["category"] = "Personal"
-    t["done"] = false
-    t["priority"] = 4
+    t["category"]    = "Personal"
+    t["done"]        = false
+    t["priority"]    = 4
     t["description"] = "Learn Cloud Datastore"
   end
   datastore.save task
@@ -132,15 +132,15 @@ def upsert
 end
 
 def insert
-  task = nil
+  task      = nil
   datastore = Google::Cloud::Datastore.new
 
   # [START datastore_insert]
   datastore.transaction do |_tx|
     task = datastore.entity "Task" do |t|
-      t["category"] = "Personal"
-      t["done"] = false
-      t["priority"] = 4
+      t["category"]    = "Personal"
+      t["done"]        = false
+      t["priority"]    = 4
       t["description"] = "Learn Cloud Datastore"
     end
     datastore.save task
@@ -155,7 +155,7 @@ def lookup
 
   # [START datastore_lookup]
   task_key = datastore.key "Task", "sampleTask"
-  task = datastore.find task_key
+  task     = datastore.find task_key
   # [END datastore_lookup]
 
   task
@@ -165,16 +165,16 @@ def update
   datastore = Google::Cloud::Datastore.new
 
   task = datastore.entity "Task", "sampleTask" do |t|
-    t["category"] = "Personal"
-    t["done"] = false
-    t["priority"] = 4
+    t["category"]    = "Personal"
+    t["done"]        = false
+    t["priority"]    = 4
     t["description"] = "Learn Cloud Datastore"
   end
   datastore.save task
 
   # [START datastore_update]
   datastore.transaction do |_tx|
-    task = datastore.find "Task", "sampleTask"
+    task             = datastore.find "Task", "sampleTask"
     task["priority"] = 5
     datastore.save task
   end
@@ -199,20 +199,20 @@ def batch_upsert
 
   # [START datastore_batch_upsert]
   task1 = datastore.entity "Task" do |t|
-    t["category"] = "Personal"
-    t["done"] = false
-    t["priority"] = 4
+    t["category"]    = "Personal"
+    t["done"]        = false
+    t["priority"]    = 4
     t["description"] = "Learn Cloud Datastore"
   end
 
   task2 = datastore.entity "Task" do |t|
-    t["category"] = "Personal"
-    t["done"] = false
-    t["priority"] = 5
+    t["category"]    = "Personal"
+    t["done"]        = false
+    t["priority"]    = 5
     t["description"] = "Integrate Cloud Datastore"
   end
 
-  tasks = datastore.save task1, task2
+  tasks     = datastore.save task1, task2
   task_key1 = tasks[0].key
   task_key2 = tasks[1].key
   # [END datastore_batch_upsert]
@@ -226,7 +226,7 @@ def batch_lookup
   # [START datastore_batch_lookup]
   task_key1 = datastore.key "Task", "sampleTask1"
   task_key2 = datastore.key "Task", "sampleTask2"
-  tasks = datastore.find_all task_key1, task_key2
+  tasks     = datastore.find_all task_key1, task_key2
   # [END datastore_batch_lookup]
 end
 
@@ -318,7 +318,7 @@ def kindless_query
 
   last_seen_key = datastore.key "Task", "a"
   # [START datastore_kindless_query]
-  query = Google::Cloud::Datastore::Query.new
+  query         = Google::Cloud::Datastore::Query.new
   query.where "__key__", ">", last_seen_key
   # [END datastore_kindless_query]
 
@@ -345,7 +345,7 @@ def projection_query
   # [END datastore_projection_query]
 
   # [START datastore_run_query_projection]
-  priorities = []
+  priorities        = []
   percent_completes = []
   datastore.run(query).each do |task|
     priorities << task["priority"]
@@ -477,9 +477,9 @@ def cursor_paging
 
   # [START datastore_cursor_paging]
   page_size = 2
-  query = datastore.query("Task")
-                   .limit(page_size)
-  tasks = datastore.run query
+  query     = datastore.query("Task")
+                       .limit(page_size)
+  tasks     = datastore.run query
 
   page_cursor = tasks.cursor
 
@@ -516,9 +516,9 @@ def exploding_properties
 
   # [START datastore_exploding_properties]
   task = datastore.entity "Task" do |t|
-    t["tags"] = ["fun", "programming", "learn"]
+    t["tags"]          = ["fun", "programming", "learn"]
     t["collaborators"] = ["alice", "bob", "charlie"]
-    t["created"] = Time.now
+    t["created"]       = Time.now
   end
   # [END datastore_exploding_properties]
 end
@@ -526,10 +526,10 @@ end
 # [START datastore_transactional_update]
 def transfer_funds from_key, to_key, amount
   datastore.transaction do |tx|
-    from = tx.find from_key
+    from             = tx.find from_key
     from["balance"] -= amount
-    to = tx.find to_key
-    to["balance"] += amount
+    to               = tx.find to_key
+    to["balance"]   += amount
     tx.save from, to
   end
 end
@@ -554,9 +554,9 @@ def transactional_get_or_create task_key
     task = tx.find task_key
     if task.nil?
       task = datastore.entity task_key do |t|
-        t["category"] = "Personal"
-        t["done"] = false
-        t["priority"] = 4
+        t["category"]    = "Personal"
+        t["done"]        = false
+        t["priority"]    = 4
         t["description"] = "Learn Cloud Datastore"
       end
       tx.save task
@@ -571,8 +571,8 @@ def transactional_single_entity_group_read_only
   # [START datastore_transactional_single_entity_group_read_only]
   task_list_key = datastore.key "TaskList", "default"
   datastore.read_only_transaction do |tx|
-    task_list = tx.find task_list_key
-    query = datastore.query("Task").ancestor(task_list)
+    task_list     = tx.find task_list_key
+    query         = datastore.query("Task").ancestor(task_list)
     tasks_in_list = tx.run query
   end
   # [END datastore_transactional_single_entity_group_read_only]
@@ -614,10 +614,10 @@ def property_run_query
   query = datastore.query("__property__")
                    .select("__key__")
 
-  entities = datastore.run query
+  entities           = datastore.run query
   properties_by_kind = entities.each_with_object({}) do |entity, memo|
-    kind = entity.key.parent.name
-    prop = entity.key.name
+    kind         = entity.key.parent.name
+    prop         = entity.key.name
     memo[kind] ||= []
     memo[kind] << prop
   end
@@ -628,14 +628,14 @@ def property_by_kind_run_query
   datastore = Google::Cloud::Datastore.new
 
   # [START datastore_property_by_kind_run_query]
-  ancestor_key = datastore.key "__kind__", "Task"
-  query = datastore.query("__property__")
-                   .ancestor(ancestor_key)
+  ancestor_key    = datastore.key "__kind__", "Task"
+  query           = datastore.query("__property__")
+                             .ancestor(ancestor_key)
 
-  entities = datastore.run query
+  entities        = datastore.run query
   representations = entities.each_with_object({}) do |entity, memo|
-    property_name = entity.key.name
-    property_types = entity["property_representation"]
+    property_name       = entity.key.name
+    property_types      = entity["property_representation"]
     memo[property_name] = property_types
   end
   # [END datastore_property_by_kind_run_query]
@@ -645,15 +645,15 @@ def property_filtering_run_query
   datastore = Google::Cloud::Datastore.new
 
   # [START datastore_property_filtering_run_query]
-  start_key = datastore.key [["__kind__", "Task"], ["__property__", "priority"]]
-  query = datastore.query("__property__")
-                   .select("__key__")
-                   .where("__key__", ">=", start_key)
+  start_key          = datastore.key [["__kind__", "Task"], ["__property__", "priority"]]
+  query              = datastore.query("__property__")
+                                .select("__key__")
+                                .where("__key__", ">=", start_key)
 
-  entities = datastore.run query
+  entities           = datastore.run query
   properties_by_kind = entities.each_with_object({}) do |entity, memo|
-    kind = entity.key.parent.name
-    prop = entity.key.name
+    kind         = entity.key.parent.name
+    prop         = entity.key.name
     memo[kind] ||= []
     memo[kind] << prop
   end

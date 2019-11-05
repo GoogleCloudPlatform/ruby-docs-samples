@@ -59,7 +59,7 @@ $create_crypto_key = lambda do |project_id:, location_id:, key_ring_id:, crypto_
     CloudKMS::KeyManagementServiceClient.key_ring_path project_id, location_id, key_ring_id
 
   # CryptoKey creation parameters
-  crypto_key_spec = CloudKMS::CryptoKey.new
+  crypto_key_spec         = CloudKMS::CryptoKey.new
   crypto_key_spec.purpose = CloudKMS::CryptoKey::CryptoKeyPurpose::ENCRYPT_DECRYPT
 
   # Create a crypto key in the key ring
@@ -209,11 +209,11 @@ $enable_crypto_key_version = lambda do |project_id:, location_id:, key_ring_id:,
   version_path = CloudKMS::KeyManagementServiceClient.crypto_key_version_path(
     project_id, location_id, key_ring_id, crypto_key_id, version_id
   )
-  version = client.get_crypto_key_version version_path
+  version      = client.get_crypto_key_version version_path
 
   # Set the version state to enabled for update
   version.state = CloudKMS::CryptoKeyVersion::CryptoKeyVersionState::ENABLED
-  update_mask = Google::Protobuf::FieldMask.new
+  update_mask   = Google::Protobuf::FieldMask.new
   update_mask.paths << "state"
 
   # Enable the crypto key version
@@ -241,11 +241,11 @@ $disable_crypto_key_version = lambda do |project_id:, key_ring_id:, crypto_key_i
   version_path = CloudKMS::KeyManagementServiceClient.crypto_key_version_path(
     project_id, location_id, key_ring_id, crypto_key_id, version_id
   )
-  version = client.get_crypto_key_version version_path
+  version      = client.get_crypto_key_version version_path
 
   # Set the version state to disabled for update
   version.state = CloudKMS::CryptoKeyVersion::CryptoKeyVersionState::DISABLED
-  update_mask = Google::Protobuf::FieldMask.new
+  update_mask   = Google::Protobuf::FieldMask.new
   update_mask.paths << "state"
 
   # Disable the crypto key version

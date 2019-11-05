@@ -17,7 +17,7 @@ require "google/cloud/firestore"
 def query_create_examples project_id:
   # project_id = "Your Google Cloud Project ID"
 
-  firestore = Google::Cloud::Firestore.new project_id: project_id
+  firestore  = Google::Cloud::Firestore.new project_id: project_id
   # [START fs_query_create_examples]
   cities_ref = firestore.col "cities"
   cities_ref.doc("SF").set(
@@ -62,7 +62,7 @@ end
 def create_query_state project_id:
   # project_id = "Your Google Cloud Project ID"
 
-  firestore = Google::Cloud::Firestore.new project_id: project_id
+  firestore  = Google::Cloud::Firestore.new project_id: project_id
   # [START fs_create_query_state]
   cities_ref = firestore.col "cities"
 
@@ -77,7 +77,7 @@ end
 def create_query_capital project_id:
   # project_id = "Your Google Cloud Project ID"
 
-  firestore = Google::Cloud::Firestore.new project_id: project_id
+  firestore  = Google::Cloud::Firestore.new project_id: project_id
   # [START fs_create_query_capital]
   cities_ref = firestore.col "cities"
 
@@ -92,8 +92,8 @@ end
 def simple_queries project_id:
   # project_id = "Your Google Cloud Project ID"
 
-  firestore  = Google::Cloud::Firestore.new project_id: project_id
-  cities_ref = firestore.col "cities"
+  firestore        = Google::Cloud::Firestore.new project_id: project_id
+  cities_ref       = firestore.col "cities"
   # [START fs_simple_queries]
   state_query      = cities_ref.where "state", "=", "CA"
   population_query = cities_ref.where "population", ">", 1_000_000
@@ -113,8 +113,8 @@ end
 def chained_query project_id:
   # project_id = "Your Google Cloud Project ID"
 
-  firestore  = Google::Cloud::Firestore.new project_id: project_id
-  cities_ref = firestore.col "cities"
+  firestore     = Google::Cloud::Firestore.new project_id: project_id
+  cities_ref    = firestore.col "cities"
   # [START fs_chained_query]
   chained_query = cities_ref.where("state", "=", "CA").where("name", "=", "San Francisco")
   # [END fs_chained_query]
@@ -126,8 +126,8 @@ end
 def composite_index_chained_query project_id:
   # project_id = "Your Google Cloud Project ID"
 
-  firestore  = Google::Cloud::Firestore.new project_id: project_id
-  cities_ref = firestore.col "cities"
+  firestore     = Google::Cloud::Firestore.new project_id: project_id
+  cities_ref    = firestore.col "cities"
   # [START fs_composite_index_chained_query]
   chained_query = cities_ref.where("state", "=", "CA").where("population", "<", 1_000_000)
   # [END fs_composite_index_chained_query]
@@ -139,8 +139,8 @@ end
 def range_query project_id:
   # project_id = "Your Google Cloud Project ID"
 
-  firestore  = Google::Cloud::Firestore.new project_id: project_id
-  cities_ref = firestore.col "cities"
+  firestore   = Google::Cloud::Firestore.new project_id: project_id
+  cities_ref  = firestore.col "cities"
   # [START fs_range_query]
   range_query = cities_ref.where("state", ">=", "CA").where("state", "<=", "IN")
   # [END fs_range_query]
@@ -152,8 +152,8 @@ end
 def invalid_range_query project_id:
   # project_id = "Your Google Cloud Project ID"
 
-  firestore  = Google::Cloud::Firestore.new project_id: project_id
-  cities_ref = firestore.col "cities"
+  firestore           = Google::Cloud::Firestore.new project_id: project_id
+  cities_ref          = firestore.col "cities"
   # [START fs_invalid_range_query]
   invalid_range_query = cities_ref.where("state", ">=", "CA").where("population", ">", 1_000_000)
   # [END fs_invalid_range_query]

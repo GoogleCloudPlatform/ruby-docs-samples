@@ -37,7 +37,7 @@ def analyze_labels_gcs path:
       label.segments.each do |segment|
         start_time = (segment.segment.start_time_offset.seconds +
                        segment.segment.start_time_offset.nanos / 1e9)
-        end_time =   (segment.segment.end_time_offset.seconds +
+        end_time   =   (segment.segment.end_time_offset.seconds +
                        segment.segment.end_time_offset.nanos / 1e9)
 
         puts "Segment: #{start_time} to #{end_time}"
@@ -78,7 +78,7 @@ def analyze_labels_local path:
       label.segments.each do |segment|
         start_time = (segment.segment.start_time_offset.seconds +
                        segment.segment.start_time_offset.nanos / 1e9)
-        end_time =   (segment.segment.end_time_offset.seconds +
+        end_time   =   (segment.segment.end_time_offset.seconds +
                        segment.segment.end_time_offset.nanos / 1e9)
 
         puts "Segment: #{start_time} to #{end_time}"
@@ -112,7 +112,7 @@ def analyze_shots path:
     annotation_result.shot_annotations.each do |shot_annotation|
       start_time = (shot_annotation.start_time_offset.seconds +
                      shot_annotation.start_time_offset.nanos / 1e9)
-      end_time =   (shot_annotation.end_time_offset.seconds +
+      end_time   =   (shot_annotation.end_time_offset.seconds +
                      shot_annotation.end_time_offset.nanos / 1e9)
 
       puts "#{start_time} to #{end_time}"
@@ -185,7 +185,7 @@ def transcribe_speech_gcs path:
         alternative.words.each do |word_info|
           start_time = (word_info.start_time.seconds +
                          word_info.start_time.nanos / 1e9)
-          end_time =   (word_info.end_time.seconds +
+          end_time   =   (word_info.end_time.seconds +
                          word_info.end_time.nanos / 1e9)
 
           puts "#{word_info.word}: #{start_time} to #{end_time}"
@@ -218,19 +218,19 @@ def detect_text_gcs path:
       puts "Text: #{text_annotation.text}"
 
       # Print information about the first segment of the text.
-      text_segment = text_annotation.segments.first
+      text_segment      = text_annotation.segments.first
       start_time_offset = text_segment.segment.start_time_offset
-      end_time_offset = text_segment.segment.end_time_offset
-      start_time = (start_time_offset.seconds +
+      end_time_offset   = text_segment.segment.end_time_offset
+      start_time        = (start_time_offset.seconds +
                      start_time_offset.nanos / 1e9)
-      end_time =   (end_time_offset.seconds +
+      end_time          = (end_time_offset.seconds +
                      end_time_offset.nanos / 1e9)
       puts "start_time: #{start_time}, end_time: #{end_time}"
 
       puts "Confidence: #{text_segment.confidence}"
 
       # Print information about the first frame of the segment.
-      frame = text_segment.frames.first
+      frame       = text_segment.frames.first
       time_offset = (frame.time_offset.seconds +
                       frame.time_offset.nanos / 1e9)
       puts "Time offset for the first frame: #{time_offset}"
@@ -268,19 +268,19 @@ def detect_text_local path:
       puts "Text: #{text_annotation.text}"
 
       # Print information about the first segment of the text.
-      text_segment = text_annotation.segments.first
+      text_segment      = text_annotation.segments.first
       start_time_offset = text_segment.segment.start_time_offset
-      end_time_offset = text_segment.segment.end_time_offset
-      start_time = (start_time_offset.seconds +
+      end_time_offset   = text_segment.segment.end_time_offset
+      start_time        = (start_time_offset.seconds +
                      start_time_offset.nanos / 1e9)
-      end_time =   (end_time_offset.seconds +
+      end_time          = (end_time_offset.seconds +
                      end_time_offset.nanos / 1e9)
       puts "start_time: #{start_time}, end_time: #{end_time}"
 
       puts "Confidence: #{text_segment.confidence}"
 
       # Print information about the first frame of the segment.
-      frame = text_segment.frames.first
+      frame       = text_segment.frames.first
       time_offset = (frame.time_offset.seconds +
                       frame.time_offset.nanos / 1e9)
       puts "Time offset for the first frame: #{time_offset}"
@@ -317,9 +317,9 @@ def track_objects_gcs path:
       puts "Entity id: #{object_annotation.entity.entity_id}" if object_annotation.entity.entity_id
 
       object_segment = object_annotation.segment
-      start_time = (object_segment.start_time_offset.seconds +
+      start_time     = (object_segment.start_time_offset.seconds +
                      object_segment.start_time_offset.nanos / 1e9)
-      end_time =   (object_segment.end_time_offset.seconds +
+      end_time       = (object_segment.end_time_offset.seconds +
                      object_segment.end_time_offset.nanos / 1e9)
       puts "Segment: #{start_time}s to #{end_time}s"
 
@@ -327,7 +327,7 @@ def track_objects_gcs path:
 
       # Print information about the first frame of the segment.
       frame = object_annotation.frames.first
-      box = frame.normalized_bounding_box
+      box   = frame.normalized_bounding_box
 
       time_offset = (frame.time_offset.seconds +
                       frame.time_offset.nanos / 1e9)
@@ -368,9 +368,9 @@ def track_objects_local path:
       puts "Entity id: #{object_annotation.entity.entity_id}" if object_annotation.entity.entity_id
 
       object_segment = object_annotation.segment
-      start_time = (object_segment.start_time_offset.seconds +
+      start_time     = (object_segment.start_time_offset.seconds +
                      object_segment.start_time_offset.nanos / 1e9)
-      end_time =   (object_segment.end_time_offset.seconds +
+      end_time       = (object_segment.end_time_offset.seconds +
                      object_segment.end_time_offset.nanos / 1e9)
       puts "Segment: #{start_time}s to #{end_time}s"
 
@@ -378,7 +378,7 @@ def track_objects_local path:
 
       # Print information about the first frame of the segment.
       frame = object_annotation.frames.first
-      box = frame.normalized_bounding_box
+      box   = frame.normalized_bounding_box
 
       time_offset = (frame.time_offset.seconds +
                       frame.time_offset.nanos / 1e9)

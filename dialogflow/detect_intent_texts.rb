@@ -25,12 +25,12 @@ def detect_intent_texts project_id:, session_id:, texts:, language_code:
   require "google/cloud/dialogflow"
 
   session_client = Google::Cloud::Dialogflow::Sessions.new
-  session = session_client.class.session_path project_id, session_id
+  session        = session_client.class.session_path project_id, session_id
   puts "Session path: #{session}"
 
   texts.each do |text|
-    query_input = { text: { text: text, language_code: language_code } }
-    response = session_client.detect_intent session, query_input
+    query_input  = { text: { text: text, language_code: language_code } }
+    response     = session_client.detect_intent session, query_input
     query_result = response.query_result
 
     puts "Query text:        #{query_result.query_text}"
@@ -44,7 +44,7 @@ end
 
 if $PROGRAM_NAME == __FILE__
   project_id = ENV["GOOGLE_CLOUD_PROJECT"]
-  texts = ARGV
+  texts      = ARGV
 
   if texts.any?
     detect_intent_texts project_id:    project_id,

@@ -18,12 +18,12 @@ def translate_v3_translate_text_with_glossary
 
   client = Google::Cloud::Translate.new
 
-  project_id = "[Google Cloud Project ID]"
+  project_id  = "[Google Cloud Project ID]"
   location_id = "[LOCATION ID]"
   glossary_id = "[YOUR_GLOSSARY_ID]"
 
   # The content to translate in string format
-  contents = ["Hello, world!"]
+  contents        = ["Hello, world!"]
   # Required. The BCP-47 language code to use for translation.
   target_language = "fr"
   # Optional. The BCP-47 language code of the input text.
@@ -33,8 +33,8 @@ def translate_v3_translate_text_with_glossary
     glossary: client.class.glossary_path(project_id, location_id, glossary_id)
   }
   # Optional. Can be "text/plain" or "text/html".
-  mime_type = "text/plain"
-  parent = client.class.location_path project_id, location_id
+  mime_type       = "text/plain"
+  parent          = client.class.location_path project_id, location_id
 
   response = client.translate_text(
     contents, target_language, parent,

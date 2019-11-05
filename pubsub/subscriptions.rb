@@ -186,8 +186,8 @@ def listen_for_messages_with_error_handler project_id:, subscription_name:
 
   pubsub = Google::Cloud::Pubsub.new project: project_id
 
-  subscription = pubsub.subscription subscription_name
-  subscriber   = subscription.listen do |received_message|
+  subscription              = pubsub.subscription subscription_name
+  subscriber                = subscription.listen do |received_message|
     puts "Received message: #{received_message.data}"
     received_message.acknowledge!
   end
@@ -202,8 +202,8 @@ def listen_for_messages_with_error_handler project_id:, subscription_name:
     # messages does not quit
     sleep 60
     subscriber.stop.wait!
-  rescue Exception => ex
-    puts "Exception #{ex.inspect}: #{ex.message}"
+  rescue Exception => e
+    puts "Exception #{e.inspect}: #{e.message}"
     raise "Stopped listening for messages."
   end
   # [END pubsub_subscriber_error_listener]

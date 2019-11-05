@@ -38,8 +38,8 @@ def job_discovery_create_company project_id:, company_to_be_created:
 
   require "google/apis/jobs_v3"
 
-  jobs = Google::Apis::JobsV3
-  talent_solution_client = jobs::CloudTalentSolutionService.new
+  jobs                                 = Google::Apis::JobsV3
+  talent_solution_client               = jobs::CloudTalentSolutionService.new
   # @see
   # https://developers.google.com/identity/protocols/application-default-credentials#callingruby
   talent_solution_client.authorization = Google::Auth.get_application_default(
@@ -48,7 +48,7 @@ def job_discovery_create_company project_id:, company_to_be_created:
 
   begin
     create_company_request = jobs::CreateCompanyRequest.new company: company_to_be_created
-    company_created = talent_solution_client.create_company project_id, create_company_request
+    company_created        = talent_solution_client.create_company project_id, create_company_request
     puts "Company created: #{company_created.to_json}"
     return company_created
   rescue StandardError => e
@@ -63,8 +63,8 @@ def job_discovery_get_company company_name:
 
   require "google/apis/jobs_v3"
 
-  jobs = Google::Apis::JobsV3
-  talent_solution_client = jobs::CloudTalentSolutionService.new
+  jobs                                 = Google::Apis::JobsV3
+  talent_solution_client               = jobs::CloudTalentSolutionService.new
   # @see
   # https://developers.google.com/identity/protocols/application-default-credentials#callingruby
   talent_solution_client.authorization = Google::Auth.get_application_default(
@@ -88,8 +88,8 @@ def job_discovery_update_company company_name:, company_updated:
 
   require "google/apis/jobs_v3"
 
-  jobs = Google::Apis::JobsV3
-  talent_solution_client = jobs::CloudTalentSolutionService.new
+  jobs                                 = Google::Apis::JobsV3
+  talent_solution_client               = jobs::CloudTalentSolutionService.new
   # @see
   # https://developers.google.com/identity/protocols/application-default-credentials#callingruby
   talent_solution_client.authorization = Google::Auth.get_application_default(
@@ -98,8 +98,8 @@ def job_discovery_update_company company_name:, company_updated:
 
   begin
     update_company_request = jobs::UpdateCompanyRequest.new company: company_updated
-    company_updated = talent_solution_client
-                      .patch_project_company(company_name, update_company_request)
+    company_updated        = talent_solution_client
+                             .patch_project_company(company_name, update_company_request)
     puts "Company updated: #{company_updated.to_json}"
     return company_updated
   rescue StandardError => e
@@ -116,8 +116,8 @@ def job_discovery_update_company_with_field_mask company_name:, field_mask:, com
 
   require "google/apis/jobs_v3"
 
-  jobs = Google::Apis::JobsV3
-  talent_solution_client = jobs::CloudTalentSolutionService.new
+  jobs                                 = Google::Apis::JobsV3
+  talent_solution_client               = jobs::CloudTalentSolutionService.new
   # @see
   # https://developers.google.com/identity/protocols/application-default-credentials#callingruby
   talent_solution_client.authorization = Google::Auth.get_application_default(
@@ -127,8 +127,8 @@ def job_discovery_update_company_with_field_mask company_name:, field_mask:, com
   begin
     update_company_request = jobs::UpdateCompanyRequest.new company:     company_updated,
                                                             update_mask: field_mask
-    company_updated = talent_solution_client
-                      .patch_project_company(company_name, update_company_request)
+    company_updated        = talent_solution_client
+                             .patch_project_company(company_name, update_company_request)
     puts "Company updated with filedMask #{update_company_request.update_mask}. "
     puts "Updated company: #{company_updated.to_json}"
     return company_updated
@@ -144,8 +144,8 @@ def job_discovery_delete_company company_name:
 
   require "google/apis/jobs_v3"
 
-  jobs = Google::Apis::JobsV3
-  talent_solution_client = jobs::CloudTalentSolutionService.new
+  jobs                                 = Google::Apis::JobsV3
+  talent_solution_client               = jobs::CloudTalentSolutionService.new
   # @see
   # https://developers.google.com/identity/protocols/application-default-credentials#callingruby
   talent_solution_client.authorization = Google::Auth.get_application_default(
@@ -162,10 +162,10 @@ def job_discovery_delete_company company_name:
 end
 
 def run_basic_company_sample arguments
-  command = arguments.shift
+  command            = arguments.shift
   default_project_id = "projects/#{ENV['GOOGLE_CLOUD_PROJECT']}"
-  user_input = arguments.shift
-  company_name = "#{default_project_id}/companies/#{user_input}" if command != "create_company"
+  user_input         = arguments.shift
+  company_name       = "#{default_project_id}/companies/#{user_input}" if command != "create_company"
 
   case command
   when "create_company"
@@ -173,18 +173,18 @@ def run_basic_company_sample arguments
       job_discovery_generate_company display_name:         user_input,
                                      external_id:          arguments.shift,
                                      headquarters_address: arguments.shift
-    company_created =
+    company_created   =
       job_discovery_create_company company_to_be_created: company_generated,
                                    project_id:            default_project_id
   when "get_company"
     job_discovery_get_company company_name: company_name
   when "update_company"
-    company_to_be_updated = job_discovery_get_company company_name: company_name
+    company_to_be_updated              = job_discovery_get_company company_name: company_name
     company_to_be_updated.display_name = "Updated name Google"
     job_discovery_update_company company_name:    company_name,
                                  company_updated: company_to_be_updated
   when "update_company_with_field_mask"
-    company_to_be_updated = job_discovery_get_company company_name: company_name
+    company_to_be_updated              = job_discovery_get_company company_name: company_name
     company_to_be_updated.display_name = "Updated name Google"
     job_discovery_update_company_with_field_mask company_name:    company_name,
                                                  field_mask:      "DisplayName",
