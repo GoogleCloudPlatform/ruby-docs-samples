@@ -49,15 +49,15 @@ def batch_get_history project_id:, asset_names:
   # project_id = 'YOUR_PROJECT_ID'
   # asset names, e.g.: //storage.googleapis.com/[YOUR_BUCKET_NAME]
   # asset_names = [ASSET_NAMES, COMMMA_DELIMTTED]
-  formatted_parent =
-    Google::Cloud::Asset::V1::AssetServiceClient.project_path project_id
+  asset_service_client = Google::Cloud::Asset.new version: :v1
+
+  formatted_parent = asset_service_client.project_path project_id
 
   content_type = :RESOURCE
   read_time_window = Google::Cloud::Asset::V1::TimeWindow.new(
     start_time: Google::Protobuf::Timestamp.new(seconds: Time.now.getutc.to_i)
   )
 
-  asset_service_client = Google::Cloud::Asset.new version: :v1
   response = asset_service_client.batch_get_assets_history(
     formatted_parent, content_type, read_time_window, asset_names: asset_names
   )

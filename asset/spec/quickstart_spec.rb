@@ -32,7 +32,7 @@ RSpec.configure do |config|
 end
 
 describe "Asset Quickstart" do
-  before do
+  before(:all) do
     @storage     = Google::Cloud::Storage.new
     @bucket_name = SecureRandom.uuid
     @bucket = @storage.create_bucket @bucket_name
@@ -40,7 +40,7 @@ describe "Asset Quickstart" do
     @dump_file_name = "assets-by-ruby.txt"
   end
 
-  after do
+  after(:all) do
     return if @bucket.nil?
 
     file = @bucket.file @dump_file_name
@@ -57,7 +57,6 @@ describe "Asset Quickstart" do
   end
 
   it "batch get assets history" do
-    skip "batch_get_history does not work"
     project_id = ENV["GOOGLE_CLOUD_PROJECT"]
     asset_names = ["//storage.googleapis.com/#{@bucket_name}"]
     batch_get_history project_id: project_id, asset_names: asset_names
