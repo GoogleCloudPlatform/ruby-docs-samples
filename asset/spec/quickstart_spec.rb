@@ -32,7 +32,7 @@ RSpec.configure do |config|
 end
 
 describe "Asset Quickstart" do
-  before do
+  before(:all) do
     @storage     = Google::Cloud::Storage.new
     @bucket_name = SecureRandom.uuid
     @bucket = @storage.create_bucket @bucket_name
@@ -40,7 +40,7 @@ describe "Asset Quickstart" do
     @dump_file_name = "assets-by-ruby.txt"
   end
 
-  after do
+  after(:all) do
     return if @bucket.nil?
 
     file = @bucket.file @dump_file_name
