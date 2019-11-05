@@ -47,7 +47,7 @@ def paginated_query_cursor project_id:
 
   firestore = Google::Cloud::Firestore.new project_id: project_id
   # [START fs_paginated_query_cursor]
-  cities_ref = firestore.col "cities"
+  cities_ref  = firestore.col "cities"
   first_query = cities_ref.order("population").limit(3)
 
   # Get the last document from the results.
