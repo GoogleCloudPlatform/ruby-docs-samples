@@ -46,6 +46,7 @@ def paginated_query_cursor project_id:
   # project_id = "Your Google Cloud Project ID"
 
   firestore = Google::Cloud::Firestore.new project_id: project_id
+
   # [START fs_paginated_query_cursor]
   cities_ref  = firestore.col "cities"
   first_query = cities_ref.order("population").limit(3)

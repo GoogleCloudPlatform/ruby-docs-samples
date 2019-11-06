@@ -94,6 +94,7 @@ def simple_queries project_id:
 
   firestore  = Google::Cloud::Firestore.new project_id: project_id
   cities_ref = firestore.col "cities"
+
   # [START fs_simple_queries]
   state_query      = cities_ref.where "state", "=", "CA"
   population_query = cities_ref.where "population", ">", 1_000_000
