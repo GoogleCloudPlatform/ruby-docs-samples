@@ -46,8 +46,8 @@ describe "Storage HMAC SA sample" do
     @storage.hmac_keys.all do |hmac_key|
         if hmac_key.active?
           hmac_key.inactive!
-          hmac_key.delete!
         end
+        hmac_key.delete!
     end
   end
 
