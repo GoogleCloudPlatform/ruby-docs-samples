@@ -24,7 +24,7 @@ require "google/cloud/tasks"
 # @param [Integer] seconds The delay, in seconds, to process your task.
 def create_http_task project_id, location_id, queue_id, url, payload: nil, seconds: nil
   # Instantiates a client.
-  client = Google::Cloud::Tasks.new version: :v2beta3
+  client = Google::Cloud::Tasks.new
 
   # Construct the fully qualified queue name.
   parent = client.queue_path project_id, location_id, queue_id
