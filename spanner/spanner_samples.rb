@@ -663,7 +663,7 @@ def spanner_batch_client project_id:, instance_id:, database_id:
   # Collect statistics for batch query
   average_records_per_partition = 0.0
   if total_partitions != 0
-    average_records_per_partition = total_records.value.to_f / total_partitions.to_f
+    average_records_per_partition = total_records.value / total_partitions.to_f
   end
 
   puts "Total Partitions: #{total_partitions}"

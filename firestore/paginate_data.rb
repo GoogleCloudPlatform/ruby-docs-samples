@@ -17,7 +17,7 @@ require "google/cloud/firestore"
 def start_at_field_query_cursor project_id:
   # project_id = "Your Google Cloud Project ID"
 
-  firestore  = Google::Cloud::Firestore.new project_id: project_id
+  firestore = Google::Cloud::Firestore.new project_id: project_id
 
   cities_ref = firestore.col "cities"
   # [START fs_start_at_field_query_cursor]
@@ -31,7 +31,7 @@ end
 def end_at_field_query_cursor project_id:
   # project_id = "Your Google Cloud Project ID"
 
-  firestore  = Google::Cloud::Firestore.new project_id: project_id
+  firestore = Google::Cloud::Firestore.new project_id: project_id
 
   cities_ref = firestore.col "cities"
   # [START fs_end_at_field_query_cursor]
@@ -46,6 +46,7 @@ def paginated_query_cursor project_id:
   # project_id = "Your Google Cloud Project ID"
 
   firestore = Google::Cloud::Firestore.new project_id: project_id
+
   # [START fs_paginated_query_cursor]
   cities_ref  = firestore.col "cities"
   first_query = cities_ref.order("population").limit(3)
@@ -68,7 +69,7 @@ end
 def multiple_cursor_conditions project_id:
   # project_id = "Your Google Cloud Project ID"
 
-  firestore  = Google::Cloud::Firestore.new project_id: project_id
+  firestore = Google::Cloud::Firestore.new project_id: project_id
 
   cities_ref = firestore.col "cities"
   # [START fs_multiple_cursor_conditions]

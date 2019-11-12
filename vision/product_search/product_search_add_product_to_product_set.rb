@@ -16,11 +16,11 @@
 require "google/cloud/vision"
 
 def product_search_add_product_to_product_set(
-    project_id     = "your-project-id",
-    location       = "us-west1",
-    product_id     = "your-product-id",
-    product_set_id = "your-product-set-id"
-  )
+  project_id     = "your-project-id",
+  location       = "us-west1",
+  product_id     = "your-product-id",
+  product_set_id = "your-product-set-id"
+)
 
   client = Google::Cloud::Vision::ProductSearch.new
 

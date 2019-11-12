@@ -21,7 +21,7 @@ require "google/cloud/pubsub"
 pubsub = Google::Cloud::Pubsub.new
 
 # [START gae_flex_pubsub_env]
-topic  = pubsub.topic ENV["PUBSUB_TOPIC"]
+topic = pubsub.topic ENV["PUBSUB_TOPIC"]
 PUBSUB_VERIFICATION_TOKEN = ENV["PUBSUB_VERIFICATION_TOKEN"]
 # [END gae_flex_pubsub_env]
 

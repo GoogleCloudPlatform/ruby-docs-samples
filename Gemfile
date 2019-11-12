@@ -14,4 +14,4 @@
 
 source "https://rubygems.org"
 
-gem "google-style", "~> 0.2", groups: [:development, :test]
+gem "google-style", "~> 1.24.0", groups: [:development, :test]
