@@ -63,17 +63,8 @@ describe "Google Translate API samples (V3)" do
   end
 
   example "Translating Text", :translate_v3_translate_text do
-    text = "Hello, world!"
-    target_language = "fr"
-    parent = translate.class.location_path project_id, "global"
-
-    response = translate.translate_text [text], target_language, parent
-
-    allow(Google::Cloud::Translate).to receive(:new).and_return(client_double)
-    allow(client_double).to receive(:translate_text).and_return(response)
-
     expect do
-      translate_v3_translate_text
+      translate_v3_translate_text project_id: project_id, text: "Hello, world!", target_language: "fr"
     end.to output("Translated text: Bonjour le monde!\n").to_stdout
   end
 
