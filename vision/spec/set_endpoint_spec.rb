@@ -13,7 +13,6 @@
 # limitations under the License.
 
 require "rspec"
-# require "google/cloud/storage"
 
 require_relative "../set_endpoint"
 

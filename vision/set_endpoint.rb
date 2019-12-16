@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "uri"
-
 def set_endpoint
   # [START vision_set_endpoint]
   require "google/cloud/vision"
 
   # Specify the service address at client construction.
   image_annotator = Google::Cloud::Vision::ImageAnnotator.new service_address: "eu-vision.googleapis.com"
+  # [END vision_set_endpoint]
 
   response = image_annotator.text_detection(
     image:       "gs://cloud-samples-data/vision/text/screen.jpg",
@@ -31,7 +30,6 @@ def set_endpoint
       puts text.description
     end
   end
-  # [END vision_set_endpoint]
 end
 
 if $PROGRAM_NAME == __FILE__
