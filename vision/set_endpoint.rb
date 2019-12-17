@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-def set_endpoint service_address: nil, image_path: nil
-  # [START vision_set_endpoint]
-  # service_address = "Service address, eg. 'eu-vision.googleapis.com'"
+def set_endpoint image_path: nil
   # image_path = "Google Cloud Storage URI, eg. 'gs://my-bucket/image.png'"
+  # [START vision_set_endpoint]
   require "google/cloud/vision"
 
-  # Specify the service address at client construction.
-  image_annotator = Google::Cloud::Vision::ImageAnnotator.new service_address: service_address
+  # Specifies the location of the api endpoint
+  image_annotator = Google::Cloud::Vision::ImageAnnotator.new service_address: "eu-vision.googleapis.com"
   # [END vision_set_endpoint]
 
   response = image_annotator.text_detection(
@@ -35,5 +34,5 @@ def set_endpoint service_address: nil, image_path: nil
 end
 
 if $PROGRAM_NAME == __FILE__
-  set_endpoint service_address: ARGV.first, image_path: ARGV[1]
+  set_endpoint image_path: ARGV.first
 end

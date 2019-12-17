@@ -18,12 +18,11 @@ require_relative "../set_endpoint"
 
 describe "Set Endpoint" do
 	before do
-		@service_address = "eu-vision.googleapis.com"
 		@image_path = "gs://cloud-samples-data/vision/text/screen.jpg"
 	end
   example "detect text from image file in Google Cloud Storage" do
     expect {
-      set_endpoint service_address: @service_address, image_path: @image_path
+      set_endpoint image_path: @image_path
     }.to output(
       /System/
     ).to_stdout
