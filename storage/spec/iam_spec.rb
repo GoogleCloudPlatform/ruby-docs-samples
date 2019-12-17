@@ -42,25 +42,44 @@ describe "Google Cloud Storage IAM sample" do
   end
 
   it "can view bucket IAM members" do
-    @bucket.policy do |policy|
-      policy.roles[@test_role] = [@test_member]
+    @bucket.policy requested_policy_version: 3 do |policy|
+      policy.version = 3
+      policy.bindings.insert({role: @test_role, members: [@test_member]})
     end
 
-    expect(@bucket.policy.roles[@test_role]).to include @test_member
+    result_members = nil
+    @bucket.policy requested_policy_version: 3 do |policy|
+      policy.bindings.each do |binding|
+        if binding.role == @test_role and binding.condition == nil
+          result_members = binding.members
+        end
+      end
+    end
+    expect(result_members).to include @test_member
 
     expect {
       view_bucket_iam_members project_id: @project_id, bucket_name: @bucket_name
     }.to output(
-      /#{@test_role} Members:.*#{@test_member}/
+      /#{@test_role}\nMembers:.*#{@test_member}/
     ).to_stdout
   end
 
   it "can add an IAM member" do
-    @bucket.policy do |policy|
-      policy.roles[@test_role] = []
+    @bucket.policy requested_policy_version: 3 do |policy|
+      policy.bindings.each do |binding|
+        policy.bindings.remove(binding)
+      end
     end
 
-    expect(@bucket.policy.roles[@test_role]).to eq nil
+    result_members = nil
+    @bucket.policy requested_policy_version: 3 do |policy|
+      policy.bindings.each do |binding|
+        if binding.role == @test_role and binding.condition == nil
+          result_members = binding.members
+        end
+      end
+    end
+    expect(result_members).to eq nil
 
     expect {
       add_bucket_iam_member project_id:  @project_id,
@@ -71,15 +90,84 @@ describe "Google Cloud Storage IAM sample" do
       /Added #{@test_member} with role #{@test_role}/
     ).to_stdout
 
-    expect(@bucket.policy.roles[@test_role]).to include @test_member
+    result_members = nil
+    @bucket.policy requested_policy_version: 3 do |policy|
+      policy.bindings.each do |binding|
+        if binding.role == @test_role and binding.condition == nil
+          result_members = binding.members
+        end
+      end
+    end
+    expect(result_members).to include @test_member
+  end
+
+  it "can add a conditional IAM binding" do
+    @bucket.policy requested_policy_version: 3 do |policy|
+      policy.bindings.each do |binding|
+        policy.bindings.remove(binding)
+      end
+    end
+    # enable BPO
+    @bucket.uniform_bucket_level_access = true
+
+    result_members = nil
+    @bucket.policy requested_policy_version: 3 do |policy|
+      policy.bindings.each do |binding|
+        if binding.role == @test_role and binding.condition == nil
+          result_members = binding.members
+        end
+      end
+    end
+    expect(result_members).to eq nil
+
+    expect {
+      add_bucket_conditional_iam_binding project_id:  @project_id,
+                                         bucket_name: @bucket_name,
+                                         role:        @test_role,
+                                         member:      @test_member,
+                                         title:       "title",
+                                         description: "description",
+                                         expression:  "resource.name.startsWith(\"projects/_/buckets/bucket-name/objects/prefix-a-\")"
+    }.to output(
+      /Added #{@test_member} with role #{@test_role}/
+    ).to_stdout
+
+    result_members = nil
+    @bucket.policy requested_policy_version: 3 do |policy|
+      policy.bindings.each do |binding|
+        if binding.role == @test_role and binding.condition != nil
+          result_members = binding.members
+        end
+      end
+    end
+    expect(result_members).to include @test_member
+
+    @bucket.policy requested_policy_version: 3 do |policy|
+      policy.bindings.each do |binding|
+        if binding.condition != nil
+          policy.bindings.remove(binding)
+        end
+      end
+    end
+    # diable bpo
+    @bucket.uniform_bucket_level_access = false
   end
 
   it "can remove an IAM member" do
-    @bucket.policy do |policy|
-      policy.roles[@test_role] = [@test_member]
+    @bucket.policy requested_policy_version: 3 do |policy|
+      policy.version = 3
+      policy.bindings.insert({role: @test_role, members: [@test_member]})
     end
 
-    expect(@bucket.policy.roles[@test_role]).to include @test_member
+    result_members = nil
+    @bucket.policy requested_policy_version: 3 do |policy|
+      policy.bindings.each do |binding|
+        if binding.role == @test_role and binding.condition == nil
+          result_members = binding.members
+        end
+      end
+    end
+    expect(result_members).to include @test_member
 
     expect {
       remove_bucket_iam_member project_id:  @project_id,
@@ -90,6 +178,14 @@ describe "Google Cloud Storage IAM sample" do
       /Removed #{@test_member} with role #{@test_role}/
     ).to_stdout
 
-    expect(@bucket.policy.roles[@test_role]).to eq nil
+    result_members = nil
+    @bucket.policy requested_policy_version: 3 do |policy|
+      policy.bindings.each do |binding|
+        if binding.role == @test_role and binding.condition == nil
+          result_members = binding.members
+        end
+      end
+    end
+    expect(result_members).to eq nil
   end
 end
