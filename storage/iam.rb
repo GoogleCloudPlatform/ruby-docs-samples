@@ -22,10 +22,16 @@ def view_bucket_iam_members project_id:, bucket_name:
   storage = Google::Cloud::Storage.new project_id: project_id
   bucket = storage.bucket bucket_name
 
-  policy = bucket.policy
+  policy = bucket.policy requested_policy_version: 3
 
-  policy.roles.each do |role, members|
-    puts "Role: #{role} Members: #{members}"
+  policy.bindings.each do |binding|
+    puts "Role: #{binding.role}"
+    puts "Members: #{binding.members}"
+
+    # if a conditional binding exists print the condition.
+    if binding.condition
+      puts "Condition: #{binding.condition}"
+    end
   end
   # [END view_bucket_iam_members]
 end
@@ -42,8 +48,12 @@ def add_bucket_iam_member project_id:, bucket_name:, role:, member:
   storage = Google::Cloud::Storage.new project_id: project_id
   bucket = storage.bucket bucket_name
 
-  bucket.policy do |policy|
-    policy.add role, member
+  bucket.policy(requested_policy_version: 3) do |policy|
+    policy.bindings.each do |binding|
+      if binding.role == role
+        binding.members.insert(member)
+      end
+    end
   end
 
   puts "Added #{member} with role #{role} to #{bucket_name}"
@@ -62,12 +72,48 @@ def remove_bucket_iam_member project_id:, bucket_name:, role:, member:
   storage = Google::Cloud::Storage.new project_id: project_id
   bucket = storage.bucket bucket_name
 
-  bucket.policy do |policy|
-    policy.remove role, member
+  bucket.policy(requested_policy_version: 3) do |policy|
+    policy.bindings.each do |binding|
+      if binding.role == role
+        binding.members.remove(member)
+      end
+    end
   end
 
   puts "Removed #{member} with role #{role} from #{bucket_name}"
   # [END remove_bucket_iam_member]
+end
+
+def add_bucket_conditional_iam_binding project_id:, bucket_name:, role:, member:, title:, description:, expression:
+  # [START storage_add_bucket_conditional_iam_binding]
+  # project_id  = "Your Google Cloud project ID"
+  # bucket_name = "Your Google Cloud Storage bucket name"
+  # role        = "Bucket-level IAM role"
+  # member      = "Bucket-level IAM member"
+  # title       = "Condition Title"
+  # description = "Condition Description"
+  # expression  = "Condition Expression"
+
+  require "google/cloud/storage"
+
+  storage = Google::Cloud::Storage.new project_id: project_id
+  bucket = storage.bucket bucket_name
+
+  bucket.policy(requested_policy_version: 3) do |policy|
+    policy.version = 3
+    policy.insert({
+      role: role,
+      members: member
+      condition: {
+        title: title,
+        description: description,
+        expression: expression
+      }
+    })
+  end
+
+  puts "Added #{member} with role #{role} to #{bucket_name} with condition #{title} #{description} #{expression}"
+  # [END storage_add_bucket_conditional_iam_binding]
 end
 
 def run_sample arguments
