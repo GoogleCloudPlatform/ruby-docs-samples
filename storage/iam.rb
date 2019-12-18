@@ -48,8 +48,8 @@ def add_bucket_iam_member project_id:, bucket_name:, role:, member:
   storage = Google::Cloud::Storage.new project_id: project_id
   bucket = storage.bucket bucket_name
 
-  bucket.policy(requested_policy_version: 3) do |policy|
-    policy.bindings.insert({role: role, members: [member]})
+  bucket.policy requested_policy_version: 3 do |policy|
+    policy.bindings.insert role: role, members: [member]
   end
 
   puts "Added #{member} with role #{role} to #{bucket_name}"
@@ -68,15 +68,15 @@ def remove_bucket_iam_member project_id:, bucket_name:, role:, member:
   storage = Google::Cloud::Storage.new project_id: project_id
   bucket = storage.bucket bucket_name
 
-  bucket.policy(requested_policy_version: 3) do |policy|
+  bucket.policy requested_policy_version: 3 do |policy|
     policy.bindings.each do |binding|
       if binding.role == role
         if binding.members.count > 1
           # At least 2 members exist in the binding
-          binding.members.delete(member)
+          binding.members.delete member
         else
           # Last member in the list, delete binding from policy.
-          policy.bindings.remove(binding)
+          policy.bindings.remove binding
         end
       end
     end
@@ -101,17 +101,17 @@ def add_bucket_conditional_iam_binding project_id:, bucket_name:, role:, member:
   storage = Google::Cloud::Storage.new project_id: project_id
   bucket = storage.bucket bucket_name
 
-  bucket.policy(requested_policy_version: 3) do |policy|
+  bucket.policy requested_policy_version: 3 do |policy|
     policy.version = 3
-    policy.bindings.insert({
-      role: role,
-      members: member,
+    policy.bindings.insert(
+      role:      role,
+      members:   member,
       condition: {
-        title: title,
+        title:       title,
         description: description,
-        expression: expression
+        expression:  expression
       }
-    })
+    )
   end
 
   puts "Added #{member} with role #{role} to #{bucket_name} with condition #{title} #{description} #{expression}"

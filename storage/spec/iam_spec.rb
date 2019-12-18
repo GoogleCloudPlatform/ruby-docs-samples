@@ -44,13 +44,13 @@ describe "Google Cloud Storage IAM sample" do
   it "can view bucket IAM members" do
     @bucket.policy requested_policy_version: 3 do |policy|
       policy.version = 3
-      policy.bindings.insert({role: @test_role, members: [@test_member]})
+      policy.bindings.insert role: @test_role, members: [@test_member]
     end
 
     result_members = nil
     @bucket.policy requested_policy_version: 3 do |policy|
       policy.bindings.each do |binding|
-        if binding.role == @test_role and binding.condition == nil
+        if (binding.role == @test_role) && binding.condition.nil?
           result_members = binding.members
         end
       end
@@ -67,14 +67,14 @@ describe "Google Cloud Storage IAM sample" do
   it "can add an IAM member" do
     @bucket.policy requested_policy_version: 3 do |policy|
       policy.bindings.each do |binding|
-        policy.bindings.remove(binding)
+        policy.bindings.remove binding
       end
     end
 
     result_members = nil
     @bucket.policy requested_policy_version: 3 do |policy|
       policy.bindings.each do |binding|
-        if binding.role == @test_role and binding.condition == nil
+        if (binding.role == @test_role) && binding.condition.nil?
           result_members = binding.members
         end
       end
@@ -93,7 +93,7 @@ describe "Google Cloud Storage IAM sample" do
     result_members = nil
     @bucket.policy requested_policy_version: 3 do |policy|
       policy.bindings.each do |binding|
-        if binding.role == @test_role and binding.condition == nil
+        if (binding.role == @test_role) && binding.condition.nil?
           result_members = binding.members
         end
       end
@@ -104,7 +104,7 @@ describe "Google Cloud Storage IAM sample" do
   it "can add a conditional IAM binding" do
     @bucket.policy requested_policy_version: 3 do |policy|
       policy.bindings.each do |binding|
-        policy.bindings.remove(binding)
+        policy.bindings.remove binding
       end
     end
     # enable BPO
@@ -113,7 +113,7 @@ describe "Google Cloud Storage IAM sample" do
     result_members = nil
     @bucket.policy requested_policy_version: 3 do |policy|
       policy.bindings.each do |binding|
-        if binding.role == @test_role and binding.condition == nil
+        if (binding.role == @test_role) && binding.condition.nil?
           result_members = binding.members
         end
       end
@@ -135,7 +135,7 @@ describe "Google Cloud Storage IAM sample" do
     result_members = nil
     @bucket.policy requested_policy_version: 3 do |policy|
       policy.bindings.each do |binding|
-        if binding.role == @test_role and binding.condition != nil
+        if (binding.role == @test_role) && !binding.condition.nil?
           result_members = binding.members
         end
       end
@@ -144,8 +144,8 @@ describe "Google Cloud Storage IAM sample" do
 
     @bucket.policy requested_policy_version: 3 do |policy|
       policy.bindings.each do |binding|
-        if binding.condition != nil
-          policy.bindings.remove(binding)
+        unless binding.condition.nil?
+          policy.bindings.remove binding
         end
       end
     end
@@ -156,13 +156,13 @@ describe "Google Cloud Storage IAM sample" do
   it "can remove an IAM member" do
     @bucket.policy requested_policy_version: 3 do |policy|
       policy.version = 3
-      policy.bindings.insert({role: @test_role, members: [@test_member]})
+      policy.bindings.insert role: @test_role, members: [@test_member]
     end
 
     result_members = nil
     @bucket.policy requested_policy_version: 3 do |policy|
       policy.bindings.each do |binding|
-        if binding.role == @test_role and binding.condition == nil
+        if (binding.role == @test_role) && binding.condition.nil?
           result_members = binding.members
         end
       end
@@ -181,7 +181,7 @@ describe "Google Cloud Storage IAM sample" do
     result_members = nil
     @bucket.policy requested_policy_version: 3 do |policy|
       policy.bindings.each do |binding|
-        if binding.role == @test_role and binding.condition == nil
+        if (binding.role == @test_role) && binding.condition.nil?
           result_members = binding.members
         end
       end
