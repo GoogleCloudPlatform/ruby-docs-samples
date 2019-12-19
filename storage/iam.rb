@@ -23,14 +23,15 @@ def view_bucket_iam_members project_id:, bucket_name:
   bucket = storage.bucket bucket_name
 
   policy = bucket.policy requested_policy_version: 3
-
   policy.bindings.each do |binding|
     puts "Role: #{binding.role}"
     puts "Members: #{binding.members}"
 
     # if a conditional binding exists print the condition.
     if binding.condition
-      puts "Condition: #{binding.condition}"
+      puts "Condition Title: #{binding.condition.title}"
+      puts "Condition Description: #{binding.condition.description}"
+      puts "Condition Expression: #{binding.condition.expression}"
     end
   end
   # [END view_bucket_iam_members]
@@ -70,14 +71,8 @@ def remove_bucket_iam_member project_id:, bucket_name:, role:, member:
 
   bucket.policy requested_policy_version: 3 do |policy|
     policy.bindings.each do |binding|
-      if binding.role == role
-        if binding.members.count > 1
-          # At least 2 members exist in the binding
-          binding.members.delete member
-        else
-          # Last member in the list, delete binding from policy.
-          policy.bindings.remove binding
-        end
+      if binding.role == role && binding.condition.nil?
+        binding.members.delete member
       end
     end
   end

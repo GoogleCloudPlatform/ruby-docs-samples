@@ -54,8 +54,8 @@ describe "Google Cloud Storage IAM sample" do
           result_members = binding.members
         end
       end
+      expect(result_members).to include @test_member
     end
-    expect(result_members).to include @test_member
 
     expect {
       view_bucket_iam_members project_id: @project_id, bucket_name: @bucket_name
@@ -65,10 +65,10 @@ describe "Google Cloud Storage IAM sample" do
   end
 
   it "can add an IAM member" do
-    @bucket.policy requested_policy_version: 3 do |policy|
-      policy.bindings.each do |binding|
-        policy.bindings.remove binding
-      end
+    # clear policy
+    @bucket.policy requested_policy_version: 3 do |p|
+      bindings_copy = p.bindings.dup
+      bindings_copy.each { |b| p.bindings.remove b }
     end
 
     result_members = nil
@@ -79,7 +79,7 @@ describe "Google Cloud Storage IAM sample" do
         end
       end
     end
-    expect(result_members).to eq nil
+    expect(binding.members).to eq nil
 
     expect {
       add_bucket_iam_member project_id:  @project_id,
@@ -92,8 +92,8 @@ describe "Google Cloud Storage IAM sample" do
 
     result_members = nil
     @bucket.policy requested_policy_version: 3 do |policy|
-      policy.bindings.each do |binding|
-        if (binding.role == @test_role) && binding.condition.nil?
+      policy.bindings.map do |binding|
+        if binding.role == @test_role && binding.condition.nil?
           result_members = binding.members
         end
       end
@@ -102,10 +102,10 @@ describe "Google Cloud Storage IAM sample" do
   end
 
   it "can add a conditional IAM binding" do
-    @bucket.policy requested_policy_version: 3 do |policy|
-      policy.bindings.each do |binding|
-        policy.bindings.remove binding
-      end
+    # clear policy
+    @bucket.policy requested_policy_version: 3 do |p|
+      bindings_copy = p.bindings.dup
+      bindings_copy.each { |b| p.bindings.remove b }
     end
     # enable BPO
     @bucket.uniform_bucket_level_access = true
@@ -142,12 +142,10 @@ describe "Google Cloud Storage IAM sample" do
     end
     expect(result_members).to include @test_member
 
-    @bucket.policy requested_policy_version: 3 do |policy|
-      policy.bindings.each do |binding|
-        unless binding.condition.nil?
-          policy.bindings.remove binding
-        end
-      end
+    # clear policy
+    @bucket.policy requested_policy_version: 3 do |p|
+      bindings_copy = p.bindings.dup
+      bindings_copy.each { |b| p.bindings.remove b }
     end
     # diable bpo
     @bucket.uniform_bucket_level_access = false
@@ -156,7 +154,7 @@ describe "Google Cloud Storage IAM sample" do
   it "can remove an IAM member" do
     @bucket.policy requested_policy_version: 3 do |policy|
       policy.version = 3
-      policy.bindings.insert role: @test_role, members: [@test_member]
+      policy.bindings.insert role: @test_role, members: [@test_member, "user:example@example.com"]
     end
 
     result_members = nil
@@ -186,6 +184,6 @@ describe "Google Cloud Storage IAM sample" do
         end
       end
     end
-    expect(result_members).to eq nil
+    expect(result_members).to include "user:example@example.com"
   end
 end
