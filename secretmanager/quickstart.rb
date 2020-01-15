@@ -12,21 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-def quickstart i_project_id: nil, i_secret_id: nil
+def quickstart project_id: nil, secret_id: nil
   # [START secretmanager_quickstart]
+  # project_id  = "YOUR-GOOGLE-CLOUD-PROJECT"  # (e.g. "my-project")
+  # secret_id   = "YOUR-SECRET-ID"             # (e.g. "my-secret")
+
   # Import the Secret Manager client library.
   require "google/cloud/secret_manager"
 
-  # GCP project in which to store secrets in Secret Manager.
-  project_id = "YOUR_PROJECT_ID"
-
-  # ID of the secret to create.
-  secret_id = "YOUR_SECRET_ID"
-
-  # [END secretmanager_quickstart]
-  project_id = i_project_id if i_project_id
-  secret_id = i_secret_id if i_secret_id
-  # [START secretmanager_quickstart]
   # Create the Secret Manager client.
   client = Google::Cloud::SecretManager.secret_manager_service
 
@@ -66,7 +59,7 @@ end
 
 if $PROGRAM_NAME == __FILE__
   quickstart(
-    i_project_id: ENV["GOOGLE_CLOUD_PROJECT"],
-    i_secret_id:  "my-secret-#{Time.now.to_i}"
+    project_id: ENV["GOOGLE_CLOUD_PROJECT"],
+    secret_id:  "my-secret-#{Time.now.to_i}"
   )
 end

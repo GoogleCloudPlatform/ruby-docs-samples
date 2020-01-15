@@ -30,7 +30,7 @@ describe "Secret Manager Quickstart" do
 
   it "creates and accesses a secret" do
     expect {
-      quickstart(i_project_id: project_id, i_secret_id: secret_id)
+      quickstart(project_id: project_id, secret_id: secret_id)
     }.to output("Plaintext: hello world!\n").to_stdout
 
     secret = client.get_secret name: secret_name
