@@ -14,9 +14,9 @@
 
 def access_secret_version project_id:, secret_id:, version_id:
   # [START secretmanager_access_secret_version]
-  # project_id  = "YOUR-GOOGLE-CLOUD-PROJECT"  # (e.g. "my-project")
-  # secret_id   = "YOUR-SECRET-ID"             # (e.g. "my-secret")
-  # version_id  = "YOUR-VERSION"               # (e.g. "5" or "latest")
+  # project_id = "YOUR-GOOGLE-CLOUD-PROJECT"  # (e.g. "my-project")
+  # secret_id  = "YOUR-SECRET-ID"             # (e.g. "my-secret")
+  # version_id = "YOUR-VERSION"               # (e.g. "5" or "latest")
 
   # Require the Secret Manager client library.
   require "google/cloud/secret_manager"
@@ -43,8 +43,8 @@ end
 
 def add_secret_version project_id:, secret_id:
   # [START secretmanager_add_secret_version]
-  # project_id  = "YOUR-GOOGLE-CLOUD-PROJECT"  # (e.g. "my-project")
-  # secret_id   = "YOUR-SECRET-ID"             # (e.g. "my-secret")
+  # project_id = "YOUR-GOOGLE-CLOUD-PROJECT"  # (e.g. "my-project")
+  # secret_id  = "YOUR-SECRET-ID"             # (e.g. "my-secret")
 
   # Require the Secret Manager client library.
   require "google/cloud/secret_manager"
@@ -72,8 +72,8 @@ end
 
 def create_secret project_id:, secret_id:
   # [START secretmanager_create_secret]
-  # project_id  = "YOUR-GOOGLE-CLOUD-PROJECT"  # (e.g. "my-project")
-  # secret_id   = "YOUR-SECRET-ID"             # (e.g. "my-secret")
+  # project_id = "YOUR-GOOGLE-CLOUD-PROJECT"  # (e.g. "my-project")
+  # secret_id  = "YOUR-SECRET-ID"             # (e.g. "my-secret")
 
   # Require the Secret Manager client library.
   require "google/cloud/secret_manager"
@@ -104,8 +104,8 @@ end
 
 def delete_secret project_id:, secret_id:
   # [START secretmanager_delete_secret]
-  # project_id  = "YOUR-GOOGLE-CLOUD-PROJECT"  # (e.g. "my-project")
-  # secret_id   = "YOUR-SECRET-ID"             # (e.g. "my-secret")
+  # project_id = "YOUR-GOOGLE-CLOUD-PROJECT"  # (e.g. "my-project")
+  # secret_id  = "YOUR-SECRET-ID"             # (e.g. "my-secret")
 
   # Require the Secret Manager client library.
   require "google/cloud/secret_manager"
@@ -126,9 +126,9 @@ end
 
 def destroy_secret_version project_id:, secret_id:, version_id:
   # [START secretmanager_destroy_secret_version]
-  # project_id  = "YOUR-GOOGLE-CLOUD-PROJECT"  # (e.g. "my-project")
-  # secret_id   = "YOUR-SECRET-ID"             # (e.g. "my-secret")
-  # version_id  = "YOUR-VERSION"               # (e.g. "5" or "latest")
+  # project_id = "YOUR-GOOGLE-CLOUD-PROJECT"  # (e.g. "my-project")
+  # secret_id  = "YOUR-SECRET-ID"             # (e.g. "my-secret")
+  # version_id = "YOUR-VERSION"               # (e.g. "5" or "latest")
 
   # Require the Secret Manager client library.
   require "google/cloud/secret_manager"
@@ -151,9 +151,9 @@ end
 
 def disable_secret_version project_id:, secret_id:, version_id:
   # [START secretmanager_disable_secret_version]
-  # project_id  = "YOUR-GOOGLE-CLOUD-PROJECT"  # (e.g. "my-project")
-  # secret_id   = "YOUR-SECRET-ID"             # (e.g. "my-secret")
-  # version_id  = "YOUR-VERSION"               # (e.g. "5" or "latest")
+  # project_id = "YOUR-GOOGLE-CLOUD-PROJECT"  # (e.g. "my-project")
+  # secret_id  = "YOUR-SECRET-ID"             # (e.g. "my-secret")
+  # version_id = "YOUR-VERSION"               # (e.g. "5" or "latest")
 
   # Require the Secret Manager client library.
   require "google/cloud/secret_manager"
@@ -176,9 +176,9 @@ end
 
 def enable_secret_version project_id:, secret_id:, version_id:
   # [START secretmanager_enable_secret_version]
-  # project_id  = "YOUR-GOOGLE-CLOUD-PROJECT"  # (e.g. "my-project")
-  # secret_id   = "YOUR-SECRET-ID"             # (e.g. "my-secret")
-  # version_id  = "YOUR-VERSION"               # (e.g. "5" or "latest")
+  # project_id = "YOUR-GOOGLE-CLOUD-PROJECT"  # (e.g. "my-project")
+  # secret_id  = "YOUR-SECRET-ID"             # (e.g. "my-secret")
+  # version_id = "YOUR-VERSION"               # (e.g. "5" or "latest")
 
   # Require the Secret Manager client library.
   require "google/cloud/secret_manager"
@@ -201,8 +201,8 @@ end
 
 def get_secret project_id:, secret_id:
   # [START secretmanager_get_secret]
-  # project_id  = "YOUR-GOOGLE-CLOUD-PROJECT"  # (e.g. "my-project")
-  # secret_id   = "YOUR-SECRET-ID"             # (e.g. "my-secret")
+  # project_id = "YOUR-GOOGLE-CLOUD-PROJECT"  # (e.g. "my-project")
+  # secret_id  = "YOUR-SECRET-ID"             # (e.g. "my-secret")
 
   # Require the Secret Manager client library.
   require "google/cloud/secret_manager"
@@ -234,9 +234,9 @@ end
 
 def get_secret_version project_id:, secret_id:, version_id:
   # [START secretmanager_get_secret_version]
-  # project_id  = "YOUR-GOOGLE-CLOUD-PROJECT"  # (e.g. "my-project")
-  # secret_id   = "YOUR-SECRET-ID"             # (e.g. "my-secret")
-  # version_id  = "YOUR-VERSION"               # (e.g. "5" or "latest")
+  # project_id = "YOUR-GOOGLE-CLOUD-PROJECT"  # (e.g. "my-project")
+  # secret_id  = "YOUR-SECRET-ID"             # (e.g. "my-secret")
+  # version_id = "YOUR-VERSION"               # (e.g. "5" or "latest")
 
   # Require the Secret Manager client library.
   require "google/cloud/secret_manager"
@@ -262,8 +262,8 @@ end
 
 def list_secret_versions project_id:, secret_id:
   # [START secretmanager_list_secret_versions]
-  # project_id  = "YOUR-GOOGLE-CLOUD-PROJECT"  # (e.g. "my-project")
-  # secret_id   = "YOUR-SECRET-ID"             # (e.g. "my-secret")
+  # project_id = "YOUR-GOOGLE-CLOUD-PROJECT"  # (e.g. "my-project")
+  # secret_id  = "YOUR-SECRET-ID"             # (e.g. "my-secret")
 
   # Require the Secret Manager client library.
   require "google/cloud/secret_manager"
@@ -309,8 +309,8 @@ end
 
 def update_secret project_id:, secret_id:
   # [START secretmanager_update_secret]
-  # project_id  = "YOUR-GOOGLE-CLOUD-PROJECT"  # (e.g. "my-project")
-  # secret_id   = "YOUR-SECRET-ID"             # (e.g. "my-secret")
+  # project_id = "YOUR-GOOGLE-CLOUD-PROJECT"  # (e.g. "my-project")
+  # secret_id  = "YOUR-SECRET-ID"             # (e.g. "my-secret")
 
   # Require the Secret Manager client library.
   require "google/cloud/secret_manager"
