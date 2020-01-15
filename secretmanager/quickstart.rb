@@ -32,7 +32,6 @@ def quickstart i_project_id: nil, i_secret_id: nil
 
   # Build the parent name from the project.
   parent = "projects/#{project_id}"
-  # parent = client.project_path(project_id) # TODO
 
   # Create the parent secret.
   secret = client.create_secret(

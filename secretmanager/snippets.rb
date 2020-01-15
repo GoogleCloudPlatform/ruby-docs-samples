@@ -25,7 +25,6 @@ def access_secret_version project_id:, secret_id:, version_id:
   client = Google::Cloud::SecretManager.secret_manager_service
 
   # Build the resource name of the secret version.
-  # name = client.secret_version_path(project_id, secret_id, version_id) # TODO
   name = "projects/#{project_id}/secrets/#{secret_id}/versions/#{version_id}"
 
   # Access the secret version.
@@ -54,7 +53,6 @@ def add_secret_version project_id:, secret_id:
   client = Google::Cloud::SecretManager.secret_manager_service
 
   # Build the resource name of the secret version.
-  # name = client.secret_path(project_id, secret_id) # TODO
   name = "projects/#{project_id}/secrets/#{secret_id}"
 
   # Add the secret version.
@@ -84,7 +82,6 @@ def create_secret project_id:, secret_id:
   client = Google::Cloud::SecretManager.secret_manager_service
 
   # Build the resource name of the parent project.
-  # parent = client.project_path(project_id) # TODO
   parent = "projects/#{project_id}"
 
   # Create the secret.
@@ -117,7 +114,6 @@ def delete_secret project_id:, secret_id:
   client = Google::Cloud::SecretManager.secret_manager_service
 
   # Build the resource name of the secret.
-  # name = client.secret_path(project_id, secret_id) # TODO
   name = "projects/#{project_id}/secrets/#{secret_id}"
 
   # Delete the secret.
@@ -141,7 +137,6 @@ def destroy_secret_version project_id:, secret_id:, version_id:
   client = Google::Cloud::SecretManager.secret_manager_service
 
   # Build the resource name of the secret version.
-  # name = client.secret_version_path(project_id, secret_id, version_id) # TODO
   name = "projects/#{project_id}/secrets/#{secret_id}/versions/#{version_id}"
 
   # Destroy the secret version.
@@ -167,7 +162,6 @@ def disable_secret_version project_id:, secret_id:, version_id:
   client = Google::Cloud::SecretManager.secret_manager_service
 
   # Build the resource name of the secret version.
-  # name = client.secret_version_path(project_id, secret_id, version_id) # TODO
   name = "projects/#{project_id}/secrets/#{secret_id}/versions/#{version_id}"
 
   # Disable the secret version.
@@ -193,7 +187,6 @@ def enable_secret_version project_id:, secret_id:, version_id:
   client = Google::Cloud::SecretManager.secret_manager_service
 
   # Build the resource name of the secret version.
-  # name = client.secret_version_path(project_id, secret_id, version_id) # TODO
   name = "projects/#{project_id}/secrets/#{secret_id}/versions/#{version_id}"
 
   # Enable the secret version.
@@ -218,7 +211,6 @@ def get_secret project_id:, secret_id:
   client = Google::Cloud::SecretManager.secret_manager_service
 
   # Build the resource name of the secret.
-  # name = client.secret_path(project_id, secret_id) # TODO
   name = "projects/#{project_id}/secrets/#{secret_id}"
 
   # Get the secret.
@@ -253,7 +245,6 @@ def get_secret_version project_id:, secret_id:, version_id:
   client = Google::Cloud::SecretManager.secret_manager_service
 
   # Build the resource name of the secret version.
-  # name = client.secret_version_path(project_id, secret_id, version_id) # TODO
   name = "projects/#{project_id}/secrets/#{secret_id}/versions/#{version_id}"
 
   # Get the secret version.
@@ -281,7 +272,6 @@ def list_secret_versions project_id:, secret_id:
   client = Google::Cloud::SecretManager.secret_manager_service
 
   # Build the resource name of the parent.
-  # parent = client.secret_path(project_id, secret_id) # TODO
   parent = "projects/#{project_id}/secrets/#{secret_id}"
 
   # Get the list of secret versions.
@@ -305,7 +295,6 @@ def list_secrets project_id:
   client = Google::Cloud::SecretManager.secret_manager_service
 
   # Build the resource name of the parent.
-  # parent = client.project_path(project_id) # TODO
   parent = "projects/#{project_id}"
 
   # Get the list of secrets.
@@ -330,7 +319,6 @@ def update_secret project_id:, secret_id:
   client = Google::Cloud::SecretManager.secret_manager_service
 
   # Build the resource name of the secret.
-  # name = client.secret_path(project_id, secret_id) # TODO
   name = "projects/#{project_id}/secrets/#{secret_id}"
 
   # Create the secret.
