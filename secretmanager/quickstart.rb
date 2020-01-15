@@ -39,7 +39,7 @@ def quickstart i_project_id: nil, i_secret_id: nil
     secret_id: secret_id,
     secret:    {
       replication: {
-        automatic: Google::Cloud::SecretManager::V1beta1::Replication::Automatic.new
+        automatic: {}
       }
     }
   )

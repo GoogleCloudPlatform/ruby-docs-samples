@@ -30,7 +30,7 @@ describe "Secret Manager Snippets" do
       secret_id: secret_id,
       secret:    {
         replication: {
-          automatic: Google::Cloud::SecretManager::V1beta1::Replication::Automatic.new
+          automatic: {}
         }
       }
     )
