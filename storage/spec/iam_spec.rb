@@ -79,7 +79,7 @@ describe "Google Cloud Storage IAM sample" do
         end
       end
     end
-    expect(binding.members).to eq nil
+    expect(result_members).to eq nil
 
     expect {
       add_bucket_iam_member project_id:  @project_id,
