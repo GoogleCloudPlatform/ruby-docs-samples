@@ -1,40 +1,47 @@
-require "json"
-require "google/cloud/monitoring"
-require "google/cloud/monitoring/v3/alert_policy_service_client"
-require "google/cloud/monitoring/v3/notification_channel_service_client"
-
 def list_alert_policies project_id:
   # [START monitoring_alert_list_policies]
+  # project_id  = "Your Google Cloud project ID"
+
+  require "google/cloud/monitoring"
+  require "google/cloud/monitoring/v3/alert_policy_service_client"
+
   client = Google::Cloud::Monitoring::AlertPolicy.new
   project_name = Google::Cloud::Monitoring::V3::AlertPolicyServiceClient.project_path project_id
   policies = client.list_alert_policies project_name
   policies.each do |policy|
-    p policy
+    puts policy.display_name
   end
   # [END monitoring_alert_list_policies]
 end
 
 # Enable or disable alert policies in a project.
 # @param project_id [String]
-# @param enable [Boolean]
+# @param enable [Boolean] Enable or disable the policies
 # @param filter [String] Optional.
 #   Only enable/disable alert policies that match this filter.
 #   https://cloud.google.com/monitoring/api/v3/sorting-and-filtering
 #
 def enable_alert_policies project_id:, enable:, filter: nil
   # [START monitoring_alert_enable_policies]
+  # project_id  = "Your Google Cloud project ID"
+  # enable  = "Enable or disable the policies"
+  # filter  = "Only enable/disable alert policies that match filter."
+
+  require "google/cloud/monitoring"
+  require "google/cloud/monitoring/v3/alert_policy_service_client"
+
   client = Google::Cloud::Monitoring::AlertPolicy.new
   project_name = Google::Cloud::Monitoring::V3::AlertPolicyServiceClient.project_path project_id
   policies = client.list_alert_policies project_name, filter: filter
 
   policies.each do |policy|
     if policy.enabled.value == enable
-      p "Policy #{policy.name} is already #{policy.enabled.value ? "enabled" : "disabled"}"
+      puts "Policy #{policy.display_name} is already #{policy.enabled.value ? 'enabled' : 'disabled'}"
     else
       policy.enabled.value = enable
       update_mask = Google::Protobuf::FieldMask.new paths: ["enabled"]
-      # client.update_alert_policy policy, update_mask
-      p "#{enable ? "Enabled" : "Disabled"} #{policy.name}"
+      client.update_alert_policy policy, update_mask: update_mask
+      puts "#{enable ? 'Enabled' : 'Disabled'} #{policy.display_name}"
     end
   end
   # [END monitoring_alert_enable_policies]
@@ -42,17 +49,29 @@ end
 
 def list_notification_channels project_id:
   # [START monitoring_alert_list_channels]
+  # project_id  = "Your Google Cloud project ID"
+  require "google/cloud/monitoring"
+  require "google/cloud/monitoring/v3/notification_channel_service_client"
+
   client = Google::Cloud::Monitoring::NotificationChannel.new
   project_name = Google::Cloud::Monitoring::V3::NotificationChannelServiceClient.project_path project_id
   channels = client.list_notification_channels project_name
   channels.each do |channel|
-    p channel
+    puts channel.name
   end
   # [END monitoring_alert_list_channels]
 end
 
 def replace_notification_channels project_id:, alert_policy_id:, channel_ids: []
   # [START monitoring_alert_replace_channels]
+  # project_id  = "Your Google Cloud project ID"
+  # alert_policy_id = "Alter policy id"
+  # channel_ids = "List of channel ids"
+
+  require "google/cloud/monitoring"
+  require "google/cloud/monitoring/v3/alert_policy_service_client"
+  require "google/cloud/monitoring/v3/notification_channel_service_client"
+
   alert_client = Google::Cloud::Monitoring::AlertPolicy.new
   channel_client = Google::Cloud::Monitoring::NotificationChannel.new
   project_name = Google::Cloud::Monitoring::V3::AlertPolicyServiceClient.project_path project_id
@@ -70,26 +89,28 @@ def replace_notification_channels project_id:, alert_policy_id:, channel_ids: []
   end
 
   update_mask = Google::Protobuf::FieldMask.new paths: ["notification_channels"]
-  updated_policy = alert_client.update_alert_policy policy, update_mask
-  p "Updated #{updated_policy.name}"
+  updated_policy = alert_client.update_alert_policy policy, update_mask: update_mask
+  puts "Updated #{updated_policy.name}"
   # [END monitoring_alert_replace_channels]
 end
 
 def backup project_id:
   # [START monitoring_alert_backup_policies]
+  # project_id  = "Your Google Cloud project ID"
+
+  require "json"
+  require "google/cloud/monitoring"
+  require "google/cloud/monitoring/v3/alert_policy_service_client"
+
   alert_client = Google::Cloud::Monitoring::AlertPolicy.new
   channel_client = Google::Cloud::Monitoring::NotificationChannel.new
   project_name = Google::Cloud::Monitoring::V3::AlertPolicyServiceClient.project_path project_id
 
-  policies = alert_client.list_alert_policies(project_name).map(&:to_h)
-  channels = channel_client.list_notification_channels(project_name).map(&:to_h)
-  record = {
-    project_id: project_id,
-    policies: policies,
-    channels: channels
-  }
+  policies = alert_client.list_alert_policies(project_name).map(&:to_json)
+  channels = channel_client.list_notification_channels(project_name).map(&:to_json)
+  record = { project_id: project_id, policies: policies, channels: channels }
 
-  File.write("backup.json", JSON.pretty_generate(record))
+  File.write "backup.json", JSON.pretty_generate(record)
   puts "Backed up alert policies and notification channels to 'backup.json'."
   # [END monitoring_alert_backup_policies]
 end
@@ -99,19 +120,26 @@ def restore project_id:
   # [START monitoring_alert_create_policy]
   # [START monitoring_alert_create_channel]
   # [START monitoring_alert_update_channel]
+  # project_id  = "Your Google Cloud project ID"
+
+  require "json"
+  require "google/cloud/monitoring"
+  require "google/cloud/monitoring/v3/alert_policy_service_client"
+  require "google/cloud/monitoring/v3/notification_channel_service_client"
+
   project_name = Google::Cloud::Monitoring::V3::AlertPolicyServiceClient.project_path project_id
 
-  p "Loading alert policies and notification channels from backup.json."
-  backup_data = JSON.parse(File.read("backup.json"))
+  puts "Loading alert policies and notification channels from backup.json."
+  backup_data = JSON.parse File.read("backup.json")
 
   # Convert json policies data to AlertPolicies.
   policies = backup_data["policies"].map do |policy|
-    Google::Monitoring::V3::AlertPolicy.new policy
+    Google::Monitoring::V3::AlertPolicy.decode_json policy
   end
 
   # Convert json channel data to NotificationChannels
   channels = backup_data["channels"].map do |channel|
-    Google::Monitoring::V3::NotificationChannel.new channel
+    Google::Monitoring::V3::NotificationChannel.decode_json channel
   end
 
   # Restore the channels.
@@ -119,7 +147,7 @@ def restore project_id:
   channel_name_map = {}
 
   channels.each do |channel|
-    p "Updating channel #{channel.display_name}"
+    puts "Updating channel #{channel.display_name}"
 
     # This field is immutable and it is illegal to specify a
     # non-default value (UNVERIFIED or VERIFIED) in the
@@ -134,7 +162,7 @@ def restore project_id:
         channel_client.update_notification_channel channel
         updated = true
       rescue e
-        p "The channel was deleted.Create it below."
+        puts "The channel was deleted.Create it below."
       end
     end
 
@@ -149,7 +177,7 @@ def restore project_id:
   alert_client = Google::Cloud::Monitoring::AlertPolicy.new
 
   policies.each do |policy|
-    p "Updating policy #{policy.display_name}"
+    puts "Updating policy #{policy.display_name}"
     policy.creation_record = nil
     policy.mutation_record = nil
 
@@ -165,8 +193,8 @@ def restore project_id:
       begin
         alert_client.update_alert_policy policy
         updated = true
-      rescue e
-        p "The policy was deleted.  Create it below."
+      rescue StandardError => e
+        puts "The policy was deleted. Create it below."
       end
     end
 
@@ -178,7 +206,7 @@ def restore project_id:
     end
 
     policy = alert_client.create_alert_policy project_name, policy
-    p "Updated #{policy.name}"
+    puts "Updated #{policy.name}"
   end
   # [END monitoring_alert_restore_policies]
   # [END monitoring_alert_create_policy]

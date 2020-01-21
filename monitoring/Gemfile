@@ -8,4 +8,5 @@ gem "google-cloud-monitoring"
 
 group :test do
   gem "rspec"
+  gem "rspec-retry"
 end
