@@ -75,7 +75,7 @@ describe "Google Cloud Monitoring Alert API samples" do
       list_alert_policies project_id: @project_id
     end
 
-    expect(output).to include(@policy.display_name)
+    expect(output).to include @policy.display_name
   end
 
   example "enable alert policies" do
@@ -83,19 +83,19 @@ describe "Google Cloud Monitoring Alert API samples" do
       enable_alert_policies project_id: @project_id, enable: true
     end
 
-    expect(output).to include("Enabled #{@policy.display_name}")
+    expect(output).to include "Enabled #{@policy.display_name}"
 
     output = capture do
       enable_alert_policies project_id: @project_id, enable: true
     end
 
-    expect(output).to include("Policy #{@policy.display_name} is already enabled")
+    expect(output).to include "Policy #{@policy.display_name} is already enabled"
 
     output = capture do
       enable_alert_policies project_id: @project_id, enable: false
     end
 
-    expect(output).to include("Disabled #{@policy.display_name}")
+    expect(output).to include "Disabled #{@policy.display_name}"
   end
 
   example "list notification channels" do
@@ -103,7 +103,7 @@ describe "Google Cloud Monitoring Alert API samples" do
       list_notification_channels project_id: @project_id
     end
 
-    expect(output).to include(@notification_channel.name)
+    expect(output).to include @notification_channel.name
   end
 
   example "backup" do
@@ -111,7 +111,7 @@ describe "Google Cloud Monitoring Alert API samples" do
       backup project_id: @project_id
     end
 
-    expect(output).to include("Backed up alert policies and notification channels to 'backup.json'")
+    expect(output).to include "Backed up alert policies and notification channels to 'backup.json'"
   end
 
   example "restore" do
@@ -121,7 +121,7 @@ describe "Google Cloud Monitoring Alert API samples" do
       restore project_id: @project_id
     end
 
-    expect(output).to include("Updating channel #{@notification_channel.display_name}")
-    expect(output).to include("Updating policy #{@policy.display_name}")
+    expect(output).to include "Updating channel #{@notification_channel.display_name}"
+    expect(output).to include "Updating policy #{@policy.display_name}"
   end
 end
