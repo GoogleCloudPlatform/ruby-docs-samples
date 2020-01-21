@@ -22,10 +22,17 @@ def view_bucket_iam_members project_id:, bucket_name:
   storage = Google::Cloud::Storage.new project_id: project_id
   bucket = storage.bucket bucket_name
 
-  policy = bucket.policy
+  policy = bucket.policy requested_policy_version: 3
+  policy.bindings.each do |binding|
+    puts "Role: #{binding.role}"
+    puts "Members: #{binding.members}"
 
-  policy.roles.each do |role, members|
-    puts "Role: #{role} Members: #{members}"
+    # if a conditional binding exists print the condition.
+    if binding.condition
+      puts "Condition Title: #{binding.condition.title}"
+      puts "Condition Description: #{binding.condition.description}"
+      puts "Condition Expression: #{binding.condition.expression}"
+    end
   end
   # [END view_bucket_iam_members]
 end
@@ -42,8 +49,8 @@ def add_bucket_iam_member project_id:, bucket_name:, role:, member:
   storage = Google::Cloud::Storage.new project_id: project_id
   bucket = storage.bucket bucket_name
 
-  bucket.policy do |policy|
-    policy.add role, member
+  bucket.policy requested_policy_version: 3 do |policy|
+    policy.bindings.insert role: role, members: [member]
   end
 
   puts "Added #{member} with role #{role} to #{bucket_name}"
@@ -62,12 +69,48 @@ def remove_bucket_iam_member project_id:, bucket_name:, role:, member:
   storage = Google::Cloud::Storage.new project_id: project_id
   bucket = storage.bucket bucket_name
 
-  bucket.policy do |policy|
-    policy.remove role, member
+  bucket.policy requested_policy_version: 3 do |policy|
+    policy.bindings.each do |binding|
+      if binding.role == role && binding.condition.nil?
+        binding.members.delete member
+      end
+    end
   end
 
   puts "Removed #{member} with role #{role} from #{bucket_name}"
   # [END remove_bucket_iam_member]
+end
+
+def add_bucket_conditional_iam_binding project_id:, bucket_name:, role:, member:, title:, description:, expression:
+  # [START storage_add_bucket_conditional_iam_binding]
+  # project_id  = "Your Google Cloud project ID"
+  # bucket_name = "Your Google Cloud Storage bucket name"
+  # role        = "Bucket-level IAM role"
+  # member      = "Bucket-level IAM member"
+  # title       = "Condition Title"
+  # description = "Condition Description"
+  # expression  = "Condition Expression"
+
+  require "google/cloud/storage"
+
+  storage = Google::Cloud::Storage.new project_id: project_id
+  bucket = storage.bucket bucket_name
+
+  bucket.policy requested_policy_version: 3 do |policy|
+    policy.version = 3
+    policy.bindings.insert(
+      role:      role,
+      members:   member,
+      condition: {
+        title:       title,
+        description: description,
+        expression:  expression
+      }
+    )
+  end
+
+  puts "Added #{member} with role #{role} to #{bucket_name} with condition #{title} #{description} #{expression}"
+  # [END storage_add_bucket_conditional_iam_binding]
 end
 
 def run_sample arguments
@@ -83,6 +126,14 @@ def run_sample arguments
                           bucket_name: arguments.shift,
                           role:        arguments.shift,
                           member:      arguments.shift
+  when "add_bucket_conditional_iam_binding"
+    add_bucket_conditional_iam_binding project_id:  project_id,
+                                       bucket_name: arguments.shift,
+                                       role:        arguments.shift,
+                                       member:      arguments.shift,
+                                       title:       arguments.shift,
+                                       description: arguments.shift,
+                                       expression:  arguments.shift
   when "remove_bucket_iam_member"
     remove_bucket_iam_member project_id:  project_id,
                              bucket_name: arguments.shift,
@@ -93,9 +144,10 @@ def run_sample arguments
       Usage: bundle exec ruby iam.rb [command] [arguments]
 
       Commands:
-        view_bucket_iam_members  <bucket>                         View bucket-level IAM members
-        add_bucket_iam_member    <bucket> <iam_role> <iam_member> Add a bucket-level IAM member
-        remove_bucket_iam_member <bucket> <iam_role> <iam_member> Remove a bucket-level IAM member
+        view_bucket_iam_members  <bucket>                                                                                View bucket-level IAM members
+        add_bucket_iam_member    <bucket> <iam_role> <iam_member>                                                        Add a bucket-level IAM member
+        add_bucket_conditional_iam_binding <bucket> <iam_role> <iam_member> <cond_title> <cond_description> <cond_expr>  Add a conditional bucket-level binding
+        remove_bucket_iam_member <bucket> <iam_role> <iam_member>                                                        Remove a bucket-level IAM member
 
       Environment variables:
         GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
