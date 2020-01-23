@@ -47,6 +47,61 @@ def enable_alert_policies project_id:, enable:, filter: nil
   # [END monitoring_alert_enable_policies]
 end
 
+# rubocop:disable Layout/AlignHash,Layout/IndentFirstHashElement
+def create_policy project_id:
+  # [START monitoring_alert_create_policy]
+  # project_id  = "Your Google Cloud project ID"
+
+  require "google/cloud/monitoring"
+  require "google/cloud/monitoring/v3/alert_policy_service_client"
+  require "securerandom"
+
+  policy_data = {
+    "displayName": "ruby-samples-#{SecureRandom.hex 4}",
+    "combiner": "OR",
+    "conditions": [
+      {
+        "conditionThreshold": {
+          "filter": "metric.label.state=\"blocked\" AND metric.type=\"agent.googleapis.com/processes/count_by_state\"  AND resource.type=\"gce_instance\"",
+          "comparison": "COMPARISON_GT",
+          "thresholdValue": 100,
+          "duration": { "seconds": 900 },
+            "trigger": {
+            "percent": 0
+          },
+          "aggregations": [{
+            "alignmentPeriod": { "seconds": 60 },
+            "perSeriesAligner": "ALIGN_MEAN",
+            "crossSeriesReducer": "REDUCE_MEAN",
+            "groupByFields": [
+              "project",
+              "resource.label.instance_id",
+              "resource.label.zone"
+            ]
+          }]
+        },
+        "displayName": "ruby-samples-#{SecureRandom.hex 4}"
+      }
+    ],
+    "enabled": { value: false }
+  }.to_json
+
+  project_name = \
+    Google::Cloud::Monitoring::V3::AlertPolicyServiceClient.project_path(
+      project_id
+    )
+
+  client = Google::Cloud::Monitoring::AlertPolicy.new
+  policy = Google::Monitoring::V3::AlertPolicy.decode_json policy_data
+  policy = client.create_alert_policy project_name, policy
+
+  puts "Policy #{policy.display_name} created."
+  # [END monitoring_alert_create_policy]
+
+  policy
+end
+# rubocop:enable Layout/AlignHash,Layout/IndentFirstHashElement
+
 def list_notification_channels project_id:
   # [START monitoring_alert_list_channels]
   # project_id  = "Your Google Cloud project ID"
@@ -94,6 +149,73 @@ def replace_notification_channels project_id:, alert_policy_id:, channel_ids: []
   # [END monitoring_alert_replace_channels]
 end
 
+# rubocop:disable Layout/AlignHash,Layout/IndentFirstHashElement
+def create_channel project_id:
+  # [START monitoring_alert_create_policy]
+  # project_id  = "Your Google Cloud project ID"
+
+  require "google/cloud/monitoring"
+  require "google/cloud/monitoring/v3/notification_channel_service_client"
+  require "securerandom"
+
+  channel_data = {
+    "type": "email",
+    "displayName": "Email joe",
+    "description": "test_notification_channel.json",
+    "labels": {
+        "email_address": "joe@example.com"
+    },
+    "userLabels": {
+        "office": "california_westcoast_usa",
+        "division": "fulfillment",
+        "role": "operations",
+        "level": "5"
+    },
+    "enabled": { "value": true }
+  }.to_json
+
+  project_name = \
+    Google::Cloud::Monitoring::V3::NotificationChannelServiceClient.project_path(
+      project_id
+    )
+
+  client = Google::Cloud::Monitoring::NotificationChannel.new
+  channel = Google::Monitoring::V3::NotificationChannel.decode_json channel_data
+  channel = client.create_notification_channel project_name, channel
+
+  puts "Notification channel #{channel.display_name} created."
+  # [END monitoring_alert_create_policy]
+
+  channel
+end
+# rubocop:enable Layout/AlignHash,Layout/IndentFirstHashElement
+
+def update_channel project_id:, channel_id:
+  # [START monitoring_alert_update_channel]
+  # project_id  = "Your Google Cloud project ID"
+  # channel_id  = "Notification channel ID"
+
+  require "google/cloud/monitoring"
+  require "google/cloud/monitoring/v3/notification_channel_service_client"
+
+  client = Google::Cloud::Monitoring::NotificationChannel.new
+  channel_name = Google::Cloud::Monitoring::V3::NotificationChannelServiceClient.notification_channel_path(
+    project_id, channel_id
+  )
+  channel = client.get_notification_channel channel_name
+
+  if channel
+    channel.display_name = "ruby-samples-#{SecureRandom.hex 4}"
+    update_mask = Google::Protobuf::FieldMask.new paths: ["display_name"]
+    channel = client.update_notification_channel channel, update_mask: update_mask
+    puts "Channel #{channel_id} updated."
+  else
+    puts "Channel #{channel_id} not found."
+  end
+
+  # [END monitoring_alert_update_channel]
+end
+
 def backup project_id:
   # [START monitoring_alert_backup_policies]
   # project_id  = "Your Google Cloud project ID"
@@ -117,9 +239,6 @@ end
 
 def restore project_id:
   # [START monitoring_alert_restore_policies]
-  # [START monitoring_alert_create_policy]
-  # [START monitoring_alert_create_channel]
-  # [START monitoring_alert_update_channel]
   # project_id  = "Your Google Cloud project ID"
 
   require "json"
@@ -209,15 +328,18 @@ def restore project_id:
     puts "Updated #{policy.name}"
   end
   # [END monitoring_alert_restore_policies]
-  # [END monitoring_alert_create_policy]
-  # [END monitoring_alert_create_channel]
-  # [END monitoring_alert_update_channel]
 end
 
 if $PROGRAM_NAME == __FILE__
   case ARGV.shift
+  when "create_policy"
+    create_policy project_id: ARGV.shift
   when "list_alert_policies"
     list_alert_policies project_id: ARGV.shift
+  when "create_channel"
+    create_channel project_id: ARGV.shift
+  when "update_channel"
+    update_channel project_id: ARGV.shift, channel_id: ARGV.shift
   when "list_notification_channels"
     list_notification_channels project_id: ARGV.shift
   when "enable_alert_policies"
@@ -233,9 +355,12 @@ if $PROGRAM_NAME == __FILE__
       Usage: bundle exec ruby alerts.rb [command] [arguments]
 
       Commands:
+        create_policy                   <project_id>
         list_alert_policies             <project_id>
-        list_notification_channels      <project_id>
         enable_alert_policies           <project_id> <enable> <filter>                # enable value yes / no
+        create_channel                  <project_id>
+        update_channel                  <project_id> <channel_ids>
+        list_notification_channels      <project_id>
         replace_notification_channels   <project_id> <alert_policy_id> <channel_ids>
         backup                          <project_id>
         restore                         <project_id>

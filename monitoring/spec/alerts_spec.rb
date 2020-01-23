@@ -30,28 +30,13 @@ describe "Google Cloud Monitoring Alert API samples" do
         @project_id
       )
 
-    # Create alert policy
     @policy_client = Google::Cloud::Monitoring::AlertPolicy.new
-    policy_data = File.read("spec/test_alert_policy.json")
-    @policy = Google::Monitoring::V3::AlertPolicy.decode_json policy_data
-    @policy.display_name = "ruby-sample-test-#{SecureRandom.hex(4)}"
-    @policy = @policy_client.create_alert_policy @project_path, @policy
+    # Create alert policy
+    @policy = create_policy project_id: @project_id
 
-     # Create a notification channel.
     @notification_client = Google::Cloud::Monitoring::NotificationChannel.new
-    notification_channel_data = File.read "spec/test_notification_channel.json"
-    @notification_channel = Google::Monitoring::V3::NotificationChannel.decode_json(
-      notification_channel_data
-    )
-    @notification_channel.display_name = "ruby-sample-test-#{SecureRandom.hex(4)}"
-    notification_channel_path = \
-      Google::Cloud::Monitoring::V3::NotificationChannelServiceClient.notification_channel_path(
-        @project_id, @notification_channel.display_name
-      )
-    @notification_channel = @notification_client.create_notification_channel(
-      notification_channel_path,
-      @notification_channel
-    )
+    # Create a notification channel.
+    @notification_channel = create_channel project_id: @project_id
   end
 
   after do
@@ -78,6 +63,14 @@ describe "Google Cloud Monitoring Alert API samples" do
     expect(output).to include @policy.display_name
   end
 
+  example "create alert policy" do
+    output = capture do
+      create_policy project_id: @project_id
+    end
+
+    expect(output).to include "Policy ruby-samples"
+  end
+
   example "enable alert policies" do
     output = capture do
       enable_alert_policies project_id: @project_id, enable: true
@@ -96,6 +89,23 @@ describe "Google Cloud Monitoring Alert API samples" do
     end
 
     expect(output).to include "Disabled #{@policy.display_name}"
+  end
+
+  example "create channel" do
+    output = capture do
+      create_channel project_id: @project_id
+    end
+
+    expect(output).to include "Notification channel Email joe created"
+  end
+
+  example "update channel" do
+    channel_id = @notification_channel.name.split("/").last
+    output = capture do
+      update_channel project_id: @project_id, channel_id: channel_id
+    end
+
+    expect(output).to include "Channel #{channel_id} updated"
   end
 
   example "list notification channels" do
