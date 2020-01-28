@@ -260,6 +260,76 @@ def get_secret_version project_id:, secret_id:, version_id:
   version
 end
 
+def iam_grant_access project_id:, secret_id:, member:
+  # [START secretmanager_iam_grant_access]
+  # project_id = "YOUR-GOOGLE-CLOUD-PROJECT"  # (e.g. "my-project")
+  # secret_id  = "YOUR-SECRET-ID"             # (e.g. "my-secret")
+  # member     = "USER-OR-ACCOUNT"            # (e.g. "user:foo@example.com")
+
+  # Require the Secret Manager client library.
+  require "google/cloud/secret_manager"
+
+  # Create a Secret Manager client.
+  client = Google::Cloud::SecretManager.secret_manager_service
+
+  # Build the resource name of the secret.
+  name = "projects/#{project_id}/secrets/#{secret_id}"
+
+  # Get the current IAM policy.
+  policy = client.get_iam_policy resource: name
+
+  # Add new member to current bindings
+  policy.bindings ||= []
+  policy.bindings << Google::Iam::V1::Binding.new(
+    members: [member],
+    role:    "roles/secretmanager.secretAccessor"
+  )
+
+  # Update IAM policy
+  new_policy = client.set_iam_policy resource: name, policy: policy
+
+  # Print a success message.
+  puts "Updated IAM policy for #{secret_id}"
+  # [END secretmanager_iam_grant_access]
+
+  new_policy
+end
+
+def iam_revoke_access project_id:, secret_id:, member:
+  # [START secretmanager_iam_revoke_access]
+  # project_id = "YOUR-GOOGLE-CLOUD-PROJECT"  # (e.g. "my-project")
+  # secret_id  = "YOUR-SECRET-ID"             # (e.g. "my-secret")
+  # member     = "USER-OR-ACCOUNT"            # (e.g. "user:foo@example.com")
+
+  # Require the Secret Manager client library.
+  require "google/cloud/secret_manager"
+
+  # Create a Secret Manager client.
+  client = Google::Cloud::SecretManager.secret_manager_service
+
+  # Build the resource name of the secret.
+  name = "projects/#{project_id}/secrets/#{secret_id}"
+
+  # Get the current IAM policy.
+  policy = client.get_iam_policy resource: name
+
+  # Remove the member from the current bindings
+  policy.bindings.each do |bind|
+    if bind.role == "roles/secretmanager.secretAccessor"
+      bind.members.delete member
+    end
+  end
+
+  # Update IAM policy
+  new_policy = client.set_iam_policy resource: name, policy: policy
+
+  # Print a success message.
+  puts "Updated IAM policy for #{secret_id}"
+  # [END secretmanager_iam_revoke_access]
+
+  new_policy
+end
+
 def list_secret_versions project_id:, secret_id:
   # [START secretmanager_list_secret_versions]
   # project_id = "YOUR-GOOGLE-CLOUD-PROJECT"  # (e.g. "my-project")
@@ -397,6 +467,18 @@ if $PROGRAM_NAME == __FILE__
       secret_id:  args.shift,
       version_id: args.shift
     )
+  when "iam_grant_access"
+    iam_grant_access(
+      project_id: ENV["GOOGLE_CLOUD_PROJECT"],
+      secret_id:  args.shift,
+      member:     args.shift
+    )
+  when "iam_revoke_access"
+    iam_revoke_access(
+      project_id: ENV["GOOGLE_CLOUD_PROJECT"],
+      secret_id:  args.shift,
+      member:     args.shift
+    )
   when "list_secret_versions"
     list_secret_versions(
       project_id: ENV["GOOGLE_CLOUD_PROJECT"],
@@ -416,18 +498,20 @@ if $PROGRAM_NAME == __FILE__
       Usage: bundle exec ruby #{__FILE__} [command] [arguments]
 
       Commands:
-        access_secret_version <secret> <version>     Access a secret version
-        add_secret_version <secret>                  Add a new secret version
-        create_secret <secret>                       Create a new secret
-        delete_secret <secret>                       Delete an existing secret
-        destroy_secret_version <secret> <version>    Destroy a secret version
-        disable_secret_version <secret> <version>    Disable a secret version
-        enable_secret_version <secret> <version>     Enable a secret version
-        get_secret <secret>                          Get a secret
-        get_secret_version <secret> <version>        Get a secret version
-        list_secret_versions <secret>                List all versions for a secret
-        list_secrets                                 List all secrets
-        update_secret <secret>                       Update a secret
+        access_secret_version <secret> <version>           Access a secret version
+        add_secret_version <secret>                        Add a new secret version
+        create_secret <secret>                             Create a new secret
+        delete_secret <secret>                             Delete an existing secret
+        destroy_secret_version <secret> <version>          Destroy a secret version
+        disable_secret_version <secret> <version>          Disable a secret version
+        enable_secret_version <secret> <version>           Enable a secret version
+        get_secret <secret>                                Get a secret
+        get_secret_version <secret> <version>              Get a secret version
+        iam_grant_access <secret> <version> <member>       Grant the member access to the secret
+        iam_revoke_access <secret> <version> <member>      Revoke the member access to the secret
+        list_secret_versions <secret>                      List all versions for a secret
+        list_secrets                                       List all secrets
+        update_secret <secret>                             Update a secret
 
       Environment variables:
         GOOGLE_CLOUD_PROJECT    ID of the Google Cloud project to run snippets
