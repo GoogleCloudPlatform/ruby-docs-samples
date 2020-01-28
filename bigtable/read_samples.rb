@@ -73,8 +73,8 @@ def reads_row_ranges project_id, instance_id, table_id
 
   ranges = []
   ranges <<
-    table.new_row_range.between("phone#4c410523#20190501", "phone#4c410523#201906201")
-  table.new_row_range.between "phone#5c10102#20190501", "phone#5c10102#201906201"
+    table.new_row_range.between("phone#4c410523#20190501", "phone#4c410523#201906201") <<
+    table.new_row_range.between("phone#5c10102#20190501", "phone#5c10102#201906201")
   table.read_rows(ranges: ranges).each do |row|
     print_row row
   end
@@ -118,16 +118,16 @@ end
 # [START bigtable_reads_filter]
 
 def print_row row
-  puts "Reading data for #{row.key}"
+  puts "Reading data for #{row.key}:"
 
   row.cells.each do |column_family, data|
     puts "Column Family #{column_family}"
     data.each do |cell|
-      labels = cell.labels.length ? " [#{cell.labels.join ','}]" : ""
-      puts "\t#{cell.qualifier}: #{cell.value} #{cell.timestamp}#{labels}"
+      labels = !cell.labels.empty? ? " [#{cell.labels.join ','}]" : ""
+      puts "\t#{cell.qualifier}: #{cell.value} @#{cell.timestamp}#{labels}"
     end
-    puts "\n"
   end
+  puts "\n"
 end
 
 # [END bigtable_reads_row]
