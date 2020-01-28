@@ -104,10 +104,9 @@ describe "Google Cloud Spanner API samples" do
 
     expect(data_definition_statements.size).to eq 3
 
-    ddl = data_definition_statements.join "\n"
-    expect(ddl).to include "CREATE TABLE Singers"
-    expect(ddl).to include "CREATE TABLE Albums"
-    expect(ddl).to include "CREATE TABLE Boxes"
+    expect(data_definition_statements).to include(match "CREATE TABLE Singers")
+    expect(data_definition_statements).to include(match "CREATE TABLE Albums")
+    expect(data_definition_statements).to include(match "CREATE TABLE Boxes")
   end
 
   example "create table with timestamp column" do
@@ -130,7 +129,7 @@ describe "Google Cloud Spanner API samples" do
 
     data_definition_statements = database.ddl force: true
     expect(data_definition_statements.size).to eq 4
-    expect(data_definition_statements.join("\n")).to include "CREATE TABLE Performances"
+    expect(data_definition_statements).to include(match "CREATE TABLE Performances")
   end
 
   example "insert data" do
@@ -1136,7 +1135,7 @@ describe "Google Cloud Spanner API samples" do
 
     data_definition_statements = database.ddl force: true
     expect(data_definition_statements.size).to eq 4
-    expect(data_definition_statements.join("\n")).to include "CREATE TABLE Venues"
+    expect(data_definition_statements).to include(match "CREATE TABLE Venues")
   end
 
   example "insert datatypes data" do
