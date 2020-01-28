@@ -10,8 +10,10 @@ describe "Google Cloud Bigtable write Samples", focus: true do
     bigtable = Google::Cloud::Bigtable.new project_id: @project_id
 
     puts "Creating table."
-    @table = bigtable.create_table @instance_id, @table_id
-    @table.column_family("stats_summary", Google::Cloud::Bigtable::GcRule.max_versions(5)).create()
+    column_families = Google::Cloud::Bigtable::ColumnFamilyMap.new
+    column_families.add "stats_summary", gc_rule: nil
+
+    @table = bigtable.create_table @instance_id, @table_id, column_families: column_families
   end
 
   it "writes one row" do
