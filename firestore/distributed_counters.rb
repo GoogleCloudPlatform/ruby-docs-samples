@@ -12,11 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "google/cloud/firestore"
 
 def create_counter project_id:, num_shards:
   # project_id = "Your Google Cloud Project ID"
   # num_shards = "Number of shards for distributed counter"
+
+  require "google/cloud/firestore"
 
   firestore = Google::Cloud::Firestore.new project_id: project_id
   # [START fs_create_counter]
@@ -35,6 +36,8 @@ def increment_counter project_id:, num_shards:
   # project_id = "Your Google Cloud Project ID"
   # num_shards = "Number of shards for distributed counter"
 
+  require "google/cloud/firestore"
+
   firestore = Google::Cloud::Firestore.new project_id: project_id
   # [START fs_increment_counter]
 
@@ -51,6 +54,8 @@ end
 
 def get_count project_id:
   # project_id = "Your Google Cloud Project ID"
+
+  require "google/cloud/firestore"
 
   firestore = Google::Cloud::Firestore.new project_id: project_id
   # [START fs_get_count]
