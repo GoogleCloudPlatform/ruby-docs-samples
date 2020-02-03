@@ -1253,7 +1253,6 @@ def write_read_bool_array project_id:, instance_id:, database_id:
   results.rows.each do |row|
     puts row["ErrorChecks"]
   end
-
   # [END spanner_write_read_bool_array]
 end
 
@@ -1276,7 +1275,6 @@ def write_read_empty_int64_array project_id:, instance_id:, database_id:
   results.rows.each do |row|
     puts row["Heights"].empty?
   end
-
   # [END spanner_write_read_empty_int64_array]
 end
 
@@ -1299,7 +1297,6 @@ def write_read_null_int64_array project_id:, instance_id:, database_id:
   results.rows.each do |row|
     row["Heights"].each { |height| puts height.nil? }
   end
-
   # [END spanner_write_read_null_int64_array]
 end
 
@@ -1322,7 +1319,6 @@ def write_read_int64_array project_id:, instance_id:, database_id:
   results.rows.each do |row|
     puts row["Heights"]
   end
-
   # [END spanner_write_read_int64_array]
 end
 
@@ -1345,7 +1341,6 @@ def write_read_empty_float64_array project_id:, instance_id:, database_id:
   results.rows.each do |row|
     puts row["Weights"].empty?
   end
-
   # [END spanner_write_read_empty_float64_array]
 end
 
@@ -1368,7 +1363,6 @@ def write_read_null_float64_array project_id:, instance_id:, database_id:
   results.rows.each do |row|
     row["Weights"].each { |weight| puts weight.nil? }
   end
-
   # [END spanner_write_read_null_float64_array]
 end
 
@@ -1391,7 +1385,6 @@ def write_read_float64_array project_id:, instance_id:, database_id:
   results.rows.each do |row|
     puts row["Weights"]
   end
-
   # [END spanner_write_read_float64_array]
 end
 
