@@ -1264,6 +1264,7 @@ def write_read_empty_int64_array project_id:, instance_id:, database_id:
   # database_id = "Your Spanner database ID"
 
   require "google/cloud/spanner"
+  require "securerandom"
 
   spanner = Google::Cloud::Spanner.new project: project_id
   client  = spanner.client instance_id, database_id
@@ -1286,6 +1287,7 @@ def write_read_null_int64_array project_id:, instance_id:, database_id:
   # database_id = "Your Spanner database ID"
 
   require "google/cloud/spanner"
+  require "securerandom"
 
   spanner = Google::Cloud::Spanner.new project: project_id
   client  = spanner.client instance_id, database_id
@@ -1308,6 +1310,7 @@ def write_read_int64_array project_id:, instance_id:, database_id:
   # database_id = "Your Spanner database ID"
 
   require "google/cloud/spanner"
+  require "securerandom"
 
   spanner = Google::Cloud::Spanner.new project: project_id
   client  = spanner.client instance_id, database_id
@@ -1330,6 +1333,7 @@ def write_read_empty_float64_array project_id:, instance_id:, database_id:
   # database_id = "Your Spanner database ID"
 
   require "google/cloud/spanner"
+  require "securerandom"
 
   spanner = Google::Cloud::Spanner.new project: project_id
   client  = spanner.client instance_id, database_id
@@ -1352,6 +1356,7 @@ def write_read_null_float64_array project_id:, instance_id:, database_id:
   # database_id = "Your Spanner database ID"
 
   require "google/cloud/spanner"
+  require "securerandom"
 
   spanner = Google::Cloud::Spanner.new project: project_id
   client  = spanner.client instance_id, database_id
@@ -1374,6 +1379,7 @@ def write_read_float64_array project_id:, instance_id:, database_id:
   # database_id = "Your Spanner database ID"
 
   require "google/cloud/spanner"
+  require "securerandom"
 
   spanner = Google::Cloud::Spanner.new project: project_id
   client  = spanner.client instance_id, database_id
