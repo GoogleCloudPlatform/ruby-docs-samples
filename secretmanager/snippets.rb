@@ -25,7 +25,11 @@ def access_secret_version project_id:, secret_id:, version_id:
   client = Google::Cloud::SecretManager.secret_manager_service
 
   # Build the resource name of the secret version.
-  name = "projects/#{project_id}/secrets/#{secret_id}/versions/#{version_id}"
+  name = client.secret_version_path(
+    project:        project_id,
+    secret:         secret_id,
+    secret_version: version_id
+  )
 
   # Access the secret version.
   version = client.access_secret_version name: name
@@ -53,7 +57,7 @@ def add_secret_version project_id:, secret_id:
   client = Google::Cloud::SecretManager.secret_manager_service
 
   # Build the resource name of the secret version.
-  name = "projects/#{project_id}/secrets/#{secret_id}"
+  name = client.secret_path project: project_id, secret: secret_id
 
   # Add the secret version.
   version = client.add_secret_version(
@@ -82,7 +86,7 @@ def create_secret project_id:, secret_id:
   client = Google::Cloud::SecretManager.secret_manager_service
 
   # Build the resource name of the parent project.
-  parent = "projects/#{project_id}"
+  parent = client.project_path project: project_id
 
   # Create the secret.
   secret = client.create_secret(
@@ -114,7 +118,7 @@ def delete_secret project_id:, secret_id:
   client = Google::Cloud::SecretManager.secret_manager_service
 
   # Build the resource name of the secret.
-  name = "projects/#{project_id}/secrets/#{secret_id}"
+  name = client.secret_path project: project_id, secret: secret_id
 
   # Delete the secret.
   client.delete_secret name: name
@@ -137,7 +141,11 @@ def destroy_secret_version project_id:, secret_id:, version_id:
   client = Google::Cloud::SecretManager.secret_manager_service
 
   # Build the resource name of the secret version.
-  name = "projects/#{project_id}/secrets/#{secret_id}/versions/#{version_id}"
+  name = client.secret_version_path(
+    project:        project_id,
+    secret:         secret_id,
+    secret_version: version_id
+  )
 
   # Destroy the secret version.
   response = client.destroy_secret_version name: name
@@ -162,7 +170,11 @@ def disable_secret_version project_id:, secret_id:, version_id:
   client = Google::Cloud::SecretManager.secret_manager_service
 
   # Build the resource name of the secret version.
-  name = "projects/#{project_id}/secrets/#{secret_id}/versions/#{version_id}"
+  name = client.secret_version_path(
+    project:        project_id,
+    secret:         secret_id,
+    secret_version: version_id
+  )
 
   # Disable the secret version.
   response = client.disable_secret_version name: name
@@ -187,7 +199,11 @@ def enable_secret_version project_id:, secret_id:, version_id:
   client = Google::Cloud::SecretManager.secret_manager_service
 
   # Build the resource name of the secret version.
-  name = "projects/#{project_id}/secrets/#{secret_id}/versions/#{version_id}"
+  name = client.secret_version_path(
+    project:        project_id,
+    secret:         secret_id,
+    secret_version: version_id
+  )
 
   # Enable the secret version.
   response = client.enable_secret_version name: name
@@ -211,7 +227,7 @@ def get_secret project_id:, secret_id:
   client = Google::Cloud::SecretManager.secret_manager_service
 
   # Build the resource name of the secret.
-  name = "projects/#{project_id}/secrets/#{secret_id}"
+  name = client.secret_path project: project_id, secret: secret_id
 
   # Get the secret.
   secret = client.get_secret name: name
@@ -245,7 +261,11 @@ def get_secret_version project_id:, secret_id:, version_id:
   client = Google::Cloud::SecretManager.secret_manager_service
 
   # Build the resource name of the secret version.
-  name = "projects/#{project_id}/secrets/#{secret_id}/versions/#{version_id}"
+  name = client.secret_version_path(
+    project:        project_id,
+    secret:         secret_id,
+    secret_version: version_id
+  )
 
   # Get the secret version.
   version = client.get_secret_version name: name
@@ -273,7 +293,7 @@ def iam_grant_access project_id:, secret_id:, member:
   client = Google::Cloud::SecretManager.secret_manager_service
 
   # Build the resource name of the secret.
-  name = "projects/#{project_id}/secrets/#{secret_id}"
+  name = client.secret_path project: project_id, secret: secret_id
 
   # Get the current IAM policy.
   policy = client.get_iam_policy resource: name
@@ -308,7 +328,7 @@ def iam_revoke_access project_id:, secret_id:, member:
   client = Google::Cloud::SecretManager.secret_manager_service
 
   # Build the resource name of the secret.
-  name = "projects/#{project_id}/secrets/#{secret_id}"
+  name = client.secret_path project: project_id, secret: secret_id
 
   # Get the current IAM policy.
   policy = client.get_iam_policy resource: name
@@ -342,7 +362,7 @@ def list_secret_versions project_id:, secret_id:
   client = Google::Cloud::SecretManager.secret_manager_service
 
   # Build the resource name of the parent.
-  parent = "projects/#{project_id}/secrets/#{secret_id}"
+  parent = client.secret_path project: project_id, secret: secret_id
 
   # Get the list of secret versions.
   list = client.list_secret_versions parent: parent
@@ -365,7 +385,7 @@ def list_secrets project_id:
   client = Google::Cloud::SecretManager.secret_manager_service
 
   # Build the resource name of the parent.
-  parent = "projects/#{project_id}"
+  parent = client.project_path project: project_id
 
   # Get the list of secrets.
   list = client.list_secrets parent: parent
@@ -389,7 +409,7 @@ def update_secret project_id:, secret_id:
   client = Google::Cloud::SecretManager.secret_manager_service
 
   # Build the resource name of the secret.
-  name = "projects/#{project_id}/secrets/#{secret_id}"
+  name = client.secret_path project: project_id, secret: secret_id
 
   # Create the secret.
   secret = client.update_secret(
