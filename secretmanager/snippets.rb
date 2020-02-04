@@ -299,7 +299,6 @@ def iam_grant_access project_id:, secret_id:, member:
   policy = client.get_iam_policy resource: name
 
   # Add new member to current bindings
-  policy.bindings ||= []
   policy.bindings << Google::Iam::V1::Binding.new(
     members: [member],
     role:    "roles/secretmanager.secretAccessor"
