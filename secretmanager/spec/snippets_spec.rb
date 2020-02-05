@@ -230,6 +230,16 @@ describe "Secret Manager Snippets" do
   describe "#iam_revoke_access" do
     it "revokes access to the secret" do
       expect(secret).to be
+
+      # Add an IAM member
+      name = client.secret_path project: project_id, secret: secret_id
+      policy = client.get_iam_policy resource: name
+      policy.bindings << Google::Iam::V1::Binding.new(
+        members: [iam_user],
+        role:    "roles/secretmanager.secretAccessor"
+      )
+      new_policy = client.set_iam_policy resource: name, policy: policy
+
       expect {
         policy = iam_revoke_access(
           project_id: project_id,
