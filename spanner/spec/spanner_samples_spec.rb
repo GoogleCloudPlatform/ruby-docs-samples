@@ -41,8 +41,8 @@ describe "Google Cloud Spanner API samples" do
   end
 
   # Creates a temporary database with random ID (will be dropped after test)
-  # (re-uses create_database to create database with Albums/Singers schema)
-  def create_singers_albums_database
+  # (re-uses create_database to create database with Albums/Singers/Boxes schema)
+  def create_singers_albums_boxes_database
     capture do
       create_database project_id:  @project_id,
                       instance_id: @instance.instance_id,
@@ -101,13 +101,16 @@ describe "Google Cloud Spanner API samples" do
     expect(@test_database).not_to be nil
 
     data_definition_statements = @test_database.ddl
-    expect(data_definition_statements.size).to  eq 2
-    expect(data_definition_statements.first).to include "CREATE TABLE Singers"
-    expect(data_definition_statements.last).to  include "CREATE TABLE Albums"
+
+    expect(data_definition_statements.size).to eq 3
+
+    expect(data_definition_statements).to include(match "CREATE TABLE Singers")
+    expect(data_definition_statements).to include(match "CREATE TABLE Albums")
+    expect(data_definition_statements).to include(match "CREATE TABLE Boxes")
   end
 
   example "create table with timestamp column" do
-    database = create_singers_albums_database
+    database = create_singers_albums_boxes_database
 
     expect(@instance.databases.map(&:database_id)).to include @database_id
 
@@ -125,12 +128,12 @@ describe "Google Cloud Spanner API samples" do
     )
 
     data_definition_statements = database.ddl force: true
-    expect(data_definition_statements.size).to eq 3
-    expect(data_definition_statements.last).to include "CREATE TABLE Performances"
+    expect(data_definition_statements.size).to eq 4
+    expect(data_definition_statements).to include(match "CREATE TABLE Performances")
   end
 
   example "insert data" do
-    database = create_singers_albums_database
+    database = create_singers_albums_boxes_database
     client   = @spanner.client @instance.instance_id, database.database_id
 
     expect(client.execute("SELECT * FROM Singers").rows.count).to eq 0
@@ -152,7 +155,7 @@ describe "Google Cloud Spanner API samples" do
   end
 
   example "insert data with timestamp column" do
-    database = create_singers_albums_database
+    database = create_singers_albums_boxes_database
     create_performances_table
     # Ignore the following capture block
     capture do
@@ -177,7 +180,7 @@ describe "Google Cloud Spanner API samples" do
   end
 
   example "query data" do
-    database = create_singers_albums_database
+    database = create_singers_albums_boxes_database
 
     # Ignore the following capture block
     capture do
@@ -201,7 +204,7 @@ describe "Google Cloud Spanner API samples" do
   end
 
   example "query with struct" do
-    database = create_singers_albums_database
+    database = create_singers_albums_boxes_database
 
     capture do
       write_struct_data project_id:  @project_id,
@@ -218,7 +221,7 @@ describe "Google Cloud Spanner API samples" do
   end
 
   example "query with array of struct" do
-    database = create_singers_albums_database
+    database = create_singers_albums_boxes_database
 
     capture do
       write_struct_data project_id:  @project_id,
@@ -231,11 +234,13 @@ describe "Google Cloud Spanner API samples" do
                                  instance_id: @instance.instance_id,
                                  database_id: database.database_id
     end
-    expect(captured_output).to match /8\n7\n6\n/
+    expect(captured_output).to include "6"
+    expect(captured_output).to include "7"
+    expect(captured_output).to include "8"
   end
 
   example "query struct field" do
-    database = create_singers_albums_database
+    database = create_singers_albums_boxes_database
 
     capture do
       write_struct_data project_id:  @project_id,
@@ -252,7 +257,7 @@ describe "Google Cloud Spanner API samples" do
   end
 
   example "query nested struct field" do
-    database = create_singers_albums_database
+    database = create_singers_albums_boxes_database
 
     capture do
       write_struct_data project_id:  @project_id,
@@ -269,7 +274,7 @@ describe "Google Cloud Spanner API samples" do
   end
 
   example "query data with timestamp column" do
-    database = create_singers_albums_database
+    database = create_singers_albums_boxes_database
 
     # Ignore the following capture block
     capture do
@@ -305,7 +310,7 @@ describe "Google Cloud Spanner API samples" do
   end
 
   example "read data" do
-    database = create_singers_albums_database
+    database = create_singers_albums_boxes_database
 
     # Ignore the following capture block
     capture do
@@ -329,7 +334,7 @@ describe "Google Cloud Spanner API samples" do
   end
 
   example "read stale data" do
-    database = create_singers_albums_database
+    database = create_singers_albums_boxes_database
 
     # Ignore the following capture block
     capture do
@@ -367,7 +372,7 @@ describe "Google Cloud Spanner API samples" do
   end
 
   example "create index" do
-    database = create_singers_albums_database
+    database = create_singers_albums_boxes_database
 
     expect(database.ddl(force: true).join).not_to include(
       "CREATE INDEX AlbumsByAlbumTitle ON Albums(AlbumTitle)"
@@ -388,7 +393,7 @@ describe "Google Cloud Spanner API samples" do
   end
 
   example "create storing index" do
-    database = create_singers_albums_database
+    database = create_singers_albums_boxes_database
 
     # Ignore the following capture block
     capture do
@@ -417,7 +422,7 @@ describe "Google Cloud Spanner API samples" do
   end
 
   example "add column" do
-    database = create_singers_albums_database
+    database = create_singers_albums_boxes_database
 
     expect(database.ddl(force: true).join).not_to include(
       "MarketingBudget INT64"
@@ -435,7 +440,7 @@ describe "Google Cloud Spanner API samples" do
   end
 
   example "add column timestamp column" do
-    database = create_singers_albums_database
+    database = create_singers_albums_boxes_database
 
     expect(database.ddl(force: true).join).not_to include(
       "MarketingBudget INT64"
@@ -453,7 +458,7 @@ describe "Google Cloud Spanner API samples" do
   end
 
   example "update data" do
-    database = create_singers_albums_database
+    database = create_singers_albums_boxes_database
     client   = @spanner.client @instance.instance_id, database.database_id
 
     # Ignore the following capture block
@@ -491,7 +496,7 @@ describe "Google Cloud Spanner API samples" do
   end
 
   example "update data with timestamp column" do
-    database = create_singers_albums_database
+    database = create_singers_albums_boxes_database
     client   = @spanner.client @instance.instance_id, database.database_id
 
     # Ignore the following capture block
@@ -532,7 +537,7 @@ describe "Google Cloud Spanner API samples" do
   end
 
   example "query data with new column" do
-    database = create_singers_albums_database
+    database = create_singers_albums_boxes_database
 
     # Ignore the following capture block
     capture do
@@ -566,7 +571,7 @@ describe "Google Cloud Spanner API samples" do
   end
 
   example "read/write transaction (successful transfer)" do
-    database = create_singers_albums_database
+    database = create_singers_albums_boxes_database
     client   = @spanner.client @instance.instance_id, database.database_id
 
     # Ignore the following capture block
@@ -607,7 +612,7 @@ describe "Google Cloud Spanner API samples" do
   end
 
   example "read/write transaction (not enough funds)" do
-    database = create_singers_albums_database
+    database = create_singers_albums_boxes_database
     client   = @spanner.client @instance.instance_id, database.database_id
 
     # Ignore the following capture block
@@ -640,7 +645,7 @@ describe "Google Cloud Spanner API samples" do
   end
 
   example "query data with index" do
-    database = create_singers_albums_database
+    database = create_singers_albums_boxes_database
 
     # Ignore the following capture block
     capture do
@@ -671,7 +676,7 @@ describe "Google Cloud Spanner API samples" do
   end
 
   example "read data with index" do
-    database = create_singers_albums_database
+    database = create_singers_albums_boxes_database
 
     # Ignore the following capture block
     capture do
@@ -702,7 +707,7 @@ describe "Google Cloud Spanner API samples" do
   end
 
   example "read data with storing index" do
-    database = create_singers_albums_database
+    database = create_singers_albums_boxes_database
 
     # Ignore the following capture block
     capture do
@@ -733,7 +738,7 @@ describe "Google Cloud Spanner API samples" do
   end
 
   example "read only transaction" do
-    database = create_singers_albums_database
+    database = create_singers_albums_boxes_database
 
     # Ignore the following capture block
     capture do
@@ -754,7 +759,7 @@ describe "Google Cloud Spanner API samples" do
   end
 
   example "batch client read partitions across threads" do
-    database = create_singers_albums_database
+    database = create_singers_albums_boxes_database
 
     # Ignore the following capture block
     capture do
@@ -774,7 +779,7 @@ describe "Google Cloud Spanner API samples" do
   end
 
   example "insert data using dml" do
-    database = create_singers_albums_database
+    database = create_singers_albums_boxes_database
     # Ignore the following capture block
     capture do
       # Insert Singers and Albums (re-use insert_data sample to populate)
@@ -799,7 +804,7 @@ describe "Google Cloud Spanner API samples" do
   end
 
   example "update using dml" do
-    database = create_singers_albums_database
+    database = create_singers_albums_boxes_database
     client   = @spanner.client @instance.instance_id, database.database_id
 
     # Ignore the following capture block
@@ -836,7 +841,7 @@ describe "Google Cloud Spanner API samples" do
   end
 
   example "delete data using dml" do
-    database = create_singers_albums_database
+    database = create_singers_albums_boxes_database
     # Ignore the following capture block
     capture do
       # Insert Singers and Albums (re-use insert_data sample to populate)
@@ -861,7 +866,7 @@ describe "Google Cloud Spanner API samples" do
   end
 
   example "update data using dml with timestamp column" do
-    database = create_singers_albums_database
+    database = create_singers_albums_boxes_database
     client   = @spanner.client @instance.instance_id, database.database_id
 
     # Ignore the following capture block
@@ -894,7 +899,7 @@ describe "Google Cloud Spanner API samples" do
   end
 
   example "write and read data using dml" do
-    database = create_singers_albums_database
+    database = create_singers_albums_boxes_database
     # Ignore the following capture block
     capture do
       # Insert Singers and Albums (re-use insert_data sample to populate)
@@ -918,7 +923,7 @@ describe "Google Cloud Spanner API samples" do
   end
 
   example "update data using dml with struct" do
-    database = create_singers_albums_database
+    database = create_singers_albums_boxes_database
     # Ignore the following capture block
     capture do
       # Insert Singers and Albums (re-use insert_data sample to populate)
@@ -948,7 +953,7 @@ describe "Google Cloud Spanner API samples" do
   end
 
   example "insert multiple records using dml" do
-    database = create_singers_albums_database
+    database = create_singers_albums_boxes_database
     # Ignore the following capture block
     capture do
       # Insert Singers and Albums (re-use insert_data sample to populate)
@@ -979,7 +984,7 @@ describe "Google Cloud Spanner API samples" do
   end
 
   example "write with transaction using dml (successful transfer)" do
-    database = create_singers_albums_database
+    database = create_singers_albums_boxes_database
     client   = @spanner.client @instance.instance_id, database.database_id
 
     # Ignore the following capture block
@@ -1018,7 +1023,7 @@ describe "Google Cloud Spanner API samples" do
   end
 
   example "update data using partioned dml" do
-    database = create_singers_albums_database
+    database = create_singers_albums_boxes_database
     client   = @spanner.client @instance.instance_id, database.database_id
 
     # Ignore the following capture block
@@ -1050,7 +1055,7 @@ describe "Google Cloud Spanner API samples" do
   end
 
   example "delete multiple records using dml" do
-    database = create_singers_albums_database
+    database = create_singers_albums_boxes_database
     # Ignore the following capture block
     capture do
       # Insert Singers and Albums (re-use insert_data sample to populate)
@@ -1080,7 +1085,7 @@ describe "Google Cloud Spanner API samples" do
   end
 
   example "insert and update a record using batch dml" do
-    database = create_singers_albums_database
+    database = create_singers_albums_boxes_database
     # Ignore the following capture block
     capture do
       # Insert Singers and Albums (re-use insert_data sample to populate)
@@ -1113,7 +1118,7 @@ describe "Google Cloud Spanner API samples" do
   end
 
   example "create table with supported datatypes columns" do
-    database = create_singers_albums_database
+    database = create_singers_albums_boxes_database
 
     expect(@instance.databases.map(&:database_id)).to include @database_id
 
@@ -1131,12 +1136,12 @@ describe "Google Cloud Spanner API samples" do
     )
 
     data_definition_statements = database.ddl force: true
-    expect(data_definition_statements.size).to eq 3
-    expect(data_definition_statements.last).to include "CREATE TABLE Venues"
+    expect(data_definition_statements.size).to eq 4
+    expect(data_definition_statements).to include(match "CREATE TABLE Venues")
   end
 
   example "insert datatypes data" do
-    database = create_singers_albums_database
+    database = create_singers_albums_boxes_database
     create_venues_table
 
     client = @spanner.client @instance.instance_id, database.database_id
@@ -1154,7 +1159,7 @@ describe "Google Cloud Spanner API samples" do
   end
 
   example "query data with datatypes" do
-    database = create_singers_albums_database
+    database = create_singers_albums_boxes_database
     create_venues_table
 
    # Ignore the following capture block
@@ -1197,7 +1202,7 @@ describe "Google Cloud Spanner API samples" do
 
     expect(captured_output).to include "4 Venue 4 2018-09-02"
     expect(captured_output).to include "42 Venue 42 2018-10-01"
-    
+
     capture do
       query_with_float project_id:  @project_id,
                       instance_id: @instance.instance_id,
@@ -1206,7 +1211,7 @@ describe "Google Cloud Spanner API samples" do
 
     expect(captured_output).to include "4 Venue 4 0.8"
     expect(captured_output).to include "19 Venue 19 0.9"
-    
+
     capture do
       query_with_int project_id:  @project_id,
                       instance_id: @instance.instance_id,
@@ -1233,5 +1238,69 @@ describe "Google Cloud Spanner API samples" do
     expect(captured_output).to include "4 Venue 4"
     expect(captured_output).to include "19 Venue 19"
     expect(captured_output).to include "42 Venue 42"
+  end
+
+  example "write data with array types and read" do
+    database = create_singers_albums_boxes_database
+
+    capture do
+      write_read_bool_array project_id: @project_id,
+                            instance_id: @instance.instance_id,
+                            database_id: database.database_id
+    end
+
+    expect(captured_output.split("\n")).to match_array(["true", "false", "true"])
+
+    capture do
+      write_read_empty_int64_array project_id: @project_id,
+                                   instance_id: @instance.instance_id,
+                                   database_id: database.database_id
+    end
+
+    expect(captured_output).to include "true"
+
+    capture do
+      write_read_null_int64_array project_id: @project_id,
+                                  instance_id: @instance.instance_id,
+                                  database_id: database.database_id
+    end
+
+    expect(captured_output.split("\n")).to match_array(["true", "true", "true"])
+
+    capture do
+      write_read_int64_array project_id: @project_id,
+                             instance_id: @instance.instance_id,
+                             database_id: database.database_id
+    end
+
+    expect(captured_output).to include "10"
+    expect(captured_output).to include "11"
+    expect(captured_output).to include "12"
+
+    capture do
+      write_read_empty_float64_array project_id: @project_id,
+                                     instance_id: @instance.instance_id,
+                                     database_id: database.database_id
+    end
+
+    expect(captured_output).to include "true"
+
+    capture do
+      write_read_null_float64_array project_id: @project_id,
+                                    instance_id: @instance.instance_id,
+                                    database_id: database.database_id
+    end
+
+    expect(captured_output.split("\n")).to match_array(["true", "true", "true"])
+
+    capture do
+      write_read_float64_array project_id: @project_id,
+                               instance_id: @instance.instance_id,
+                               database_id: database.database_id
+    end
+
+    expect(captured_output).to include "10.001"
+    expect(captured_output).to include "11.1212"
+    expect(captured_output).to include "104.4123101"
   end
 end
