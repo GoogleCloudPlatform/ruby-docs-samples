@@ -36,18 +36,7 @@ def create_database project_id:, instance_id:, database_id:
       AlbumId      INT64 NOT NULL,
       AlbumTitle   STRING(MAX)
     ) PRIMARY KEY (SingerId, AlbumId),
-    INTERLEAVE IN PARENT Singers ON DELETE CASCADE",
-
-    "CREATE TABLE Boxes (
-        BoxId             STRING(36) NOT NULL,
-        Heights           ARRAY<INT64>,
-        Weights           ARRAY<FLOAT64>,
-        ErrorChecks       ARRAY<BOOL>,
-        Types             ARRAY<STRING(MAX)>,
-        Descriptions      ARRAY<BYTES(MAX)>,
-        AvailableDates    ARRAY<DATE>,
-        UpdatesTimestamps ARRAY<TIMESTAMP>
-      ) PRIMARY KEY (BoxId)"
+    INTERLEAVE IN PARENT Singers ON DELETE CASCADE"
   ]
 
   puts "Waiting for create database operation to complete"
@@ -1244,6 +1233,17 @@ def write_read_bool_array project_id:, instance_id:, database_id:
   require "securerandom"
 
   spanner = Google::Cloud::Spanner.new project: project_id
+  database = spanner.database instance_id, database_id
+  job = database.update statements: [
+    "CREATE TABLE Boxes (
+        BoxId             STRING(36) NOT NULL,
+        Heights           ARRAY<INT64>,
+        Weights           ARRAY<FLOAT64>,
+        ErrorChecks       ARRAY<BOOL>
+      ) PRIMARY KEY (BoxId)"
+  ]
+  job.wait_until_done!
+
   client = spanner.client instance_id, database_id
 
   box_id = SecureRandom.uuid
@@ -1266,7 +1266,18 @@ def write_read_empty_int64_array project_id:, instance_id:, database_id:
   require "securerandom"
 
   spanner = Google::Cloud::Spanner.new project: project_id
-  client  = spanner.client instance_id, database_id
+  database = spanner.database instance_id, database_id
+  job = database.update statements: [
+    "CREATE TABLE Boxes (
+        BoxId             STRING(36) NOT NULL,
+        Heights           ARRAY<INT64>,
+        Weights           ARRAY<FLOAT64>,
+        ErrorChecks       ARRAY<BOOL>
+      ) PRIMARY KEY (BoxId)"
+  ]
+  job.wait_until_done!
+
+  client = spanner.client instance_id, database_id
 
   box_id = SecureRandom.uuid
   client.insert "Boxes", BoxId: box_id, Heights: []
@@ -1288,7 +1299,18 @@ def write_read_null_int64_array project_id:, instance_id:, database_id:
   require "securerandom"
 
   spanner = Google::Cloud::Spanner.new project: project_id
-  client  = spanner.client instance_id, database_id
+  database = spanner.database instance_id, database_id
+  job = database.update statements: [
+    "CREATE TABLE Boxes (
+        BoxId             STRING(36) NOT NULL,
+        Heights           ARRAY<INT64>,
+        Weights           ARRAY<FLOAT64>,
+        ErrorChecks       ARRAY<BOOL>
+      ) PRIMARY KEY (BoxId)"
+  ]
+  job.wait_until_done!
+
+  client = spanner.client instance_id, database_id
 
   box_id = SecureRandom.uuid
   client.insert "Boxes", BoxId: box_id, Heights: [nil, nil, nil]
@@ -1310,7 +1332,18 @@ def write_read_int64_array project_id:, instance_id:, database_id:
   require "securerandom"
 
   spanner = Google::Cloud::Spanner.new project: project_id
-  client  = spanner.client instance_id, database_id
+  database = spanner.database instance_id, database_id
+  job = database.update statements: [
+    "CREATE TABLE Boxes (
+        BoxId             STRING(36) NOT NULL,
+        Heights           ARRAY<INT64>,
+        Weights           ARRAY<FLOAT64>,
+        ErrorChecks       ARRAY<BOOL>
+      ) PRIMARY KEY (BoxId)"
+  ]
+  job.wait_until_done!
+
+  client = spanner.client instance_id, database_id
 
   box_id = SecureRandom.uuid
   client.insert "Boxes", BoxId: box_id, Heights: [10, 11, 12]
@@ -1332,7 +1365,18 @@ def write_read_empty_float64_array project_id:, instance_id:, database_id:
   require "securerandom"
 
   spanner = Google::Cloud::Spanner.new project: project_id
-  client  = spanner.client instance_id, database_id
+  database = spanner.database instance_id, database_id
+  job = database.update statements: [
+    "CREATE TABLE Boxes (
+        BoxId             STRING(36) NOT NULL,
+        Heights           ARRAY<INT64>,
+        Weights           ARRAY<FLOAT64>,
+        ErrorChecks       ARRAY<BOOL>
+      ) PRIMARY KEY (BoxId)"
+  ]
+  job.wait_until_done!
+
+  client = spanner.client instance_id, database_id
 
   box_id = SecureRandom.uuid
   client.insert "Boxes", BoxId: box_id, Weights: []
@@ -1354,7 +1398,18 @@ def write_read_null_float64_array project_id:, instance_id:, database_id:
   require "securerandom"
 
   spanner = Google::Cloud::Spanner.new project: project_id
-  client  = spanner.client instance_id, database_id
+  database = spanner.database instance_id, database_id
+  job = database.update statements: [
+    "CREATE TABLE Boxes (
+        BoxId             STRING(36) NOT NULL,
+        Heights           ARRAY<INT64>,
+        Weights           ARRAY<FLOAT64>,
+        ErrorChecks       ARRAY<BOOL>
+      ) PRIMARY KEY (BoxId)"
+  ]
+  job.wait_until_done!
+
+  client = spanner.client instance_id, database_id
 
   box_id = SecureRandom.uuid
   client.insert "Boxes", BoxId: box_id, Weights: [nil, nil, nil]
@@ -1376,7 +1431,18 @@ def write_read_float64_array project_id:, instance_id:, database_id:
   require "securerandom"
 
   spanner = Google::Cloud::Spanner.new project: project_id
-  client  = spanner.client instance_id, database_id
+  database = spanner.database instance_id, database_id
+  job = database.update statements: [
+    "CREATE TABLE Boxes (
+        BoxId             STRING(36) NOT NULL,
+        Heights           ARRAY<INT64>,
+        Weights           ARRAY<FLOAT64>,
+        ErrorChecks       ARRAY<BOOL>
+      ) PRIMARY KEY (BoxId)"
+  ]
+  job.wait_until_done!
+
+  client = spanner.client instance_id, database_id
 
   box_id = SecureRandom.uuid
   client.insert "Boxes", BoxId: box_id, Weights: [10.001, 11.1212, 104.4123101]
