@@ -51,288 +51,298 @@ describe "Google Cloud Bigtable Read Samples", focus: true do
     output = capture do
       filter_limit_row_regex @project_id, @instance_id, @table_id
     end
-    expect(output).to match "Reading data for phone#4c410523#20190501:
-Column Family cell_plan
-\tdata_plan_01gb: false @#{@timestamp}
-\tdata_plan_01gb: true @#{@timestamp_minus_hr}
-\tdata_plan_05gb: true @#{@timestamp}
-Column Family stats_summary
-\tconnected_cell: 1 @#{@timestamp}
-\tconnected_wifi: 1 @#{@timestamp}
-\tos_build: PQ2A.190405.003 @#{@timestamp}
+    expect(output).to match <<~OUTPUT
+      Reading data for phone#4c410523#20190501:
+      Column Family cell_plan
+      \tdata_plan_01gb: false @#{@timestamp}
+      \tdata_plan_01gb: true @#{@timestamp_minus_hr}
+      \tdata_plan_05gb: true @#{@timestamp}
+      Column Family stats_summary
+      \tconnected_cell: 1 @#{@timestamp}
+      \tconnected_wifi: 1 @#{@timestamp}
+      \tos_build: PQ2A.190405.003 @#{@timestamp}
 
-Reading data for phone#5c10102#20190501:
-Column Family cell_plan
-\tdata_plan_10gb: true @#{@timestamp}
-Column Family stats_summary
-\tconnected_cell: 1 @#{@timestamp}
-\tconnected_wifi: 1 @#{@timestamp}
-\tos_build: PQ2A.190401.002 @#{@timestamp}
+      Reading data for phone#5c10102#20190501:
+      Column Family cell_plan
+      \tdata_plan_10gb: true @#{@timestamp}
+      Column Family stats_summary
+      \tconnected_cell: 1 @#{@timestamp}
+      \tconnected_wifi: 1 @#{@timestamp}
+      \tos_build: PQ2A.190401.002 @#{@timestamp}
 
-"
+    OUTPUT
   end
 
   it 'filter_limit_cells_per_col' do
     output = capture do
       filter_limit_cells_per_col @project_id, @instance_id, @table_id
     end
-    expect(output).to match "Reading data for phone#4c410523#20190501:
-Column Family cell_plan
-\tdata_plan_01gb: false @#{@timestamp}
-\tdata_plan_01gb: true @#{@timestamp_minus_hr}
-\tdata_plan_05gb: true @#{@timestamp}
-Column Family stats_summary
-\tconnected_cell: 1 @#{@timestamp}
-\tconnected_wifi: 1 @#{@timestamp}
-\tos_build: PQ2A.190405.003 @#{@timestamp}
+    expect(output).to match <<~OUTPUT
+      Reading data for phone#4c410523#20190501:
+      Column Family cell_plan
+      \tdata_plan_01gb: false @#{@timestamp}
+      \tdata_plan_01gb: true @#{@timestamp_minus_hr}
+      \tdata_plan_05gb: true @#{@timestamp}
+      Column Family stats_summary
+      \tconnected_cell: 1 @#{@timestamp}
+      \tconnected_wifi: 1 @#{@timestamp}
+      \tos_build: PQ2A.190405.003 @#{@timestamp}
 
-Reading data for phone#4c410523#20190502:
-Column Family cell_plan
-\tdata_plan_05gb: true @#{@timestamp}
-Column Family stats_summary
-\tconnected_cell: 1 @#{@timestamp}
-\tconnected_wifi: 1 @#{@timestamp}
-\tos_build: PQ2A.190405.004 @#{@timestamp}
+      Reading data for phone#4c410523#20190502:
+      Column Family cell_plan
+      \tdata_plan_05gb: true @#{@timestamp}
+      Column Family stats_summary
+      \tconnected_cell: 1 @#{@timestamp}
+      \tconnected_wifi: 1 @#{@timestamp}
+      \tos_build: PQ2A.190405.004 @#{@timestamp}
 
-Reading data for phone#4c410523#20190505:
-Column Family cell_plan
-\tdata_plan_05gb: true @#{@timestamp}
-Column Family stats_summary
-\tconnected_cell: 0 @#{@timestamp}
-\tconnected_wifi: 1 @#{@timestamp}
-\tos_build: PQ2A.190406.000 @#{@timestamp}
+      Reading data for phone#4c410523#20190505:
+      Column Family cell_plan
+      \tdata_plan_05gb: true @#{@timestamp}
+      Column Family stats_summary
+      \tconnected_cell: 0 @#{@timestamp}
+      \tconnected_wifi: 1 @#{@timestamp}
+      \tos_build: PQ2A.190406.000 @#{@timestamp}
 
-Reading data for phone#5c10102#20190501:
-Column Family cell_plan
-\tdata_plan_10gb: true @#{@timestamp}
-Column Family stats_summary
-\tconnected_cell: 1 @#{@timestamp}
-\tconnected_wifi: 1 @#{@timestamp}
-\tos_build: PQ2A.190401.002 @#{@timestamp}
+      Reading data for phone#5c10102#20190501:
+      Column Family cell_plan
+      \tdata_plan_10gb: true @#{@timestamp}
+      Column Family stats_summary
+      \tconnected_cell: 1 @#{@timestamp}
+      \tconnected_wifi: 1 @#{@timestamp}
+      \tos_build: PQ2A.190401.002 @#{@timestamp}
 
-Reading data for phone#5c10102#20190502:
-Column Family cell_plan
-\tdata_plan_10gb: true @#{@timestamp}
-Column Family stats_summary
-\tconnected_cell: 1 @#{@timestamp}
-\tconnected_wifi: 0 @#{@timestamp}
-\tos_build: PQ2A.190406.000 @#{@timestamp}
+      Reading data for phone#5c10102#20190502:
+      Column Family cell_plan
+      \tdata_plan_10gb: true @#{@timestamp}
+      Column Family stats_summary
+      \tconnected_cell: 1 @#{@timestamp}
+      \tconnected_wifi: 0 @#{@timestamp}
+      \tos_build: PQ2A.190406.000 @#{@timestamp}
 
-"
+    OUTPUT
   end
 
   it 'filter_limit_cells_per_row' do
     output = capture do
       filter_limit_cells_per_row @project_id, @instance_id, @table_id
     end
-    expect(output).to match "Reading data for phone#4c410523#20190501:
-Column Family cell_plan
-\tdata_plan_01gb: false @#{@timestamp}
-\tdata_plan_01gb: true @#{@timestamp_minus_hr}
+    expect(output).to match <<~OUTPUT
+      Reading data for phone#4c410523#20190501:
+      Column Family cell_plan
+      \tdata_plan_01gb: false @#{@timestamp}
+      \tdata_plan_01gb: true @#{@timestamp_minus_hr}
 
-Reading data for phone#4c410523#20190502:
-Column Family cell_plan
-\tdata_plan_05gb: true @#{@timestamp}
-Column Family stats_summary
-\tconnected_cell: 1 @#{@timestamp}
+      Reading data for phone#4c410523#20190502:
+      Column Family cell_plan
+      \tdata_plan_05gb: true @#{@timestamp}
+      Column Family stats_summary
+      \tconnected_cell: 1 @#{@timestamp}
 
-Reading data for phone#4c410523#20190505:
-Column Family cell_plan
-\tdata_plan_05gb: true @#{@timestamp}
-Column Family stats_summary
-\tconnected_cell: 0 @#{@timestamp}
+      Reading data for phone#4c410523#20190505:
+      Column Family cell_plan
+      \tdata_plan_05gb: true @#{@timestamp}
+      Column Family stats_summary
+      \tconnected_cell: 0 @#{@timestamp}
 
-Reading data for phone#5c10102#20190501:
-Column Family cell_plan
-\tdata_plan_10gb: true @#{@timestamp}
-Column Family stats_summary
-\tconnected_cell: 1 @#{@timestamp}
+      Reading data for phone#5c10102#20190501:
+      Column Family cell_plan
+      \tdata_plan_10gb: true @#{@timestamp}
+      Column Family stats_summary
+      \tconnected_cell: 1 @#{@timestamp}
 
-Reading data for phone#5c10102#20190502:
-Column Family cell_plan
-\tdata_plan_10gb: true @#{@timestamp}
-Column Family stats_summary
-\tconnected_cell: 1 @#{@timestamp}
+      Reading data for phone#5c10102#20190502:
+      Column Family cell_plan
+      \tdata_plan_10gb: true @#{@timestamp}
+      Column Family stats_summary
+      \tconnected_cell: 1 @#{@timestamp}
 
-"
+    OUTPUT
   end
 
   it 'filter_limit_cells_per_row_offset' do
     output = capture do
       filter_limit_cells_per_row_offset @project_id, @instance_id, @table_id
     end
-    expect(output).to match "Reading data for phone#4c410523#20190501:
-Column Family cell_plan
-\tdata_plan_05gb: true @#{@timestamp}
-Column Family stats_summary
-\tconnected_cell: 1 @#{@timestamp}
-\tconnected_wifi: 1 @#{@timestamp}
-\tos_build: PQ2A.190405.003 @#{@timestamp}
+    expect(output).to match <<~OUTPUT
+      Reading data for phone#4c410523#20190501:
+      Column Family cell_plan
+      \tdata_plan_05gb: true @#{@timestamp}
+      Column Family stats_summary
+      \tconnected_cell: 1 @#{@timestamp}
+      \tconnected_wifi: 1 @#{@timestamp}
+      \tos_build: PQ2A.190405.003 @#{@timestamp}
 
-Reading data for phone#4c410523#20190502:
-Column Family stats_summary
-\tconnected_wifi: 1 @#{@timestamp}
-\tos_build: PQ2A.190405.004 @#{@timestamp}
+      Reading data for phone#4c410523#20190502:
+      Column Family stats_summary
+      \tconnected_wifi: 1 @#{@timestamp}
+      \tos_build: PQ2A.190405.004 @#{@timestamp}
 
-Reading data for phone#4c410523#20190505:
-Column Family stats_summary
-\tconnected_wifi: 1 @#{@timestamp}
-\tos_build: PQ2A.190406.000 @#{@timestamp}
+      Reading data for phone#4c410523#20190505:
+      Column Family stats_summary
+      \tconnected_wifi: 1 @#{@timestamp}
+      \tos_build: PQ2A.190406.000 @#{@timestamp}
 
-Reading data for phone#5c10102#20190501:
-Column Family stats_summary
-\tconnected_wifi: 1 @#{@timestamp}
-\tos_build: PQ2A.190401.002 @#{@timestamp}
+      Reading data for phone#5c10102#20190501:
+      Column Family stats_summary
+      \tconnected_wifi: 1 @#{@timestamp}
+      \tos_build: PQ2A.190401.002 @#{@timestamp}
 
-Reading data for phone#5c10102#20190502:
-Column Family stats_summary
-\tconnected_wifi: 0 @#{@timestamp}
-\tos_build: PQ2A.190406.000 @#{@timestamp}
+      Reading data for phone#5c10102#20190502:
+      Column Family stats_summary
+      \tconnected_wifi: 0 @#{@timestamp}
+      \tos_build: PQ2A.190406.000 @#{@timestamp}
 
-"
+    OUTPUT
   end
 
   it 'filter_limit_col_family_regex' do
     output = capture do
       filter_limit_col_family_regex @project_id, @instance_id, @table_id
     end
-    expect(output).to match "Reading data for phone#4c410523#20190501:
-Column Family stats_summary
-\tconnected_cell: 1 @#{@timestamp}
-\tconnected_wifi: 1 @#{@timestamp}
-\tos_build: PQ2A.190405.003 @#{@timestamp}
+    expect(output).to match <<~OUTPUT
+      Reading data for phone#4c410523#20190501:
+      Column Family stats_summary
+      \tconnected_cell: 1 @#{@timestamp}
+      \tconnected_wifi: 1 @#{@timestamp}
+      \tos_build: PQ2A.190405.003 @#{@timestamp}
 
-Reading data for phone#4c410523#20190502:
-Column Family stats_summary
-\tconnected_cell: 1 @#{@timestamp}
-\tconnected_wifi: 1 @#{@timestamp}
-\tos_build: PQ2A.190405.004 @#{@timestamp}
+      Reading data for phone#4c410523#20190502:
+      Column Family stats_summary
+      \tconnected_cell: 1 @#{@timestamp}
+      \tconnected_wifi: 1 @#{@timestamp}
+      \tos_build: PQ2A.190405.004 @#{@timestamp}
 
-Reading data for phone#4c410523#20190505:
-Column Family stats_summary
-\tconnected_cell: 0 @#{@timestamp}
-\tconnected_wifi: 1 @#{@timestamp}
-\tos_build: PQ2A.190406.000 @#{@timestamp}
+      Reading data for phone#4c410523#20190505:
+      Column Family stats_summary
+      \tconnected_cell: 0 @#{@timestamp}
+      \tconnected_wifi: 1 @#{@timestamp}
+      \tos_build: PQ2A.190406.000 @#{@timestamp}
 
-Reading data for phone#5c10102#20190501:
-Column Family stats_summary
-\tconnected_cell: 1 @#{@timestamp}
-\tconnected_wifi: 1 @#{@timestamp}
-\tos_build: PQ2A.190401.002 @#{@timestamp}
+      Reading data for phone#5c10102#20190501:
+      Column Family stats_summary
+      \tconnected_cell: 1 @#{@timestamp}
+      \tconnected_wifi: 1 @#{@timestamp}
+      \tos_build: PQ2A.190401.002 @#{@timestamp}
 
-Reading data for phone#5c10102#20190502:
-Column Family stats_summary
-\tconnected_cell: 1 @#{@timestamp}
-\tconnected_wifi: 0 @#{@timestamp}
-\tos_build: PQ2A.190406.000 @#{@timestamp}
+      Reading data for phone#5c10102#20190502:
+      Column Family stats_summary
+      \tconnected_cell: 1 @#{@timestamp}
+      \tconnected_wifi: 0 @#{@timestamp}
+      \tos_build: PQ2A.190406.000 @#{@timestamp}
 
-"
+    OUTPUT
   end
 
   it 'filter_limit_col_qualifier_regex' do
     output = capture do
       filter_limit_col_qualifier_regex @project_id, @instance_id, @table_id
     end
-    expect(output).to match "Reading data for phone#4c410523#20190501:
-Column Family stats_summary
-\tconnected_cell: 1 @#{@timestamp}
-\tconnected_wifi: 1 @#{@timestamp}
+    expect(output).to match <<~OUTPUT
+      Reading data for phone#4c410523#20190501:
+      Column Family stats_summary
+      \tconnected_cell: 1 @#{@timestamp}
+      \tconnected_wifi: 1 @#{@timestamp}
 
-Reading data for phone#4c410523#20190502:
-Column Family stats_summary
-\tconnected_cell: 1 @#{@timestamp}
-\tconnected_wifi: 1 @#{@timestamp}
+      Reading data for phone#4c410523#20190502:
+      Column Family stats_summary
+      \tconnected_cell: 1 @#{@timestamp}
+      \tconnected_wifi: 1 @#{@timestamp}
 
-Reading data for phone#4c410523#20190505:
-Column Family stats_summary
-\tconnected_cell: 0 @#{@timestamp}
-\tconnected_wifi: 1 @#{@timestamp}
+      Reading data for phone#4c410523#20190505:
+      Column Family stats_summary
+      \tconnected_cell: 0 @#{@timestamp}
+      \tconnected_wifi: 1 @#{@timestamp}
 
-Reading data for phone#5c10102#20190501:
-Column Family stats_summary
-\tconnected_cell: 1 @#{@timestamp}
-\tconnected_wifi: 1 @#{@timestamp}
+      Reading data for phone#5c10102#20190501:
+      Column Family stats_summary
+      \tconnected_cell: 1 @#{@timestamp}
+      \tconnected_wifi: 1 @#{@timestamp}
 
-Reading data for phone#5c10102#20190502:
-Column Family stats_summary
-\tconnected_cell: 1 @#{@timestamp}
-\tconnected_wifi: 0 @#{@timestamp}
+      Reading data for phone#5c10102#20190502:
+      Column Family stats_summary
+      \tconnected_cell: 1 @#{@timestamp}
+      \tconnected_wifi: 0 @#{@timestamp}
 
-"
+    OUTPUT
   end
 
   it 'filter_limit_col_range' do
     output = capture do
       filter_limit_col_range @project_id, @instance_id, @table_id
     end
-    expect(output).to match "Reading data for phone#4c410523#20190501:
-Column Family cell_plan
-\tdata_plan_01gb: false @#{@timestamp}
-\tdata_plan_01gb: true @#{@timestamp_minus_hr}
-\tdata_plan_05gb: true @#{@timestamp}
+    expect(output).to match <<~OUTPUT
+      Reading data for phone#4c410523#20190501:
+      Column Family cell_plan
+      \tdata_plan_01gb: false @#{@timestamp}
+      \tdata_plan_01gb: true @#{@timestamp_minus_hr}
+      \tdata_plan_05gb: true @#{@timestamp}
 
-Reading data for phone#4c410523#20190502:
-Column Family cell_plan
-\tdata_plan_05gb: true @#{@timestamp}
+      Reading data for phone#4c410523#20190502:
+      Column Family cell_plan
+      \tdata_plan_05gb: true @#{@timestamp}
 
-Reading data for phone#4c410523#20190505:
-Column Family cell_plan
-\tdata_plan_05gb: true @#{@timestamp}
+      Reading data for phone#4c410523#20190505:
+      Column Family cell_plan
+      \tdata_plan_05gb: true @#{@timestamp}
 
-"
+    OUTPUT
   end
 
   it 'filter_limit_value_range' do
     output = capture do
       filter_limit_value_range @project_id, @instance_id, @table_id
     end
-    expect(output).to match "Reading data for phone#4c410523#20190501:
-Column Family stats_summary
-\tos_build: PQ2A.190405.003 @#{@timestamp}
+    expect(output).to match <<~OUTPUT
+      Reading data for phone#4c410523#20190501:
+      Column Family stats_summary
+      \tos_build: PQ2A.190405.003 @#{@timestamp}
 
-Reading data for phone#4c410523#20190502:
-Column Family stats_summary
-\tos_build: PQ2A.190405.004 @#{@timestamp}
+      Reading data for phone#4c410523#20190502:
+      Column Family stats_summary
+      \tos_build: PQ2A.190405.004 @#{@timestamp}
 
-"
+    OUTPUT
   end
 
   it 'filter_limit_value_regex' do
     output = capture do
       filter_limit_value_regex @project_id, @instance_id, @table_id
     end
-    expect(output).to match "Reading data for phone#4c410523#20190501:
-Column Family stats_summary
-\tos_build: PQ2A.190405.003 @#{@timestamp}
+    expect(output).to match <<~OUTPUT
+      Reading data for phone#4c410523#20190501:
+      Column Family stats_summary
+      \tos_build: PQ2A.190405.003 @#{@timestamp}
 
-Reading data for phone#4c410523#20190502:
-Column Family stats_summary
-\tos_build: PQ2A.190405.004 @#{@timestamp}
+      Reading data for phone#4c410523#20190502:
+      Column Family stats_summary
+      \tos_build: PQ2A.190405.004 @#{@timestamp}
 
-Reading data for phone#4c410523#20190505:
-Column Family stats_summary
-\tos_build: PQ2A.190406.000 @#{@timestamp}
+      Reading data for phone#4c410523#20190505:
+      Column Family stats_summary
+      \tos_build: PQ2A.190406.000 @#{@timestamp}
 
-Reading data for phone#5c10102#20190501:
-Column Family stats_summary
-\tos_build: PQ2A.190401.002 @#{@timestamp}
+      Reading data for phone#5c10102#20190501:
+      Column Family stats_summary
+      \tos_build: PQ2A.190401.002 @#{@timestamp}
 
-Reading data for phone#5c10102#20190502:
-Column Family stats_summary
-\tos_build: PQ2A.190406.000 @#{@timestamp}
+      Reading data for phone#5c10102#20190502:
+      Column Family stats_summary
+      \tos_build: PQ2A.190406.000 @#{@timestamp}
 
-"
+    OUTPUT
   end
 
   it 'filter_limit_timestamp_range' do
     output = capture do
       filter_limit_timestamp_range @project_id, @instance_id, @table_id
     end
-    expect(output).to match "Reading data for phone#4c410523#20190501:
-Column Family cell_plan
-\tdata_plan_01gb: true @#{@timestamp_minus_hr}
+    expect(output).to match <<~OUTPUT
+      Reading data for phone#4c410523#20190501:
+      Column Family cell_plan
+      \tdata_plan_01gb: true @#{@timestamp_minus_hr}
 
-"
+    OUTPUT
   end
 
   it 'filter_limit_block_all' do
@@ -346,261 +356,267 @@ Column Family cell_plan
     output = capture do
       filter_limit_pass_all @project_id, @instance_id, @table_id
     end
-    expect(output).to match "Reading data for phone#4c410523#20190501:
-Column Family cell_plan
-\tdata_plan_01gb: false @#{@timestamp}
-\tdata_plan_01gb: true @#{@timestamp_minus_hr}
-\tdata_plan_05gb: true @#{@timestamp}
-Column Family stats_summary
-\tconnected_cell: 1 @#{@timestamp}
-\tconnected_wifi: 1 @#{@timestamp}
-\tos_build: PQ2A.190405.003 @#{@timestamp}
+    expect(output).to match <<~OUTPUT
+      Reading data for phone#4c410523#20190501:
+      Column Family cell_plan
+      \tdata_plan_01gb: false @#{@timestamp}
+      \tdata_plan_01gb: true @#{@timestamp_minus_hr}
+      \tdata_plan_05gb: true @#{@timestamp}
+      Column Family stats_summary
+      \tconnected_cell: 1 @#{@timestamp}
+      \tconnected_wifi: 1 @#{@timestamp}
+      \tos_build: PQ2A.190405.003 @#{@timestamp}
 
-Reading data for phone#4c410523#20190502:
-Column Family cell_plan
-\tdata_plan_05gb: true @#{@timestamp}
-Column Family stats_summary
-\tconnected_cell: 1 @#{@timestamp}
-\tconnected_wifi: 1 @#{@timestamp}
-\tos_build: PQ2A.190405.004 @#{@timestamp}
+      Reading data for phone#4c410523#20190502:
+      Column Family cell_plan
+      \tdata_plan_05gb: true @#{@timestamp}
+      Column Family stats_summary
+      \tconnected_cell: 1 @#{@timestamp}
+      \tconnected_wifi: 1 @#{@timestamp}
+      \tos_build: PQ2A.190405.004 @#{@timestamp}
 
-Reading data for phone#4c410523#20190505:
-Column Family cell_plan
-\tdata_plan_05gb: true @#{@timestamp}
-Column Family stats_summary
-\tconnected_cell: 0 @#{@timestamp}
-\tconnected_wifi: 1 @#{@timestamp}
-\tos_build: PQ2A.190406.000 @#{@timestamp}
+      Reading data for phone#4c410523#20190505:
+      Column Family cell_plan
+      \tdata_plan_05gb: true @#{@timestamp}
+      Column Family stats_summary
+      \tconnected_cell: 0 @#{@timestamp}
+      \tconnected_wifi: 1 @#{@timestamp}
+      \tos_build: PQ2A.190406.000 @#{@timestamp}
 
-Reading data for phone#5c10102#20190501:
-Column Family cell_plan
-\tdata_plan_10gb: true @#{@timestamp}
-Column Family stats_summary
-\tconnected_cell: 1 @#{@timestamp}
-\tconnected_wifi: 1 @#{@timestamp}
-\tos_build: PQ2A.190401.002 @#{@timestamp}
+      Reading data for phone#5c10102#20190501:
+      Column Family cell_plan
+      \tdata_plan_10gb: true @#{@timestamp}
+      Column Family stats_summary
+      \tconnected_cell: 1 @#{@timestamp}
+      \tconnected_wifi: 1 @#{@timestamp}
+      \tos_build: PQ2A.190401.002 @#{@timestamp}
 
-Reading data for phone#5c10102#20190502:
-Column Family cell_plan
-\tdata_plan_10gb: true @#{@timestamp}
-Column Family stats_summary
-\tconnected_cell: 1 @#{@timestamp}
-\tconnected_wifi: 0 @#{@timestamp}
-\tos_build: PQ2A.190406.000 @#{@timestamp}
+      Reading data for phone#5c10102#20190502:
+      Column Family cell_plan
+      \tdata_plan_10gb: true @#{@timestamp}
+      Column Family stats_summary
+      \tconnected_cell: 1 @#{@timestamp}
+      \tconnected_wifi: 0 @#{@timestamp}
+      \tos_build: PQ2A.190406.000 @#{@timestamp}
 
-"
+    OUTPUT
   end
 
   it 'filter_modify_strip_value' do
     output = capture do
       filter_modify_strip_value @project_id, @instance_id, @table_id
     end
-    expect(output).to match "Reading data for phone#4c410523#20190501:
-Column Family cell_plan
-\tdata_plan_01gb:  @#{@timestamp}
-\tdata_plan_01gb:  @#{@timestamp_minus_hr}
-\tdata_plan_05gb:  @#{@timestamp}
-Column Family stats_summary
-\tconnected_cell:  @#{@timestamp}
-\tconnected_wifi:  @#{@timestamp}
-\tos_build:  @#{@timestamp}
+    expect(output).to match <<~OUTPUT
+      Reading data for phone#4c410523#20190501:
+      Column Family cell_plan
+      \tdata_plan_01gb:  @#{@timestamp}
+      \tdata_plan_01gb:  @#{@timestamp_minus_hr}
+      \tdata_plan_05gb:  @#{@timestamp}
+      Column Family stats_summary
+      \tconnected_cell:  @#{@timestamp}
+      \tconnected_wifi:  @#{@timestamp}
+      \tos_build:  @#{@timestamp}
 
-Reading data for phone#4c410523#20190502:
-Column Family cell_plan
-\tdata_plan_05gb:  @#{@timestamp}
-Column Family stats_summary
-\tconnected_cell:  @#{@timestamp}
-\tconnected_wifi:  @#{@timestamp}
-\tos_build:  @#{@timestamp}
+      Reading data for phone#4c410523#20190502:
+      Column Family cell_plan
+      \tdata_plan_05gb:  @#{@timestamp}
+      Column Family stats_summary
+      \tconnected_cell:  @#{@timestamp}
+      \tconnected_wifi:  @#{@timestamp}
+      \tos_build:  @#{@timestamp}
 
-Reading data for phone#4c410523#20190505:
-Column Family cell_plan
-\tdata_plan_05gb:  @#{@timestamp}
-Column Family stats_summary
-\tconnected_cell:  @#{@timestamp}
-\tconnected_wifi:  @#{@timestamp}
-\tos_build:  @#{@timestamp}
+      Reading data for phone#4c410523#20190505:
+      Column Family cell_plan
+      \tdata_plan_05gb:  @#{@timestamp}
+      Column Family stats_summary
+      \tconnected_cell:  @#{@timestamp}
+      \tconnected_wifi:  @#{@timestamp}
+      \tos_build:  @#{@timestamp}
 
-Reading data for phone#5c10102#20190501:
-Column Family cell_plan
-\tdata_plan_10gb:  @#{@timestamp}
-Column Family stats_summary
-\tconnected_cell:  @#{@timestamp}
-\tconnected_wifi:  @#{@timestamp}
-\tos_build:  @#{@timestamp}
+      Reading data for phone#5c10102#20190501:
+      Column Family cell_plan
+      \tdata_plan_10gb:  @#{@timestamp}
+      Column Family stats_summary
+      \tconnected_cell:  @#{@timestamp}
+      \tconnected_wifi:  @#{@timestamp}
+      \tos_build:  @#{@timestamp}
 
-Reading data for phone#5c10102#20190502:
-Column Family cell_plan
-\tdata_plan_10gb:  @#{@timestamp}
-Column Family stats_summary
-\tconnected_cell:  @#{@timestamp}
-\tconnected_wifi:  @#{@timestamp}
-\tos_build:  @#{@timestamp}
+      Reading data for phone#5c10102#20190502:
+      Column Family cell_plan
+      \tdata_plan_10gb:  @#{@timestamp}
+      Column Family stats_summary
+      \tconnected_cell:  @#{@timestamp}
+      \tconnected_wifi:  @#{@timestamp}
+      \tos_build:  @#{@timestamp}
 
-"
+    OUTPUT
   end
 
   it 'filter_modify_apply_label' do
     output = capture do
       filter_modify_apply_label @project_id, @instance_id, @table_id
     end
-    expect(output).to match "Reading data for phone#4c410523#20190501:
-Column Family cell_plan
-\tdata_plan_01gb: false @#{@timestamp} [labelled]
-\tdata_plan_01gb: true @#{@timestamp_minus_hr} [labelled]
-\tdata_plan_05gb: true @#{@timestamp} [labelled]
-Column Family stats_summary
-\tconnected_cell: 1 @#{@timestamp} [labelled]
-\tconnected_wifi: 1 @#{@timestamp} [labelled]
-\tos_build: PQ2A.190405.003 @#{@timestamp} [labelled]
+    expect(output).to match <<~OUTPUT
+      Reading data for phone#4c410523#20190501:
+      Column Family cell_plan
+      \tdata_plan_01gb: false @#{@timestamp} [labelled]
+      \tdata_plan_01gb: true @#{@timestamp_minus_hr} [labelled]
+      \tdata_plan_05gb: true @#{@timestamp} [labelled]
+      Column Family stats_summary
+      \tconnected_cell: 1 @#{@timestamp} [labelled]
+      \tconnected_wifi: 1 @#{@timestamp} [labelled]
+      \tos_build: PQ2A.190405.003 @#{@timestamp} [labelled]
 
-Reading data for phone#4c410523#20190502:
-Column Family cell_plan
-\tdata_plan_05gb: true @#{@timestamp} [labelled]
-Column Family stats_summary
-\tconnected_cell: 1 @#{@timestamp} [labelled]
-\tconnected_wifi: 1 @#{@timestamp} [labelled]
-\tos_build: PQ2A.190405.004 @#{@timestamp} [labelled]
+      Reading data for phone#4c410523#20190502:
+      Column Family cell_plan
+      \tdata_plan_05gb: true @#{@timestamp} [labelled]
+      Column Family stats_summary
+      \tconnected_cell: 1 @#{@timestamp} [labelled]
+      \tconnected_wifi: 1 @#{@timestamp} [labelled]
+      \tos_build: PQ2A.190405.004 @#{@timestamp} [labelled]
 
-Reading data for phone#4c410523#20190505:
-Column Family cell_plan
-\tdata_plan_05gb: true @#{@timestamp} [labelled]
-Column Family stats_summary
-\tconnected_cell: 0 @#{@timestamp} [labelled]
-\tconnected_wifi: 1 @#{@timestamp} [labelled]
-\tos_build: PQ2A.190406.000 @#{@timestamp} [labelled]
+      Reading data for phone#4c410523#20190505:
+      Column Family cell_plan
+      \tdata_plan_05gb: true @#{@timestamp} [labelled]
+      Column Family stats_summary
+      \tconnected_cell: 0 @#{@timestamp} [labelled]
+      \tconnected_wifi: 1 @#{@timestamp} [labelled]
+      \tos_build: PQ2A.190406.000 @#{@timestamp} [labelled]
 
-Reading data for phone#5c10102#20190501:
-Column Family cell_plan
-\tdata_plan_10gb: true @#{@timestamp} [labelled]
-Column Family stats_summary
-\tconnected_cell: 1 @#{@timestamp} [labelled]
-\tconnected_wifi: 1 @#{@timestamp} [labelled]
-\tos_build: PQ2A.190401.002 @#{@timestamp} [labelled]
+      Reading data for phone#5c10102#20190501:
+      Column Family cell_plan
+      \tdata_plan_10gb: true @#{@timestamp} [labelled]
+      Column Family stats_summary
+      \tconnected_cell: 1 @#{@timestamp} [labelled]
+      \tconnected_wifi: 1 @#{@timestamp} [labelled]
+      \tos_build: PQ2A.190401.002 @#{@timestamp} [labelled]
 
-Reading data for phone#5c10102#20190502:
-Column Family cell_plan
-\tdata_plan_10gb: true @#{@timestamp} [labelled]
-Column Family stats_summary
-\tconnected_cell: 1 @#{@timestamp} [labelled]
-\tconnected_wifi: 0 @#{@timestamp} [labelled]
-\tos_build: PQ2A.190406.000 @#{@timestamp} [labelled]
+      Reading data for phone#5c10102#20190502:
+      Column Family cell_plan
+      \tdata_plan_10gb: true @#{@timestamp} [labelled]
+      Column Family stats_summary
+      \tconnected_cell: 1 @#{@timestamp} [labelled]
+      \tconnected_wifi: 0 @#{@timestamp} [labelled]
+      \tos_build: PQ2A.190406.000 @#{@timestamp} [labelled]
 
-"
+    OUTPUT
   end
 
   it 'filter_composing_chain' do
     output = capture do
       filter_composing_chain @project_id, @instance_id, @table_id
     end
-    expect(output).to match "Reading data for phone#4c410523#20190501:
-Column Family cell_plan
-\tdata_plan_01gb: false @#{@timestamp}
-\tdata_plan_05gb: true @#{@timestamp}
+    expect(output).to match <<~OUTPUT
+      Reading data for phone#4c410523#20190501:
+      Column Family cell_plan
+      \tdata_plan_01gb: false @#{@timestamp}
+      \tdata_plan_05gb: true @#{@timestamp}
 
-Reading data for phone#4c410523#20190502:
-Column Family cell_plan
-\tdata_plan_05gb: true @#{@timestamp}
+      Reading data for phone#4c410523#20190502:
+      Column Family cell_plan
+      \tdata_plan_05gb: true @#{@timestamp}
 
-Reading data for phone#4c410523#20190505:
-Column Family cell_plan
-\tdata_plan_05gb: true @#{@timestamp}
+      Reading data for phone#4c410523#20190505:
+      Column Family cell_plan
+      \tdata_plan_05gb: true @#{@timestamp}
 
-Reading data for phone#5c10102#20190501:
-Column Family cell_plan
-\tdata_plan_10gb: true @#{@timestamp}
+      Reading data for phone#5c10102#20190501:
+      Column Family cell_plan
+      \tdata_plan_10gb: true @#{@timestamp}
 
-Reading data for phone#5c10102#20190502:
-Column Family cell_plan
-\tdata_plan_10gb: true @#{@timestamp}
-"
+      Reading data for phone#5c10102#20190502:
+      Column Family cell_plan
+      \tdata_plan_10gb: true @#{@timestamp}
+    OUTPUT
   end
 
   it 'filter_composing_interleave' do
     output = capture do
       filter_composing_interleave @project_id, @instance_id, @table_id
     end
-    expect(output).to match "Reading data for phone#4c410523#20190501:
-Column Family cell_plan
-\tdata_plan_01gb: true @#{@timestamp_minus_hr}
-\tdata_plan_05gb: true @#{@timestamp}
-Column Family stats_summary
-\tos_build: PQ2A.190405.003 @#{@timestamp}
+    expect(output).to match <<~OUTPUT
+      Reading data for phone#4c410523#20190501:
+      Column Family cell_plan
+      \tdata_plan_01gb: true @#{@timestamp_minus_hr}
+      \tdata_plan_05gb: true @#{@timestamp}
+      Column Family stats_summary
+      \tos_build: PQ2A.190405.003 @#{@timestamp}
 
-Reading data for phone#4c410523#20190502:
-Column Family cell_plan
-\tdata_plan_05gb: true @#{@timestamp}
-Column Family stats_summary
-\tos_build: PQ2A.190405.004 @#{@timestamp}
+      Reading data for phone#4c410523#20190502:
+      Column Family cell_plan
+      \tdata_plan_05gb: true @#{@timestamp}
+      Column Family stats_summary
+      \tos_build: PQ2A.190405.004 @#{@timestamp}
 
-Reading data for phone#4c410523#20190505:
-Column Family cell_plan
-\tdata_plan_05gb: true @#{@timestamp}
-Column Family stats_summary
-\tos_build: PQ2A.190406.000 @#{@timestamp}
+      Reading data for phone#4c410523#20190505:
+      Column Family cell_plan
+      \tdata_plan_05gb: true @#{@timestamp}
+      Column Family stats_summary
+      \tos_build: PQ2A.190406.000 @#{@timestamp}
 
-Reading data for phone#5c10102#20190501:
-Column Family cell_plan
-\tdata_plan_10gb: true @#{@timestamp}
-Column Family stats_summary
-\tos_build: PQ2A.190401.002 @#{@timestamp}
+      Reading data for phone#5c10102#20190501:
+      Column Family cell_plan
+      \tdata_plan_10gb: true @#{@timestamp}
+      Column Family stats_summary
+      \tos_build: PQ2A.190401.002 @#{@timestamp}
 
-Reading data for phone#5c10102#20190502:
-Column Family cell_plan
-\tdata_plan_10gb: true @#{@timestamp}
-Column Family stats_summary
-\tos_build: PQ2A.190406.000 @#{@timestamp}
+      Reading data for phone#5c10102#20190502:
+      Column Family cell_plan
+      \tdata_plan_10gb: true @#{@timestamp}
+      Column Family stats_summary
+      \tos_build: PQ2A.190406.000 @#{@timestamp}
 
-"
+    OUTPUT
   end
 
   it 'filter_composing_condition' do
     output = capture do
       filter_composing_condition @project_id, @instance_id, @table_id
     end
-    expect(output).to match "Reading data for phone#4c410523#20190501:
-Column Family cell_plan
-\tdata_plan_01gb: false @#{@timestamp} [filtered-out]
-\tdata_plan_01gb: true @#{@timestamp_minus_hr} [filtered-out]
-\tdata_plan_05gb: true @#{@timestamp} [filtered-out]
-Column Family stats_summary
-\tconnected_cell: 1 @#{@timestamp} [filtered-out]
-\tconnected_wifi: 1 @#{@timestamp} [filtered-out]
-\tos_build: PQ2A.190405.003 @#{@timestamp} [filtered-out]
+    expect(output).to match <<~OUTPUT
+      Reading data for phone#4c410523#20190501:
+      Column Family cell_plan
+      \tdata_plan_01gb: false @#{@timestamp} [filtered-out]
+      \tdata_plan_01gb: true @#{@timestamp_minus_hr} [filtered-out]
+      \tdata_plan_05gb: true @#{@timestamp} [filtered-out]
+      Column Family stats_summary
+      \tconnected_cell: 1 @#{@timestamp} [filtered-out]
+      \tconnected_wifi: 1 @#{@timestamp} [filtered-out]
+      \tos_build: PQ2A.190405.003 @#{@timestamp} [filtered-out]
 
-Reading data for phone#4c410523#20190502:
-Column Family cell_plan
-\tdata_plan_05gb: true @#{@timestamp} [filtered-out]
-Column Family stats_summary
-\tconnected_cell: 1 @#{@timestamp} [filtered-out]
-\tconnected_wifi: 1 @#{@timestamp} [filtered-out]
-\tos_build: PQ2A.190405.004 @#{@timestamp} [filtered-out]
+      Reading data for phone#4c410523#20190502:
+      Column Family cell_plan
+      \tdata_plan_05gb: true @#{@timestamp} [filtered-out]
+      Column Family stats_summary
+      \tconnected_cell: 1 @#{@timestamp} [filtered-out]
+      \tconnected_wifi: 1 @#{@timestamp} [filtered-out]
+      \tos_build: PQ2A.190405.004 @#{@timestamp} [filtered-out]
 
-Reading data for phone#4c410523#20190505:
-Column Family cell_plan
-\tdata_plan_05gb: true @#{@timestamp} [filtered-out]
-Column Family stats_summary
-\tconnected_cell: 0 @#{@timestamp} [filtered-out]
-\tconnected_wifi: 1 @#{@timestamp} [filtered-out]
-\tos_build: PQ2A.190406.000 @#{@timestamp} [filtered-out]
+      Reading data for phone#4c410523#20190505:
+      Column Family cell_plan
+      \tdata_plan_05gb: true @#{@timestamp} [filtered-out]
+      Column Family stats_summary
+      \tconnected_cell: 0 @#{@timestamp} [filtered-out]
+      \tconnected_wifi: 1 @#{@timestamp} [filtered-out]
+      \tos_build: PQ2A.190406.000 @#{@timestamp} [filtered-out]
 
-Reading data for phone#5c10102#20190501:
-Column Family cell_plan
-\tdata_plan_10gb: true @#{@timestamp} [passed-filter]
-Column Family stats_summary
-\tconnected_cell: 1 @#{@timestamp} [passed-filter]
-\tconnected_wifi: 1 @#{@timestamp} [passed-filter]
-\tos_build: PQ2A.190401.002 @#{@timestamp} [passed-filter]
+      Reading data for phone#5c10102#20190501:
+      Column Family cell_plan
+      \tdata_plan_10gb: true @#{@timestamp} [passed-filter]
+      Column Family stats_summary
+      \tconnected_cell: 1 @#{@timestamp} [passed-filter]
+      \tconnected_wifi: 1 @#{@timestamp} [passed-filter]
+      \tos_build: PQ2A.190401.002 @#{@timestamp} [passed-filter]
 
-Reading data for phone#5c10102#20190502:
-Column Family cell_plan
-\tdata_plan_10gb: true @#{@timestamp} [passed-filter]
-Column Family stats_summary
-\tconnected_cell: 1 @#{@timestamp} [passed-filter]
-\tconnected_wifi: 0 @#{@timestamp} [passed-filter]
-\tos_build: PQ2A.190406.000 @#{@timestamp} [passed-filter]
+      Reading data for phone#5c10102#20190502:
+      Column Family cell_plan
+      \tdata_plan_10gb: true @#{@timestamp} [passed-filter]
+      Column Family stats_summary
+      \tconnected_cell: 1 @#{@timestamp} [passed-filter]
+      \tconnected_wifi: 0 @#{@timestamp} [passed-filter]
+      \tos_build: PQ2A.190406.000 @#{@timestamp} [passed-filter]
 
-"
+    OUTPUT
   end
 
 

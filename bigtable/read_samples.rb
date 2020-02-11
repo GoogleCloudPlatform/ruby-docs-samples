@@ -14,12 +14,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START bigtable_reads_row]
+# [START bigtable_reads_row_partial]
+# [START bigtable_reads_rows]
+# [START bigtable_reads_row_range]
+# [START bigtable_reads_row_ranges]
+# [START bigtable_reads_prefix]
+# [START bigtable_reads_filter]
 
 # Import google bigtable client lib
 require "google/cloud/bigtable"
+# [END bigtable_reads_row]
+# [END bigtable_reads_row_partial]
+# [END bigtable_reads_rows]
+# [END bigtable_reads_row_range]
+# [END bigtable_reads_row_ranges]
+# [END bigtable_reads_prefix]
+# [END bigtable_reads_filter]
 
-# [START bigtable_reads_row]
 def reads_row project_id, instance_id, table_id
+  # [START bigtable_reads_row]
   bigtable = Google::Cloud::Bigtable.new project_id: project_id
   table = bigtable.table instance_id, table_id
 
@@ -29,8 +43,8 @@ end
 
 # [END bigtable_reads_row]
 
-# [START bigtable_reads_row_partial]
 def reads_row_partial project_id, instance_id, table_id
+  # [START bigtable_reads_row_partial]
   bigtable = Google::Cloud::Bigtable.new project_id: project_id
   table = bigtable.table instance_id, table_id
   filter = Google::Cloud::Bigtable::RowFilter.qualifier "os_build"
@@ -41,20 +55,19 @@ end
 
 # [END bigtable_reads_row_partial]
 
-# [START bigtable_reads_rows]
 def reads_rows project_id, instance_id, table_id
+  # [START bigtable_reads_rows]
   bigtable = Google::Cloud::Bigtable.new project_id: project_id
   table = bigtable.table instance_id, table_id
 
   table.read_rows(keys: ["phone#4c410523#20190501", "phone#4c410523#20190502"]).each do |row|
     print_row row
   end
+  # [END bigtable_reads_rows]
 end
 
-# [END bigtable_reads_rows]
-
-# [START bigtable_reads_row_range]
 def reads_row_range project_id, instance_id, table_id
+  # [START bigtable_reads_row_range]
   bigtable = Google::Cloud::Bigtable.new project_id: project_id
   table = bigtable.table instance_id, table_id
 
@@ -62,12 +75,11 @@ def reads_row_range project_id, instance_id, table_id
   table.read_rows(ranges: range).each do |row|
     print_row row
   end
+  # [END bigtable_reads_row_range]
 end
 
-# [END bigtable_reads_row_range]
-
-# [START bigtable_reads_row_ranges]
 def reads_row_ranges project_id, instance_id, table_id
+  # [START bigtable_reads_row_ranges]
   bigtable = Google::Cloud::Bigtable.new project_id: project_id
   table = bigtable.table instance_id, table_id
 
@@ -78,12 +90,11 @@ def reads_row_ranges project_id, instance_id, table_id
   table.read_rows(ranges: ranges).each do |row|
     print_row row
   end
+  # [END bigtable_reads_row_ranges]
 end
 
-# [END bigtable_reads_row_ranges]
-
-# [START bigtable_reads_prefix]
 def reads_prefix project_id, instance_id, table_id
+  # [START bigtable_reads_prefix]
   bigtable = Google::Cloud::Bigtable.new project_id: project_id
   table = bigtable.table instance_id, table_id
 
@@ -92,12 +103,11 @@ def reads_prefix project_id, instance_id, table_id
   table.read_rows(ranges: range).each do |row|
     print_row row
   end
+  # [END bigtable_reads_prefix]
 end
 
-# [END bigtable_reads_prefix]
-
-# [START bigtable_reads_filter]
 def reads_filter project_id, instance_id, table_id
+  # [START bigtable_reads_filter]
   bigtable = Google::Cloud::Bigtable.new project_id: project_id
   table = bigtable.table instance_id, table_id
 
@@ -105,9 +115,9 @@ def reads_filter project_id, instance_id, table_id
   table.read_rows(filter: filter).each do |row|
     print_row row
   end
+  # [END bigtable_reads_filter]
 end
 
-# [END bigtable_reads_filter]
 
 # [START bigtable_reads_row]
 # [START bigtable_reads_row_partial]

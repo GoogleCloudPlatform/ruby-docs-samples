@@ -42,27 +42,32 @@ describe "Google Cloud Bigtable Read Samples", focus: true do
     output = capture do
       reads_row @project_id, @instance_id, @table_id
     end
-    expect(output).to match "Reading data for phone#4c410523#20190501:
+    expect(output).to match <<~OUTPUT
+Reading data for phone#4c410523#20190501:
 Column Family stats_summary
 \tconnected_cell: 1 @#{@timestamp}
 \tconnected_wifi: 1 @#{@timestamp}
-\tos_build: PQ2A.190405.003 @#{@timestamp}"
+\tos_build: PQ2A.190405.003 @#{@timestamp}
+OUTPUT
   end
 
   it "reads_row_partial" do
     output = capture do
       reads_row_partial @project_id, @instance_id, @table_id
     end
-    expect(output).to match "Reading data for phone#4c410523#20190501:
+    expect(output).to match <<~OUTPUT
+Reading data for phone#4c410523#20190501:
 Column Family stats_summary
-\tos_build: PQ2A.190405.003 @#{@timestamp}"
+\tos_build: PQ2A.190405.003 @#{@timestamp}
+OUTPUT
   end
 
   it "reads_rows" do
     output = capture do
       reads_rows @project_id, @instance_id, @table_id
     end
-    expect(output).to match "Reading data for phone#4c410523#20190501:
+    expect(output).to match <<~OUTPUT
+Reading data for phone#4c410523#20190501:
 Column Family stats_summary
 \tconnected_cell: 1 @#{@timestamp}
 \tconnected_wifi: 1 @#{@timestamp}
@@ -72,14 +77,16 @@ Reading data for phone#4c410523#20190502:
 Column Family stats_summary
 \tconnected_cell: 1 @#{@timestamp}
 \tconnected_wifi: 1 @#{@timestamp}
-\tos_build: PQ2A.190405.004 @#{@timestamp}"
+\tos_build: PQ2A.190405.004 @#{@timestamp}
+OUTPUT
   end
 
   it "reads_row_range" do
     output = capture do
       reads_row_range @project_id, @instance_id, @table_id
     end
-    expect(output).to match "Reading data for phone#4c410523#20190501:
+    expect(output).to match <<~OUTPUT
+Reading data for phone#4c410523#20190501:
 Column Family stats_summary
 \tconnected_cell: 1 @#{@timestamp}
 \tconnected_wifi: 1 @#{@timestamp}
@@ -95,14 +102,16 @@ Reading data for phone#4c410523#20190505:
 Column Family stats_summary
 \tconnected_cell: 0 @#{@timestamp}
 \tconnected_wifi: 1 @#{@timestamp}
-\tos_build: PQ2A.190406.000 @#{@timestamp}"
+\tos_build: PQ2A.190406.000 @#{@timestamp}
+OUTPUT
   end
 
   it "reads_row_ranges" do
     output = capture do
       reads_row_ranges @project_id, @instance_id, @table_id
     end
-    expect(output).to match "Reading data for phone#4c410523#20190501:
+    expect(output).to match <<~OUTPUT
+Reading data for phone#4c410523#20190501:
 Column Family stats_summary
 \tconnected_cell: 1 @#{@timestamp}
 \tconnected_wifi: 1 @#{@timestamp}
@@ -130,15 +139,16 @@ Reading data for phone#5c10102#20190502:
 Column Family stats_summary
 \tconnected_cell: 1 @#{@timestamp}
 \tconnected_wifi: 0 @#{@timestamp}
-\tos_build: PQ2A.190406.000 @#{@timestamp}"
-
+\tos_build: PQ2A.190406.000 @#{@timestamp}
+OUTPUT
   end
 
   it "reads_prefix" do
     output = capture do
       reads_prefix @project_id, @instance_id, @table_id
     end
-    expect(output).to match "Reading data for phone#4c410523#20190501:
+    expect(output).to match <<~OUTPUT
+Reading data for phone#4c410523#20190501:
 Column Family stats_summary
 \tconnected_cell: 1 @#{@timestamp}
 \tconnected_wifi: 1 @#{@timestamp}
@@ -166,14 +176,16 @@ Reading data for phone#5c10102#20190502:
 Column Family stats_summary
 \tconnected_cell: 1 @#{@timestamp}
 \tconnected_wifi: 0 @#{@timestamp}
-\tos_build: PQ2A.190406.000 @#{@timestamp}"
+\tos_build: PQ2A.190406.000 @#{@timestamp}
+OUTPUT
   end
 
   it "reads_filter" do
     output = capture do
       reads_filter @project_id, @instance_id, @table_id
     end
-    expect(output).to match "Reading data for phone#4c410523#20190501:
+    expect(output).to match <<~OUTPUT
+Reading data for phone#4c410523#20190501:
 Column Family stats_summary
 \tos_build: PQ2A.190405.003 @#{@timestamp}
 
@@ -191,7 +203,8 @@ Column Family stats_summary
 
 Reading data for phone#5c10102#20190502:
 Column Family stats_summary
-\tos_build: PQ2A.190406.000 @#{@timestamp}"
+\tos_build: PQ2A.190406.000 @#{@timestamp}
+OUTPUT
   end
 
 
