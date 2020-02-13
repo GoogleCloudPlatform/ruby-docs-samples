@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-def view_bucket_iam_members project_id:, bucket_name:
+def view_bucket_iam_members bucket_name:
   # [START view_bucket_iam_members]
-  # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
   bucket = storage.bucket bucket_name
 
   policy = bucket.policy
@@ -30,16 +29,15 @@ def view_bucket_iam_members project_id:, bucket_name:
   # [END view_bucket_iam_members]
 end
 
-def add_bucket_iam_member project_id:, bucket_name:, role:, member:
+def add_bucket_iam_member bucket_name:, role:, member:
   # [START add_bucket_iam_member]
-  # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
   # role        = "Bucket-level IAM role"
   # member      = "Bucket-level IAM member"
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
   bucket = storage.bucket bucket_name
 
   bucket.policy do |policy|
@@ -50,16 +48,15 @@ def add_bucket_iam_member project_id:, bucket_name:, role:, member:
   # [END add_bucket_iam_member]
 end
 
-def remove_bucket_iam_member project_id:, bucket_name:, role:, member:
+def remove_bucket_iam_member bucket_name:, role:, member:
   # [START remove_bucket_iam_member]
-  # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
   # role        = "Bucket-level IAM role"
   # member      = "Bucket-level IAM member"
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
   bucket = storage.bucket bucket_name
 
   bucket.policy do |policy|
@@ -71,21 +68,17 @@ def remove_bucket_iam_member project_id:, bucket_name:, role:, member:
 end
 
 def run_sample arguments
-  command    = arguments.shift
-  project_id = ENV["GOOGLE_CLOUD_PROJECT"]
+  command = arguments.shift
 
   case command
   when "view_bucket_iam_members"
-    view_bucket_iam_members project_id:  project_id,
-                            bucket_name: arguments.shift
+    view_bucket_iam_members bucket_name: arguments.shift
   when "add_bucket_iam_member"
-    add_bucket_iam_member project_id:  project_id,
-                          bucket_name: arguments.shift,
+    add_bucket_iam_member bucket_name: arguments.shift,
                           role:        arguments.shift,
                           member:      arguments.shift
   when "remove_bucket_iam_member"
-    remove_bucket_iam_member project_id:  project_id,
-                             bucket_name: arguments.shift,
+    remove_bucket_iam_member bucket_name: arguments.shift,
                              role:        arguments.shift,
                              member:      arguments.shift
   else

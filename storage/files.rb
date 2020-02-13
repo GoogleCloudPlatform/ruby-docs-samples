@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-def list_bucket_contents project_id:, bucket_name:
+def list_bucket_contents bucket_name:
   # [START list_bucket_contents]
-  # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
   bucket  = storage.bucket bucket_name
 
   bucket.files.each do |file|
@@ -28,15 +27,14 @@ def list_bucket_contents project_id:, bucket_name:
   # [END list_bucket_contents]
 end
 
-def list_bucket_contents_with_prefix project_id:, bucket_name:, prefix:
+def list_bucket_contents_with_prefix bucket_name:, prefix:
   # [START list_bucket_contents_with_prefix]
-  # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
   # prefix      = "Filter results to files whose names begin with this prefix"
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
   bucket  = storage.bucket bucket_name
   files   = bucket.files prefix: prefix
 
@@ -58,17 +56,15 @@ def generate_encryption_key_base64
   # [END generate_encryption_key_base64]
 end
 
-def upload_file(project_id:, bucket_name:, local_file_path:,
-                storage_file_path: nil)
+def upload_file bucket_name:, local_file_path:, storage_file_path: nil
   # [START upload_file]
-  # project_id        = "Your Google Cloud project ID"
   # bucket_name       = "Your Google Cloud Storage bucket name"
   # local_file_path   = "Path to local file to upload"
   # storage_file_path = "Path to store the file in Google Cloud Storage"
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
   bucket  = storage.bucket bucket_name
 
   file = bucket.create_file local_file_path, storage_file_path
@@ -77,10 +73,8 @@ def upload_file(project_id:, bucket_name:, local_file_path:,
   # [END upload_file]
 end
 
-def upload_encrypted_file(project_id:, bucket_name:, local_file_path:,
-                          storage_file_path: nil, encryption_key:)
+def upload_encrypted_file bucket_name:, local_file_path:, storage_file_path: nil, encryption_key:
   # [START upload_encrypted_file]
-  # project_id        = "Your Google Cloud project ID"
   # bucket_name       = "Your Google Cloud Storage bucket name"
   # local_file_path   = "Path to local file to upload"
   # storage_file_path = "Path to store the file in Google Cloud Storage"
@@ -88,7 +82,7 @@ def upload_encrypted_file(project_id:, bucket_name:, local_file_path:,
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
 
   bucket = storage.bucket bucket_name
 
@@ -99,10 +93,8 @@ def upload_encrypted_file(project_id:, bucket_name:, local_file_path:,
   # [END upload_encrypted_file]
 end
 
-def upload_with_kms_key(project_id:, bucket_name:, local_file_path:,
-                        storage_file_path: nil, kms_key:)
+def upload_with_kms_key bucket_name:, local_file_path:, storage_file_path: nil, kms_key:
   # [START storage_upload_with_kms_key]
-  # project_id        = "Your Google Cloud project ID"
   # bucket_name       = "Your Google Cloud Storage bucket name"
   # local_file_path   = "Path to local file to upload"
   # storage_file_path = "Path to store the file in Google Cloud Storage"
@@ -110,7 +102,7 @@ def upload_with_kms_key(project_id:, bucket_name:, local_file_path:,
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
 
   bucket = storage.bucket bucket_name
 
@@ -121,16 +113,15 @@ def upload_with_kms_key(project_id:, bucket_name:, local_file_path:,
   # [END storage_upload_with_kms_key]
 end
 
-def download_file project_id:, bucket_name:, file_name:, local_path:
+def download_file bucket_name:, file_name:, local_path:
   # [START download_file]
-  # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
   # file_name   = "Name of file in Google Cloud Storage to download locally"
   # local_path  = "Destination path for downloaded file"
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
   bucket  = storage.bucket bucket_name
   file    = bucket.file file_name
 
@@ -158,29 +149,27 @@ def download_public_file bucket_name:, file_name:, local_path:
   # [END download_public_file]
 end
 
-def download_file_requester_pays project_id:, bucket_name:, file_name:, local_path:
+def download_file_requester_pays bucket_name:, file_name:, local_path:
   # [START download_file_requester_pays]
-  # project_id  = "Your Google Cloud billable project ID"
   # bucket_name = "A Google Cloud Storage bucket name"
   # file_name   = "Name of file in Google Cloud Storage to download locally"
   # local_path  = "Destination path for downloaded file"
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
   bucket  = storage.bucket bucket_name, skip_lookup: true, user_project: true
   file    = bucket.file file_name
 
   file.download local_path
 
-  puts "Downloaded #{file.name} using billing project #{project_id}"
+  puts "Downloaded #{file.name} using billing project #{storage.project}"
   # [END download_file_requester_pays]
 end
 
-def download_encrypted_file(project_id:, bucket_name:, storage_file_path:,
+def download_encrypted_file(bucket_name:, storage_file_path:,
                             local_file_path:, encryption_key:)
   # [START download_encrypted_file]
-  # project_id     = "Your Google Cloud project ID"
   # bucket_name    = "Your Google Cloud Storage bucket name"
   # file_name      = "Name of file in Google Cloud Storage to download locally"
   # local_path     = "Destination path for downloaded file"
@@ -188,7 +177,7 @@ def download_encrypted_file(project_id:, bucket_name:, storage_file_path:,
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
 
   bucket = storage.bucket bucket_name
 
@@ -199,15 +188,14 @@ def download_encrypted_file(project_id:, bucket_name:, storage_file_path:,
   # [END download_encrypted_file]
 end
 
-def delete_file project_id:, bucket_name:, file_name:
+def delete_file bucket_name:, file_name:
   # [START delete_file]
-  # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
   # file_name   = "Name of file in Google Cloud Storage to delete"
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
   bucket  = storage.bucket bucket_name
   file    = bucket.file file_name
 
@@ -217,15 +205,14 @@ def delete_file project_id:, bucket_name:, file_name:
   # [END delete_file]
 end
 
-def list_file_details project_id:, bucket_name:, file_name:
+def list_file_details bucket_name:, file_name:
   # [START list_file_details]
-  # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
   # file_name   = "Name of file in Google Cloud Storage"
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
   bucket  = storage.bucket bucket_name
   file    = bucket.file file_name
 
@@ -258,9 +245,8 @@ def list_file_details project_id:, bucket_name:, file_name:
   # [END list_file_details]
 end
 
-def set_metadata project_id:, bucket_name:, file_name:, content_type:, metadata_key:, metadata_value:
+def set_metadata bucket_name:, file_name:, content_type:, metadata_key:, metadata_value:
   # [START set_metadata]
-  # project_id     = "Your Google Cloud project ID"
   # bucket_name    = "Your Google Cloud Storage bucket name"
   # file_name      = "Name of file in Google Cloud Storage"
   # content_type   = "file Content-Type"
@@ -268,7 +254,7 @@ def set_metadata project_id:, bucket_name:, file_name:, content_type:, metadata_
   # metadata_value = "Custom metadata value"
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
   bucket  = storage.bucket bucket_name
   file    = bucket.file file_name
 
@@ -284,15 +270,14 @@ def set_metadata project_id:, bucket_name:, file_name:, content_type:, metadata_
   # [END set_metadata]
 end
 
-def make_file_public project_id:, bucket_name:, file_name:
+def make_file_public bucket_name:, file_name:
   # [START make_file_public]
-  # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
   # file_name   = "Name of file in Google Cloud Storage to make public"
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
   bucket  = storage.bucket bucket_name
   file    = bucket.file file_name
 
@@ -302,16 +287,15 @@ def make_file_public project_id:, bucket_name:, file_name:
   # [END make_file_public]
 end
 
-def rename_file project_id:, bucket_name:, file_name:, new_name:
+def rename_file bucket_name:, file_name:, new_name:
   # [START rename_file]
-  # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
   # file_name   = "Name of file in Google Cloud Storage to rename"
   # new_name    = "File will be renamed to this new name"
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
   bucket  = storage.bucket bucket_name
   file    = bucket.file file_name
 
@@ -323,10 +307,8 @@ def rename_file project_id:, bucket_name:, file_name:, new_name:
   # [END rename_file]
 end
 
-def copy_file(project_id:, source_bucket_name:, source_file_name:,
-              dest_bucket_name:, dest_file_name:)
+def copy_file source_bucket_name:, source_file_name:, dest_bucket_name:, dest_file_name:
   # [START copy_file]
-  # project_id         = "Your Google Cloud project ID"
   # source_bucket_name = "Source bucket to copy file from"
   # source_file_name   = "Source file name"
   # dest_bucket_name   = "Destination bucket to copy file to"
@@ -334,7 +316,7 @@ def copy_file(project_id:, source_bucket_name:, source_file_name:,
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
   bucket  = storage.bucket source_bucket_name
   file    = bucket.file source_file_name
 
@@ -346,10 +328,8 @@ def copy_file(project_id:, source_bucket_name:, source_file_name:,
   # [END copy_file]
 end
 
-def rotate_encryption_key(project_id:, bucket_name:, file_name:,
-                          current_encryption_key:, new_encryption_key:)
+def rotate_encryption_key bucket_name:, file_name:, current_encryption_key:, new_encryption_key:
   # [START rotate_encryption_key]
-  # project_id             = "Your Google Cloud project ID"
   # bucket_name            = "Your Google Cloud Storage bucket name"
   # file_name              = "Name of a file in the Cloud Storage bucket"
   # current_encryption_key = "Encryption key currently being used"
@@ -357,7 +337,7 @@ def rotate_encryption_key(project_id:, bucket_name:, file_name:,
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
   bucket  = storage.bucket bucket_name
   file    = bucket.file file_name, encryption_key: current_encryption_key
 
@@ -368,15 +348,14 @@ def rotate_encryption_key(project_id:, bucket_name:, file_name:,
   # [END rotate_encryption_key]
 end
 
-def generate_signed_url project_id:, bucket_name:, file_name:
+def generate_signed_url bucket_name:, file_name:
   # [START generate_signed_url]
-  # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
   # file_name   = "Name of a file in the Cloud Storage bucket"
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
   bucket  = storage.bucket bucket_name
   file    = bucket.file file_name
 
@@ -386,14 +365,13 @@ def generate_signed_url project_id:, bucket_name:, file_name:
   # [END generate_signed_url]
 end
 
-def generate_signed_get_url_v4 project_id:, bucket_name:, file_name:
+def generate_signed_get_url_v4 bucket_name:, file_name:
   # [START storage_generate_signed_url_v4]
-  # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
   # file_name   = "Name of a file in the Google Cloud Storage bucket"
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
   storage_expiry_time = 5 * 60 # 5 minutes
 
   url = storage.signed_url bucket_name, file_name, method: "GET",
@@ -406,14 +384,13 @@ def generate_signed_get_url_v4 project_id:, bucket_name:, file_name:
   # [END storage_generate_signed_url_v4]
 end
 
-def generate_signed_put_url_v4 project_id:, bucket_name:, file_name:
+def generate_signed_put_url_v4 bucket_name:, file_name:
   # [START storage_generate_upload_signed_url_v4]
-  # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
   # file_name   = "Name of a file in the Cloud Storage bucket"
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
   storage_expiry_time = 5 * 60 # 5 minutes
 
   url = storage.signed_url bucket_name, file_name, method: "PUT",
@@ -426,15 +403,14 @@ def generate_signed_put_url_v4 project_id:, bucket_name:, file_name:
   # [END storage_generate_upload_signed_url_v4]
 end
 
-def set_event_based_hold project_id:, bucket_name:, file_name:
+def set_event_based_hold bucket_name:, file_name:
   # [START storage_set_event_based_hold]
-  # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
   # file_name   = "Name of a file in the Cloud Storage bucket"
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
   bucket  = storage.bucket bucket_name
   file    = bucket.file file_name
 
@@ -444,15 +420,14 @@ def set_event_based_hold project_id:, bucket_name:, file_name:
   # [END storage_set_event_based_hold]
 end
 
-def release_event_based_hold project_id:, bucket_name:, file_name:
+def release_event_based_hold bucket_name:, file_name:
   # [START storage_release_event_based_hold]
-  # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
   # file_name   = "Name of a file in the Cloud Storage bucket"
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
   bucket  = storage.bucket bucket_name
   file    = bucket.file file_name
 
@@ -462,15 +437,14 @@ def release_event_based_hold project_id:, bucket_name:, file_name:
   # [END storage_release_event_based_hold]
 end
 
-def set_temporary_hold project_id:, bucket_name:, file_name:
+def set_temporary_hold bucket_name:, file_name:
   # [START storage_set_temporary_hold]
-  # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
   # file_name   = "Name of a file in the Cloud Storage bucket"
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
   bucket  = storage.bucket bucket_name
   file    = bucket.file file_name
 
@@ -480,15 +454,14 @@ def set_temporary_hold project_id:, bucket_name:, file_name:
   # [END storage_set_temporary_hold]
 end
 
-def release_temporary_hold project_id:, bucket_name:, file_name:
+def release_temporary_hold bucket_name:, file_name:
   # [START storage_release_temporary_hold]
-  # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
   # file_name   = "Name of a file in the Cloud Storage bucket"
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
   bucket  = storage.bucket bucket_name
   file    = bucket.file file_name
 
@@ -499,33 +472,27 @@ def release_temporary_hold project_id:, bucket_name:, file_name:
 end
 
 def run_sample arguments
-  command    = arguments.shift
-  project_id = ENV["GOOGLE_CLOUD_PROJECT"]
+  command = arguments.shift
 
   case command
   when "list"
-    list_bucket_contents project_id:  project_id,
-                         bucket_name: arguments.shift
+    list_bucket_contents bucket_name: arguments.shift
   when "upload"
-    upload_file project_id:        project_id,
-                bucket_name:       arguments.shift,
+    upload_file bucket_name:       arguments.shift,
                 local_file_path:   arguments.shift,
                 storage_file_path: arguments.shift
   when "encrypted_upload"
-    upload_encrypted_file project_id:        project_id,
-                          bucket_name:       arguments.shift,
+    upload_encrypted_file bucket_name:       arguments.shift,
                           local_file_path:   arguments.shift,
                           storage_file_path: arguments.shift,
                           encryption_key:    Base64.decode64(arguments.shift)
   when "kms_upload"
-    upload_with_kms_key project_id:        project_id,
-                        bucket_name:       arguments.shift,
+    upload_with_kms_key bucket_name:       arguments.shift,
                         local_file_path:   arguments.shift,
                         storage_file_path: arguments.shift,
                         kms_key:           arguments.shift
   when "download"
-    download_file project_id:  project_id,
-                  bucket_name: arguments.shift,
+    download_file bucket_name: arguments.shift,
                   file_name:   arguments.shift,
                   local_path:  arguments.shift
   when "download_public_file"
@@ -533,74 +500,59 @@ def run_sample arguments
                          file_name:   arguments.shift,
                          local_path:  arguments.shift
   when "encrypted_download"
-    download_file project_id:    project_id,
-                  bucket_name:   arguments.shift,
+    download_file bucket_name:   arguments.shift,
                   file_name:     arguments.shift,
                   local_path:    arguments.shift,
                   encrypted_key: Base64.decode64(arguments.shift)
   when "download_with_requester_pays"
-    download_file_requester_pays project_id:  arguments.shift,
-                                 bucket_name: arguments.shift,
+    download_file_requester_pays bucket_name: arguments.shift,
                                  file_name:   arguments.shift,
                                  local_path:  arguments.shift
   when "rotate_encryption_key"
-    rotate_encryption_key project_id:             project_id,
-                          bucket_name:            arguments.shift,
+    rotate_encryption_key bucket_name:            arguments.shift,
                           file_name:              arguments.shift,
                           current_encryption_key: arguments.shift,
                           new_encryption_key:     arguments.shift
   when "generate_encryption_key"
     generate_encryption_key_base64
   when "delete"
-    delete_file project_id:  project_id,
-                bucket_name: arguments.shift,
+    delete_file bucket_name: arguments.shift,
                 file_name:   arguments.shift
   when "metadata"
-    list_file_details project_id:  project_id,
-                      bucket_name: arguments.shift,
+    list_file_details bucket_name: arguments.shift,
                       file_name:   arguments.shift
   when "make_public"
-    make_file_public project_id:  project_id,
-                     bucket_name: arguments.shift,
+    make_file_public bucket_name: arguments.shift,
                      file_name:   arguments.shift
   when "rename"
-    rename_file project_id:  project_id,
-                bucket_name: arguments.shift,
+    rename_file bucket_name: arguments.shift,
                 file_name:   arguments.shift,
                 new_name:    arguments.shift
   when "copy"
-    copy_file project_id:         project_id,
-              source_bucket_name: arguments.shift,
+    copy_file source_bucket_name: arguments.shift,
               source_file_name:   arguments.shift,
               dest_bucket_name:   arguments.shift,
               dest_file_name:     arguments.shift
   when "generate_signed_url"
-    generate_signed_url project_id:  project_id,
-                        bucket_name: arguments.shift,
+    generate_signed_url bucket_name: arguments.shift,
                         file_name:   arguments.shift
   when "generate_signed_get_url_v4"
-    generate_signed_get_url_v4 project_id:  project_id,
-                               bucket_name: arguments.shift,
+    generate_signed_get_url_v4 bucket_name: arguments.shift,
                                file_name:   arguments.shift
   when "generate_signed_put_url_v4"
-    generate_signed_put_url_v4 project_id:  project_id,
-                               bucket_name: arguments.shift,
+    generate_signed_put_url_v4 bucket_name: arguments.shift,
                                file_name:   arguments.shift
   when "set_event_based_hold"
-    set_event_based_hold project_id:  project_id,
-                         bucket_name: arguments.shift,
+    set_event_based_hold bucket_name: arguments.shift,
                          file_name:   arguments.shift
   when "release_event_based_hold"
-    release_event_based_hold project_id:  project_id,
-                             bucket_name: arguments.shift,
+    release_event_based_hold bucket_name: arguments.shift,
                              file_name:   arguments.shift
   when "set_temporary_hold"
-    set_temporary_hold project_id:  project_id,
-                       bucket_name: arguments.shift,
+    set_temporary_hold bucket_name: arguments.shift,
                        file_name:   arguments.shift
   when "release_temporary_hold"
-    release_temporary_hold project_id:  project_id,
-                           bucket_name: arguments.shift,
+    release_temporary_hold bucket_name: arguments.shift,
                            file_name:   arguments.shift
   else
     puts <<~USAGE
@@ -625,10 +577,10 @@ def run_sample arguments
         generate_signed_url <bucket> <file>                               Generate a V2 signed url for a file
         generate_signed_get_url_v4 <bucket> <file>                        Generate a V4 signed get url for a file
         generate_signed_put_url_v4 <bucket> <file>                        Generate a V4 signed put url for a file
-        set_event_based_hold     <bucket> <file>                          Set an event-based hold on a file
-        release_event_based_hold <bucket> <file>                          Relase an event-based hold on a file
-        set_temporary_hold       <bucket> <file>                          Set a temporary hold on a file
-        release_temporary_hold   <bucket> <file>                          Release a temporary hold on a file
+        set_event_based_hold       <bucket> <file>                        Set an event-based hold on a file
+        release_event_based_hold   <bucket> <file>                        Relase an event-based hold on a file
+        set_temporary_hold         <bucket> <file>                        Set a temporary hold on a file
+        release_temporary_hold     <bucket> <file>                        Release a temporary hold on a file
 
       Environment variables:
         GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID

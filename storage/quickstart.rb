@@ -12,21 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START storage_quickstart]
-# Imports the Google Cloud client library
-require "google/cloud/storage"
+def quickstart bucket_name:
+  # [START storage_quickstart]
+  # Imports the Google Cloud client library
+  require "google/cloud/storage"
 
-# Your Google Cloud Platform project ID
-project_id = "YOUR_PROJECT_ID"
+  # Instantiates a client
+  storage = Google::Cloud::Storage.new
 
-# Instantiates a client
-storage = Google::Cloud::Storage.new project_id: project_id
+  # bucket_name = "The name of the bucket to be created, i.e. 'new-bucket'"
 
-# The name for the new bucket
-bucket_name = "my-new-bucket"
+  # Creates the new bucket
+  bucket = storage.create_bucket bucket_name
 
-# Creates the new bucket
-bucket = storage.create_bucket bucket_name
-
-puts "Bucket #{bucket.name} was created."
-# [END storage_quickstart]
+  puts "Bucket #{bucket.name} was created."
+  # [END storage_quickstart]
+end
