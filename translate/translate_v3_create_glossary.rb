@@ -20,7 +20,7 @@ def translate_v3_create_glossary
 
   project_id = "[Google Cloud Project ID]"
   location_id = "[LOCATION ID]"
-  glossary_id = "[YOUR_GLOSSARY_ID]"
+  glossary_id = "your-glossary-display-name"
 
   project_2 = "[Your Google Cloud Project ID]"
   input_uri = "gs://translation_samples_beta/glossaries/glossary.csv"
