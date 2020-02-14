@@ -57,4 +57,28 @@ describe "IAM Snippets" do
       end
     end
   end
+
+  describe "add_bucket_conditional_iam_binding" do
+    it "adds conditional IAM binding to a bucket" do
+      title = "title"
+      description = "description"
+      expression = "resource.name.startsWith(\"projects/_/buckets/bucket-name/objects/prefix-a-\")"
+      bucket.uniform_bucket_level_access = true
+      assert_output "Added #{member} with role #{role} to #{bucket.name} with condition #{title} #{description} #{expression}\n" do
+        add_bucket_conditional_iam_binding bucket_name: bucket.name,
+                                           role:        role,
+                                           member:      member,
+                                           title:       title,
+                                           description: description,
+                                           expression:  expression
+      end
+
+      policy = bucket.policy(requested_policy_version: 3).bindings.select(&:condition).first
+      assert_equal policy.role, role
+      assert_includes policy.members, member
+      assert_equal policy.condition.title, title
+      assert_equal policy.condition.description, description
+      assert_equal policy.condition.expression, expression
+    end
+  end
 end

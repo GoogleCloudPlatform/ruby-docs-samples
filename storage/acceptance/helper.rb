@@ -9,33 +9,37 @@ require "uri"
 def create_bucket_helper bucket_name
   storage_client = Google::Cloud::Storage.new
 
-  5.times do
-    begin
-      return storage_client.create_bucket bucket_name
-    rescue Google::Cloud::ResourceExhaustedError => e
-      puts e
-      puts "trying again"
-      sleep rand(1..3)
-    end
+  retry_resource_exhaustion do
+    return storage_client.create_bucket bucket_name
   end
 end
 
 def delete_bucket_helper bucket_name
   storage_client = Google::Cloud::Storage.new
-  bucket = storage_client.bucket bucket_name
-  return unless bucket
 
+  retry_resource_exhaustion do
+    bucket = storage_client.bucket bucket_name
+    return unless bucket
+
+    bucket.files.each(&:delete)
+    bucket.delete
+  end
+end
+
+def retry_resource_exhaustion
   5.times do
     begin
-      bucket.files.each(&:delete)
-      bucket.delete
+      yield
       return
     rescue Google::Cloud::ResourceExhaustedError => e
-      puts e
-      puts "trying again"
+      puts "\n#{e} Gonna try again"
       sleep rand(1..3)
+    rescue StandardError => e
+      puts "\n#{e}"
+      return
     end
   end
+  raise Google::Cloud::ResourceExhaustedError("Maybe take a break from creating and deleting buckets for a bit")
 end
 
 def get_kms_key project_id

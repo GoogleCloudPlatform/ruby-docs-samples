@@ -7,7 +7,7 @@ describe "ACL Snippets" do
   let :bucket do
     create_bucket_helper "ruby_storage_sample_#{SecureRandom.hex}"
   end
-  
+
   let(:storage_client)   { Google::Cloud::Storage.new }
   let(:local_file)       { File.expand_path "data/file.txt", __dir__ }
   let(:email)            { "user-test@test.com" }

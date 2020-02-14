@@ -78,9 +78,8 @@ def remove_bucket_iam_member bucket_name:, role:, member:
   # [END remove_bucket_iam_member]
 end
 
-def add_bucket_conditional_iam_binding project_id:, bucket_name:, role:, member:, title:, description:, expression:
+def add_bucket_conditional_iam_binding bucket_name:, role:, member:, title:, description:, expression:
   # [START storage_add_bucket_conditional_iam_binding]
-  # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
   # role        = "Bucket-level IAM role"
   # member      = "Bucket-level IAM member"
@@ -90,7 +89,7 @@ def add_bucket_conditional_iam_binding project_id:, bucket_name:, role:, member:
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
   bucket = storage.bucket bucket_name
 
   bucket.policy requested_policy_version: 3 do |policy|

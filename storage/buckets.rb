@@ -185,8 +185,7 @@ def create_bucket bucket_name:
   # [END create_bucket]
 end
 
-def create_bucket_class_location(bucket_name:, location:,
-                                 storage_class:)
+def create_bucket_class_location bucket_name:, location:, storage_class:
   # [START create_bucket_class_location]
   # bucket_name   = "Name of Google Cloud Storage bucket to create"
   # location      = "Location of where to create Cloud Storage bucket"
@@ -385,9 +384,9 @@ def get_default_event_based_hold bucket_name:
   bucket  = storage.bucket bucket_name
 
   if bucket.default_event_based_hold?
-    puts "Default event-based hold is enabled for {bucket_name}."
+    puts "Default event-based hold is enabled for #{bucket_name}."
   else
-    puts "Default event-based hold is not enabled for {bucket_name}."
+    puts "Default event-based hold is not enabled for #{bucket_name}."
   end
   # [END storage_get_default_event_based_hold]
 end
