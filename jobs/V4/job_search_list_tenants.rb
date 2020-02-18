@@ -1,4 +1,4 @@
-# Copyright 2019 Google LLC
+# Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,13 +14,17 @@
 
 # DO NOT EDIT! This is a generated sample ("RequestPagedAll",  "job_search_list_tenants")
 
+# sample-metadata
+#   title:
+#   description: List Tenants
+#   bundle exec ruby samples/v4beta1/job_search_list_tenants.rb [--project_id "Your Google Cloud Project ID"]
+
 require "google/cloud/talent"
 
 # [START job_search_list_tenants]
 
 # List Tenants
-def sample_list_tenants(project_id)
-  # [START job_search_list_tenants_core]
+def sample_list_tenants project_id
   # Instantiate a client
   tenant_client = Google::Cloud::Talent::TenantService.new version: :v4beta1
 
@@ -32,15 +36,13 @@ def sample_list_tenants(project_id)
     puts "Tenant Name: #{element.name}"
     puts "External ID: #{element.external_id}"
   end
-
-  # [END job_search_list_tenants_core]
 end
 # [END job_search_list_tenants]
 
 
 require "optparse"
 
-if $0 == __FILE__
+if $PROGRAM_NAME == __FILE__
 
   project_id = "Your Google Cloud Project ID"
 

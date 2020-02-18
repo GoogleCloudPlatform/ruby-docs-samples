@@ -1,4 +1,4 @@
-# Copyright 2019 Google LLC
+# Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,13 +14,17 @@
 
 # DO NOT EDIT! This is a generated sample ("Request",  "job_search_delete_tenant")
 
+# sample-metadata
+#   title:
+#   description: Delete Tenant
+#   bundle exec ruby samples/v4beta1/job_search_delete_tenant.rb [--project_id "Your Google Cloud Project ID"] [--tenant_id "Your Tenant ID)"]
+
 require "google/cloud/talent"
 
 # [START job_search_delete_tenant]
 
 # Delete Tenant
-def sample_delete_tenant(project_id, tenant_id)
-  # [START job_search_delete_tenant_core]
+def sample_delete_tenant project_id, tenant_id
   # Instantiate a client
   tenant_client = Google::Cloud::Talent::TenantService.new version: :v4beta1
 
@@ -31,15 +35,13 @@ def sample_delete_tenant(project_id, tenant_id)
   tenant_client.delete_tenant(formatted_name)
 
   puts "Deleted Tenant."
-
-  # [END job_search_delete_tenant_core]
 end
 # [END job_search_delete_tenant]
 
 
 require "optparse"
 
-if $0 == __FILE__
+if $PROGRAM_NAME == __FILE__
 
   project_id = "Your Google Cloud Project ID"
   tenant_id = "Your Tenant ID)"

@@ -1,4 +1,4 @@
-# Copyright 2019 Google LLC
+# Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,16 +14,20 @@
 
 # DO NOT EDIT! This is a generated sample ("RequestPagedAll",  "job_search_list_jobs")
 
+# sample-metadata
+#   title:
+#   description: List Jobs
+#   bundle exec ruby samples/v4beta1/job_search_list_jobs.rb [--project_id "Your Google Cloud Project ID"] [--tenant_id "Your Tenant ID (using tenancy is optional)"] [--filter "companyName=projects/my-project/companies/company-id"]
+
 require "google/cloud/talent"
 
 # [START job_search_list_jobs]
 
- # List Jobs
- #
- # @param project_id {String} Your Google Cloud Project ID
- # @param tenant_id {String} Identifier of the Tenant
-def sample_list_jobs(project_id, tenant_id, filter)
-  # [START job_search_list_jobs_core]
+# List Jobs
+#
+# @param project_id {String} Your Google Cloud Project ID
+# @param tenant_id {String} Identifier of the Tenant
+def sample_list_jobs project_id, tenant_id, filter
   # Instantiate a client
   job_client = Google::Cloud::Talent::JobService.new version: :v4beta1
 
@@ -39,15 +43,13 @@ def sample_list_jobs(project_id, tenant_id, filter)
     puts "Job title: #{element.title}"
     puts "Job description: #{element.description}"
   end
-
-  # [END job_search_list_jobs_core]
 end
 # [END job_search_list_jobs]
 
 
 require "optparse"
 
-if $0 == __FILE__
+if $PROGRAM_NAME == __FILE__
 
   project_id = "Your Google Cloud Project ID"
   tenant_id = "Your Tenant ID (using tenancy is optional)"

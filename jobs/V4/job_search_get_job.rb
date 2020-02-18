@@ -1,4 +1,4 @@
-# Copyright 2019 Google LLC
+# Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,13 +14,17 @@
 
 # DO NOT EDIT! This is a generated sample ("Request",  "job_search_get_job")
 
+# sample-metadata
+#   title:
+#   description: Get Job
+#   bundle exec ruby samples/v4beta1/job_search_get_job.rb [--project_id "Your Google Cloud Project ID"] [--tenant_id "Your Tenant ID (using tenancy is optional)"] [--job_id "Job ID"]
+
 require "google/cloud/talent"
 
 # [START job_search_get_job]
 
 # Get Job
-def sample_get_job(project_id, tenant_id, job_id)
-  # [START job_search_get_job_core]
+def sample_get_job project_id, tenant_id, job_id
   # Instantiate a client
   job_client = Google::Cloud::Talent::JobService.new version: :v4beta1
 
@@ -44,15 +48,13 @@ def sample_get_job(project_id, tenant_id, job_id)
   response.application_info.uris.each do |website_uri|
     puts "Website: #{website_uri}"
   end
-
-  # [END job_search_get_job_core]
 end
 # [END job_search_get_job]
 
 
 require "optparse"
 
-if $0 == __FILE__
+if $PROGRAM_NAME == __FILE__
 
   project_id = "Your Google Cloud Project ID"
   tenant_id = "Your Tenant ID (using tenancy is optional)"

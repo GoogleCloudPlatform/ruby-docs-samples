@@ -1,4 +1,4 @@
-# Copyright 2019 Google LLC
+# Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,17 +14,21 @@
 
 # DO NOT EDIT! This is a generated sample ("RequestPagedAll",  "job_search_histogram_search")
 
+# sample-metadata
+#   title:
+#   description: Search Jobs with histogram queries
+#   bundle exec ruby samples/v4beta1/job_search_histogram_search.rb [--project_id "Your Google Cloud Project ID"] [--tenant_id "Your Tenant ID (using tenancy is optional)"] [--query "count(base_compensation, [bucket(12, 20)])"]
+
 require "google/cloud/talent"
 
 # [START job_search_histogram_search]
 
- # Search Jobs with histogram queries
- #
- # @param query {String} Histogram query
- # More info on histogram facets, constants, and built-in functions:
- # https://godoc.org/google.golang.org/genproto/googleapis/cloud/talent/v4beta1#SearchJobsRequest
-def sample_search_jobs(project_id, tenant_id, query)
-  # [START job_search_histogram_search_core]
+# Search Jobs with histogram queries
+#
+# @param query {String} Histogram query
+# More info on histogram facets, constants, and built-in functions:
+# https://godoc.org/google.golang.org/genproto/googleapis/cloud/talent/v4beta1#SearchJobsRequest
+def sample_search_jobs project_id, tenant_id, query
   # Instantiate a client
   job_client = Google::Cloud::Talent::JobService.new version: :v4beta1
 
@@ -44,22 +48,20 @@ def sample_search_jobs(project_id, tenant_id, query)
   histogram_queries = [histogram_queries_element]
 
   # Iterate over all results.
-  job_client.search_jobs(formatted_parent, request_metadata, custom_ranking_info: custom_ranking_info, order_by: order_by).each do |element|
+  job_client.search_jobs(formatted_parent, request_metadata, histogram_queries: histogram_queries).each do |element|
     puts "Job summary: #{element.job_summary}"
     puts "Job title snippet: #{element.job_title_snippet}"
     job = element.job
     puts "Job name: #{job.name}"
     puts "Job title: #{job.title}"
   end
-
-  # [END job_search_histogram_search_core]
 end
 # [END job_search_histogram_search]
 
 
 require "optparse"
 
-if $0 == __FILE__
+if $PROGRAM_NAME == __FILE__
 
   project_id = "Your Google Cloud Project ID"
   tenant_id = "Your Tenant ID (using tenancy is optional)"
