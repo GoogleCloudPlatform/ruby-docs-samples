@@ -21,10 +21,12 @@ def create_metric_descriptor project_id:
   # [END monitoring_create_metric]
 end
 
-def delete_metric_descriptor descriptor_name:
+def delete_metric_descriptor project_id:, descriptor_name:
   # [START monitoring_delete_metric]
   client = Google::Cloud::Monitoring::Metric.new
-  client.delete_metric_descriptor descriptor_name
+  project_name = Google::Cloud::Monitoring::V3::MetricServiceClient.metric_descriptor_path(project_id, descriptor_name)
+
+  client.delete_metric_descriptor project_name
   p "Deleted metric descriptor #{descriptor_name}."
   # [END monitoring_delete_metric]
 end
@@ -210,7 +212,7 @@ if $PROGRAM_NAME == __FILE__
   when "create_metric_descriptor"
     create_metric_descriptor project_id: ARGV.shift
   when "delete_metric_descriptor"
-    delete_metric_descriptor descriptor_name: ARGV.shift
+    delete_metric_descriptor project_id: ARGV.shift, descriptor_name: ARGV.shift
   when "write_time_series"
     write_time_series project_id: ARGV.shift
   when "list_time_series"
@@ -235,7 +237,7 @@ if $PROGRAM_NAME == __FILE__
 
       Commands:
         create_metric_descriptor                     <project_id>
-        delete_metric_descriptor                     <descriptor_name>
+        delete_metric_descriptor                     <project_id> <descriptor_name>
         write_time_series                            <project_id>
         list_time_series                             <project_id>
         list_time_series_header                      <project_id>
