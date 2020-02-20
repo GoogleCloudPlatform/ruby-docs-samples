@@ -38,7 +38,7 @@ describe "HMAC Snippets" do
       match = out.match(/Access ID:\s+(.*)\n/)
       access_id = match[1]
       # Raises error if no hmac_key found
-      hmac_key = storage_client.hmac_key access_id
+      delete_hmac_key_helper storage_client.hmac_key(access_id)
 
       assert_match(/Service Account Email:\s+#{service_account_email}/, out)
     end
