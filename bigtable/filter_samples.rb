@@ -173,6 +173,7 @@ def filter_composing_chain project_id, instance_id, table_id
 end
 
 def filter_composing_interleave project_id, instance_id, table_id
+  # [START bigtable_filters_composing_interleave]
   filter = Google::Cloud::Bigtable::RowFilter.interleave.value("true").qualifier("os_build")
   read_with_filter project_id, instance_id, table_id, filter
   # [END bigtable_filters_composing_interleave]
