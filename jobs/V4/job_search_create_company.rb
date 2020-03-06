@@ -1,4 +1,4 @@
-# Copyright 2019 Google LLC
+# Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,16 +14,20 @@
 
 # DO NOT EDIT! This is a generated sample ("Request",  "job_search_create_company")
 
+# sample-metadata
+#   title:
+#   description: Create Company
+#   bundle exec ruby samples/v4beta1/job_search_create_company.rb [--project_id "Your Google Cloud Project ID"] [--tenant_id "Your Tenant ID (using tenancy is optional)"] [--display_name "My Company Name"] [--external_id "Identifier of this company in my system"]
+
 require "google/cloud/talent"
 
 # [START job_search_create_company]
 
- # Create Company
- #
- # @param project_id {String} Your Google Cloud Project ID
- # @param tenant_id {String} Identifier of the Tenant
-def sample_create_company(project_id, tenant_id, display_name, external_id)
-  # [START job_search_create_company_core]
+# Create Company
+#
+# @param project_id {String} Your Google Cloud Project ID
+# @param tenant_id {String} Identifier of the Tenant
+def sample_create_company project_id, tenant_id, display_name, external_id
   # Instantiate a client
   company_client = Google::Cloud::Talent::CompanyService.new version: :v4beta1
 
@@ -39,15 +43,13 @@ def sample_create_company(project_id, tenant_id, display_name, external_id)
   puts "Name: #{response.name}"
   puts "Display Name: #{response.display_name}"
   puts "External ID: #{response.external_id}"
-
-  # [END job_search_create_company_core]
 end
 # [END job_search_create_company]
 
 
 require "optparse"
 
-if $0 == __FILE__
+if $PROGRAM_NAME == __FILE__
 
   project_id = "Your Google Cloud Project ID"
   tenant_id = "Your Tenant ID (using tenancy is optional)"

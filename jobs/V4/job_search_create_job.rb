@@ -1,4 +1,4 @@
-# Copyright 2019 Google LLC
+# Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,16 +14,20 @@
 
 # DO NOT EDIT! This is a generated sample ("Request",  "job_search_create_job")
 
+# sample-metadata
+#   title:
+#   description: Create Job
+#   bundle exec ruby samples/v4beta1/job_search_create_job.rb [--project_id "Your Google Cloud Project ID"] [--tenant_id "Your Tenant ID (using tenancy is optional)"] [--company_name "Company name, e.g. projects/your-project/companies/company-id"] [--requisition_id "Job requisition ID, aka Posting ID. Unique per job."] [--title "Software Engineer"] [--description "This is a description of this <i>wonderful</i> job!"] [--job_application_url "https://www.example.org/job-posting/123"] [--address_one "1600 Amphitheatre Parkway, Mountain View, CA 94043"] [--address_two "111 8th Avenue, New York, NY 10011"] [--language_code "en-US"]
+
 require "google/cloud/talent"
 
 # [START job_search_create_job]
 
- # Create Job
- #
- # @param project_id {String} Your Google Cloud Project ID
- # @param tenant_id {String} Identifier of the Tenant
-def sample_create_job(project_id, tenant_id, company_name, requisition_id, title, description, job_application_url, address_one, address_two, language_code)
-  # [START job_search_create_job_core]
+# Create Job
+#
+# @param project_id {String} Your Google Cloud Project ID
+# @param tenant_id {String} Identifier of the Tenant
+def sample_create_job project_id, tenant_id, company_name, requisition_id, title, description, job_application_url, address_one, address_two, language_code
   # Instantiate a client
   job_client = Google::Cloud::Talent::JobService.new version: :v4beta1
 
@@ -53,15 +57,13 @@ def sample_create_job(project_id, tenant_id, company_name, requisition_id, title
 
   response = job_client.create_job(formatted_parent, job)
   puts "Created job: #{response.name}"
-
-  # [END job_search_create_job_core]
 end
 # [END job_search_create_job]
 
 
 require "optparse"
 
-if $0 == __FILE__
+if $PROGRAM_NAME == __FILE__
 
   project_id = "Your Google Cloud Project ID"
   tenant_id = "Your Tenant ID (using tenancy is optional)"

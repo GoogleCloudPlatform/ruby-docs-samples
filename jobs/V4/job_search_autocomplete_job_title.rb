@@ -1,4 +1,4 @@
-# Copyright 2019 Google LLC
+# Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,16 +14,20 @@
 
 # DO NOT EDIT! This is a generated sample ("Request",  "job_search_autocomplete_job_title")
 
+# sample-metadata
+#   title:
+#   description: Complete job title given partial text (autocomplete)
+#   bundle exec ruby samples/v4beta1/job_search_autocomplete_job_title.rb [--project_id "Your Google Cloud Project ID"] [--tenant_id "Your Tenant ID (using tenancy is optional)"] [--query "[partially typed job title]"] [--num_results 5] [--language_code "en-US"]
+
 require "google/cloud/talent"
 
 # [START job_search_autocomplete_job_title]
 
- # Complete job title given partial text (autocomplete)
- #
- # @param project_id {String} Your Google Cloud Project ID
- # @param tenant_id {String} Identifier of the Tenantd
-def sample_complete_query(project_id, tenant_id, query, num_results, language_code)
-  # [START job_search_autocomplete_job_title_core]
+# Complete job title given partial text (autocomplete)
+#
+# @param project_id {String} Your Google Cloud Project ID
+# @param tenant_id {String} Identifier of the Tenantd
+def sample_complete_query project_id, tenant_id, query, num_results, language_code
   # Instantiate a client
   completion_client = Google::Cloud::Talent::Completion.new version: :v4beta1
 
@@ -41,15 +45,13 @@ def sample_complete_query(project_id, tenant_id, query, num_results, language_co
     # Suggestion type is JOB_TITLE or COMPANY_TITLE
     puts "Suggestion type: #{result.type}"
   end
-
-  # [END job_search_autocomplete_job_title_core]
 end
 # [END job_search_autocomplete_job_title]
 
 
 require "optparse"
 
-if $0 == __FILE__
+if $PROGRAM_NAME == __FILE__
 
   project_id = "Your Google Cloud Project ID"
   tenant_id = "Your Tenant ID (using tenancy is optional)"

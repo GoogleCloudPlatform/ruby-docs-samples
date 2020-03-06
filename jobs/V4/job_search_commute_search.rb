@@ -1,4 +1,4 @@
-# Copyright 2019 Google LLC
+# Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,13 +14,17 @@
 
 # DO NOT EDIT! This is a generated sample ("RequestPagedAll",  "job_search_commute_search")
 
+# sample-metadata
+#   title:
+#   description: Search Jobs using commute distance
+#   bundle exec ruby samples/v4beta1/job_search_commute_search.rb [--project_id "Your Google Cloud Project ID"] [--tenant_id "Your Tenant ID (using tenancy is optional)"]
+
 require "google/cloud/talent"
 
 # [START job_search_commute_search]
 
 # Search Jobs using commute distance
-def sample_search_jobs(project_id, tenant_id)
-  # [START job_search_commute_search_core]
+def sample_search_jobs project_id, tenant_id
   # Instantiate a client
   job_client = Google::Cloud::Talent::JobService.new version: :v4beta1
 
@@ -39,7 +43,7 @@ def sample_search_jobs(project_id, tenant_id)
   seconds = 1800
   travel_duration = { seconds: seconds }
   latitude = 37.422408
-  longitude = 122.084068
+  longitude = -122.084068
   start_coordinates = { latitude: latitude, longitude: longitude }
   commute_filter = {
     commute_method: commute_method,
@@ -49,22 +53,20 @@ def sample_search_jobs(project_id, tenant_id)
   job_query = { commute_filter: commute_filter }
 
   # Iterate over all results.
-  job_client.search_jobs(formatted_parent, request_metadata, custom_ranking_info: custom_ranking_info, order_by: order_by).each do |element|
+  job_client.search_jobs(formatted_parent, request_metadata, job_query: job_query).each do |element|
     puts "Job summary: #{element.job_summary}"
     puts "Job title snippet: #{element.job_title_snippet}"
     job = element.job
     puts "Job name: #{job.name}"
     puts "Job title: #{job.title}"
   end
-
-  # [END job_search_commute_search_core]
 end
 # [END job_search_commute_search]
 
 
 require "optparse"
 
-if $0 == __FILE__
+if $PROGRAM_NAME == __FILE__
 
   project_id = "Your Google Cloud Project ID"
   tenant_id = "Your Tenant ID (using tenancy is optional)"
