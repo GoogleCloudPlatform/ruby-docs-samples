@@ -1,42 +1,50 @@
 require "rake/testtask"
 
 task :test do
-  each_lib do |dir|
-    test_task dir, "test"
-  end
+  run_tests "test"
 end
 
 task :acceptance do
-  each_lib do |dir|
-    test_task dir, "test"
-    test_task dir, "acceptance"
-  end
+  run_tests "acceptance"
 end
 
-def each_lib
+def run_tests type
   failed = false
   full_start_time = Time.now
-  dirs.each do |dir|
-    Dir.chdir dir do
-      Bundler.with_clean_env do
-        start_time = Time.now
-        lib = dir.split("ruby-docs-samples/").last
-        begin
-          header "Running tests for #{lib}"
-          sh "bundle install"
-          yield dir
-        rescue
-          failed = true
-        end
-        end_time = Time.now
-        header_2 "Tests for #{lib} took #{(end_time - start_time).to_i} seconds"
-      end
-    end
+
+  header "Installing dependencies"
+  each_lib do |_dir|
+    sh "bundle install"
   end
+
+  each_lib do |dir|
+    start_time = Time.now
+    lib = dir.split("ruby-docs-samples/").last
+    begin
+      header "Running tests for #{lib}"
+      test_task dir, type
+    rescue
+      failed = true
+    end
+    end_time = Time.now
+    header_2 "Tests for #{lib} took #{(end_time - start_time).to_i} seconds"
+    test_task dir, type
+  end
+
   full_end_time = Time.now
   header_2 "Tests took a total of #{(full_end_time - full_start_time).to_i} seconds"
   raise "Tests failed" if failed
   header "Tests passed"
+end
+
+def each_lib
+  dirs.each do |dir|
+    Dir.chdir dir do
+      Bundler.with_clean_env do
+        yield dir
+      end
+    end
+  end
 end
 
 def test_task dir, type
