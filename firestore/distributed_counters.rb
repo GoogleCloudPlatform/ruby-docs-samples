@@ -14,13 +14,14 @@
 
 
 def create_counter project_id:, num_shards:
+  # [START fs_create_counter]
   # project_id = "Your Google Cloud Project ID"
   # num_shards = "Number of shards for distributed counter"
 
   require "google/cloud/firestore"
 
   firestore = Google::Cloud::Firestore.new project_id: project_id
-  # [START fs_create_counter]
+
   shards_ref = firestore.col "shards"
 
   # Initialize each shard with count=0
@@ -28,18 +29,18 @@ def create_counter project_id:, num_shards:
     shards_ref.doc(i).set(count: 0)
   end
 
-  # [END fs_create_counter]
   puts "Distributed counter shards collection created."
+  # [END fs_create_counter]
 end
 
 def increment_counter project_id:, num_shards:
+  # [START fs_increment_counter]
   # project_id = "Your Google Cloud Project ID"
   # num_shards = "Number of shards for distributed counter"
 
   require "google/cloud/firestore"
 
   firestore = Google::Cloud::Firestore.new project_id: project_id
-  # [START fs_increment_counter]
 
   # Select a shard of the counter at random
   shard_id = rand 0..num_shards
@@ -48,17 +49,18 @@ def increment_counter project_id:, num_shards:
   # increment counter
   shard_ref.update count: firestore.field_increment(1)
 
-  # [END fs_increment_counter]
   puts "Counter incremented."
+  # [END fs_increment_counter]
 end
 
 def get_count project_id:
+  # [START fs_increment_counter]
   # project_id = "Your Google Cloud Project ID"
 
   require "google/cloud/firestore"
 
   firestore = Google::Cloud::Firestore.new project_id: project_id
-  # [START fs_get_count]
+
   shards_ref = firestore.col_group "shards"
 
   count = 0
@@ -66,8 +68,8 @@ def get_count project_id:
     count += doc_ref[:count]
   end
 
-  # [END fs_get_count]
   puts "Count value is #{count}."
+  # [END fs_get_count]
 end
 
 if $PROGRAM_NAME == __FILE__
