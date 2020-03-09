@@ -54,7 +54,7 @@ def increment_counter project_id:, num_shards:
 end
 
 def get_count project_id:
-  # [START fs_increment_counter]
+  # [START fs_get_count]
   # project_id = "Your Google Cloud Project ID"
 
   require "google/cloud/firestore"
