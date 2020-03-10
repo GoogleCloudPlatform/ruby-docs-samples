@@ -38,6 +38,10 @@ def sample_async_batch_annotate_images(input_image_uri, output_uri)
   type_2 = :IMAGE_PROPERTIES
   features_element_2 = { type: type_2 }
   features = [features_element, features_element_2]
+  
+  # Each requests element corresponds to a single image.  To annotate more
+  # images, create a request element for each image and add it to
+  # the array of requests 
   requests_element = { image: image, features: features }
   requests = [requests_element]
   gcs_destination = { uri: output_uri }
