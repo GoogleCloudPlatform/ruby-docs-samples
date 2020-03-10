@@ -24,7 +24,7 @@ end
 def delete_metric_descriptor project_id:, descriptor_name:
   # [START monitoring_delete_metric]
   client = Google::Cloud::Monitoring::Metric.new
-  project_name = Google::Cloud::Monitoring::V3::MetricServiceClient.metric_descriptor_path(project_id, descriptor_name)
+  project_name = Google::Cloud::Monitoring::V3::MetricServiceClient.metric_descriptor_path project_id, descriptor_name
 
   client.delete_metric_descriptor project_name
   p "Deleted metric descriptor #{descriptor_name}."
