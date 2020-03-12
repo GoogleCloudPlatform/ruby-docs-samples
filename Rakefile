@@ -14,7 +14,7 @@ def run_tests type
 
   header "Installing dependencies"
   each_lib do |_dir|
-    sh "bundle install"
+    sh "bundle update"
   end
 
   each_lib do |dir|
