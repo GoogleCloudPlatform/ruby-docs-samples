@@ -28,3 +28,7 @@ def quickstart bucket_name:
   puts "Bucket #{bucket.name} was created."
   # [END storage_quickstart]
 end
+
+if $PROGRAM_NAME == __FILE__
+  quickstart "quickstart_bucket"
+end
