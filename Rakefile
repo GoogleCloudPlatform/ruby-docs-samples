@@ -40,7 +40,7 @@ end
 def each_lib
   dirs.each do |dir|
     Dir.chdir dir do
-      Bundler.with_clean_env do
+      Bundler.with_unbundled_env do
         yield dir
       end
     end
