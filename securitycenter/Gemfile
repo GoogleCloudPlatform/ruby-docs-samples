@@ -3,7 +3,7 @@ source "https://rubygems.org"
 gem "google-cloud-security_center"
 
 group :test do
+  gem "google-gax"
   gem "rspec"
   gem "rspec-retry"
-  gem "google-gax"
 end
