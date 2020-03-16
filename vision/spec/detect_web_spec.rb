@@ -32,7 +32,7 @@ describe "Detect Web Entities and Pages" do
     expect {
       detect_web image_path: image_path("otter_crossing.jpg")
     }.to output(
-      /Otter.*http/m
+      /http.*otter/
     ).to_stdout
   end
 
@@ -43,7 +43,7 @@ describe "Detect Web Entities and Pages" do
     expect {
       detect_web_gcs image_path: storage_file.to_gs_url
     }.to output(
-      /Otter.*http/m
+      /http.*otter/
     ).to_stdout
   end
 end
