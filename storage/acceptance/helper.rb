@@ -53,7 +53,7 @@ def retry_resource_exhaustion
       return
     end
   end
-  raise Google::Cloud::ResourceExhaustedError("Maybe take a break from creating and deleting buckets for a bit")
+  raise Google::Cloud::ResourceExhaustedError, "Maybe take a break from creating and deleting buckets for a bit"
 end
 
 def get_kms_key project_id
