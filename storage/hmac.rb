@@ -12,16 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-def list_hmac_keys project_id:
+def list_hmac_keys
   # [START storage_list_hmac_keys]
-  # project_id = "Your Google Cloud project ID"
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
 
   # By default Storage#hmac_keys uses the Storage client project_id
-  hmac_keys = storage.hmac_keys project_id: project_id
+  hmac_keys = storage.hmac_keys
 
   puts "HMAC Keys:"
   hmac_keys.all do |hmac_key|
@@ -31,17 +30,16 @@ def list_hmac_keys project_id:
   # [END storage_list_hmac_keys]
 end
 
-def create_hmac_key project_id:, service_account_email:
+def create_hmac_key service_account_email:
   # [START storage_create_hmac_key]
-  # project_id = "Your Google Cloud project ID"
   # service_account_email = "Service account used to associate generate HMAC key"
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
 
   # By default Storage#create_hmac_key uses the Storage client project_id
-  hmac_key = storage.create_hmac_key service_account_email, project_id: project_id
+  hmac_key = storage.create_hmac_key service_account_email
 
   puts "The base64 encoded secret is: #{hmac_key.secret}"
   puts "Do not miss that secret, there is no API to recover it."
@@ -57,17 +55,16 @@ def create_hmac_key project_id:, service_account_email:
   # [END storage_create_hmac_key]
 end
 
-def get_hmac_key project_id:, access_id:
+def get_hmac_key access_id:
   # [START storage_get_hmac_key]
-  # project_id = "Your Google Cloud project ID"
   # access_id = "ID of an HMAC key"
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
 
   # By default Storage#hmac_keys uses the Storage client project_id
-  hmac_key = storage.hmac_key access_id, project_id: project_id
+  hmac_key = storage.hmac_key access_id
 
   puts "The HMAC key metadata is:"
   puts "Key ID:                #{hmac_key.id}"
@@ -81,17 +78,16 @@ def get_hmac_key project_id:, access_id:
   # [END storage_get_hmac_key]
 end
 
-def activate_hmac_key project_id:, access_id:
+def activate_hmac_key access_id:
   # [START storage_activate_hmac_key]
-  # project_id = "Your Google Cloud project ID"
   # access_id = "ID of an inactive HMAC key"
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
 
   # By default Storage#hmac_keys uses the Storage client project_id
-  hmac_key = storage.hmac_key access_id, project_id: project_id
+  hmac_key = storage.hmac_key access_id
 
   hmac_key.active!
 
@@ -108,17 +104,16 @@ def activate_hmac_key project_id:, access_id:
   # [END storage_activate_hmac_key]
 end
 
-def deactivate_hmac_key project_id:, access_id:
+def deactivate_hmac_key access_id:
   # [START storage_deactivate_hmac_key]
-  # project_id = "Your Google Cloud project ID"
   # access_id = "ID of an inactive HMAC key"
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
 
   # By default Storage#hmac_keys uses the Storage client project_id
-  hmac_key = storage.hmac_key access_id, project_id: project_id
+  hmac_key = storage.hmac_key access_id
 
   hmac_key.inactive!
 
@@ -135,17 +130,16 @@ def deactivate_hmac_key project_id:, access_id:
   # [END storage_deactivate_hmac_key]
 end
 
-def delete_hmac_key project_id:, access_id:
+def delete_hmac_key access_id:
   # [START storage_delete_hmac_key]
-  # project_id = "Your Google Cloud project ID"
   # access_id = "ID of an inactive HMAC key"
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
 
   # By default Storage#hmac_keys uses the Storage client project_id
-  hmac_key = storage.hmac_key access_id, project_id: project_id
+  hmac_key = storage.hmac_key access_id
 
   hmac_key.delete!
 
@@ -154,21 +148,19 @@ def delete_hmac_key project_id:, access_id:
 end
 
 if $PROGRAM_NAME == __FILE__
-  project_id = ENV["GOOGLE_CLOUD_PROJECT"]
-
   case ARGV.shift
   when "list_hmac_keys"
-    list_hmac_keys project_id:  project_id
+    list_hmac_keys
   when "create_hmac_key"
-    create_hmac_key project_id: project_id, service_account_email: ARGV.shift
+    create_hmac_key service_account_email: ARGV.shift
   when "get_hmac_key"
-    get_hmac_key project_id: project_id, access_id: ARGV.shift
+    get_hmac_key access_id: ARGV.shift
   when "activate_hmac_key"
-    activate_hmac_key project_id: project_id, access_id: ARGV.shift
+    activate_hmac_key access_id: ARGV.shift
   when "deactivate_hmac_key"
-    deactivate_hmac_key project_id: project_id, access_id: ARGV.shift
+    deactivate_hmac_key access_id: ARGV.shift
   when "delete_hmac_key"
-    delete_hmac_key project_id: project_id, access_id: ARGV.shift
+    delete_hmac_key access_id: ARGV.shift
   else
     puts <<~USAGE
       Usage: bundle exec ruby hmac.rb [command] [arguments]

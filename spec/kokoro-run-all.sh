@@ -144,6 +144,7 @@ function set_failed_status {
 }
 
 (bundle update && bundle exec rubocop) || set_failed_status
+(bundle exec rake acceptance) || set_failed_status
 
 if [[ $RUN_ALL_TESTS = "1" ]]; then
   echo "Running all tests"

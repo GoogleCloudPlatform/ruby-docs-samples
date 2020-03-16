@@ -1,4 +1,4 @@
-# Copyright 2016 Google, Inc
+# Copyright 2020 Google, LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,15 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START storage_dependencies]
-source "https://rubygems.org"
+require_relative "helper"
+require_relative "../quickstart.rb"
 
-gem "google-cloud-storage"
-# [END storage_dependencies]
+describe "Storage Quickstart" do
+  let(:storage_client) { Google::Cloud::Storage.new }
+  let(:bucket_name)    { "ruby_storage_sample_#{SecureRandom.hex}" }
 
-group :test do
-  gem "google-cloud-kms"
-  gem "minitest", "~> 5.13"
-  gem "rspec"
-  gem "rspec-retry"
+  after do
+    delete_bucket_helper bucket_name
+  end
+
+  it "creates a new bucket" do
+    assert_output "Bucket #{bucket_name} was created.\n" do
+      quickstart bucket_name: bucket_name
+    end
+
+    assert storage_client.bucket bucket_name
+  end
 end
