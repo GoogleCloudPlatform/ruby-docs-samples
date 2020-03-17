@@ -1243,6 +1243,38 @@ describe "Google Cloud Spanner API samples" do
     expect(captured_output).to include "42 Venue 42"
   end
 
+  example "query data with query options" do
+    database = create_singers_albums_database
+    create_venues_table
+
+    # Ignore the following capture block
+    capture do
+      write_datatypes_data project_id:  @project_id,
+                           instance_id: @instance.instance_id,
+                           database_id: database.database_id
+    end
+
+    capture do
+      query_with_query_options project_id:  @project_id,
+                      instance_id: @instance.instance_id,
+                      database_id: database.database_id
+    end
+
+    expect(captured_output).to include "4 Venue 4"
+    expect(captured_output).to include "19 Venue 19"
+    expect(captured_output).to include "42 Venue 42"
+
+    capture do
+      create_client_with_query_options project_id:  @project_id,
+                      instance_id: @instance.instance_id,
+                      database_id: database.database_id
+    end
+
+    expect(captured_output).to include "4 Venue 4"
+    expect(captured_output).to include "19 Venue 19"
+    expect(captured_output).to include "42 Venue 42"
+  end
+
   example "write data with array types and read" do
     database = create_boxes_database
 
