@@ -1,7 +1,9 @@
+require "google/cloud/security_center"
+
 def create_notification_config org_id:, config_id:, pubsub_topic:
   # [START scc_create_notification_config]
   require "google/cloud/security_center"
-  
+
   # org_id:       Your organization id. e.g. for organizations/123, this would
   #               be 123.
   # config_id:    Your notification config id. e.g. for config id
@@ -26,7 +28,7 @@ end
 def update_notification_config org_id:, config_id:, description: nil, pubsub_topic: nil
   # [START scc_update_notification_config]
   require "google/cloud/security_center"
-  
+
   # org_id:       Your organization id. e.g. for organizations/123, this would
   #               be 123.
   # config_id:    Your notification config id. e.g. for config id
@@ -84,7 +86,7 @@ end
 def get_notification_config org_id:, config_id:
   # [START scc_get_notification_config]
   require "google/cloud/security_center"
-  
+
   # org_id:       Your organization id. e.g. for organizations/123, this would
   #               be 123.
   # config_id:    Your notification config id. e.g. for config id
@@ -102,7 +104,7 @@ end
 def list_notification_configs org_id:
   # [START scc_list_notification_configs]
   require "google/cloud/security_center"
-  
+
   # org_id: Your organization id. e.g. for organizations/123, this would
   #         be 123.
   securitycenter = Google::Cloud::SecurityCenter.new

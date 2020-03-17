@@ -16,11 +16,11 @@ end
 
 describe "Google Cloud Security Center Notifications Sample" do
   before do
-    @securitycenter = Google::Cloud::SecurityCenter.new()
+    @securitycenter = Google::Cloud::SecurityCenter.new
     @pubsub_topic   = "projects/project-a-id/topics/notifications-sample-topic"
     @config_id      = "config-id"
     @org_id         = "1081635000895"
-    @formatted_config_id = @securitycenter.notification_config_path(@org_id, @config_id)
+    @formatted_config_id = @securitycenter.notification_config_path @org_id, @config_id
 
     cleanup!
   end
@@ -30,63 +30,61 @@ describe "Google Cloud Security Center Notifications Sample" do
   end
 
   def cleanup!
-    begin
-      @securitycenter.delete_notification_config(@formatted_config_id)
-    rescue Google::Gax::NotFoundError
-      # do nothing, means config was already cleaned up
-    end
+    @securitycenter.delete_notification_config @formatted_config_id
+  rescue Google::Gax::NotFoundError
+    puts "Config #{@formatted_config_id} already deleted"
   end
 
   it "creates notification config" do
     expect {
-      create_notification_config org_id: @org_id,
-                                 config_id: @config_id,
+      create_notification_config org_id:       @org_id,
+                                 config_id:    @config_id,
                                  pubsub_topic: @pubsub_topic
     }.to output(/Created notification config #{@config_id}/).to_stdout
 
-    config = @securitycenter.get_notification_config(@formatted_config_id)
+    config = @securitycenter.get_notification_config @formatted_config_id
     expect(config.name).to eq(@formatted_config_id)
   end
 
   it "updates notification config" do
-    create_notification_config org_id: @org_id,
-                               config_id: @config_id,
+    create_notification_config org_id:       @org_id,
+                               config_id:    @config_id,
                                pubsub_topic: @pubsub_topic
     expect {
-      update_notification_config org_id: @org_id,
-                                config_id: @config_id,
-                                description: "Updated description"
+      update_notification_config org_id:      @org_id,
+                                 config_id:   @config_id,
+                                 description: "Updated description"
     }.to output(/Updated description/).to_stdout
   end
 
   it "deletes notification config" do
-    create_notification_config org_id: @org_id,
-                               config_id: @config_id,
+    create_notification_config org_id:       @org_id,
+                               config_id:    @config_id,
                                pubsub_topic: @pubsub_topic
 
     expect {
-      delete_notification_config org_id: @org_id,
+      delete_notification_config org_id:    @org_id,
                                  config_id: @config_id
     }.to output(/Deleted notification config: #{@config_id}/).to_stdout
   end
 
   it "gets notification config" do
-      create_notification_config org_id: @org_id,
-                                 config_id: @config_id,
-                                 pubsub_topic: @pubsub_topic
-      expect {
-        get_notification_config  org_id: @org_id,
-                                 config_id: @config_id
-      }.to output(/#{@formatted_config_id}/).to_stdout
+    create_notification_config org_id:       @org_id,
+                               config_id:    @config_id,
+                               pubsub_topic: @pubsub_topic
+    expect {
+      get_notification_config  org_id:    @org_id,
+                               config_id: @config_id
+    }.to output(/#{@formatted_config_id}/).to_stdout
   end
 
   it "lists notification configs" do
-      create_notification_config org_id: @org_id,
-                                 config_id: @config_id,
-                                 pubsub_topic: @pubsub_topic
+    create_notification_config org_id:       @org_id,
+                               config_id:    @config_id,
+                               pubsub_topic: @pubsub_topic
 
-      expect {
-        list_notification_configs org_id: @org_id
-      }.to output(/#{@formatted_config_id}/).to_stdout
+    expect {
+      list_notification_configs org_id: @org_id
+    }.to output(/#{@formatted_config_id}/).to_stdout
   end
 end
