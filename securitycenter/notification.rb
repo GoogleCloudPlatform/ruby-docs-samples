@@ -1,7 +1,7 @@
-# [START scc_create_notification_config]
-require "google/cloud/security_center"
-
 def create_notification_config org_id:, config_id:, pubsub_topic:
+  # [START scc_create_notification_config]
+  require "google/cloud/security_center"
+  
   # org_id:       Your organization id. e.g. for organizations/123, this would
   #               be 123.
   # config_id:    Your notification config id. e.g. for config id
@@ -20,13 +20,13 @@ def create_notification_config org_id:, config_id:, pubsub_topic:
 
   response = securitycenter.create_notification_config formatted_parent, config_id, notification_config
   puts "Created notification config #{config_id}: #{response}. "
+  # [END scc_create_notification_config]
 end
-# [END scc_create_notification_config]
-
-# [START scc_update_notification_config]
-require "google/cloud/security_center"
 
 def update_notification_config org_id:, config_id:, description: nil, pubsub_topic: nil
+  # [START scc_update_notification_config]
+  require "google/cloud/security_center"
+  
   # org_id:       Your organization id. e.g. for organizations/123, this would
   #               be 123.
   # config_id:    Your notification config id. e.g. for config id
@@ -60,13 +60,13 @@ def update_notification_config org_id:, config_id:, description: nil, pubsub_top
 
   response = securitycenter.update_notification_config notification_config, update_mask: update_mask
   puts response
+  # [END scc_update_notification_config]
 end
-# [END scc_update_notification_config]
-
-# [START scc_delete_notification_config]
-require "google/cloud/security_center"
 
 def delete_notification_config org_id:, config_id:
+  # [START scc_delete_notification_config]
+  require "google/cloud/security_center"
+
   # org_id:       Your organization id. e.g. for organizations/123, this would
   #               be 123.
   # config_id:    Your notification config id. e.g. for config id
@@ -78,13 +78,13 @@ def delete_notification_config org_id:, config_id:
 
   response = securitycenter.delete_notification_config formatted_config_id
   puts "Deleted notification config: #{config_id}"
+  # [END scc_delete_notification_config]
 end
-# [END scc_delete_notification_config]
-
-# [START scc_get_notification_config]
-require "google/cloud/security_center"
 
 def get_notification_config org_id:, config_id:
+  # [START scc_get_notification_config]
+  require "google/cloud/security_center"
+  
   # org_id:       Your organization id. e.g. for organizations/123, this would
   #               be 123.
   # config_id:    Your notification config id. e.g. for config id
@@ -96,13 +96,13 @@ def get_notification_config org_id:, config_id:
 
   response = securitycenter.get_notification_config formatted_config_id
   puts "Notification config fetched: #{response}"
+  # [END scc_get_notification_config]
 end
-# [END scc_get_notification_config]
-
-# [START scc_list_notification_configs]
-require "google/cloud/security_center"
 
 def list_notification_configs org_id:
+  # [START scc_list_notification_configs]
+  require "google/cloud/security_center"
+  
   # org_id: Your organization id. e.g. for organizations/123, this would
   #         be 123.
   securitycenter = Google::Cloud::SecurityCenter.new
@@ -114,8 +114,8 @@ def list_notification_configs org_id:
       puts element
     end
   end
+  # [END scc_list_notification_configs]
 end
-# [END scc_list_notification_configs]
 
 if $PROGRAM_NAME == __FILE__
   case ARGV.shift
