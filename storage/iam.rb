@@ -122,10 +122,10 @@ def remove_bucket_conditional_iam_binding bucket_name:, role:, title:, descripti
   storage = Google::Cloud::Storage.new
   bucket = storage.bucket bucket_name
 
-  binding_to_remove = nil
   bucket.policy requested_policy_version: 3 do |policy|
     policy.version = 3
 
+    binding_to_remove = nil
     policy.bindings.each do |b|
       condition = {
         title:       title,
@@ -141,13 +141,10 @@ def remove_bucket_conditional_iam_binding bucket_name:, role:, title:, descripti
     end
     if binding_to_remove
       policy.bindings.remove binding_to_remove
+      puts "Conditional Binding was removed."
+    else
+      puts "No matching conditional binding found."
     end
-  end
-
-  if binding_to_remove
-    puts "Conditional Binding was removed."
-  else
-    puts "No matching conditional binding found."
   end
   # [END storage_remove_bucket_conditional_iam_binding]
 end
