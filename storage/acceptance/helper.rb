@@ -47,7 +47,7 @@ def retry_resource_exhaustion
       return
     rescue Google::Cloud::ResourceExhaustedError => e
       puts "\n#{e} Gonna try again"
-      sleep rand(1..3)
+      sleep rand(3..5)
     rescue StandardError => e
       puts "\n#{e}"
       return
