@@ -95,4 +95,30 @@ describe "IAM Snippets" do
       assert_equal policy.condition.expression, expression
     end
   end
+
+  describe "remove_bucket_conditional_iam_binding" do
+    it "remove conditional IAM binding to a bucket" do
+      title = "title"
+      description = "description"
+      expression = "resource.name.startsWith('projects/_/buckets/bucket-name/objects/prefix-a-')"
+      bucket.uniform_bucket_level_access = true
+      capture_io do
+        add_bucket_conditional_iam_binding bucket_name: bucket.name,
+                                           role:        role,
+                                           member:      member,
+                                           title:       title,
+                                           description: description,
+                                           expression:  expression
+      end
+      assert_output "Conditional Binding was removed.\n" do
+        remove_bucket_conditional_iam_binding bucket_name: bucket.name,
+                                              role:        role,
+                                              title:       title,
+                                              description: description,
+                                              expression:  expression
+      end
+      bindings = bucket.policy(requested_policy_version: 3).bindings.select(&:condition)
+      assert_equal bindings.size, 0
+    end
+  end
 end

@@ -123,6 +123,7 @@ Commands:
   add_bucket_iam_member    <bucket> <iam_role> <iam_member>                                                        Add a bucket-level IAM member
   add_bucket_conditional_iam_binding <bucket> <iam_role> <iam_member> <cond_title> <cond_description> <cond_expr>  Add a conditional bucket-level binding
   remove_bucket_iam_member <bucket> <iam_role> <iam_member>                                                        Remove a bucket-level IAM member
+  remove_bucket_conditional_iam_binding <bucket> <iam_member> <cond_title> <cond_description> <cond_expr>          Remove a conditional bucket-level binding
 
 Environment variables:
   GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID

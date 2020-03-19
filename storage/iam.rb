@@ -109,6 +109,49 @@ def add_bucket_conditional_iam_binding bucket_name:, role:, member:, title:, des
   # [END storage_add_bucket_conditional_iam_binding]
 end
 
+def remove_bucket_conditional_iam_binding bucket_name:, role:, title:, description:, expression:
+  # [START storage_remove_bucket_conditional_iam_binding]
+  # bucket_name = "Your Google Cloud Storage bucket name"
+  # role        = "Bucket-level IAM role"
+  # title       = "Condition Title"
+  # description = "Condition Description"
+  # expression  = "Condition Expression"
+
+  require "google/cloud/storage"
+
+  storage = Google::Cloud::Storage.new
+  bucket = storage.bucket bucket_name
+
+  binding_to_remove = nil
+  bucket.policy requested_policy_version: 3 do |policy|
+    policy.version = 3
+
+    policy.bindings.each do |b|
+      condition = {
+        title:       title,
+        description: description,
+        expression:  expression
+      }
+      if (b.role == role) && (b.condition &&
+        b.condition.title == title &&
+        b.condition.description == description &&
+        b.condition.expression == expression)
+        binding_to_remove = b
+      end
+    end
+    if binding_to_remove
+      policy.bindings.remove binding_to_remove
+    end
+  end
+
+  if binding_to_remove
+    puts "Conditional Binding was removed."
+  else
+    puts "No matching conditional binding found."
+  end
+  # [END storage_remove_bucket_conditional_iam_binding]
+end
+
 def run_sample arguments
   command = arguments.shift
 
@@ -131,6 +174,12 @@ def run_sample arguments
     remove_bucket_iam_member bucket_name: arguments.shift,
                              role:        arguments.shift,
                              member:      arguments.shift
+  when "remove_bucket_conditional_iam_binding"
+    remove_bucket_conditional_iam_binding bucket_name: arguments.shift,
+                                          role:        arguments.shift,
+                                          title:       arguments.shift,
+                                          description: arguments.shift,
+                                          expression:  arguments.shift
   else
     puts <<~USAGE
       Usage: bundle exec ruby iam.rb [command] [arguments]
@@ -140,6 +189,7 @@ def run_sample arguments
         add_bucket_iam_member    <bucket> <iam_role> <iam_member>                                                        Add a bucket-level IAM member
         add_bucket_conditional_iam_binding <bucket> <iam_role> <iam_member> <cond_title> <cond_description> <cond_expr>  Add a conditional bucket-level binding
         remove_bucket_iam_member <bucket> <iam_role> <iam_member>                                                        Remove a bucket-level IAM member
+        remove_bucket_conditional_iam_binding <bucket> <iam_member> <cond_title> <cond_description> <cond_expr>          Remove a conditional bucket-level binding
 
       Environment variables:
         GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
