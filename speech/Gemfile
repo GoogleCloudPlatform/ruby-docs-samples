@@ -19,4 +19,5 @@ gem "google-cloud-speech"
 group :test do
   gem "google-cloud-storage"
   gem "rspec"
+  gem "rspec_junit_formatter"
 end

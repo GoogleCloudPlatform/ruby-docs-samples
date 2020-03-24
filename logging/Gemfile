@@ -20,5 +20,6 @@ group :test do
   gem "google-cloud-storage"
   gem "rack-test"
   gem "rspec"
+  gem "rspec_junit_formatter"
   gem "rspec-retry"
 end

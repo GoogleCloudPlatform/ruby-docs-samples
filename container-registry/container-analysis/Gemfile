@@ -20,4 +20,5 @@ gem "public_suffix", "= 3.0.3"
 
 group :test do
   gem "rspec"
+  gem "rspec_junit_formatter"
 end

@@ -18,5 +18,6 @@ gem "google-cloud-secret_manager", "~> 0.2"
 
 group :test do
   gem "rspec"
+  gem "rspec_junit_formatter"
   gem "rspec-retry"
 end

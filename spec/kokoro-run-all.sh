@@ -157,11 +157,13 @@ if [[ $RUN_ALL_TESTS = "1" ]]; then
 
     start_time="$(date -u +%s)"
 
-    (bundle update && bundle exec rspec --format documentation) || set_failed_status
+    (bundle update && bundle exec rspec --format RspecJunitFormatter --out sponge_log.xml) || set_failed_status
 
     if [[ $E2E = "true" ]]; then
       # Clean up deployed version
       bundle exec ruby "$REPO_DIRECTORY/spec/e2e_cleanup.rb" "$TEST_DIR" "$BUILD_ID"
+      chmod +x $KOKORO_GFILE_DIR/linux_amd64/buildcop
+      $KOKORO_GFILE_DIR/linux_amd64/buildcop
     fi
 
     end_time="$(date -u +%s)"
@@ -182,11 +184,13 @@ else
 
     start_time="$(date -u +%s)"
 
-    (bundle update && bundle exec rspec --format documentation) || set_failed_status
+    (bundle update && bundle exec rspec --format RspecJunitFormatter --out sponge_log.xml || set_failed_status
 
     if [[ $E2E = "true" ]]; then
       # Clean up deployed version
       bundle exec ruby "$REPO_DIRECTORY/spec/e2e_cleanup.rb" "$TEST_DIR" "$BUILD_ID"
+      chmod +x $KOKORO_GFILE_DIR/linux_amd64/buildcop
+      $KOKORO_GFILE_DIR/linux_amd64/buildcop
     fi
 
     end_time="$(date -u +%s)"

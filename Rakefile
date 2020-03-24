@@ -47,6 +47,14 @@ def each_lib
   end
 end
 
+def each_gemfile
+  gemfiles = Dir.glob("**/Gemfile") - ["Gemfile"]
+  gemfiles.map! { |gemfile| File.dirname gemfile }.uniq!
+  gemfiles.each do |gemfile|
+    yield gemfile
+  end
+end
+
 def test_task dir, type
   Rake::TestTask.new "#{dir}_#{type}" do |t|
     t.test_files = FileList["#{dir}/#{type}/**/*_test.rb"]
