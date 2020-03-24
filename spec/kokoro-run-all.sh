@@ -162,8 +162,6 @@ if [[ $RUN_ALL_TESTS = "1" ]]; then
     if [[ $E2E = "true" ]]; then
       # Clean up deployed version
       bundle exec ruby "$REPO_DIRECTORY/spec/e2e_cleanup.rb" "$TEST_DIR" "$BUILD_ID"
-      chmod +x $KOKORO_GFILE_DIR/linux_amd64/buildcop
-      $KOKORO_GFILE_DIR/linux_amd64/buildcop
     fi
 
     end_time="$(date -u +%s)"
@@ -188,8 +186,6 @@ else
     if [[ $E2E = "true" ]]; then
       # Clean up deployed version
       bundle exec ruby "$REPO_DIRECTORY/spec/e2e_cleanup.rb" "$TEST_DIR" "$BUILD_ID"
-      chmod +x $KOKORO_GFILE_DIR/linux_amd64/buildcop
-      $KOKORO_GFILE_DIR/linux_amd64/buildcop
     fi
 
     end_time="$(date -u +%s)"
@@ -199,5 +195,8 @@ else
     popd
   done
 fi
+
+chmod +x $KOKORO_GFILE_DIR/linux_amd64/buildcop
+$KOKORO_GFILE_DIR/linux_amd64/buildcop --repo GoogleCloudPlatform/ruby-docs-samples
 
 exit $EXIT_STATUS
