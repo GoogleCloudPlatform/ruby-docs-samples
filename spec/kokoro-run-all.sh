@@ -175,8 +175,7 @@ if [[ $RUN_ALL_TESTS = "1" ]]; then
 else
   SPEC_DIRS=$(find $CHANGED_DIRS -type d -name 'spec' -path "*/*" -not -path "*vendor/*" -exec dirname {} \; | sort | uniq)
   echo "Running tests in modified directories: $SPEC_DIRS"
-  for PRODUCT in $SPEC_DIRS
-  do
+  for PRODUCT in $SPEC_DIRS; do
     # Run Tests
     echo "[$PRODUCT]"
     export TEST_DIR="$PRODUCT"
@@ -184,7 +183,7 @@ else
 
     start_time="$(date -u +%s)"
 
-    (bundle update && bundle exec rspec --format RspecJunitFormatter --out sponge_log.xml || set_failed_status
+    (bundle update && bundle exec rspec --format RspecJunitFormatter --out sponge_log.xml) || set_failed_status
 
     if [[ $E2E = "true" ]]; then
       # Clean up deployed version
