@@ -17,7 +17,7 @@ scaffolding for other frameworks and use cases.
 
 1. Change directories to the sample that you want to test. Example:
    ```
-   cd ruby-docs-samples/storage
+   cd ruby-docs-samples/bigtable
    ```
 
 1. Run the tests from the command line.
