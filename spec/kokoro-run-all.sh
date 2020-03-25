@@ -181,7 +181,7 @@ else
 
     start_time="$(date -u +%s)"
 
-    (bundle update && bundle exec rspec --format RspecJunitFormatter --out sponge_log.xml) || set_failed_status
+    (bundle update && bundle exec rspec --format documentation --format RspecJunitFormatter --out sponge_log.xml | tee sponge_log.log) || set_failed_status
 
     if [[ $E2E = "true" ]]; then
       # Clean up deployed version
