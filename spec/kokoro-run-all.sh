@@ -197,6 +197,6 @@ else
 fi
 
 chmod +x $KOKORO_GFILE_DIR/linux_amd64/buildcop
-$KOKORO_GFILE_DIR/linux_amd64/buildcop --repo GoogleCloudPlatform/ruby-docs-samples
+$KOKORO_GFILE_DIR/linux_amd64/buildcop
 
 exit $EXIT_STATUS
