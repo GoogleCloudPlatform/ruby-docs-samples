@@ -21,7 +21,7 @@ def analyze_labels_gcs path:
   video = Google::Cloud::VideoIntelligence.new
 
   # Register a callback during the method call
-  operation = video.annotate_video input_uri: path, features: [:LABEL_DETECTION] do |operation|
+  operation = video.annotate_video [:LABEL_DETECTION], input_uri: path do |operation|
     raise operation.results.message? if operation.error?
     puts "Finished Processing."
 
@@ -62,7 +62,7 @@ def analyze_labels_local path:
   video_contents = File.binread path
 
   # Register a callback during the method call
-  operation = video.annotate_video input_content: video_contents, features: [:LABEL_DETECTION] do |operation|
+  operation = video.annotate_video [:LABEL_DETECTION], input_content: video_contents do |operation|
     raise operation.results.message? if operation.error?
     puts "Finished Processing."
 
@@ -101,7 +101,7 @@ def analyze_shots path:
   video = Google::Cloud::VideoIntelligence.new
 
   # Register a callback during the method call
-  operation = video.annotate_video input_uri: path, features: [:SHOT_CHANGE_DETECTION] do |operation|
+  operation = video.annotate_video [:SHOT_CHANGE_DETECTION], input_uri: path do |operation|
     raise operation.results.message? if operation.error?
     puts "Finished processing."
 
@@ -133,7 +133,7 @@ def analyze_explicit_content path:
   video = Google::Cloud::VideoIntelligence.new
 
   # Register a callback during the method call
-  operation = video.annotate_video input_uri: path, features: [:EXPLICIT_CONTENT_DETECTION] do |operation|
+  operation = video.annotate_video [:EXPLICIT_CONTENT_DETECTION], input_uri: path do |operation|
     raise operation.results.message? if operation.error?
     puts "Finished Processing."
 
@@ -168,7 +168,7 @@ def transcribe_speech_gcs path:
   }
 
   # Register a callback during the method call
-  operation = video.annotate_video input_uri: path, features: [:SPEECH_TRANSCRIPTION], video_context: context do |operation|
+  operation = video.annotate_video [:SPEECH_TRANSCRIPTION], input_uri: path, video_context: context do |operation|
     raise operation.results.message? if operation.error?
     puts "Finished Processing."
 
@@ -208,7 +208,7 @@ def detect_text_gcs path:
   video = Google::Cloud::VideoIntelligence.new
 
   # Register a callback during the method call
-  operation = video.annotate_video input_uri: path, features: [:TEXT_DETECTION] do |operation|
+  operation = video.annotate_video [:TEXT_DETECTION], input_uri: path do |operation|
     raise operation.results.message? if operation.error?
     puts "Finished Processing."
 
@@ -258,7 +258,7 @@ def detect_text_local path:
   video_contents = File.binread path
 
   # Register a callback during the method call
-  operation = video.annotate_video input_content: video_contents, features: [:TEXT_DETECTION] do |operation|
+  operation = video.annotate_video [:TEXT_DETECTION], input_content: video_contents do |operation|
     raise operation.results.message? if operation.error?
     puts "Finished Processing."
 
@@ -306,7 +306,7 @@ def track_objects_gcs path:
   video = Google::Cloud::VideoIntelligence.new
 
   # Register a callback during the method call
-  operation = video.annotate_video input_uri: path, features: [:OBJECT_TRACKING] do |operation|
+  operation = video.annotate_video [:OBJECT_TRACKING], input_uri: path do |operation|
     raise operation.results.message? if operation.error?
     puts "Finished Processing."
 
@@ -357,7 +357,7 @@ def track_objects_local path:
   video_contents = File.binread path
 
   # Register a callback during the method call
-  operation = video.annotate_video input_content: video_contents, features: [:OBJECT_TRACKING] do |operation|
+  operation = video.annotate_video [:OBJECT_TRACKING], input_content: video_contents do |operation|
     raise operation.results.message? if operation.error?
     puts "Finished Processing."
 
