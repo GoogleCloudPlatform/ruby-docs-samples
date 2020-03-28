@@ -23,6 +23,8 @@ end
 
 def delete_metric_descriptor project_id:, descriptor_name:
   # [START monitoring_delete_metric]
+  # project_id: the text identifer of you Google Cloud project
+  # descriptor_name: the text name of the descriptor (eg: 'run.googleapis.com/request_count')
   client = Google::Cloud::Monitoring::Metric.new
   project_name = Google::Cloud::Monitoring::V3::MetricServiceClient.metric_descriptor_path project_id, descriptor_name
 
