@@ -14,7 +14,7 @@
 
 source "https://rubygems.org"
 
-gem "google-cloud-secret_manager", "~> 0.2"
+gem "google-cloud-secret_manager"
 
 group :test do
   gem "rspec"
