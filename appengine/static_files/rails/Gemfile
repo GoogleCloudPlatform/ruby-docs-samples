@@ -25,5 +25,6 @@ group :test do
   gem "poltergeist"
   gem "puma"
   gem "rspec-rails"
+  gem "rspec_junit_formatter"
   gem "therubyracer"
 end

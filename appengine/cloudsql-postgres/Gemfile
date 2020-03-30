@@ -26,5 +26,6 @@ group :test do
   gem "poltergeist"
   gem "rack-test"
   gem "rspec"
+  gem "rspec_junit_formatter"
   gem "sqlite3"
 end
