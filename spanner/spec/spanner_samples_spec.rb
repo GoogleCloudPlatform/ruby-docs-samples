@@ -22,22 +22,33 @@ describe "Google Cloud Spanner API samples" do
       skip "GOOGLE_CLOUD_SPANNER_TEST_INSTANCE and/or GOOGLE_CLOUD_SPANNER_PROJECT not defined"
     end
 
-    @project_id  = ENV["GOOGLE_CLOUD_SPANNER_PROJECT"]
-    @instance_id = ENV["GOOGLE_CLOUD_SPANNER_TEST_INSTANCE"]
-    @seed        = SecureRandom.hex 8
-    @database_id = "test_db_#{@seed}"
-    @spanner     = Google::Cloud::Spanner.new project: @project_id
-    @instance    = @spanner.instance @instance_id
+    @project_id           = ENV["GOOGLE_CLOUD_SPANNER_PROJECT"]
+    @instance_id          = ENV["GOOGLE_CLOUD_SPANNER_TEST_INSTANCE"]
+    @seed                 = SecureRandom.hex 8
+    @database_id          = "test_db_#{@seed}"
+    @backup_id            = "test_bu_#{@seed}"
+    @restored_database_id = "restored_db_#{@seed}"
+    @expire_time          = Time.now + 36_000
+    @spanner              = Google::Cloud::Spanner.new project: @project_id
+    @instance             = @spanner.instance @instance_id
   end
 
   before :each do
     @test_database = @instance.database @database_id
     @test_database&.drop
+    @test_database = @instance.database @restored_database_id
+    @test_database&.drop
+    @test_backup = @instance.backup @backup_id
+    @test_backup&.delete
   end
 
   after do
     @test_database = @instance.database @database_id
     @test_database&.drop
+    @test_database = @instance.database @restored_database_id
+    @test_database&.drop
+    @test_backup = @instance.backup @backup_id
+    @test_backup&.delete
   end
 
   # Creates a temporary database with random ID (will be dropped after test)
@@ -75,6 +86,59 @@ describe "Google Cloud Spanner API samples" do
     job.wait_until_done!
     @test_database = job.database
   end
+
+  def create_database_with_data
+    database = create_singers_albums_database
+
+    capture do
+      write_using_dml project_id:  @project_id,
+                      instance_id: @instance.instance_id,
+                      database_id: database.database_id
+
+      @test_database = @instance.database @database_id
+    end
+
+    @test_database
+  end
+
+  # Creates a temporary backup with random ID (will be dropped after test)
+  def create_backup_with_data
+    database = create_singers_albums_database
+
+    capture do
+      write_using_dml project_id:  @project_id,
+                      instance_id: @instance.instance_id,
+                      database_id: database.database_id
+    end
+
+    capture do
+      create_backup project_id:  @project_id,
+                    instance_id: @instance.instance_id,
+                    database_id: database.database_id,
+                    backup_id:   @backup_id,
+                    expire_time: @expire_time
+
+      @test_backup = @instance.backup @backup_id
+    end
+
+    @test_backup
+  end
+
+  def restore_database_from_backup
+    backup = create_backup_with_data
+
+    capture do
+      restore_backup project_id:  @project_id,
+                     instance_id: @instance.instance_id,
+                     database_id: @restored_database_id,
+                     backup_id:   backup.backup_id
+
+      @test_database = @instance.database @restored_database_id
+    end
+
+    @test_database
+  end
+
 
   # Capture and return STDOUT output by block
   def capture
@@ -973,10 +1037,10 @@ describe "Google Cloud Spanner API samples" do
       write_using_dml project_id:  @project_id,
                       instance_id: @instance.instance_id,
                       database_id: database.database_id
-    }.to output("4 records inserted.\n").to_stdout
+    }.to output("14 records inserted.\n").to_stdout
 
     singers = client.execute("SELECT * FROM Singers").rows.to_a
-    expect(singers.count).to eq 9
+    expect(singers.count).to eq 19
     expect(singers.find { |s| s[:FirstName] == "Dylan" }).not_to be nil
 
     expect {
@@ -1074,13 +1138,13 @@ describe "Google Cloud Spanner API samples" do
 
     client = @spanner.client @instance.instance_id, database.database_id
 
-    expect(client.execute("SELECT * FROM Singers").rows.count).to eq 9
+    expect(client.execute("SELECT * FROM Singers").rows.count).to eq 19
 
     expect {
       delete_using_partitioned_dml project_id:  @project_id,
                                    instance_id: @instance.instance_id,
                                    database_id: database.database_id
-    }.to output("4 records deleted.\n").to_stdout
+    }.to output("14 records deleted.\n").to_stdout
 
     singers = client.execute("SELECT * FROM Singers").rows.to_a
     expect(singers.count).to eq 5
@@ -1337,5 +1401,176 @@ describe "Google Cloud Spanner API samples" do
     expect(captured_output).to include "10.001"
     expect(captured_output).to include "11.1212"
     expect(captured_output).to include "104.4123101"
+  end
+
+  example "create backup" do
+    expect(@instance.backup(@backup_id)).to be nil
+    database = create_database_with_data
+
+    capture do
+      create_backup project_id:  @project_id,
+                    instance_id: @instance.instance_id,
+                    database_id: database.database_id,
+                    backup_id:   @backup_id,
+                    expire_time: @expire_time
+    end
+
+    expect(captured_output).to include(
+      "Backup operation in progress"
+    )
+    expect(captured_output).to include(
+      "Backup #{@backup_id} of size 607 bytes was created at"
+    )
+
+    @test_backup = @instance.backup @backup_id
+    expect(@test_backup).not_to be nil
+  end
+
+  example "restore backup" do
+    expect(@instance.backup(@backup_id)).to be nil
+    backup = create_backup_with_data
+
+    capture do
+      restore_backup project_id:  @project_id,
+                     instance_id: @instance.instance_id,
+                     database_id: @restored_database_id,
+                     backup_id:   backup.backup_id
+    end
+
+    expect(captured_output).to include(
+      "Waiting for restore backup operation to complete"
+    )
+    expect(captured_output).to include(
+      "Database #{@database_id} restored from backup #{@backup_id}"
+    )
+
+    @test_database = @instance.database @restored_database_id
+    expect(@test_database).not_to be nil
+  end
+
+  example "cancel backup operation" do
+    expect(@instance.backup(@backup_id)).to be nil
+    database = create_database_with_data
+
+    capture do
+      create_backup_cancel project_id:  @project_id,
+                           instance_id: @instance.instance_id,
+                           database_id: database.database_id,
+                           backup_id:   @backup_id,
+                           expire_time: @expire_time
+    end
+
+    expect(captured_output).to include(
+      "Backup operation in progress"
+    )
+    expect(captured_output).to include(
+      "#{@backup_id} creation job cancelled"
+    )
+
+    @test_backup = @instance.backup @backup_id
+    expect(@test_backup).to be nil
+  end
+
+  example "list backup operations" do
+    expect(@instance.backup(@backup_id)).to be nil
+    backup = create_backup_with_data
+
+    capture do
+      list_backup_operations project_id:  @project_id,
+                             instance_id: @instance.instance_id,
+                             database_id: @database_id
+    end
+
+    expect(captured_output).to include(
+      "Backup #{backup.backup_id} pending: 100% complete"
+    )
+
+    @test_backup = @instance.backup @backup_id
+    expect(@test_backup).not_to be nil
+  end
+
+  example "list database operations" do
+    expect(@instance.backup(@backup_id)).to be nil
+    database = restore_database_from_backup
+
+    capture do
+      list_database_operations project_id:  @project_id,
+                               instance_id: @instance.instance_id
+    end
+
+    expect(captured_output).to include(
+      "Database #{database.database_id} restored from backup #{@backup_id} is in READY_OPTIMIZING state"
+    )
+
+    @test_database = @instance.database @database_id
+    expect(@test_database).not_to be nil
+  end
+
+  example "list backups with various filters" do
+    expect(@instance.backup(@backup_id)).to be nil
+    backup = create_backup_with_data
+
+    capture do
+      list_backups project_id:  @project_id,
+                   instance_id: @instance.instance_id
+    end
+
+    expect(captured_output).to include(
+      "All backups\n#{backup.backup_id}"
+    )
+    expect(captured_output).to include(
+      "All backups that contains a name \"test_bu_\":\n#{backup.backup_id}"
+    )
+    expect(captured_output).to include(
+      "All backups for a database that contains a name \"test_db_\":\n#{backup.backup_id}"
+    )
+    expect(captured_output).to include(
+      "All backups that expire before a timestamp:\n#{backup.backup_id}"
+    )
+    expect(captured_output).to include(
+      "All backups with a size greater than 500 bytes:\n#{backup.backup_id}"
+    )
+    expect(captured_output).to include(
+      "All backups that were created after a timestamp that are also ready:\n#{backup.backup_id}"
+    )
+    expect(captured_output).to include(
+      "All backups with pagination:\n#{backup.backup_id}"
+    )
+
+    @test_backup = @instance.backup @backup_id
+    expect(@test_backup).not_to be nil
+  end
+
+  example "delete backup" do
+    expect(@instance.backup(@backup_id)).to be nil
+    backup = create_backup_with_data
+
+    capture do
+      delete_backup project_id:  @project_id,
+                    instance_id: @instance.instance_id,
+                    backup_id:   backup.backup_id
+    end
+
+    expect(captured_output).to include(
+      "Backup #{backup.backup_id} deleted"
+    )
+
+    @test_backup = @instance.backup @backup_id
+    expect(@test_backup).to be nil
+  end
+
+  example "update expiration time" do
+    expect(@instance.backup(@backup_id)).to be nil
+    backup = create_backup_with_data
+
+    capture do
+      update_backup_expiration_time project_id:  @project_id,
+                                    instance_id: @instance.instance_id,
+                                    backup_id:   backup.backup_id
+    end
+
+    expect(captured_output).to include(
+      "Expiration time updated: #{@expire_time + 2_592_000}"
+    )
   end
 end
