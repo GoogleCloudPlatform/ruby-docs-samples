@@ -403,6 +403,19 @@ describe "Files Snippets" do
     end
   end
 
+  describe "generate_signed_post_policy_v4" do
+    it "generates a v4 signed post policy v4 for a file in a bucket" do
+      refute bucket.file remote_file_name
+
+      out, _err = capture_io do
+        generate_signed_post_policy_v4 bucket_name: bucket.name,
+                                       file_name:   remote_file_name
+      end
+
+      assert_includes out, ""
+    end
+  end
+
   describe "set_event_based_hold" do
     it "sets an event-based hold for a file in a bucket" do
       bucket.create_file local_file, remote_file_name
