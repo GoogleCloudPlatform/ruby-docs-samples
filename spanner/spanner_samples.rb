@@ -1621,8 +1621,8 @@ def list_database_operations project_id:, instance_id:
     if job.error?
       puts job.error
     else
-      restore_info = job.database.restore_info
-      puts "Database #{job.database.database_id} restored from backup is #{job.progress_percent}% optimized"
+      progress_percent = job.grpc.metadata.progress.progress_percent
+      puts "Database #{job.database.database_id} restored from backup is #{progress_percent}% optimized"
     end
   end
   # [END spanner_list_database_operations]

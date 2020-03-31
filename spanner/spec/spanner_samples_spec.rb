@@ -114,8 +114,6 @@ describe "Google Cloud Spanner API samples" do
 
     return @test_backup if @test_backup
 
-    p "Bkup"
-
     database = create_singers_albums_database
 
     capture do
@@ -1416,8 +1414,7 @@ describe "Google Cloud Spanner API samples" do
   end
 
   example "create backup" do
-    @instance.backup(@backup_id)&.drop
-
+    cleanup_backup_resources
     database = create_database_with_data
 
     capture do
@@ -1460,24 +1457,24 @@ describe "Google Cloud Spanner API samples" do
   end
 
   example "cancel backup operation" do
-    cleanup_backup_resources
     database = create_database_with_data
 
+    cancel_backup_id = "cancel_#{@backup_id}"
     capture do
       create_backup_cancel project_id:  @project_id,
                            instance_id: @instance.instance_id,
                            database_id: database.database_id,
-                           backup_id:   @backup_id
+                           backup_id:   cancel_backup_id
     end
 
     expect(captured_output).to include(
       "Backup operation in progress"
     )
     expect(captured_output).to include(
-      "#{@backup_id} creation job cancelled"
+      "#{cancel_backup_id} creation job cancelled"
     )
 
-    @test_backup = @instance.backup @backup_id
+    @test_backup = @instance.backup cancel_backup_id
     expect(@test_backup).to be nil
   end
 
@@ -1490,8 +1487,8 @@ describe "Google Cloud Spanner API samples" do
                              database_id: @database_id
     end
 
-    expect(captured_output).to include(
-      "Backup #{backup.backup_id} on database #{@database_id} is 100% complete"
+    expect(captured_output).to match(
+      /Backup #{backup.backup_id} on database #{@database_id} is \d+% complete/
     )
 
     @test_backup = @instance.backup @backup_id
@@ -1506,8 +1503,8 @@ describe "Google Cloud Spanner API samples" do
                                instance_id: @instance.instance_id
     end
 
-    expect(captured_output).to include(
-      "Database #{database.database_id} restored from backup #{@backup_id} is in READY_OPTIMIZING state"
+    expect(captured_output).to match(
+      /Database #{database.database_id} restored from backup is \d+% optimized/
     )
 
     @test_database = @instance.database @database_id
