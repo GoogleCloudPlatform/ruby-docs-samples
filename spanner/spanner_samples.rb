@@ -1505,19 +1505,19 @@ def write_read_float64_array project_id:, instance_id:, database_id:
   # [END spanner_write_read_float64_array]
 end
 
-def create_backup project_id:, instance_id:, database_id:, backup_id:, expire_time:
+def create_backup project_id:, instance_id:, database_id:, backup_id:
   # [START spanner_create_backup]
   # project_id  = "Your Google Cloud project ID"
   # instance_id = "Your Spanner instance ID"
   # database_id = "Your Spanner database ID"
   # backup_id = "Your Spanner backup ID"
-  # expire_time = "Your Spanner backup expiration time"
 
   require "google/cloud/spanner"
 
   spanner  = Google::Cloud::Spanner.new project: project_id
   instance = spanner.instance instance_id
   database = instance.database database_id
+  expire_time = Time.now + 14 * 24 * 3600 # 14 days from now
 
   job = database.create_backup backup_id, expire_time
 
@@ -1550,23 +1550,23 @@ def restore_backup project_id:, instance_id:, database_id:, backup_id:
   job.wait_until_done!
 
   restore_info = job.database.restore_info
-  puts "Database #{restore_info.backup_info.source_database_id} restored from backup #{restore_info.backup_info.backup_id}"
+  puts "Database #{restore_info.backup_info.source_database_id} was restored to #{database_id} from backup #{restore_info.backup_info.backup_id}"
   # [END spanner_restore_backup]
 end
 
-def create_backup_cancel project_id:, instance_id:, database_id:, backup_id:, expire_time:
+def create_backup_cancel project_id:, instance_id:, database_id:, backup_id:
   # [START spanner_cancel_backup_create]
   # project_id  = "Your Google Cloud project ID"
   # instance_id = "Your Spanner instance ID"
   # database_id = "Your Spanner database ID"
   # backup_id = "Your Spanner backup ID"
-  # expire_time = "Your Spanner backup expiration time"
 
   require "google/cloud/spanner"
 
   spanner  = Google::Cloud::Spanner.new project: project_id
   instance = spanner.instance instance_id
   database = instance.database database_id
+  expire_time = Time.now + 14 * 24 * 3600 # 14 days from now
 
   job = database.create_backup backup_id, expire_time
 
@@ -1594,12 +1594,12 @@ def list_backup_operations project_id:, instance_id:, database_id:
   spanner  = Google::Cloud::Spanner.new project: project_id
   instance = spanner.instance instance_id
 
-  jobs = instance.backup_operations filter: "metadata.database:#{database_id} AND metadata.@type:CreateBackupMetadata"
+  jobs = instance.backup_operations filter: "metadata.@type:type.googleapis.com/google.spanner.admin.database.v1.CreateBackupMetadata"
   jobs.each do |job|
     if job.error?
       puts job.error
     else
-      puts "Backup #{job.backup.backup_id} pending: #{job.progress_percent}% complete"
+      puts "Backup #{job.backup.backup_id} on database #{database_id} is #{job.progress_percent}% complete"
     end
   end
   # [END spanner_list_backup_operations]
@@ -1615,22 +1615,25 @@ def list_database_operations project_id:, instance_id:
   spanner  = Google::Cloud::Spanner.new project: project_id
   instance = spanner.instance instance_id
 
-  jobs = instance.database_operations filter: "metadata.@type:RestoreDatabaseMetadata"
+  jobs = instance.database_operations filter: "metadata.@type:type.googleapis.com/google.spanner.admin.database.v1.OptimizeRestoredDatabaseMetadata"
+
   jobs.each do |job|
     if job.error?
       puts job.error
     else
       restore_info = job.database.restore_info
-      puts "Database #{job.database.database_id} restored from backup #{restore_info.backup_info.backup_id} is in #{job.database.state} state"
+      puts "Database #{job.database.database_id} restored from backup is #{job.progress_percent}% optimized"
     end
   end
   # [END spanner_list_database_operations]
 end
 
-def list_backups project_id:, instance_id:
+def list_backups project_id:, instance_id:, backup_id:, database_id:
   # [START spanner_list_backups]
   # project_id  = "Your Google Cloud project ID"
   # instance_id = "Your Spanner instance ID"
+  # backup_id = "Your Spanner database backup ID"
+  # database_id = "Your Spanner databaseID"
 
   require "google/cloud/spanner"
 
@@ -1642,18 +1645,19 @@ def list_backups project_id:, instance_id:
     puts backup.backup_id
   end
 
-  puts "All backups that contains a name \"test_bu_\":"
-  instance.backups(filter: "name:test_bu_").all.each do |backup|
+  puts "All backups with backup name containing \"#{backup_id}\":"
+  instance.backups(filter: "name:#{backup_id}").all.each do |backup|
     puts backup.backup_id
   end
 
-  puts "All backups for a database that contains a name \"test_db_\":"
-  instance.backups(filter: "database:test_db_").all.each do |backup|
+  puts "All backups for databases with a name containing \"#{database_id}\":"
+  instance.backups(filter: "database:#{database_id}").all.each do |backup|
     puts backup.backup_id
   end
 
   puts "All backups that expire before a timestamp:"
-  instance.backups(filter: "expire_time < \"#{(Time.now + 315_360_000).iso8601}\"").all.each do |backup|
+  expire_time = Time.now + 30 * 24 * 3600 # From now 30 days
+  instance.backups(filter: "expire_time < \"#{expire_time.iso8601}\"").all.each do |backup|
     puts backup.backup_id
   end
 
@@ -1663,7 +1667,8 @@ def list_backups project_id:, instance_id:
   end
 
   puts "All backups that were created after a timestamp that are also ready:"
-  instance.backups(filter: "create_time >= \"#{(Time.now - 10_000).iso8601}\" AND state:READY").all.each do |backup|
+  create_time = Time.now - 24 * 3600 # From now 1 day ago
+  instance.backups(filter: "create_time >= \"#{create_time.iso8601}\" AND state:READY").all.each do |backup|
     puts backup.backup_id
   end
 
@@ -1692,8 +1697,8 @@ def delete_backup project_id:, instance_id:, backup_id:
   # [END spanner_delete_backup]
 end
 
-def update_backup_expiration_time project_id:, instance_id:, backup_id:
-  # [START spanner_update_expiration_time]
+def update_backup project_id:, instance_id:, backup_id:
+  # [START spanner_update_backup]
   # project_id  = "Your Google Cloud project ID"
   # instance_id = "Your Spanner instance ID"
   # backup_id = "Your Spanner backup ID"
@@ -1707,7 +1712,7 @@ def update_backup_expiration_time project_id:, instance_id:, backup_id:
   backup.expire_time = backup.expire_time + 2_592_000 # Extending the expiry time by 30 days.
 
   puts "Expiration time updated: #{backup.expire_time}"
-  # [END spanner_update_expiration_time]
+  # [END spanner_update_backup]
 end
 
 def usage
@@ -1773,14 +1778,14 @@ def usage
       write_read_empty_float64_array     <instance_id> <database_id> Writes empty FLOAT64 array and read.
       write_read_null_float64_array      <instance_id> <database_id> Writes nil to FLOAT64 array and read.
       write_read_float64_array           <instance_id> <database_id> Writes FLOAT64 array and read.
-      create_backup                      <instance_id> <database_id> <backup_id> <expire_time> Create a backup.
+      create_backup                      <instance_id> <database_id> <backup_id> Create a backup.
       restore_backup                     <instance_id> <database_id> <backup_id> Restore a database.
-      create_backup_cancel               <instance_id> <database_id> <backup_id> <expire_time> Cancel a backup.
+      create_backup_cancel               <instance_id> <database_id> <backup_id> Cancel a backup.
       list_backup_operations             <instance_id> List backup operations.
       list_database_operations           <instance_id> List database operations.
-      list_backups                       <instance_id> List all backups.
+      list_backups                       <instance_id> <backup_id> <database_id> List and filter backups.
       delete_backup                      <instance_id> <backup_id> Delete a backup.
-      update_backup_expiration_time      <instance_id> <backup_id> Update the backup expiry time.
+      update_backup                      <instance_id> <backup_id> Update the backup.
 
     Environment variables:
       GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID

@@ -17,7 +17,7 @@ require "rspec"
 require "google/cloud/spanner"
 
 describe "Google Cloud Spanner API samples" do
-  before do
+  before :all do
     if ENV["GOOGLE_CLOUD_SPANNER_TEST_INSTANCE"].nil? || ENV["GOOGLE_CLOUD_SPANNER_PROJECT"].nil?
       skip "GOOGLE_CLOUD_SPANNER_TEST_INSTANCE and/or GOOGLE_CLOUD_SPANNER_PROJECT not defined"
     end
@@ -28,25 +28,31 @@ describe "Google Cloud Spanner API samples" do
     @database_id          = "test_db_#{@seed}"
     @backup_id            = "test_bu_#{@seed}"
     @restored_database_id = "restored_db_#{@seed}"
-    @expire_time          = Time.now + 36_000
     @spanner              = Google::Cloud::Spanner.new project: @project_id
     @instance             = @spanner.instance @instance_id
+    cleanup_backup_resources
+  end
+
+  after :all do
+    cleanup_backup_resources
   end
 
   before :each do
-    @test_database = @instance.database @database_id
-    @test_database&.drop
-    @test_database = @instance.database @restored_database_id
-    @test_database&.drop
-    @test_backup = @instance.backup @backup_id
-    @test_backup&.delete
+    cleanup_database_resources
   end
 
-  after do
+  after :each do
+    cleanup_database_resources
+  end
+
+  def cleanup_database_resources
     @test_database = @instance.database @database_id
     @test_database&.drop
     @test_database = @instance.database @restored_database_id
     @test_database&.drop
+  end
+
+  def cleanup_backup_resources
     @test_backup = @instance.backup @backup_id
     @test_backup&.delete
   end
@@ -101,8 +107,15 @@ describe "Google Cloud Spanner API samples" do
     @test_database
   end
 
-  # Creates a temporary backup with random ID (will be dropped after test)
+  # Creates or return existing stemporary backup with random ID (will be dropped
+  # after test)
   def create_backup_with_data
+    @test_backup = @instance.backup @backup_id
+
+    return @test_backup if @test_backup
+
+    p "Bkup"
+
     database = create_singers_albums_database
 
     capture do
@@ -115,8 +128,7 @@ describe "Google Cloud Spanner API samples" do
       create_backup project_id:  @project_id,
                     instance_id: @instance.instance_id,
                     database_id: database.database_id,
-                    backup_id:   @backup_id,
-                    expire_time: @expire_time
+                    backup_id:   @backup_id
 
       @test_backup = @instance.backup @backup_id
     end
@@ -1404,22 +1416,22 @@ describe "Google Cloud Spanner API samples" do
   end
 
   example "create backup" do
-    expect(@instance.backup(@backup_id)).to be nil
+    @instance.backup(@backup_id)&.drop
+
     database = create_database_with_data
 
     capture do
       create_backup project_id:  @project_id,
                     instance_id: @instance.instance_id,
                     database_id: database.database_id,
-                    backup_id:   @backup_id,
-                    expire_time: @expire_time
+                    backup_id:   @backup_id
     end
 
     expect(captured_output).to include(
       "Backup operation in progress"
     )
-    expect(captured_output).to include(
-      "Backup #{@backup_id} of size 607 bytes was created at"
+    expect(captured_output).to match(
+      /Backup #{@backup_id} of size \d+ bytes was created at/
     )
 
     @test_backup = @instance.backup @backup_id
@@ -1427,7 +1439,6 @@ describe "Google Cloud Spanner API samples" do
   end
 
   example "restore backup" do
-    expect(@instance.backup(@backup_id)).to be nil
     backup = create_backup_with_data
 
     capture do
@@ -1441,7 +1452,7 @@ describe "Google Cloud Spanner API samples" do
       "Waiting for restore backup operation to complete"
     )
     expect(captured_output).to include(
-      "Database #{@database_id} restored from backup #{@backup_id}"
+      "Database #{@database_id} was restored to #{@restored_database_id} from backup #{backup.backup_id}"
     )
 
     @test_database = @instance.database @restored_database_id
@@ -1449,15 +1460,14 @@ describe "Google Cloud Spanner API samples" do
   end
 
   example "cancel backup operation" do
-    expect(@instance.backup(@backup_id)).to be nil
+    cleanup_backup_resources
     database = create_database_with_data
 
     capture do
       create_backup_cancel project_id:  @project_id,
                            instance_id: @instance.instance_id,
                            database_id: database.database_id,
-                           backup_id:   @backup_id,
-                           expire_time: @expire_time
+                           backup_id:   @backup_id
     end
 
     expect(captured_output).to include(
@@ -1472,7 +1482,6 @@ describe "Google Cloud Spanner API samples" do
   end
 
   example "list backup operations" do
-    expect(@instance.backup(@backup_id)).to be nil
     backup = create_backup_with_data
 
     capture do
@@ -1482,7 +1491,7 @@ describe "Google Cloud Spanner API samples" do
     end
 
     expect(captured_output).to include(
-      "Backup #{backup.backup_id} pending: 100% complete"
+      "Backup #{backup.backup_id} on database #{@database_id} is 100% complete"
     )
 
     @test_backup = @instance.backup @backup_id
@@ -1490,7 +1499,6 @@ describe "Google Cloud Spanner API samples" do
   end
 
   example "list database operations" do
-    expect(@instance.backup(@backup_id)).to be nil
     database = restore_database_from_backup
 
     capture do
@@ -1507,22 +1515,23 @@ describe "Google Cloud Spanner API samples" do
   end
 
   example "list backups with various filters" do
-    expect(@instance.backup(@backup_id)).to be nil
     backup = create_backup_with_data
 
     capture do
       list_backups project_id:  @project_id,
-                   instance_id: @instance.instance_id
+                   instance_id: @instance.instance_id,
+                   backup_id: @backup_id,
+                   database_id: backup.database_id
     end
 
     expect(captured_output).to include(
       "All backups\n#{backup.backup_id}"
     )
     expect(captured_output).to include(
-      "All backups that contains a name \"test_bu_\":\n#{backup.backup_id}"
+      "All backups with backup name containing \"#{backup.backup_id}\":\n#{backup.backup_id}"
     )
     expect(captured_output).to include(
-      "All backups for a database that contains a name \"test_db_\":\n#{backup.backup_id}"
+      "All backups for databases with a name containing \"#{backup.database_id}\":\n#{backup.backup_id}"
     )
     expect(captured_output).to include(
       "All backups that expire before a timestamp:\n#{backup.backup_id}"
@@ -1542,7 +1551,6 @@ describe "Google Cloud Spanner API samples" do
   end
 
   example "delete backup" do
-    expect(@instance.backup(@backup_id)).to be nil
     backup = create_backup_with_data
 
     capture do
@@ -1559,18 +1567,17 @@ describe "Google Cloud Spanner API samples" do
     expect(@test_backup).to be nil
   end
 
-  example "update expiration time" do
-    expect(@instance.backup(@backup_id)).to be nil
+  example "update backup" do
     backup = create_backup_with_data
 
     capture do
-      update_backup_expiration_time project_id:  @project_id,
-                                    instance_id: @instance.instance_id,
-                                    backup_id:   backup.backup_id
+      update_backup project_id:  @project_id,
+                    instance_id: @instance.instance_id,
+                    backup_id:   backup.backup_id
     end
 
     expect(captured_output).to include(
-      "Expiration time updated: #{@expire_time + 2_592_000}"
+      "Expiration time updated: #{backup.expire_time + 2_592_000}"
     )
   end
 end
