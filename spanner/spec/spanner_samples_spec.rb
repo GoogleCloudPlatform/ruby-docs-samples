@@ -107,7 +107,7 @@ describe "Google Cloud Spanner API samples" do
     @test_database
   end
 
-  # Creates or return existing stemporary backup with random ID (will be dropped
+  # Creates or return existing temporary backup with random ID (will be dropped
   # after test)
   def create_backup_with_data
     @test_backup = @instance.backup @backup_id

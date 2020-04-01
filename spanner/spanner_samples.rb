@@ -1656,7 +1656,7 @@ def list_backups project_id:, instance_id:, backup_id:, database_id:
   end
 
   puts "All backups that expire before a timestamp:"
-  expire_time = Time.now + 30 * 24 * 3600 # From now 30 days
+  expire_time = Time.now + 30 * 24 * 3600 # 30 days from now
   instance.backups(filter: "expire_time < \"#{expire_time.iso8601}\"").all.each do |backup|
     puts backup.backup_id
   end
@@ -1667,7 +1667,7 @@ def list_backups project_id:, instance_id:, backup_id:, database_id:
   end
 
   puts "All backups that were created after a timestamp that are also ready:"
-  create_time = Time.now - 24 * 3600 # From now 1 day ago
+  create_time = Time.now - 24 * 3600 # From 1 day ago
   instance.backups(filter: "create_time >= \"#{create_time.iso8601}\" AND state:READY").all.each do |backup|
     puts backup.backup_id
   end
