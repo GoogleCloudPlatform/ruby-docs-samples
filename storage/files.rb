@@ -413,8 +413,8 @@ def generate_signed_post_policy_v4 bucket_name:, file_name:
 
   bucket = storage.bucket bucket_name
   response = bucket.generate_signed_post_policy_v4 file_name,
-      expires: 600,
-      fields: {'x-goog-meta-test': 'data'}
+                                                   expires: 600,
+                                                   fields:  { "x-goog-meta-test": "data" }
 
   html_form = "<form action='#{response.url}' method='POST' enctype='multipart/form-data'>\n"
   response.fields.each do |name, value|
