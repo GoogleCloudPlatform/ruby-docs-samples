@@ -16,7 +16,7 @@ def create_logging_client
   # [START create_logging_client]
   require "google/cloud/logging"
 
-  logging = Google::Cloud::Logging.new project: "my-gcp-project-id"
+  logging = Google::Cloud::Logging.new
   # [END create_logging_client]
 end
 
@@ -24,7 +24,7 @@ def list_log_sinks
   # [START logging_list_sinks]
   require "google/cloud/logging"
 
-  logging = Google::Cloud::Logging.new project: "my-gcp-project-id"
+  logging = Google::Cloud::Logging.new
 
   logging.sinks.each do |sink|
     puts "#{sink.name}: #{sink.filter} -> #{sink.destination}"
@@ -36,8 +36,8 @@ def create_log_sink
   # [START logging_create_sink]
   require "google/cloud/logging"
 
-  logging = Google::Cloud::Logging.new project: "my-gcp-project-id"
-  storage = Google::Cloud::Storage.new project: "my-gcp-project-id"
+  logging = Google::Cloud::Logging.new
+  storage = Google::Cloud::Storage.new
   bucket  = storage.create_bucket "my-logs-bucket"
 
   # Grant owner permission to Cloud Logging service
@@ -52,8 +52,8 @@ def update_log_sink
   # [START logging_update_sink]
   require "google/cloud/logging"
 
-  logging = Google::Cloud::Logging.new project: "my-gcp-project-id"
-  storage = Google::Cloud::Storage.new project: "my-gcp-project-id"
+  logging = Google::Cloud::Logging.new
+  storage = Google::Cloud::Storage.new
   bucket  = storage.bucket "new-destination-bucket"
   sink    = logging.sink "my-sink"
 
@@ -67,7 +67,7 @@ def delete_log_sink
   # [START logging_delete_sink]
   require "google/cloud/logging"
 
-  logging = Google::Cloud::Logging.new project: "my-gcp-project-id"
+  logging = Google::Cloud::Logging.new
 
   sink = logging.sink "my-sink"
   sink.delete
@@ -78,7 +78,7 @@ def list_log_entries
   # [START logging_list_log_entries]
   require "google/cloud/logging"
 
-  logging = Google::Cloud::Logging.new project: "my-gcp-project-id"
+  logging = Google::Cloud::Logging.new
   entries = logging.entries filter: 'resource.type = "gae_app"'
 
   entries.each do |entry|
@@ -91,7 +91,7 @@ def write_log_entry
   # [START logging_write_log_entry]
   require "google/cloud/logging"
 
-  logging = Google::Cloud::Logging.new project: "my-gcp-project-id"
+  logging = Google::Cloud::Logging.new
 
   entry = logging.entry
   entry.log_name = "my_application_log"
@@ -109,7 +109,7 @@ def delete_log
   # [START logging_delete_log]
   require "google/cloud/logging"
 
-  logging = Google::Cloud::Logging.new project: "my-gcp-project-id"
+  logging = Google::Cloud::Logging.new
 
   logging.delete_log "my_application_log"
   # [END logging_delete_log]
@@ -119,7 +119,7 @@ def write_log_entry_using_ruby_logger
   # [START logging_write_log_entry_using_ruby_logger]
   require "google/cloud/logging"
 
-  logging  = Google::Cloud::Logging.new project: "my-gcp-project-id"
+  logging  = Google::Cloud::Logging.new
   resource = logging.resource "gae_app", module_id:  "default",
                                          version_id: "20160101t163030"
 
