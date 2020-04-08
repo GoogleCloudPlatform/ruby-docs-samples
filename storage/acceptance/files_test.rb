@@ -406,13 +406,23 @@ describe "Files Snippets" do
   describe "generate_signed_post_policy_v4" do
     it "generates a v4 signed post policy v4 for a file in a bucket" do
       refute bucket.file remote_file_name
-
-      out, _err = capture_io do
-        generate_signed_post_policy_v4 bucket_name: bucket.name,
-                                       file_name:   remote_file_name
+      timestamp = Time.new 2020, 1, 1, 0, 0, 0, "+00:00"
+      out = nil
+      Time.stub :now, timestamp do
+        out, _err = capture_io do
+          generate_signed_post_policy_v4 bucket_name: bucket.name,
+                                         file_name:   remote_file_name
+        end
       end
-
-      assert_includes out, ""
+      assert_includes out, "<form action='https://storage.googleapis.com/#{bucket.name}/' method='POST' enctype='multipart/form-data'>"
+      assert_includes out, "<input name='x-goog-meta-test' value='data' type='hidden'/>"
+      assert_includes out, "<input name='key' value='#{remote_file_name}' type='hidden'/>"
+      assert_includes out, "<input name='x-goog-date' value='20200101T000000Z' type='hidden'/>"
+      assert_includes out, "<input name='x-goog-credential' value='664476911263-rfrsgaitrs4niii0k60ns485cu4vgm2u@developer.gserviceaccount.com/20200101/auto/storage/goog4_request' type='hidden'/>"
+      assert_includes out, "<input name='x-goog-algorithm' value='GOOG4-RSA-SHA256' type='hidden'/>"
+      assert_includes out, "<input name='x-goog-signature' value='a0c6422f328090ab128f9b1d11583aa6dcb7a5eb96fe78156b3a87975f2f44c02b120e5792acfbf2cc9bda0173e4e0aade0f1c9b8b28a224a64eb1579dd311791fdcb7c00add3ef59ef05a81b1d6c8e790460ea4e326815eafbd6d7f49f62074d7b8ba01819712514b32e2fb143225363040111d1c25771cc962e6863daccac31541f5b338fa15892e94dedec2a8d92c18b2996238920bf6b3ba4cbedc092a229ede2639df161ea78abdae1f573c316159912b30c29fa52c35c18fd4c1537e34da3f1669f6fb14d8b988de2944ebcbbd533df694f3e85ca5fe12933eadf92158b6da8b4a9a536b7c898e3a33ae66cdd3a9807e3620806107c3042c3aefca9abc' type='hidden'/>"
+      assert_includes out, "<input name='policy' value='eyJjb25kaXRpb25zIjpbeyJ4LWdvb2ctbWV0YS10ZXN0IjoiZGF0YSJ9LHsia2V5IjoicGF0aC9maWxlX25hbWUudHh0In0seyJ4LWdvb2ctZGF0ZSI6IjIwMjAwMTAxVDAwMDAwMFoifSx7IngtZ29vZy1jcmVkZW50aWFsIjoiNjY0NDc2OTExMjYzLXJmcnNnYWl0cnM0bmlpaTBrNjBuczQ4NWN1NHZnbTJ1QGRldmVsb3Blci5nc2VydmljZWFjY291bnQuY29tLzIwMjAwMTAxL2F1dG8vc3RvcmFnZS9nb29nNF9yZXF1ZXN0In0seyJ4LWdvb2ctYWxnb3JpdGhtIjoiR09PRzQtUlNBLVNIQTI1NiJ9XSwiZXhwaXJhdGlvbiI6IjIwMjAtMDEtMDFUMDA6MTA6MDBaIn0=' type='hidden'/>"
+      assert_includes out, "<input type='file' name='#{remote_file_name}'/>"
     end
   end
 
