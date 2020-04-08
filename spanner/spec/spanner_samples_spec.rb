@@ -1506,9 +1506,6 @@ describe "Google Cloud Spanner API samples" do
     expect(captured_output).to match(
       /Database #{database.database_id} restored from backup is \d+% optimized/
     )
-
-    @test_database = @instance.database @database_id
-    expect(@test_database).not_to be nil
   end
 
   example "list backups with various filters" do
