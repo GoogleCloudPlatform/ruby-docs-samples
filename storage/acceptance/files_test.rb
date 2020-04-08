@@ -406,14 +406,12 @@ describe "Files Snippets" do
   describe "generate_signed_post_policy_v4" do
     it "generates a v4 signed post policy v4 for a file in a bucket" do
       refute bucket.file remote_file_name
-      timestamp = Time.new 2020, 1, 1, 0, 0, 0, "+00:00"
-      out = nil
-      Time.stub :now, timestamp do
-        out, _err = capture_io do
-          generate_signed_post_policy_v4 bucket_name: bucket.name,
-                                         file_name:   remote_file_name
-        end
+
+      out, _err = capture_io do
+        generate_signed_post_policy_v4 bucket_name: bucket.name,
+                                       file_name:   remote_file_name
       end
+
       assert_includes out, "<form action='https://storage.googleapis.com/#{bucket.name}/'"
       assert_includes out, "<input name='key' value='#{remote_file_name}'"
       assert_includes out, "<input name='x-goog-signature'"
