@@ -420,7 +420,7 @@ def generate_signed_post_policy_v4 bucket_name:, file_name:
   post_object.fields.each do |name, value|
     html_form += "  <input name='#{name}' value='#{value}' type='hidden'/>\n"
   end
-  html_form += "  <input type='file' name='#{file_name}'/><br />\n"
+  html_form += "  <input type='file' name='file'/><br />\n"
   html_form += "  <input type='submit' value='Upload File' name='submit'/><br />\n"
   html_form += "</form>\n"
 
