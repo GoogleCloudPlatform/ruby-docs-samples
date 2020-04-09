@@ -403,6 +403,27 @@ describe "Files Snippets" do
     end
   end
 
+  describe "generate_signed_post_policy_v4" do
+    it "generates a v4 signed post policy v4 for a file in a bucket" do
+      refute bucket.file remote_file_name
+
+      out, _err = capture_io do
+        generate_signed_post_policy_v4 bucket_name: bucket.name,
+                                       file_name:   remote_file_name
+      end
+
+      assert_includes out, "<form action='https://storage.googleapis.com/#{bucket.name}/'"
+      assert_includes out, "<input name='key' value='#{remote_file_name}'"
+      assert_includes out, "<input name='x-goog-signature'"
+      assert_includes out, "<input name='x-goog-date'"
+      assert_includes out, "<input name='x-goog-credential'"
+      assert_includes out, "<input name='x-goog-algorithm' value='GOOG4-RSA-SHA256'"
+      assert_includes out, "<input name='policy'"
+      assert_includes out, "<input name='x-goog-meta-test' value='data'"
+      assert_includes out, "<input type='file' name='file'/>"
+    end
+  end
+
   describe "set_event_based_hold" do
     it "sets an event-based hold for a file in a bucket" do
       bucket.create_file local_file, remote_file_name

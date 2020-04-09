@@ -403,6 +403,31 @@ def generate_signed_put_url_v4 bucket_name:, file_name:
   # [END storage_generate_upload_signed_url_v4]
 end
 
+def generate_signed_post_policy_v4 bucket_name:, file_name:
+  # [START storage_generate_signed_post_policy_v4]
+  # bucket_name = "Your Google Cloud Storage bucket name"
+  # file_name   = "Name of a file to create in the Cloud Storage bucket"
+  require "google/cloud/storage"
+
+  storage = Google::Cloud::Storage.new
+
+  bucket = storage.bucket bucket_name
+  post_object = bucket.generate_signed_post_policy_v4 file_name,
+                                                      expires: 600,
+                                                      fields:  { "x-goog-meta-test": "data" }
+
+  html_form = "<form action='#{post_object.url}' method='POST' enctype='multipart/form-data'>\n"
+  post_object.fields.each do |name, value|
+    html_form += "  <input name='#{name}' value='#{value}' type='hidden'/>\n"
+  end
+  html_form += "  <input type='file' name='file'/><br />\n"
+  html_form += "  <input type='submit' value='Upload File' name='submit'/><br />\n"
+  html_form += "</form>\n"
+
+  puts html_form
+  # [END storage_generate_signed_post_policy_v4]
+end
+
 def set_event_based_hold bucket_name:, file_name:
   # [START storage_set_event_based_hold]
   # bucket_name = "Your Google Cloud Storage bucket name"
@@ -542,6 +567,9 @@ def run_sample arguments
   when "generate_signed_put_url_v4"
     generate_signed_put_url_v4 bucket_name: arguments.shift,
                                file_name:   arguments.shift
+  when "generate_signed_post_policy_v4"
+    generate_signed_post_policy_v4 bucket_name: arguments.shift,
+                                   file_name:   arguments.shift
   when "set_event_based_hold"
     set_event_based_hold bucket_name: arguments.shift,
                          file_name:   arguments.shift
@@ -577,6 +605,7 @@ def run_sample arguments
         generate_signed_url <bucket> <file>                               Generate a V2 signed url for a file
         generate_signed_get_url_v4 <bucket> <file>                        Generate a V4 signed get url for a file
         generate_signed_put_url_v4 <bucket> <file>                        Generate a V4 signed put url for a file
+        generate_signed_post_policy_v4 <bucket> <file>                    Generate a V4 signed post policy for a file and print HTML form
         set_event_based_hold       <bucket> <file>                        Set an event-based hold on a file
         release_event_based_hold   <bucket> <file>                        Relase an event-based hold on a file
         set_temporary_hold         <bucket> <file>                        Set a temporary hold on a file
