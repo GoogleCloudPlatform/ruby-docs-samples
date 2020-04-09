@@ -72,10 +72,8 @@ describe "Logging sample" do
   before :each do
     cleanup!
     allow(Google::Cloud::Logging).to receive(:new)
-      .with(project: "my-gcp-project-id")
       .and_return(@logging)
     allow(Google::Cloud::Storage).to receive(:new)
-      .with(project: "my-gcp-project-id")
       .and_return(@storage)
     allow(@storage).to receive(:create_bucket).and_return(@bucket)
     allow(@storage).to receive(:bucket).with("my-logs-bucket")
