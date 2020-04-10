@@ -1,4 +1,4 @@
-# Copyright 2016 Google, Inc
+# Copyright 2020 Google, LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,12 +12,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-source "https://rubygems.org"
+require_relative "helper"
+require_relative "../quickstart.rb"
 
-gem "google-cloud-logging"
+describe "Logging Quickstart" do
+  parallelize_me!
 
-group :test do
-  gem "google-cloud-storage"
-  gem "minitest", "~> 5.13"
-  gem "rake"
+  let(:log_name) { "logging_samples_test_#{SecureRandom.hex}" }
+  let(:payload) { "logging sample test payload" }
+
+  after do
+    logging.delete_log log_name
+  end
+
+  it "creates a new log entry" do
+    assert_output "Logged #{payload}\n" do
+      quickstart payload: payload, log_name: log_name
+    end
+
+    entries = get_entries_helper log_name
+    assert_equal entries.first.payload, payload
+  end
 end
