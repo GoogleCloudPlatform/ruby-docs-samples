@@ -12,29 +12,28 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START logging_quickstart]
-# [START require_library]
-# Imports the Google Cloud client library
-require "google/cloud/logging"
-# [END require_library]
+def quickstart payload:, log_name:
+  # [START logging_quickstart]
+  # [START require_library]
+  # Imports the Google Cloud client library
+  require "google/cloud/logging"
+  # [END require_library]
 
-# Your Google Cloud Platform project ID
-project_id = "YOUR_PROJECT_ID"
+  # Instantiates a client
+  logging = Google::Cloud::Logging.new
 
-# Instantiates a client
-logging = Google::Cloud::Logging.new project: project_id
+  # Prepares a log entry
+  entry = logging.entry
+  # payload = "The data you want to log"
+  entry.payload = payload
+  # log_name = "The name of the log to write to"
+  entry.log_name = log_name
+  # The resource associated with the data
+  entry.resource.type = "global"
 
-# Prepares a log entry
-entry = logging.entry
-# The data to log
-entry.payload = "Hello, world!"
-# The name of the log to write to
-entry.log_name = "my-log"
-# The resource associated with the data
-entry.resource.type = "global"
+  # Writes the log entry
+  logging.write_entries entry
 
-# Writes the log entry
-logging.write_entries entry
-
-puts "Logged #{entry.payload}"
-# [END logging_quickstart]
+  puts "Logged #{entry.payload}"
+  # [END logging_quickstart]
+end

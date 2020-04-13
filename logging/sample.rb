@@ -32,45 +32,53 @@ def list_log_sinks
   # [END logging_list_sinks]
 end
 
-def create_log_sink
+def create_log_sink bucket_name:, sink_name:
   # [START logging_create_sink]
   require "google/cloud/logging"
 
   logging = Google::Cloud::Logging.new
   storage = Google::Cloud::Storage.new
-  bucket  = storage.create_bucket "my-logs-bucket"
+  # bucket_name = "name-of-my-storage-bucket"
+  bucket  = storage.create_bucket bucket_name
 
   # Grant owner permission to Cloud Logging service
   email = "cloud-logs@google.com"
   bucket.acl.add_owner "group-#{email}"
 
-  sink = logging.create_sink "my-sink", "storage.googleapis.com/#{bucket.id}"
+  # sink_name = "name-of-my-sink"
+  sink = logging.create_sink sink_name, "storage.googleapis.com/#{bucket.id}"
+  puts "#{sink.name}: #{sink.filter} -> #{sink.destination}"
   # [END logging_create_sink]
 end
 
-def update_log_sink
+def update_log_sink bucket_name:, sink_name:
   # [START logging_update_sink]
   require "google/cloud/logging"
 
   logging = Google::Cloud::Logging.new
   storage = Google::Cloud::Storage.new
-  bucket  = storage.bucket "new-destination-bucket"
-  sink    = logging.sink "my-sink"
+  # bucket_name = "name-of-my-storage-bucket"
+  bucket  = storage.create_bucket bucket_name
+  # sink_name = "name-of-my-sink"
+  sink    = logging.sink sink_name
 
   sink.destination = "storage.googleapis.com/#{bucket.id}"
 
   sink.save
+  puts "Updated sink destination for #{sink.name} to #{sink.destination}"
   # [END logging_update_sink]
 end
 
-def delete_log_sink
+def delete_log_sink sink_name:
   # [START logging_delete_sink]
   require "google/cloud/logging"
 
   logging = Google::Cloud::Logging.new
 
-  sink = logging.sink "my-sink"
+  # sink_name = "name-of-my-sink"
+  sink = logging.sink sink_name
   sink.delete
+  puts "Deleted sink: #{sink.name}"
   # [END logging_delete_sink]
 end
 
@@ -87,35 +95,40 @@ def list_log_entries
   # [END logging_list_log_entries]
 end
 
-def write_log_entry
+def write_log_entry log_name:, payload:
   # [START logging_write_log_entry]
   require "google/cloud/logging"
 
   logging = Google::Cloud::Logging.new
 
   entry = logging.entry
-  entry.log_name = "my_application_log"
-  entry.payload  = "Log message"
+  # payload = "The data you want to log"
+  entry.payload = payload
+  # log_name = "The name of the log to write to"
+  entry.log_name = log_name
   entry.severity = :NOTICE
   entry.resource.type = "gae_app"
   entry.resource.labels[:module_id] = "default"
   entry.resource.labels[:version_id] = "20160101t163030"
 
   logging.write_entries entry
+  puts "Wrote payload: #{entry.payload} to log: #{entry.log_name}"
   # [END logging_write_log_entry]
 end
 
-def delete_log
+def delete_log log_name:
   # [START logging_delete_log]
   require "google/cloud/logging"
 
   logging = Google::Cloud::Logging.new
 
-  logging.delete_log "my_application_log"
+  # log_name = "The name of the log"
+  logging.delete_log log_name
+  puts "Deleted log: #{log_name}"
   # [END logging_delete_log]
 end
 
-def write_log_entry_using_ruby_logger
+def write_log_entry_using_ruby_logger payload:, log_name:
   # [START logging_write_log_entry_using_ruby_logger]
   require "google/cloud/logging"
 
@@ -123,8 +136,10 @@ def write_log_entry_using_ruby_logger
   resource = logging.resource "gae_app", module_id:  "default",
                                          version_id: "20160101t163030"
 
-  logger = logging.logger "my_application_log", resource
+  # log_name = "The name of the log"
+  logger = logging.logger log_name, resource
 
-  logger.info "Log message"
+  # payload = "Data to be logged"
+  logger.info payload
   # [END logging_write_log_entry_using_ruby_logger]
 end
