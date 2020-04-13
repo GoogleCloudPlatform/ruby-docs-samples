@@ -21,7 +21,4 @@ gem "google-cloud-storage"
 group :test do
   gem "google-cloud-kms"
   gem "minitest", "~> 5.13"
-  gem "rspec"
-  gem "rspec-retry"
-  gem "rspec_junit_formatter"
 end
