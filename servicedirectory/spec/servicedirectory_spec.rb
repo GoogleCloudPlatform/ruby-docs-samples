@@ -286,5 +286,33 @@ describe "Service Directory API Test" do
     }.to output(/#{@endpoint}/).to_stdout
   end
 
+  it "can resolve service" do
+    test_namespace = create_namespace(
+      project:   @project,
+      location:  @location,
+      namespace: @namespace
+    )
+    test_service = create_service(
+      project:   @project,
+      location:  @location,
+      namespace: @namespace,
+      service:   @service
+    )
+    test_endpoint = create_endpoint(
+      project:   @project,
+      location:  @location,
+      namespace: @namespace,
+      service:   @service,
+      endpoint:  @endpoint
+    )
+    expect {
+      $resolve_service.call(
+        project:   @project,
+        location:  @location,
+        namespace: @namespace,
+        service:   @service
+      )
+    }.to output(/#{@endpoint}/).to_stdout
+  end
 
 end
