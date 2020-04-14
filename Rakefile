@@ -58,6 +58,7 @@ end
 def test_task dir, type
   Rake::TestTask.new "#{dir}_#{type}" do |t|
     t.test_files = FileList["#{dir}/#{type}/**/*_test.rb"]
+    t.options = "--junit --junit-filename=#{dir}/sponge_log.xml"
     t.warning = false
   end
   Rake::Task["#{dir}_#{type}"].invoke
