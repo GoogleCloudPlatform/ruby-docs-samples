@@ -13,30 +13,9 @@
 # limitations under the License.
 
 require_relative "../spanner_samples"
-require "rspec"
-require "google/cloud/spanner"
+require_relative "./spec_helper"
 
 describe "Google Cloud Spanner API samples" do
-  before :all do
-    if ENV["GOOGLE_CLOUD_SPANNER_TEST_INSTANCE"].nil? || ENV["GOOGLE_CLOUD_SPANNER_PROJECT"].nil?
-      skip "GOOGLE_CLOUD_SPANNER_TEST_INSTANCE and/or GOOGLE_CLOUD_SPANNER_PROJECT not defined"
-    end
-
-    @project_id           = ENV["GOOGLE_CLOUD_SPANNER_PROJECT"]
-    @instance_id          = ENV["GOOGLE_CLOUD_SPANNER_TEST_INSTANCE"]
-    @seed                 = SecureRandom.hex 8
-    @database_id          = "test_db_#{@seed}"
-    @backup_id            = "test_bu_#{@seed}"
-    @restored_database_id = "restored_db_#{@seed}"
-    @spanner              = Google::Cloud::Spanner.new project: @project_id
-    @instance             = @spanner.instance @instance_id
-    cleanup_backup_resources
-  end
-
-  after :all do
-    cleanup_backup_resources
-  end
-
   before :each do
     cleanup_database_resources
   end
@@ -45,16 +24,8 @@ describe "Google Cloud Spanner API samples" do
     cleanup_database_resources
   end
 
-  def cleanup_database_resources
-    @test_database = @instance.database @database_id
-    @test_database&.drop
-    @test_database = @instance.database @restored_database_id
-    @test_database&.drop
-  end
-
-  def cleanup_backup_resources
-    @test_backup = @instance.backup @backup_id
-    @test_backup&.delete
+  after :all do
+    cleanup_backup_resources
   end
 
   # Creates a temporary database with random ID (will be dropped after test)
@@ -148,7 +119,6 @@ describe "Google Cloud Spanner API samples" do
 
     @test_database
   end
-
 
   # Capture and return STDOUT output by block
   def capture
