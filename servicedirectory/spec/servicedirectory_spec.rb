@@ -13,107 +13,43 @@
 # limitations under the License.
 
 require "rspec"
-require "google/cloud/service_directory/v1beta1"
+require "google/cloud/service_directory"
 require_relative "../servicedirectory"
 
 describe "Service Directory API Test" do
   ServiceDirectory = Google::Cloud::ServiceDirectory::V1beta1
 
-  def create_namespace project:, location:, namespace:
-    client = ServiceDirectory::RegistrationService::Client.new
-    location_path = ServiceDirectory::RegistrationService::Paths.location_path(
-      project:  project,
-      location: location
-    )
-    request = ServiceDirectory::CreateNamespaceRequest.new(
-      parent:       location_path,
-      namespace_id: namespace
-    )
-    client.create_namespace request
-  end
-
   def get_namespace project:, location:, namespace:
-    client = ServiceDirectory::RegistrationService::Client.new
-    namespace_path = ServiceDirectory::RegistrationService::Paths.namespace_path(
+    client = Google::Cloud::ServiceDirectory.registration_service
+    namespace_path = client.namespace_path(
       project:   project,
       location:  location,
       namespace: namespace
     )
-    request = ServiceDirectory::GetNamespaceRequest.new(
-      name: namespace_path
-    )
-    client.get_namespace request
-  end
-
-  def delete_namespace namespace_path:
-    client = ServiceDirectory::RegistrationService::Client.new
-    request = ServiceDirectory::DeleteNamespaceRequest.new(
-      name: namespace_path
-    )
-    client.delete_namespace request
-  end
-
-  def create_service project:, location:, namespace:, service:
-    client = ServiceDirectory::RegistrationService::Client.new
-    namespace_path = ServiceDirectory::RegistrationService::Paths.namespace_path(
-      project:   project,
-      location:  location,
-      namespace: namespace
-    )
-    request = ServiceDirectory::CreateServiceRequest.new(
-      parent:     namespace_path,
-      service_id: service
-    )
-    client.create_service request
+    client.get_namespace name: namespace_path
   end
 
   def get_service project:, location:, namespace:, service:
-    client = ServiceDirectory::RegistrationService::Client.new
-    service_path = ServiceDirectory::RegistrationService::Paths.service_path(
+    client = Google::Cloud::ServiceDirectory.registration_service
+    service_path = client.service_path(
       project:   project,
       location:  location,
       namespace: namespace,
       service:   service
     )
-    request = ServiceDirectory::GetServiceRequest.new(
-      name: service_path
-    )
-    client.get_service request
-  end
-
-  def create_endpoint project:, location:, namespace:, service:, endpoint:
-    client = ServiceDirectory::RegistrationService::Client.new
-    service_path = ServiceDirectory::RegistrationService::Paths.service_path(
-      project:   project,
-      location:  location,
-      namespace: namespace,
-      service:   service
-    )
-    endpoint_data = ServiceDirectory::Endpoint.new(
-      address: "10.0.0.1",
-      port:    443
-    )
-    request = ServiceDirectory::CreateEndpointRequest.new(
-      parent:      service_path,
-      endpoint_id: endpoint,
-      endpoint:    endpoint_data
-    )
-    client.create_endpoint request
+    client.get_service name: service_path
   end
 
   def get_endpoint project:, location:, namespace:, service:, endpoint:
-    client = ServiceDirectory::RegistrationService::Client.new
-    endpoint_path = ServiceDirectory::RegistrationService::Paths.endpoint_path(
+    client = Google::Cloud::ServiceDirectory.registration_service
+    endpoint_path = client.endpoint_path(
       project:   project,
       location:  location,
       namespace: namespace,
       service:   service,
       endpoint:  endpoint
     )
-    request = ServiceDirectory::GetEndpointRequest.new(
-      name: endpoint_path
-    )
-    client.get_endpoint request
+    client.get_endpoint name: endpoint_path
   end
 
   before :each do
@@ -127,7 +63,8 @@ describe "Service Directory API Test" do
   end
 
   after :each do
-    namespace_path = ServiceDirectory::RegistrationService::Paths.namespace_path(
+    client = Google::Cloud::ServiceDirectory.registration_service
+    namespace_path = client.namespace_path(
       project: @project,
       location: @location,
       namespace: @namespace
@@ -135,14 +72,14 @@ describe "Service Directory API Test" do
     # Ignore errors from delete_namespace because some tests will clean the
     # namespace up, which would cause 'NOT_FOUND' errors
     begin
-      delete_namespace(namespace_path: namespace_path)
+      client.delete_namespace name: namespace_path
     rescue
     end
   end
 
   it "can create namespace" do
     expect {
-      $create_namespace.call(
+      create_namespace(
         project:   @project,
         location:  @location,
         namespace: @namespace
@@ -165,7 +102,7 @@ describe "Service Directory API Test" do
     )
 
     expect {
-      $delete_namespace.call(
+      delete_namespace(
         project:   @project,
         location:  @location,
         namespace: @namespace
@@ -181,12 +118,11 @@ describe "Service Directory API Test" do
     )
 
     expect {
-      $create_service.call(
+      create_service(
         project:   @project,
         location:  @location,
         namespace: @namespace,
         service:   @service
-
       )
     }.to output(/#{@service}/).to_stdout
 
@@ -214,7 +150,7 @@ describe "Service Directory API Test" do
     )
 
     expect {
-      $delete_service.call(
+      delete_service(
         project:   @project,
         location:  @location,
         namespace: @namespace,
@@ -237,7 +173,7 @@ describe "Service Directory API Test" do
     )
 
     expect {
-      $create_endpoint.call(
+      create_endpoint(
         project:   @project,
         location:  @location,
         namespace: @namespace,
@@ -276,7 +212,7 @@ describe "Service Directory API Test" do
       endpoint:  @endpoint
     )
     expect {
-      $delete_endpoint.call(
+      delete_endpoint(
         project:   @project,
         location:  @location,
         namespace: @namespace,
@@ -306,7 +242,7 @@ describe "Service Directory API Test" do
       endpoint:  @endpoint
     )
     expect {
-      $resolve_service.call(
+      resolve_service(
         project:   @project,
         location:  @location,
         namespace: @namespace,
