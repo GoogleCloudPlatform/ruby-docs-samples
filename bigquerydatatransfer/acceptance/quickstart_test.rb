@@ -1,4 +1,4 @@
-# Copyright 2018 Google LLC
+# Copyright 2020 Google, LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,12 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-source "https://rubygems.org"
+require_relative "helper"
+require_relative "../quickstart.rb"
 
-gem "google-cloud-bigquery-data_transfer"
+describe "BigQuery Data Transfer Quickstart" do
+  parallelize_me!
 
-group :test do
-  gem "minitest", "~> 5.13"
-  gem "minitest-junit"
-  gem "rake"
+  it "lists data sources" do
+    out, _err = capture_io do
+      quickstart project_id: ENV["GOOGLE_CLOUD_PROJECT"]
+    end
+
+    assert_match "Supported Data Sources:", out
+    assert_match "Data source: ", out
+    assert_match "ID: ", out
+    assert_match "Full path: ", out
+    assert_match "Description: ", out
+  end
 end
