@@ -120,4 +120,39 @@ describe "Google Cloud Firestore API samples - Query Data" do
   example "invalid_range_query" do
     invalid_range_query project_id: @firestore_project
   end
+
+  example "in_query_without_array" do
+    output = capture do
+      in_query_without_array project_id: @firestore_project
+    end
+
+    expect(output).to include "Document SF returned by query in ['USA','Japan']."
+    expect(output).to include "Document LA returned by query in ['USA','Japan']."
+    expect(output).to include "Document DC returned by query in ['USA','Japan']."
+    expect(output).to include "Document TOK returned by query in ['USA','Japan']."
+    expect(output).not_to include "Document BJ returned by query in ['USA','Japan']."
+  end
+
+  example "in_query_with_array" do
+    output = capture do
+      in_query_with_array project_id: @firestore_project
+    end
+
+    expect(output).to include "Document DC returned by query in [['west_coast'], ['east_coast']]."
+    expect(output).not_to include "Document SF returned by query in [['west_coast'], ['east_coast']]."
+    expect(output).not_to include "Document LA returned by query in [['west_coast'], ['east_coast']]."
+    expect(output).not_to include "Document TOK returned by query in [['west_coast'], ['east_coast']]."
+    expect(output).not_to include "Document BJ returned by query in [['west_coast'], ['east_coast']]."
+  end
+
+  example "array_contains_any_queries" do
+    output = capture do
+      array_contains_any_queries project_id: @firestore_project
+    end
+    expect(output).to include "Document SF returned by query array-contains-any ['west_coast', 'east_coast']."
+    expect(output).to include "Document LA returned by query array-contains-any ['west_coast', 'east_coast']."
+    expect(output).to include "Document DC returned by query array-contains-any ['west_coast', 'east_coast']."
+    expect(output).not_to include "Document TOK returned by query array-contains-any ['west_coast', 'east_coast']."
+    expect(output).not_to include "Document BJ returned by query array-contains-any ['west_coast', 'east_coast']."
+  end
 end

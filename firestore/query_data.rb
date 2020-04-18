@@ -25,35 +25,40 @@ def query_create_examples project_id:
     state:      "CA",
     country:    "USA",
     capital:    false,
-    population: 860_000
+    population: 860_000,
+    regions:    ["west_coast", "norcal"]
   )
   cities_ref.doc("LA").set(
     name:       "Los Angeles",
     state:      "CA",
     country:    "USA",
     capital:    false,
-    population: 3_900_000
+    population: 3_900_000,
+    regions:    ["west_coast", "socal"]
   )
   cities_ref.doc("DC").set(
     name:       "Washington D.C.",
     state:      nil,
     country:    "USA",
     capital:    true,
-    population: 680_000
+    population: 680_000,
+    regions:    ["east_coast"]
   )
   cities_ref.doc("TOK").set(
     name:       "Tokyo",
     state:      nil,
     country:    "Japan",
     capital:    true,
-    population: 9_000_000
+    population: 9_000_000,
+    regions:    ["kanto", "honshu"]
   )
   cities_ref.doc("BJ").set(
     name:       "Beijing",
     state:      nil,
     country:    "China",
     capital:    true,
-    population: 21_500_000
+    population: 21_500_000,
+    regions:    ["jingjinji", "hebei"]
   )
   # [END fs_query_create_examples]
   puts "Added example cities data to the cities collection."
@@ -160,6 +165,44 @@ def invalid_range_query project_id:
   # [END fs_invalid_range_query]
 end
 
+def in_query_without_array project_id:
+  # project_id = "Your Google Cloud Project ID"
+
+  firestore = Google::Cloud::Firestore.new project_id: project_id
+  # [START fs_query_filter_in]
+  cities_ref = firestore.col "cities"
+  usr_or_japan = cities_ref.where "country", "in", ["USA", "Japan"]
+  # [END fs_query_filter_in]
+  usr_or_japan.get do |city|
+    puts "Document #{city.document_id} returned by query in ['USA','Japan']."
+  end
+end
+
+def in_query_with_array project_id:
+  # project_id = "Your Google Cloud Project ID"
+
+  firestore = Google::Cloud::Firestore.new project_id: project_id
+  # [START fs_in_filter_with_array]
+  cities_ref = firestore.col "cities"
+  exactly_one_cost = cities_ref.where "regions", "in", [["west_coast"], ["east_coast"]]
+  # [END fs_in_filter_with_array]
+  exactly_one_cost.get do |city|
+    puts "Document #{city.document_id} returned by query in [['west_coast'], ['east_coast']]."
+  end
+end
+
+def array_contains_any_queries project_id:
+  # project_id = "Your Google Cloud Project ID"
+
+  firestore = Google::Cloud::Firestore.new project_id: project_id
+  # [START fs_query_filter_array_contains_any]
+  cities_ref = firestore.col "cities"
+  costal_cities = cities_ref.where "regions", "array-contains-any", ["west_coast", "east_coast"]
+  # [END fs_query_filter_array_contains_any]
+  costal_cities.get do |city|
+    puts "Document #{city.document_id} returned by query array-contains-any ['west_coast', 'east_coast']."
+  end
+end
 
 if $PROGRAM_NAME == __FILE__
   project = ENV["FIRESTORE_PROJECT_ID"]
@@ -180,6 +223,12 @@ if $PROGRAM_NAME == __FILE__
     range_query project_id: project
   when "invalid_range_query"
     invalid_range_query project_id: project
+  when "in_query_without_array"
+    in_query_without_array project_id: project
+  when "in_query_with_array"
+    in_query_with_array project_id: project
+  when "array_contains_any_queries"
+    array_contains_any_queries project_id: project
   else
     puts <<~USAGE
       Usage: bundle exec ruby query_data.rb [command]
@@ -193,6 +242,9 @@ if $PROGRAM_NAME == __FILE__
         composite_index_chained_query  Create a composite index chained query.
         range_query                    Create a query with range clauses.
         invalid_range_query            An example of an invalid range query.
+        in_query_without_array         In queries without array.
+        in_query_with_array            In queries with array.
+        array_contains_any_queries     Array contains any in query.
     USAGE
   end
 end
