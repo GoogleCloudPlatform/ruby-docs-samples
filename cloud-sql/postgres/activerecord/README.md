@@ -21,12 +21,12 @@ Download a JSON key to use to authenticate your connection.
 ```bash
 export GOOGLE_APPLICATION_CREDENTIALS=/path/to/service/account/key.json
 export INSTANCE_CONNECTION_NAME='<MY-PROJECT>:<INSTANCE-REGION>:<INSTANCE-NAME>'
-export MYSQL_USER='my-db-user'
-export MYSQL_PASS='my-db-pass'
-export MYSQL_DATABASE='my_db'
+export PG_USERNAME='my-db-user'
+export PG_PASSWORD='my-db-pass'
+export PG_DATABASE='my_db'
 ```
 Note: Saving credentials in environment variables is convenient, but not secure - consider a more
-secure solution such as [Cloud KMS](https://cloud.google.com/kms/) to help keep secrets safe.
+secure solution such as [Secret Manager](https://cloud.google.com/secret-manager/docs/overview) to help keep secrets safe.
 
 ## Running locally
 
