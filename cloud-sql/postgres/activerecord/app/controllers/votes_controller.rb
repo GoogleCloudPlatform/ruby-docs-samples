@@ -23,7 +23,7 @@ class VotesController < ApplicationController
   end
 
   def create
-    # [START cloud_sql_mysql_activerecord_connection]
+    # [START cloud_sql_postgres_activerecord_connection]
     @vote = Vote.new candidate: candidate
 
     # ActiveRecord creates and executes your SQL and automatically
@@ -33,7 +33,7 @@ class VotesController < ApplicationController
     else
       render json: @vote.errors, status: :unprocessable_entity
     end
-    # [END cloud_sql_mysql_activerecord_connection]
+    # [END cloud_sql_postgres_activerecord_connection]
   end
 
   private
