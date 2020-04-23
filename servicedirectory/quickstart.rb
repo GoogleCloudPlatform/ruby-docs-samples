@@ -15,7 +15,6 @@
 # [START servicedirectory_quickstart]
 # Imports the Google Cloud client library
 require "google/cloud/service_directory"
-ServiceDirectory = Google::Cloud::ServiceDirectory
 
 # Your Google Cloud Platform project ID
 project = "YOUR_PROJECT_ID"
@@ -24,14 +23,14 @@ project = "YOUR_PROJECT_ID"
 location = "us-central1"
 
 # Initialize a client
-client = ServiceDirectory.registration_service
+registration_service = Google::Cloud::ServiceDirectory.registration_service
 
 # The resource name of the project
-location_name = client.location_path(
+location_name = registration_service.location_path(
   project: project, location: location)
 
 # Request list of namespaces in the project
-response = client.list_namespaces parent: location_name
+response = registration_service.list_namespaces parent: location_name
 
 # List all namespaces for your project
 puts "Namespaces: "

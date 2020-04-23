@@ -21,13 +21,15 @@ def create_namespace project:, location:, namespace:
   require "google/cloud/service_directory"
 
   # Initialize the client
-  client = Google::Cloud::ServiceDirectory.registration_service
+  registration_service = Google::Cloud::ServiceDirectory.registration_service
 
   # The parent path of the namespace
-  parent = client.location_path project: project, location: location
+  parent = registration_service.location_path(
+    project: project, location: location)
 
   # Use the Service Directory API to create the namespace
-  response = client.create_namespace parent: parent, namespace_id: namespace
+  response = registration_service.create_namespace(
+    parent: parent, namespace_id: namespace)
   puts "Created namespace: #{response.name}"
   # [END servicedirectory_create_namespace]
 end
@@ -41,14 +43,14 @@ def delete_namespace project:, location:, namespace:
   require "google/cloud/service_directory"
 
   # Initialize the client
-  client = Google::Cloud::ServiceDirectory.registration_service
+  registration_service = Google::Cloud::ServiceDirectory.registration_service
 
   # The path of the namespace
-  namespace_name = client.namespace_path(
+  namespace_name = registration_service.namespace_path(
     project: project, location: location, namespace: namespace)
 
   # Use the Service Directory API to delete the namespace
-  client.delete_namespace name: namespace_name
+  registration_service.delete_namespace name: namespace_name
   puts "Deleted namespace: #{namespace_name}"
   # [END servicedirectory_delete_namespace]
 end
@@ -63,14 +65,14 @@ def create_service project:, location:, namespace:, service:
   require "google/cloud/service_directory"
 
   # Initialize the client
-  client = Google::Cloud::ServiceDirectory.registration_service
+  registration_service = Google::Cloud::ServiceDirectory.registration_service
 
   # The parent path of the service
-  parent = client.namespace_path(
+  parent = registration_service.namespace_path(
     project: project, location: location, namespace: namespace)
 
   # Use the Service Directory API to create the service
-  response = client.create_service parent: parent, service_id: service
+  response = registration_service.create_service parent: parent, service_id: service
   puts "Created service: #{response.name}"
   # [END servicedirectory_create_service]
 end
@@ -85,10 +87,10 @@ def delete_service project:, location:, namespace:, service:
   require "google/cloud/service_directory"
 
   # Initialize the client
-  client = Google::Cloud::ServiceDirectory.registration_service
+  registration_service = Google::Cloud::ServiceDirectory.registration_service
 
   # The path of the service
-  service_path = client.service_path(
+  service_path = registration_service.service_path(
     project:   project,
     location:  location,
     namespace: namespace,
@@ -96,7 +98,7 @@ def delete_service project:, location:, namespace:, service:
   )
 
   # Use the Service Directory API to delete the service
-  client.delete_service name: service_path
+  registration_service.delete_service name: service_path
   puts "Deleted service: #{service_path}"
   # [END servicedirectory_delete_service]
 end
@@ -112,10 +114,10 @@ def create_endpoint project:, location:, namespace:, service:, endpoint:
   require "google/cloud/service_directory"
 
   # Initialize the client
-  client = Google::Cloud::ServiceDirectory.registration_service
+  registration_service = Google::Cloud::ServiceDirectory.registration_service
 
   # The parent path of the endpoint
-  parent = client.service_path(
+  parent = registration_service.service_path(
     project: project,
     location: location,
     namespace: namespace,
@@ -129,7 +131,7 @@ def create_endpoint project:, location:, namespace:, service:, endpoint:
   )
 
   # Use the Service Directory API to create the endpoint
-  response = client.create_endpoint(
+  response = registration_service.create_endpoint(
     parent: parent, endpoint_id: endpoint, endpoint: endpoint_data)
   puts "Created endpoint: #{response.name}"
   # [END servicedirectory_create_endpoint]
@@ -146,10 +148,10 @@ def delete_endpoint project:, location:, namespace:, service:, endpoint:
   require "google/cloud/service_directory"
 
   # Initialize the client
-  client = Google::Cloud::ServiceDirectory.registration_service
+  registration_service = Google::Cloud::ServiceDirectory.registration_service
 
   # The path of the endpoint
-  endpoint_path = client.endpoint_path(
+  endpoint_path = registration_service.endpoint_path(
     project:   project,
     location:  location,
     namespace: namespace,
@@ -158,7 +160,7 @@ def delete_endpoint project:, location:, namespace:, service:, endpoint:
   )
 
   # Use the Service Directory API to delete the endpoint
-  client.delete_endpoint name: endpoint_path
+  registration_service.delete_endpoint name: endpoint_path
   puts "Deleted endpoint: #{endpoint_path}"
   # [END servicedirectory_delete_endpoint]
 end
@@ -173,10 +175,10 @@ def resolve_service project:, location:, namespace:, service:
   require "google/cloud/service_directory"
 
   # Initialize the client
-  client = Google::Cloud::ServiceDirectory.lookup_service
+  lookup_service = Google::Cloud::ServiceDirectory.lookup_service
 
   # The name of the service
-  service_path = client.service_path(
+  service_path = lookup_service.service_path(
     project:   project,
     location:  location,
     namespace: namespace,
@@ -184,7 +186,7 @@ def resolve_service project:, location:, namespace:, service:
   )
 
   # Use the Service Directory API to resolve the service
-  response = client.resolve_service name: service_path
+  response = lookup_service.resolve_service name: service_path
   puts "Resolved service: #{response.service.name}"
   puts "Endpoints: "
   response.service.endpoints.each do |endpoint|

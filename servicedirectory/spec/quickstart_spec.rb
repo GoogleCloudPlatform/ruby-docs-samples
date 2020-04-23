@@ -13,11 +13,9 @@
 # limitations under the License.
 
 require "rspec"
-require "google/cloud/service_directory/v1beta1"
+require "google/cloud/service_directory"
 
 describe "Service Directory Registration Service Quickstart" do
-  ServiceDirectory = Google::Cloud::ServiceDirectory::V1beta1
-
   before :all do
     $VERBOSE = nil
   end
@@ -29,24 +27,20 @@ describe "Service Directory Registration Service Quickstart" do
 
     # Ensure that there is some test namespace in the project
     test_namespace_id = "test-namespace-#{test_project}"
-    client = ServiceDirectory::RegistrationService::Client.new
-    list_request = ServiceDirectory::ListNamespacesRequest.new(parent:test_parent)
-    test_namespaces = client.list_namespaces list_request
+    registration_service = Google::Cloud::ServiceDirectory.registration_service
+    test_namespaces = registration_service.list_namespaces parent: test_parent
 
     created = test_namespaces.any? do |namespace|
       namespace.name.end_with? test_namespace_id
     end
 
     unless created
-      create_request = ServiceDirectory::CreateNamespaceRequest.new(
-        parent:test_parent, namespace_id:test_namespace_id)
-      test_namespace = client.create_namespace create_request
+      test_namespace = registration_service.create_namespace(
+        parent: test_parent, namespace_id: test_namespace_id)
       expect(test_namespace).not_to eq nil
       expect(test_namespace.name).to include test_namespace_id
     end
 
-    expect(ServiceDirectory::RegistrationService::Paths).to receive(:location_path)
-      .and_return(test_parent)
     expect {
       load File.expand_path("../quickstart.rb", __dir__)
     }.to output(

@@ -20,51 +20,51 @@ describe "Service Directory API Test" do
   ServiceDirectory = Google::Cloud::ServiceDirectory::V1beta1
 
   def get_namespace project:, location:, namespace:
-    client = Google::Cloud::ServiceDirectory.registration_service
-    namespace_path = client.namespace_path(
+    registration_service = Google::Cloud::ServiceDirectory.registration_service
+    namespace_path = registration_service.namespace_path(
       project:   project,
       location:  location,
       namespace: namespace
     )
-    client.get_namespace name: namespace_path
+    registration_service.get_namespace name: namespace_path
   end
 
   def get_service project:, location:, namespace:, service:
-    client = Google::Cloud::ServiceDirectory.registration_service
-    service_path = client.service_path(
+    registration_service = Google::Cloud::ServiceDirectory.registration_service
+    service_path = registration_service.service_path(
       project:   project,
       location:  location,
       namespace: namespace,
       service:   service
     )
-    client.get_service name: service_path
+    registration_service.get_service name: service_path
   end
 
   def get_endpoint project:, location:, namespace:, service:, endpoint:
-    client = Google::Cloud::ServiceDirectory.registration_service
-    endpoint_path = client.endpoint_path(
+    registration_service = Google::Cloud::ServiceDirectory.registration_service
+    endpoint_path = registration_service.endpoint_path(
       project:   project,
       location:  location,
       namespace: namespace,
       service:   service,
       endpoint:  endpoint
     )
-    client.get_endpoint name: endpoint_path
+    registration_service.get_endpoint name: endpoint_path
   end
 
   before :each do
     @project   = ENV["GOOGLE_CLOUD_PROJECT"]
     @location  = "us-central1"
-    @namespace = "ruby-test-namespace-#{Time.now.to_i}"
-    @service   = "test-service-#{Time.now.to_i}"
-    @endpoint  = "test-endpoint-#{Time.now.to_i}"
+    @namespace = "ruby-test-namespace-#{SecureRandom.uuid}"
+    @service   = "test-service-#{SecureRandom.uuid}"
+    @endpoint  = "test-endpoint-#{SecureRandom.uuid}"
 
     $VERBOSE = nil
   end
 
   after :each do
-    client = Google::Cloud::ServiceDirectory.registration_service
-    namespace_path = client.namespace_path(
+    registration_service = Google::Cloud::ServiceDirectory.registration_service
+    namespace_path = registration_service.namespace_path(
       project: @project,
       location: @location,
       namespace: @namespace
@@ -72,7 +72,7 @@ describe "Service Directory API Test" do
     # Ignore errors from delete_namespace because some tests will clean the
     # namespace up, which would cause 'NOT_FOUND' errors
     begin
-      client.delete_namespace name: namespace_path
+      registration_service.delete_namespace name: namespace_path
     rescue
     end
   end

@@ -79,11 +79,10 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  google-cloud-service_directory (~> 0.2.0)
-  google-cloud-service_directory-v1beta1 (~> 0.2.1)
+  google-cloud-service_directory
   rspec
   rspec-retry
   rspec_junit_formatter
 
 BUNDLED WITH
-   2.1.4
+   1.17.3
