@@ -271,7 +271,7 @@ describe "Container Analysis API samples" do
       note_name:     formatted_note,
       resource_uri: @image_url,
       vulnerability: {
-        severity: :CRITICAL,
+        effective_severity: :CRITICAL,
         package_issue: [
           affected_cpe_uri: 'your-uri-here',
           affected_package: 'your-package-here',
