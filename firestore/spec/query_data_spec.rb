@@ -156,7 +156,7 @@ describe "Google Cloud Firestore API samples - Query Data" do
     expect(output).not_to include "Document BJ returned by query array-contains-any ['west_coast', 'east_coast']."
   end
 
-  example "array_contains" do
+  example "array_contains_filter" do
     output = capture do
       array_contains_filter project_id: @firestore_project
     end
