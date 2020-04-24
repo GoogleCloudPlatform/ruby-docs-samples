@@ -32,8 +32,10 @@ RSpec.configure do |config|
   end
 
   config.after :all do
-    test_backup = @instance.backup @backup_id
-    test_backup&.delete
+    if @instance
+      test_backup = @instance.backup @backup_id
+      test_backup&.delete
+    end
   end
 
   def seed
