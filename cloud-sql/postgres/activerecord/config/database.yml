@@ -1,4 +1,4 @@
-# Copyright 2019 Google, Inc
+# Copyright 2020 Google, Inc
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -33,13 +33,13 @@ development:
   # [END cloud_sql_postgres_activerecord_backoff]
   
   # [END_EXCLUDE]
-  username: <%= ENV["PG_USERNAME"] %>
-  password: <%= ENV["PG_PASSWORD"] %>
-  database: <%= ENV.fetch("PG_DATABASE") { "vote_development" } %>
+  username: <%= ENV["DB_USER"] %>
+  password: <%= ENV["DB_PASS"] %>
+  database: <%= ENV.fetch("DB_NAME") { "vote_development" } %>
   # If connecting via unix domain socket, specify the socket path as host
   host:  '/cloudsql/<%= ENV["INSTANCE_CONNECTION_NAME"] %>'
   # If connecting via TCP, enter the IP and port instead
-  # host: '127.0.0.1'
+  # host: '127.0.0.1' # or '172.17.0.1' if deployed to GAE Flex
   # port: 5432
 # [END cloud_sql_postgres_activerecord_create]
 
@@ -58,11 +58,11 @@ production:
   adapter: postgresql
   pool: 5
   timeout: 5000
-  username: <%= ENV["PG_USERNAME"] %>
-  password: <%= ENV["PG_PASSWORD"] %>
-  database: <%= ENV.fetch("PG_DATABASE") { "vote_production" } %>
+  username: <%= ENV["DB_USER"] %>
+  password: <%= ENV["DB_PASS"] %>
+  database: <%= ENV.fetch("DB_NAME") { "vote_production" } %>
   # If connecting via unix domain socket, specify the path as host
   host:  '/cloudsql/<%= ENV["INSTANCE_CONNECTION_NAME"] %>'
   # If connecting via TCP, enter the IP and port instead
-  # host: '172.0.0.1' 
+  # host: '172.17.0.1' 
   # port: 5432
