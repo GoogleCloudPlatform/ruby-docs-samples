@@ -32,7 +32,7 @@ secure solution such as [Secret Manager](https://cloud.google.com/secret-manager
 
 To run this application locally, download and install the `cloud_sql_proxy` by
 following the instructions
-[here](https://cloud.google.com/sql/docs/mysql/sql-proxy#install). Once the
+[here](https://cloud.google.com/sql/docs/mysql/authorize-proxy#installing_the). Once the
 proxy has been downloaded, use the following commands to create the `/cloudsql`
 directory and give the user running the proxy the appropriate permissions:
 ```bash
