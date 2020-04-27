@@ -22,4 +22,5 @@ gem "stackdriver"
 gem "google-cloud-monitoring"
 group :test do
   gem "rspec"
+  gem "rspec_junit_formatter"
 end

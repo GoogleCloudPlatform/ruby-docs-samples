@@ -1223,6 +1223,278 @@ def query_with_timestamp project_id:, instance_id:, database_id:
   # [END spanner_query_with_timestamp_parameter]
 end
 
+def query_with_query_options project_id:, instance_id:, database_id:
+  # [START spanner_query_with_query_options]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+
+  spanner = Google::Cloud::Spanner.new project: project_id
+  client  = spanner.client instance_id, database_id
+
+  sql_query = "SELECT VenueId, VenueName, LastUpdateTime FROM Venues"
+  query_options = { optimizer_version: "1" }
+
+  client.execute(sql_query, query_options: query_options).rows.each do |row|
+    puts "#{row[:VenueId]} #{row[:VenueName]} #{row[:LastUpdateTime]}"
+  end
+  # [END spanner_query_with_query_options]
+end
+
+def create_client_with_query_options project_id:, instance_id:, database_id:
+  # [START spanner_create_client_with_query_options]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+
+  query_options = { optimizer_version: "1" }
+
+  spanner = Google::Cloud::Spanner.new project: project_id
+  client  = spanner.client instance_id, database_id, query_options: query_options
+
+  sql_query = "SELECT VenueId, VenueName, LastUpdateTime FROM Venues"
+
+  client.execute(sql_query).rows.each do |row|
+    puts "#{row[:VenueId]} #{row[:VenueName]} #{row[:LastUpdateTime]}"
+  end
+  # [END spanner_create_client_with_query_options]
+end
+
+def write_read_bool_array project_id:, instance_id:, database_id:
+  # [START spanner_write_read_bool_array]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+  require "securerandom"
+
+  spanner = Google::Cloud::Spanner.new project: project_id
+  database = spanner.database instance_id, database_id
+  job = database.update statements: [
+    "CREATE TABLE Boxes (
+        BoxId             STRING(36) NOT NULL,
+        Heights           ARRAY<INT64>,
+        Weights           ARRAY<FLOAT64>,
+        ErrorChecks       ARRAY<BOOL>
+      ) PRIMARY KEY (BoxId)"
+  ]
+  job.wait_until_done!
+
+  client = spanner.client instance_id, database_id
+
+  box_id = SecureRandom.uuid
+  client.insert "Boxes", BoxId: box_id, ErrorChecks: [true, false, true]
+  results = client.read "Boxes", [:BoxId, :ErrorChecks], keys: box_id
+
+  results.rows.each do |row|
+    puts row["ErrorChecks"]
+  end
+  # [END spanner_write_read_bool_array]
+end
+
+def write_read_empty_int64_array project_id:, instance_id:, database_id:
+  # [START spanner_write_read_empty_int64_array]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+  require "securerandom"
+
+  spanner = Google::Cloud::Spanner.new project: project_id
+  database = spanner.database instance_id, database_id
+  job = database.update statements: [
+    "CREATE TABLE Boxes (
+        BoxId             STRING(36) NOT NULL,
+        Heights           ARRAY<INT64>,
+        Weights           ARRAY<FLOAT64>,
+        ErrorChecks       ARRAY<BOOL>
+      ) PRIMARY KEY (BoxId)"
+  ]
+  job.wait_until_done!
+
+  client = spanner.client instance_id, database_id
+
+  box_id = SecureRandom.uuid
+  client.insert "Boxes", BoxId: box_id, Heights: []
+  results = client.read "Boxes", [:BoxId, :Heights], keys: box_id
+
+  results.rows.each do |row|
+    puts row["Heights"].empty?
+  end
+  # [END spanner_write_read_empty_int64_array]
+end
+
+def write_read_null_int64_array project_id:, instance_id:, database_id:
+  # [START spanner_write_read_null_int64_array]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+  require "securerandom"
+
+  spanner = Google::Cloud::Spanner.new project: project_id
+  database = spanner.database instance_id, database_id
+  job = database.update statements: [
+    "CREATE TABLE Boxes (
+        BoxId             STRING(36) NOT NULL,
+        Heights           ARRAY<INT64>,
+        Weights           ARRAY<FLOAT64>,
+        ErrorChecks       ARRAY<BOOL>
+      ) PRIMARY KEY (BoxId)"
+  ]
+  job.wait_until_done!
+
+  client = spanner.client instance_id, database_id
+
+  box_id = SecureRandom.uuid
+  client.insert "Boxes", BoxId: box_id, Heights: [nil, nil, nil]
+  results = client.read "Boxes", [:BoxId, :Heights], keys: box_id
+
+  results.rows.each do |row|
+    row["Heights"].each { |height| puts height.nil? }
+  end
+  # [END spanner_write_read_null_int64_array]
+end
+
+def write_read_int64_array project_id:, instance_id:, database_id:
+  # [START spanner_write_read_int64_array]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+  require "securerandom"
+
+  spanner = Google::Cloud::Spanner.new project: project_id
+  database = spanner.database instance_id, database_id
+  job = database.update statements: [
+    "CREATE TABLE Boxes (
+        BoxId             STRING(36) NOT NULL,
+        Heights           ARRAY<INT64>,
+        Weights           ARRAY<FLOAT64>,
+        ErrorChecks       ARRAY<BOOL>
+      ) PRIMARY KEY (BoxId)"
+  ]
+  job.wait_until_done!
+
+  client = spanner.client instance_id, database_id
+
+  box_id = SecureRandom.uuid
+  client.insert "Boxes", BoxId: box_id, Heights: [10, 11, 12]
+  results = client.read "Boxes", [:BoxId, :Heights], keys: box_id
+
+  results.rows.each do |row|
+    puts row["Heights"]
+  end
+  # [END spanner_write_read_int64_array]
+end
+
+def write_read_empty_float64_array project_id:, instance_id:, database_id:
+  # [START spanner_write_read_empty_float64_array]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+  require "securerandom"
+
+  spanner = Google::Cloud::Spanner.new project: project_id
+  database = spanner.database instance_id, database_id
+  job = database.update statements: [
+    "CREATE TABLE Boxes (
+        BoxId             STRING(36) NOT NULL,
+        Heights           ARRAY<INT64>,
+        Weights           ARRAY<FLOAT64>,
+        ErrorChecks       ARRAY<BOOL>
+      ) PRIMARY KEY (BoxId)"
+  ]
+  job.wait_until_done!
+
+  client = spanner.client instance_id, database_id
+
+  box_id = SecureRandom.uuid
+  client.insert "Boxes", BoxId: box_id, Weights: []
+  results = client.read "Boxes", [:BoxId, :Weights], keys: box_id
+
+  results.rows.each do |row|
+    puts row["Weights"].empty?
+  end
+  # [END spanner_write_read_empty_float64_array]
+end
+
+def write_read_null_float64_array project_id:, instance_id:, database_id:
+  # [START spanner_write_read_null_float64_array]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+  require "securerandom"
+
+  spanner = Google::Cloud::Spanner.new project: project_id
+  database = spanner.database instance_id, database_id
+  job = database.update statements: [
+    "CREATE TABLE Boxes (
+        BoxId             STRING(36) NOT NULL,
+        Heights           ARRAY<INT64>,
+        Weights           ARRAY<FLOAT64>,
+        ErrorChecks       ARRAY<BOOL>
+      ) PRIMARY KEY (BoxId)"
+  ]
+  job.wait_until_done!
+
+  client = spanner.client instance_id, database_id
+
+  box_id = SecureRandom.uuid
+  client.insert "Boxes", BoxId: box_id, Weights: [nil, nil, nil]
+  results = client.read "Boxes", [:BoxId, :Weights], keys: box_id
+
+  results.rows.each do |row|
+    row["Weights"].each { |weight| puts weight.nil? }
+  end
+  # [END spanner_write_read_null_float64_array]
+end
+
+def write_read_float64_array project_id:, instance_id:, database_id:
+  # [START spanner_write_read_float64_array]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+  require "securerandom"
+
+  spanner = Google::Cloud::Spanner.new project: project_id
+  database = spanner.database instance_id, database_id
+  job = database.update statements: [
+    "CREATE TABLE Boxes (
+        BoxId             STRING(36) NOT NULL,
+        Heights           ARRAY<INT64>,
+        Weights           ARRAY<FLOAT64>,
+        ErrorChecks       ARRAY<BOOL>
+      ) PRIMARY KEY (BoxId)"
+  ]
+  job.wait_until_done!
+
+  client = spanner.client instance_id, database_id
+
+  box_id = SecureRandom.uuid
+  client.insert "Boxes", BoxId: box_id, Weights: [10.001, 11.1212, 104.4123101]
+  results = client.read "Boxes", [:BoxId, :Weights], keys: box_id
+
+  results.rows.each do |row|
+    puts row["Weights"]
+  end
+  # [END spanner_write_read_float64_array]
+end
+
 def usage
   puts <<~USAGE
 
@@ -1277,6 +1549,15 @@ def usage
       query_with_int                     <instance_id> <database_id> Queries data using a INT64 parameter.
       query_with_string                  <instance_id> <database_id> Queries data using a STRING parameter.
       query_with_timestamp               <instance_id> <database_id> Queries data using a TIMESTAMP parameter.
+      query_with_query_options           <instance_id> <database_id> Queries data with query options.
+      create_client_with_query_options   <instance_id> <database_id> Create a client with query options.
+      write_read_bool_array              <instance_id> <database_id> Writes and read BOOL array.
+      write_read_empty_int64_array       <instance_id> <database_id> Writes empty INT64 array and read.
+      write_read_null_int64_array        <instance_id> <database_id> Writes nil to INT64 array and read.
+      write_read_int64_array             <instance_id> <database_id> Writes INT64 array and read.
+      write_read_empty_float64_array     <instance_id> <database_id> Writes empty FLOAT64 array and read.
+      write_read_null_float64_array      <instance_id> <database_id> Writes nil to FLOAT64 array and read.
+      write_read_float64_array           <instance_id> <database_id> Writes FLOAT64 array and read.
 
     Environment variables:
       GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
@@ -1308,7 +1589,11 @@ def run_sample arguments
     "create_table_with_datatypes", "write_datatypes_data",
     "query_with_array", "query_with_bool", "query_with_bytes", "query_with_date",
     "query_with_float", "query_with_int", "query_with_string",
-    "query_with_timestamp"
+    "query_with_timestamp", "query_with_query_options",
+    "create_client_with_query_options", "write_read_bool_array",
+    "write_read_empty_int64_array", "write_read_null_int64_array",
+    "write_read_int64_array", "write_read_empty_float64_array",
+    "write_read_null_float64_array", "write_read_float64_array"
   ]
   if command.eql?("query_data_with_index") && instance_id && database_id && arguments.size >= 2
     query_data_with_index project_id:  project_id,

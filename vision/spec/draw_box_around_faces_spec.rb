@@ -44,10 +44,7 @@ describe "Draw box around faces sample" do
                               path_to_output_file: output_image_file.path
       end
       expect(captured_output).to include "Face bounds:"
-      expect(captured_output).to include "(126, 0)"
-      expect(captured_output).to include "(338, 0)"
-      expect(captured_output).to include "(338, 202)"
-      expect(captured_output).to include "(126, 202)"
+      expect(captured_output).to match(/\(\d+, \d+\)\n\(\d+, \d+\)\n\(\d+, \d+\)\n\(\d+, \d+\)\n/)
       expect(File.size(output_image_file.path)).to be > 0
     ensure
       output_image_file.close

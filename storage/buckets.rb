@@ -12,13 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-def list_buckets project_id:
+def list_buckets
   # [START list_buckets]
-  # project_id = "Your Google Cloud project ID"
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
 
   storage.buckets.each do |bucket|
     puts bucket.name
@@ -26,14 +25,13 @@ def list_buckets project_id:
   # [END list_buckets]
 end
 
-def list_bucket_details project_id:, bucket_name:
+def list_bucket_details bucket_name:
   # [START storage_get_bucket_metadata]
-  # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
   bucket  = storage.bucket bucket_name
 
   puts "ID:                       #{bucket.id}"
@@ -63,14 +61,13 @@ def list_bucket_details project_id:, bucket_name:
   # [END storage_get_bucket_metadata]
 end
 
-def disable_requester_pays project_id:, bucket_name:
+def disable_requester_pays bucket_name:
   # [START disable_requester_pays]
-  # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Name of your Google Cloud Storage bucket"
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
   bucket  = storage.bucket bucket_name
 
   bucket.requester_pays = false
@@ -79,14 +76,13 @@ def disable_requester_pays project_id:, bucket_name:
   # [END disable_requester_pays]
 end
 
-def enable_requester_pays project_id:, bucket_name:
+def enable_requester_pays bucket_name:
   # [START enable_requester_pays]
-  # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Name of your Google Cloud Storage bucket"
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
   bucket  = storage.bucket bucket_name
 
   bucket.requester_pays = true
@@ -95,14 +91,13 @@ def enable_requester_pays project_id:, bucket_name:
   # [END enable_requester_pays]
 end
 
-def get_requester_pays_status project_id:, bucket_name:
+def get_requester_pays_status bucket_name:
   # [START get_requester_pays_status]
-  # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Name of your Google Cloud Storage bucket"
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
   bucket  = storage.bucket bucket_name
 
   if bucket.requester_pays
@@ -113,14 +108,13 @@ def get_requester_pays_status project_id:, bucket_name:
   # [END get_requester_pays_status]
 end
 
-def disable_uniform_bucket_level_access project_id:, bucket_name:
+def disable_uniform_bucket_level_access bucket_name:
   # [START storage_disable_uniform_bucket_level_access]
-  # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Name of your Google Cloud Storage bucket"
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
   bucket  = storage.bucket bucket_name
 
   bucket.uniform_bucket_level_access = false
@@ -129,14 +123,13 @@ def disable_uniform_bucket_level_access project_id:, bucket_name:
   # [END storage_disable_uniform_bucket_level_access]
 end
 
-def enable_uniform_bucket_level_access project_id:, bucket_name:
+def enable_uniform_bucket_level_access bucket_name:
   # [START storage_enable_uniform_bucket_level_access]
-  # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Name of your Google Cloud Storage bucket"
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
   bucket  = storage.bucket bucket_name
 
   bucket.uniform_bucket_level_access = true
@@ -145,14 +138,13 @@ def enable_uniform_bucket_level_access project_id:, bucket_name:
   # [END storage_enable_uniform_bucket_level_access]
 end
 
-def get_uniform_bucket_level_access project_id:, bucket_name:
+def get_uniform_bucket_level_access bucket_name:
   # [START storage_get_uniform_bucket_level_access]
-  # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Name of your Google Cloud Storage bucket"
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
   bucket  = storage.bucket bucket_name
 
   if bucket.uniform_bucket_level_access?
@@ -164,15 +156,14 @@ def get_uniform_bucket_level_access project_id:, bucket_name:
   # [END storage_get_uniform_bucket_level_access]
 end
 
-def enable_default_kms_key project_id:, bucket_name:, default_kms_key:
+def enable_default_kms_key bucket_name:, default_kms_key:
   # [START storage_set_bucket_default_kms_key]
-  # project_id      = "Your Google Cloud project ID"
   # bucket_name     = "Name of your Google Cloud Storage bucket"
   # default_kms_key = "KMS key resource id"
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
   bucket  = storage.bucket bucket_name
 
   bucket.default_kms_key = default_kms_key
@@ -181,31 +172,28 @@ def enable_default_kms_key project_id:, bucket_name:, default_kms_key:
   # [END storage_set_bucket_default_kms_key]
 end
 
-def create_bucket project_id:, bucket_name:
+def create_bucket bucket_name:
   # [START create_bucket]
-  # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Name of Google Cloud Storage bucket to create"
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
   bucket  = storage.create_bucket bucket_name
 
   puts "Created bucket: #{bucket.name}"
   # [END create_bucket]
 end
 
-def create_bucket_class_location(project_id:, bucket_name:, location:,
-                                 storage_class:)
+def create_bucket_class_location bucket_name:, location:, storage_class:
   # [START create_bucket_class_location]
-  # project_id    = "Your Google Cloud project ID"
   # bucket_name   = "Name of Google Cloud Storage bucket to create"
   # location      = "Location of where to create Cloud Storage bucket"
   # storage_class = "Storage class of Cloud Storage bucket"
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
   bucket  = storage.create_bucket bucket_name,
                                   location:      location,
                                   storage_class: storage_class
@@ -215,14 +203,13 @@ def create_bucket_class_location(project_id:, bucket_name:, location:,
   # [END create_bucket_class_location]
 end
 
-def list_bucket_labels project_id:, bucket_name:
+def list_bucket_labels bucket_name:
   # [START get_bucket_labels]
-  # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Name of your Google Cloud Storage bucket"
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
   bucket  = storage.bucket bucket_name
 
   puts "Labels for #{bucket_name}"
@@ -232,16 +219,15 @@ def list_bucket_labels project_id:, bucket_name:
   # [END get_bucket_labels]
 end
 
-def add_bucket_label project_id:, bucket_name:, label_key:, label_value:
+def add_bucket_label bucket_name:, label_key:, label_value:
   # [START add_bucket_label]
-  # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Name of your Google Cloud Storage bucket"
   # label_key   = "Cloud Storage bucket Label Key"
   # label_value = "Cloud Storage bucket Label Value"
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
   bucket  = storage.bucket bucket_name
 
   bucket.update do |bucket|
@@ -252,15 +238,14 @@ def add_bucket_label project_id:, bucket_name:, label_key:, label_value:
   # [END add_bucket_label]
 end
 
-def delete_bucket_label project_id:, bucket_name:, label_key:
+def delete_bucket_label bucket_name:, label_key:
   # [START remove_bucket_label]
-  # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Name of your Google Cloud Storage bucket"
   # label_key   = "Cloud Storage bucket Label Key"
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
   bucket  = storage.bucket bucket_name
 
   bucket.update do |bucket|
@@ -271,14 +256,13 @@ def delete_bucket_label project_id:, bucket_name:, label_key:
   # [END remove_bucket_label]
 end
 
-def delete_bucket project_id:, bucket_name:
+def delete_bucket bucket_name:
   # [START delete_bucket]
-  # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Name of your Google Cloud Storage bucket to delete"
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
   bucket  = storage.bucket bucket_name
 
   bucket.delete
@@ -287,15 +271,14 @@ def delete_bucket project_id:, bucket_name:
   # [END delete_bucket]
 end
 
-def set_retention_policy project_id:, bucket_name:, retention_period:
+def set_retention_policy bucket_name:, retention_period:
   # [START storage_set_retention_policy]
-  # project_id       = "Your Google Cloud project ID"
   # bucket_name      = "Name of your Google Cloud Storage bucket"
   # retention_period = "Object retention period defined in seconds"
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
   bucket  = storage.bucket bucket_name
 
   bucket.retention_period = retention_period
@@ -304,14 +287,13 @@ def set_retention_policy project_id:, bucket_name:, retention_period:
   # [END storage_set_retention_policy]
 end
 
-def lock_retention_policy project_id:, bucket_name:
+def lock_retention_policy bucket_name:
   # [START storage_lock_retention_policy]
-  # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Name of your Google Cloud Storage bucket"
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
   bucket  = storage.bucket bucket_name
 
   # Warning: Once a retention policy is locked it cannot be unlocked
@@ -324,14 +306,13 @@ def lock_retention_policy project_id:, bucket_name:
   # [END storage_lock_retention_policy]
 end
 
-def remove_retention_policy project_id:, bucket_name:
+def remove_retention_policy bucket_name:
   # [START storage_remove_retention_policy]
-  # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Name of your Google Cloud Storage bucket"
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
   bucket  = storage.bucket bucket_name
 
   if !bucket.retention_policy_locked?
@@ -343,14 +324,13 @@ def remove_retention_policy project_id:, bucket_name:
   # [END storage_remove_retention_policy]
 end
 
-def get_retention_policy project_id:, bucket_name:
+def get_retention_policy bucket_name:
   # [START storage_get_retention_policy]
-  # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Name of your Google Cloud Storage bucket"
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
   bucket  = storage.bucket bucket_name
 
   puts "Retention policy:"
@@ -360,14 +340,13 @@ def get_retention_policy project_id:, bucket_name:
   # [END storage_get_retention_policy]
 end
 
-def enable_default_event_based_hold project_id:, bucket_name:
+def enable_default_event_based_hold bucket_name:
   # [START storage_enable_default_event_based_hold]
-  # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Name of your Google Cloud Storage bucket"
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
   bucket  = storage.bucket bucket_name
 
   bucket.update do |b|
@@ -378,14 +357,13 @@ def enable_default_event_based_hold project_id:, bucket_name:
   # [END storage_enable_default_event_based_hold]
 end
 
-def disable_default_event_based_hold project_id:, bucket_name:
+def disable_default_event_based_hold bucket_name:
   # [START storage_disable_default_event_based_hold]
-  # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Name of your Google Cloud Storage bucket"
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
   bucket  = storage.bucket bucket_name
 
   bucket.update do |b|
@@ -396,98 +374,76 @@ def disable_default_event_based_hold project_id:, bucket_name:
   # [END storage_disable_default_event_based_hold]
 end
 
-def get_default_event_based_hold project_id:, bucket_name:
+def get_default_event_based_hold bucket_name:
   # [START storage_get_default_event_based_hold]
-  # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Name of your Google Cloud Storage bucket"
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
   bucket  = storage.bucket bucket_name
 
   if bucket.default_event_based_hold?
-    puts "Default event-based hold is enabled for {bucket_name}."
+    puts "Default event-based hold is enabled for #{bucket_name}."
   else
-    puts "Default event-based hold is not enabled for {bucket_name}."
+    puts "Default event-based hold is not enabled for #{bucket_name}."
   end
   # [END storage_get_default_event_based_hold]
 end
 
 if $PROGRAM_NAME == __FILE__
-  project_id = ENV["GOOGLE_CLOUD_PROJECT"]
-
   case ARGV.shift
   when "list"
-    list_buckets project_id: project_id
+    list_buckets
   when "metadata"
-    list_bucket_details project_id:  project_id,
-                        bucket_name: ARGV.shift
+    list_bucket_details bucket_name: ARGV.shift
   when "create"
     if ARGV.size == 1
-      create_bucket project_id:  project_id,
-                    bucket_name: ARGV.shift
+      create_bucket bucket_name: ARGV.shift
     elsif ARGV.size == 3
-      create_bucket_class_location project_id:    project_id,
-                                   bucket_name:   ARGV.shift,
+      create_bucket_class_location bucket_name:   ARGV.shift,
                                    location:      ARGV.shift,
                                    storage_class: ARGV.shift
     end
   when "delete"
-    delete_bucket project_id:  project_id,
-                  bucket_name: ARGV.shift
+    delete_bucket bucket_name: ARGV.shift
   when "enable_requester_pays"
-    enable_requester_pays project_id:  project_id,
-                          bucket_name: ARGV.shift
+    enable_requester_pays bucket_name: ARGV.shift
   when "disable_requester_pays"
-    disable_requester_pays project_id:  project_id,
-                           bucket_name: ARGV.shift
+    disable_requester_pays bucket_name: ARGV.shift
   when "enable_default_kms_key"
-    enable_default_kms_key project_id:      project_id,
-                           bucket_name:     ARGV.shift,
+    enable_default_kms_key bucket_name:     ARGV.shift,
                            default_kms_key: ARGV.shift
   when "check_requester_pays"
-    check_requester_pays project_id:  project_id,
-                         bucket_name: ARGV.shift
+    check_requester_pays bucket_name: ARGV.shift
   when "list_bucket_labels"
-    list_bucket_labels project_id: project_id
+    list_bucket_labels
   when "add_bucket_label"
-    add_bucket_label project_id:  project_id,
-                     bucket_name: ARGV.shift,
+    add_bucket_label bucket_name: ARGV.shift,
                      label_key:   ARGV.shift,
                      label_value: ARGV.shift
   when "delete_bucket_label"
-    delete_bucket_label project_id:  project_id,
-                        bucket_name: ARGV.shift,
+    delete_bucket_label bucket_name: ARGV.shift,
                         label_key:   ARGV.shift
   when "set_retention_policy"
-    set_retention_policy project_id:       project_id,
-                         bucket_name:      ARGV.shift,
+    set_retention_policy bucket_name:      ARGV.shift,
                          retention_period: ARGV.shift
   when "get_retention_policy"
-    get_retention_policy project_id:  project_id,
-                         bucket_name: ARGV.shift
+    get_retention_policy bucket_name: ARGV.shift
   when "lock_retention_policy"
-    lock_retention_policy project_id:  project_id,
-                          bucket_name: ARGV.shift
+    lock_retention_policy bucket_name: ARGV.shift
   when "enable_default_event_based_hold"
-    enable_default_event_based_hold project_id:  project_id,
-                                    bucket_name: ARGV.shift
+    enable_default_event_based_hold bucket_name: ARGV.shift
   when "disable_default_event_based_hold"
-    disable_default_event_based_hold project_id:  project_id,
-                                     bucket_name: ARGV.shift
+    disable_default_event_based_hold bucket_name: ARGV.shift
   when "get_default_event_based_hold"
-    get_default_event_based_hold project_id:  project_id,
-                                 bucket_name: ARGV.shift
+    get_default_event_based_hold bucket_name: ARGV.shift
   when "enable_uniform_bucket_level_access"
-    enable_uniform_bucket_level_access project_id:  project_id,
-                                       bucket_name: ARGV.shift
+    enable_uniform_bucket_level_access bucket_name: ARGV.shift
   when "disable_uniform_bucket_level_access"
-    disable_uniform_bucket_level_access project_id:  project_id,
-                                        bucket_name: ARGV.shift
+    disable_uniform_bucket_level_access bucket_name: ARGV.shift
   when "get_uniform_bucket_level_access"
-    get_uniform_bucket_level_access project_id:  project_id,
-                                    bucket_name: ARGV.shift
+    get_uniform_bucket_level_access bucket_name: ARGV.shift
   else
     puts <<~USAGE
       Usage: bundle exec ruby buckets.rb [command] [arguments]

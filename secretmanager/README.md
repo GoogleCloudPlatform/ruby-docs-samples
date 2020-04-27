@@ -47,18 +47,20 @@ These samples show how to use the [Google Secret Manager API]
     Usage: bundle exec ruby snippets.rb [command] [arguments]
 
     Commands:
-      access_secret_version <secret> <version>     Access a secret version
-      add_secret_version <secret>                  Add a new secret version
-      create_secret <secret>                       Create a new secret
-      delete_secret <secret>                       Delete an existing secret
-      destroy_secret_version <secret> <version>    Destroy a secret version
-      disable_secret_version <secret> <version>    Disable a secret version
-      enable_secret_version <secret> <version>     Enable a secret version
-      get_secret <secret>                          Get a secret
-      get_secret_version <secret> <version>        Get a secret version
-      list_secret_versions <secret>                List all versions for a secret
-      list_secrets                                 List all secrets
-      update_secret <secret>                       Update a secret
+      access_secret_version <secret> <version>           Access a secret version
+      add_secret_version <secret>                        Add a new secret version
+      create_secret <secret>                             Create a new secret
+      delete_secret <secret>                             Delete an existing secret
+      destroy_secret_version <secret> <version>          Destroy a secret version
+      disable_secret_version <secret> <version>          Disable a secret version
+      enable_secret_version <secret> <version>           Enable a secret version
+      get_secret <secret>                                Get a secret
+      get_secret_version <secret> <version>              Get a secret version
+      iam_grant_access <secret> <version> <member>       Grant the member access to the secret
+      iam_revoke_access <secret> <version> <member>      Revoke the member access to the secret
+      list_secret_versions <secret>                      List all versions for a secret
+      list_secrets                                       List all secrets
+      update_secret <secret>                             Update a secret
 
     Environment variables:
       GOOGLE_CLOUD_PROJECT    ID of the Google Cloud project to run snippets

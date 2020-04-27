@@ -3,6 +3,7 @@ inherit_gem:
 AllCops:
   Exclude:
     - "**/spec/**"
+    - "Rakefile"
 Lint/RescueException:
   Exclude:
     - "pubsub/subscriptions.rb"

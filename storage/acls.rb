@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-def print_bucket_acl project_id:, bucket_name:
+def print_bucket_acl bucket_name:
   # [START print_bucket_acl]
-  # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
   bucket  = storage.bucket bucket_name
 
   puts "ACL for #{bucket_name}:"
@@ -38,15 +37,14 @@ def print_bucket_acl project_id:, bucket_name:
   # [END print_bucket_acl]
 end
 
-def print_bucket_acl_for_user project_id:, bucket_name:, email:
+def print_bucket_acl_for_user bucket_name:, email:
   # [START print_bucket_acl_for_user]
-  # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
   # email       = "Google Cloud Storage ACL Entity email"
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
   bucket  = storage.bucket bucket_name
 
   puts "Permissions for #{email}:"
@@ -56,15 +54,14 @@ def print_bucket_acl_for_user project_id:, bucket_name:, email:
   # [END print_bucket_acl_for_user]
 end
 
-def add_bucket_owner project_id:, bucket_name:, email:
+def add_bucket_owner bucket_name:, email:
   # [START add_bucket_owner]
-  # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
   # email       = "Google Cloud Storage ACL Entity email"
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
   bucket  = storage.bucket bucket_name
 
   bucket.acl.add_owner email
@@ -73,7 +70,7 @@ def add_bucket_owner project_id:, bucket_name:, email:
   # [END add_bucket_owner]
 end
 
-def remove_bucket_acl project_id:, bucket_name:, email:
+def remove_bucket_acl bucket_name:, email:
   # [START remove_bucket_acl]
   # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
@@ -81,7 +78,7 @@ def remove_bucket_acl project_id:, bucket_name:, email:
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
   bucket  = storage.bucket bucket_name
 
   bucket.acl.delete email
@@ -90,15 +87,14 @@ def remove_bucket_acl project_id:, bucket_name:, email:
   # [END remove_bucket_acl]
 end
 
-def add_bucket_default_owner project_id:, bucket_name:, email:
+def add_bucket_default_owner bucket_name:, email:
   # [START add_bucket_default_owner]
-  # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
   # email       = "Google Cloud Storage ACL Entity email"
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
   bucket  = storage.bucket bucket_name
 
   bucket.default_acl.add_owner email
@@ -107,15 +103,14 @@ def add_bucket_default_owner project_id:, bucket_name:, email:
   # [END add_bucket_default_owner]
 end
 
-def remove_bucket_default_acl project_id:, bucket_name:, email:
+def remove_bucket_default_acl bucket_name:, email:
   # [START remove_bucket_default_acl]
-  # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
   # email       = "Google Cloud Storage ACL Entity email"
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
   bucket  = storage.bucket bucket_name
 
   bucket.default_acl.delete email
@@ -124,16 +119,15 @@ def remove_bucket_default_acl project_id:, bucket_name:, email:
   # [END remove_bucket_default_acl]
 end
 
-def print_file_acl project_id:, bucket_name:, file_name:
+def print_file_acl bucket_name:, file_name:
   # [START print_file_acl]
-  # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
   # file_name   = "Name of a file in the Storage bucket"
   # email       = "Google Cloud Storage ACL Entity email"
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
   bucket  = storage.bucket bucket_name
   file    = bucket.file file_name
 
@@ -149,16 +143,15 @@ def print_file_acl project_id:, bucket_name:, file_name:
   # [END print_file_acl]
 end
 
-def print_file_acl_for_user project_id:, bucket_name:, file_name:, email:
+def print_file_acl_for_user bucket_name:, file_name:, email:
   # [START print_file_acl_for_user]
-  # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
   # file_name   = "Name of a file in the Storage bucket"
   # email       = "Google Cloud Storage ACL Entity email"
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
   bucket  = storage.bucket bucket_name
   file    = bucket.file file_name
 
@@ -168,16 +161,15 @@ def print_file_acl_for_user project_id:, bucket_name:, file_name:, email:
   # [END print_file_acl_for_user]
 end
 
-def add_file_owner project_id:, bucket_name:, file_name:, email:
+def add_file_owner bucket_name:, file_name:, email:
   # [START add_file_owner]
-  # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
   # file_name   = "Name of a file in the Storage bucket"
   # email       = "Google Cloud Storage ACL Entity email"
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
   bucket  = storage.bucket bucket_name
   file    = bucket.file file_name
 
@@ -187,16 +179,15 @@ def add_file_owner project_id:, bucket_name:, file_name:, email:
   # [END add_file_owner]
 end
 
-def remove_file_acl project_id:, bucket_name:, file_name:, email:
+def remove_file_acl bucket_name:, file_name:, email:
   # [START remove_file_acl]
-  # project_id  = "Your Google Cloud project ID"
   # bucket_name = "Your Google Cloud Storage bucket name"
   # file_name   = "Name of a file in the Storage bucket"
   # email       = "Google Cloud Storage ACL Entity email"
 
   require "google/cloud/storage"
 
-  storage = Google::Cloud::Storage.new project_id: project_id
+  storage = Google::Cloud::Storage.new
   bucket  = storage.bucket bucket_name
   file    = bucket.file file_name
 
@@ -207,50 +198,39 @@ def remove_file_acl project_id:, bucket_name:, file_name:, email:
 end
 
 def run_sample arguments
-  command    = arguments.shift
-  project_id = ENV["GOOGLE_CLOUD_PROJECT"]
+  command = arguments.shift
 
   case command
   when "print_bucket_acl"
-    print_bucket_acl project_id:  project_id,
-                     bucket_name: arguments.shift
+    print_bucket_acl bucket_name: arguments.shift
   when "print_bucket_acl_for_user"
-    print_bucket_acl_for_user project_id:  project_id,
-                              bucket_name: arguments.shift,
+    print_bucket_acl_for_user bucket_name: arguments.shift,
                               email:       arguments.shift
   when "add_bucket_owner"
-    add_bucket_owner project_id:  project_id,
-                     bucket_name: arguments.shift,
+    add_bucket_owner bucket_name: arguments.shift,
                      email:       arguments.shift
   when "remove_bucket_acl"
-    remove_bucket_acl project_id:  project_id,
-                      bucket_name: arguments.shift,
+    remove_bucket_acl bucket_name: arguments.shift,
                       email:       arguments.shift
   when "add_bucket_default_owner"
-    add_bucket_default_owner project_id:  project_id,
-                             bucket_name: arguments.shift,
+    add_bucket_default_owner bucket_name: arguments.shift,
                              email:       arguments.shift
   when "remove_bucket_default_acl"
-    remove_bucket_default_acl project_id:  project_id,
-                              bucket_name: arguments.shift,
+    remove_bucket_default_acl bucket_name: arguments.shift,
                               email:       arguments.shift
   when "print_file_acl"
-    print_file_acl project_id:  project_id,
-                   bucket_name: arguments.shift,
+    print_file_acl bucket_name: arguments.shift,
                    file_name:   arguments.shift
   when "print_file_acl_for_user"
-    print_file_acl_for_user project_id:  project_id,
-                            bucket_name: arguments.shift,
+    print_file_acl_for_user bucket_name: arguments.shift,
                             file_name:   arguments.shift,
                             email:       arguments.shift
   when "add_file_owner"
-    add_file_owner project_id:  project_id,
-                   bucket_name: arguments.shift,
+    add_file_owner bucket_name: arguments.shift,
                    file_name:   arguments.shift,
                    email:       arguments.shift
   when "remove_file_acl"
-    remove_file_acl project_id:  project_id,
-                    bucket_name: arguments.shift,
+    remove_file_acl bucket_name: arguments.shift,
                     file_name:   arguments.shift,
                     email:       arguments.shift
   else

@@ -24,6 +24,8 @@ describe "Secret Manager Snippets" do
   let(:secret_id) { "ruby-quickstart-#{(Time.now.to_f*1000).to_i}" }
   let(:secret_name) { "projects/#{project_id}/secrets/#{secret_id}" }
 
+  let(:iam_user) { "user:sethvargo@google.com" }
+
   let(:secret) do
     client.create_secret(
       parent:    "projects/#{project_id}",
@@ -201,6 +203,59 @@ describe "Secret Manager Snippets" do
         expect(n_version).to be
         expect(n_version.name).to eq(secret_version.name)
       }.to output(/Got secret version/).to_stdout
+    end
+  end
+
+  describe "#iam_grant_access" do
+    it "grants access to the secret" do
+      expect(secret).to be
+      expect {
+        policy = iam_grant_access(
+          project_id: project_id,
+          secret_id:  secret_id,
+          member:     iam_user
+        )
+
+        expect(policy).to be
+        bind = policy.bindings.find do |b|
+          b.role == "roles/secretmanager.secretAccessor"
+        end
+
+        expect(bind).to be
+        expect(bind.members).to include(iam_user)
+      }.to output(/Updated IAM policy/).to_stdout
+    end
+  end
+
+  describe "#iam_revoke_access" do
+    it "revokes access to the secret" do
+      expect(secret).to be
+
+      # Add an IAM member
+      name = client.secret_path project: project_id, secret: secret_id
+      policy = client.get_iam_policy resource: name
+      policy.bindings << Google::Iam::V1::Binding.new(
+        members: [iam_user],
+        role:    "roles/secretmanager.secretAccessor"
+      )
+      new_policy = client.set_iam_policy resource: name, policy: policy
+
+      expect {
+        policy = iam_revoke_access(
+          project_id: project_id,
+          secret_id:  secret_id,
+          member:     iam_user
+        )
+
+        expect(policy).to be
+        bind = policy.bindings.find do |b|
+          b.role == "roles/secretmanager.secretAccessor"
+        end
+
+        # The only member was iam_user, so the server will remove the binding
+        # automatically.
+        expect(bind).to_not be
+      }.to output(/Updated IAM policy/).to_stdout
     end
   end
 

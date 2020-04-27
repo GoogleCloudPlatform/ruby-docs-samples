@@ -70,6 +70,12 @@ describe "Google Cloud Spanner API samples" do
     end
   end
 
+  def create_boxes_database
+    job = @instance.create_database @database_id
+    job.wait_until_done!
+    @test_database = job.database
+  end
+
   # Capture and return STDOUT output by block
   def capture
     real_stdout = $stdout
@@ -101,9 +107,11 @@ describe "Google Cloud Spanner API samples" do
     expect(@test_database).not_to be nil
 
     data_definition_statements = @test_database.ddl
-    expect(data_definition_statements.size).to  eq 2
-    expect(data_definition_statements.first).to include "CREATE TABLE Singers"
-    expect(data_definition_statements.last).to  include "CREATE TABLE Albums"
+
+    expect(data_definition_statements.size).to eq 2
+
+    expect(data_definition_statements).to include(match "CREATE TABLE Singers")
+    expect(data_definition_statements).to include(match "CREATE TABLE Albums")
   end
 
   example "create table with timestamp column" do
@@ -1197,7 +1205,7 @@ describe "Google Cloud Spanner API samples" do
 
     expect(captured_output).to include "4 Venue 4 2018-09-02"
     expect(captured_output).to include "42 Venue 42 2018-10-01"
-    
+
     capture do
       query_with_float project_id:  @project_id,
                       instance_id: @instance.instance_id,
@@ -1206,7 +1214,7 @@ describe "Google Cloud Spanner API samples" do
 
     expect(captured_output).to include "4 Venue 4 0.8"
     expect(captured_output).to include "19 Venue 19 0.9"
-    
+
     capture do
       query_with_int project_id:  @project_id,
                       instance_id: @instance.instance_id,
@@ -1233,5 +1241,101 @@ describe "Google Cloud Spanner API samples" do
     expect(captured_output).to include "4 Venue 4"
     expect(captured_output).to include "19 Venue 19"
     expect(captured_output).to include "42 Venue 42"
+  end
+
+  example "query data with query options" do
+    database = create_singers_albums_database
+    create_venues_table
+
+    # Ignore the following capture block
+    capture do
+      write_datatypes_data project_id:  @project_id,
+                           instance_id: @instance.instance_id,
+                           database_id: database.database_id
+    end
+
+    capture do
+      query_with_query_options project_id:  @project_id,
+                      instance_id: @instance.instance_id,
+                      database_id: database.database_id
+    end
+
+    expect(captured_output).to include "4 Venue 4"
+    expect(captured_output).to include "19 Venue 19"
+    expect(captured_output).to include "42 Venue 42"
+
+    capture do
+      create_client_with_query_options project_id:  @project_id,
+                      instance_id: @instance.instance_id,
+                      database_id: database.database_id
+    end
+
+    expect(captured_output).to include "4 Venue 4"
+    expect(captured_output).to include "19 Venue 19"
+    expect(captured_output).to include "42 Venue 42"
+  end
+
+  example "write data with array types and read" do
+    database = create_boxes_database
+
+    capture do
+      write_read_bool_array project_id: @project_id,
+                            instance_id: @instance.instance_id,
+                            database_id: database.database_id
+    end
+
+    expect(captured_output.split("\n")).to match_array(["true", "false", "true"])
+
+    capture do
+      write_read_empty_int64_array project_id: @project_id,
+                                   instance_id: @instance.instance_id,
+                                   database_id: database.database_id
+    end
+
+    expect(captured_output).to include "true"
+
+    capture do
+      write_read_null_int64_array project_id: @project_id,
+                                  instance_id: @instance.instance_id,
+                                  database_id: database.database_id
+    end
+
+    expect(captured_output.split("\n")).to match_array(["true", "true", "true"])
+
+    capture do
+      write_read_int64_array project_id: @project_id,
+                             instance_id: @instance.instance_id,
+                             database_id: database.database_id
+    end
+
+    expect(captured_output).to include "10"
+    expect(captured_output).to include "11"
+    expect(captured_output).to include "12"
+
+    capture do
+      write_read_empty_float64_array project_id: @project_id,
+                                     instance_id: @instance.instance_id,
+                                     database_id: database.database_id
+    end
+
+    expect(captured_output).to include "true"
+
+    capture do
+      write_read_null_float64_array project_id: @project_id,
+                                    instance_id: @instance.instance_id,
+                                    database_id: database.database_id
+    end
+
+    expect(captured_output.split("\n")).to match_array(["true", "true", "true"])
+
+    capture do
+      write_read_float64_array project_id: @project_id,
+                               instance_id: @instance.instance_id,
+                               database_id: database.database_id
+    end
+
+    expect(captured_output).to include "10.001"
+    expect(captured_output).to include "11.1212"
+    expect(captured_output).to include "104.4123101"
   end
 end

@@ -78,11 +78,14 @@ Commands:
   make_public  <bucket> <file>                                      Make a file in a bucket public
   rename       <bucket> <file> <new>                                Rename a file in a bucket
   copy <srcBucket> <srcFile> <destBucket> <destFile>                Copy file to other bucket
-  generate_signed_url <bucket> <file>                               Generate a signed url for a file
-  set_event_based_hold     <bucket> <file>                          Set an event-based hold on a file
-  release_event_based_hold <bucket> <file>                          Relase an event-based hold on a file
-  set_temporary_hold       <bucket> <file>                          Set a temporary hold on a file
-  release_temporary_hold   <bucket> <file>                          Release a temporary hold on a file
+  generate_signed_url <bucket> <file>                               Generate a V2 signed url for a file
+  generate_signed_get_url_v4 <bucket> <file>                        Generate a V4 signed get url for a file
+  generate_signed_put_url_v4 <bucket> <file>                        Generate a V4 signed put url for a file
+  generate_signed_post_policy_v4 <bucket> <file>                    Generate a V4 signed post policy for a file and print HTML form
+  set_event_based_hold       <bucket> <file>                        Set an event-based hold on a file
+  release_event_based_hold   <bucket> <file>                        Relase an event-based hold on a file
+  set_temporary_hold         <bucket> <file>                        Set a temporary hold on a file
+  release_temporary_hold     <bucket> <file>                        Release a temporary hold on a file
 
 Environment variables:
   GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
@@ -119,9 +122,11 @@ Environment variables:
 Usage: bundle exec ruby iam.rb [command] [arguments]
 
 Commands:
-  view_bucket_iam_members  <bucket>                         View bucket-level IAM members
-  add_bucket_iam_member    <bucket> <iam_role> <iam_member> Add a bucket-level IAM member
-  remove_bucket_iam_member <bucket> <iam_role> <iam_member> Remove a bucket-level IAM member
+  view_bucket_iam_members  <bucket>                                                                                View bucket-level IAM members
+  add_bucket_iam_member    <bucket> <iam_role> <iam_member>                                                        Add a bucket-level IAM member
+  add_bucket_conditional_iam_binding <bucket> <iam_role> <iam_member> <cond_title> <cond_description> <cond_expr>  Add a conditional bucket-level binding
+  remove_bucket_iam_member <bucket> <iam_role> <iam_member>                                                        Remove a bucket-level IAM member
+  remove_bucket_conditional_iam_binding <bucket> <iam_member> <cond_title> <cond_description> <cond_expr>          Remove a conditional bucket-level binding
 
 Environment variables:
   GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID

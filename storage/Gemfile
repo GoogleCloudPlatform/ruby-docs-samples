@@ -19,6 +19,6 @@ gem "google-cloud-storage"
 # [END storage_dependencies]
 
 group :test do
-  gem "rspec"
-  gem "rspec-retry"
+  gem "google-cloud-kms"
+  gem "minitest", "~> 5.13"
 end

@@ -12,29 +12,32 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START bigquerydatatransfer_quickstart]
-# Imports the Google Cloud client library
-require "google/cloud/bigquery/data_transfer"
+def quickstart project_id:
+  # [START bigquerydatatransfer_quickstart]
+  # [START require_library]
+  # Imports the Google Cloud client library
+  require "google/cloud/bigquery/data_transfer"
+  # [END require_library]
 
-# Your Google Cloud Platform project ID
-project_id = "YOUR_PROJECT_ID"
+  # Your Google Cloud Platform project ID
+  # project_id = "YOUR_PROJECT_ID"
 
-# Instantiate a client
-BigQueryDataTransfer = Google::Cloud::Bigquery::DataTransfer # Alias the module
-data_transfer = BigQueryDataTransfer.new
+  # Instantiate a client
+  data_transfer = Google::Cloud::Bigquery::DataTransfer.new
 
-# Get the full path to your project.
-project_path = BigQueryDataTransfer::V1::DataTransferServiceClient.project_path(
-  project_id
-)
+  # Get the full path to your project.
+  project_path = Google::Cloud::Bigquery::DataTransfer::V1::DataTransferServiceClient.project_path(
+    project_id
+  )
 
-puts "Supported Data Sources:"
+  puts "Supported Data Sources:"
 
-# Iterate over all possible data sources.
-data_transfer.list_data_sources(project_path).each do |data_source|
-  puts "Data source: #{data_source.display_name}"
-  puts "ID: #{data_source.data_source_id}"
-  puts "Full path: #{data_source.name}"
-  puts "Description: #{data_source.description}"
+  # Iterate over all possible data sources.
+  data_transfer.list_data_sources(project_path).each do |data_source|
+    puts "Data source: #{data_source.display_name}"
+    puts "ID: #{data_source.data_source_id}"
+    puts "Full path: #{data_source.name}"
+    puts "Description: #{data_source.description}"
+  end
+  # [END bigquerydatatransfer_quickstart]
 end
-# [END bigquerydatatransfer_quickstart]
