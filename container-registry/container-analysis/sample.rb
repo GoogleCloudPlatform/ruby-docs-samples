@@ -338,7 +338,7 @@ def find_high_severity_vulnerabilities_for_image resource_url:, project_id:
                        .list_occurrences(formatted_parent, filter: filter)
   # Filter the list to include only "high" and "critical" vulnerabilities
   vulnerability_list.select do |item|
-    item.vulnerability.severity == :HIGH || item.vulnerability.severity == :CRITICAL
+    item.vulnerability.effective_severity == :HIGH || item.vulnerability.effective_severity == :CRITICAL
   end
   # [END containeranalysis_filter_vulnerability_occurrences]
 end
