@@ -1,4 +1,4 @@
-# Copyright 2016 Google, Inc
+# Copyright 2016 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,30 +12,36 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START datastore_quickstart]
-# Imports the Google Cloud client library
-require "google/cloud/datastore"
+def quickstart
+  # [START datastore_quickstart]
+  # [START require_library]
+  # Imports the Google Cloud client library
+  require "google/cloud/datastore"
+  # [END require_library]
 
-# Your Google Cloud Platform project ID
-project_id = "YOUR_PROJECT_ID"
+  # Instantiate a client
+  datastore = Google::Cloud::Datastore.new
 
-# Instantiates a client
-datastore = Google::Cloud::Datastore.new project: project_id
+  # The kind for the new entity
+  kind = "Task"
+  # The name/ID for the new entity
+  name = "sampletask1"
+  # The Cloud Datastore key for the new entity
+  task_key = datastore.key kind, name
 
-# The kind for the new entity
-kind = "Task"
-# The name/ID for the new entity
-name = "sampletask1"
-# The Cloud Datastore key for the new entity
-task_key = datastore.key kind, name
+  # Prepares the new entity
+  task = datastore.entity task_key do |t|
+    t["description"] = "Buy milk"
+  end
 
-# Prepares the new entity
-task = datastore.entity task_key do |t|
-  t["description"] = "Buy milk"
+  # Saves the entity
+  datastore.save task
+
+  puts "Saved #{task.key.name}: #{task['description']}"
+  task_key = datastore.find task_key
+  # [END datastore_quickstart]
 end
 
-# Saves the entity
-datastore.save task
-
-puts "Saved #{task.key.name}: #{task['description']}"
-# [END datastore_quickstart]
+if $PROGRAM_NAME == __FILE__
+  quickstart
+end
