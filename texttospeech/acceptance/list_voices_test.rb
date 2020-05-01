@@ -16,8 +16,6 @@ require "minitest/autorun"
 require_relative "../list_voices"
 
 describe "List Voices" do
-  parallelize_me!
-
   it "lists voices to stdout" do
     out, err = capture_io do
       list_voices
