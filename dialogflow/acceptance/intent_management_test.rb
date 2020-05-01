@@ -12,9 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "rspec"
-require "google/cloud/dialogflow"
-require "spec_helper"
+require_relative "helper"
+require "securerandom"
 
 require_relative "../intent_management"
 
@@ -23,33 +22,45 @@ describe "Intent Management" do
     @project_id             = ENV["GOOGLE_CLOUD_PROJECT"]
     @intent_display_name    = "fake_intent_for_testing"
     @message_text           = "fake_message_text_for_testing"
-    @training_phrases_parts = %w[fake_training_phrase_part_1
-                                 fake_training_phease_part_2]
+    @training_phrases_parts = ["fake_training_phrase_part_1", "fake_training_phease_part_2"]
+
+    hide do
+      clean_intents project_id:   @project_id,
+                    display_name: @intent_display_name
+    end
   end
 
-  example "create intent" do
-    expect(
-      get_intent_ids(project_id:   @project_id,
-                     display_name: @intent_display_name).size
-    ).to eq(0)
+  after do
+    hide do
+      clean_intents project_id:   @project_id,
+                    display_name: @intent_display_name
+    end
+  end
 
-    expectation = expect {
+  it "creates an intent" do
+    ids = get_intent_ids project_id:   @project_id,
+                         display_name: @intent_display_name
+    assert_empty ids
+
+    assert_output(/#{@intent_display_name}.*#{@message_text}/m) do
       create_intent project_id:             @project_id,
                     display_name:           @intent_display_name,
                     message_text:           @message_text,
                     training_phrases_parts: @training_phrases_parts
-    }.to output(
-      /#{@intent_display_name}.*#{@message_text}/m
-    ).to_stdout
+    end
 
-    expect(
-      get_intent_ids(project_id:   @project_id,
-                     display_name: @intent_display_name).size
-    ).to eq(1)
+    ids = get_intent_ids project_id:   @project_id,
+                         display_name: @intent_display_name
+    assert_equal 1, ids.size
   end
 
-  example "delete intent" do
+  it "deletes an intent" do
     hide do
+      create_intent project_id:             @project_id,
+                    display_name:           @intent_display_name,
+                    message_text:           @message_text,
+                    training_phrases_parts: @training_phrases_parts
+
       intent_ids = get_intent_ids project_id:   @project_id,
                                   display_name: @intent_display_name
 
@@ -58,9 +69,9 @@ describe "Intent Management" do
                       intent_id:  intent_id
       end
     end
-    expect(
-      (get_intent_ids project_id:   @project_id,
-                      display_name: @intent_display_name).size
-    ).to eq(0)
+
+    ids = get_intent_ids project_id:   @project_id,
+                         display_name: @intent_display_name
+    assert_empty ids
   end
 end
