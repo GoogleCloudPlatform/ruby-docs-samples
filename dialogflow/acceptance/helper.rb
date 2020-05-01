@@ -52,7 +52,7 @@ def get_intent_ids project_id:, display_name:
 end
 
 def clean_intents project_id:, display_name:
-  intent_ids = get_intent_ids project_id: project_id,
+  intent_ids = get_intent_ids project_id:   project_id,
                               display_name: display_name
   intent_ids.each do |intent_id|
     delete_intent project_id: project_id, intent_id: intent_id
