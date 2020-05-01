@@ -12,9 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "rspec"
-require "google/cloud/dialogflow"
-require "spec_helper"
+require_relative "helper"
+require "securerandom"
 
 require_relative "../session_entity_type_management"
 require_relative "../detect_intent_texts"
@@ -23,19 +22,17 @@ require_relative "../entity_type_management"
 describe "Session Entity Type Management" do
   before do
     @project_id = ENV["GOOGLE_CLOUD_PROJECT"]
-    @session_id = "fake_session_for_testing"
+    @session_id = "session_#{SecureRandom.hex}"
     @entity_type_display_name = "fake_display_name"
     @entity_values = %w[fake_entity_value_1 fake_entity_value_2]
-  end
 
-  before :each do
     hide do
       clean_entity_types project_id:   @project_id,
                          display_name: @entity_type_display_name
     end
   end
 
-  after :each do
+  after do
     hide do
       clean_entity_types project_id:   @project_id,
                          display_name: @entity_type_display_name
@@ -60,33 +57,33 @@ describe "Session Entity Type Management" do
                                entity_values:            @entity_values
   end
 
-  example "create session_entity_type" do
+  it "creates a session_entity_type" do
     hide do
       create_test_session_entity_type
     end
-    expectation = expect do
+
+    out, _err = capture_io do
       list_session_entity_types project_id: @project_id, session_id: @session_id
     end
-
-    expectation.to output(/#{@session_id}/).to_stdout
-    expectation.to output(/#{@entity_type_display_name}/).to_stdout
-    expectation.to output(/#{@entity_values[0]}/).to_stdout
-    expectation.to output(/#{@entity_values[1]}/).to_stdout
+    assert_match(/#{@session_id}/, out)
+    assert_match(/#{@entity_type_display_name}/, out)
+    assert_match(/#{@entity_values[0]}/, out)
+    assert_match(/#{@entity_values[1]}/, out)
   end
 
-  example "delete session_entity_type" do
+  it "deletes a session_entity_type" do
     hide do
       create_test_session_entity_type
       delete_session_entity_type project_id:               @project_id,
                                  session_id:               @session_id,
                                  entity_type_display_name: @entity_type_display_name
     end
-    expectation = expect do
+
+    out, _err = capture_io do
       list_session_entity_types project_id: @project_id, session_id: @session_id
     end
-
-    expectation.not_to output(/#{@entity_type_display_name}/).to_stdout
-    expectation.not_to output(/#{@entity_values[0]}/).to_stdout
-    expectation.not_to output(/#{@entity_values[1]}/).to_stdout
+    refute_match(/#{@entity_type_display_name}/, out)
+    refute_match(/#{@entity_values[0]}/, out)
+    refute_match(/#{@entity_values[1]}/, out)
   end
 end

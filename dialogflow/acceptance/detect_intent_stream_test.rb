@@ -12,27 +12,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "rspec"
-require "google/cloud/dialogflow"
+require_relative "helper"
+require "securerandom"
 
 require_relative "../detect_intent_stream"
 
 describe "Detect Intent Stream" do
   before do
     @project_id      = ENV["GOOGLE_CLOUD_PROJECT"]
-    @session_id      = "session-for-testing"
+    @session_id      = "session_#{SecureRandom.hex}"
     @audio_file_path = "resources/book_a_room.wav"
     @language_code   = "en-US"
   end
 
-  example "detect intent from stream" do
-    expect {
+  it "detects intent from stream" do
+    assert_output(/I can help with that/) do
       detect_intent_stream project_id:      @project_id,
                            session_id:      @session_id,
                            audio_file_path: @audio_file_path,
                            language_code:   @language_code
-    }.to output(
-      /What date?/
-    ).to_stdout
+    end
   end
 end

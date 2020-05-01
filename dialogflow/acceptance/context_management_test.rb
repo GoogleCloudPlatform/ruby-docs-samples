@@ -12,39 +12,36 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "rspec"
-require "google/cloud/dialogflow"
+require_relative "helper"
+require "securerandom"
 
 require_relative "../context_management"
 
 describe "Context Management" do
   before do
     @project_id = ENV["GOOGLE_CLOUD_PROJECT"]
-    @session_id = "fake_session_for_testing"
-    @context_id = "fake_context_for_testing"
+    @session_id = "session_#{SecureRandom.hex}"
+    @context_id = "context_#{SecureRandom.hex}"
   end
 
-  example "create context" do
-    expect {
+  it "creates context" do
+    out, _err = capture_io do
       list_contexts project_id: @project_id, session_id: @session_id
-    }.not_to output(
-      /#{@context_id}/
-    ).to_stdout
-    expect {
+    end
+    refute_match(/#{@context_id}/, out)
+
+    assert_output(/#{@session_id}.*#{@context_id}/m) do
       create_context project_id: @project_id,
                      session_id: @session_id,
                      context_id: @context_id
-    }.to output(
-      /#{@session_id}.*#{@context_id}/m
-    ).to_stdout
-    expect {
+    end
+
+    assert_output(/#{@context_id}/) do
       list_contexts project_id: @project_id, session_id: @session_id
-    }.to output(
-      /#{@context_id}/
-    ).to_stdout
+    end
   end
 
-  example "delete context" do
+  it "deletes context" do
     hide do
       create_context project_id: @project_id,
                      session_id: @session_id,
@@ -54,10 +51,10 @@ describe "Context Management" do
                      session_id: @session_id,
                      context_id: @context_id
     end
-    expect {
+
+    out, _err = capture_io do
       list_contexts project_id: @project_id, session_id: @session_id
-    }.not_to output(
-      /#{@context_id}/
-    ).to_stdout
+    end
+    refute_match(/#{@context_id}/, out)
   end
 end

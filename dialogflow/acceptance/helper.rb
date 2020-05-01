@@ -1,4 +1,4 @@
-# Copyright 2018 Google, Inc
+# Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,20 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
+require "minitest/autorun"
+require "minitest/spec"
 require "google/cloud/dialogflow"
-require "rspec/retry"
-
-RSpec.configure do |config|
-  # show retry status in spec process
-  config.verbose_retry = true
-  # show exception that triggers a retry if verbose_retry is set to true
-  config.display_try_failure_messages = true
-
-  # set retry count and retry sleep interval to 1 minute
-  config.default_retry_count = 5
-  config.default_sleep_interval = 60
-end
 
 def get_entity_type_ids project_id:, display_name:
   entity_types_client = Google::Cloud::Dialogflow::EntityTypes.new

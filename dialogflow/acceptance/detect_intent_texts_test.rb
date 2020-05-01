@@ -12,28 +12,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "rspec"
-require "google/cloud/dialogflow"
+require_relative "helper"
+require "securerandom"
 
 require_relative "../detect_intent_texts"
 
 describe "Detect Intent Texts" do
   before do
     @project_id = ENV["GOOGLE_CLOUD_PROJECT"]
-    @session_id = "session-for-testing"
+    @session_id = "session_#{SecureRandom.hex}"
     @texts      = ["hello", "book a meeting room", "Mountain View",
                    "tomorrow", "10 AM", "2 hours", "10 people", "A", "yes"]
     @language_code = "en-US"
   end
 
-  example "detect intent from texts" do
-    expect {
+  it "detects intent from texts" do
+    assert_output(/All set!/) do
       detect_intent_texts project_id:    @project_id,
                           session_id:    @session_id,
                           texts:         @texts,
                           language_code: @language_code
-    }.to output(
-      /All set!/
-    ).to_stdout
+    end
   end
 end

@@ -1,4 +1,4 @@
-# Copyright 2018 Google, Inc
+# Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,11 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-source "https://rubygems.org"
+require "rake/testtask"
 
-gem "google-cloud-dialogflow"
-
-group :test do
-  gem "minitest", "~> 5.14"
-  gem "rake", ">= 12.0"
+Rake::TestTask.new "test" do |t|
+  t.test_files = FileList["acceptance/*_test.rb"]
+  t.warning = false
 end

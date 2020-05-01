@@ -12,9 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "rspec"
-require "google/cloud/dialogflow"
-require "spec_helper"
+require_relative "helper"
 
 require_relative "../entity_type_management"
 
@@ -23,43 +21,37 @@ describe "Entity Type Management" do
     @project_id               = ENV["GOOGLE_CLOUD_PROJECT"]
     @entity_type_display_name = "fake_entity_type_for_testing"
     @kind                     = :KIND_MAP
-  end
 
-  before :each do
     hide do
       clean_entity_types project_id:   @project_id,
                          display_name: @entity_type_display_name
     end
   end
 
-  after :each do
+  after do
     hide do
       clean_entity_types project_id:   @project_id,
                          display_name: @entity_type_display_name
     end
   end
 
-  example "create entity type" do
-    expect(
-      get_entity_type_ids(project_id:   @project_id,
-                          display_name: @entity_type_display_name).size
-    ).to eq(0)
+  it "creates an entity type" do
+    ids = get_entity_type_ids project_id:   @project_id,
+                              display_name: @entity_type_display_name
+    assert_empty ids
 
-    expect {
+    assert_output(/#{@entity_type_display_name}/) do
       create_entity_type project_id:   @project_id,
                          display_name: @entity_type_display_name,
                          kind:         @kind
-    }.to output(
-      /#{@entity_type_display_name}/
-    ).to_stdout
+    end
 
-    expect(
-      (get_entity_type_ids project_id:   @project_id,
-                           display_name: @entity_type_display_name).size
-    ).to eq(1)
+    ids = get_entity_type_ids project_id:   @project_id,
+                              display_name: @entity_type_display_name
+    assert_equal 1, ids.size
   end
 
-  example "delete entity type" do
+  it "deletes an entity type" do
     hide do
       create_entity_type project_id:   @project_id,
                          display_name: @entity_type_display_name,
@@ -71,9 +63,9 @@ describe "Entity Type Management" do
                            entity_type_id: entity_type_id
       end
     end
-    expect(
-      (get_entity_type_ids project_id:   @project_id,
-                           display_name: @entity_type_display_name).size
-    ).to eq(0)
+
+    ids = get_entity_type_ids project_id:   @project_id,
+                              display_name: @entity_type_display_name
+    assert_empty ids
   end
 end
