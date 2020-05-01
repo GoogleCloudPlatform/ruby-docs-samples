@@ -49,7 +49,7 @@ describe "DLP sample" do
 
   it "can inspect name in file" do
     out, err = capture_io do
-      inspect_file project_id: @project, filename: "spec/data/test.txt"
+      inspect_file project_id: @project, filename: "acceptance/data/test.txt"
     end
     assert_empty err
     assert_match(
