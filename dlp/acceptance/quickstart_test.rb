@@ -1,4 +1,4 @@
-# Copyright 2018 Google, Inc
+# Copyright 2020 Google, Inc
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,16 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "rspec"
+require "minitest/autorun"
 
 describe "DLP Quickstart" do
   it "prints results found in sample text" do
-    expect {
+    out, err = capture_io do
       load File.expand_path("../quickstart.rb", __dir__)
-    }.to output(
+    end
+
+    assert_empty err
+    assert_match(
       "Quote:      Robert Frost\n" +
       "Info type:  PERSON_NAME\n" +
-      "Likelihood: LIKELY\n"
-    ).to_stdout
+      "Likelihood: LIKELY\n", out)
   end
 end
