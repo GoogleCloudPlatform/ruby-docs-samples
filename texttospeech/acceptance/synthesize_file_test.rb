@@ -1,4 +1,4 @@
-# Copyright 2018 Google, Inc
+# Copyright 2020 Google, Inc
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,12 +21,12 @@ describe "Synthesize File" do
       synthesize_text_file text_file: "resources/hello.txt"
     end
 
-    assert_equal '', err
-    assert_match /Audio content written to file/, out
- 
+    assert_empty err
+    assert_match(/Audio content written to file/, out)
+
     output_filepath = File.expand_path "../output.mp3", __dir__
     assert File.exist?(output_filepath)
-    assert File.size(output_filepath) > 0
+    assert File.size(output_filepath).positive?
 
     File.delete output_filepath
     refute File.exist?(output_filepath)
@@ -37,12 +37,12 @@ describe "Synthesize File" do
       synthesize_ssml_file ssml_file: "resources/hello.ssml"
     end
 
-    assert_equal '', err
-    assert_match /Audio content written to file/, out
+    assert_empty err
+    assert_match(/Audio content written to file/, out)
 
     output_filepath = File.expand_path "../output.mp3", __dir__
     assert File.exist?(output_filepath)
-    assert File.size(output_filepath) > 0
+    assert File.size(output_filepath).positive?
 
     File.delete output_filepath
     refute File.exist?(output_filepath)

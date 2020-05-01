@@ -1,4 +1,4 @@
-# Copyright 2018 Google, Inc
+# Copyright 2020 Google, Inc
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -20,12 +20,12 @@ describe "Quickstart" do
       load File.expand_path("../quickstart.rb", __dir__)
     end
 
-    assert_equal '', err
-    assert_match /Audio content written to file 'output.mp3'/, out
-   
+    assert_empty err
+    assert_match (/Audio content written to file 'output.mp3'/, out)
+
     output_filepath = File.expand_path "../output.mp3", __dir__
     assert File.exist?(output_filepath)
-    assert File.size(output_filepath) > 0
+    assert File.size(output_filepath).positive?
 
     File.delete output_filepath
     refute File.exist?(output_filepath)

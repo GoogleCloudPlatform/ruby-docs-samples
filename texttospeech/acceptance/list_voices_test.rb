@@ -20,10 +20,10 @@ describe "List Voices" do
     out, err = capture_io do
       list_voices
     end
-    
-    assert_equal '', err
-    assert_match /en-US/, out
-    assert_match /SSML Voice Gender: MALE/, out
-    assert_match /SSML Voice Gender: FEMALE/, out
+
+    assert_empty err
+    assert_match(/en-US/, out)
+    assert_match(/SSML Voice Gender: MALE/, out)
+    assert_match(/SSML Voice Gender: FEMALE/, out)
   end
 end
