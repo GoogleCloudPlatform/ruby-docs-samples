@@ -24,6 +24,7 @@ describe "DLP Quickstart" do
     assert_match(
       "Quote:      Robert Frost\n" +
       "Info type:  PERSON_NAME\n" +
-      "Likelihood: LIKELY\n", out)
+      "Likelihood: LIKELY\n", out
+    )
   end
 end

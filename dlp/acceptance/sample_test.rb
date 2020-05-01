@@ -24,7 +24,7 @@ describe "DLP sample" do
     out, err = capture_io do
       inspect_string project_id: @project, content: "Robert Frost"
     end
-    
+
     assert_empty err
     assert_match(
       "Quote:      Robert Frost\n" +
