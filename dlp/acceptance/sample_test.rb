@@ -29,7 +29,8 @@ describe "DLP sample" do
     assert_match(
       "Quote:      Robert Frost\n" +
       "Info type:  PERSON_NAME\n" +
-      "Likelihood: LIKELY\n", out)
+      "Likelihood: LIKELY\n", out
+    )
   end
 
   it "can limit max findings of inspect string results" do
@@ -44,7 +45,8 @@ describe "DLP sample" do
     assert_match(
       "Quote:      Robert Frost\n" +
       "Info type:  PERSON_NAME\n" +
-      "Likelihood: LIKELY\n", out)
+      "Likelihood: LIKELY\n", out
+    )
   end
 
   it "can inspect name in file" do
@@ -55,6 +57,7 @@ describe "DLP sample" do
     assert_match(
       "Quote:      Robert Frost\n" +
       "Info type:  PERSON_NAME\n" +
-      "Likelihood: LIKELY\n", out)
+      "Likelihood: LIKELY\n", out
+    )
   end
 end
