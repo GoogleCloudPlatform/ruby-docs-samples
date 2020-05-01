@@ -23,6 +23,18 @@ describe "Intent Management" do
     @intent_display_name    = "fake_intent_for_testing"
     @message_text           = "fake_message_text_for_testing"
     @training_phrases_parts = ["fake_training_phrase_part_1", "fake_training_phease_part_2"]
+
+    hide do
+      clean_intents project_id:   @project_id,
+                    display_name: @intent_display_name
+    end
+  end
+
+  after do
+    hide do
+      clean_intents project_id:   @project_id,
+                    display_name: @intent_display_name
+    end
   end
 
   it "creates an intent" do
@@ -44,6 +56,11 @@ describe "Intent Management" do
 
   it "deletes an intent" do
     hide do
+      create_intent project_id:             @project_id,
+                    display_name:           @intent_display_name,
+                    message_text:           @message_text,
+                    training_phrases_parts: @training_phrases_parts
+
       intent_ids = get_intent_ids project_id:   @project_id,
                                   display_name: @intent_display_name
 
