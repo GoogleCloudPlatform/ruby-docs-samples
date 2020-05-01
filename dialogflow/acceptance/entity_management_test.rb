@@ -24,8 +24,7 @@ describe "Entity Management" do
     @kind                     = :KIND_MAP
     @entity_value_1           = "fake_entity_for_testing_1"
     @entity_value_2           = "fake_entity_for_testing_2"
-    @synonyms                 = %w[fake_synonym_for_testing_1
-                                   fake_synonym_for_testing_2]
+    @synonyms                 = ["fake_synonym_for_testing_1", "fake_synonym_for_testing_2"]
 
     hide do
       clean_entity_types project_id:   @project_id,

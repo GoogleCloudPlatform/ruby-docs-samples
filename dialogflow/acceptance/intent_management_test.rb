@@ -22,8 +22,7 @@ describe "Intent Management" do
     @project_id             = ENV["GOOGLE_CLOUD_PROJECT"]
     @intent_display_name    = "fake_intent_for_testing"
     @message_text           = "fake_message_text_for_testing"
-    @training_phrases_parts = %w[fake_training_phrase_part_1
-                                 fake_training_phease_part_2]
+    @training_phrases_parts = ["fake_training_phrase_part_1", "fake_training_phease_part_2"]
   end
 
   it "creates an intent" do

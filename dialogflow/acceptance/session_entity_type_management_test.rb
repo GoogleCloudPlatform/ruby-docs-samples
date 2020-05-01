@@ -24,7 +24,7 @@ describe "Session Entity Type Management" do
     @project_id = ENV["GOOGLE_CLOUD_PROJECT"]
     @session_id = "session_#{SecureRandom.hex}"
     @entity_type_display_name = "fake_display_name"
-    @entity_values = %w[fake_entity_value_1 fake_entity_value_2]
+    @entity_values = ["fake_entity_value_1", "fake_entity_value_2"]
 
     hide do
       clean_entity_types project_id:   @project_id,
