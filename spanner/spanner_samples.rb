@@ -1620,7 +1620,7 @@ def list_database_operations project_id:, instance_id:
   jobs.each do |job|
     if job.error?
       puts job.error
-    else
+    elsif job.database
       progress_percent = job.grpc.metadata.progress.progress_percent
       puts "Database #{job.database.database_id} restored from backup is #{progress_percent}% optimized"
     end
