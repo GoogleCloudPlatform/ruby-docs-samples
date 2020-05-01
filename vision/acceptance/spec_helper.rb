@@ -12,13 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-source "https://rubygems.org"
+require "google/cloud/vision"
 
-gem "google-cloud-vision"
-gem "rmagick"
-
-group :test do
-  gem "google-cloud-storage"
-  gem "minitest", "~> 5.13"
-  gem "rake"
+def version
+  versions = Google::Cloud::Vision::AVAILABLE_VERSIONS
+  versions = versions.reject { |v| v.include? "beta" }
+  versions.max_by { |v| v.match(/\d+/)[0].to_i }
 end
