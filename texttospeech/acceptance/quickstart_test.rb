@@ -21,7 +21,7 @@ describe "Quickstart" do
     end
 
     assert_empty err
-    assert_match (/Audio content written to file 'output.mp3'/, out)
+    assert_match(/Audio content written to file 'output.mp3'/, out)
 
     output_filepath = File.expand_path "../output.mp3", __dir__
     assert File.exist?(output_filepath)
