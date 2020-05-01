@@ -13,4 +13,5 @@
 # limitations under the License.
 
 require "minitest/autorun"
+require "minitest/focus"
 require "google/cloud/datastore"

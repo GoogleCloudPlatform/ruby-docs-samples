@@ -18,8 +18,9 @@ gem "google-cloud-datastore"
 gem "sinatra"
 
 group :test do
-  gem "rack-test"
   gem "minitest", "~> 5.13"
+  gem "minitest-focus", "~> 1.1"
   gem "minitest-junit"
+  gem "rack-test"
   gem "rake"
 end

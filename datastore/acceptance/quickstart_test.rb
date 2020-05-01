@@ -15,6 +15,7 @@
 require_relative "helper"
 require_relative "../quickstart.rb"
 
+# TODO: Migrate this retry to minitest?
 # RSpec.configure do |config|
 #   # show retry status in spec process
 #   config.verbose_retry = true
@@ -27,10 +28,8 @@ require_relative "../quickstart.rb"
 # end
 
 describe "Datastore Quickstart" do
-  parallelize_me!
-
-  let (:datastore) { Google::Cloud::Datastore.new }
-  let (:task_key) { datastore.key "Task", "sampletask1" }
+  let(:datastore) { Google::Cloud::Datastore.new }
+  let(:task_key) { datastore.key "Task", "sampletask1" }
 
   before do
     if (task = datastore.find task_key)

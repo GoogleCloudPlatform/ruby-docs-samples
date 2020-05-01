@@ -12,24 +12,28 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-def create_client project_id
+def create_client
   # [START datastore_build_service]
   require "google/cloud/datastore"
 
-  @datastore = Google::Cloud::Datastore.new project: project_id
+  datastore = Google::Cloud::Datastore.new
   # [END datastore_build_service]
 end
 
 # [START datastore_add_entity]
 def add_task description
-  task = @datastore.entity "Task" do |t|
+  require "google/cloud/datastore"
+
+  datastore = Google::Cloud::Datastore.new
+
+  task = datastore.entity "Task" do |t|
     t["description"] = description
     t["created"]     = Time.now
     t["done"]        = false
     t.exclude_from_indexes! "description", true
   end
 
-  @datastore.save task
+  datastore.save task
 
   puts task.key.id
 
@@ -39,18 +43,26 @@ end
 
 # [START datastore_update_entity]
 def mark_done task_id
-  task = @datastore.find "Task", task_id
+  require "google/cloud/datastore"
+
+  datastore = Google::Cloud::Datastore.new
+
+  task = datastore.find "Task", task_id
 
   task["done"] = true
 
-  @datastore.save task
+  datastore.save task
 end
 # [END datastore_update_entity]
 
 # [START datastore_retrieve_entities]
 def list_tasks
-  query = @datastore.query("Task").order("created")
-  tasks = @datastore.run query
+  require "google/cloud/datastore"
+
+  datastore = Google::Cloud::Datastore.new
+
+  query = datastore.query("Task").order("created")
+  tasks = datastore.run query
 
   tasks.each do |t|
     puts t["description"]
@@ -62,9 +74,13 @@ end
 
 # [START datastore_delete_entity]
 def delete_task task_id
-  task = @datastore.find "Task", task_id
+  require "google/cloud/datastore"
 
-  @datastore.delete task
+  datastore = Google::Cloud::Datastore.new
+
+  task = datastore.find "Task", task_id
+
+  datastore.delete task
 end
 # [END datastore_delete_entity]
 
