@@ -24,10 +24,6 @@ describe "Google Cloud Spanner API samples" do
     cleanup_database_resources
   end
 
-  after :all do
-    cleanup_backup_resources
-  end
-
   # Creates a temporary database with random ID (will be dropped after test)
   # (re-uses create_database to create database with Albums/Singers schema)
   def create_singers_albums_database

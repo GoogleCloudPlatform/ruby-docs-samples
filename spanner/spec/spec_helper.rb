@@ -32,10 +32,7 @@ RSpec.configure do |config|
   end
 
   config.after :all do
-    if @instance
-      test_backup = @instance.backup @backup_id
-      test_backup&.delete
-    end
+    cleanup_backup_resources
   end
 
   def seed
@@ -43,6 +40,8 @@ RSpec.configure do |config|
   end
 
   def cleanup_database_resources
+    return unless @instance
+
     @test_database = @instance.database @database_id
     @test_database&.drop
     @test_database = @instance.database @restored_database_id
@@ -50,9 +49,7 @@ RSpec.configure do |config|
   end
 
   def cleanup_backup_resources
-    unless @instance
-      @instance = @spanner.instance ENV["GOOGLE_CLOUD_SPANNER_TEST_INSTANCE"]
-    end
+    return unless @instance
 
     @test_backup = @instance.backup @backup_id
     @test_backup&.delete
