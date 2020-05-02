@@ -49,7 +49,7 @@ $ gcloud config set project PROJECT_ID
 $ gcloud auth login
 
 # Create the indexes
-$ gcloud datastore create-indexes index.yaml
+$ gcloud datastore indexes create index.yaml
 ```
 
 ### Running the tests
