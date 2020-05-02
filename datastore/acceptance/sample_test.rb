@@ -205,7 +205,7 @@ describe "Datastore sample" do
     refute tasks.empty?
     tasks.each do |t|
       assert_equal false, t["done"]
-    end  
+    end
   end
 
   it "supports composite_filter" do
@@ -510,7 +510,7 @@ describe "Datastore sample" do
   def task_entity key
     datastore.entity key do |t|
       t["category"] = "Personal"
-      t["created"] = Time.utc 1999, 12, (rand(31) + 1)
+      t["created"] = Time.utc 1999, 12, rand(1..31)
       t["done"] = false
       t["priority"] = 4
       t["percent_complete"] = 10.0
