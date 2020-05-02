@@ -21,7 +21,7 @@ describe "Datastore sample" do
   let :task_list do
     tl = datastore.find task_list_key
     if tl.nil?
-      tl = task_entity task_list_key
+      tl = datastore.entity task_list_key
       datastore.save tl
     end
     tl
