@@ -55,6 +55,6 @@ $ gcloud datastore indexes create index.yaml
 ### Running the tests
 
 ```bash
-$ bundle exec rspec
+$ bundle exec rake test
 ```
 
