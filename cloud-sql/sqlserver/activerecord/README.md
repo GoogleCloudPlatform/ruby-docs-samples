@@ -17,37 +17,32 @@ name.
 [instructions](https://cloud.google.com/sql/docs/mysql/connect-external-app#4_if_required_by_your_authentication_method_create_a_service_account).
 Download a JSON key to use to authenticate your connection. 
 
-1. Use the information noted in the previous steps:
-```bash
-export GOOGLE_APPLICATION_CREDENTIALS=/path/to/service/account/key.json
-export INSTANCE_CONNECTION_NAME='<MY-PROJECT>:<INSTANCE-REGION>:<INSTANCE-NAME>'
-export MYSQL_USER='my-db-user'
-export MYSQL_PASS='my-db-pass'
-export MYSQL_DATABASE='my_db'
-```
-Note: Saving credentials in environment variables is convenient, but not secure - consider a more
-secure solution such as [Cloud KMS](https://cloud.google.com/kms/) to help keep secrets safe.
+
 
 ## Running locally
 
-To run this application locally, download and install the `cloud_sql_proxy` by
-following the instructions
-[here](https://cloud.google.com/sql/docs/mysql/sql-proxy#install). Once the
-proxy has been downloaded, use the following commands to create the `/cloudsql`
-directory and give the user running the proxy the appropriate permissions:
+To run this application locally, use the information noted in the previous steps:
 ```bash
-sudo mkdir /cloudsql
-sudo chown -R $USER /cloudsql
+export GOOGLE_APPLICATION_CREDENTIALS=/path/to/service/account/key.json
+export INSTANCE_CONNECTION_NAME='<MY-PROJECT>:<INSTANCE-REGION>:<INSTANCE-NAME>'
+export DB_USER='my-db-user'
+export DB_PASS='my-db-pass'
+export DB_NAME='my_db'
 ```
+Note: Saving credentials in environment variables is convenient, but not secure - consider a more
+secure solution such as [Secret Manager](https://cloud.google.com/secret-manager/docs/overview) to help keep secrets safe.
 
-Once the `/cloudsql` directory is ready, use the following command to start the proxy in the
+Follow the [instructions on Microsoft's website](https://docs.microsoft.com/en-us/sql/connect/ruby/step-1-configure-development-environment-for-ruby-development?view=sql-server-ver15) for your operating system to make sure your development environment is properly configured. For Unix systems, this will require installing [FreeTDS](https://www.freetds.org/index.html), while Windows systems require [Ruby DevKit](https://rubyinstaller.org/downloads/)
+
+Next, download and install the `cloud_sql_proxy` by
+following the instructions
+[here](https://cloud.google.com/sql/docs/mysql/sql-proxy#install).
+
+Use the following command to start the proxy in the
 background:
 ```bash
-./cloud_sql_proxy -dir=/cloudsql --instances=$INSTANCE_CONNECTION_NAME --credential_file=$GOOGLE_APPLICATION_CREDENTIALS
+./cloud_sql_proxy  --instances=$INSTANCE_CONNECTION_NAME=tcp:1433 --credential_file=$GOOGLE_APPLICATION_CREDENTIALS
 ```
-Note: Make sure to run the command under a user with write access in the 
-`/cloudsql` directory. This proxy will use this folder to create a unix socket
-the application will use to connect to Cloud SQL. 
 
 Next, setup install the requirements:
 ```bash
@@ -56,8 +51,7 @@ bundle install
 
 Then, setup and seed the database:
 ```bash
-bundle exec rails db:setup
-bundle exec rails db:seed
+bundle exec rails db:setup 
 ```
 
 Finally, start the application:
@@ -80,7 +74,13 @@ SECRET_KEY_BASE can be found by running:
 bundle exec rails secret
 ```
 
-Next, the following command will deploy the application to your Google Cloud project:
+Next, create your production database:
 ```bash
-gcloud app deploy
+RAILS_ENV=production bundle exec rails db:create
+RAILS_ENV=production bundle exec rails db:schema:load
+```
+
+Finally, the following command will deploy the application to your Google Cloud project:
+```bash
+gcloud beta app deploy
 ```
