@@ -36,7 +36,7 @@ Follow the [instructions on Microsoft's website](https://docs.microsoft.com/en-u
 
 Next, download and install the `cloud_sql_proxy` by
 following the instructions
-[here](https://cloud.google.com/sql/docs/mysql/sql-proxy#install).
+[here](https://cloud.google.com/sql/docs/sqlserver/authorize-proxy#installing_the).
 
 Use the following command to start the proxy in the
 background:
