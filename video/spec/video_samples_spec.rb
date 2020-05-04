@@ -38,7 +38,7 @@ describe "Google Cloud Video API sample" do
     begin
       local_tempfile = Tempfile.new "temp_video"
       File.open local_tempfile.path, "w" do |file|
-        file_contents = Net::HTTP.get URI("http://storage.googleapis.com/#{@labels_file}")
+        file_contents = Net::HTTP.get URI("http://storage.googleapis.com/#{@transcription_file}")
         file.write file_contents
         file.flush
       end
@@ -46,7 +46,7 @@ describe "Google Cloud Video API sample" do
       expect {
         analyze_labels_local path: local_tempfile.path
       }.to output(
-        /Label description: animal/
+        /Finished Processing./
       ).to_stdout
     ensure
       local_tempfile.close
@@ -118,7 +118,7 @@ describe "Google Cloud Video API sample" do
     begin
       local_tempfile = Tempfile.new "temp_video"
       File.open local_tempfile.path, "w" do |file|
-        file_contents = Net::HTTP.get URI("http://storage.googleapis.com/#{@labels_file}")
+        file_contents = Net::HTTP.get URI("http://storage.googleapis.com/#{@transcription_file}")
         file.write file_contents
         file.flush
       end
@@ -126,7 +126,7 @@ describe "Google Cloud Video API sample" do
       expect {
         track_objects_local path: local_tempfile.path
       }.to output(
-        /cat/
+        /Finished Processing./
       ).to_stdout
     ensure
       local_tempfile.close
