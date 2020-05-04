@@ -1,4 +1,4 @@
-# Copyright 2016 Google LLC
+# Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,14 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-source "https://rubygems.org"
-
-gem "google-cloud-datastore"
-
-group :development, :test do
-  gem "google-style", "~> 1.24.0"
-  gem "minitest", "~> 5.13"
-  gem "minitest-focus", "~> 1.1"
-  gem "minitest-junit"
-  gem "rake"
-end
+require "minitest/autorun"
+require "minitest/focus"
+require "google/cloud/datastore"

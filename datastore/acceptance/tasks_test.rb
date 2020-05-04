@@ -1,4 +1,4 @@
-# Copyright 2016 Google, Inc
+# Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,85 +12,80 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+require_relative "helper"
 require_relative "../tasks"
-require "rspec"
-require "google/cloud/datastore"
 
 describe "Datastore task list" do
-  before :all do
-    @project_id = ENV["GOOGLE_CLOUD_PROJECT"]
-    @datastore  = Google::Cloud::Datastore.new project: @project_id
-    create_client @project_id
+  let(:datastore) { Google::Cloud::Datastore.new }
+
+  before do
     delete_tasks
   end
 
-  after :each do
-    delete_tasks
-  end
-
-  def wait_until times: 5, delay: 10
+  def wait_until times: 5
     times.times do
       return if yield
     end
   end
 
   def delete_tasks
-    tasks = @datastore.run @datastore.query("Task")
-    @datastore.delete(*tasks.map(&:key)) unless tasks.empty?
+    tasks = datastore.run datastore.query("Task")
+    datastore.delete(*tasks.map(&:key)) unless tasks.empty?
   end
 
   it "creates a task" do
     desc = "Test description."
-    allow($stdout).to receive(:puts)
     id = add_task desc
-    task = @datastore.find "Task", id
-    expect(task.nil?).to be(false)
-    expect(task["description"]).to eq(desc)
+    task = datastore.find "Task", id
+    assert task
+    assert_equal desc, task["description"]
   end
 
   it "marks done" do
-    task = @datastore.entity "Task" do |t|
+    task = datastore.entity "Task" do |t|
       t["done"] = false
     end
-    @datastore.save task
+    datastore.save task
     id = task.key.id
     mark_done id
-    task = @datastore.find "Task", id
-    expect(task["done"]).to be(true)
+    task = datastore.find "Task", id
+    assert_equal true, task["done"]
   end
 
   it "list_tasks" do
-    task1 = @datastore.entity "Task" do |t|
+    task1 = datastore.entity "Task" do |t|
       t["description"] = "Test 1."
       t["created"]     = Time.now
       t["done"]        = false
       t.exclude_from_indexes! "description", true
     end
-    task2 = @datastore.entity "Task" do |t|
+    task2 = datastore.entity "Task" do |t|
       t["description"] = "Test 2."
       t["created"]     = Time.now
       t["done"]        = false
       t.exclude_from_indexes! "description", true
     end
-    @datastore.save task1, task2
+    datastore.save task1, task2
 
-    query = @datastore.query("Task").order "created"
-    wait_until { @datastore.run(query).any? }
+    query = datastore.query("Task").order "created"
+    wait_until { datastore.run(query).any? }
 
-    expect { list_tasks }.to output(/Test 1/).to_stdout
+    assert_output(/Test 1/) do
+      list_tasks
+    end
   end
 
   it "deletes tasks" do
-    task = @datastore.entity "Task" do |t|
+    task = datastore.entity "Task" do |t|
       t["description"] = "Test 1."
       t["created"]     = Time.now
       t["done"]        = false
       t.exclude_from_indexes! "description", true
     end
-    @datastore.save task
+    datastore.save task
     id = task.key.id
     delete_task id
-    task = @datastore.find "Task", id
-    expect(task.nil?).to be(true)
+    task = datastore.find "Task", id
+    refute task
   end
 end
