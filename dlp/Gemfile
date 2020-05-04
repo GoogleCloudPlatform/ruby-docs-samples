@@ -1,4 +1,4 @@
-# Copyright 2018 Google, Inc
+# Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@ source "https://rubygems.org"
 gem "google-cloud-dlp", "~> 0.2"
 
 group :test do
-  gem "rack-test"
-  gem "rspec"
-  gem "rspec_junit_formatter"
+  gem "minitest", "~> 5.14"
+  gem "rake", ">= 12.0"
 end

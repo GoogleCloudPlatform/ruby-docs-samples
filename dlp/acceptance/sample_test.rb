@@ -1,4 +1,4 @@
-# Copyright 2018 Google, Inc
+# Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,8 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+require "minitest/autorun"
 require_relative "../sample"
-require "rspec"
 
 describe "DLP sample" do
   before do
@@ -21,32 +21,43 @@ describe "DLP sample" do
   end
 
   it "can inspect name in string" do
-    expect { inspect_string project_id: @project, content: "Robert Frost" }.to output(
+    out, err = capture_io do
+      inspect_string project_id: @project, content: "Robert Frost"
+    end
+
+    assert_empty err
+    assert_match(
       "Quote:      Robert Frost\n" +
       "Info type:  PERSON_NAME\n" +
-      "Likelihood: LIKELY\n"
-    ).to_stdout
+      "Likelihood: LIKELY\n", out
+    )
   end
 
   it "can limit max findings of inspect string results" do
-    expect {
+    out, err = capture_io do
       inspect_string(
         project_id:   @project,
         content:      "Robert Frost is the name of poet Robert Frost",
         max_findings: 1
       )
-    }.to output(
+    end
+    assert_empty err
+    assert_match(
       "Quote:      Robert Frost\n" +
       "Info type:  PERSON_NAME\n" +
-      "Likelihood: LIKELY\n"
-    ).to_stdout
+      "Likelihood: LIKELY\n", out
+    )
   end
 
   it "can inspect name in file" do
-    expect { inspect_file project_id: @project, filename: "spec/data/test.txt" }.to output(
+    out, err = capture_io do
+      inspect_file project_id: @project, filename: "acceptance/data/test.txt"
+    end
+    assert_empty err
+    assert_match(
       "Quote:      Robert Frost\n" +
       "Info type:  PERSON_NAME\n" +
-      "Likelihood: LIKELY\n"
-    ).to_stdout
+      "Likelihood: LIKELY\n", out
+    )
   end
 end
