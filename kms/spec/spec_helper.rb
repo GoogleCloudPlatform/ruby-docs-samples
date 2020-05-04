@@ -1,4 +1,4 @@
-# Copyright 2017 Google, Inc
+# Copyright 2020 Google, Inc
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,12 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-source "https://rubygems.org"
+require "rspec"
+require "rspec/retry"
 
-gem "google-cloud-kms", "~> 1.6"
+require "google/cloud/kms"
 
-group :test do
-  gem "rspec"
-  gem "rspec-retry"
-  gem "rspec_junit_formatter"
+RSpec.configure do |config|
+  config.verbose_retry = true
+  config.display_try_failure_messages = true
+
+  # config.default_retry_count = 2
+  # config.default_sleep_interval = 5
 end
