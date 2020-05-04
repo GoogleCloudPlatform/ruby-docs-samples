@@ -49,9 +49,11 @@ Next, setup install the requirements:
 bundle install
 ```
 
-Then, setup and seed the database:
+Then, setup and seed the database. You only need to do this once:
 ```bash
-bundle exec rails db:setup 
+bundle exec rails db:create
+bundle exec rails db:migrate
+bundle exec rails db:seed
 ```
 
 Finally, start the application:
@@ -74,7 +76,7 @@ SECRET_KEY_BASE can be found by running:
 bundle exec rails secret
 ```
 
-Next, create your production database:
+Next, create your production database. You only need to do this once:
 ```bash
 RAILS_ENV=production bundle exec rails db:create
 RAILS_ENV=production bundle exec rails db:schema:load
