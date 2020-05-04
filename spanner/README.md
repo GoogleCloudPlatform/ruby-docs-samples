@@ -87,7 +87,14 @@ environment variable to the path to the key file, for example:
       update_using_partitioned_dml       <instance_id> <database_id> Update multiple records using a partitioned DML statement.
       delete_using_partitioned_dml       <instance_id> <database_id> Delete multiple records using a partitioned DML statement.
       update_using_batch_dml             <instance_id> <database_id> Updates sample data in the database using Batch DML.
-
+      create_backup                      <instance_id> <database_id> <backup_id> Create a backup.
+      restore_backup                     <instance_id> <database_id> <backup_id> Restore a database.
+      create_backup_cancel               <instance_id> <database_id> <backup_id> Cancel a backup.
+      list_backup_operations             <instance_id> List backup operations.
+      list_database_operations           <instance_id> List database operations.
+      list_backups                       <instance_id> <backup_id> <database_id> List and filter backups.
+      delete_backup                      <instance_id> <backup_id> Delete a backup.
+      update_backup                      <instance_id> <backup_id> Update the backup expiry time.
     Environment variables:
       GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
 
