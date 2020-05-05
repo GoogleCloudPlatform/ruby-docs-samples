@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "rspec"
+require "minitest/autorun"
 
 require_relative "spec_helper"
 require_relative "../detect_crop_hints"
@@ -44,27 +44,34 @@ class AnnotatorMock < Google::Cloud::Vision.const_get(version.capitalize)::Image
 end
 
 describe "Detect Crop Hints" do
-
   # Returns full path to sample image included in repository for testing
   def image_path filename
     File.expand_path "../resources/#{filename}", __dir__
   end
 
-  example "detect crop hints from local image file" do
-    allow(Google::Cloud::Vision.const_get(version.capitalize)::ImageAnnotatorClient).to receive(:new).and_return(AnnotatorMock.new)
-    expect do
-      detect_crop_hints image_path: image_path("otter_crossing.jpg")
-    end.to output(
-      /1234, 1234/
-    ).to_stdout
+  it "detect crop hints from local image file" do
+    mock = MiniTest::Mock.new
+    mock.expect(:new, AnnotatorMock.new)
+
+    Google::Cloud::Vision.const_get(version.capitalize)::ImageAnnotatorClient.stub(:new, mock) do
+      assert_output(/1234, 1234/) { 
+        detect_crop_hints image_path: image_path("otter_crossing.jpg") 
+      }
+    end
+
+    mock.verify
   end
 
-  example "detect crop hints from image file in Google Cloud Storage" do
-    allow(Google::Cloud::Vision.const_get(version.capitalize)::ImageAnnotatorClient).to receive(:new).and_return(AnnotatorMock.new)
-    expect do
-      detect_crop_hints_gcs image_path: "gs://my-bucket/image.png"
-    end.to output(
-      /1234, 1234/
-    ).to_stdout
+  it "detect crop hints from image file in Google Cloud Storage" do
+    mock = MiniTest::Mock.new
+    mock.expect(:new, AnnotatorMock.new)
+
+    Google::Cloud::Vision.const_get(version.capitalize)::ImageAnnotatorClient.stub(:new, mock) do
+      assert_output(/1234, 1234/) { 
+        detect_crop_hints_gcs image_path: "gs://my-bucket/image.png" 
+      }
+    end
+
+    mock.verify
   end
 end

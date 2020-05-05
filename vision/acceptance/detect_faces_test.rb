@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "rspec"
+require "minitest/autorun"
 require "google/cloud/storage"
 
 require_relative "../detect_faces"
@@ -28,22 +28,17 @@ describe "Detect Faces" do
     File.expand_path "../resources/#{filename}", __dir__
   end
 
-  example "detect faces from local image file" do
-    expect {
+  it "detect faces from local image file" do
+    assert_output(/Surprise: VERY_UNLIKELY/) { 
       detect_faces image_path: image_path("face_no_surprise.png")
-    }.to output(
-      /Surprise: VERY_UNLIKELY/
-    ).to_stdout
+    }
   end
 
-  example "detect faces from image file in Google Cloud Storage" do
+  it "detect faces from image file in Google Cloud Storage" do
     storage_file = @bucket.upload_file image_path("face_surprise.jpg"),
                                        "face_surprise.jpg"
-
-    expect {
-      detect_faces_gcs image_path: storage_file.to_gs_url
-    }.to output(
-      /Surprise: LIKELY/
-    ).to_stdout
+    assert_output(/Surprise: LIKELY/) { 
+      detect_faces image_path: image_path("face_no_surprise.png") 
+    }
   end
 end

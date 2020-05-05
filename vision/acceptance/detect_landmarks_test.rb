@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "rspec"
+require "minitest/autorun"
 require "google/cloud/storage"
 
 require_relative "../detect_landmarks"
@@ -23,21 +23,17 @@ describe "Detect Landmarks" do
     File.expand_path "../resources/#{filename}", __dir__
   end
 
-  example "detect landmarks from local image file" do
-    expect {
+  it "detect landmarks from local image file" do
+    assert_output(/Palace/) {
       detect_landmarks image_path: image_path("palace_of_fine_arts.jpg")
-    }.to output(
-      /Palace/
-    ).to_stdout
+    }
   end
 
-  example "detect landmarks from image file in Google Cloud Storage" do
+  it "detect landmarks from image file in Google Cloud Storage" do
     gcs_uri = "gs://cloud-samples-data/vision/palace_of_fine_arts.jpg"
 
-    expect {
+    assert_output(/Palace/) {
       detect_landmarks_gcs image_path: gcs_uri
-    }.to output(
-      /Palace/
-    ).to_stdout
+    }
   end
 end

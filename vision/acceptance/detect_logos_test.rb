@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "rspec"
+require "minitest/autorun"
 require "google/cloud/storage"
 
 require_relative "../detect_logos"
@@ -28,22 +28,18 @@ describe "Detect Logos" do
     File.expand_path "../resources/#{filename}", __dir__
   end
 
-  example "detect logos from local image file" do
-    expect {
+  it "detect logos from local image file" do
+    assert_output(/google/i) {
       detect_logos image_path: image_path("logos.png")
-    }.to output(
-      /google/i
-    ).to_stdout
+    }
   end
 
-  example "detect logos from image file in Google Cloud Storage" do
+  it "detect logos from image file in Google Cloud Storage" do
     storage_file = @bucket.upload_file image_path("logos.png"),
                                        "logos.png"
 
-    expect {
+    assert_output(/google/i) {
       detect_logos_gcs image_path: storage_file.to_gs_url
-    }.to output(
-      /google/i
-    ).to_stdout
+    }
   end
 end

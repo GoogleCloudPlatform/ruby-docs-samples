@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "rspec"
+require "minitest/autorun"
 require "google/cloud/storage"
 
 require_relative "../localize_objects"
@@ -28,22 +28,18 @@ describe "Localize Objects" do
     File.expand_path "../resources/#{filename}", __dir__
   end
 
-  example "localize objects from local image file" do
-    expect {
+  it "localize objects from local image file" do
+    assert_output(/Dog/) {
       localize_objects image_path: image_path("puppies.jpg")
-    }.to output(
-      /Dog/
-    ).to_stdout
+    }
   end
 
-  example "localize objects from image file in Google Cloud Storage" do
+  it "localize objects from image file in Google Cloud Storage" do
     storage_file = @bucket.upload_file image_path("puppies.jpg"),
                                        "puppies.jpg"
 
-    expect {
+    assert_output(/Dog/) {
       localize_objects_gs image_path: storage_file.to_gs_url
-    }.to output(
-      /Dog/
-    ).to_stdout
+    }
   end
 end

@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "rspec"
+require "minitest/autorun"
 require "google/cloud/storage"
 
 require_relative "../detect_pdf"
@@ -28,15 +28,13 @@ describe "Detect Document Text from PDF" do
     File.expand_path "../resources/#{filename}", __dir__
   end
 
-  example "detect document text from pdf file in Google Cloud Storage" do
+  it "detect document text from pdf file in Google Cloud Storage" do
     storage_file = @bucket.upload_file document_path("pdf_ocr.pdf"),
                                        "pdf_ocr.pdf"
 
-    expect {
+    assert_output(/A Simple PDF File/) {
       detect_pdf_gcs gcs_source_uri:      storage_file.to_gs_url,
                      gcs_destination_uri: "gs://#{@bucket.name}/prefix_"
-    }.to output(
-      /A Simple PDF File/
-    ).to_stdout
+    }
   end
 end

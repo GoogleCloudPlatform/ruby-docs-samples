@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "rspec"
+require "minitest/autorun"
 require "tempfile"
 
 require_relative "../draw_box_around_faces"
@@ -23,29 +23,20 @@ describe "Draw box around faces sample" do
     File.expand_path "../resources/#{filename}", __dir__
   end
 
-  # Capture and return STDOUT output by block
-  def capture
-    real_stdout = $stdout
-    $stdout = StringIO.new
-    yield
-    @captured_output = $stdout.string
-  ensure
-    $stdout = real_stdout
-  end
-  attr_reader :captured_output
-
-  example "box-in face" do
+  it "box-in face" do
     output_image_file = Tempfile.new "cloud-vision-testing"
-    expect(File.size(output_image_file.path)).to eq 0
+    assert File.size(output_image_file.path) == 0
 
     begin
-      capture do
+      out, err = capture_io do
         draw_box_around_faces path_to_image_file:  image_path("face_no_surprise.png"),
                               path_to_output_file: output_image_file.path
       end
-      expect(captured_output).to include "Face bounds:"
-      expect(captured_output).to match(/\(\d+, \d+\)\n\(\d+, \d+\)\n\(\d+, \d+\)\n\(\d+, \d+\)\n/)
-      expect(File.size(output_image_file.path)).to be > 0
+
+      assert_empty err
+      assert_match(/Face bounds:/, out)
+      assert_match(/\(\d+, \d+\)\n\(\d+, \d+\)\n\(\d+, \d+\)\n\(\d+, \d+\)\n/, out)
+      assert File.size(output_image_file.path) > 0
     ensure
       output_image_file.close
       output_image_file.unlink

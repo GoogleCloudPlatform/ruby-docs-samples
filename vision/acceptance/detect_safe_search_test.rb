@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "rspec"
+require "minitest/autorun"
 require "google/cloud/storage"
 
 require_relative "../detect_safe_search"
@@ -28,22 +28,18 @@ describe "Detect Safe Search Properties" do
     File.expand_path "../resources/#{filename}", __dir__
   end
 
-  example "detect safe search properties from local image file" do
-    expect {
+  it "detect safe search properties from local image file" do
+    assert_output(/Violence: VERY_UNLIKELY/) {
       detect_safe_search image_path: image_path("otter_crossing.jpg")
-    }.to output(
-      /Violence: VERY_UNLIKELY/
-    ).to_stdout
+    }
   end
 
-  example "detect safe search properties from image file in Google Cloud Storage" do
+  it "detect safe search properties from image file in Google Cloud Storage" do
     storage_file = @bucket.upload_file image_path("otter_crossing.jpg"),
                                        "otter_crossing.jpg"
 
-    expect {
+    assert_output(/Violence: VERY_UNLIKELY/) {
       detect_safe_search_gcs image_path: storage_file.to_gs_url
-    }.to output(
-      /Violence: VERY_UNLIKELY/
-    ).to_stdout
+    }
   end
 end

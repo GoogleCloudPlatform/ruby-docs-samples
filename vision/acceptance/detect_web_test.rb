@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "rspec"
+require "minitest/autorun"
 require "google/cloud/storage"
 
 require_relative "../detect_web"
@@ -28,22 +28,18 @@ describe "Detect Web Entities and Pages" do
     File.expand_path "../resources/#{filename}", __dir__
   end
 
-  example "detect web entities and pages from local image file" do
-    expect {
+  it "detect web entities and pages from local image file" do
+    assert_output(/http.*otter/) {
       detect_web image_path: image_path("otter_crossing.jpg")
-    }.to output(
-      /http.*otter/
-    ).to_stdout
+    }
   end
 
-  example "detect web entities and pages from image in Google Cloud Storage" do
+  it "detect web entities and pages from image in Google Cloud Storage" do
     storage_file = @bucket.upload_file image_path("otter_crossing.jpg"),
                                        "otter_crossing.jpg"
 
-    expect {
+    assert_output(/http.*otter/) {
       detect_web_gcs image_path: storage_file.to_gs_url
-    }.to output(
-      /http.*otter/
-    ).to_stdout
+    }
   end
 end

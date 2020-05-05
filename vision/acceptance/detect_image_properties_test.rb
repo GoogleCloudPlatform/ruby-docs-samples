@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "rspec"
+require "minitest/autorun"
 require "google/cloud/storage"
 
 require_relative "../detect_image_properties"
@@ -28,22 +28,17 @@ describe "Detect Image Properties" do
     File.expand_path "../resources/#{filename}", __dir__
   end
 
-  example "detect image properties from local image file" do
-    expect {
-      detect_image_properties image_path: image_path("otter_crossing.jpg")
-    }.to output(
-      /Color 104.0, 17.0, 32.0/
-    ).to_stdout
+  it "detect image properties from local image file" do
+    assert_output(/Color 104.0, 17.0, 32.0/) { 
+      detect_image_properties image_path: image_path("otter_crossing.jpg") 
+    }
   end
 
-  example "detect image properties from image file in Google Cloud Storage" do
+  it "detect image properties from image file in Google Cloud Storage" do
     storage_file = @bucket.upload_file image_path("otter_crossing.jpg"),
                                        "otter_crossing.jpg"
-
-    expect {
-      detect_image_properties_gcs image_path: storage_file.to_gs_url
-    }.to output(
-      /Color 104.0, 17.0, 32.0/
-    ).to_stdout
+    assert_output(/Color 104.0, 17.0, 32.0/) { 
+      detect_image_properties_gcs image_path: storage_file.to_gs_url 
+    }
   end
 end
