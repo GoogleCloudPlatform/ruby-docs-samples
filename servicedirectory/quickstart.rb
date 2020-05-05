@@ -17,7 +17,7 @@
 require "google/cloud/service_directory"
 
 # Your Google Cloud Platform project ID
-project = "YOUR_PROJECT_ID"
+project = ENV["GOOGLE_CLOUD_PROJECT"]
 
 # Location of the Service Directory Namespace
 location = "us-central1"
