@@ -763,7 +763,7 @@ def sign_asymmetric project_id:, location_id:, key_ring_id:, key_id:, version_id
 end
 
 def update_key_add_rotation project_id:, location_id:, key_ring_id:, key_id:
-  # [START kms_update_key_add_rotation]
+  # [START kms_update_key_add_rotation_schedule]
   # TODO(developer): uncomment these values before running the sample.
   # project_id  = "my-project"
   # location_id = "us-east1"
@@ -800,7 +800,7 @@ def update_key_add_rotation project_id:, location_id:, key_ring_id:, key_id:
   # Call the API.
   updated_key = client.update_crypto_key key, update_mask
   puts "Updated key: #{updated_key.name}"
-  # [END kms_update_key_add_rotation]
+  # [END kms_update_key_add_rotation_schedule]
 
   updated_key
 end
