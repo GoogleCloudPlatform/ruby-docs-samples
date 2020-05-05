@@ -25,11 +25,13 @@ def create_namespace project:, location:, namespace:
 
   # The parent path of the namespace
   parent = registration_service.location_path(
-    project: project, location: location)
+    project: project, location: location
+  )
 
   # Use the Service Directory API to create the namespace
   response = registration_service.create_namespace(
-    parent: parent, namespace_id: namespace)
+    parent: parent, namespace_id: namespace
+  )
   puts "Created namespace: #{response.name}"
   # [END servicedirectory_create_namespace]
 end
@@ -47,7 +49,8 @@ def delete_namespace project:, location:, namespace:
 
   # The path of the namespace
   namespace_name = registration_service.namespace_path(
-    project: project, location: location, namespace: namespace)
+    project: project, location: location, namespace: namespace
+  )
 
   # Use the Service Directory API to delete the namespace
   registration_service.delete_namespace name: namespace_name
@@ -69,7 +72,8 @@ def create_service project:, location:, namespace:, service:
 
   # The parent path of the service
   parent = registration_service.namespace_path(
-    project: project, location: location, namespace: namespace)
+    project: project, location: location, namespace: namespace
+  )
 
   # Use the Service Directory API to create the service
   response = registration_service.create_service parent: parent, service_id: service
@@ -118,10 +122,10 @@ def create_endpoint project:, location:, namespace:, service:, endpoint:
 
   # The parent path of the endpoint
   parent = registration_service.service_path(
-    project: project,
-    location: location,
+    project:   project,
+    location:  location,
     namespace: namespace,
-    service: service
+    service:   service
   )
 
   # Set the IP Address and Port on the Endpoint
@@ -132,7 +136,8 @@ def create_endpoint project:, location:, namespace:, service:, endpoint:
 
   # Use the Service Directory API to create the endpoint
   response = registration_service.create_endpoint(
-    parent: parent, endpoint_id: endpoint, endpoint: endpoint_data)
+    parent: parent, endpoint_id: endpoint, endpoint: endpoint_data
+  )
   puts "Created endpoint: #{response.name}"
   # [END servicedirectory_create_endpoint]
 end
@@ -198,7 +203,7 @@ end
 
 if $PROGRAM_NAME == __FILE__
   project = ENV["GOOGLE_CLOUD_PROJECT"]
-  command    = ARGV.shift
+  command = ARGV.shift
 
   case command
   when "create_namespace"

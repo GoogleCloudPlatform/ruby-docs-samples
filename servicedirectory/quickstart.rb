@@ -27,7 +27,8 @@ registration_service = Google::Cloud::ServiceDirectory.registration_service
 
 # The resource name of the project
 location_name = registration_service.location_path(
-  project: project, location: location)
+  project: project, location: location
+)
 
 # Request list of namespaces in the project
 response = registration_service.list_namespaces parent: location_name
