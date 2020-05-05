@@ -17,7 +17,6 @@ require "google/cloud/service_directory"
 require_relative "../servicedirectory"
 
 describe "Service Directory API Test" do
-  ServiceDirectory = Google::Cloud::ServiceDirectory::V1beta1
 
   def get_namespace project:, location:, namespace:
     registration_service = Google::Cloud::ServiceDirectory.registration_service
