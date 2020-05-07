@@ -14,7 +14,7 @@
 
 source "https://rubygems.org"
 
-gem "google-cloud-text_to_speech"
+gem "google-cloud-text_to_speech", "~> 1.0.0"
 
 group :test do
   gem "minitest", "~> 5.14"
