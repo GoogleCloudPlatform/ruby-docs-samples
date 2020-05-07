@@ -1,34 +1,25 @@
-require_relative "spec_helper"
-require "securerandom"
+# Copyright 2020 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
-describe "Google Cloud Bigtable Quickstart" do
-  it "read one row and print" do
-    table_id = "test_table_#{SecureRandom.hex 8}"
-    table = @bigtable.table @instance_id, table_id
+require_relative "helper"
+require_relative "../quickstart"
 
-    unless table.exists?
-      table = @bigtable.create_table @instance_id, table_id do |cf|
-        cf.add "cf", Google::Cloud::Bigtable::GcRule.max_versions(1)
-      end
+describe Google::Cloud::Bigtable, "Quickstart", :bigtable do
+  it "quickstart" do
+    out, _err = capture_io do
+      quickstart bigtable_instance_id, bigtable_read_table_id
     end
-
-    # Write row
-    entry = table.new_mutation_entry "user0000001"
-    entry.set_cell "cf", "field1", "XYZ"
-    table.mutate_row entry
-
-    expect(Google::Cloud::Bigtable).to receive(:new)
-      .with(project_id: "YOUR_PROJECT_ID")
-      .and_return(@bigtable)
-
-    expect(@bigtable).to receive(:table)
-      .with("my-bigtable-instance", "my-table")
-      .and_return(table)
-
-    expect {
-      load File.expand_path("../quickstart.rb", __dir__)
-    }.to output(/user0000001/).to_stdout
-
-    table.delete
+    assert_includes out, "@key=\"user0000001\""
   end
 end

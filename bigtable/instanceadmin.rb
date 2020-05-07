@@ -1,12 +1,10 @@
-# frozen_string_literal: true
-
-# Copyright 2018 Google LLC
+# Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#     https://www.apache.org/licenses/LICENSE-2.0
+#     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 # Import google bigtable client lib
 require "google/cloud/bigtable"
 
 def create_prod_instance project_id, instance_id, cluster_id, cluster_location
-  bigtable = Google::Cloud::Bigtable.new project_id: project_id
+  bigtable = Google::Cloud::Bigtable.new
   puts "Check Instance Exists"
 
   # [START bigtable_check_instance_exists]
@@ -67,7 +64,7 @@ def create_prod_instance project_id, instance_id, cluster_id, cluster_location
 end
 
 def create_dev_instance project_id, instance_id, cluster_id, cluster_location
-  bigtable = Google::Cloud::Bigtable.new project_id: project_id
+  bigtable = Google::Cloud::Bigtable.new
   puts "Creating a DEVELOPMENT Instance"
 
   # [START bigtable_create_dev_instance]
@@ -87,7 +84,7 @@ def create_dev_instance project_id, instance_id, cluster_id, cluster_location
 end
 
 def delete_instance project_id, instance_id
-  bigtable = Google::Cloud::Bigtable.new project_id: project_id
+  bigtable = Google::Cloud::Bigtable.new
   instance = bigtable.instance instance_id
   puts "Deleting Instance: #{instance.instance_id}"
 
@@ -98,7 +95,7 @@ def delete_instance project_id, instance_id
 end
 
 def add_cluster project_id, instance_id, cluster_id, cluster_location
-  bigtable = Google::Cloud::Bigtable.new project_id: project_id
+  bigtable = Google::Cloud::Bigtable.new
   instance = bigtable.instance instance_id
 
   unless instance
@@ -123,7 +120,7 @@ def add_cluster project_id, instance_id, cluster_id, cluster_location
 end
 
 def delete_cluster project_id, instance_id, cluster_id
-  bigtable = Google::Cloud::Bigtable.new project_id: project_id
+  bigtable = Google::Cloud::Bigtable.new
   instance = bigtable.instance instance_id
   cluster = instance.cluster cluster_id
   puts "Deleting Cluster: #{cluster_id}"

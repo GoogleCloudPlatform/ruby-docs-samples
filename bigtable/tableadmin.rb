@@ -1,12 +1,10 @@
-# frozen_string_literal: true
-
-# Copyright 2018 Google LLC
+# Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#     https://www.apache.org/licenses/LICENSE-2.0
+#     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 # Import google bigtable client lib
 require "google/cloud/bigtable"
 
 def run_table_operations project_id, instance_id, table_id
-  bigtable = Google::Cloud::Bigtable.new project_id: project_id
+  bigtable = Google::Cloud::Bigtable.new
   puts "Checking if table exists"
   table = bigtable.table instance_id, table_id, perform_lookup: true
 
@@ -150,7 +147,7 @@ def run_table_operations project_id, instance_id, table_id
 end
 
 def delete_table project_id, instance_id, table_id
-  bigtable = Google::Cloud::Bigtable.new project_id: project_id
+  bigtable = Google::Cloud::Bigtable.new
 
   puts "Delete the table."
   #  [START bigtable_delete_table]
