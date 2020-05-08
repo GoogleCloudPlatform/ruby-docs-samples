@@ -14,7 +14,7 @@
 
 source "https://rubygems.org"
 
-gem "google-cloud-dialogflow"
+gem 'google-cloud-dialogflow', '~>0.15'
 
 group :test do
   gem "minitest", "~> 5.14"
