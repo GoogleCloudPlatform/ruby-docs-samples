@@ -13,31 +13,32 @@
 # limitations under the License.
 
 # A short sample demonstrating how to make a BigQuery API request
+def stackoverflow
+  # [START bigquery_simple_app_all]
+  # [START bigquery_simple_app_deps]
+  require "google/cloud/bigquery"
+  # [END bigquery_simple_app_deps]
 
-# [START bigquery_simple_app_all]
-# [START bigquery_simple_app_deps]
-require "google/cloud/bigquery"
-# [END bigquery_simple_app_deps]
+  # [START bigquery_simple_app_client]
+  # This uses Application Default Credentials to authenticate.
+  # @see https://cloud.google.com/bigquery/docs/authentication/getting-started
+  bigquery = Google::Cloud::Bigquery.new
+  # [END bigquery_simple_app_client]
 
-# [START bigquery_simple_app_client]
-# This uses Application Default Credentials to authenticate.
-# @see https://cloud.google.com/bigquery/docs/authentication/getting-started
-bigquery = Google::Cloud::Bigquery.new
-# [END bigquery_simple_app_client]
+  # [START bigquery_simple_app_query]
+  sql     = "SELECT " +
+            "CONCAT('https://stackoverflow.com/questions/', " +
+            "       CAST(id as STRING)) as url, view_count " +
+            "FROM `bigquery-public-data.stackoverflow.posts_questions` " +
+            "WHERE tags like '%google-bigquery%' " +
+            "ORDER BY view_count DESC LIMIT 10"
+  results = bigquery.query sql
+  # [END bigquery_simple_app_query]
 
-# [START bigquery_simple_app_query]
-sql     = "SELECT " +
-          "CONCAT('https://stackoverflow.com/questions/', " +
-          "       CAST(id as STRING)) as url, view_count " +
-          "FROM `bigquery-public-data.stackoverflow.posts_questions` " +
-          "WHERE tags like '%google-bigquery%' " +
-          "ORDER BY view_count DESC LIMIT 10"
-results = bigquery.query sql
-# [END bigquery_simple_app_query]
-
-# [START bigquery_simple_app_print]
-results.each do |row|
-  puts "#{row[:url]}: #{row[:view_count]} views"
+  # [START bigquery_simple_app_print]
+  results.each do |row|
+    puts "#{row[:url]}: #{row[:view_count]} views"
+  end
+  # [END bigquery_simple_app_print]
+  # [END bigquery_simple_app_all]
 end
-# [END bigquery_simple_app_print]
-# [END bigquery_simple_app_all]

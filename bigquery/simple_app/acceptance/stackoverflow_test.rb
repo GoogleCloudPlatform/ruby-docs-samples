@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "rspec"
+require "minitest/autorun"
+require_relative "../stackoverflow.rb"
 
 describe "BigQuery Stack Overflow" do
   it "queries stackoverflow dataset" do
-    expect {
-      load File.expand_path("../stackoverflow.rb", __dir__)
-    }.to output(
-      /stackoverflow\.com.*views/
-    ).to_stdout
+    assert_output  /stackoverflow\.com.*views/ do
+      stackoverflow
+    end
   end
 end
