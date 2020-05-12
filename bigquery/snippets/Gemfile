@@ -18,7 +18,8 @@ gem "google-cloud-bigquery"
 
 group :test do
   gem "google-cloud-storage"
-  gem "rspec"
-  gem "rspec-retry"
-  gem "rspec_junit_formatter"
+  gem "minitest", "~> 5.13"
+  gem "minitest-focus", "~> 1.1"
+  gem "minitest-junit"
+  gem "rake"
 end

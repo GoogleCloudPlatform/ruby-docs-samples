@@ -9,4 +9,4 @@ analytics data warehouse.
 
 ## Run the samples
 
-Run the tests for these samples by running `bundle exec rspec`.
+Run the tests for these samples by running `bundle exec rake test`.

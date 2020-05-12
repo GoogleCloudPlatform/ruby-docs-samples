@@ -18,3 +18,7 @@ dataset][stackoverflow_dataset] for top questions tagged with
 `google-bigquery`.
 
 [stackoverflow_dataset]: https://cloud.google.com/bigquery/public-data/stackoverflow
+
+## Run the tests
+
+Run the tests for the sample by running `bundle exec rake test`.
