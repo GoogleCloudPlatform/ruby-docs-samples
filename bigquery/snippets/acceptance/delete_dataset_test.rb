@@ -13,15 +13,15 @@
 # limitations under the License.
 
 require_relative "../delete_dataset"
-require "spec_helper"
+require_relative "helper"
 
 describe "Delete dataset" do
-  example "deletes a dataset" do
+  it "deletes a dataset" do
     bigquery = Google::Cloud::Bigquery.new
     dataset = bigquery.create_dataset "test_empty_dataset_#{Time.now.to_i}"
 
     delete_dataset dataset.dataset_id
 
-    expect(bigquery.dataset(dataset.dataset_id, skip_lookup: true).exists?).to be(false)
+    refute bigquery.dataset(dataset.dataset_id, skip_lookup: true).exists?
   end
 end

@@ -14,7 +14,7 @@
 
 require_relative "../load_table_gcs_json"
 require_relative "../load_table_gcs_json_truncate"
-require "spec_helper"
+require_relative "helper"
 
 
 describe "Load table from JSON file on GCS and replace existing table data" do
@@ -22,17 +22,17 @@ describe "Load table from JSON file on GCS and replace existing table data" do
     @dataset = create_temp_dataset
   end
 
-  example "Load table from JSON file on GCS and replace existing table data" do
+  it "loads table from JSON file on GCS and replace existing table data" do
     load_table_gcs_json @dataset.dataset_id
     table = @dataset.tables.first
-    expect(table.rows_count).to eq(50)
+    assert_equal 50, table.rows_count
 
-    output = capture do
+    output = capture_io do
       load_table_gcs_json_truncate @dataset.dataset_id, table.table_id
     end
 
     table.reload!
-    expect(output).to include(table.table_id)
-    expect(output).to include("50 rows")
+    assert_match table.table_id, output.first
+    assert_match "50 rows", output.first
   end
 end

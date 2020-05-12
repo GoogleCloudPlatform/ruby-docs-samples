@@ -13,7 +13,7 @@
 # limitations under the License.
 
 require_relative "../table_insert_rows"
-require "spec_helper"
+require_relative "helper"
 
 describe "Insert rows into a table" do
   before do
@@ -24,9 +24,9 @@ describe "Insert rows into a table" do
     end
   end
 
-  example "Insert rows into a table" do
-    output = capture { table_insert_rows @dataset.dataset_id, @table.table_id }
+  it "inserts rows into a table" do
+    output = capture_io { table_insert_rows @dataset.dataset_id, @table.table_id }
 
-    expect(output).to include("successfully")
+    assert_match "successfully", output.first
   end
 end

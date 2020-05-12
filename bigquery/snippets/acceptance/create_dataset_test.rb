@@ -13,22 +13,21 @@
 # limitations under the License.
 
 require_relative "../create_dataset"
-require "spec_helper"
+require_relative "helper"
 
 describe "Create dataset" do
-  before do
-    @dataset_id = "test_dataset_#{Time.now.to_i}"
-  end
-
-  example "creates a new dataset" do
-    location = "US"
-    create_dataset @dataset_id, location
-
-    dataset = @bigquery.dataset @dataset_id
-    expect(dataset.location).to eq(location)
-  end
+  let(:bigquery) { Google::Cloud::Bigquery.new }
+  let(:dataset_id) { "test_dataset_#{Time.now.to_i}" }
+  let(:dataset_location) { "US" }
 
   after do
-    @bigquery.dataset(@dataset_id).delete
+    bigquery.dataset(dataset_id).delete
+  end
+
+  it "creates a new dataset" do
+    create_dataset dataset_id, dataset_location
+
+    dataset = bigquery.dataset dataset_id
+    assert_equal dataset_location, dataset.location
   end
 end

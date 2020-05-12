@@ -13,7 +13,7 @@
 # limitations under the License.
 
 require_relative "../load_table_gcs_json_autodetect"
-require "spec_helper"
+require_relative "helper"
 
 
 describe "Load table from JSON file on GCS with auto-detected schema" do
@@ -21,11 +21,11 @@ describe "Load table from JSON file on GCS with auto-detected schema" do
     @dataset = create_temp_dataset
   end
 
-  example "Load a new table from a JSON file on GCS with auto-detected schema" do
-    output = capture { load_table_gcs_json_autodetect @dataset.dataset_id }
+  it "loads a new table from a JSON file on GCS with auto-detected schema" do
+    output = capture_io { load_table_gcs_json_autodetect @dataset.dataset_id }
 
     table = @dataset.tables.first
-    expect(output).to include(table.table_id)
-    expect(output).to include("50 rows")
+    assert_match table.table_id, output.first
+    assert_match "50 rows", output.first
   end
 end

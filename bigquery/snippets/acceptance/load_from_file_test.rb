@@ -13,7 +13,7 @@
 # limitations under the License.
 
 require_relative "../load_from_file"
-require "spec_helper"
+require_relative "helper"
 
 
 describe "Load table" do
@@ -21,13 +21,13 @@ describe "Load table" do
     @dataset = create_temp_dataset
   end
 
-  example "Load a new table from a local CSV file" do
+  it "loads a new table from a local CSV file" do
     file_path = File.expand_path "../resources/people.csv", __dir__
 
-    output = capture { load_from_file @dataset.dataset_id, file_path }
+    output = capture_io { load_from_file @dataset.dataset_id, file_path }
 
     table = @dataset.tables.first
-    expect(output).to include(table.table_id)
-    expect(output).to include("2 rows")
+    assert_match table.table_id, output.first
+    assert_match "2 rows", output.first
   end
 end

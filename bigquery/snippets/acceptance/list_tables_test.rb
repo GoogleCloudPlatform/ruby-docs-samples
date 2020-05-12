@@ -13,7 +13,7 @@
 # limitations under the License.
 
 require_relative "../list_tables"
-require "spec_helper"
+require_relative "helper"
 
 
 describe "List tables" do
@@ -21,12 +21,12 @@ describe "List tables" do
     @dataset = create_temp_dataset
   end
 
-  example "list tables in a dataset" do
+  it "lists tables in a dataset" do
     table1 = @dataset.create_table "test_table1_#{Time.now.to_i}"
     table2 = @dataset.create_table "test_table2_#{Time.now.to_i}"
 
-    output = capture { list_tables @dataset.dataset_id }
-    expect(output).to include(table1.table_id)
-    expect(output).to include(table2.table_id)
+    output = capture_io { list_tables @dataset.dataset_id }
+    assert_match table1.table_id, output.first
+    assert_match table2.table_id, output.first
   end
 end

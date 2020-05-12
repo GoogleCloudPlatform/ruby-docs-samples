@@ -14,7 +14,7 @@
 
 require_relative "../extract_table"
 require_relative "../load_from_file"
-require "spec_helper"
+require_relative "helper"
 require "google/cloud/storage"
 
 describe "Extract table" do
@@ -31,8 +31,8 @@ describe "Extract table" do
     extract_table @bucket.name, @dataset.dataset_id, @table.table_id
 
     output_file = @bucket.files(prefix: "output").first
-    expect(output_file).not_to be nil
-    expect(output_file.size).to be > 0
+    assert output_file
+    assert_operator output_file.size, :>, 0
   end
 
   after do

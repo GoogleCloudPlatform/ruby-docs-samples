@@ -12,34 +12,28 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "rspec"
-require "google/cloud/bigquery"
+require "minitest/autorun"
+require "minitest/focus"
 
-RSpec.configure do |config|
-  config.before :all do
-    @bigquery = Google::Cloud::Bigquery.new
-    @temp_datasets = []
-  end
+$temp_datasets = []
 
-  config.after :each do
-    @temp_datasets.each do |dataset|
-      dataset.delete force: true
-    end
-  end
+def register_temp_datasets *datasets
+  $temp_datasets += datasets
+end
 
-  def create_temp_dataset
-    dataset = @bigquery.create_dataset "test_dataset_#{Time.now.to_i}"
-    @temp_datasets << dataset
-    dataset
-  end
+def create_temp_dataset
+  bigquery = Google::Cloud::Bigquery.new
+  dataset = bigquery.create_dataset "test_dataset_#{Time.now.to_i}"
+  register_temp_datasets dataset
+  dataset
+end
 
-  # Capture and return STDOUT output by block
-  def capture
-    real_stdout = $stdout
-    $stdout = StringIO.new
-    yield
-    $stdout.string
-  ensure
-    $stdout = real_stdout
+def delete_temp_datasets
+  $temp_datasets.each do |dataset|
+    dataset.delete force: true
   end
+end
+
+Minitest.after_run do
+  delete_temp_datasets
 end

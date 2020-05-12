@@ -17,7 +17,7 @@ require_relative "../stackoverflow.rb"
 
 describe "BigQuery Stack Overflow" do
   it "queries stackoverflow dataset" do
-    assert_output  /stackoverflow\.com.*views/ do
+    assert_output(/stackoverflow\.com.*views/) do
       stackoverflow
     end
   end

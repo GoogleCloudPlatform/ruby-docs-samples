@@ -13,12 +13,12 @@
 # limitations under the License.
 
 require_relative "../browse_table"
-require "spec_helper"
+require_relative "helper"
 
 describe "Browse table" do
-  example "lists first 10 rows of table" do
-    output = capture { browse_table }
-    rows = output.split "\n"
-    expect(rows.length).to eq 10
+  it "lists first 10 rows of table" do
+    output = capture_io { browse_table }
+    rows = output.first.split "\n"
+    assert_equal 10, rows.length
   end
 end

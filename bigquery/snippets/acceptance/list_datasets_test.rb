@@ -13,17 +13,18 @@
 # limitations under the License.
 
 require_relative "../list_datasets"
-require "spec_helper"
+require_relative "helper"
 
 
 describe "List datasets" do
-  example "list datasets in a project" do
-    dataset1 = @bigquery.create_dataset "test_dataset1_#{Time.now.to_i}"
-    dataset2 = @bigquery.create_dataset "test_dataset2_#{Time.now.to_i}"
-    @temp_datasets.push dataset1, dataset2
+  it "lists datasets in a project" do
+    bigquery = Google::Cloud::Bigquery.new
+    dataset1 = bigquery.create_dataset "test_dataset1_#{Time.now.to_i}"
+    dataset2 = bigquery.create_dataset "test_dataset2_#{Time.now.to_i}"
+    register_temp_datasets dataset1, dataset2
 
-    output = capture { list_datasets @bigquery.name }
-    expect(output).to include(dataset1.dataset_id)
-    expect(output).to include(dataset2.dataset_id)
+    output = capture_io { list_datasets bigquery.name }
+    assert_match dataset1.dataset_id, output.first
+    assert_match dataset2.dataset_id, output.first
   end
 end

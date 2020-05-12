@@ -13,18 +13,18 @@
 # limitations under the License.
 
 require_relative "../delete_table"
-require "spec_helper"
+require_relative "helper"
 
 describe "Delete table" do
   before do
     @dataset = create_temp_dataset
   end
 
-  example "deletes a table" do
+  it "deletes a table" do
     table = @dataset.create_table "test_table_#{Time.now.to_i}"
 
     delete_table @dataset.dataset_id, table.table_id
 
-    expect(@dataset.table(table.table_id, skip_lookup: true).exists?).to be(false)
+    refute @dataset.table(table.table_id, skip_lookup: true).exists?
   end
 end

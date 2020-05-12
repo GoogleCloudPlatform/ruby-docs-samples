@@ -13,13 +13,13 @@
 # limitations under the License.
 
 require_relative "../query"
-require "spec_helper"
+require_relative "helper"
 
 
 describe "Query" do
-  example "Runs a standard SQL query" do
-    output = capture { query }
-    rows = output.split "\n"
-    expect(rows.length).to eq 100
+  it "runs a standard SQL query" do
+    output = capture_io { query }
+    rows = output.first.split "\n"
+    assert_equal 100, rows.length
   end
 end
