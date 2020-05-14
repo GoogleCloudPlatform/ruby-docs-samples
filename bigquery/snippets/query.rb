@@ -16,8 +16,8 @@ require "google/cloud/bigquery"
 
 def query
   bigquery = Google::Cloud::Bigquery.new
-  sql = "SELECT name FROM `bigquery-public-data.usa_names.usa_1910_2013` " +
-        "WHERE state = 'TX' " +
+  sql = "SELECT name FROM `bigquery-public-data.usa_names.usa_1910_2013` " \
+        "WHERE state = 'TX' " \
         "LIMIT 100"
 
   # Location must match that of the dataset(s) referenced in the query.

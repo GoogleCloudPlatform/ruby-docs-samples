@@ -14,8 +14,8 @@
 # [START bigquery_load_from_file]
 require "google/cloud/bigquery"
 
-def load_from_file(dataset_id = "your_dataset_id",
-                   file_path  = "path/to/file.csv")
+def load_from_file dataset_id = "your_dataset_id",
+                   file_path  = "path/to/file.csv"
 
   bigquery = Google::Cloud::Bigquery.new
   dataset  = bigquery.dataset dataset_id
