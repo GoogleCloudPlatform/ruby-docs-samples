@@ -1,4 +1,4 @@
-# Copyright 2018 Google LLC
+# Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -11,16 +11,20 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# [START bigquery_delete_table]
-require "google/cloud/bigquery"
 
-def delete_table dataset_id = "my_dataset_id", table_id = "my_table_id"
-  bigquery = Google::Cloud::Bigquery.new
-  dataset  = bigquery.dataset dataset_id
-  table    = dataset.table table_id
+require_relative "../delete_table"
+require_relative "helper"
 
-  table.delete
+describe "Delete table" do
+  before do
+    @dataset = create_temp_dataset
+  end
 
-  puts "Table #{table_id} deleted."
+  it "deletes a table" do
+    table = @dataset.create_table "test_table_#{Time.now.to_i}"
+
+    delete_table @dataset.dataset_id, table.table_id
+
+    refute @dataset.table(table.table_id, skip_lookup: true).exists?
+  end
 end
-# [END bigquery_delete_table]

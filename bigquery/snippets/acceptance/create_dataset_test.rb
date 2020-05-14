@@ -1,4 +1,4 @@
-# Copyright 2017 Google LCC
+# Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,14 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "rspec"
+require_relative "../create_dataset"
+require_relative "helper"
 
-describe "BigQuery Stack Overflow" do
-  it "queries stackoverflow dataset" do
-    expect {
-      load File.expand_path("../stackoverflow.rb", __dir__)
-    }.to output(
-      /stackoverflow\.com.*views/
-    ).to_stdout
+describe "Create dataset" do
+  let(:bigquery) { Google::Cloud::Bigquery.new }
+  let(:dataset_id) { "test_dataset_#{Time.now.to_i}" }
+  let(:dataset_location) { "US" }
+
+  after do
+    bigquery.dataset(dataset_id).delete
+  end
+
+  it "creates a new dataset" do
+    create_dataset dataset_id, dataset_location
+
+    dataset = bigquery.dataset dataset_id
+    assert_equal dataset_location, dataset.location
   end
 end

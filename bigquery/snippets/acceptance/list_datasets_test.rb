@@ -1,4 +1,4 @@
-# Copyright 2018 Google, LLC
+# Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,21 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require_relative "../table_insert_rows"
-require "spec_helper"
+require_relative "../list_datasets"
+require_relative "helper"
 
-describe "Insert rows into a table" do
-  before do
-    @dataset = create_temp_dataset
-    @table = @dataset.create_table "test_table" do |schema|
-      schema.string  "name"
-      schema.integer "value"
-    end
-  end
 
-  example "Insert rows into a table" do
-    output = capture { table_insert_rows @dataset.dataset_id, @table.table_id }
+describe "List datasets" do
+  it "lists datasets in a project" do
+    bigquery = Google::Cloud::Bigquery.new
+    dataset1 = bigquery.create_dataset "test_dataset1_#{Time.now.to_i}"
+    dataset2 = bigquery.create_dataset "test_dataset2_#{Time.now.to_i}"
+    register_temp_datasets dataset1, dataset2
 
-    expect(output).to include("successfully")
+    output = capture_io { list_datasets bigquery.name }
+    assert_match dataset1.dataset_id, output.first
+    assert_match dataset2.dataset_id, output.first
   end
 end

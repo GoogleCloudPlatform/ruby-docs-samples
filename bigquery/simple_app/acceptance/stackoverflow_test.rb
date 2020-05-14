@@ -1,4 +1,4 @@
-# Copyright 2018 Google, LLC
+# Copyright 2020 Google LCC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,23 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require_relative "../create_dataset"
-require "spec_helper"
+require "minitest/autorun"
+require_relative "../stackoverflow.rb"
 
-describe "Create dataset" do
-  before do
-    @dataset_id = "test_dataset_#{Time.now.to_i}"
-  end
-
-  example "creates a new dataset" do
-    location = "US"
-    create_dataset @dataset_id, location
-
-    dataset = @bigquery.dataset @dataset_id
-    expect(dataset.location).to eq(location)
-  end
-
-  after do
-    @bigquery.dataset(@dataset_id).delete
+describe "BigQuery Stack Overflow" do
+  it "queries stackoverflow dataset" do
+    assert_output(/stackoverflow\.com.*views/) do
+      stackoverflow
+    end
   end
 end

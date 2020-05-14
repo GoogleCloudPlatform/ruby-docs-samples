@@ -1,4 +1,4 @@
-# Copyright 2018 Google, LLC
+# Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,19 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require_relative "../delete_table"
-require "spec_helper"
+require_relative "../delete_dataset"
+require_relative "helper"
 
-describe "Delete table" do
-  before do
-    @dataset = create_temp_dataset
-  end
+describe "Delete dataset" do
+  it "deletes a dataset" do
+    bigquery = Google::Cloud::Bigquery.new
+    dataset = bigquery.create_dataset "test_empty_dataset_#{Time.now.to_i}"
 
-  example "deletes a table" do
-    table = @dataset.create_table "test_table_#{Time.now.to_i}"
+    delete_dataset dataset.dataset_id
 
-    delete_table @dataset.dataset_id, table.table_id
-
-    expect(@dataset.table(table.table_id, skip_lookup: true).exists?).to be(false)
+    refute bigquery.dataset(dataset.dataset_id, skip_lookup: true).exists?
   end
 end

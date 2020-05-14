@@ -1,4 +1,4 @@
-# Copyright 2018 Google, LLC
+# Copyright 2018 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@ require "google/cloud/bigquery"
 
 def query
   bigquery = Google::Cloud::Bigquery.new
-  sql = "SELECT name FROM `bigquery-public-data.usa_names.usa_1910_2013` " +
-        "WHERE state = 'TX' " +
+  sql = "SELECT name FROM `bigquery-public-data.usa_names.usa_1910_2013` " \
+        "WHERE state = 'TX' " \
         "LIMIT 100"
 
   # Location must match that of the dataset(s) referenced in the query.

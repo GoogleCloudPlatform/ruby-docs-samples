@@ -1,4 +1,4 @@
-# Copyright 2018 Google, LLC
+# Copyright 2018 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,9 +14,9 @@
 # [START bigquery_extract_table]
 require "google/cloud/bigquery"
 
-def extract_table(bucket_name = "my-bucket",
+def extract_table bucket_name = "my-bucket",
                   dataset_id  = "my_dataset_id",
-                  table_id    = "my_table_id")
+                  table_id    = "my_table_id"
 
   bigquery = Google::Cloud::Bigquery.new
   dataset  = bigquery.dataset dataset_id

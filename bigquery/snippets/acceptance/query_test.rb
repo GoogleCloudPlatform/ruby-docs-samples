@@ -1,4 +1,4 @@
-# Copyright 2018 Google, LLC
+# Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,20 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require_relative "../load_table_gcs_csv"
-require "spec_helper"
+require_relative "../query"
+require_relative "helper"
 
 
-describe "Load table from CSV file on GCS" do
-  before do
-    @dataset = create_temp_dataset
-  end
-
-  example "Load a new table from a CSV file on GCS" do
-    output = capture { load_table_gcs_csv @dataset.dataset_id }
-
-    table = @dataset.tables.first
-    expect(output).to include(table.table_id)
-    expect(output).to include("50 rows")
+describe "Query" do
+  it "runs a standard SQL query" do
+    output = capture_io { query }
+    rows = output.first.split "\n"
+    assert_equal 100, rows.length
   end
 end

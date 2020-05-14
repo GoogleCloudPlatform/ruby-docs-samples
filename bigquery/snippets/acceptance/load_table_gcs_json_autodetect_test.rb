@@ -1,4 +1,4 @@
-# Copyright 2018 Google, LLC
+# Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,13 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require_relative "../browse_table"
-require "spec_helper"
+require_relative "../load_table_gcs_json_autodetect"
+require_relative "helper"
 
-describe "Browse table" do
-  example "lists first 10 rows of table" do
-    output = capture { browse_table }
-    rows = output.split "\n"
-    expect(rows.length).to eq 10
+
+describe "Load table from JSON file on GCS with auto-detected schema" do
+  before do
+    @dataset = create_temp_dataset
+  end
+
+  it "loads a new table from a JSON file on GCS with auto-detected schema" do
+    output = capture_io { load_table_gcs_json_autodetect @dataset.dataset_id }
+
+    table = @dataset.tables.first
+    assert_match table.table_id, output.first
+    assert_match "50 rows", output.first
   end
 end

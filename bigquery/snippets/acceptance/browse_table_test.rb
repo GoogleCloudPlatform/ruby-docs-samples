@@ -1,4 +1,4 @@
-# Copyright 2018 Google, LLC
+# Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,18 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require_relative "../create_table"
-require "spec_helper"
+require_relative "../browse_table"
+require_relative "helper"
 
-describe "Create table" do
-  before do
-    @dataset = create_temp_dataset
-  end
-
-  example "creates a new table" do
-    create_table @dataset.dataset_id
-
-    table = @dataset.table "my_table"
-    expect(table.exists?).to be(true)
+describe "Browse table" do
+  it "lists first 10 rows of table" do
+    output = capture_io { browse_table }
+    rows = output.first.split "\n"
+    assert_equal 10, rows.length
   end
 end

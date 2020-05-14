@@ -1,4 +1,4 @@
-# Copyright 2018 Google, LLC
+# Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,20 +12,28 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require_relative "../load_table_gcs_json"
-require "spec_helper"
+require "minitest/autorun"
+require "minitest/focus"
 
+$temp_datasets = []
 
-describe "Load table from JSON file on GCS" do
-  before do
-    @dataset = create_temp_dataset
+def register_temp_datasets *datasets
+  $temp_datasets += datasets
+end
+
+def create_temp_dataset
+  bigquery = Google::Cloud::Bigquery.new
+  dataset = bigquery.create_dataset "test_dataset_#{Time.now.to_i}"
+  register_temp_datasets dataset
+  dataset
+end
+
+def delete_temp_datasets
+  $temp_datasets.each do |dataset|
+    dataset.delete force: true
   end
+end
 
-  example "Load a new table from a JSON file on GCS" do
-    output = capture { load_table_gcs_json @dataset.dataset_id }
-
-    table = @dataset.tables.first
-    expect(output).to include(table.table_id)
-    expect(output).to include("50 rows")
-  end
+Minitest.after_run do
+  delete_temp_datasets
 end

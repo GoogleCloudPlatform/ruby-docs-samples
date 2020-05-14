@@ -1,4 +1,4 @@
-# Copyright 2018 Google, LLC
+# Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,14 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require_relative "../query"
-require "spec_helper"
+require_relative "../load_from_file"
+require_relative "helper"
 
 
-describe "Query" do
-  example "Runs a standard SQL query" do
-    output = capture { query }
-    rows = output.split "\n"
-    expect(rows.length).to eq 100
+describe "Load table" do
+  before do
+    @dataset = create_temp_dataset
+  end
+
+  it "loads a new table from a local CSV file" do
+    file_path = File.expand_path "../resources/people.csv", __dir__
+
+    output = capture_io { load_from_file @dataset.dataset_id, file_path }
+
+    table = @dataset.tables.first
+    assert_match table.table_id, output.first
+    assert_match "2 rows", output.first
   end
 end

@@ -1,4 +1,4 @@
-# Copyright 2018 Google, LLC
+# Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,20 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require_relative "../load_table_gcs_orc"
-require "spec_helper"
+require_relative "../table_insert_rows"
+require_relative "helper"
 
-
-describe "Load table from Orc file on GCS" do
+describe "Insert rows into a table" do
   before do
     @dataset = create_temp_dataset
+    @table = @dataset.create_table "test_table" do |schema|
+      schema.string  "name"
+      schema.integer "value"
+    end
   end
 
-  example "Load a new table from a Orc file on GCS" do
-    output = capture { load_table_gcs_orc @dataset.dataset_id }
+  it "inserts rows into a table" do
+    output = capture_io { table_insert_rows @dataset.dataset_id, @table.table_id }
 
-    table = @dataset.tables.first
-    expect(output).to include(table.table_id)
-    expect(output).to include("50 rows")
+    assert_match "successfully", output.first
   end
 end
