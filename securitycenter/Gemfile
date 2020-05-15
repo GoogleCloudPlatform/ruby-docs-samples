@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-gem "google-cloud-security_center"
+gem "google-cloud-security_center", "~> 0.10"
 
 group :test do
   gem "google-gax"
