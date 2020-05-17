@@ -1,4 +1,4 @@
-# Connecting to Cloud SQL - MySQL
+# Connecting to Cloud SQL - PostgreSQL
 
 ## Before you begin
 
@@ -6,15 +6,15 @@
 [create a project](https://cloud.google.com/resource-manager/docs/creating-managing-projects#creating_a_project).
 
 1. Create a 2nd Gen Cloud SQL Instance by following these 
-[instructions](https://cloud.google.com/sql/docs/mysql/create-instance). Note the connection string,
+[instructions](https://cloud.google.com/sql/docs/postgres/create-instance). Note the connection string,
 database user, and database password that you create.
 
 1. Create a database for your application by following these 
-[instructions](https://cloud.google.com/sql/docs/mysql/create-manage-databases). Note the database
+[instructions](https://cloud.google.com/sql/docs/postgres/create-manage-databases). Note the database
 name. 
 
 1. Create a service account with the 'Cloud SQL Client' permissions by following these 
-[instructions](https://cloud.google.com/sql/docs/mysql/connect-external-app#4_if_required_by_your_authentication_method_create_a_service_account).
+[instructions](https://cloud.google.com/sql/docs/postgres/connect-external-app#4_if_required_by_your_authentication_method_create_a_service_account).
 Download a JSON key to use to authenticate your connection. 
 
 
@@ -34,7 +34,7 @@ secure solution such as [Secret Manager](https://cloud.google.com/secret-manager
 
 Then, download and install the `cloud_sql_proxy` by
 following the instructions
-[here](https://cloud.google.com/sql/docs/mysql/authorize-proxy#installing_the). Once the
+[here](https://cloud.google.com/sql/docs/postgres/authorize-proxy#installing_the). Once the
 proxy has been downloaded, use the following commands to create the `/cloudsql`
 directory and give the user running the proxy the appropriate permissions:
 ```bash
