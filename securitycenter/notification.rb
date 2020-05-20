@@ -25,7 +25,7 @@ def create_notification_config org_id:, config_id:, pubsub_topic:
   # [END scc_create_notification_config]
 end
 
-def update_notification_config org_id:, config_id:, description: nil, pubsub_topic: nil
+def update_notification_config org_id:, config_id:, description: nil, pubsub_topic: nil, filter: nil
   # [START scc_update_notification_config]
   require "google/cloud/security_center"
 
@@ -36,6 +36,7 @@ def update_notification_config org_id:, config_id:, description: nil, pubsub_top
   #               this would be "my-config".
   # description:  Updated description of the Notification config.
   # pubsub_topic: Updated pubsub topic for the Notification config.
+  # filter:       Update filter string for Notification config.
   securitycenter = Google::Cloud::SecurityCenter.new
 
   formatted_config_id = securitycenter.notification_config_path org_id, config_id
@@ -49,6 +50,10 @@ def update_notification_config org_id:, config_id:, description: nil, pubsub_top
   unless pubsub_topic.nil?
     notification_config[:pubsub_topic] = pubsub_topic
   end
+  unless filter.nil?
+    notification_config[:streaming_config][:filter] = filter
+  end
+
 
   update_mask = {
     paths: []
@@ -59,6 +64,10 @@ def update_notification_config org_id:, config_id:, description: nil, pubsub_top
   unless pubsub_topic.nil?
     update_mask[:paths].push "pubsub_topic"
   end
+  unless filter.nil?
+    update_mask[:paths].push "streaming_config.filter"
+  end
+
 
   response = securitycenter.update_notification_config notification_config, update_mask: update_mask
   puts response
@@ -132,7 +141,8 @@ if $PROGRAM_NAME == __FILE__
     update_notification_config org_id:       ARGV.shift,
                                config_id:    ARGV.shift,
                                description:  ARGV.shift,
-                               pubsub_topic: ARGV.shift
+                               pubsub_topic: ARGV.shift,
+                               filter:       ARGV.shift
   when "get_notification_config"
     get_notification_config org_id:    ARGV.shift,
                             config_id: ARGV.shift
@@ -147,7 +157,7 @@ if $PROGRAM_NAME == __FILE__
         create_notification_config  <org_id> <config_id> <pubsub_topic>                Creates a Notification config
         delete_notification_config  <org_id> <config_id>                               Deletes a Notification config
         get_notification_config     <org_id> <config_id>                               Fetches a Notification config
-        update_notification_config  <org_id> <config_id> <description> <pubsub_topic>  Updates a Notification config
+        update_notification_config  <org_id> <config_id> <description> <pubsub_topic> <filter> Updates a Notification config
         list_notification_configs   <org_id>                                           Lists Notification configs in an organization
     USAGE
   end
