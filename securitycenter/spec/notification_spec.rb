@@ -49,11 +49,13 @@ describe "Google Cloud Security Center Notifications Sample" do
   it "updates notification config" do
     create_notification_config org_id:       @org_id,
                                config_id:    @config_id,
-                               pubsub_topic: @pubsub_topic
+                               pubsub_topic: @pubsub_topic,
+                               filter:       @filter
     expect {
       update_notification_config org_id:      @org_id,
                                  config_id:   @config_id,
-                                 description: "Updated description"
+                                 description: "Updated description",
+                                 streaming_config: {filter: @filter}
     }.to output(/Updated description/).to_stdout
   end
 
