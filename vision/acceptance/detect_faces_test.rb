@@ -12,7 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "minitest/autorun"
+require_relative "helper"
+
 require "google/cloud/storage"
 
 require_relative "../detect_faces"
@@ -38,7 +39,7 @@ describe "Detect Faces" do
     storage_file = @bucket.upload_file image_path("face_surprise.jpg"),
                                        "face_surprise.jpg"
     assert_output(/Surprise: LIKELY/) { 
-      detect_faces image_path: image_path("face_no_surprise.png") 
+      detect_faces image_path: image_path("face_surprise.jpg") 
     }
   end
 end

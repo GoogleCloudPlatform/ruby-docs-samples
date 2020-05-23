@@ -12,23 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "minitest/autorun"
-require "google/cloud/vision"
+require_relative "helper"
 
 describe "Vision Quickstart" do
   it "performs label detection on a sample image file" do
-    image_annotator = Google::Cloud::Vision::ImageAnnotator.new
-
-    mock = MiniTest::Mock.new
-    mock.expect(:new, image_annotator)
-    mock.expect(:new, image_annotator, [{version: :v1}])
-
-    Google::Cloud::Vision::ImageAnnotator.stub(:new, mock) do
-      assert_output(/Labels:.*cat.*/m) {
-        load File.expand_path("../quickstart.rb", __dir__)
-      }
-    end
-
-    mock.verify
+    assert_output(/Labels:.*cat.*/m) {
+      load File.expand_path("../quickstart.rb", __dir__)
+    }
   end
 end

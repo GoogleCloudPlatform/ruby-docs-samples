@@ -12,10 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "google/cloud/vision"
+require "minitest/autorun"
 
-def version
-  versions = Google::Cloud::Vision::AVAILABLE_VERSIONS
-  versions = versions.reject { |v| v.include? "beta" }
-  versions.max_by { |v| v.match(/\d+/)[0].to_i }
-end
+require "google/cloud/vision"
+require "google/cloud/vision/v1"

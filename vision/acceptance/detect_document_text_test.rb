@@ -12,7 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "minitest/autorun"
+require_relative "helper"
+
 require "google/cloud/storage"
 
 require_relative "../detect_document_text"
@@ -36,6 +37,7 @@ describe "Detect Document Text" do
 
   it "detect document text from image file in Google Cloud Storage" do
     storage_file = @bucket.upload_file image_path("otter_crossing.jpg"),
+                                       "otter_crossing.jpg"
     assert_output(/Otters/) { 
       detect_document_text_gcs image_path: storage_file.to_gs_url 
     }

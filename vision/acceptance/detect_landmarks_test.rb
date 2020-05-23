@@ -12,7 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "minitest/autorun"
+require_relative "helper"
+
 require "google/cloud/storage"
 
 require_relative "../detect_landmarks"
