@@ -12,20 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "spec_helper"
+require_relative "helper"
 
-describe "Purge orphan products" do
-  example "Purge orphan products" do
+describe "Purge orphan products", :product_search do
+  it "purges orphan products" do
     snippet_filepath = get_snippet_filepath __FILE__
     temp_product = create_temp_product
     temp_product_id = get_id temp_product
-    expect(@client.get_product(temp_product.name)).to be_truthy
+    assert @client.get_product(temp_product.name)
 
     output = `ruby #{snippet_filepath} #{@project_id} #{@location}`
 
     # Verify product was deleted
-    expect {
+    assert_raises Google::Gax::RetryError do
       @client.get_product temp_product.name
-    }.to raise_error Google::Gax::RetryError
+    end
   end
 end

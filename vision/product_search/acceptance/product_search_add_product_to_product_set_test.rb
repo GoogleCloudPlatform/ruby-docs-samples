@@ -12,10 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "spec_helper"
+require_relative "helper"
 
-describe "Add product to product set" do
-  example "Add product to product set" do
+describe "Add product to product set", :product_search do
+  it "adds product to product set" do
     temp_product = create_temp_product
     temp_product_set = create_temp_product_set
     snippet_filepath = get_snippet_filepath __FILE__
@@ -23,7 +23,7 @@ describe "Add product to product set" do
     output = `ruby #{snippet_filepath} #{@project_id} #{@location} #{get_id temp_product} #{get_id temp_product_set}`
 
     products_in_product_set = Array(@client.list_products_in_product_set(temp_product_set.name))
-    expect(products_in_product_set.length).to eq 1
-    expect(products_in_product_set.first.name).to eq temp_product.name
+    _(products_in_product_set.length).must_equal 1
+    _(products_in_product_set.first.name).must_equal temp_product.name
   end
 end

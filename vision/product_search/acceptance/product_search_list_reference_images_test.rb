@@ -12,10 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "spec_helper"
+require_relative "helper"
 
-describe "List reference images" do
-  example "List reference images" do
+describe "List reference images", :product_search do
+  it "lists reference images" do
     snippet_filepath = get_snippet_filepath __FILE__
     product = create_temp_product
     product_id = get_id product
@@ -24,6 +24,6 @@ describe "List reference images" do
     output = `ruby #{snippet_filepath} #{@project_id} #{@location} #{product_id}`
 
     output_reference_images = output.split("\n").select { |line| line.include? "projects/" }
-    expect(output_reference_images.length).to eq 2
+    _(output_reference_images.length).must_equal 2
   end
 end

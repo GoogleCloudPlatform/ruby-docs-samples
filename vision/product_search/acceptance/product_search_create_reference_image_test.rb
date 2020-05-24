@@ -12,19 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "spec_helper"
+require_relative "helper"
 
-describe "Create reference image" do
-  example "Create reference image" do
+describe "Create reference image", :product_search do
+  it "creates reference image" do
     snippet_filepath = get_snippet_filepath __FILE__
     product = create_temp_product
     product_id = get_id product
     reference_images_before = Array(@client.list_reference_images(product.name))
-    expect(reference_images_before.length).to eq 0
+    _(reference_images_before.length).must_equal 0
 
     output = `ruby #{snippet_filepath} #{@project_id} #{@location} #{product_id}`
 
     reference_images_after = Array(@client.list_reference_images(product.name))
-    expect(reference_images_after.length).to eq 1
+    _(reference_images_after.length).must_equal 1
   end
 end

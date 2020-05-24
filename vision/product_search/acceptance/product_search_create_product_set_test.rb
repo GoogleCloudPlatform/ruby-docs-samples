@@ -12,15 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "spec_helper"
+require_relative "helper"
 
-describe "Create product set" do
-  example "Create product set" do
+describe "Create product set", :product_search do
+  it "creates product set" do
     snippet_filepath = get_snippet_filepath __FILE__
 
     output = `ruby #{snippet_filepath} #{@project_id}`
 
     product_set_name = output.split.last
-    expect(@client.get_product_set(product_set_name)).to be_truthy
+    assert @client.get_product_set(product_set_name)
   end
 end

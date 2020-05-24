@@ -12,9 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "spec_helper"
+require_relative "helper"
 
-describe "Get similar products" do
+describe "Get similar products", :product_search do
   before do
     @snippet_filepath = get_snippet_filepath __FILE__
     @product_category = "apparel"
@@ -25,7 +25,7 @@ describe "Get similar products" do
     @filter = "'style = womens'"
   end
 
-  example "Product sets are not immediately indexed" do
+  it "does not immediately index product sets" do
     temp_product_set_id = get_id create_temp_product_set
     sample_params = [
       @snippet_filepath,
@@ -39,10 +39,10 @@ describe "Get similar products" do
 
     output = `ruby #{sample_params.join " "}`
 
-    expect(output).to include "Product set has not been indexed."
+    _(output).must_include "Product set has not been indexed."
   end
 
-  example "Finds similar products in an indexed product set" do
+  it "finds similar products in an indexed product set" do
     # Indexing product sets does not happen immediately, cannot be triggered by
     # the user, and can take up to 30 minutes. See note here:
     # https://cloud.google.com/vision/product-search/docs/tutorial-search-merged
@@ -76,6 +76,6 @@ describe "Get similar products" do
 
     output = `ruby #{sample_params.join " "}`
 
-    expect(output).to include "shoes_1"
+    _(output).must_include "shoes_1"
   end
 end

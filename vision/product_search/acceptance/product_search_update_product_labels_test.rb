@@ -12,18 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "spec_helper"
+require_relative "helper"
 
-describe "Update product labels" do
-  example "Update product labels" do
+describe "Update product labels", :product_search do
+  it "updates product labels" do
     snippet_filepath = get_snippet_filepath __FILE__
     temp_product = create_temp_product
     temp_product_id = get_id temp_product
-    expect(temp_product.product_labels).to be_empty
+    _(temp_product.product_labels).must_be_empty
 
     output = `ruby #{snippet_filepath} #{@project_id} #{@location} #{temp_product_id}`
 
     temp_product = @client.get_product temp_product.name
-    expect(temp_product.product_labels.first.value).to eq "green"
+    _(temp_product.product_labels.first.value).must_equal "green"
   end
 end

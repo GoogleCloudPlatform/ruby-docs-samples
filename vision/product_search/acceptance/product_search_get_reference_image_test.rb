@@ -12,10 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "spec_helper"
+require_relative "helper"
 
-describe "Get reference image" do
-  example "Get reference image" do
+describe "Get reference image", :product_search do
+  it "gets reference image" do
     snippet_filepath = get_snippet_filepath __FILE__
     product = create_temp_product
     product_id = get_id product
@@ -24,6 +24,6 @@ describe "Get reference image" do
 
     output = `ruby #{snippet_filepath} #{@project_id} #{@location} #{product_id} #{image_id}`
 
-    expect(output).to include reference_image.uri
+    _(output).must_include reference_image.uri
   end
 end

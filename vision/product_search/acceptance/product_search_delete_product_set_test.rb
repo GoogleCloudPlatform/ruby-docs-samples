@@ -12,18 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "spec_helper"
+require_relative "helper"
 
-describe "Delete product set" do
-  example "Delete product set" do
+describe "Delete product set", :product_search do
+  it "deletes product set" do
     snippet_filepath = get_snippet_filepath __FILE__
     product_set = create_temp_product
     product_set_id = get_id product_set
 
     output = `ruby #{snippet_filepath} #{@project_id} #{@location} #{product_set_id}`
 
-    expect {
+    assert_raises Google::Gax::RetryError do
       @client.get_product_set product_set.name
-    }.to raise_error Google::Gax::RetryError
+    end
   end
 end

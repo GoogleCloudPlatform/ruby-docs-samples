@@ -12,26 +12,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "spec_helper"
+require_relative "helper"
 
-describe "Purge products in product set" do
-  example "Purge products in product set" do
+describe "Purge products in product set", :product_search do
+  it "purges products in product set" do
     snippet_filepath = get_snippet_filepath __FILE__
     temp_product = create_temp_product
     temp_product_id = get_id temp_product
     temp_product_set = create_temp_product_set [temp_product]
     temp_product_set_id = get_id temp_product_set
     product_list_before = Array(@client.list_products_in_product_set(temp_product_set.name))
-    expect(product_list_before.length).to eq 1
+    _(product_list_before.length).must_equal 1
 
     output = `ruby #{snippet_filepath} #{@project_id} #{@location} #{temp_product_set_id}`
 
     product_list_after = Array(@client.list_products_in_product_set(temp_product_set.name))
-    expect(product_list_after.length).to eq 0
+    _(product_list_after).must_be_empty
     
     # Verify product was deleted
-    expect {
+    assert_raises Google::Gax::RetryError do
       @client.get_product temp_product.name
-    }.to raise_error Google::Gax::RetryError
+    end
   end
 end

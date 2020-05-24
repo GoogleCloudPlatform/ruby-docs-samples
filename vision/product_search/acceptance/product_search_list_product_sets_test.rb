@@ -12,16 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "spec_helper"
+require_relative "helper"
 
-describe "List product sets" do
-  example "List product sets" do
+describe "List product sets", :product_search do
+  it "lists product sets" do
     snippet_filepath = get_snippet_filepath __FILE__
     2.times { create_temp_product_set }
 
     output = `ruby #{snippet_filepath} #{@project_id} #{@location}`
 
     output_product_sets = output.split("\n").select { |line| line.include? "projects/" }
-    expect(output_product_sets.length).to be >= 2
+    _(output_product_sets.length).must_be :>=, 2
   end
 end

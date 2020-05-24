@@ -15,8 +15,12 @@
 require "minitest/autorun"
 require "google/cloud/vision"
 
-RSpec.configure do |config|
-  config.before :all do
+class ProductSearchSpec < Minitest::Spec
+  register_spec_type(self) do |desc, *more_desc|
+    more_desc.include? :product_search
+  end
+
+  before do
     @current_directory = __dir__
     @client = Google::Cloud::Vision::ProductSearch.new
     @project_id = ENV["GOOGLE_CLOUD_PROJECT"]
@@ -30,7 +34,7 @@ RSpec.configure do |config|
     @temp_product_sets = []
   end
 
-  config.after :each do
+  after do
     @temp_products.each do |product|
       product_path = if product.is_a? String
                        @client.product_path(
@@ -88,7 +92,7 @@ RSpec.configure do |config|
     File.join(
       @current_directory,
       "..",
-      File.basename(test_filepath).sub("_spec", "")
+      File.basename(test_filepath).sub("_test.rb", ".rb")
     )
   end
 end

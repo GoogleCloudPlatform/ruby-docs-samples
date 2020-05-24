@@ -12,10 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "spec_helper"
+require_relative "helper"
 
-describe "Delete reference image" do
-  example "Delete reference image" do
+describe "Delete reference image", :product_search do
+  it "deletes reference image" do
     snippet_filepath = get_snippet_filepath __FILE__
     product = create_temp_product
     product_id = get_id product
@@ -24,8 +24,8 @@ describe "Delete reference image" do
 
     output = `ruby #{snippet_filepath} #{@project_id} #{@location} #{product_id} #{reference_image_id}`
 
-    expect {
+    assert_raises Google::Gax::RetryError do
       @client.get_reference_image reference_image.name
-    }.to raise_error Google::Gax::RetryError
+    end
   end
 end

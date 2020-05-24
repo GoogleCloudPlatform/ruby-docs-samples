@@ -12,15 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "spec_helper"
+require_relative "helper"
 
-describe "Import product sets and retrieve reference images" do
+describe "Import product sets and retrieve reference images", :product_search do
   before do
     @product_set_id = "fake_product_set_id_for_testing"
     @temp_product_sets << @product_set_id
   end
 
-  example "Import product sets and retrieve reference images" do
+  it "imports product sets and retrieve reference images" do
     snippet_filepath = get_snippet_filepath __FILE__
     product_images = {
       "fake_product_id_for_testing_1" => "shoes_1.jpg",
@@ -31,21 +31,21 @@ describe "Import product sets and retrieve reference images" do
 
     # Verify console output
     product_images.values.each do |image_uri|
-      expect(output).to include image_uri
+      _(output).must_include image_uri
     end
 
     # Verify project set existence
     product_set_path = @client.product_set_path @project_id, @location, @product_set_id
     product_set = @client.get_product_set product_set_path
-    expect(product_set).to be_truthy
+    assert product_set
 
     # Verify product reference image URIs
     products = @client.list_products_in_product_set product_set.name
     products.each do |product|
       product_id = get_id product
-      expect(product_images).to have_key product_id
+      _(product_images).must_include product_id
       reference_image_uri = @client.list_reference_images(product.name).first.uri
-      expect(reference_image_uri).to include product_images[product_id]
+      _(reference_image_uri).must_include product_images[product_id]
     end
   end
 end

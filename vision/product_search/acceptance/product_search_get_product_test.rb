@@ -12,16 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "spec_helper"
+require_relative "helper"
 
-describe "Get product" do
-  example "Get product" do
+describe "Get product", :product_search do
+  it "gets product" do
     snippet_filepath = get_snippet_filepath __FILE__
     product = create_temp_product
     product_id = get_id product
 
     output = `ruby #{snippet_filepath} #{@project_id} #{@location} #{product_id}`
 
-    expect(output).to include product.display_name
+    _(output).must_include product.display_name
   end
 end

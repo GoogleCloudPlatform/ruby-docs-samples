@@ -15,6 +15,6 @@
 require "rake/testtask"
 
 Rake::TestTask.new "test" do |t|
-  t.test_files = FileList["acceptance/*_test.rb"]
+  t.test_files = FileList["acceptance/*_test.rb"] + FileList["product_search/acceptance/*_test.rb"]
   t.warning = false
 end
