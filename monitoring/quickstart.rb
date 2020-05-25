@@ -41,7 +41,7 @@ def quickstart project_id:, metric_label:
   point.interval = Google::Monitoring::V3::TimeInterval.new end_time: end_time
   series.points << point
 
-  response = metric_service_client.create_time_series project_path, [series]
+  metric_service_client.create_time_series project_path, [series]
 
   puts "Successfully wrote time series."
   # [END monitoring_quickstart]
