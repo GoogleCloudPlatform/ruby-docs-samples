@@ -1,4 +1,4 @@
-# Copyright 2020 Google, Inc
+# Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -972,7 +972,8 @@ def verify_asymmetric_signature_ec project_id:, location_id:, key_ring_id:, key_
 end
 
 if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new("2.5.0")
-  def verify_asymmetric_signature_rsa project_id:, location_id:, key_ring_id:, key_id:, version_id:, message:, signature:
+  def verify_asymmetric_signature_rsa project_id:, location_id:, key_ring_id:, key_id:, version_id:, message:,
+                                      signature:
     # [START kms_verify_asymmetric_signature_rsa]
     # TODO(developer): uncomment these values before running the sample.
     # project_id  = "my-project"
