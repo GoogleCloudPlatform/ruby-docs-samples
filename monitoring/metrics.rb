@@ -1,15 +1,32 @@
+# Copyright 2020 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 require "google/cloud/monitoring"
 
-def create_metric_descriptor project_id:
-  # Random suffix for metric type to avoid collisions with other runs
-  random_suffix = rand(36**10).to_s(36)
-
+def create_metric_descriptor project_id:, metric_type:
   # [START monitoring_create_metric]
+  # Your Google Cloud Platform project ID
+  # project_id = "YOUR_PROJECT_ID"
+
+  # Example metric type
+  # metric_type = "custom.googleapis.com/my_metric"
+
   client = Google::Cloud::Monitoring::Metric.new
   project_name = Google::Cloud::Monitoring::V3::MetricServiceClient.project_path project_id
 
   descriptor = Google::Api::MetricDescriptor.new(
-    type:        "custom.googleapis.com/my_metric#{random_suffix}",
+    type:        metric_type,
     metric_kind: Google::Api::MetricDescriptor::MetricKind::GAUGE,
     value_type:  Google::Api::MetricDescriptor::ValueType::DOUBLE,
     description: "This is a simple example of a custom metric."
@@ -21,33 +38,40 @@ def create_metric_descriptor project_id:
   # [END monitoring_create_metric]
 end
 
-def delete_metric_descriptor project_id:, descriptor_name:
+def delete_metric_descriptor project_id:, metric_type:
   # [START monitoring_delete_metric]
-  # project_id: the text identifer of you Google Cloud project
-  # descriptor_name: the text name of the descriptor (eg: 'run.googleapis.com/request_count')
-  client = Google::Cloud::Monitoring::Metric.new
-  project_name = Google::Cloud::Monitoring::V3::MetricServiceClient.metric_descriptor_path project_id, descriptor_name
+  # Your Google Cloud Platform project ID
+  # project_id = "YOUR_PROJECT_ID"
 
-  client.delete_metric_descriptor project_name
-  p "Deleted metric descriptor #{descriptor_name}."
+  # Example metric type
+  # metric_type = "custom.googleapis.com/my_metric"
+
+  client = Google::Cloud::Monitoring::Metric.new
+  metric_name = Google::Cloud::Monitoring::V3::MetricServiceClient.metric_descriptor_path(
+    project_id, metric_type
+  )
+
+  client.delete_metric_descriptor metric_name
+  p "Deleted metric descriptor #{metric_name}."
   # [END monitoring_delete_metric]
 end
 
-def write_time_series project_id:
+def write_time_series project_id:, metric_type:
   # [START monitoring_write_timeseries]
+  # Your Google Cloud Platform project ID
+  # project_id = "YOUR_PROJECT_ID"
+
+  # Example metric type
+  # metric_type = "custom.googleapis.com/my_metric"
+
   client = Google::Cloud::Monitoring::Metric.new
   project_name = Google::Cloud::Monitoring::V3::MetricServiceClient.project_path project_id
 
-  # Random suffix for metric type to avoid collisions with other runs
-  random_suffix = rand(36**10).to_s(36)
-
   series = Google::Monitoring::V3::TimeSeries.new
-  metric = Google::Api::Metric.new type: "custom.googleapis.com/my_metric#{random_suffix}"
-  series.metric = metric
+  series.metric = Google::Api::Metric.new type: metric_type
 
-  resource = Google::Api::MonitoredResource.new type: "gce_instance"
-  resource.labels["instance_id"] = "1234567890123456789"
-  resource.labels["zone"] = "us-central1-f"
+  resource = Google::Api::MonitoredResource.new type: "global"
+  resource.labels["project_id"] = project_id
   series.resource = resource
 
   point = Google::Monitoring::V3::Point.new
@@ -58,12 +82,15 @@ def write_time_series project_id:
   series.points << point
 
   client.create_time_series project_name, [series]
-  p "Time series created : #{metric.type}"
+  p "Time series created."
   # [END monitoring_write_timeseries]
 end
 
 def list_time_series project_id:
   # [START monitoring_read_timeseries_simple]
+  # Your Google Cloud Platform project ID
+  # project_id = "YOUR_PROJECT_ID"
+
   client = Google::Cloud::Monitoring::Metric.new
   project_name = Google::Cloud::Monitoring::V3::MetricServiceClient.project_path project_id
 
@@ -86,6 +113,9 @@ end
 
 def list_time_series_header project_id:
   # [START monitoring_read_timeseries_fields]
+  # Your Google Cloud Platform project ID
+  # project_id = "YOUR_PROJECT_ID"
+
   client = Google::Cloud::Monitoring::Metric.new
   project_name = Google::Cloud::Monitoring::V3::MetricServiceClient.project_path project_id
 
@@ -108,6 +138,9 @@ end
 
 def list_time_series_aggregate project_id:
   # [START monitoring_read_timeseries_align]
+  # Your Google Cloud Platform project ID
+  # project_id = "YOUR_PROJECT_ID"
+
   client = Google::Cloud::Monitoring::Metric.new
   project_name = Google::Cloud::Monitoring::V3::MetricServiceClient.project_path project_id
 
@@ -137,6 +170,9 @@ end
 
 def list_time_series_reduce project_id:
   # [START monitoring_read_timeseries_reduce]
+  # Your Google Cloud Platform project ID
+  # project_id = "YOUR_PROJECT_ID"
+
   client = Google::Cloud::Monitoring::Metric.new
   project_name = Google::Cloud::Monitoring::V3::MetricServiceClient.project_path project_id
 
@@ -168,8 +204,12 @@ end
 
 def list_metric_descriptors project_id:
   # [START monitoring_list_descriptors]
+  # Your Google Cloud Platform project ID
+  # project_id = "YOUR_PROJECT_ID"
+
   client = Google::Cloud::Monitoring::Metric.new
   project_name = Google::Cloud::Monitoring::V3::MetricServiceClient.project_path project_id
+
   results = client.list_metric_descriptors project_name
   results.each do |descriptor|
     p descriptor.type
@@ -179,6 +219,9 @@ end
 
 def list_monitored_resources project_id:
   # [START monitoring_list_resources]
+  # Your Google Cloud Platform project ID
+  # project_id = "YOUR_PROJECT_ID"
+
   client = Google::Cloud::Monitoring::Metric.new
   project_name = Google::Cloud::Monitoring::V3::MetricServiceClient.project_path project_id
   results = client.list_monitored_resource_descriptors project_name
@@ -190,10 +233,15 @@ end
 
 def get_monitored_resource_descriptor project_id:, resource_type:
   # [START monitoring_get_resource]
+  # Your Google Cloud Platform project ID
+  # project_id = "YOUR_PROJECT_ID"
+
+  # The resource type
+  # resource_type = "gce_instance"
+
   client = Google::Cloud::Monitoring::Metric.new
   resource_path = Google::Cloud::Monitoring::V3::MetricServiceClient.monitored_resource_descriptor_path(
-    project_id,
-    resource_type
+    project_id, resource_type
   )
 
   result = client.get_monitored_resource_descriptor resource_path
@@ -201,9 +249,19 @@ def get_monitored_resource_descriptor project_id:, resource_type:
   # [END monitoring_get_resource]
 end
 
-def get_metric_descriptor metric_name:
+def get_metric_descriptor project_id:, metric_type:
   # [START monitoring_get_descriptor]
+  # Your Google Cloud Platform project ID
+  # project_id = "YOUR_PROJECT_ID"
+
+  # Example metric type
+  # metric_type = "custom.googleapis.com/my_metric"
+
   client = Google::Cloud::Monitoring::Metric.new
+  metric_name = Google::Cloud::Monitoring::V3::MetricServiceClient.metric_descriptor_path(
+    project_id, metric_type
+  )
+
   descriptor = client.get_metric_descriptor metric_name
   p descriptor
   # [END monitoring_get_descriptor]
@@ -212,9 +270,9 @@ end
 if $PROGRAM_NAME == __FILE__
   case ARGV.shift
   when "create_metric_descriptor"
-    create_metric_descriptor project_id: ARGV.shift
+    create_metric_descriptor project_id: ARGV.shift, metric_type: ARGV.shift
   when "delete_metric_descriptor"
-    delete_metric_descriptor project_id: ARGV.shift, descriptor_name: ARGV.shift
+    delete_metric_descriptor project_id: ARGV.shift, metric_type: ARGV.shift
   when "write_time_series"
     write_time_series project_id: ARGV.shift
   when "list_time_series"
@@ -232,14 +290,14 @@ if $PROGRAM_NAME == __FILE__
   when "get_monitored_resource_descriptor"
     get_monitored_resource_descriptor project_id: ARGV.shift, resource_type: ARGV.shift
   when "get_metric_descriptor"
-    get_metric_descriptor metric_name: ARGV.shift
+    get_metric_descriptor project_id: ARGV.shift, metric_type: ARGV.shift
   else
     puts <<~USAGE
       Usage: bundle exec ruby metrics.rb [command] [arguments]
 
       Commands:
-        create_metric_descriptor                     <project_id>
-        delete_metric_descriptor                     <project_id> <descriptor_name>
+        create_metric_descriptor                     <project_id> <metric_type>
+        delete_metric_descriptor                     <project_id> <metric_type>
         write_time_series                            <project_id>
         list_time_series                             <project_id>
         list_time_series_header                      <project_id>
@@ -248,7 +306,7 @@ if $PROGRAM_NAME == __FILE__
         list_metric_descriptors                      <project_id>
         list_monitored_resources                     <project_id>
         get_monitored_resource_descriptor            <project_id> <resource_type>
-        get_metric_descriptor                        <metric_name>
+        get_metric_descriptor                        <project_id> <metric_type>
     USAGE
   end
 end

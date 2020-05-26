@@ -2,6 +2,7 @@ inherit_gem:
   google-style: google-style.yml
 AllCops:
   Exclude:
+    - "**/acceptance/**"
     - "**/spec/**"
     - "Rakefile"
 Lint/RescueException:
