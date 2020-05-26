@@ -25,8 +25,7 @@ describe "Translate Quickstart" do
     expect {
       load File.expand_path("../quickstart.rb", __dir__)
     }.to output(
-      "Text: Hello, world!\n" +
-      "Translation: Привет, мир!\n"
+      /Translation:/
     ).to_stdout
   end
 end

@@ -1,4 +1,4 @@
-# Copyright 2018 Google, LLC
+# Copyright 2018 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,8 +14,8 @@
 # [START bigquery_load_from_file]
 require "google/cloud/bigquery"
 
-def load_from_file(dataset_id = "your_dataset_id",
-                   file_path  = "path/to/file.csv")
+def load_from_file dataset_id = "your_dataset_id",
+                   file_path  = "path/to/file.csv"
 
   bigquery = Google::Cloud::Bigquery.new
   dataset  = bigquery.dataset dataset_id

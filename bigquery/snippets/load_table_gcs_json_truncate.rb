@@ -1,4 +1,4 @@
-# Copyright 2018 Google, LLC
+# Copyright 2018 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,8 +14,8 @@
 # [START bigquery_load_table_gcs_json_truncate]
 require "google/cloud/bigquery"
 
-def load_table_gcs_json_truncate(dataset_id = "your_dataset_id",
-                                 table_id   = "your_table_id")
+def load_table_gcs_json_truncate dataset_id = "your_dataset_id",
+                                 table_id   = "your_table_id"
 
   bigquery = Google::Cloud::Bigquery.new
   dataset  = bigquery.dataset dataset_id
