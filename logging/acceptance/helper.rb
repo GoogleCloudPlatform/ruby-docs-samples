@@ -16,6 +16,7 @@ require "google/cloud/logging"
 require "google/cloud/errors"
 require "google/cloud/storage"
 require "minitest/autorun"
+require "minitest/focus"
 require "securerandom"
 
 def get_entries_helper log_name
