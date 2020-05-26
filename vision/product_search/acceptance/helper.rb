@@ -16,7 +16,7 @@ require "minitest/autorun"
 require "google/cloud/vision"
 
 class ProductSearchSpec < Minitest::Spec
-  register_spec_type(self) do |desc, *more_desc|
+  register_spec_type(self) do |_desc, *more_desc|
     more_desc.include? :product_search
   end
 

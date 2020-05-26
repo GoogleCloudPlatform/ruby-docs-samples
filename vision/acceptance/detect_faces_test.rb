@@ -30,7 +30,7 @@ describe "Detect Faces" do
   end
 
   it "detect faces from local image file" do
-    assert_output(/Surprise: VERY_UNLIKELY/) { 
+    assert_output(/Surprise: VERY_UNLIKELY/) {
       detect_faces image_path: image_path("face_no_surprise.png")
     }
   end
@@ -38,8 +38,8 @@ describe "Detect Faces" do
   it "detect faces from image file in Google Cloud Storage" do
     storage_file = @bucket.upload_file image_path("face_surprise.jpg"),
                                        "face_surprise.jpg"
-    assert_output(/Surprise: LIKELY/) { 
-      detect_faces image_path: image_path("face_surprise.jpg") 
+    assert_output(/Surprise: LIKELY/) {
+      detect_faces image_path: image_path("face_surprise.jpg")
     }
   end
 end

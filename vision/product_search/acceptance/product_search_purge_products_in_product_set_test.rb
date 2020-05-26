@@ -28,7 +28,7 @@ describe "Purge products in product set", :product_search do
 
     product_list_after = Array(@client.list_products_in_product_set(temp_product_set.name))
     _(product_list_after).must_be_empty
-    
+
     # Verify product was deleted
     assert_raises Google::Gax::RetryError do
       @client.get_product temp_product.name

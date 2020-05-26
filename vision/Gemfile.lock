@@ -8,7 +8,7 @@ GEM
     digest-crc (0.5.1)
     faraday (1.0.1)
       multipart-post (>= 1.2, < 3)
-    google-api-client (0.39.4)
+    google-api-client (0.39.5)
       addressable (~> 2.5, >= 2.5.1)
       googleauth (~> 0.9)
       httpclient (>= 2.8.1, < 3.0)
@@ -91,4 +91,4 @@ DEPENDENCIES
   rmagick
 
 BUNDLED WITH
-   2.1.4
+   1.17.3

@@ -44,16 +44,16 @@ describe "Detect Crop Hints" do
 
   it "detect crop hints from local image file" do
     Google::Cloud::Vision::V1::ImageAnnotatorClient.stub(:new, FakeAnnotator.new) do
-      assert_output(/1234, 1234/) { 
-        detect_crop_hints image_path: image_path("otter_crossing.jpg") 
+      assert_output(/1234, 1234/) {
+        detect_crop_hints image_path: image_path("otter_crossing.jpg")
       }
     end
   end
 
   it "detect crop hints from image file in Google Cloud Storage" do
     Google::Cloud::Vision::V1::ImageAnnotatorClient.stub(:new, FakeAnnotator.new) do
-      assert_output(/1234, 1234/) { 
-        detect_crop_hints_gcs image_path: "gs://my-bucket/image.png" 
+      assert_output(/1234, 1234/) {
+        detect_crop_hints_gcs image_path: "gs://my-bucket/image.png"
       }
     end
   end

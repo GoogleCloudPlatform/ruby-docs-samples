@@ -30,16 +30,16 @@ describe "Detect Document Text" do
   end
 
   it "detect document text from local image file" do
-    assert_output(/Otters/) { 
-      detect_document_text image_path: image_path("otter_crossing.jpg") 
+    assert_output(/Otters/) {
+      detect_document_text image_path: image_path("otter_crossing.jpg")
     }
   end
 
   it "detect document text from image file in Google Cloud Storage" do
     storage_file = @bucket.upload_file image_path("otter_crossing.jpg"),
                                        "otter_crossing.jpg"
-    assert_output(/Otters/) { 
-      detect_document_text_gcs image_path: storage_file.to_gs_url 
+    assert_output(/Otters/) {
+      detect_document_text_gcs image_path: storage_file.to_gs_url
     }
   end
 end

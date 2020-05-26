@@ -30,16 +30,16 @@ describe "Detect Image Properties" do
   end
 
   it "detect image properties from local image file" do
-    assert_output(/Color 104.0, 17.0, 32.0/) { 
-      detect_image_properties image_path: image_path("otter_crossing.jpg") 
+    assert_output(/Color 104.0, 17.0, 32.0/) {
+      detect_image_properties image_path: image_path("otter_crossing.jpg")
     }
   end
 
   it "detect image properties from image file in Google Cloud Storage" do
     storage_file = @bucket.upload_file image_path("otter_crossing.jpg"),
                                        "otter_crossing.jpg"
-    assert_output(/Color 104.0, 17.0, 32.0/) { 
-      detect_image_properties_gcs image_path: storage_file.to_gs_url 
+    assert_output(/Color 104.0, 17.0, 32.0/) {
+      detect_image_properties_gcs image_path: storage_file.to_gs_url
     }
   end
 end

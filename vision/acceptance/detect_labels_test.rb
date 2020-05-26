@@ -30,7 +30,7 @@ describe "Detect Labels" do
   end
 
   it "detect labels from local image file" do
-    assert_output(/traffic sign/i) { 
+    assert_output(/traffic sign/i) {
       detect_labels image_path: image_path("otter_crossing.jpg")
     }
   end
@@ -39,12 +39,12 @@ describe "Detect Labels" do
     storage_file = @bucket.upload_file image_path("otter_crossing.jpg"),
                                        "otter_crossing.jpg"
 
-    assert_output(/traffic sign/i) { 
+    assert_output(/traffic sign/i) {
       detect_labels_gcs image_path: storage_file.to_gs_url
     }
-    
-    assert_output(/suit/i) { 
-      detect_labels_gcs_migration 
+
+    assert_output(/suit/i) {
+      detect_labels_gcs_migration
     }
   end
 end
