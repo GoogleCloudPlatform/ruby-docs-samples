@@ -13,6 +13,7 @@
 # limitations under the License.
 
 require "minitest/autorun"
+require "minitest/focus"
 require_relative "../stackoverflow.rb"
 
 describe "BigQuery Stack Overflow" do
