@@ -1,4 +1,4 @@
-# Copyright 2017 Google, Inc
+# Copyright 2017 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,7 +17,10 @@ source "https://rubygems.org"
 gem "google-cloud-kms", "~> 1.6"
 
 group :test do
-  gem "rspec"
-  gem "rspec-retry"
-  gem "rspec_junit_formatter"
+  gem "google-style", "~> 1.24.0"
+  gem "minitest", "~> 5.13"
+  gem "minitest-focus", "~> 1.1"
+  gem "minitest-hooks", "~> 1.5"
+  gem "minitest-junit"
+  gem "rake"
 end
