@@ -48,7 +48,8 @@ def delete_metric_descriptor project_id:, metric_type:
 
   client = Google::Cloud::Monitoring::Metric.new
   metric_name = Google::Cloud::Monitoring::V3::MetricServiceClient.metric_descriptor_path(
-    project_id, metric_type)
+    project_id, metric_type
+  )
 
   client.delete_metric_descriptor metric_name
   p "Deleted metric descriptor #{metric_name}."
@@ -240,8 +241,7 @@ def get_monitored_resource_descriptor project_id:, resource_type:
 
   client = Google::Cloud::Monitoring::Metric.new
   resource_path = Google::Cloud::Monitoring::V3::MetricServiceClient.monitored_resource_descriptor_path(
-    project_id,
-    resource_type
+    project_id, resource_type
   )
 
   result = client.get_monitored_resource_descriptor resource_path
@@ -259,7 +259,8 @@ def get_metric_descriptor project_id:, metric_type:
 
   client = Google::Cloud::Monitoring::Metric.new
   metric_name = Google::Cloud::Monitoring::V3::MetricServiceClient.metric_descriptor_path(
-    project_id, metric_type)
+    project_id, metric_type
+  )
 
   descriptor = client.get_metric_descriptor metric_name
   p descriptor

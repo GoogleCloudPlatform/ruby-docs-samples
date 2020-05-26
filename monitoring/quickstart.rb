@@ -27,7 +27,7 @@ def quickstart project_id:, metric_label:
   project_path = Google::Cloud::Monitoring::V3::MetricServiceClient.project_path project_id
 
   series = Google::Monitoring::V3::TimeSeries.new
-  series.metric = Google::Api::Metric.new type: "custom.googleapis.com/my_metric",
+  series.metric = Google::Api::Metric.new type:   "custom.googleapis.com/my_metric",
                                           labels: { "my_key" => metric_label }
 
   resource = Google::Api::MonitoredResource.new type: "global"

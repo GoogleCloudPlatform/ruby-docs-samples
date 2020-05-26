@@ -20,7 +20,7 @@ require "google/cloud/monitoring"
 require "google/cloud/monitoring/v3"
 
 class MonitoringSpec < Minitest::Spec
-  register_spec_type(self) do |desc, *more_desc|
+  register_spec_type(self) do |_desc, *more_desc|
     more_desc.include? :monitoring
   end
 
@@ -34,7 +34,7 @@ class MonitoringSpec < Minitest::Spec
     loop do
       begin
         return yield
-      rescue => e
+      rescue StandardError => e
         raise e if secs >= count
       end
       sleep secs
