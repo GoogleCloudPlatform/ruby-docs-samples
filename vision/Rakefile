@@ -1,4 +1,4 @@
-# Copyright 2020 Google, Inc
+# Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,13 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-source "https://rubygems.org"
+require "rake/testtask"
 
-gem "google-cloud-vision"
-gem "rmagick"
-
-group :test do
-  gem "google-cloud-storage"
-  gem "minitest", "~> 5.13"
-  gem "rake"
+Rake::TestTask.new "test" do |t|
+  t.test_files = FileList["acceptance/*_test.rb"] + FileList["product_search/acceptance/*_test.rb"]
+  t.warning = false
 end

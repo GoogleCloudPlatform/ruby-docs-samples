@@ -1,4 +1,4 @@
-# Copyright 2020 Google, Inc
+# Copyright 2020 Google, LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,13 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-source "https://rubygems.org"
+require_relative "helper"
 
-gem "google-cloud-vision"
-gem "rmagick"
+describe "Update product labels", :product_search do
+  it "updates product labels" do
+    snippet_filepath = get_snippet_filepath __FILE__
+    temp_product = create_temp_product
+    temp_product_id = get_id temp_product
+    _(temp_product.product_labels).must_be_empty
 
-group :test do
-  gem "google-cloud-storage"
-  gem "minitest", "~> 5.13"
-  gem "rake"
+    output = `ruby #{snippet_filepath} #{@project_id} #{@location} #{temp_product_id}`
+
+    temp_product = @client.get_product temp_product.name
+    _(temp_product.product_labels.first.value).must_equal "green"
+  end
 end

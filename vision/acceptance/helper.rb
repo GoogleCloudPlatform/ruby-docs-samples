@@ -12,13 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-source "https://rubygems.org"
+require "minitest/autorun"
 
-gem "google-cloud-vision"
-gem "rmagick"
-
-group :test do
-  gem "google-cloud-storage"
-  gem "minitest", "~> 5.13"
-  gem "rake"
-end
+require "google/cloud/vision"
+require "google/cloud/vision/v1"

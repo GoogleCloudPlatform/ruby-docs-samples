@@ -1,4 +1,4 @@
-# Copyright 2016 Google, Inc
+# Copyright 2020 Google, Inc
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@ source "https://rubygems.org"
 gem "google-cloud-vision"
 
 group :test do
-  gem "rack-test"
-  gem "rspec"
-  gem "rspec_junit_formatter"
+  gem "minitest", "~> 5.13"
+  gem "rake"
 end

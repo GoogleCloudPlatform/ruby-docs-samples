@@ -21,7 +21,6 @@ def product_search_add_product_to_product_set(
   product_id     = "your-product-id",
   product_set_id = "your-product-set-id"
 )
-
   client = Google::Cloud::Vision::ProductSearch.new
 
   # Get the full path of the product set.

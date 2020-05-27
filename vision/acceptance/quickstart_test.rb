@@ -12,13 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-source "https://rubygems.org"
+require_relative "helper"
 
-gem "google-cloud-vision"
-gem "rmagick"
-
-group :test do
-  gem "google-cloud-storage"
-  gem "minitest", "~> 5.13"
-  gem "rake"
+describe "Vision Quickstart" do
+  it "performs label detection on a sample image file" do
+    assert_output(/Labels:.*cat.*/m) {
+      load File.expand_path("../quickstart.rb", __dir__)
+    }
+  end
 end

@@ -1,4 +1,4 @@
-# Copyright 2020 Google, Inc
+# Copyright 2020 Google, LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,13 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-source "https://rubygems.org"
+require_relative "helper"
 
-gem "google-cloud-vision"
-gem "rmagick"
+describe "Delete product", :product_search do
+  it "deletes product" do
+    snippet_filepath = get_snippet_filepath __FILE__
+    product = create_temp_product
+    product_id = get_id product
 
-group :test do
-  gem "google-cloud-storage"
-  gem "minitest", "~> 5.13"
-  gem "rake"
+    output = `ruby #{snippet_filepath} #{@project_id} #{@location} #{product_id}`
+
+    assert_raises Google::Gax::RetryError do
+      @client.get_product product.name
+    end
+  end
 end

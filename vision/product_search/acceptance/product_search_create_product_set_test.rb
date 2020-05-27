@@ -1,4 +1,4 @@
-# Copyright 2020 Google, Inc
+# Copyright 2020 Google, LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,13 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-source "https://rubygems.org"
+require_relative "helper"
 
-gem "google-cloud-vision"
-gem "rmagick"
+describe "Create product set", :product_search do
+  it "creates product set" do
+    snippet_filepath = get_snippet_filepath __FILE__
 
-group :test do
-  gem "google-cloud-storage"
-  gem "minitest", "~> 5.13"
-  gem "rake"
+    output = `ruby #{snippet_filepath} #{@project_id}`
+
+    product_set_name = output.split.last
+    assert @client.get_product_set(product_set_name)
+  end
 end
