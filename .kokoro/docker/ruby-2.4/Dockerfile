@@ -1,4 +1,4 @@
-FROM ruby:2.4-stretch
+FROM ruby:2.4-buster
 
 ENTRYPOINT /bin/bash
 
@@ -21,3 +21,6 @@ RUN wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x
 RUN tar xvjf phantomjs-2.1.1-linux-x86_64.tar.bz2 -C /usr/local/share/
 RUN ln -s /usr/local/share/phantomjs-2.1.1-linux-x86_64/bin/phantomjs /usr/local/bin/
 RUN rm phantomjs-2.1.1-linux-x86_64.tar.bz2
+
+# Set this to get phantomjs to work in Debian 10
+ENV OPENSSL_CONF /etc/ssl/
