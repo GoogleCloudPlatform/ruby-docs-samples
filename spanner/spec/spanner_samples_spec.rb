@@ -22,6 +22,7 @@ describe "Google Cloud Spanner API samples" do
 
   after :each do
     cleanup_database_resources
+    cleanup_instance_resources
   end
 
   # Creates a temporary database with random ID (will be dropped after test)
@@ -126,6 +127,22 @@ describe "Google Cloud Spanner API samples" do
     $stdout = real_stdout
   end
   attr_reader :captured_output
+
+  example "create_instance" do
+    @created_instance_id = "rb-test-#{seed}"
+
+    capture do
+      create_instance project_id:  @project_id,
+                      instance_id: @created_instance_id
+    end
+
+    expect(captured_output).to include(
+      "Waiting for create instance operation to complete"
+    )
+    expect(captured_output).to include(
+      "Created instance #{@created_instance_id}"
+    )
+  end
 
   example "create_database" do
     expect(@instance.databases.map(&:database_id)).not_to include @database_id

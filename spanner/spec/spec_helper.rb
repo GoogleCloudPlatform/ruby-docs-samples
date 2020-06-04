@@ -29,6 +29,7 @@ RSpec.configure do |config|
     @restored_database_id = "restored_db_#{seed}"
     @spanner              = Google::Cloud::Spanner.new project: @project_id
     @instance             = @spanner.instance @instance_id
+    @created_instance_id  = nil
   end
 
   config.after :all do
@@ -37,6 +38,14 @@ RSpec.configure do |config|
 
   def seed
     $spanner_example_seed ||= SecureRandom.hex 8
+  end
+
+  def cleanup_instance_resources
+    return unless @created_instance_id
+
+    instance = @spanner.instance @created_instance_id
+    instance.delete
+    @created_instance_id = nil
   end
 
   def cleanup_database_resources
