@@ -215,6 +215,31 @@ def read_data project_id:, instance_id:, database_id:
   # [END spanner_read_data]
 end
 
+def delete_data project_id:, instance_id:, database_id:
+  # [START spanner_delete_data]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+
+  spanner = Google::Cloud::Spanner.new project: project_id
+  client  = spanner.client instance_id, database_id
+
+  # Delete individual rows
+  client.delete "Albums", [[2, 1], [2, 3]]
+
+  # Delete a range of rows where the column key is >=3 and <5
+  key_range = client.range 3, 5, exclude_end: true
+  client.delete "Singers", key_range
+
+  # Delete remaining Singers rows, which will also delete the remaining
+  # Albums rows because Albums was defined with ON DELETE CASCADE
+  client.delete "Singers"
+
+  # [END spanner_delete_data]
+end
+
 def read_stale_data project_id:, instance_id:, database_id:
   # [START spanner_read_stale_data]
   # project_id  = "Your Google Cloud project ID"
@@ -1756,6 +1781,7 @@ def usage
       insert_data_with_timestamp_column  <instance_id> <database_id> Inserts data into Performances table containing the commit timestamp column
       query_data                         <instance_id> <database_id> Query Data
       read_data                          <instance_id> <database_id> Read Data
+      delete_data                        <instance_id> <database_id> Delete Data
       read_stale_data                    <instance_id> <database_id> Read Stale Data
       create_index                       <instance_id> <database_id> Create Index
       create_storing_index               <instance_id> <database_id> Create Storing Index
@@ -1830,7 +1856,7 @@ def run_sample arguments
   commands = [
     "create_instance", "create_database", "create_table_with_timestamp_column",
     "insert_data", "insert_data_with_timestamp_column", "query_data",
-    "query_data_with_timestamp_column", "read_data", "read_stale_data",
+    "query_data_with_timestamp_column", "read_data", "delete_data", "read_stale_data",
     "create_index", "create_storing_index", "add_column", "add_timestamp_column",
     "update_data", "query_data_with_new_column",
     "update_data_with_timestamp_column", "read_write_transaction",

@@ -393,6 +393,32 @@ describe "Google Cloud Spanner API samples" do
     expect(captured_output).to include "2 3 Terrified"
   end
 
+  example "delete data" do
+    database = create_singers_albums_database
+
+    # Ignore the following capture block
+    capture do
+      # Insert Singers and Albums (re-use insert_data sample to populate)
+      insert_data project_id:  @project_id,
+                  instance_id: @instance.instance_id,
+                  database_id: database.database_id
+    end
+
+    capture do
+      delete_data project_id:  @project_id,
+                instance_id: @instance.instance_id,
+                database_id: database.database_id
+    end
+
+    capture do
+      read_data project_id:  @project_id,
+                instance_id: @instance.instance_id,
+                database_id: database.database_id
+    end
+
+    expect(captured_output).to eq ""
+  end
+
   example "read stale data" do
     database = create_singers_albums_database
 
