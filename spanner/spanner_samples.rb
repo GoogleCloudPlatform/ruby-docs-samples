@@ -12,6 +12,34 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+def create_instance project_id:, instance_id:
+  # [START spanner_create_instance]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+
+  require "google/cloud/spanner"
+
+  spanner  = Google::Cloud::Spanner.new project: project_id
+  instance = spanner.instance instance_id
+
+  job = spanner.create_instance instance_id,
+                                name:   instance_id,
+                                config: "regional-us-central1",
+                                nodes:  2,
+                                labels: { "cloud_spanner_samples": true }
+
+  puts "Waiting for create instance operation to complete"
+
+  job.wait_until_done!
+
+  if job.error?
+    puts job.error
+  else
+    puts "Created instance #{instance_id}"
+  end
+  # [END spanner_create_instance]
+end
+
 def create_database project_id:, instance_id:, database_id:
   # [START spanner_create_database]
   # project_id  = "Your Google Cloud project ID"
@@ -1721,6 +1749,7 @@ def usage
     Usage: bundle exec ruby spanner_samples.rb [command] [arguments]
 
     Commands:
+      create_instance                    <instance_id> Create Instance
       create_database                    <instance_id> <database_id> Create Database
       create_table_with_timestamp_column <instance_id> <database_id> Create table Performances with commit timestamp column
       insert_data                        <instance_id> <database_id> Insert Data
@@ -1799,8 +1828,8 @@ def run_sample arguments
   project_id  = ENV["GOOGLE_CLOUD_PROJECT"]
 
   commands = [
-    "create_database", "create_table_with_timestamp_column", "insert_data",
-    "insert_data_with_timestamp_column", "query_data",
+    "create_instance", "create_database", "create_table_with_timestamp_column",
+    "insert_data", "insert_data_with_timestamp_column", "query_data",
     "query_data_with_timestamp_column", "read_data", "read_stale_data",
     "create_index", "create_storing_index", "add_column", "add_timestamp_column",
     "update_data", "query_data_with_new_column",
