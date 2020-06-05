@@ -23,9 +23,9 @@ def create_instance project_id:, instance_id:
   instance = spanner.instance instance_id
 
   job = spanner.create_instance instance_id,
-                                name: instance_id,
+                                name:   instance_id,
                                 config: "regional-us-central1",
-                                nodes: 2,
+                                nodes:  2,
                                 labels: { "cloud_spanner_samples": true }
 
   puts "Waiting for create instance operation to complete"
