@@ -416,7 +416,10 @@ describe "Google Cloud Spanner API samples" do
                 database_id: database.database_id
     end
 
-    expect(captured_output).to eq ""
+    client = @spanner.client @instance.instance_id, database.database_id
+
+    expect(client.execute("SELECT * FROM Singers").rows.count).to eq 0
+    expect(client.execute("SELECT * FROM Albums").rows.count).to eq 0
   end
 
   example "read stale data" do
