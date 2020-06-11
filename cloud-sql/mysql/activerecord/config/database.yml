@@ -37,8 +37,8 @@ development:
   username: <%= ENV["DB_USER"] %>  # e.g. "my-database-user"
   password: <%= ENV["DB_PASS"] %> # e.g. "my-database-password"
   database: <%= ENV.fetch("DB_NAME") { "vote_development" } %> 
-  host: <%= ENV["DB_HOST"] { "127.0.0.1" }%> # '172.17.0.1' if deployed to GAE Flex
-  port: <%= ENV["DB_PORT"] { 3306 }%> 
+  host: <%= ENV.fetch("DB_HOST") { "127.0.0.1" }%> # '172.17.0.1' if deployed to GAE Flex
+  port: <%= ENV.fetch("DB_PORT") { 3306 }%> 
 # [END cloud_sql_mysql_activerecord_create_tcp]
 
 
