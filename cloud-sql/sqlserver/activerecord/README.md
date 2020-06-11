@@ -21,28 +21,53 @@ Download a JSON key to use to authenticate your connection.
 
 ## Running locally
 
-To run this application locally, use the information noted in the previous steps:
-```bash
-export GOOGLE_APPLICATION_CREDENTIALS=/path/to/service/account/key.json
-export INSTANCE_CONNECTION_NAME='<MY-PROJECT>:<INSTANCE-REGION>:<INSTANCE-NAME>'
-export DB_USER='my-db-user'
-export DB_PASS='my-db-pass'
-export DB_NAME='my_db'
-```
-Note: Saving credentials in environment variables is convenient, but not secure - consider a more
-secure solution such as [Secret Manager](https://cloud.google.com/secret-manager/docs/overview) to help keep secrets safe.
-
 Follow the [instructions on Microsoft's website](https://docs.microsoft.com/en-us/sql/connect/ruby/step-1-configure-development-environment-for-ruby-development?view=sql-server-ver15) for your operating system to make sure your development environment is properly configured. For Unix systems, this will require installing [FreeTDS](https://www.freetds.org/index.html), while Windows systems require [Ruby DevKit](https://rubyinstaller.org/downloads/)
 
 Next, download and install the `cloud_sql_proxy` by
 following the instructions
 [here](https://cloud.google.com/sql/docs/sqlserver/authorize-proxy#installing_the).
 
-Use the following command to start the proxy in the
-background:
+### Linux / MacOS
+Use these terminal commands to initialize environment variables:
 ```bash
-./cloud_sql_proxy  --instances=$INSTANCE_CONNECTION_NAME=tcp:1433 --credential_file=$GOOGLE_APPLICATION_CREDENTIALS
+export GOOGLE_APPLICATION_CREDENTIALS=/path/to/service/account/key.json
+export CLOUD_SQL_CONNECTION_NAME='<MY-PROJECT>:<INSTANCE-REGION>:<INSTANCE-NAME>'
+export DB_USER='my-db-user'
+export DB_PASS='my-db-pass'
+export DB_NAME='my_db'
+export DB_HOST='127.0.0.1'
+export DB_PORT='1433'
 ```
+Note: Saving credentials in environment variables is convenient, but not secure - consider a more
+secure solution such as [Secret Manager](https://cloud.google.com/secret-manager/docs/overview) to
+help keep secrets safe.
+
+Then, use the following command to start the proxy in the background using TCP:
+```bash
+./cloud_sql_proxy -instances=${CLOUD_SQL_CONNECTION_NAME}=tcp:1433 sqlserver -u ${DB_USER} --host 127.0.0.1 &
+```
+
+### Windows / PowerShell
+Use these PowerShell commands to initialize environment variables:
+```powershell
+$env:GOOGLE_APPLICATION_CREDENTIALS="<CREDENTIALS_JSON_FILE>"
+$env:CLOUD_SQL_CONNECTION_NAME="<MY-PROJECT>:<INSTANCE-REGION>:<INSTANCE-NAME>"
+$env:DB_USER="my-db-user"
+$env:DB_PASS="my-db-pass"
+$env:DB_NAME="my_db"
+$env:DB_HOST="127.0.0.1"
+$env:DB_PORT="1433"
+```
+Note: Saving credentials in environment variables is convenient, but not secure - consider a more
+secure solution such as [Secret Manager](https://cloud.google.com/secret-manager/docs/overview) to
+help keep secrets safe.
+
+Then use this command to launch the proxy in a separate PowerShell session:
+```powershell
+Start-Process -filepath "C:\<path to proxy exe>" -ArgumentList "-instances=<MY-PROJECT>:<INSTANCE-REGION>:<INSTANCE-NAME>=tcp:1433 -credential_file=<CREDENTIALS_JSON_FILE>"
+```
+
+### Testing the application
 
 Next, setup install the requirements:
 ```bash

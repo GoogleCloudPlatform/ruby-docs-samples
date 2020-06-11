@@ -23,6 +23,8 @@ env_variables:
   DB_PASS: [MY_DB_PASS]
   # Use a different name for your production database from your development database
   DB_NAME: [MY_DB_NAME] 
+  DB_HOST: '172.17.0.1'
+  DB_PORT: 1433
 
 
 beta_settings:

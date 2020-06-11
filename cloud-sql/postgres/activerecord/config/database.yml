@@ -34,8 +34,8 @@ development:
   # [END cloud_sql_postgres_activerecord_backoff]
   
   # [START cloud_sql_postgres_activerecord_create_tcp]
-  username: <%= ENV["DB_USER"] %>
-  password: <%= ENV["DB_PASS"] %>
+  username: <%= ENV["DB_USER"] %>  # e.g. "my-database-user"
+  password: <%= ENV["DB_PASS"] %> # e.g. "my-database-password"
   database: <%= ENV.fetch("DB_NAME") { "vote_development" } %>
   host: <%= ENV["DB_HOST"] { "127.0.0.1" }%> # '172.17.0.1' if deployed to GAE Flex
   port: <%= ENV["DB_PORT"] { 5432 }%> 
@@ -60,8 +60,8 @@ production:
   pool: 5
   timeout: 5000
   # [START cloud_sql_postgres_activerecord_create_socket]
-  username: <%= ENV["DB_USER"] %>
-  password: <%= ENV["DB_PASS"] %>
+  username: <%= ENV["DB_USER"] %>  # e.g. "my-database-user"
+  password: <%= ENV["DB_PASS"] %> # e.g. "my-database-password"
   database: <%= ENV.fetch("DB_NAME") { "vote_production" } %>
   # If connecting via unix domain socket, specify the socket path as host
   host:  "<%= ENV.fetch("DB_SOCKET_DIR") { '/cloudsql' } %>/<%= ENV["INSTANCE_CONNECTION_NAME"] %>"
