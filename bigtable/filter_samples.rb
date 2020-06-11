@@ -14,46 +14,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START bigtable_filters_limit_row_sample]
-# [START bigtable_filters_limit_row_regex]
-# [START bigtable_filters_limit_cells_per_col]
-# [START bigtable_filters_limit_cells_per_row]
-# [START bigtable_filters_limit_cells_per_row_offset]
-# [START bigtable_filters_limit_col_family_regex]
-# [START bigtable_filters_limit_col_qualifier_regex]
-# [START bigtable_filters_limit_col_range]
-# [START bigtable_filters_limit_value_range]
-# [START bigtable_filters_limit_value_regex]
-# [START bigtable_filters_limit_timestamp_range]
-# [START bigtable_filters_limit_block_all]
-# [START bigtable_filters_limit_pass_all]
-# [START bigtable_filters_modify_strip_value]
-# [START bigtable_filters_modify_apply_label]
-# [START bigtable_filters_composing_chain]
-# [START bigtable_filters_composing_interleave]
-# [START bigtable_filters_composing_condition]
+# [START bigtable_filters_imports]
 
 # Import google bigtable client lib
 require "google/cloud/bigtable"
 
-# [END bigtable_filters_limit_row_sample]
-# [END bigtable_filters_limit_row_regex]
-# [END bigtable_filters_limit_cells_per_col]
-# [END bigtable_filters_limit_cells_per_row]
-# [END bigtable_filters_limit_cells_per_row_offset]
-# [END bigtable_filters_limit_col_family_regex]
-# [END bigtable_filters_limit_col_qualifier_regex]
-# [END bigtable_filters_limit_col_range]
-# [END bigtable_filters_limit_value_range]
-# [END bigtable_filters_limit_value_regex]
-# [END bigtable_filters_limit_timestamp_range]
-# [END bigtable_filters_limit_block_all]
-# [END bigtable_filters_limit_pass_all]
-# [END bigtable_filters_modify_strip_value]
-# [END bigtable_filters_modify_apply_label]
-# [END bigtable_filters_composing_chain]
-# [END bigtable_filters_composing_interleave]
-# [END bigtable_filters_composing_condition]
+# [END bigtable_filters_imports]
 
 def filter_limit_row_sample project_id, instance_id, table_id
   # [START bigtable_filters_limit_row_sample]
@@ -191,24 +157,7 @@ def filter_composing_condition project_id, instance_id, table_id
 end
 
 
-# [START bigtable_filters_limit_row_sample]
-# [START bigtable_filters_limit_row_regex]
-# [START bigtable_filters_limit_cells_per_col]
-# [START bigtable_filters_limit_cells_per_row]
-# [START bigtable_filters_limit_cells_per_row_offset]
-# [START bigtable_filters_limit_col_family_regex]
-# [START bigtable_filters_limit_col_qualifier_regex]
-# [START bigtable_filters_limit_col_range]
-# [START bigtable_filters_limit_value_range]
-# [START bigtable_filters_limit_value_regex]
-# [START bigtable_filters_limit_timestamp_range]
-# [START bigtable_filters_limit_block_all]
-# [START bigtable_filters_limit_pass_all]
-# [START bigtable_filters_modify_strip_value]
-# [START bigtable_filters_modify_apply_label]
-# [START bigtable_filters_composing_chain]
-# [START bigtable_filters_composing_interleave]
-# [START bigtable_filters_composing_condition]
+# [START bigtable_filters_print]
 
 
 def read_with_filter project_id, instance_id, table_id, filter
@@ -233,21 +182,4 @@ def print_row row
   puts "\n"
 end
 
-# [END bigtable_filters_limit_row_sample]
-# [END bigtable_filters_limit_row_regex]
-# [END bigtable_filters_limit_cells_per_col]
-# [END bigtable_filters_limit_cells_per_row]
-# [END bigtable_filters_limit_cells_per_row_offset]
-# [END bigtable_filters_limit_col_family_regex]
-# [END bigtable_filters_limit_col_qualifier_regex]
-# [END bigtable_filters_limit_col_range]
-# [END bigtable_filters_limit_value_range]
-# [END bigtable_filters_limit_value_regex]
-# [END bigtable_filters_limit_timestamp_range]
-# [END bigtable_filters_limit_block_all]
-# [END bigtable_filters_limit_pass_all]
-# [END bigtable_filters_modify_strip_value]
-# [END bigtable_filters_modify_apply_label]
-# [END bigtable_filters_composing_chain]
-# [END bigtable_filters_composing_interleave]
-# [END bigtable_filters_composing_condition]
+# [END bigtable_filters_print]
