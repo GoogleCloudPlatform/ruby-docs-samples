@@ -12,10 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START cloud_sql_sqlserver_activerecord_create]
+# [START cloud_sql_sqlserver_activerecord_create_tcp]
 development:
   adapter: sqlserver
-  # [START_EXCLUDE]
+  # Configure additional properties here.
+  # [END cloud_sql_sqlserver_activerecord_create_tcp]
   # [START cloud_sql_sqlserver_activerecord_limit]
   # 'pool' is the maximum number of permanent connections to keep.
   pool: 5
@@ -32,13 +33,13 @@ development:
   # but provides no arguments for configuration.
   # [END cloud_sql_sqlserver_activerecord_backoff]
   
-  # [END_EXCLUDE]
-  username: <%= ENV["DB_USER"] %>
-  password: <%= ENV["DB_PASS"] %>
+  # [START cloud_sql_sqlserver_activerecord_create_tcp]
+  username: <%= ENV["DB_USER"] %>  # e.g. "my-database-user"
+  password: <%= ENV["DB_PASS"] %> # e.g. "my-database-password"
   database: <%= ENV.fetch("DB_NAME") { "vote_development" } %>
-  host: '127.0.0.1' # or '172.17.0.1' if deployed to GAE Flex
-  port: 1433
-# [END cloud_sql_sqlserver_activerecord_create]
+  host: <%= ENV.fetch("DB_HOST") { "127.0.0.1" }%> # '172.17.0.1' if deployed to GAE Flex
+  port: <%= ENV.fetch("DB_PORT") { 1433 }%> 
+# [END cloud_sql_sqlserver_activerecord_create_tcp]
 
 
 # Warning: The database defined as "test" will be erased and
@@ -55,8 +56,8 @@ production:
   adapter: sqlserver
   pool: 5
   timeout: 5000
-  username: <%= ENV["DB_USER"] %>
-  password: <%= ENV["DB_PASS"] %>
+  username: <%= ENV["DB_USER"] %>  # e.g. "my-database-user"
+  password: <%= ENV["DB_PASS"] %> # e.g. "my-database-password"
   database: <%= ENV.fetch("DB_NAME") { "vote_production" } %>
-  host: '172.17.0.1'
-  port: 1433
+  host: <%= ENV.fetch("DB_HOST") { "127.0.0.1" }%> # '172.17.0.1' if deployed to GAE Flex
+  port: <%= ENV.fetch("DB_PORT") { 1433 }%> 

@@ -12,10 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START cloud_sql_mysql_activerecord_create]
+# [START cloud_sql_mysql_activerecord_create_tcp]
 development:
   adapter: mysql2
-  # [START_EXCLUDE]
+  # Configure additional properties here
+  # [END cloud_sql_mysql_activerecord_create_tcp]
   # [START cloud_sql_mysql_activerecord_limit]
   # 'pool' is the maximum number of permanent connections to keep.
   pool: 5
@@ -32,12 +33,13 @@ development:
   # but provides no arguments for configuration.
   # [END cloud_sql_mysql_activerecord_backoff]
   
-  # [END_EXCLUDE]
-  username: <%= ENV["MYSQL_USERNAME"] %>
-  password: <%= ENV["MYSQL_PASSWORD"] %>
-  database: <%= ENV.fetch("MYSQL_DATABASE") { "vote_development" } %>
-  socket:   "/cloudsql/<%= ENV["INSTANCE_CONNECTION_NAME"] %>"
-# [END cloud_sql_mysql_activerecord_create]
+  # [START cloud_sql_mysql_activerecord_create_tcp]
+  username: <%= ENV["DB_USER"] %>  # e.g. "my-database-user"
+  password: <%= ENV["DB_PASS"] %> # e.g. "my-database-password"
+  database: <%= ENV.fetch("DB_NAME") { "vote_development" } %> 
+  host: <%= ENV.fetch("DB_HOST") { "127.0.0.1" }%> # '172.17.0.1' if deployed to GAE Flex
+  port: <%= ENV.fetch("DB_PORT") { 3306 }%> 
+# [END cloud_sql_mysql_activerecord_create_tcp]
 
 
 # Warning: The database defined as "test" will be erased and
@@ -50,11 +52,16 @@ test:
   timeout: 5000
   database: db/test.sqlite3
 
+# [START cloud_sql_mysql_activerecord_create_socket]
 production:
   adapter: mysql2
+  # Configure additional properties here.
+  # [END cloud_sql_mysql_activerecord_create_socket]
   pool: 5
   timeout: 5000
-  username: <%= ENV["MYSQL_USERNAME"] %>
-  password: <%= ENV["MYSQL_PASSWORD"] %>
-  database: <%= ENV.fetch("MYSQL_DATABASE") { "vote_production" } %>
-  socket:   "/cloudsql/<%= ENV["INSTANCE_CONNECTION_NAME"] %>"
+  # [START cloud_sql_mysql_activerecord_create_socket]
+  username: <%= ENV["DB_USER"] %>  # e.g. "my-database-user"
+  password: <%= ENV["DB_PASS"] %> # e.g. "my-database-password"
+  database: <%= ENV.fetch("DB_NAME") { "vote_production" } %>
+  socket: "<%= ENV.fetch("DB_SOCKET_DIR") { '/cloudsql' } %>/<%= ENV["INSTANCE_CONNECTION_NAME"] %>"
+# [END cloud_sql_mysql_activerecord_create_socket]
