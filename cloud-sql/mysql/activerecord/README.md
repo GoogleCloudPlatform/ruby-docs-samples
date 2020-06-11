@@ -17,37 +17,95 @@ name.
 [instructions](https://cloud.google.com/sql/docs/mysql/connect-external-app#4_if_required_by_your_authentication_method_create_a_service_account).
 Download a JSON key to use to authenticate your connection. 
 
-1. Use the information noted in the previous steps:
-```bash
-export GOOGLE_APPLICATION_CREDENTIALS=/path/to/service/account/key.json
-export INSTANCE_CONNECTION_NAME='<MY-PROJECT>:<INSTANCE-REGION>:<INSTANCE-NAME>'
-export MYSQL_USER='my-db-user'
-export MYSQL_PASS='my-db-pass'
-export MYSQL_DATABASE='my_db'
-```
-Note: Saving credentials in environment variables is convenient, but not secure - consider a more
-secure solution such as [Cloud KMS](https://cloud.google.com/kms/) to help keep secrets safe.
 
 ## Running locally
 
 To run this application locally, download and install the `cloud_sql_proxy` by
 following the instructions
-[here](https://cloud.google.com/sql/docs/mysql/sql-proxy#install). Once the
-proxy has been downloaded, use the following commands to create the `/cloudsql`
-directory and give the user running the proxy the appropriate permissions:
+[here](https://cloud.google.com/sql/docs/mysql/authorize-proxy#installing_the).
+
+Instructions are provided below for using the proxy with a TCP connection or a Unix Domain Socket.
+On Linux or Mac OS you can use either option, but on Windows the proxy currently requires a TCP
+connection.
+
+### Launch proxy with TCP
+
+To run the sample locally with a TCP connection, set environment variables and launch the proxy as
+shown below.
+
+#### Linux / Mac OS
+Use these terminal commands to initialize environment variables:
+```bash
+export GOOGLE_APPLICATION_CREDENTIALS=/path/to/service/account/key.json
+export DB_HOST='127.0.0.1'
+export DB_PORT='3306'
+export DB_USER='<DB_USER_NAME>'
+export DB_PASS='<DB_PASSWORD>'
+export DB_NAME='<DB_NAME>'
+```
+Note: Saving credentials in environment variables is convenient, but not secure - consider a more
+secure solution such as [Secret Manager](https://cloud.google.com/secret-manager/docs/overview) to
+help keep secrets safe.
+
+Then use this command to launch the proxy in the background:
+```bash
+./cloud_sql_proxy -instances=<project-id>:<region>:<instance-name>=tcp:3306 -credential_file=$GOOGLE_APPLICATION_CREDENTIALS &
+```
+
+#### Windows/PowerShell
+Use these PowerShell commands to initialize environment variables:
+```powershell
+$env:GOOGLE_APPLICATION_CREDENTIALS="<CREDENTIALS_JSON_FILE>"
+$env:DB_HOST="127.0.0.1"
+$env:DB_PORT="3306"
+$env:DB_USER="<DB_USER_NAME>"
+$env:DB_PASS="<DB_PASSWORD>"
+$env:DB_NAME="<DB_NAME>"
+```
+Note: Saving credentials in environment variables is convenient, but not secure - consider a more
+secure solution such as [Secret Manager](https://cloud.google.com/secret-manager/docs/overview) to
+help keep secrets safe.
+
+Then use this command to launch the proxy in a separate PowerShell session:
+```powershell
+Start-Process -filepath "C:\<path to proxy exe>" -ArgumentList "-instances=<project-id>:<region>:<instance-name>=tcp:3306 -credential_file=<CREDENTIALS_JSON_FILE>"
+```
+
+### Launch proxy with Unix Domain Socket
+NOTE: this option is currently only supported on Linux and Mac OS. Windows users should use the
+[Launch proxy with TCP](#launch-proxy-with-tcp) option.
+
+To use a Unix socket, you'll need to create a directory and give write access to the user running
+the proxy. For example:
+
 ```bash
 sudo mkdir /cloudsql
 sudo chown -R $USER /cloudsql
 ```
 
-Once the `/cloudsql` directory is ready, use the following command to start the proxy in the
-background:
+You'll also need to initialize an environment variable containing the directory you just created:
 ```bash
-./cloud_sql_proxy -dir=/cloudsql --instances=$INSTANCE_CONNECTION_NAME --credential_file=$GOOGLE_APPLICATION_CREDENTIALS
+export DB_SOCKET_DIR=/path/to/the/new/directory
 ```
-Note: Make sure to run the command under a user with write access in the 
-`/cloudsql` directory. This proxy will use this folder to create a unix socket
-the application will use to connect to Cloud SQL. 
+
+Use these terminal commands to initialize other environment variables as well:
+```bash
+export GOOGLE_APPLICATION_CREDENTIALS=/path/to/service/account/key.json
+export INSTANCE_CONNECTION_NAME='<MY-PROJECT>:<INSTANCE-REGION>:<INSTANCE-NAME>'
+export DB_USER='<DB_USER_NAME>'
+export DB_PASS='<DB_PASSWORD>'
+export DB_NAME='<DB_NAME>'
+```
+Note: Saving credentials in environment variables is convenient, but not secure - consider a more
+secure solution such as [Secret Manager](https://cloud.google.com/secret-manager/docs/overview) to
+help keep secrets safe.
+
+Then use this command to launch the proxy in the background:
+```bash
+./cloud_sql_proxy -dir=$DB_SOCKET_DIR --instances=$INSTANCE_CONNECTION_NAME --credential_file=$GOOGLE_APPLICATION_CREDENTIALS &
+```
+
+### Testing the application
 
 Next, setup install the requirements:
 ```bash
@@ -67,12 +125,36 @@ bundle exec rails s
 
 Navigate towards `http://localhost:3000` to verify your application is running correctly.
 
-## Google App Engine Flexible
+## Deploy to Google App Engine Standard
+
+To allow your app to connect to your Cloud SQL instance when the app is deployed, add the user, password, database, and instance connection name variables from Cloud SQL to the related environment variables in the `app.standard.yaml` file. The deployed application will connect using Unix sockets.
+
+    ```
+    env_variables:
+      DB_USER: MY_DB_USER
+      DB_PASS: MY_DB_PASSWORD
+      DB_NAME: MY_DATABASE
+      # e.g. my-awesome-project:us-central1:my-cloud-sql-instance
+      CLOUD_SQL_CONNECTION_NAME: <MY-PROJECT>:<INSTANCE-REGION>:<MY-DATABASE>
+    ```
+
+SECRET_KEY_BASE can be found by running:
+```bash
+bundle exec rails secret
+```
+
+To deploy to App Engine Standard, run the following command:
+```bash
+gcloud app deploy app.standard.yaml
+```
+
+
+## Deploy to Google App Engine Flexible
 
 To run on GAE-Flex, create an App Engine project by following the setup for these 
 [instructions](https://cloud.google.com/appengine/docs/flexible/ruby/quickstart).
 
-First, update `app.yaml` with the correct values to pass the environment 
+First, update `app.flexible.yaml` with the correct values to pass the environment 
 variables into the runtime.
 
 SECRET_KEY_BASE can be found by running:
@@ -80,7 +162,7 @@ SECRET_KEY_BASE can be found by running:
 bundle exec rails secret
 ```
 
-Next, the following command will deploy the application to your Google Cloud project:
+To deploy to App Engine Flexible, run the following command:
 ```bash
-gcloud app deploy
+gcloud app deploy app.flexible.yaml
 ```
