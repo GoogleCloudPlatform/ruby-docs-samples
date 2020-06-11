@@ -14,23 +14,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START bigtable_reads_row]
-# [START bigtable_reads_row_partial]
-# [START bigtable_reads_rows]
-# [START bigtable_reads_row_range]
-# [START bigtable_reads_row_ranges]
-# [START bigtable_reads_prefix]
-# [START bigtable_reads_filter]
-
+# [START bigtable_reads_imports]
 # Import google bigtable client lib
 require "google/cloud/bigtable"
-# [END bigtable_reads_row]
-# [END bigtable_reads_row_partial]
-# [END bigtable_reads_rows]
-# [END bigtable_reads_row_range]
-# [END bigtable_reads_row_ranges]
-# [END bigtable_reads_prefix]
-# [END bigtable_reads_filter]
+# [END bigtable_reads_imports]
 
 def reads_row project_id, instance_id, table_id
   # [START bigtable_reads_row]
@@ -119,14 +106,7 @@ def reads_filter project_id, instance_id, table_id
 end
 
 
-# [START bigtable_reads_row]
-# [START bigtable_reads_row_partial]
-# [START bigtable_reads_rows]
-# [START bigtable_reads_row_range]
-# [START bigtable_reads_row_ranges]
-# [START bigtable_reads_prefix]
-# [START bigtable_reads_filter]
-
+# [START bigtable_filters_print]
 def print_row row
   puts "Reading data for #{row.key}:"
 
@@ -140,10 +120,4 @@ def print_row row
   puts "\n"
 end
 
-# [END bigtable_reads_row]
-# [END bigtable_reads_row_partial]
-# [END bigtable_reads_rows]
-# [END bigtable_reads_row_range]
-# [END bigtable_reads_row_ranges]
-# [END bigtable_reads_prefix]
-# [END bigtable_reads_filter]
+# [END bigtable_filters_print]
