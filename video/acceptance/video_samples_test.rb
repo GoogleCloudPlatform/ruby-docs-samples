@@ -14,7 +14,8 @@
 
 require_relative "../video_samples"
 require "minitest/autorun"
-require "minitest/hooks"
+require "minitest/focus"
+require "minitest/hooks/default"
 require "net/http"
 require "securerandom"
 require "tempfile"
