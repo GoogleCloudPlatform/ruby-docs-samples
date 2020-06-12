@@ -18,6 +18,7 @@ gem "google-cloud-video_intelligence"
 
 group :test do
   gem "google-cloud-storage"
-  gem "rspec"
-  gem "rspec_junit_formatter"
+  gem "minitest", "~> 5.14"
+  gem "minitest-hooks", "~>1.5"
+  gem "rake", ">= 12.0"
 end

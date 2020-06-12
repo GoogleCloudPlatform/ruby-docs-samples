@@ -1,4 +1,4 @@
-# Copyright 2017 Google, Inc
+# Copyright 2020 Google, Inc
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,13 +13,15 @@
 # limitations under the License.
 
 require_relative "../video_samples"
-require "rspec"
-require "tempfile"
+require "minitest/autorun"
+require "minitest/hooks"
 require "net/http"
+require "securerandom"
+require "tempfile"
 require "uri"
 
 describe "Google Cloud Video API sample" do
-  before do
+  before :all do
     @labels_file        = "cloud-samples-data/video/cat.mp4"
     @shots_file         = "cloud-samples-data/video/gbikes_dinosaur.mp4"
     @safe_search_file   = "cloud-samples-data/video/pizza.mp4"
@@ -27,27 +29,22 @@ describe "Google Cloud Video API sample" do
   end
 
   it "can analyze labels from a gcs file" do
-    expect {
+    assert_output(/Label description: animal/) do
       analyze_labels_gcs path: "gs://#{@labels_file}"
-    }.to output(
-      /Label description: animal/
-    ).to_stdout
+    end
   end
 
   it "can analyze labels from a local file" do
     begin
-      local_tempfile = Tempfile.new "temp_video"
+      local_tempfile = Tempfile.new "temp_video#{SecureRandom.hex}"
       File.open local_tempfile.path, "w" do |file|
         file_contents = Net::HTTP.get URI("http://storage.googleapis.com/#{@transcription_file}")
         file.write file_contents
         file.flush
       end
-
-      expect {
+      assert_output(/Finished Processing./) do
         analyze_labels_local path: local_tempfile.path
-      }.to output(
-        /Finished Processing./
-      ).to_stdout
+      end
     ensure
       local_tempfile.close
       local_tempfile.unlink
@@ -55,51 +52,40 @@ describe "Google Cloud Video API sample" do
   end
 
   it "can analyze explicit content from a gcs file" do
-    expect {
+    assert_output(/pornography: VERY_UNLIKELY/) do
       analyze_explicit_content path: "gs://#{@safe_search_file}"
-    }.to output(
-      /pornography: VERY_UNLIKELY/
-    ).to_stdout
+    end
   end
 
   it "can analyze shots from a gcs file" do
-    expect {
+    assert_output(/0.0 to 5/) do
       analyze_shots path: "gs://#{@shots_file}"
-    }.to output(
-      /0.0 to 5/
-    ).to_stdout
+    end
   end
 
   it "can transcribe speech from a gcs file" do
-    expect {
+    assert_output(/cultural/) do
       transcribe_speech_gcs path: "gs://#{@transcription_file}"
-    }.to output(
-      /cultural/
-    ).to_stdout
+    end
   end
 
   it "can detect texts from a gcs file" do
-    expect {
+    assert_output(/GOOGLE/) do
       detect_text_gcs path: "gs://#{@transcription_file}"
-    }.to output(
-      /GOOGLE/
-    ).to_stdout
+    end
   end
 
   it "can detect texts from a local file" do
     begin
-      local_tempfile = Tempfile.new "temp_video"
+      local_tempfile = Tempfile.new "temp_video#{SecureRandom.hex}"
       File.open local_tempfile.path, "w" do |file|
         file_contents = Net::HTTP.get URI("http://storage.googleapis.com/#{@transcription_file}")
         file.write file_contents
         file.flush
       end
-
-      expect {
+      assert_output(/GOOGLE/) do
         detect_text_local path: local_tempfile.path
-      }.to output(
-        /GOOGLE/
-      ).to_stdout
+      end
     ensure
       local_tempfile.close
       local_tempfile.unlink
@@ -107,27 +93,22 @@ describe "Google Cloud Video API sample" do
   end
 
   it "can track objects from a gcs file" do
-    expect {
+    assert_output(/cat/) do
       track_objects_gcs path: "gs://#{@labels_file}"
-    }.to output(
-      /cat/
-    ).to_stdout
+    end
   end
 
   it "can track objects from a local file" do
     begin
-      local_tempfile = Tempfile.new "temp_video"
+      local_tempfile = Tempfile.new "temp_video#{SecureRandom.hex}"
       File.open local_tempfile.path, "w" do |file|
         file_contents = Net::HTTP.get URI("http://storage.googleapis.com/#{@transcription_file}")
         file.write file_contents
         file.flush
       end
-
-      expect {
+      assert_output(/Finished Processing./) do
         track_objects_local path: local_tempfile.path
-      }.to output(
-        /Finished Processing./
-      ).to_stdout
+      end
     ensure
       local_tempfile.close
       local_tempfile.unlink
