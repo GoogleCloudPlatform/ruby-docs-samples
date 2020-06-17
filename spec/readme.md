@@ -60,5 +60,5 @@ for i in {0..9}; do
     gcloud projects add-iam-policy-binding cloud-samples-ruby-test-1 --member serviceAccount:kokoro-cloud-samples-ruby-$i@cloud-samples-ruby-test-$i.iam.gserviceaccount.com --role roles/owner
 
     # Every project should have access to the Firebase project.
-    gcloud projects add-iam-policy-binding ruby-firestore --member serviceAccount:kokoro-cloud-samples-ruby-$i@cloud-samples-ruby-test-$i.iam.gserviceaccount.com --role roles/owner
+    gcloud projects add-iam-policy-binding ruby-firestore-ci --member serviceAccount:kokoro-cloud-samples-ruby-$i@cloud-samples-ruby-test-$i.iam.gserviceaccount.com --role roles/owner
 done
