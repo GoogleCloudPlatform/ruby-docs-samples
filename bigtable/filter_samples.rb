@@ -14,12 +14,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START bigtable_filters_imports]
+# [START bigtable_filters_print]
 
 # Import google bigtable client lib
 require "google/cloud/bigtable"
 
-# [END bigtable_filters_imports]
+# Write your code here.
+# [START_EXCLUDE]
 
 def filter_limit_row_sample project_id, instance_id, table_id
   # [START bigtable_filters_limit_row_sample]
@@ -157,7 +158,7 @@ def filter_composing_condition project_id, instance_id, table_id
 end
 
 
-# [START bigtable_filters_print]
+# [END_EXCLUDE]
 
 
 def read_with_filter project_id, instance_id, table_id, filter
