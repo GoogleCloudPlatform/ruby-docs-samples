@@ -14,10 +14,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START bigtable_reads_imports]
+# [START bigtable_reads_print]
 # Import google bigtable client lib
 require "google/cloud/bigtable"
-# [END bigtable_reads_imports]
+# Write your code here.
+# [START_EXCLUDE]
 
 def reads_row project_id, instance_id, table_id
   # [START bigtable_reads_row]
@@ -106,7 +107,7 @@ def reads_filter project_id, instance_id, table_id
 end
 
 
-# [START bigtable_filters_print]
+# [END_EXCLUDE]
 def print_row row
   puts "Reading data for #{row.key}:"
 
