@@ -56,7 +56,7 @@ export GOOGLE_APPLICATION_CREDENTIALS_SECONDARY=$KOKORO_GFILE_DIR/cloud-samples-
 # allow the service account project and GOOGLE_CLOUD_PROJECT to be different.
 export GOOGLE_APPLICATION_CREDENTIALS=$KOKORO_KEYSTORE_DIR/71386_kokoro-$GOOGLE_CLOUD_PROJECT
 
-export FIRESTORE_PROJECT_ID=ruby-firestore
+export FIRESTORE_PROJECT_ID=ruby-firestore-ci
 export E2E_GOOGLE_CLOUD_PROJECT=cloud-samples-ruby-test-kokoro
 export MYSQL_DATABASE=${GOOGLE_CLOUD_PROJECT//-/_}
 export POSTGRES_DATABASE=${GOOGLE_CLOUD_PROJECT//-/_}
