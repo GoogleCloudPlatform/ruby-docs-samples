@@ -106,7 +106,6 @@ def reads_filter project_id, instance_id, table_id
   # [END bigtable_reads_filter]
 end
 
-
 # [END_EXCLUDE]
 def print_row row
   puts "Reading data for #{row.key}:"
