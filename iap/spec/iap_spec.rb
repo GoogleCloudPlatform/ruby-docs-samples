@@ -14,12 +14,42 @@
 
 require_relative "../iap"
 require "rspec"
+require "pp"
+
+def fetch_iap_jwt
+  begin
+    prev = $stdout
+    $stdout = StringIO.new
+    make_iap_request url: "https://print-iap-jwt-assertion-dot-cloud-iap-for-testing.uc.r.appspot.com",
+      client_id: "1031437410300-ki5srmdg37qc6cl521dlqcmt4gbjufn5.apps.googleusercontent.com"
+    result = $stdout.string
+  ensure
+    $stdout = prev
+  end
+  result.split("\n")[1]
+end
 
 describe "Google Cloud IAP Sample" do
-  it "fetches an ID token" do
+  it "makes an IAP request" do
     expect {
-      fetch_id_token url: "https://print-iap-jwt-assertion-dot-cloud-iap-for-testing.uc.r.appspot.com",
-              client_id: "1031437410300-ki5srmdg37qc6cl521dlqcmt4gbjufn5.apps.googleusercontent.com"
+      make_iap_request url: "https://print-iap-jwt-assertion-dot-cloud-iap-for-testing.uc.r.appspot.com",
+        client_id: "1031437410300-ki5srmdg37qc6cl521dlqcmt4gbjufn5.apps.googleusercontent.com"
     }.to output(/x-goog-authenticated-user-jwt:/).to_stdout
+  end
+
+  it "verifies an IAP JWT" do
+    # test with audience
+    expect {
+      verify_iap_jwt iap_jwt: fetch_iap_jwt(),
+        project_number: "1031437410300",
+        project_id: "cloud-iap-for-testing"
+    }.to output(/\/projects\/1031437410300\/apps\/cloud-iap-for-testing/).to_stdout
+  end
+
+  it "verifies an IAP JWT without an audience" do
+    # test without audience
+    expect {
+      verify_iap_jwt iap_jwt: fetch_iap_jwt()
+    }.to output(/Audience not verified/).to_stdout
   end
 end

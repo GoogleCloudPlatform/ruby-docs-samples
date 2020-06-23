@@ -14,7 +14,7 @@
 
 require "uri"
 
-def request url:, client_id:
+def make_iap_request url:, client_id:
   # [START iap_make_request]
   # url = "The Identity-Aware Proxy-protected URL to fetch"
   # client_id = "The client ID used by Identity-Aware Proxy"
@@ -33,30 +33,68 @@ def request url:, client_id:
   end
 
   if resp.status == 200
+    puts "x-goog-authenticated-user-jwt: "
     puts resp.body
   else
+    puts "Error requesting IAP"
     puts resp.status
     puts resp.headers
-    puts "Error requesting IAP"
   end
   # [END iap_make_request]
+end
+
+def verify_iap_jwt iap_jwt:, project_number: nil, project_id: nil, backend_service_id: nil
+  # [START iap_validate_jwt]
+  # iap_jwt = "The contents of the X-Goog-Iap-Jwt-Assertion header"
+  # project_number = "The project *number* for your Google Cloud project"
+  # project_id = "Your Google Cloud Project ID"
+  require "googleauth"
+
+  audience = nil
+  if project_number and project_id
+    # Expected audience for App Engine
+    audience = "/projects/#{project_number}/apps/#{project_id}"
+  elsif project_number and backend_service_id
+    # Expected audience for App Engine
+    audience = "/projects/#{project_number}/global/backendServices//#{backend_service_id}"
+  end
+
+  # The client ID as the target audience for IAP
+  payload = Google::Auth::IDTokens.verify_iap iap_jwt, aud: audience
+
+  puts payload
+
+  if audience == nil
+    puts "Audience not verified! Supply a project_number and project_id to verify"
+  end
+  # [END iap_validate_jwt]
 end
 
 if $PROGRAM_NAME == __FILE__
   case ARGV.shift
   when "request"
-    request url: ARGV.shift, client_id: ARGV.shift
+    make_iap_request url: ARGV.shift, client_id: ARGV.shift
+  when "verify"
+    verify_iap_jwt iap_jwt: ARGV.shift, project_number: ARGV.shift, project_id: ARGV.shift
   else
     puts <<~USAGE
       Usage: bundle exec ruby iap.rb [command] [arguments]
 
       Commands:
-        fetch_id_token <url> <client_id>
+
+        request <url> <client_id>
+
           Example:
-            bundle exec iap.rb fetch_id_token https://my-iap-url "iap-client-id"
-        verify_id_token <url> <client_id>
+
+            bundle exec iap.rb request https://my-iap-url "iap-client-id"
+
+        verify <url> <client_id>
+
           Example:
-            bundle exec iap.rb verify_id_token https://my-iap-url "iap-client-id"
+
+            bundle exec iap.rb verify IAP_JWT "project_number" "project_id"
+
+            bundle exec iap.rb verify IAP_JWT "project_number" "" "backend_service_id"
     USAGE
   end
 end
