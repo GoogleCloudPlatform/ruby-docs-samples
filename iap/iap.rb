@@ -54,6 +54,9 @@ if $PROGRAM_NAME == __FILE__
         fetch_id_token <url> <client_id>
           Example:
             bundle exec iap.rb fetch_id_token https://my-iap-url "iap-client-id"
+        verify_id_token <url> <client_id>
+          Example:
+            bundle exec iap.rb verify_id_token https://my-iap-url "iap-client-id"
     USAGE
   end
 end
