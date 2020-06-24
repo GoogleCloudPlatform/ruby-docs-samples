@@ -17,7 +17,6 @@ require "minitest/autorun"
 require "minitest/focus"
 require "minitest/hooks/default"
 require "net/http"
-require "securerandom"
 require "tempfile"
 require "uri"
 
@@ -37,7 +36,7 @@ describe "Google Cloud Video API sample" do
 
   it "can analyze labels from a local file" do
     begin
-      local_tempfile = Tempfile.new "temp_video#{SecureRandom.hex}"
+      local_tempfile = Tempfile.new "temp_video"
       File.open local_tempfile.path, "w" do |file|
         file_contents = Net::HTTP.get URI("http://storage.googleapis.com/#{@transcription_file}")
         file.write file_contents
@@ -78,7 +77,7 @@ describe "Google Cloud Video API sample" do
 
   it "can detect texts from a local file" do
     begin
-      local_tempfile = Tempfile.new "temp_video#{SecureRandom.hex}"
+      local_tempfile = Tempfile.new "temp_video"
       File.open local_tempfile.path, "w" do |file|
         file_contents = Net::HTTP.get URI("http://storage.googleapis.com/#{@transcription_file}")
         file.write file_contents
@@ -101,7 +100,7 @@ describe "Google Cloud Video API sample" do
 
   it "can track objects from a local file" do
     begin
-      local_tempfile = Tempfile.new "temp_video#{SecureRandom.hex}"
+      local_tempfile = Tempfile.new "temp_video"
       File.open local_tempfile.path, "w" do |file|
         file_contents = Net::HTTP.get URI("http://storage.googleapis.com/#{@transcription_file}")
         file.write file_contents
