@@ -14,7 +14,7 @@
 
 require_relative "../iap"
 require "rspec"
-require "pp"
+require "stringio"
 
 def fetch_iap_jwt
   begin

@@ -22,15 +22,12 @@ def make_iap_request url:, client_id:
   require "faraday"
 
   # The client ID as the target audience for IAP
-  id_token_creds = Google::Auth::Credentials.default \
-    target_audience: client_id
+  id_token_creds = Google::Auth::Credentials.default target_audience: client_id
 
   headers = {}
   id_token_creds.client.apply! headers
 
-  resp = Faraday.get url do |req|
-    req.headers = headers
-  end
+  resp = Faraday.get url, nil, headers
 
   if resp.status == 200
     puts "x-goog-authenticated-user-jwt: "
