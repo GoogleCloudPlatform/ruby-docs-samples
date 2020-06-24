@@ -28,7 +28,7 @@ def make_iap_request url:, client_id:
   headers = {}
   id_token_creds.client.apply! headers
 
-  resp = Faraday.get(url) do |req|
+  resp = Faraday.get url do |req|
     req.headers = headers
   end
 
@@ -51,10 +51,10 @@ def verify_iap_jwt iap_jwt:, project_number: nil, project_id: nil, backend_servi
   require "googleauth"
 
   audience = nil
-  if project_number and project_id
+  if project_number && project_id
     # Expected audience for App Engine
     audience = "/projects/#{project_number}/apps/#{project_id}"
-  elsif project_number and backend_service_id
+  elsif project_number && backend_service_id
     # Expected audience for App Engine
     audience = "/projects/#{project_number}/global/backendServices//#{backend_service_id}"
   end
@@ -64,7 +64,7 @@ def verify_iap_jwt iap_jwt:, project_number: nil, project_id: nil, backend_servi
 
   puts payload
 
-  if audience == nil
+  if audience.nil?
     puts "Audience not verified! Supply a project_number and project_id to verify"
   end
   # [END iap_validate_jwt]
