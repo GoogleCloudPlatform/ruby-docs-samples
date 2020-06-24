@@ -34,7 +34,7 @@ describe "Google Cloud IAP Sample" do
     expect {
       make_iap_request url: "https://print-iap-jwt-assertion-dot-cloud-iap-for-testing.uc.r.appspot.com",
         client_id: "1031437410300-ki5srmdg37qc6cl521dlqcmt4gbjufn5.apps.googleusercontent.com"
-    }.to output(/x-goog-authenticated-user-jwt:/).to_stdout
+    }.to output(/X-Goog-Iap-Jwt-Assertion:/).to_stdout
   end
 
   it "verifies an IAP JWT" do
