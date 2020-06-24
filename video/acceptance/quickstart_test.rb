@@ -1,4 +1,4 @@
-# Copyright 2017 Google, Inc
+# Copyright 2020 Google, Inc
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,14 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "rspec"
+require "minitest/autorun"
 
 describe "Video Intelligence API Quickstart" do
   it "can find labels for a cat video" do
-    expect {
-      load File.expand_path("../quickstart.rb", __dir__)
-    }.to output(
-      /Label description: animal/
-    ).to_stdout
+    assert_output(/Label description: animal/) do 
+      load File.expand_path("../quickstart.rb", __dir__) 
+    end
   end
 end
