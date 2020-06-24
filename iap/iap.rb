@@ -47,7 +47,8 @@ def verify_iap_jwt iap_jwt:, project_number: nil, project_id: nil, backend_servi
   # [START iap_validate_jwt]
   # iap_jwt = "The contents of the X-Goog-Iap-Jwt-Assertion header"
   # project_number = "The project *number* for your Google Cloud project"
-  # project_id = "Your Google Cloud Project ID"
+  # project_id = "Your Google Cloud project ID"
+  # backend_service_id = "Your Compute Engine backend service ID"
   require "googleauth"
 
   audience = nil
@@ -55,7 +56,7 @@ def verify_iap_jwt iap_jwt:, project_number: nil, project_id: nil, backend_servi
     # Expected audience for App Engine
     audience = "/projects/#{project_number}/apps/#{project_id}"
   elsif project_number && backend_service_id
-    # Expected audience for App Engine
+    # Expected audience for Compute Engine
     audience = "/projects/#{project_number}/global/backendServices//#{backend_service_id}"
   end
 
