@@ -57,7 +57,7 @@ def verify_iap_jwt iap_jwt:, project_number: nil, project_id: nil, backend_servi
     audience = "/projects/#{project_number}/apps/#{project_id}"
   elsif project_number && backend_service_id
     # Expected audience for Compute Engine
-    audience = "/projects/#{project_number}/global/backendServices//#{backend_service_id}"
+    audience = "/projects/#{project_number}/global/backendServices/#{backend_service_id}"
   end
 
   # The client ID as the target audience for IAP
