@@ -14,7 +14,7 @@
 
 source "https://rubygems.org"
 
-gem "functions_framework", "~> 0.1"
+gem "functions_framework", "~> 0.3"
 
 group "test" do
   gem "minitest", "~> 5.14"

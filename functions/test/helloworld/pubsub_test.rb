@@ -24,7 +24,7 @@ describe "functions_helloworld_pubsub" do
 
   it "handles name in pubsub payload" do
     load_temporary "helloworld/pubsub.rb" do
-      payload = { "@type" => resource_type, "data" => Base64.encode64("Ruby") }
+      payload = { "@type" => resource_type, "message" => { "data" => Base64.encode64("Ruby") } }
       event = make_cloud_event payload, source: source, type: type
       _out, err = capture_subprocess_io do
         call_event "hello-pubsub", event
@@ -35,7 +35,7 @@ describe "functions_helloworld_pubsub" do
 
   it "uses a default name" do
     load_temporary "helloworld/pubsub.rb" do
-      payload = { "@type" => resource_type }
+      payload = { "@type" => resource_type, "message" => { "data" => nil } }
       event = make_cloud_event payload, source: source, type: type
       _out, err = capture_subprocess_io do
         call_event "hello-pubsub", event
