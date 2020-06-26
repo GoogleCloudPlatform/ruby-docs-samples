@@ -25,18 +25,18 @@ FunctionsFramework.http "http-content" do |request|
   # '{"name":"John"}'
   when "application/json"
     name = (JSON.parse(request.body.read.to_s)["name"] rescue nil)
-  # 'John', stored in a Buffer
-  when 'application/octet-stream'
+  # "John", stored in a Buffer
+  when "application/octet-stream"
     name = request.body.read.to_s # Convert buffer to a string
-  #'John'
-  when 'text/plain'
+  # "John"
+  when "text/plain"
     name = request.body.read.to_s
-  #'name=John' in the body of a POST request (not the URL)
-  when 'application/x-www-form-urlencoded'
+  # "name=John" in the body of a POST request (not the URL)
+  when "application/x-www-form-urlencoded"
     name = (request.params["name"] rescue nil)
   end
 
-  name = name || "World"
+  name ||= "World"
 
   # Return the response body as a string.
   # You can also return a Rack::Response object, a Rack response array, or
