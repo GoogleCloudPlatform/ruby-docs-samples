@@ -19,7 +19,7 @@ describe "functions_helloworld_storage" do
   include FunctionsFramework::Testing
 
   let(:source) { "//storage.googleapis.com/projects/sample-project/buckets/sample-bucket/objects/ruby-rocks.rb" }
-  let(:type) { "google.storage.object.change.v1" }
+  let(:type) { "google.cloud.storage.object.v1.finalized" }
 
   it "responds to generic event" do
     load_temporary "helloworld/storage_generic.rb" do
@@ -33,11 +33,11 @@ describe "functions_helloworld_storage" do
       }
       event = make_cloud_event payload, source: source, type: type
       _out, err = capture_subprocess_io do
-        call_event "hello-gcs-generic", event
+        call_event "hello_gcs_generic", event
       end
 
       assert_match(/Event: /, err)
-      assert_match(/Event Type: google.storage.object.change.v1/, err)
+      assert_match(/Event Type: google.cloud.storage.object.v1.finalized/, err)
       assert_match(/Bucket: sample-bucket/, err)
       assert_match(/File: ruby-rocks.rb/, err)
       assert_match(/Metageneration: 1/, err)
