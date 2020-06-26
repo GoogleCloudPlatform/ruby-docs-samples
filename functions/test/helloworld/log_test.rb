@@ -17,30 +17,17 @@ require "helper"
 describe "functions_log_helloworld" do
   include FunctionsFramework::Testing
 
-  before do
-    @real_stdout = $stdout
-    @real_stderr = $stderr
-
-    $stdout = StringIO.new
-    $stderr = StringIO.new
-  end
-
-  after do
-    $stdout = @real_stdout
-    $stderr = @real_stderr
-  end
-
   it "logs to stdout and stderr" do
     load_temporary "helloworld/log.rb" do
-      request = make_get_request "http://example.com:8080"
-      response = call_http "log-helloworld", request
+      stdout, stderr = capture_subprocess_io do
+        request = make_get_request "http://example.com:8080"
+        response = call_http "log-helloworld", request
 
-      $stdout.rewind
-      $stderr.rewind
+        assert_equal 200, response.status
+      end
 
-      assert_equal 200, response.status
-      assert_equal "Hello, stdout!", $stdout.read.strip
-      assert_equal "Hello, stderr!", $stderr.read.strip
+      assert_equal "Hello, stdout!", stdout.strip
+      assert_equal "Hello, stderr!", stderr.strip
     end
   end
 end
