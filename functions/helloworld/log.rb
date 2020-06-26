@@ -16,9 +16,12 @@
 require "functions_framework"
 
 FunctionsFramework.http "log-helloworld" do |_request|
+  # Any output sent to either stdout or stderr will be captured and written to
+  # the function's logs.
   puts "Hello, stdout!"
   warn "Hello, stderr!"
 
+  # Return the response body as a string.
   "Hello, world!"
 end
 # [END functions_log_helloworld]
