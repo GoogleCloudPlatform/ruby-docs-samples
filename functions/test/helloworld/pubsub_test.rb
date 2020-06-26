@@ -22,7 +22,7 @@ describe "functions_helloworld_pubsub" do
 
   let(:resource_type) { "type.googleapis.com/google.pubsub.v1.PubsubMessage" }
   let(:source) { "//pubsub.googleapis.com/projects/sample-project/topics/gcf-test" }
-  let(:type) { "google.pubsub.topic.publish.v1" }
+  let(:type) { "google.cloud.pubsub.topic.v1.messagePublished" }
 
   it "prints a name" do
     load_temporary "helloworld/pubsub.rb" do
@@ -30,7 +30,7 @@ describe "functions_helloworld_pubsub" do
       event = make_cloud_event payload, source: source, type: type
       _out, err = capture_subprocess_io do
         # Call tested function
-        call_event "hello-pubsub", event
+        call_event "hello_pubsub", event
       end
       assert_match(/Hello, Ruby!/, err)
     end
@@ -42,7 +42,7 @@ describe "functions_helloworld_pubsub" do
       event = make_cloud_event payload, source: source, type: type
       _out, err = capture_subprocess_io do
         # Call tested function
-        call_event "hello-pubsub", event
+        call_event "hello_pubsub", event
       end
       assert_match(/Hello, World!/, err)
     end

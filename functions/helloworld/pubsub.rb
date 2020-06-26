@@ -16,7 +16,7 @@
 require "functions_framework"
 require "base64"
 
-FunctionsFramework.cloud_event "hello-pubsub" do |event|
+FunctionsFramework.cloud_event "hello_pubsub" do |event|
   # The event parameter is a FunctionsFramework::CloudEvents::Event object.
   # See https://www.rubydoc.info/gems/functions_framework/FunctionsFramework/CloudEvents/Event
   name = Base64.decode64 event.data["message"]["data"] rescue "World"

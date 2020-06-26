@@ -22,7 +22,7 @@ describe "functions_helloworld_http" do
   it "prints a name" do
     load_temporary "helloworld/http.rb" do
       request = make_post_request "http://example.com:8080/", '{"name": "Ruby"}'
-      response = call_http "hello-http", request
+      response = call_http "hello_http", request
       assert_equal 200, response.status
       assert_equal "Hello Ruby!", response.body.join
     end
@@ -31,7 +31,7 @@ describe "functions_helloworld_http" do
   it "prints hello world" do
     load_temporary "helloworld/http.rb" do
       request = make_post_request "http://example.com:8080/", ""
-      response = call_http "hello-http", request
+      response = call_http "hello_http", request
       assert_equal 200, response.status
       assert_equal "Hello World!", response.body.join
     end
@@ -45,7 +45,7 @@ describe "functions_helloworld_http" do
   it "prints a name in a query parameter" do
     load_temporary "helloworld/http.rb" do
       request = make_post_request "http://example.com:8080/?name=Ruby", ""
-      response = call_http "hello-http", request
+      response = call_http "hello_http", request
       assert_equal 200, response.status
       assert_equal "Hello Ruby!", response.body.join
     end
