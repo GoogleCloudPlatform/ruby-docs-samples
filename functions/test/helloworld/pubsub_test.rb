@@ -12,7 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "helper"
+# [START functions_pubsub_unit_test]
+require "minitest/autorun"
+require "functions_framework/testing"
 require "base64"
 
 describe "functions_helloworld_pubsub" do
@@ -22,25 +24,28 @@ describe "functions_helloworld_pubsub" do
   let(:source) { "//pubsub.googleapis.com/projects/sample-project/topics/gcf-test" }
   let(:type) { "google.pubsub.topic.publish.v1" }
 
-  it "handles name in pubsub payload" do
+  it "prints a name" do
     load_temporary "helloworld/pubsub.rb" do
       payload = { "@type" => resource_type, "message" => { "data" => Base64.encode64("Ruby") } }
       event = make_cloud_event payload, source: source, type: type
       _out, err = capture_subprocess_io do
+        # Call tested function
         call_event "hello-pubsub", event
       end
       assert_match(/Hello, Ruby!/, err)
     end
   end
 
-  it "uses a default name" do
+  it "prints hello world" do
     load_temporary "helloworld/pubsub.rb" do
       payload = { "@type" => resource_type, "message" => { "data" => nil } }
       event = make_cloud_event payload, source: source, type: type
       _out, err = capture_subprocess_io do
+        # Call tested function
         call_event "hello-pubsub", event
       end
       assert_match(/Hello, World!/, err)
     end
   end
 end
+# [END functions_pubsub_unit_test]
