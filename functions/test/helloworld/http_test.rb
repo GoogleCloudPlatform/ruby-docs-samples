@@ -12,21 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "helper"
+# [START functions_http_unit_test]
+require "minitest/autorun"
+require "functions_framework/testing"
 
 describe "functions_helloworld_http" do
   include FunctionsFramework::Testing
 
-  it "handles name in a query parameter" do
-    load_temporary "helloworld/http.rb" do
-      request = make_post_request "http://example.com:8080/?name=Ruby", ""
-      response = call_http "hello-http", request
-      assert_equal 200, response.status
-      assert_equal "Hello Ruby!", response.body.join
-    end
-  end
-
-  it "handles name in the JSON body" do
+  it "prints a name" do
     load_temporary "helloworld/http.rb" do
       request = make_post_request "http://example.com:8080/", '{"name": "Ruby"}'
       response = call_http "hello-http", request
@@ -35,12 +28,26 @@ describe "functions_helloworld_http" do
     end
   end
 
-  it "uses a default name" do
+  it "prints hello world" do
     load_temporary "helloworld/http.rb" do
       request = make_post_request "http://example.com:8080/", ""
       response = call_http "hello-http", request
       assert_equal 200, response.status
       assert_equal "Hello World!", response.body.join
+    end
+  end
+end
+# [END functions_http_unit_test]
+
+describe "functions_helloworld_http" do
+  include FunctionsFramework::Testing
+
+  it "prints a name in a query parameter" do
+    load_temporary "helloworld/http.rb" do
+      request = make_post_request "http://example.com:8080/?name=Ruby", ""
+      response = call_http "hello-http", request
+      assert_equal 200, response.status
+      assert_equal "Hello Ruby!", response.body.join
     end
   end
 end
