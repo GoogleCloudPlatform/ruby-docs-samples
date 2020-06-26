@@ -17,7 +17,7 @@ require "functions_framework"
 
 FunctionsFramework.http "log-helloworld" do |_request|
   puts "Hello, stdout!"
-  $stderr.puts "Hello, stderr!"
+  warn "Hello, stderr!"
 
   "Hello, world!"
 end
