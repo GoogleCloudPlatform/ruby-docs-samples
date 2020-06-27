@@ -17,8 +17,8 @@ require "helper"
 describe "functions_firebase_firestore" do
   include FunctionsFramework::Testing
 
-  let(:source) { "my-resource" }
-  let(:type) { "type" }
+  let(:source) { "//firestore.googleapis.com/projects/project-id/databases/(default)/documents/gcf-test/12345678" }
+  let(:type) { "google.cloud.firestore.document.v1.written" }
 
   it "responds to firestore document change event" do
     load_temporary "firebase/firestore.rb" do
@@ -32,7 +32,7 @@ describe "functions_firebase_firestore" do
         call_event "hello_firestore", event
       end
 
-      assert_match(/Function triggered by change to: my-resource/, err)
+      assert_includes err, "Function triggered by change to: #{source}"
       assert_match(/Old value: {\"a\"=>1}/, err)
       assert_match(/New value: {\"b\"=>2}/, err)
     end
