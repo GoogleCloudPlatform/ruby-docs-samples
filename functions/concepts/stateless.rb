@@ -20,7 +20,7 @@ require "functions_framework"
 # Global variable, but scoped only within one function instance.
 $count = 0
 
-FunctionsFramework.http "execution-count" do |_request|
+FunctionsFramework.http "execution_count" do |_request|
   $count += 1
 
   # Note: the total function invocation count across all instances

@@ -20,7 +20,7 @@ describe "functions_concepts_stateless" do
   it "generates the correct response body" do
     load_temporary "concepts/stateless.rb" do
       request = make_get_request "http://example.com:8080/"
-      response = call_http "execution-count", request
+      response = call_http "execution_count", request
       assert_equal 200, response.status
       assert_equal "Instance execution count: 1", response.body.join
     end

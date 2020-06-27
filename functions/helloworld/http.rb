@@ -17,7 +17,7 @@ require "functions_framework"
 require "cgi"
 require "json"
 
-FunctionsFramework.http "hello-http" do |request|
+FunctionsFramework.http "hello_http" do |request|
   # The request parameter is a Rack::Request object.
   # See https://www.rubydoc.info/gems/rack/Rack/Request
   name = request.params["name"] ||

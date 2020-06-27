@@ -15,7 +15,7 @@
 # [START functions_helloworld_get]
 require "functions_framework"
 
-FunctionsFramework.http "hello-get" do |_request|
+FunctionsFramework.http "hello_get" do |_request|
   # The request parameter is a Rack::Request object.
   # See https://www.rubydoc.info/gems/rack/Rack/Request
 

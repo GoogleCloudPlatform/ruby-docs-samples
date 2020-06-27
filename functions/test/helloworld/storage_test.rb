@@ -20,7 +20,7 @@ describe "functions_helloworld_storage" do
   include FunctionsFramework::Testing
 
   let(:source) { "//storage.googleapis.com/projects/sample-project/buckets/sample-bucket/objects/ruby-rocks.rb" }
-  let(:type) { "google.storage.object.change.v1" }
+  let(:type) { "google.cloud.storage.object.v1.finalized" }
 
   it "responds to uploaded event" do
     load_temporary "helloworld/storage.rb" do
@@ -31,7 +31,7 @@ describe "functions_helloworld_storage" do
       event = make_cloud_event payload, source: source, type: type
       _out, err = capture_subprocess_io do
         # Call tested function
-        call_event "hello-gcs", event
+        call_event "hello_gcs", event
       end
       assert_match(/File ruby-rocks\.rb uploaded\./, err)
     end
@@ -43,7 +43,7 @@ describe "functions_helloworld_storage" do
   include FunctionsFramework::Testing
 
   let(:source) { "//storage.googleapis.com/projects/sample-project/buckets/sample-bucket/objects/ruby-rocks.rb" }
-  let(:type) { "google.storage.object.change.v1" }
+  let(:type) { "google.cloud.storage.object.v1.finalized" }
 
   it "responds to updated event" do
     load_temporary "helloworld/storage.rb" do
@@ -53,7 +53,7 @@ describe "functions_helloworld_storage" do
       }
       event = make_cloud_event payload, source: source, type: type
       _out, err = capture_subprocess_io do
-        call_event "hello-gcs", event
+        call_event "hello_gcs", event
       end
       assert_match(/File ruby-rocks\.rb metadata updated\./, err)
     end
@@ -68,7 +68,7 @@ describe "functions_helloworld_storage" do
       }
       event = make_cloud_event payload, source: source, type: type
       _out, err = capture_subprocess_io do
-        call_event "hello-gcs", event
+        call_event "hello_gcs", event
       end
       assert_match(/File ruby-rocks\.rb deleted\./, err)
     end

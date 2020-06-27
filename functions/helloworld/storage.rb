@@ -15,7 +15,7 @@
 # [START functions_helloworld_storage]
 require "functions_framework"
 
-FunctionsFramework.cloud_event "hello-gcs" do |event|
+FunctionsFramework.cloud_event "hello_gcs" do |event|
   # The event parameter is a FunctionsFramework::CloudEvents::Event object.
   # See https://www.rubydoc.info/gems/functions_framework/FunctionsFramework/CloudEvents/Event
   payload = event.data
