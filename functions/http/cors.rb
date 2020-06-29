@@ -15,13 +15,13 @@
 require "functions_framework"
 
 # [START functions_http_cors]
-FunctionsFramework.http "cors_enabled_function" do |_request|
+FunctionsFramework.http "cors_enabled_function" do |request|
   # For more information about CORS and CORS preflight requests, see
   # https://developer.mozilla.org/en-US/docs/Glossary/Preflight_request
   # for more information.
 
   # Set CORS headers for the preflight request
-  if _request.options?
+  if request.options?
     # Allows GET requests from any origin with the Content-Type
     # header and caches preflight response for an 3600s
     headers = {
@@ -43,13 +43,13 @@ end
 # [END functions_http_cors]
 
 # [START functions_http_cors_auth]
-FunctionsFramework.http "cors_enabled_function_auth" do |_request|
+FunctionsFramework.http "cors_enabled_function_auth" do |request|
   # For more information about CORS and CORS preflight requests, see
   # https://developer.mozilla.org/en-US/docs/Glossary/Preflight_request
   # for more information.
 
   # Set CORS headers for preflight requests
-  if _request.options?
+  if request.options?
     # Allows GET requests from origin https://mydomain.com with
     # Authorization header
     headers = {
