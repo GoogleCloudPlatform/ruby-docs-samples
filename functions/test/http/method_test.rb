@@ -21,7 +21,7 @@ describe "functions_http_method" do
   it "handles GET requests" do
     load_temporary "http/method.rb" do
       request = make_get_request "http://example.com:8080/"
-      response = call_http "http-method", request
+      response = call_http "http_method", request
       assert_equal 200, response.status
       assert_equal "Hello World!", response.body.join
     end
@@ -32,7 +32,7 @@ describe "functions_http_method" do
       request = make_post_request "http://example.com:8080/", "Ruby", ["content-type:text/plain"]
       request.env[::Rack::REQUEST_METHOD] = ::Rack::PUT
 
-      response = call_http "http-method", request
+      response = call_http "http_method", request
       assert_equal 403, response.status
       assert_equal "Forbidden!", response.body.join
     end
@@ -41,9 +41,9 @@ describe "functions_http_method" do
   it "handles POST requests" do
     load_temporary "http/method.rb" do
       request = make_post_request "http://example.com:8080/", "Ruby", ["content-type:text/plain"]
-      response = call_http "http-method", request
+      response = call_http "http_method", request
       assert_equal 405, response.status
-      assert_equal "Something blew up!", JSON.parse(response.body.read.to_s)["error"]
+      assert_equal "Something blew up!", JSON.parse(response.body.join)["error"]
     end
   end
 end

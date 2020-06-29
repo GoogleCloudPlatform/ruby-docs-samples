@@ -14,11 +14,9 @@
 
 # [START functions_concepts_filesystem]
 require "functions_framework"
-require "cgi"
 
-FunctionsFramework.http "concepts-filesystem" do |_request|
+FunctionsFramework.http "concepts_filesystem" do |_request|
   files = Dir.entries "."
-  files_escaped = files.map { |f| CGI.escape_html f }
-  "Files: #{files_escaped.join "\n"}"
+  "Files: #{files.join "\n"}"
 end
 # [END functions_concepts_filesystem]

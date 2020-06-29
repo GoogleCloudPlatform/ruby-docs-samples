@@ -16,7 +16,7 @@
 require "functions_framework"
 require "json"
 
-FunctionsFramework.http "http-method" do |request|
+FunctionsFramework.http "http_method" do |request|
   # The request parameter is a Rack::Request object.
   # See https://www.rubydoc.info/gems/rack/Rack/Request
   case request.request_method
@@ -28,7 +28,7 @@ FunctionsFramework.http "http-method" do |request|
     body = "Forbidden!"
   else
     status = 405
-    body = ::StringIO.new '{"error":"Something blew up!"}'
+    body = '{"error":"Something blew up!"}'
   end
 
   # Return the response body as a Rack::Response object.

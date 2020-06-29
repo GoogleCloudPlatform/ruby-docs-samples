@@ -20,7 +20,7 @@ describe "functions_concepts_filesystem" do
   it "generates the correct response body" do
     load_temporary "concepts/filesystem.rb" do
       request = make_get_request "http://example.com:8080/"
-      response = call_http "concepts-filesystem", request
+      response = call_http "concepts_filesystem", request
       assert_equal 200, response.status
       assert_match(/Files:/, response.body.join)
     end

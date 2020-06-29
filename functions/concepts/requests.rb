@@ -14,10 +14,9 @@
 
 # [START functions_concepts_requests]
 require "functions_framework"
-require "cgi"
 require "net/http"
 
-FunctionsFramework.http "concepts-requests" do |_request|
+FunctionsFramework.http "concepts_requests" do |_request|
   url = "example.com"
   response = Net::HTTP.get_response url, "/"
   "Received code: #{response.code} from url: #{url}"

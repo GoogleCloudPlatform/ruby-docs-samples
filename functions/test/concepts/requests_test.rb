@@ -20,7 +20,7 @@ describe "functions_concepts_requests" do
   it "generates the correct response body" do
     load_temporary "concepts/requests.rb" do
       request = make_get_request "http://example.com:8080/"
-      response = call_http "concepts-requests", request
+      response = call_http "concepts_requests", request
       assert_equal 200, response.status
       assert_match(/Received code:/, response.body.join)
     end
