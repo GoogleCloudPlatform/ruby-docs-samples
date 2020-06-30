@@ -14,4 +14,10 @@
 
 source "https://rubygems.org"
 
-gem "google-style", "~> 1.24.0", groups: [:development, :test]
+group :development, :test do
+  gem "google-style", "~> 1.24.0"
+  gem "minitest", "~> 5.13"
+  gem "minitest-focus", "~> 1.1"
+  gem "minitest-junit"
+  gem "rake", "~> 13.0"
+end

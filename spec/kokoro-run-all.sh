@@ -56,7 +56,7 @@ export GOOGLE_APPLICATION_CREDENTIALS_SECONDARY=$KOKORO_GFILE_DIR/cloud-samples-
 # allow the service account project and GOOGLE_CLOUD_PROJECT to be different.
 export GOOGLE_APPLICATION_CREDENTIALS=$KOKORO_KEYSTORE_DIR/71386_kokoro-$GOOGLE_CLOUD_PROJECT
 
-export FIRESTORE_PROJECT_ID=ruby-firestore
+export FIRESTORE_PROJECT_ID=ruby-firestore-ci
 export E2E_GOOGLE_CLOUD_PROJECT=cloud-samples-ruby-test-kokoro
 export MYSQL_DATABASE=${GOOGLE_CLOUD_PROJECT//-/_}
 export POSTGRES_DATABASE=${GOOGLE_CLOUD_PROJECT//-/_}
@@ -144,6 +144,7 @@ function set_failed_status {
 }
 
 (bundle update && bundle exec rubocop) || set_failed_status
+(bundle exec rake acceptance) || set_failed_status
 
 if [[ $RUN_ALL_TESTS = "1" ]]; then
   echo "Running all tests"
@@ -156,7 +157,7 @@ if [[ $RUN_ALL_TESTS = "1" ]]; then
 
     start_time="$(date -u +%s)"
 
-    (bundle update && bundle exec rspec --format documentation) || set_failed_status
+    (bundle update && bundle exec rspec --format documentation --format RspecJunitFormatter --out sponge_log.xml | tee sponge_log.log) || set_failed_status
 
     if [[ $E2E = "true" ]]; then
       # Clean up deployed version
@@ -172,8 +173,7 @@ if [[ $RUN_ALL_TESTS = "1" ]]; then
 else
   SPEC_DIRS=$(find $CHANGED_DIRS -type d -name 'spec' -path "*/*" -not -path "*vendor/*" -exec dirname {} \; | sort | uniq)
   echo "Running tests in modified directories: $SPEC_DIRS"
-  for PRODUCT in $SPEC_DIRS
-  do
+  for PRODUCT in $SPEC_DIRS; do
     # Run Tests
     echo "[$PRODUCT]"
     export TEST_DIR="$PRODUCT"
@@ -181,7 +181,7 @@ else
 
     start_time="$(date -u +%s)"
 
-    (bundle update && bundle exec rspec --format documentation) || set_failed_status
+    (bundle update && bundle exec rspec --format documentation --format RspecJunitFormatter --out sponge_log.xml | tee sponge_log.log) || set_failed_status
 
     if [[ $E2E = "true" ]]; then
       # Clean up deployed version
@@ -194,6 +194,11 @@ else
 
     popd
   done
+fi
+
+if [[ $KOKORO_BUILD_ARTIFACTS_SUBDIR = *"system-tests"* ]]; then
+  chmod +x $KOKORO_GFILE_DIR/linux_amd64/buildcop
+  $KOKORO_GFILE_DIR/linux_amd64/buildcop
 fi
 
 exit $EXIT_STATUS

@@ -23,4 +23,5 @@ group :test do
   gem "rack-test"
   gem "rest-client"
   gem "rspec"
+  gem "rspec_junit_formatter"
 end

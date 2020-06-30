@@ -111,6 +111,7 @@ def test_subscription_permissions project_id:, subscription_name:
 end
 
 def listen_for_messages project_id:, subscription_name:
+  # [START pubsub_subscriber_async_pull]
   # [START pubsub_quickstart_subscriber]
   # project_id        = "Your Google Cloud Project ID"
   # subscription_name = "Your Pubsub subscription name"
@@ -129,6 +130,7 @@ def listen_for_messages project_id:, subscription_name:
   # messages does not quit
   sleep 60
   subscriber.stop.wait!
+  # [END pubsub_subscriber_async_pull]
   # [END pubsub_quickstart_subscriber]
 end
 

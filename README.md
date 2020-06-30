@@ -1,6 +1,7 @@
 ## Ruby docs samples
 
-Kokoro: [![Kokoro](https://storage.googleapis.com/cloud-devrel-kokoro-resources/ruby/ruby-docs-samples/system_tests-ubuntu.png)](https://fusion.corp.google.com/projectanalysis/current/KOKORO/prod:cloud-devrel%2Fruby%2Fruby-docs-samples%2Fsystem_tests)
+Ruby 2.4: [![Kokoro](https://storage.googleapis.com/cloud-devrel-public/ruby-docs-samples/badges/ruby2.4.svg)](https://storage.googleapis.com/cloud-devrel-public/ruby-docs-samples/badges/ruby2.4.html)
+Ruby 2.5: [![Kokoro](https://storage.googleapis.com/cloud-devrel-public/ruby-docs-samples/badges/ruby2.5.svg)](https://storage.googleapis.com/cloud-devrel-public/ruby-docs-samples/badges/ruby2.5.html)
 
 This repository holds samples used in the ruby documentation on
 cloud.google.com.

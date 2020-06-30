@@ -301,12 +301,13 @@ describe "Cloud Job Discovery Samples" do
   end
   # verify filter_search_sample.rb
   it "filter_search_sample" do
+    headquarters_address = "1600 Amphitheatre Parkway Mountain View, CA 94043"
+
     capture do
       company_generated =
         job_discovery_generate_company display_name:         "Google",
                                        external_id:          "externalId: Google #{SecureRandom.hex}",
-                                       headquarters_address: "1600 Amphitheatre Parkway " +
-                                                             "Mountain View, CA 94043"
+                                       headquarters_address: headquarters_address
       company_created =
         job_discovery_create_company company_to_be_created: company_generated,
                                      project_id:            @default_project_id
@@ -314,12 +315,13 @@ describe "Cloud Job Discovery Samples" do
                                                  requisition_id: "#{company_created.name} #{SecureRandom.hex}"
       job_created = job_discovery_create_job job_to_be_created: job_generated,
                                              project_id:        @default_project_id
+
       sleep 10
       keyword_search_result = job_discovery_basic_keyword_search company_name: company_created.name,
                                                                  query:        job_created.title,
                                                                  project_id:   @default_project_id
       filter_search_result = job_discovery_category_filter_search company_name: company_created.name,
-                                                                  categories:   job_created.derived_info.job_categories,
+                                                                  categories:   [:SCIENCE_AND_ENGINEERING],
                                                                   project_id:   @default_project_id
       employment_search_result = job_discovery_employment_types_filter_search company_name:     company_created.name,
                                                                               employment_types: job_created.employment_types,

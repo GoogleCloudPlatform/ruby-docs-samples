@@ -1,4 +1,4 @@
-# Copyright 2018 Google, LLC
+# Copyright 2018 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,6 +18,9 @@ gem "google-cloud-bigquery"
 
 group :test do
   gem "google-cloud-storage"
-  gem "rspec"
-  gem "rspec-retry"
+  gem "google-style", "~> 1.24.0"
+  gem "minitest", "~> 5.13"
+  gem "minitest-focus", "~> 1.1"
+  gem "minitest-junit"
+  gem "rake"
 end
