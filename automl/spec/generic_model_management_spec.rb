@@ -51,7 +51,7 @@ describe "Generic Model Management" do
 
     expect do
       delete_model actual_project_id: project_id, actual_model_id: fake_model_id
-    end.to raise_error Google::Gax::GaxError, /The model does not exist/
+    end.to raise_error Google::Cloud::NotFoundError
   end
 
   example "List model evaluations and get model evaluation" do

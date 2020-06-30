@@ -30,10 +30,12 @@ def vision_batch_predict actual_project_id:, actual_model_id:, actual_input_uri:
   output_uri = actual_output_uri
   # [START automl_vision_batch_predict]
 
-  prediction_client = Google::Cloud::AutoML::Prediction.new
+  prediction_client = Google::Cloud::AutoML.prediction_service
 
   # Get the full path of the model.
-  model_full_id = prediction_client.class.model_path project_id, "us-central1", model_id
+  model_full_id = prediction_client.model_path project: project_id,
+                                               location: "us-central1",
+                                               model: model_id
   input_config = {
     gcs_source: {
       input_uris: [input_uri]
@@ -47,7 +49,10 @@ def vision_batch_predict actual_project_id:, actual_model_id:, actual_input_uri:
   # [0.0-1.0] Only produce results higher than this value
   params = { "score_threshold" => "0.8" }
 
-  operation = prediction_client.batch_predict model_full_id, input_config, output_config, params: params
+  operation = prediction_client.batch_predict name: model_full_id,
+                                              input_config: input_config,
+                                              output_config: output_config,
+                                              params: params
 
   puts "Waiting for operation to complete..."
 

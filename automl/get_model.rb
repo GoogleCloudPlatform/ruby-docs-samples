@@ -25,12 +25,14 @@ def get_model actual_project_id:, actual_model_id:
   model_id = actual_model_id
   # [START automl_get_model]
 
-  client = Google::Cloud::AutoML::AutoML.new
+  client = Google::Cloud::AutoML.auto_ml
 
   # Get the full path of the model.
-  model_full_id = client.class.model_path project_id, "us-central1", model_id
+  model_full_id = client.model_path project: project_id,
+                                    location: "us-central1",
+                                    model: model_id
 
-  model = client.get_model model_full_id
+  model = client.get_model name: model_full_id
 
   # Retrieve deployment state.
   deployment_state = if model.deployment_state == :DEPLOYED

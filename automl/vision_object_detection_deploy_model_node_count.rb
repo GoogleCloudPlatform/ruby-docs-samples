@@ -25,14 +25,14 @@ def object_detection_deploy_model_node_count actual_project_id:, actual_model_id
   model_id = actual_model_id
   # [START automl_vision_object_detection_deploy_model_node_count]
 
-  client = Google::Cloud::AutoML::AutoML.new
+  client = Google::Cloud::AutoML.auto_ml
   # Get the full path of the model.
-  model_full_id = client.class.model_path project_id, "us-central1", model_id
+  model_full_id = client.model_path project: project_id,
+                                    location: "us-central1",
+                                    model: model_id
   metadata = { node_count: 2 }
-  operation = client.deploy_model(
-    model_full_id,
-    image_object_detection_model_deployment_metadata: metadata
-  )
+  operation = client.deploy_model name: model_full_id,
+                                  image_object_detection_model_deployment_metadata: metadata
 
   # Wait until the long running operation is done
   operation.wait_until_done!

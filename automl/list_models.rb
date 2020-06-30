@@ -23,10 +23,11 @@ def list_models actual_project_id:
   project_id = actual_project_id
   # [START automl_list_models]
 
-  client = Google::Cloud::AutoML::AutoML.new
+  client = Google::Cloud::AutoML.auto_ml
   # A resource that represents Google Cloud Platform location.
-  project_location = client.class.location_path project_id, "us-central1"
-  models = client.list_models project_location
+  project_location = client.location_path project: project_id,
+                                          location: "us-central1"
+  models = client.list_models parent: project_location
 
   puts "List of models:"
 

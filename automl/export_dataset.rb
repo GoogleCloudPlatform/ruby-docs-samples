@@ -27,17 +27,20 @@ def export_dataset actual_project_id:, actual_dataset_id:, actual_gcs_uri:
   gcs_uri = actual_gcs_uri
   # [START automl_export_dataset]
 
-  client = Google::Cloud::AutoML::AutoML.new
+  client = Google::Cloud::AutoML.auto_ml
 
   # Get the full path of the dataset
-  dataset_full_id = client.class.dataset_path project_id, "us-central1", dataset_id
+  dataset_full_id = client.dataset_path project: project_id,
+                                        location: "us-central1",
+                                        dataset: dataset_id
   output_config = {
     gcs_destination: {
       output_uri_prefix: gcs_uri
     }
   }
 
-  operation = client.export_data dataset_full_id, output_config
+  operation = client.export_data name: dataset_full_id,
+                                 output_config: output_config
 
   # Wait until the long running operation is done
   operation.wait_until_done!

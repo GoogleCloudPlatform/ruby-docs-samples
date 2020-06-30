@@ -25,10 +25,11 @@ def sentiment_analysis_create_dataset actual_project_id:, actual_display_name:
   display_name = actual_display_name
   # [START automl_language_sentiment_analysis_create_dataset]
 
-  client = Google::Cloud::AutoML::AutoML.new
+  client = Google::Cloud::AutoML.auto_ml
 
   # A resource that represents Google Cloud Platform location.
-  project_location = client.class.location_path project_id, "us-central1"
+  project_location = client.location_path project: project_id,
+                                          location: "us-central1"
   dataset = {
     display_name:                    display_name,
     text_sentiment_dataset_metadata: {
@@ -38,7 +39,8 @@ def sentiment_analysis_create_dataset actual_project_id:, actual_display_name:
   }
 
   # Create a dataset with the dataset metadata in the region.
-  created_dataset = client.create_dataset project_location, dataset
+  created_dataset = client.create_dataset parent: project_location,
+                                          dataset: dataset
   #
   # # Wait until the long running operation is done
   # operation.wait_until_done!

@@ -25,12 +25,14 @@ def delete_dataset actual_project_id:, actual_dataset_id:
   dataset_id = actual_dataset_id
   # [START automl_delete_dataset]
 
-  client = Google::Cloud::AutoML::AutoML.new
+  client = Google::Cloud::AutoML.auto_ml
 
   # Get the full path of the dataset
-  dataset_full_id = client.class.dataset_path project_id, "us-central1", dataset_id
+  dataset_full_id = client.dataset_path project: project_id,
+                                        location: "us-central1",
+                                        dataset: dataset_id
 
-  operation = client.delete_dataset dataset_full_id
+  operation = client.delete_dataset name: dataset_full_id
 
   # Wait until the long running operation is done
   operation.wait_until_done!

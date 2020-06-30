@@ -27,10 +27,11 @@ def translate_create_model actual_project_id:, actual_dataset_id:, actual_displa
   display_name = actual_display_name
   # [START automl_translate_create_model]
 
-  client = Google::Cloud::AutoML::AutoML.new
+  client = Google::Cloud::AutoML.auto_ml
 
   # A resource that represents Google Cloud Platform location.
-  project_location = client.class.location_path project_id, "us-central1"
+  project_location = client.location_path project: project_id,
+                                          location: "us-central1"
   model = {
     display_name:               display_name,
     dataset_id:                 dataset_id,
@@ -39,7 +40,8 @@ def translate_create_model actual_project_id:, actual_dataset_id:, actual_displa
   }
 
   # Create a model with the model metadata in the region.
-  operation = client.create_model project_location, model
+  operation = client.create_model parent: project_location,
+                                  model: model
   # [END automl_translate_create_model]
   # Cancel the operation immediately as it take a very long time to complete
   operation.cancel

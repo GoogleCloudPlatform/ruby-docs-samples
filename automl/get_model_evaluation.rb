@@ -42,13 +42,16 @@ def get_model_evaluation actual_project_id:, actual_model_id:, actual_model_eval
   # [START automl_vision_classification_get_model_evaluation]
   # [START automl_vision_object_detection_get_model_evaluation]
 
-  client = Google::Cloud::AutoML::AutoML.new
+  client = Google::Cloud::AutoML.auto_ml
 
   # Get the full path of the model evaluation.
-  model_evaluation_full_id = client.class.model_evaluation_path project_id, "us-central1", model_id, model_evaluation_id
+  model_evaluation_full_id = client.model_evaluation_path project: project_id,
+                                                          location: "us-central1",
+                                                          model: model_id,
+                                                          model_evaluation: model_evaluation_id
 
   # Get complete detail of the model evaluation.
-  model_evaluation = client.get_model_evaluation model_evaluation_full_id
+  model_evaluation = client.get_model_evaluation name: model_evaluation_full_id
 
   puts "Model evaluation name: #{model_evaluation.name}"
   puts "Model annotation spec id: #{model_evaluation.annotation_spec_id}"

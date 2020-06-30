@@ -28,10 +28,12 @@ def classification_predict actual_project_id:, actual_model_id:, actual_file_pat
   file_path = actual_file_path
   # [START automl_vision_classification_predict]
 
-  prediction_client = Google::Cloud::AutoML::Prediction.new
+  prediction_client = Google::Cloud::AutoML.prediction_service
 
   # Get the full path of the model.
-  model_full_id = prediction_client.class.model_path project_id, "us-central1", model_id
+  model_full_id = prediction_client.model_path project: project_id,
+                                               location: "us-central1",
+                                               model: model_id
 
   # Read the file.
   content = File.binread file_path
@@ -44,7 +46,9 @@ def classification_predict actual_project_id:, actual_model_id:, actual_file_pat
   # score_threshold is used to filter the result
   params = { "score_threshold" => "0.8" }
 
-  response = prediction_client.predict model_full_id, payload, params
+  response = prediction_client.predict name: model_full_id,
+                                       payload: payload,
+                                       params: params
 
   puts "Prediction results:"
   response.payload.each do |result|

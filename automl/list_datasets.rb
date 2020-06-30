@@ -38,13 +38,14 @@ def list_datasets actual_project_id:
   # [START automl_vision_classification_list_datasets]
   # [START automl_vision_object_detection_list_datasets]
 
-  client = Google::Cloud::AutoML::AutoML.new
+  client = Google::Cloud::AutoML.auto_ml
 
   # A resource that represents Google Cloud Platform location.
-  project_location = client.class.location_path project_id, "us-central1"
+  project_location = client.location_path project: project_id,
+                                          location: "us-central1"
 
   # List all the datasets available in the region.
-  datasets = client.list_datasets project_location
+  datasets = client.list_datasets parent: project_location
 
   puts "List of datasets:"
 

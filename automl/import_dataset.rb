@@ -27,10 +27,12 @@ def import_dataset actual_project_id:, actual_dataset_id:, actual_path:
   path = actual_path
   # [START automl_import_data]
 
-  client = Google::Cloud::AutoML::AutoML.new
+  client = Google::Cloud::AutoML.auto_ml
 
   # Get the full path of the dataset.
-  dataset_full_id = client.class.dataset_path project_id, "us-central1", dataset_id
+  dataset_full_id = client.dataset_path project: project_id,
+                                        location: "us-central1",
+                                        dataset: dataset_id
   input_config = {
     gcs_source: {
       # Get the multiple Google Cloud Storage URIs
@@ -39,7 +41,8 @@ def import_dataset actual_project_id:, actual_dataset_id:, actual_path:
   }
 
   # Import data from the input URI
-  operation = client.import_data dataset_full_id, input_config
+  operation = client.import_data name: dataset_full_id,
+                                 input_config: input_config
 
   puts "Processing import..."
 

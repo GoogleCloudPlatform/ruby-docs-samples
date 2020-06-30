@@ -27,10 +27,12 @@ def text_classification_predict actual_project_id:, actual_model_id:, actual_con
   content = actual_content
   # [START automl_language_text_classification_predict]
 
-  prediction_client = Google::Cloud::AutoML::Prediction.new
+  prediction_client = Google::Cloud::AutoML.prediction_service
 
   # Get the full path of the model.
-  model_full_id = prediction_client.class.model_path project_id, "us-central1", model_id
+  model_full_id = prediction_client.model_path project: project_id,
+                                               location: "us-central1",
+                                               model: model_id
   payload = {
     text_snippet: {
       content:   content,
@@ -39,7 +41,8 @@ def text_classification_predict actual_project_id:, actual_model_id:, actual_con
     }
   }
 
-  response = prediction_client.predict model_full_id, payload
+  response = prediction_client.predict name: model_full_id,
+                                       payload: payload
 
   response.payload.each do |annotation_payload|
     puts "Predicted class name: #{annotation_payload.display_name}"

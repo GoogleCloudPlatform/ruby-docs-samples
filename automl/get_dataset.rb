@@ -40,10 +40,12 @@ def get_dataset actual_project_id:, actual_dataset_id:
   # [START automl_vision_classification_get_dataset]
   # [START automl_vision_object_detection_get_dataset]
 
-  client = Google::Cloud::AutoML::AutoML.new
+  client = Google::Cloud::AutoML.auto_ml
   # Get the full path of the dataset
-  dataset_full_id = client.class.dataset_path project_id, "us-central1", dataset_id
-  dataset = client.get_dataset dataset_full_id
+  dataset_full_id = client.dataset_path project: project_id,
+                                        location: "us-central1",
+                                        dataset: dataset_id
+  dataset = client.get_dataset name: dataset_full_id
 
   # Display the dataset information
   puts "Dataset name: #{dataset.name}"

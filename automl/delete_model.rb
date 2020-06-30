@@ -25,12 +25,14 @@ def delete_model actual_project_id:, actual_model_id:
   model_id = actual_model_id
   # [START automl_delete_model]
 
-  client = Google::Cloud::AutoML::AutoML.new
+  client = Google::Cloud::AutoML.auto_ml
 
   # Get the full path of the dataset
-  model_full_id = client.class.model_path project_id, "us-central1", model_id
+  model_full_id = client.model_path project: project_id,
+                                    location: "us-central1",
+                                    model: model_id
 
-  operation = client.delete_model model_full_id
+  operation = client.delete_model name: model_full_id
 
   # Wait until the long running operation is done
   operation.wait_until_done!
