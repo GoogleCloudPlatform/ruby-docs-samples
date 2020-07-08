@@ -46,7 +46,7 @@ Run the sample for using topics:
       create_notification_config  <org_id> <config_id> <pubsub_topic>                Creates a Notification config
       delete_notification_config  <org_id> <config_id>                               Deletes a Notification config
       get_notification_config     <org_id> <config_id>                               Fetches a Notification config
-      update_notification_config  <org_id> <config_id> <description> <pubsub_topic>  Updates a Notification config
+      update_notification_config  <org_id> <config_id> <description> <pubsub_topic> <filter>  Updates a Notification config
       list_notification_configs   <org_id>                                           Lists Notification configs in an organization
 
 For example:
