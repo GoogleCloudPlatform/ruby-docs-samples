@@ -1678,6 +1678,9 @@ def list_database_operations project_id:, instance_id:
       puts "Database #{job.database.database_id} restored from backup is #{progress_percent}% optimized"
     end
   end
+
+  puts "List database operations with optimized database filter found #{jobs.length} jobs."
+
   # [END spanner_list_database_operations]
 end
 
