@@ -1516,7 +1516,7 @@ describe "Google Cloud Spanner API samples" do
     end
 
     expect(captured_output).to match(
-      /Database #{database.database_id} restored from backup is \d+% optimized/
+      /List database operations with optimized database filter found \d+ jobs/
     )
   end
 
