@@ -1586,4 +1586,29 @@ describe "Google Cloud Spanner API samples" do
       "Expiration time updated: #{backup.expire_time + 2_592_000}"
     )
   end
+
+  example "set custom timeout and retry settings" do
+    database = create_singers_albums_database
+    # Ignore the following capture block
+    capture do
+      # Insert Singers and Albums (re-use insert_data sample to populate)
+      insert_data project_id:  @project_id,
+                  instance_id: @instance.instance_id,
+                  database_id: database.database_id
+    end
+
+    client = @spanner.client @instance.instance_id, database.database_id
+
+    expect(client.execute("SELECT * FROM Singers").rows.count).to eq 5
+
+    expect {
+      set_custom_timeout_and_retry project_id:  @project_id,
+                       instance_id: @instance.instance_id,
+                       database_id: database.database_id
+    }.to output("1 record inserted.\n").to_stdout
+
+    singers = client.execute("SELECT * FROM Singers").rows.to_a
+    expect(singers.count).to eq 6
+    expect(singers.find { |s| s[:FirstName] == "Virginia" }).not_to be nil
+  end
 end
