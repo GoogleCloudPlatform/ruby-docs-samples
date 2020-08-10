@@ -12,27 +12,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+require "open3"
 require "rspec"
-require "securerandom"
 require "rest-client"
+require "securerandom"
 
 describe "E2E tests" do
   before :all do
     suffix = SecureRandom.hex(15)
     system("gcloud", "builds", "submit", "--project=#{ENV["GOOGLE_CLOUD_PROJECT"]}", "--config=e2e_test_setup.yaml", "--substitutions=_SUFFIX=#{suffix}", "--quiet")
     @service = "helloworld-#{suffix}"
-    io = IO.popen(["gcloud", "run", "services", "describe", "--project=#{ENV["GOOGLE_CLOUD_PROJECT"]}", @service, "--format=value(status.url)"])
-    url = io.read
-    @url = url[0..-2] # Strip newline character
-    io.close
+    stdout, stderr, status = Open3.capture3("gcloud run services describe --project=#{ENV["GOOGLE_CLOUD_PROJECT"]} #{}{@service} --format=value(status.url)")
+    @url = stdout[0..-2] # Strip newline character
 
     if !@url
       throw Error "No service url found. For example: https://service-x8xabcdefg-uc.a.run.app"
     end
 
-    io = IO.popen(["gcloud", "auth", "print-identity-token"])
-    @token = io.read
-    io.close
+    stdout, stderr, status = Open3.capture3("gcloud auth print-identity-token")
+    @token = stdout[0..-2]
   end
 
   after (:all) do
