@@ -1,0 +1,12 @@
+source "https://rubygems.org"
+
+gem "sinatra", ">=2.0.8"
+gem "rack", ">= 2.2.3"
+
+group :test do
+  gem "rack-test"
+  gem "rspec"
+  gem "rspec_junit_formatter"
+  gem "rest-client"
+  gem "rubysl-securerandom"
+end
