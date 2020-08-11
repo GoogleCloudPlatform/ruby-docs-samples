@@ -121,9 +121,9 @@ if [[ $KOKORO_BUILD_ARTIFACTS_SUBDIR =~ "system-tests" ]]; then
 fi
 
 # If the test configuration changed, run all tests.
-if [[ $CHANGED_DIRS =~ "spec" || $CHANGED_DIRS =~ ".kokoro" ]]; then
-  RUN_ALL_TESTS="1"
-fi
+# if [[ $CHANGED_DIRS =~ "spec" || $CHANGED_DIRS =~ ".kokoro" ]]; then
+#   RUN_ALL_TESTS="1"
+# fi
 
 # Start memcached (for appengine/memcache).
 service memcached start
