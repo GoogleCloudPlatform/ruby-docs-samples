@@ -102,6 +102,7 @@ if [[ $CHANGED_DIRS =~ "run" ]]; then
   CHANGED_DIRS="${CHANGED_DIRS/run/} $AE_CHANGED_DIRS"
   # Install gcloud for Cloud Run samples if not installing later
   if [[ ! -n ${RUN_ALL_TESTS:-} ]]; then
+    export PATH="$PATH:/tmp/google-cloud-sdk/bin"
     ./.kokoro/configure_gcloud.sh
   fi
 fi
