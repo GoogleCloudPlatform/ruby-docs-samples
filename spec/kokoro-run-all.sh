@@ -91,13 +91,13 @@ done
 CHANGED_DIRS="${CHANGED_DIRS_ARRAY[*]}"
 
 # The appengine directory has many subdirectories. Only test the modified ones.
-if [[ $CHANGED_DIRS =~ "appengine" ]]; then
+if [[ $CHANGED_DIRS =~ "appengine" || $CHANGED_DIRS =~ "run" ]]; then
   AE_CHANGED_DIRS=$(git --no-pager diff --name-only HEAD $(git merge-base HEAD master) | grep "appengine/" | cut -d/ -f1,2 | sort | uniq || true)
   CHANGED_DIRS="${CHANGED_DIRS/appengine/} $AE_CHANGED_DIRS"
 fi
 
-# Most tests in the appengine directory are E2E.
-if [[ $CHANGED_DIRS =~ "appengine" && -n ${RUN_ALL_TESTS:-} ]]; then
+# Most tests in the appengine directory are E2E or always run E2E tests for Cloud Run
+if [[ ($CHANGED_DIRS =~ "appengine" && -n ${RUN_ALL_TESTS:-}) || $CHANGED_DIRS =~ "run" ]]; then
   E2E="true"
 fi
 

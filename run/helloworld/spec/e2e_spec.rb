@@ -18,15 +18,15 @@ require "rest-client"
 require "securerandom"
 
 describe "E2E tests" do
-  before :all do
+  before (:all) do
     suffix = SecureRandom.hex(15)
-    system("gcloud", "builds", "submit", "--project=#{ENV["GOOGLE_CLOUD_PROJECT"]}", "--config=e2e_test_setup.yaml", "--substitutions=_SUFFIX=#{suffix}", "--quiet")
+    system("gcloud", "builds", "submit", "--project=#{ENV["GOOGLE_CLOUD_PROJECT"]}", "--config=e2e_test_setup.yaml", "--substitutions=_SUFFIX=#{suffix}")
     @service = "helloworld-#{suffix}"
     stdout, stderr, status = Open3.capture3("gcloud run services describe --project=#{ENV["GOOGLE_CLOUD_PROJECT"]} #{@service} --format=value'('status.url')'")
     @url = stdout[0..-2] # Strip newline character
 
     if @url.empty?
-      throw Error "No service url found. For example: https://service-x8xabcdefg-uc.a.run.app"
+      raise "No service url found. For example: https://service-x8xabcdefg-uc.a.run.app"
     end
 
     stdout, stderr, status = Open3.capture3("gcloud auth print-identity-token")
@@ -38,8 +38,6 @@ describe "E2E tests" do
   end
 
   it "Can make request to service" do
-    puts @url
-    puts @token
     response = RestClient.get @url, Authorization: "Bearer #{@token}"
     expect(response.body).to eq("Hello Test!")
     expect(response.code).to eq(200)
