@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "open3"
 require "rspec"
 require "rest-client"
 require "securerandom"
@@ -21,41 +20,50 @@ describe "E2E tests" do
   before (:all) do
     suffix = SecureRandom.hex(15)
     system("gcloud",
-           "builds",
-           "submit",
-           "--project=#{ENV["GOOGLE_CLOUD_PROJECT"]}",
-           "--config=e2e_test_setup.yaml",
-           "--substitutions=_SUFFIX=#{suffix}")
+      "builds",
+      "submit",
+      "--project=#{ENV["GOOGLE_CLOUD_PROJECT"]}",
+      "--config=e2e_test_setup.yaml",
+      "--substitutions=_SUFFIX=#{suffix}"
+    )
 
     @service = "helloworld-#{suffix}"
 
-    @url = ""
-    while @url.empty? do
     io = IO.popen(
-      "gcloud run services describe --project=#{ENV["GOOGLE_CLOUD_PROJECT"]} #{@service} --format=value'('status.url')'")
+      "gcloud run services describe #{@service} "\
+      "--project=#{ENV["GOOGLE_CLOUD_PROJECT"]} "\
+      "--platform=managed "\
+      "--region=us-central1 "\
+      "--format=value'('status.url')'"
+    )
     url = io.read
     puts url
-    @url = url[0..-2] # Strip newline character
+
+    if url.downcase.include? "error"
+      raise "Error: "
     end
+    @url = url[0..-2] # Strip newline character
 
     if @url.empty?
-      raise "No service url found. For example: https://service-x8xabcdefg-uc.a.run.app"
+      raise "Error: No service url found. For example: https://service-x8xabcdefg-uc.a.run.app"
     end
 
-    stdout, stderr, status = Open3.capture3("gcloud auth print-identity-token")
-    @token = stdout[0..-2]
+    io = IO.popen("gcloud auth print-identity-token")
+    token = io.read
+    @token = token[0..-2]
   end
 
   after (:all) do
     system("gcloud",
-           "run",
-           "services",
-           "delete",
-           @service,
-           "--project=#{ENV["GOOGLE_CLOUD_PROJECT"]}",
-           "--platform=managed",
-           "--region=us-central1",
-           "--quiet")
+      "run",
+      "services",
+      "delete",
+      @service,
+      "--project=#{ENV["GOOGLE_CLOUD_PROJECT"]}",
+      "--platform=managed",
+      "--region=us-central1",
+      "--quiet"
+    )
   end
 
   it "Can make request to service" do
