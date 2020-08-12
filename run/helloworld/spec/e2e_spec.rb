@@ -28,9 +28,15 @@ describe "E2E tests" do
            "--substitutions=_SUFFIX=#{suffix}")
 
     @service = "helloworld-#{suffix}"
-    stdout, stderr, status = Open3.capture3(
+
+    @url = ""
+    while @url.empty? do
+    io = IO.popen(
       "gcloud run services describe --project=#{ENV["GOOGLE_CLOUD_PROJECT"]} #{@service} --format=value'('status.url')'")
-    @url = stdout[0..-2] # Strip newline character
+    url = io.read
+    puts url
+    @url = url[0..-2] # Strip newline character
+    end
 
     if @url.empty?
       raise "No service url found. For example: https://service-x8xabcdefg-uc.a.run.app"
@@ -45,7 +51,7 @@ describe "E2E tests" do
            "run",
            "services",
            "delete",
-           @service, 
+           @service,
            "--project=#{ENV["GOOGLE_CLOUD_PROJECT"]}",
            "--platform=managed",
            "--region=us-central1",
