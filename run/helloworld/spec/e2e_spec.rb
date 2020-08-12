@@ -20,9 +20,16 @@ require "securerandom"
 describe "E2E tests" do
   before (:all) do
     suffix = SecureRandom.hex(15)
-    system("gcloud", "builds", "submit", "--project=#{ENV["GOOGLE_CLOUD_PROJECT"]}", "--config=e2e_test_setup.yaml", "--substitutions=_SUFFIX=#{suffix}")
+    system("gcloud",
+           "builds",
+           "submit",
+           "--project=#{ENV["GOOGLE_CLOUD_PROJECT"]}",
+           "--config=e2e_test_setup.yaml",
+           "--substitutions=_SUFFIX=#{suffix}")
+
     @service = "helloworld-#{suffix}"
-    stdout, stderr, status = Open3.capture3("gcloud run services describe --project=#{ENV["GOOGLE_CLOUD_PROJECT"]} #{@service} --format=value'('status.url')'")
+    stdout, stderr, status = Open3.capture3(
+      "gcloud run services describe --project=#{ENV["GOOGLE_CLOUD_PROJECT"]} #{@service} --format=value'('status.url')'")
     @url = stdout[0..-2] # Strip newline character
 
     if @url.empty?
@@ -34,7 +41,15 @@ describe "E2E tests" do
   end
 
   after (:all) do
-    system("gcloud", "run", "services", "delete", @service, "--project=#{ENV["GOOGLE_CLOUD_PROJECT"]}", "--platform=managed", "--region=us-central1", "--quiet")
+    system("gcloud",
+           "run",
+           "services",
+           "delete",
+           @service, 
+           "--project=#{ENV["GOOGLE_CLOUD_PROJECT"]}",
+           "--platform=managed",
+           "--region=us-central1",
+           "--quiet")
   end
 
   it "Can make request to service" do

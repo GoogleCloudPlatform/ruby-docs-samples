@@ -22,8 +22,9 @@ steps:
   args: ['push', 'gcr.io/$PROJECT_ID/helloworld-${_SUFFIX}']
 
 - # Deploy to Cloud Run
-  name: gcr.io/cloud-builders/gcloud
+  name: gcr.io/google.com/cloudsdktool/cloud-sdk
   args:
+  - gcloud
   - run
   - deploy
   - helloworld-${_SUFFIX}

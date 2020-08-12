@@ -29,9 +29,10 @@ For more Cloud Run samples beyond Ruby, see the main list in the [Cloud Run Samp
 2. [Build the sample container](https://cloud.google.com/run/docs/building/containers#building_locally_and_pushing_using_docker):
 
     ```sh
-    export SAMPLE=$sample
+    # Replace <sample> with the sample name, ie 'helloworld'
+    export SAMPLE=<sample>
     cd $SAMPLE
-    docker build --tag $sample .
+    docker build --tag $SAMPLE .
     ```
 
 3. [Run containers locally](https://cloud.google.com/run/docs/testing/local)
@@ -61,17 +62,25 @@ For more Cloud Run samples beyond Ruby, see the main list in the [Cloud Run Samp
         -v $PWD:/usr/src/app $SAMPLE
     ```
 
-## Running the Tests
-
-```sh
-# Run unit & system tests.
-bundle exec rspec
-```
+4. Visit the application at [http://localhost:8080](http://localhost:8080).
 
 ## Deploying
 
+1. Set your GCP project Id:
+
+```
+export GOOGLE_CLOUD_PROJECT=$(gcloud config get-value project)
+```
+
+1. Build your container image using Cloud Build, by running the following command from the directory containing the Dockerfile:
+
 ```sh
 gcloud builds submit --tag gcr.io/${GOOGLE_CLOUD_PROJECT}/${SAMPLE}
+```
+
+1. Deploy the container image using the following command:
+
+```sh
 gcloud run deploy ${SAMPLE} \
   --image gcr.io/${GOOGLE_CLOUD_PROJECT}/${SAMPLE}
 ```
