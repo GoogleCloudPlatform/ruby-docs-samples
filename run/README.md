@@ -68,22 +68,22 @@ For more Cloud Run samples beyond Ruby, see the main list in the [Cloud Run Samp
 
 1. Set your GCP project Id:
 
-```
-export GOOGLE_CLOUD_PROJECT=$(gcloud config get-value project)
-```
+    ```sh
+    export GOOGLE_CLOUD_PROJECT=$(gcloud config get-value project)
+    ```
 
 1. Build your container image using Cloud Build, by running the following command from the directory containing the Dockerfile:
 
-```sh
-gcloud builds submit --tag gcr.io/${GOOGLE_CLOUD_PROJECT}/${SAMPLE}
-```
+    ```sh
+    gcloud builds submit --tag gcr.io/${GOOGLE_CLOUD_PROJECT}/${SAMPLE}
+    ```
 
 1. Deploy the container image using the following command:
 
-```sh
-gcloud run deploy ${SAMPLE} \
-  --image gcr.io/${GOOGLE_CLOUD_PROJECT}/${SAMPLE}
-```
+    ```sh
+    gcloud run deploy ${SAMPLE} \
+      --image gcr.io/${GOOGLE_CLOUD_PROJECT}/${SAMPLE}
+    ```
 
 See [Building containers][run_build] and [Deploying container images][run_deploy]
 for more information.
