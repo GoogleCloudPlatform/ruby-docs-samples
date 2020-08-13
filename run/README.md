@@ -26,7 +26,7 @@ For more Cloud Run samples beyond Ruby, see the main list in the [Cloud Run Samp
 
 1. [Install docker locally](https://docs.docker.com/install/)
 
-2. [Build the sample container](https://cloud.google.com/run/docs/building/containers#building_locally_and_pushing_using_docker):
+1. [Build the sample container](https://cloud.google.com/run/docs/building/containers#building_locally_and_pushing_using_docker):
 
     ```sh
     # Replace <sample> with the sample name, ie 'helloworld'
@@ -35,7 +35,7 @@ For more Cloud Run samples beyond Ruby, see the main list in the [Cloud Run Samp
     docker build --tag $SAMPLE .
     ```
 
-3. [Run containers locally](https://cloud.google.com/run/docs/testing/local)
+1. [Run containers locally](https://cloud.google.com/run/docs/testing/local)
 
     With the built container:
 
@@ -62,7 +62,7 @@ For more Cloud Run samples beyond Ruby, see the main list in the [Cloud Run Samp
         -v $PWD:/usr/src/app $SAMPLE
     ```
 
-4. Visit the application at [http://localhost:8080](http://localhost:8080).
+1. Visit the application at [http://localhost:8080](http://localhost:8080).
 
 ## Deploying
 

@@ -22,7 +22,7 @@ FROM ruby:2.7-slim
 WORKDIR /usr/src/app
 COPY Gemfile Gemfile.lock ./
 ENV BUNDLE_FROZEN=true
-RUN gem install bundler -v 1.17.2 && bundle install --without test
+RUN gem install bundler && bundle install --without test
 
 # Copy local code to the container image.
 COPY . ./

@@ -54,13 +54,12 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  rack (>= 2.2.3)
   rack-test
   rest-client
   rspec
   rspec_junit_formatter
   rubysl-securerandom
-  sinatra (>= 2.0.8)
+  sinatra (~> 2.0)
 
 BUNDLED WITH
-   1.17.2
+   2.1.4
