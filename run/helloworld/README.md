@@ -11,7 +11,7 @@ This sample shows how to deploy a Hello World application to Cloud Run.
 
 1. [Set up for Cloud Run development](https://cloud.google.com/run/docs/setup)
 
-2. Clone this repository:
+1. Clone this repository:
 
     ```sh
     git clone https://github.com/GoogleCloudPlatform/ruby-docs-samples.git

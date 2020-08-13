@@ -37,12 +37,11 @@ describe "E2E tests" do
       "--format=value'('status.url')'"
     )
     url = io.read
-    puts url
 
     if url.downcase.include? "error"
-      raise "Error: "
+      raise "Error: Can not retrieve Cloud Run service URL: #{url}"
     end
-    @url = url[0..-2] # Strip newline character
+    @url = url.chomp
 
     if @url.empty?
       raise "Error: No service url found. For example: https://service-x8xabcdefg-uc.a.run.app"
@@ -50,7 +49,7 @@ describe "E2E tests" do
 
     io = IO.popen("gcloud auth print-identity-token")
     token = io.read
-    @token = token[0..-2]
+    @token = token.chomp
   end
 
   after (:all) do
