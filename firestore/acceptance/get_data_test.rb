@@ -12,21 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+require_relative "helper.rb"
 require_relative "../get_data.rb"
-require_relative "helpers.rb"
-require "rspec"
-require "rspec/retry"
-
-RSpec.configure do |config|
-  # show retry status in spec process
-  config.verbose_retry = true
-  # show exception that triggers a retry if verbose_retry is set to true
-  config.display_try_failure_messages = true
-
-  # set retry count and retry sleep interval to 5 seconds
-  config.default_retry_count = 5
-  config.default_sleep_interval = 5
-end
 
 describe "Google Cloud Firestore API samples - Get Data" do
   before do
@@ -39,79 +26,69 @@ describe "Google Cloud Firestore API samples - Get Data" do
     delete_collection_test collection_name: "cities", project_id: ENV["FIRESTORE_TEST_PROJECT"]
   end
 
-  # Capture and return STDOUT output by block
-  def capture
-    real_stdout = $stdout
-    $stdout = StringIO.new
-    yield
-    $stdout.string
-  ensure
-    $stdout = real_stdout
-  end
-
-  example "retrieve_create_examples" do
-    output = capture do
+  it "retrieve_create_examples" do
+    out, _err = capture_io do
       retrieve_create_examples project_id: @firestore_project
     end
-    expect(output).to include "Added example cities data to the cities collection."
+    assert_includes out, "Added example cities data to the cities collection."
   end
 
-  example "get_document" do
-    output = capture do
+  it "get_document" do
+    out, _err = capture_io do
       get_document project_id: @firestore_project
     end
-    expect(output).to include "SF data:"
-    expect(output).to include ':name=>"San Francisco"'
-    expect(output).to include ':state=>"CA"'
-    expect(output).to include ':country=>"USA"'
-    expect(output).to include ":capital=>false"
-    expect(output).to include ":population=>860000"
+    assert_includes out, "SF data:"
+    assert_includes out, ':name=>"San Francisco"'
+    assert_includes out, ':state=>"CA"'
+    assert_includes out, ':country=>"USA"'
+    assert_includes out, ":capital=>false"
+    assert_includes out, ":population=>860000"
   end
 
-  example "get_multiple_docs" do
-    output = capture do
+  it "get_multiple_docs" do
+    out, _err = capture_io do
       get_multiple_docs project_id: @firestore_project
     end
-    expect(output).to include "DC data:"
-    expect(output).to include "TOK data:"
-    expect(output).to include "BJ data:"
-    expect(output).not_to include "SF data:"
-    expect(output).not_to include "LA data:"
-    expect(output).to include ':name=>"Tokyo"'
-    expect(output).to include ":state=>nil"
-    expect(output).to include ':country=>"Japan"'
-    expect(output).to include ":capital=>true"
-    expect(output).to include ":population=>9000000"
+    assert_includes out, "DC data:"
+    assert_includes out, "TOK data:"
+    assert_includes out, "BJ data:"
+    refute_includes out, "SF data:"
+    refute_includes out, "LA data:"
+    assert_includes out, ':name=>"Tokyo"'
+    assert_includes out, ":state=>nil"
+    assert_includes out, ':country=>"Japan"'
+    assert_includes out, ":capital=>true"
+    assert_includes out, ":population=>9000000"
   end
 
-  example "get_all_docs" do
-    output = capture do
+  it "get_all_docs" do
+    out, _err = capture_io do
       get_all_docs project_id: @firestore_project
     end
-    expect(output).to include "DC data:"
-    expect(output).to include "TOK data:"
-    expect(output).to include "BJ data:"
-    expect(output).to include "SF data:"
-    expect(output).to include "LA data:"
-    expect(output).to include ':name=>"Los Angeles"'
-    expect(output).to include ':state=>"CA"'
-    expect(output).to include ':country=>"USA"'
-    expect(output).to include ":capital=>false"
-    expect(output).to include ":population=>3900000"
+    assert_includes out, "DC data:"
+    assert_includes out, "TOK data:"
+    assert_includes out, "BJ data:"
+    assert_includes out, "SF data:"
+    assert_includes out, "LA data:"
+    assert_includes out, ':name=>"Los Angeles"'
+    assert_includes out, ':state=>"CA"'
+    assert_includes out, ':country=>"USA"'
+    assert_includes out, ":capital=>false"
+    assert_includes out, ":population=>3900000"
   end
 
-  example "add_subcollection" do
-    output = capture do
+  it "add_subcollection" do
+    out, _err = capture_io do
       add_subcollection project_id: @firestore_project
     end
-    expect(output).to include "Added document with ID:"
+    assert_includes out, "Added document with ID:"
   end
 
-  example "list_subcollections" do
+  it "list_subcollections" do
     add_subcollection project_id: @firestore_project
-    output = capture do
+    out, _err = capture_io do
       list_subcollections project_id: @firestore_project
     end
-    expect(output).to include "neighborhoods"
+    assert_includes out, "neighborhoods"
   end
 end

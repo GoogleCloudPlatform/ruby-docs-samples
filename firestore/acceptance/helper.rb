@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+require "minitest/autorun"
+require "minitest/focus"
 require "google/cloud/firestore"
 
 def delete_collection_test collection_name:, project_id:

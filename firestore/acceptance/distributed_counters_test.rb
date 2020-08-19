@@ -12,21 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+require_relative "helper.rb"
 require_relative "../distributed_counters.rb"
-require_relative "helpers.rb"
-require "rspec"
-require "rspec/retry"
-
-RSpec.configure do |config|
-  # show retry status in spec process
-  config.verbose_retry = true
-  # show exception that triggers a retry if verbose_retry is set to true
-  config.display_try_failure_messages = true
-
-  # set retry count and retry sleep interval to 5 seconds
-  config.default_retry_count = 5
-  config.default_sleep_interval = 5
-end
 
 describe "Google Cloud Firestore API samples - Distributed Counter" do
   before do
@@ -38,37 +25,29 @@ describe "Google Cloud Firestore API samples - Distributed Counter" do
     delete_collection_test collection_name: "shards", project_id: ENV["FIRESTORE_TEST_PROJECT"]
   end
 
-  # Capture and return STDOUT output by block
-  def capture
-    real_stdout = $stdout
-    $stdout = StringIO.new
-    yield
-    $stdout.string
-  ensure
-    $stdout = real_stdout
-  end
-
-  example "create_counter" do
-    output = capture do
+  it "create_counter" do
+    out, _err = capture_io do
       create_counter project_id: @firestore_project, num_shards: 5
     end
-    expect(output).to include "Distributed counter shards collection created."
+    assert_includes out, "Distributed counter shards collection created."
   end
 
-  example "get_document" do
-    output = capture do
+  it "get_document" do
+    create_counter project_id: @firestore_project, num_shards: 5
+    out, _err = capture_io do
       increment_counter project_id: @firestore_project, num_shards: 5
     end
-    expect(output).to include "Counter incremented."
+    assert_includes out, "Counter incremented."
   end
 
-  example "get_count" do
+  it "get_count" do
+    create_counter project_id: @firestore_project, num_shards: 5
     increment_counter project_id: @firestore_project, num_shards: 5
     increment_counter project_id: @firestore_project, num_shards: 5
 
-    output = capture do
+    out, _err = capture_io do
       get_count project_id: @firestore_project
     end
-    expect(output).to include "Count value is 2."
+    assert_includes out, "Count value is 2."
   end
 end
