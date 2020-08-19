@@ -30,12 +30,12 @@ end
 
 describe "Google Cloud Firestore API samples - Query Data" do
   before do
-    @firestore_project = ENV["FIRESTORE_PROJECT_ID"]
+    @firestore_project = ENV["FIRESTORE_TEST_PROJECT"]
     query_create_examples project_id: @firestore_project
   end
 
   after do
-    delete_collection_test collection_name: "cities", project_id: ENV["FIRESTORE_PROJECT_ID"]
+    delete_collection_test collection_name: "cities", project_id: ENV["FIRESTORE_TEST_PROJECT"]
   end
 
   # Capture and return STDOUT output by block

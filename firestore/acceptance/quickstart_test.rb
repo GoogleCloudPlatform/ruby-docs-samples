@@ -30,11 +30,11 @@ end
 
 describe "Google Cloud Firestore API samples - Quickstart" do
   before do
-    @firestore_project = ENV["FIRESTORE_PROJECT_ID"]
+    @firestore_project = ENV["FIRESTORE_TEST_PROJECT"]
   end
 
   after do
-    delete_collection_test collection_name: "users", project_id: ENV["FIRESTORE_PROJECT_ID"]
+    delete_collection_test collection_name: "users", project_id: ENV["FIRESTORE_TEST_PROJECT"]
   end
 
   # Capture and return STDOUT output by block

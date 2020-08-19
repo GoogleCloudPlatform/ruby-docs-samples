@@ -29,7 +29,7 @@ end
 
 describe "Google Cloud Firestore API samples - Data Model" do
   before do
-    @firestore_project = ENV["FIRESTORE_PROJECT_ID"]
+    @firestore_project = ENV["FIRESTORE_TEST_PROJECT"]
   end
 
   # Capture and return STDOUT output by block

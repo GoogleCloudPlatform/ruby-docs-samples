@@ -16,9 +16,9 @@ developer applications.
 
 1. Enable APIs for your project. [Click here](https://console.cloud.google.com/flows/enableapi?apiid=firestore.googleapis.com&showconfirmation=true) to visit Cloud Platform Console and enable the Google Cloud Firestore API.
 
-1. On command line, set the `FIRESTORE_PROJECT_ID` environment variable equal to your Google Cloud / Firebase project ID.
+1. On command line, set the `FIRESTORE_TEST_PROJECT` environment variable equal to your Google Cloud / Firebase project ID.
 
-    `export FIRESTORE_PROJECT_ID=your-firestore-project-id`
+    `export FIRESTORE_TEST_PROJECT=your-firestore-project-id`
 
 ### Authentication
 
