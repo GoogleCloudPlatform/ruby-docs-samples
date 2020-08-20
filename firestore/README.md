@@ -2,19 +2,22 @@
 
 # Google Cloud Firestore Ruby Samples
 
-The [Google Cloud Firestore API](https://cloud.google.com/firestore/)
-enables easy integration of the Google Cloud Firestore database into
-developer applications.
+The [Google Cloud Firestore API](https://cloud.google.com/firestore/) enables easy integration of the Google Cloud
+Firestore database into developer applications.
 
 ## Setup
 
-1. Open the [Firebase Console](https://console.firebase.google.com/) and create a new project. (You can't use both Cloud Firestore and Cloud Datastore in the same project, which might affect apps using App Engine. Try using Cloud Firestore with a different project if this is the case).
+1. Open the [Firebase Console](https://console.firebase.google.com/) and create a new project. (You can't use both Cloud
+   Firestore and Cloud Datastore in the same project, which might affect apps using App Engine. Try using Cloud
+   Firestore with a different project if this is the case).
 
 1. In the Database section, click the 'Get Started' button for Cloud Firestore Beta.
 
 1. When prompted, select 'Start in test mode' and click 'Enable'.
 
-1. Enable APIs for your project. [Click here](https://console.cloud.google.com/flows/enableapi?apiid=firestore.googleapis.com&showconfirmation=true) to visit Cloud Platform Console and enable the Google Cloud Firestore API.
+1. Enable APIs for your project. [Click
+   here](https://console.cloud.google.com/flows/enableapi?apiid=firestore.googleapis.com&showconfirmation=true) to visit
+   Cloud Platform Console and enable the Google Cloud Firestore API.
 
 1. On command line, set the `FIRESTORE_PROJECT_ID` environment variable equal to your Google Cloud / Firebase project ID.
 
@@ -22,25 +25,11 @@ developer applications.
 
 ### Authentication
 
-Authentication is typically done through [Application Default Credentials](https://cloud.google.com/docs/authentication#getting_credentials_for_server-centric_flow)
-, which means you do not have to change the code to authenticate as long as your
-environment has credentials. You have a few options for setting up
-authentication:
+Create a [Service Account key file](https://cloud.google.com/docs/authentication#service_accounts). This file can be
+used to authenticate to Google Cloud Platform services from any environment. To use the file, set the
+`FIRESTORE_TEST_KEYFILE` environment variable to the path to the key file, for example:
 
-1. When running locally, use the [Google Cloud SDK](https://cloud.google.com/sdk/)
-
-    `gcloud auth application-default login`
-
-1. When running on App Engine or Compute Engine, credentials are already set-up.
-However, you may need to configure your Compute Engine instance with
-[additional scopes](https://cloud.google.com/compute/docs/authentication#using).
-
-1. You can create a [Service Account key file](https://cloud.google.com/docs/authentication#service_accounts)
-. This file can be used to authenticate to Google Cloud Platform services from
-any environment. To use the file, set the `GOOGLE_APPLICATION_CREDENTIALS`
-environment variable to the path to the key file, for example:
-
-    `export GOOGLE_APPLICATION_CREDENTIALS=/path/to/service_account.json`
+    `export FIRESTORE_TEST_KEYFILE=/path/to/service_account.json`
 
 ### Install Dependencies
 

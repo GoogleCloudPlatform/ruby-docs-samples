@@ -1,4 +1,4 @@
-# Copyright 2018 Google, Inc
+# Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,13 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-source "https://rubygems.org"
+require "minitest/autorun"
+require "minitest/focus"
+require "google/cloud/firestore"
 
-gem "google-cloud-firestore"
-
-group :test do
-  gem "minitest", "~> 5.13"
-  gem "minitest-focus", "~> 1.1"
-  gem "minitest-junit"
-  gem "rake"
+def delete_collection_test collection_name:, project_id:
+  firestore = Google::Cloud::Firestore.new project_id: project_id
+  cities_ref = firestore.col collection_name
+  query = cities_ref
+  query.get do |document_snapshot|
+    document_ref = document_snapshot.ref
+    document_ref.delete
+  end
 end
