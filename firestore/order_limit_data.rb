@@ -97,7 +97,7 @@ end
 
 
 if $PROGRAM_NAME == __FILE__
-  project = ENV["FIRESTORE_TEST_PROJECT"]
+  project = ENV["FIRESTORE_PROJECT_ID"]
   case ARGV.shift
   when "order_by_name_limit_query"
     order_by_name_limit_query project_id: project

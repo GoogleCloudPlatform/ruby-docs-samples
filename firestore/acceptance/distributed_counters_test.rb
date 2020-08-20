@@ -17,12 +17,12 @@ require_relative "../distributed_counters.rb"
 
 describe "Google Cloud Firestore API samples - Distributed Counter" do
   before do
-    @firestore_project = ENV["FIRESTORE_TEST_PROJECT"]
+    @firestore_project = ENV["FIRESTORE_PROJECT_ID"]
     create_counter project_id: @firestore_project, num_shards: 5
   end
 
   after do
-    delete_collection_test collection_name: "shards", project_id: ENV["FIRESTORE_TEST_PROJECT"]
+    delete_collection_test collection_name: "shards", project_id: ENV["FIRESTORE_PROJECT_ID"]
   end
 
   it "create_counter" do

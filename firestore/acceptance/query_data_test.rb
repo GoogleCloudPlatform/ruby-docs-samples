@@ -17,12 +17,12 @@ require_relative "../query_data.rb"
 
 describe "Google Cloud Firestore API samples - Query Data" do
   before do
-    @firestore_project = ENV["FIRESTORE_TEST_PROJECT"]
+    @firestore_project = ENV["FIRESTORE_PROJECT_ID"]
     query_create_examples project_id: @firestore_project
   end
 
   after do
-    delete_collection_test collection_name: "cities", project_id: ENV["FIRESTORE_TEST_PROJECT"]
+    delete_collection_test collection_name: "cities", project_id: ENV["FIRESTORE_PROJECT_ID"]
   end
 
   it "query_create_examples" do

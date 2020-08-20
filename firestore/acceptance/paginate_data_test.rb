@@ -18,12 +18,12 @@ require_relative "../paginate_data.rb"
 
 describe "Google Cloud Firestore API samples - Paginate Data" do
   before do
-    @firestore_project = ENV["FIRESTORE_TEST_PROJECT"]
+    @firestore_project = ENV["FIRESTORE_PROJECT_ID"]
     retrieve_create_examples project_id: @firestore_project
   end
 
   after do
-    delete_collection_test collection_name: "cities", project_id: ENV["FIRESTORE_TEST_PROJECT"]
+    delete_collection_test collection_name: "cities", project_id: ENV["FIRESTORE_PROJECT_ID"]
   end
 
   it "start_at_field_query_cursor" do

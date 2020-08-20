@@ -77,7 +77,7 @@ def batch_write project_id:
 end
 
 if $PROGRAM_NAME == __FILE__
-  project = ENV["FIRESTORE_TEST_PROJECT"]
+  project = ENV["FIRESTORE_PROJECT_ID"]
   case ARGV.shift
   when "run_simple_transaction"
     run_simple_transaction project_id: project
