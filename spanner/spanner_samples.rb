@@ -1771,6 +1771,38 @@ def update_backup project_id:, instance_id:, backup_id:
   # [END spanner_update_backup]
 end
 
+def set_custom_timeout_and_retry project_id:, instance_id:, database_id:
+  # [START spanner_set_custom_timeout_and_retry]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+
+  spanner   = Google::Cloud::Spanner.new project: project_id
+  client    = spanner.client instance_id, database_id
+  row_count = 0
+
+  timeout = 60.0
+  retry_policy = {
+    initial_delay: 0.5,
+    max_delay:     64.0,
+    multiplier:    1.5,
+    retry_codes:   ["UNAVAILABLE", "DEADLINE_EXCEEDED"]
+  }
+  call_options = { timeout: timeout, retry_policy: retry_policy }
+
+  client.transaction do |transaction|
+    row_count = transaction.execute_update(
+      "INSERT INTO Singers (SingerId, FirstName, LastName) VALUES (10, 'Virginia', 'Watson')",
+      call_options: call_options
+    )
+  end
+
+  puts "#{row_count} record inserted."
+  # [END spanner_set_custom_timeout_and_retry]
+end
+
 def usage
   puts <<~USAGE
 
@@ -1844,6 +1876,7 @@ def usage
       list_backups                       <instance_id> <backup_id> <database_id> List and filter backups.
       delete_backup                      <instance_id> <backup_id> Delete a backup.
       update_backup                      <instance_id> <backup_id> Update the backup.
+      set_custom_timeout_and_retry       <instance_id> <database_id> Set custom timeout and retry settings.
 
     Environment variables:
       GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
@@ -1882,7 +1915,8 @@ def run_sample arguments
     "write_read_null_float64_array", "write_read_float64_array",
     "create_backup", "restore_backup", "create_backup_cancel",
     "list_backup_operations", "list_database_operations", "list_backups",
-    "delete_backup", "update_backup_expiration_time"
+    "delete_backup", "update_backup_expiration_time",
+    "set_custom_timeout_and_retry"
   ]
   if command.eql?("query_data_with_index") && instance_id && database_id && arguments.size >= 2
     query_data_with_index project_id:  project_id,
