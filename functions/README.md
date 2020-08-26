@@ -32,7 +32,16 @@ bundle exec rubocop
 
 Each sample comes with an `app.rb` file and a `Gemfile`, suitable for deploying
 to Google Cloud Functions. If you have Cloud Functions active in your project,
-you can deploy each sample directly from its directory:
+you can deploy each sample directly from its directory.
+
+First, install the bundle. Cloud Functions requires a locked bundle in order
+to deploy (to encourage you to test against a locked bundle).
+
+```
+bundle install
+```
+
+Next, deploy using the gcloud command line:
 
 ```
 gcloud functions deploy $YOUR_FUNCTION_NAME --project=$YOUR_PROJECT_ID \
