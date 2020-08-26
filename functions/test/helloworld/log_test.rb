@@ -18,7 +18,7 @@ describe "functions_log_helloworld" do
   include FunctionsFramework::Testing
 
   it "logs to stdout and stderr" do
-    load_temporary "helloworld/log.rb" do
+    load_temporary "helloworld/log/app.rb" do
       stdout, stderr = capture_subprocess_io do
         request = make_get_request "http://example.com:8080"
         response = call_http "log-helloworld", request

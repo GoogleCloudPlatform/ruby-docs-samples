@@ -21,7 +21,7 @@ describe "functions_firebase_firestore" do
   let(:type) { "google.cloud.firestore.document.v1.written" }
 
   it "responds to firestore document change event" do
-    load_temporary "firebase/firestore.rb" do
+    load_temporary "firebase/firestore/app.rb" do
       payload = {
         "oldValue" => { "a" => 1 },
         "value"    => { "b" => 2 }

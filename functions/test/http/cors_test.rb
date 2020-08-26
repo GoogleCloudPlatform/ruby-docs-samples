@@ -30,7 +30,7 @@ describe "functions_http_cors" do
   include FunctionsFramework::Testing
 
   it "handles CORS enabled preflight requests" do
-    load_temporary "http/cors.rb" do
+    load_temporary "http/cors/app.rb" do
       request = make_options_request "http://example.com:8080/"
       response = call_http "cors_enabled_function", request
       assert_equal 204, response.status
@@ -42,7 +42,7 @@ describe "functions_http_cors" do
   end
 
   it "handles CORS enabled GET requests" do
-    load_temporary "http/cors.rb" do
+    load_temporary "http/cors/app.rb" do
       request = make_get_request "http://example.com:8080/"
       response = call_http "cors_enabled_function", request
       assert_equal 200, response.status
@@ -51,7 +51,7 @@ describe "functions_http_cors" do
   end
 
   it "handles CORS enabled preflight requests with auth enforced" do
-    load_temporary "http/cors.rb" do
+    load_temporary "http/cors/app.rb" do
       request = make_options_request "http://example.com:8080/"
       response = call_http "cors_enabled_function_auth", request
       assert_equal 204, response.status
@@ -64,7 +64,7 @@ describe "functions_http_cors" do
   end
 
   it "handles CORS enabled GET requests with auth enforced" do
-    load_temporary "http/cors.rb" do
+    load_temporary "http/cors/app.rb" do
       request = make_get_request "http://example.com:8080/"
       response = call_http "cors_enabled_function_auth", request
       assert_equal 200, response.status

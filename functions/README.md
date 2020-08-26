@@ -28,16 +28,36 @@ bundle install
 bundle exec rubocop
 ```
 
+## Deploying a sample to Cloud Functions
+
+Each sample comes with an `app.rb` file and a `Gemfile`, suitable for deploying
+to Google Cloud Functions. If you have Cloud Functions active in your project,
+you can deploy each sample directly from its directory:
+
+```
+gcloud functions deploy $YOUR_FUNCTION_NAME --project=$YOUR_PROJECT_ID \
+  --runtime=ruby26 --trigger-http --entry-point=$FUNCTION_TARGET_NAME
+```
+
+For functions that use a different trigger, such as storage events, you will
+need to replace `--trigger-http` with the appropriate trigger type. For more
+details, see the
+[reference documentation](https://cloud.google.com/sdk/gcloud/reference/functions/deploy)
+for `gcloud functions deploy`.
+
 ## Adding a sample
 
 To add a sample:
 
-*   Determine the region tag for the sample (i.e. the string identifying the
+ *  Determine the region tag for the sample (i.e. the string identifying the
     sample in the cloudsite source). This should always be a string beginning
     with `functions_`; for example, `functions_helloworld_http`.
-*   Create a Ruby directory/file matching the region tag. For tag
-    `functions_helloworld_http`, create the file `helloworld/http.rb`. Write
-    the sample in this file. You can use existing samples as a model.
+ *  Create two levels of directories matching the region tag. For tag
+    `functions_helloworld_http`, create the directory `helloworld/http/`. For
+    tag `functions_tips_infinite_retries`, the directory should be just two
+    levels deep: `tips/infinite_retries`.
+ *  In this directory, create a `Gemfile` and `app.rb`. Write the sample in
+    these files. You can use existing samples as a model.
 *   Create a test for the sample in the parallel `test` directory. For tag
     `functions_helloworld_http`, the test file should be
     `test/helloworld/http_test.rb`. You can use existing tests as a model.

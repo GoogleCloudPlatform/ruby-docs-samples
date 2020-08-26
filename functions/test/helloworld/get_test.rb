@@ -18,7 +18,7 @@ describe "functions_helloworld_get" do
   include FunctionsFramework::Testing
 
   it "generates the correct response body" do
-    load_temporary "helloworld/get.rb" do
+    load_temporary "helloworld/get/app.rb" do
       request = make_get_request "http://example.com:8080/"
       response = call_http "hello_get", request
       assert_equal 200, response.status

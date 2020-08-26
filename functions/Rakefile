@@ -13,9 +13,31 @@
 # limitations under the License.
 
 require "rake/testtask"
+require "bundler"
 
 Rake::TestTask.new "test" do |t|
   t.libs << "test"
   t.test_files = FileList["test/**/*_test.rb"]
   t.warning = true
+end
+
+task "bundle" do
+  Dir.chdir __dir__
+  bundle_update_in_cwd
+end
+
+def bundle_update_in_cwd
+  if File.file? "Gemfile"
+    puts "Updating bundle in #{Dir.pwd}"
+    Bundler.with_unbundled_env do
+      system "bundle update"
+    end
+  end
+  Dir.foreach "." do |entry|
+    next unless File.directory? entry
+    next if entry =~ /^\.\.?$/
+    Dir.chdir entry do
+      bundle_update_in_cwd
+    end
+  end
 end

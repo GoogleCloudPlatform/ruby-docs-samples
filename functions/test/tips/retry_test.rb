@@ -18,7 +18,7 @@ describe "functions_tips_retry" do
   include FunctionsFramework::Testing
 
   it "raises an error when asked to retry" do
-    load_temporary "tips/retry.rb" do
+    load_temporary "tips/retry/app.rb" do
       payload = { "retry" => true }
       event = make_cloud_event payload
       assert_raises "I failed!" do
@@ -30,7 +30,7 @@ describe "functions_tips_retry" do
   end
 
   it "Does not raise an error when not asked to retry" do
-    load_temporary "tips/retry.rb" do
+    load_temporary "tips/retry/app.rb" do
       payload = { "retry" => false }
       event = make_cloud_event payload
       _out, err = capture_subprocess_io do
