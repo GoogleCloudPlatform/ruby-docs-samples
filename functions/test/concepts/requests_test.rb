@@ -18,7 +18,7 @@ describe "functions_concepts_requests" do
   include FunctionsFramework::Testing
 
   it "generates the correct response body" do
-    load_temporary "concepts/requests.rb" do
+    load_temporary "concepts/requests/app.rb" do
       request = make_get_request "http://example.com:8080/"
       response = call_http "concepts_requests", request
       assert_equal 200, response.status

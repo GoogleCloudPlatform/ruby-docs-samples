@@ -18,7 +18,7 @@ describe "functions_concepts_stateless" do
   include FunctionsFramework::Testing
 
   it "generates the correct response body" do
-    load_temporary "concepts/stateless.rb" do
+    load_temporary "concepts/stateless/app.rb" do
       request = make_get_request "http://example.com:8080/"
       response = call_http "execution_count", request
       assert_equal 200, response.status

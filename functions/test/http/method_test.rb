@@ -19,7 +19,7 @@ describe "functions_http_method" do
   include FunctionsFramework::Testing
 
   it "handles GET requests" do
-    load_temporary "http/method.rb" do
+    load_temporary "http/method/app.rb" do
       request = make_get_request "http://example.com:8080/"
       response = call_http "http_method", request
       assert_equal 200, response.status
@@ -28,7 +28,7 @@ describe "functions_http_method" do
   end
 
   it "handles PUT requests" do
-    load_temporary "http/method.rb" do
+    load_temporary "http/method/app.rb" do
       request = make_post_request "http://example.com:8080/", "Ruby", ["content-type:text/plain"]
       request.env[::Rack::REQUEST_METHOD] = ::Rack::PUT
 
@@ -39,7 +39,7 @@ describe "functions_http_method" do
   end
 
   it "handles POST requests" do
-    load_temporary "http/method.rb" do
+    load_temporary "http/method/app.rb" do
       request = make_post_request "http://example.com:8080/", "Ruby", ["content-type:text/plain"]
       response = call_http "http_method", request
       assert_equal 405, response.status

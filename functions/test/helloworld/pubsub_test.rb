@@ -25,7 +25,7 @@ describe "functions_helloworld_pubsub" do
   let(:type) { "google.cloud.pubsub.topic.v1.messagePublished" }
 
   it "prints a name" do
-    load_temporary "helloworld/pubsub.rb" do
+    load_temporary "helloworld/pubsub/app.rb" do
       payload = { "@type" => resource_type, "message" => { "data" => Base64.encode64("Ruby") } }
       event = make_cloud_event payload, source: source, type: type
       _out, err = capture_subprocess_io do
@@ -37,7 +37,7 @@ describe "functions_helloworld_pubsub" do
   end
 
   it "prints hello world" do
-    load_temporary "helloworld/pubsub.rb" do
+    load_temporary "helloworld/pubsub/app.rb" do
       payload = { "@type" => resource_type, "message" => { "data" => nil } }
       event = make_cloud_event payload, source: source, type: type
       _out, err = capture_subprocess_io do

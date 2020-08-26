@@ -17,8 +17,8 @@ require "functions_framework"
 require "base64"
 
 FunctionsFramework.cloud_event "hello_pubsub" do |event|
-  # The event parameter is a FunctionsFramework::CloudEvents::Event object.
-  # See https://www.rubydoc.info/gems/functions_framework/FunctionsFramework/CloudEvents/Event
+  # The event parameter is a CloudEvents::Event::V1 object.
+  # See https://cloudevents.github.io/sdk-ruby/latest/CloudEvents/Event/V1.html
   name = Base64.decode64 event.data["message"]["data"] rescue "World"
   # A background function does not return a response, but you can log messages
   # or cause side effects such as sending additional events.

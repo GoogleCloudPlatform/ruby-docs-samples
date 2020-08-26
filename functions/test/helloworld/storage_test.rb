@@ -23,7 +23,7 @@ describe "functions_helloworld_storage" do
   let(:type) { "google.cloud.storage.object.v1.finalized" }
 
   it "responds to uploaded event" do
-    load_temporary "helloworld/storage.rb" do
+    load_temporary "helloworld/storage/app.rb" do
       payload = {
         "name"           => "ruby-rocks.rb",
         "metageneration" => "1"
@@ -46,7 +46,7 @@ describe "functions_helloworld_storage" do
   let(:type) { "google.cloud.storage.object.v1.finalized" }
 
   it "responds to updated event" do
-    load_temporary "helloworld/storage.rb" do
+    load_temporary "helloworld/storage/app.rb" do
       payload = {
         "name"           => "ruby-rocks.rb",
         "metageneration" => "2"
@@ -60,7 +60,7 @@ describe "functions_helloworld_storage" do
   end
 
   it "responds to deleted event" do
-    load_temporary "helloworld/storage.rb" do
+    load_temporary "helloworld/storage/app.rb" do
       payload = {
         "name"           => "ruby-rocks.rb",
         "resourceState"  => "not_exists",

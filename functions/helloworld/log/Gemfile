@@ -12,17 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "helper"
+source "https://rubygems.org"
 
-describe "functions_concepts_filesystem" do
-  include FunctionsFramework::Testing
-
-  it "generates the correct response body" do
-    load_temporary "concepts/filesystem/app.rb" do
-      request = make_get_request "http://example.com:8080/"
-      response = call_http "concepts_filesystem", request
-      assert_equal 200, response.status
-      assert_match(/Files:/, response.body.join)
-    end
-  end
-end
+gem "functions_framework", "~> 0.5"

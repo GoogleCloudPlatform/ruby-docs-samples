@@ -22,7 +22,7 @@ describe "functions_helloworld_storage" do
   let(:type) { "google.cloud.storage.object.v1.finalized" }
 
   it "responds to generic event" do
-    load_temporary "helloworld/storage_generic.rb" do
+    load_temporary "helloworld/storage_generic/app.rb" do
       timestamp = DateTime.new(2020, 2, 3, 4, 5, 6).rfc3339
       payload = {
         "bucket"         => "sample-bucket",

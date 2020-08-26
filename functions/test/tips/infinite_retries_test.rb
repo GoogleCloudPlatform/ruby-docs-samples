@@ -18,7 +18,7 @@ describe "functions_tips_infinite_retries" do
   include FunctionsFramework::Testing
 
   it "stops processing on an old event" do
-    load_temporary "tips/infinite_retries.rb" do
+    load_temporary "tips/infinite_retries/app.rb" do
       event_time = Time.now - 11
       event = make_cloud_event "", time: event_time
       _out, err = capture_subprocess_io do
@@ -29,7 +29,7 @@ describe "functions_tips_infinite_retries" do
   end
 
   it "continues processing on a recent event" do
-    load_temporary "tips/infinite_retries.rb" do
+    load_temporary "tips/infinite_retries/app.rb" do
       event_time = Time.now
       event = make_cloud_event "", time: event_time
       assert_raises "I failed!" do

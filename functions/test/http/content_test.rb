@@ -18,7 +18,7 @@ describe "functions_http_content" do
   include FunctionsFramework::Testing
 
   it "handles name in the JSON body" do
-    load_temporary "http/content.rb" do
+    load_temporary "http/content/app.rb" do
       request = make_post_request "http://example.com:8080/", '{"name": "Ruby"}', ["content-type:application/json"]
       response = call_http "http_content", request
       assert_equal 200, response.status
@@ -27,7 +27,7 @@ describe "functions_http_content" do
   end
 
   it "handles name in the octet-stream" do
-    load_temporary "http/content.rb" do
+    load_temporary "http/content/app.rb" do
       request = make_post_request "http://example.com:8080/", "Ruby", ["content-type:application/octet-stream"]
       response = call_http "http_content", request
       assert_equal 200, response.status
@@ -36,7 +36,7 @@ describe "functions_http_content" do
   end
 
   it "handles name in the plaintext body" do
-    load_temporary "http/content.rb" do
+    load_temporary "http/content/app.rb" do
       request = make_post_request "http://example.com:8080/", "Ruby", ["content-type:text/plain"]
       response = call_http "http_content", request
       assert_equal 200, response.status
@@ -45,7 +45,7 @@ describe "functions_http_content" do
   end
 
   it "handles name in the form-urlencoded body" do
-    load_temporary "http/content.rb" do
+    load_temporary "http/content/app.rb" do
       request = make_post_request "http://example.com:8080/", "name=Ruby", ["content-type:application/x-www-form-urlencoded"]
       response = call_http "http_content", request
       assert_equal 200, response.status

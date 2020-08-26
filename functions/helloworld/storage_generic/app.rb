@@ -16,8 +16,8 @@
 require "functions_framework"
 
 FunctionsFramework.cloud_event "hello_gcs_generic" do |event|
-  # The event parameter is a FunctionsFramework::CloudEvents::Event object.
-  # See https://www.rubydoc.info/gems/functions_framework/FunctionsFramework/CloudEvents/Event
+  # The event parameter is a CloudEvents::Event::V1 object.
+  # See https://cloudevents.github.io/sdk-ruby/latest/CloudEvents/Event/V1.html
   payload = event.data
 
   FunctionsFramework.logger.info "Event: #{event.id}"
