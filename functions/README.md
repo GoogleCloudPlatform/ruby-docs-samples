@@ -58,8 +58,8 @@ To add a sample:
     levels deep: `tips/infinite_retries`.
  *  In this directory, create a `Gemfile` and `app.rb`. Write the sample in
     these files. You can use existing samples as a model.
-*   Create a test for the sample in the parallel `test` directory. For tag
+ *  Create a test for the sample in the parallel `test` directory. For tag
     `functions_helloworld_http`, the test file should be
     `test/helloworld/http_test.rb`. You can use existing tests as a model.
-*   Make sure the test passes, as well as Rubocop. See the section above on
+ *  Make sure the test passes, as well as Rubocop. See the section above on
     running the tests.
