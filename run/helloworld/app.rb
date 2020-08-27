@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START run_hello_service]
+# [START run_helloworld_service]
 require "sinatra"
 
 set :bind, "0.0.0.0"
@@ -23,4 +23,4 @@ get "/" do
   name = ENV["NAME"] || "World"
   "Hello #{name}!"
 end
-# [END run_hello_service]
+# [END run_helloworld_service]
