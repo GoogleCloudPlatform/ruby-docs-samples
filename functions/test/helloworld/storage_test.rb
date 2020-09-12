@@ -12,9 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START functions_storage_unit_test]
-require "minitest/autorun"
-require "functions_framework/testing"
+require "helper"
+require "date"
 
 describe "functions_helloworld_storage" do
   include FunctionsFramework::Testing
@@ -22,55 +21,28 @@ describe "functions_helloworld_storage" do
   let(:source) { "//storage.googleapis.com/projects/sample-project/buckets/sample-bucket/objects/ruby-rocks.rb" }
   let(:type) { "google.cloud.storage.object.v1.finalized" }
 
-  it "responds to uploaded event" do
+  it "responds to generic event" do
     load_temporary "helloworld/storage/app.rb" do
+      timestamp = DateTime.new(2020, 2, 3, 4, 5, 6).rfc3339
       payload = {
+        "bucket"         => "sample-bucket",
         "name"           => "ruby-rocks.rb",
-        "metageneration" => "1"
-      }
-      event = make_cloud_event payload, source: source, type: type
-      _out, err = capture_subprocess_io do
-        # Call tested function
-        call_event "hello_gcs", event
-      end
-      assert_match(/File ruby-rocks\.rb uploaded\./, err)
-    end
-  end
-end
-# [END functions_storage_unit_test]
-
-describe "functions_helloworld_storage" do
-  include FunctionsFramework::Testing
-
-  let(:source) { "//storage.googleapis.com/projects/sample-project/buckets/sample-bucket/objects/ruby-rocks.rb" }
-  let(:type) { "google.cloud.storage.object.v1.finalized" }
-
-  it "responds to updated event" do
-    load_temporary "helloworld/storage/app.rb" do
-      payload = {
-        "name"           => "ruby-rocks.rb",
-        "metageneration" => "2"
+        "metageneration" => "1",
+        "timeCreated"    => timestamp,
+        "updated"        => timestamp
       }
       event = make_cloud_event payload, source: source, type: type
       _out, err = capture_subprocess_io do
         call_event "hello_gcs", event
       end
-      assert_match(/File ruby-rocks\.rb metadata updated\./, err)
-    end
-  end
 
-  it "responds to deleted event" do
-    load_temporary "helloworld/storage/app.rb" do
-      payload = {
-        "name"           => "ruby-rocks.rb",
-        "resourceState"  => "not_exists",
-        "metageneration" => "1"
-      }
-      event = make_cloud_event payload, source: source, type: type
-      _out, err = capture_subprocess_io do
-        call_event "hello_gcs", event
-      end
-      assert_match(/File ruby-rocks\.rb deleted\./, err)
+      assert_match(/Event: /, err)
+      assert_match(/Event Type: google.cloud.storage.object.v1.finalized/, err)
+      assert_match(/Bucket: sample-bucket/, err)
+      assert_match(/File: ruby-rocks.rb/, err)
+      assert_match(/Metageneration: 1/, err)
+      assert_match(/Created: 2020-02-03T04:05:06\+00:00/, err)
+      assert_match(/Updated: 2020-02-03T04:05:06\+00:00/, err)
     end
   end
 end
