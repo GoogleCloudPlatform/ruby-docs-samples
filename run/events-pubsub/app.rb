@@ -22,7 +22,7 @@ port = ENV["PORT"] || "8080"
 set :port, port
 
 post "/" do
-  request.body.rewind  # in case someone already read it
+  request.body.rewind # in case someone already read it
 
   body = JSON.parse request.body.read
   data = Base64.decode64 body["message"]["data"]
