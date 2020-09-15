@@ -1988,7 +1988,8 @@ def run_sample arguments
     "create_backup", "restore_backup", "create_backup_cancel",
     "list_backup_operations", "list_database_operations", "list_backups",
     "delete_backup", "update_backup_expiration_time",
-    "set_custom_timeout_and_retry"
+    "set_custom_timeout_and_retry", "query_with_numeric_parameter",
+    "update_data_with_numeric"
   ]
   if command.eql?("query_data_with_index") && instance_id && database_id && arguments.size >= 2
     query_data_with_index project_id:  project_id,
