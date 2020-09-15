@@ -357,6 +357,30 @@ def add_timestamp_column project_id:, instance_id:, database_id:
   # [END spanner_add_timestamp_column]
 end
 
+def add_numeric_column project_id:, instance_id:, database_id:
+  # [START spanner_add_numeric_column]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+
+  spanner  = Google::Cloud::Spanner.new project: project_id
+  instance = spanner.instance instance_id
+  database = instance.database database_id
+
+  job = database.update statements: [
+    "ALTER TABLE Venues ADD COLUMN Revenue NUMERIC"
+  ]
+
+  puts "Waiting for database update to complete"
+
+  job.wait_until_done!
+
+  puts "Added the Revenue as a numeric column in Venues table"
+  # [END spanner_add_numeric_column]
+end
+
 def write_struct_data project_id:, instance_id:, database_id:
   # [START spanner_write_data_for_struct_queries]
   # project_id  = "Your Google Cloud project ID"
@@ -529,6 +553,29 @@ def update_data_with_timestamp_column project_id:, instance_id:, database_id:
 
   puts "Updated data"
   # [END spanner_update_data_with_timestamp_column]
+end
+
+def update_data_with_numeric project_id:, instance_id:, database_id:
+  # [START spanner_update_data_with_numeric]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+
+  spanner = Google::Cloud::Spanner.new project: project_id
+  client  = spanner.client instance_id, database_id
+
+  client.commit do |c|
+    c.update "Venues", [
+      { VenueId: 4, Revenue: "35000" },
+      { VenueId: 19, Revenue: "104500" },
+      { VenueId: 42, Revenue: "99999999999999999999999999999.99" },
+    ]
+  end
+
+  puts "Updated data"
+  # [END spanner_update_data_with_numeric]
 end
 
 def query_data_with_new_column project_id:, instance_id:, database_id:
@@ -922,6 +969,28 @@ def query_with_parameter project_id:, instance_id:, database_id:
     puts "#{row[:SingerId]} #{row[:FirstName]} #{row[:LastName]}"
   end
   # [END spanner_query_with_parameter]
+end
+
+def query_with_numeric_parameter project_id:, instance_id:, database_id:
+  # [START spanner_query_with_numeric_parameter]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+
+  spanner = Google::Cloud::Spanner.new project: project_id
+  client  = spanner.client instance_id, database_id
+
+  sql_query = "SELECT VenueId, Revenue FROM Venues WHERE Revenue < @revenue"
+
+  params      = { revenue: 100000 }
+  param_types = { lastName: :NUMERIC }
+
+  client.execute(sql_query, params: params, types: param_types).rows.each do |row|
+    puts "VenueId: #{row[:VenueId]}, Revenue: #{row[:Revenue]}"
+  end
+  # [END spanner_query_with_numeric_parameter]
 end
 
 def write_with_transaction_using_dml project_id:, instance_id:, database_id:
@@ -1822,8 +1891,10 @@ def usage
       create_storing_index               <instance_id> <database_id> Create Storing Index
       add_column                         <instance_id> <database_id> Add Column
       add_timestamp_column               <instance_id> <database_id> Alters existing Albums table, adding a commit timestamp column
+      add_numeric_column                 <instance_id> <database_id> Alters existing Venues table, adding a numeric column
       update_data                        <instance_id> <database_id> Update Data
       update_data_with_timestamp_column  <instance_id> <database_id> Updates two records in the altered table where the commit timestamp column was added
+      update_data_with_numeric           <instance_id> <database_id> Updates three records in the altered table where the numeric column was added
       query_data_with_new_column         <instance_id> <database_id> Query Data with New Column
       query_data_with_timestamp_column   <instance_id> <database_id> Queries data from altered table where the commit timestamp column was added
       write_struct_data                  <instance_id> <database_id> Inserts sample data that can be used for STRUCT queries
@@ -1845,6 +1916,7 @@ def usage
       update_using_dml_with_struct       <instance_id> <database_id> Update data using a DML statement combined with a Spanner struct.
       write_using_dml                    <instance_id> <database_id> Insert multiple records using a DML statement.
       query_with_parameter               <instance_id> <database_id> Query record inserted using DML with a query parameter.
+      query_with_numeric_parameter       <instance_id> <database_id> Query record inserted using DML with a numeric query parameter.
       write_with_transaction_using_dml   <instance_id> <database_id> Update data using a DML statement within a read-write transaction.
       update_using_partitioned_dml       <instance_id> <database_id> Update multiple records using a partitioned DML statement.
       delete_using_partitioned_dml       <instance_id> <database_id> Delete multiple records using a partitioned DML statement.
@@ -1894,7 +1966,7 @@ def run_sample arguments
     "insert_data", "insert_data_with_timestamp_column", "query_data",
     "query_data_with_timestamp_column", "read_data", "delete_data", "read_stale_data",
     "create_index", "create_storing_index", "add_column", "add_timestamp_column",
-    "update_data", "query_data_with_new_column",
+    "add_numeric_column", "update_data", "query_data_with_new_column",
     "update_data_with_timestamp_column", "read_write_transaction",
     "query_data_with_index", "read_data_with_index",
     "read_data_with_storing_index", "read_only_transaction",
