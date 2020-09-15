@@ -1374,9 +1374,9 @@ describe "Google Cloud Spanner API samples" do
     expect(captured_output).to include "Added the Revenue as a numeric column in Venues table"
 
     capture do
-      update_data_with_numeric project_id:  @project_id,
-                               instance_id: @instance.instance_id,
-                               database_id: database.database_id
+      update_data_with_numeric_column project_id:  @project_id,
+                                      instance_id: @instance.instance_id,
+                                      database_id: database.database_id
     end
 
     expect(captured_output).to include "Updated data"
@@ -1387,7 +1387,7 @@ describe "Google Cloud Spanner API samples" do
                                    database_id: database.database_id
     end
 
-    expect(captured_output).to include "VenueId: 4, Revenue: 35000"
+    expect(captured_output).to include "4 35000"
   end
 
   example "write data with array types and read" do

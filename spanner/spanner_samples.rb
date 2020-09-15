@@ -555,8 +555,8 @@ def update_data_with_timestamp_column project_id:, instance_id:, database_id:
   # [END spanner_update_data_with_timestamp_column]
 end
 
-def update_data_with_numeric project_id:, instance_id:, database_id:
-  # [START spanner_update_data_with_numeric]
+def update_data_with_numeric_column project_id:, instance_id:, database_id:
+  # [START spanner_update_data_with_numeric_column]
   # project_id  = "Your Google Cloud project ID"
   # instance_id = "Your Spanner instance ID"
   # database_id = "Your Spanner database ID"
@@ -575,7 +575,7 @@ def update_data_with_numeric project_id:, instance_id:, database_id:
   end
 
   puts "Updated data"
-  # [END spanner_update_data_with_numeric]
+  # [END spanner_update_data_with_numeric_column]
 end
 
 def query_data_with_new_column project_id:, instance_id:, database_id:
@@ -978,17 +978,18 @@ def query_with_numeric_parameter project_id:, instance_id:, database_id:
   # database_id = "Your Spanner database ID"
 
   require "google/cloud/spanner"
+  require "bigdecimal"
 
   spanner = Google::Cloud::Spanner.new project: project_id
   client  = spanner.client instance_id, database_id
 
   sql_query = "SELECT VenueId, Revenue FROM Venues WHERE Revenue < @revenue"
 
-  params      = { revenue: 100000 }
+  params      = { revenue: BigDecimal("100000") }
   param_types = { lastName: :NUMERIC }
 
   client.execute(sql_query, params: params, types: param_types).rows.each do |row|
-    puts "VenueId: #{row[:VenueId]}, Revenue: #{row[:Revenue]}"
+    puts "#{row[:VenueId]} #{row[:Revenue]}"
   end
   # [END spanner_query_with_numeric_parameter]
 end
@@ -1894,7 +1895,7 @@ def usage
       add_numeric_column                 <instance_id> <database_id> Alters existing Venues table, adding a numeric column
       update_data                        <instance_id> <database_id> Update Data
       update_data_with_timestamp_column  <instance_id> <database_id> Updates two records in the altered table where the commit timestamp column was added
-      update_data_with_numeric           <instance_id> <database_id> Updates three records in the altered table where the numeric column was added
+      update_data_with_numeric_column    <instance_id> <database_id> Updates three records in the altered table where the numeric column was added
       query_data_with_new_column         <instance_id> <database_id> Query Data with New Column
       query_data_with_timestamp_column   <instance_id> <database_id> Queries data from altered table where the commit timestamp column was added
       write_struct_data                  <instance_id> <database_id> Inserts sample data that can be used for STRUCT queries
@@ -1989,7 +1990,7 @@ def run_sample arguments
     "list_backup_operations", "list_database_operations", "list_backups",
     "delete_backup", "update_backup_expiration_time",
     "set_custom_timeout_and_retry", "query_with_numeric_parameter",
-    "update_data_with_numeric"
+    "update_data_with_numeric_column"
   ]
   if command.eql?("query_data_with_index") && instance_id && database_id && arguments.size >= 2
     query_data_with_index project_id:  project_id,
