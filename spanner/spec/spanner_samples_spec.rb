@@ -1394,7 +1394,7 @@ describe "Google Cloud Spanner API samples" do
                                    database_id: database.database_id
     end
 
-    expect(captured_output).to include "4 35000"
+    expect(captured_output).to include "4 0.35e5"
   end
 
   example "write data with array types and read" do
