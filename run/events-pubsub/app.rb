@@ -29,14 +29,12 @@ post "/" do
   if data.empty?
     data = "World"
   end
-
+  id = request.env['HTTP_CE_ID']
   if request.has_header?('ce-id')
     id = request.get_header('ce-id')
-  else
-    id = ''
   end
 
-  result = "Hello " + data + "! ID: " + id
+  result = "Hello #{data}! ID: #{id}"
   puts result
   result
 end

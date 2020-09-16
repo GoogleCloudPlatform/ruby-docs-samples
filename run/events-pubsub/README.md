@@ -1,11 +1,11 @@
-# Cloud Run Hello World Sample
+# Events for Cloud Run – Pub/Sub tutorial
 
-This sample shows how to deploy a Hello World application to Cloud Run.
+This sample shows how to create a service that processes Pub/Sub messages.
 
 [![Run in Google Cloud][run_img]][run_link]
 
 [run_img]: https://storage.googleapis.com/cloudrun/button.svg
-[run_link]: https://console.cloud.google.com/cloudshell/editor?shellonly=true&cloudshell_image=gcr.io/cloudrun/button&cloudshell_git_repo=https://github.com/GoogleCloudPlatform/ruby-docs-samples&cloudshell_working_dir=run/run-events-pubsub
+[run_link]: https://console.cloud.google.com/cloudshell/editor?shellonly=true&cloudshell_image=gcr.io/cloudrun/button&cloudshell_git_repo=https://github.com/GoogleCloudPlatform/ruby-docs-samples&cloudshell_working_dir=run/events-pubsub
 
 ## Quickstart
 
