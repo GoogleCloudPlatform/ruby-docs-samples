@@ -1365,6 +1365,13 @@ describe "Google Cloud Spanner API samples" do
     database = create_singers_albums_database
     create_venues_table
 
+    # Ignore the following capture block
+    capture do
+      write_datatypes_data project_id:  @project_id,
+                            instance_id: @instance.instance_id,
+                            database_id: database.database_id
+    end
+
     capture do
       add_numeric_column project_id:  @project_id,
                          instance_id: @instance.instance_id,
