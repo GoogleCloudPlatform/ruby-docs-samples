@@ -986,7 +986,7 @@ def query_with_numeric_parameter project_id:, instance_id:, database_id:
   sql_query = "SELECT VenueId, Revenue FROM Venues WHERE Revenue < @revenue"
 
   params      = { revenue: BigDecimal("100000") }
-  param_types = { lastName: :NUMERIC }
+  param_types = { revenue: :NUMERIC }
 
   client.execute(sql_query, params: params, types: param_types).rows.each do |row|
     puts "#{row[:VenueId]} #{row[:Revenue]}"
