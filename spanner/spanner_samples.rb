@@ -570,7 +570,7 @@ def update_data_with_numeric_column project_id:, instance_id:, database_id:
     c.update "Venues", [
       { VenueId: 4, Revenue: "35000" },
       { VenueId: 19, Revenue: "104500" },
-      { VenueId: 42, Revenue: "99999999999999999999999999999.99" },
+      { VenueId: 42, Revenue: "99999999999999999999999999999.99" }
     ]
   end
 
