@@ -143,6 +143,23 @@ def create_pull_subscription project_id:, topic_name:, subscription_name:
   # [END pubsub_create_pull_subscription]
 end
 
+def create_ordered_pull_subscription project_id:, topic_name:, subscription_name:
+  # [START pubsub_create_ordered_pull_subscription]
+  # project_id        = "Your Google Cloud Project ID"
+  # topic_name        = "Your Pubsub topic name"
+  # subscription_name = "Your Pubsub subscription name"
+  require "google/cloud/pubsub"
+
+  pubsub = Google::Cloud::Pubsub.new project: project_id
+
+  topic        = pubsub.topic topic_name
+  subscription = topic.subscribe subscription_name,
+                                 message_ordering: true
+
+  puts "Pull subscription #{subscription_name} created with message ordering."
+  # [END pubsub_create_ordered_pull_subscription]
+end
+
 def create_push_subscription project_id:, topic_name:, subscription_name:, endpoint:
   # [START pubsub_create_push_subscription]
   # project_id        = "Your Google Cloud Project ID"
@@ -286,6 +303,64 @@ def publish_messages_async_with_concurrency_control project_id:, topic_name:
   # [END pubsub_publisher_concurrency_control]
 end
 
+def publish_ordered_messages project_id:, topic_name:
+  # [START pubsub_publish_ordered_messages]
+  # project_id = "Your Google Cloud Project ID"
+  # topic_name = "Your Pubsub topic name"
+  require "google/cloud/pubsub"
+
+  pubsub = Google::Cloud::Pubsub.new project: project_id
+
+  # Start sending messages in one request once the size of all queued messages
+  # reaches 1 MB or the number of queued messages reaches 20
+  topic = pubsub.topic topic_name, async: {
+    max_bytes:    1_000_000,
+    max_messages: 20
+  }
+  topic.enable_message_ordering!
+  10.times do |i|
+    topic.publish_async "This is message \##{i}.",
+                        ordering_key: "ordering-key"
+  end
+
+  # Stop the async_publisher to send all queued messages immediately.
+  topic.async_publisher.stop.wait!
+  puts "Messages published asynchronously in batch."
+  # [END pubsub_publish_ordered_messages]
+end
+
+def publish_resume_publish project_id:, topic_name:
+  # [START pubsub_publish_resume_publish]
+  # project_id = "Your Google Cloud Project ID"
+  # topic_name = "Your Pubsub topic name"
+  require "google/cloud/pubsub"
+
+  pubsub = Google::Cloud::Pubsub.new project: project_id
+
+  # Start sending messages in one request once the size of all queued messages
+  # reaches 1 MB or the number of queued messages reaches 20
+  topic = pubsub.topic topic_name, async: {
+    max_bytes:    1_000_000,
+    max_messages: 20
+  }
+  topic.enable_message_ordering!
+  10.times do |i|
+    topic.publish_async "This is message \##{i}.",
+                        ordering_key: "ordering-key" do |result|
+      if result.succeeded?
+        puts "Message \##{i} successfully published."
+      else
+        puts "Message \##{i} failed to publish"
+        topic.resume_publish("ordering-key")
+      end
+    end
+  end
+
+  # Stop the async_publisher to send all queued messages immediately.
+  topic.async_publisher.stop.wait!
+  # [END pubsub_publish_resume_publish]
+end
+
 if $PROGRAM_NAME == __FILE__
   case ARGV.shift
   when "create_topic"
@@ -312,6 +387,10 @@ if $PROGRAM_NAME == __FILE__
     create_pull_subscription project_id:        ARGV.shift,
                              topic_name:        ARGV.shift,
                              subscription_name: ARGV.shift
+  when "create_ordered_pull_subscription"
+    create_ordered_pull_subscription project_id:        ARGV.shift,
+                                     topic_name:        ARGV.shift,
+                                     subscription_name: ARGV.shift
   when "create_push_subscription"
     create_push_subscription project_id:        ARGV.shift,
                              topic_name:        ARGV.shift,
@@ -334,6 +413,12 @@ if $PROGRAM_NAME == __FILE__
   when "publish_messages_async_with_concurrency_control"
     publish_messages_async_with_concurrency_control project_id: ARGV.shift,
                                                     topic_name: ARGV.shift
+  when "publish_ordered_messages"
+    publish_ordered_messages project_id: ARGV.shift,
+                             topic_name: ARGV.shift
+  when "publish_resume_publish"
+    publish_resume_publish project_id: ARGV.shift,
+                           topic_name: ARGV.shift
   else
     puts <<~USAGE
       Usage: bundle exec ruby topics.rb [command] [arguments]
@@ -347,6 +432,7 @@ if $PROGRAM_NAME == __FILE__
         set_topic_policy                                <project_id> <topic_name>                     Set topic policies
         test_topic_permissions                          <project_id> <topic_name>                     Test topic permissions
         create_pull_subscription                        <project_id> <topic_name> <subscription_name> Create a pull subscription
+        create_ordered_pull_subscription                <project_id> <topic_name> <subscription_name> Create a pull subscription with ordering enabled
         create_push_subscription                        <project_id> <topic_name> <subscription_name> Create a push subscription
         publish_message                                 <project_id> <topic_name>                     Publish message
         publish_messages_with_batch_settings            <project_id> <topic_name>                     Publish messages in batch
@@ -354,6 +440,8 @@ if $PROGRAM_NAME == __FILE__
         publish_message_async_with_custom_attributes    <project_id> <topic_name>                     Publish messages asynchronously with custom attributes
         publish_messages_async_with_batch_settings      <project_id> <topic_name>                     Publish messages asynchronously in batch
         publish_messages_async_with_concurrency_control <project_id> <topic_name>                     Publish messages asynchronously with concurrency control
+        publish_ordered_messages                         <project_id> <topic_name>                     Publish messages asynchronously with ordering keys
+        publish_resume_publish                          <project_id> <topic_name>                     Publish messages asynchronously with ordering keys and resume on failure
     USAGE
   end
 end
