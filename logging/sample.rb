@@ -82,12 +82,15 @@ def delete_log_sink sink_name:
   # [END logging_delete_sink]
 end
 
-def list_log_entries
+def list_log_entries log_name:
   # [START logging_list_log_entries]
   require "google/cloud/logging"
 
+  # log_name = "my_log_name"
   logging = Google::Cloud::Logging.new
-  entries = logging.entries filter: 'resource.type = "gae_app"'
+  entries = logging.entries filter: "logName:#{log_name}",
+                            max: 1000,
+                            order: "timestamp desc"
 
   entries.each do |entry|
     puts "[#{entry.timestamp}] #{entry.log_name} #{entry.payload.inspect}"
