@@ -12,8 +12,10 @@ def run_tests type
   failed = false
   full_start_time = Time.now
 
+  header "Running on Ruby #{RUBY_VERSION}"
   header "Installing dependencies"
-  each_lib do |_dir|
+  each_lib do |dir|
+    header "Installing bundle in #{dir}"
     sh "bundle update"
   end
 
@@ -28,7 +30,6 @@ def run_tests type
     end
     end_time = Time.now
     header_2 "Tests for #{lib} took #{(end_time - start_time).to_i} seconds"
-    test_task dir, type
   end
 
   full_end_time = Time.now
@@ -68,7 +69,11 @@ def dirs
   entries = Dir.glob("#{__dir__}/**/*_test.rb").map do |entry|
     File.expand_path "..", File.dirname(entry)
   end
-  entries.uniq
+  entries.uniq!
+  if RUBY_VERSION.start_with? "2.4"
+    entries.delete_if { |dir| dir.include? "/ruby-docs-samples/functions" }
+  end
+  entries
 end
 
 def header str, token = "#"
