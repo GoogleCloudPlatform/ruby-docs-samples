@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START run_events_pubsub_dockerfile]
+# [START eventarc_pubsub_dockerfile]
 
 # Use the official lightweight Ruby image.
 # https://hub.docker.com/_/ruby
@@ -30,4 +30,4 @@ COPY . ./
 # Run the web service on container startup.
 CMD ["ruby", "./app.rb"]
 
-# [END run_events_pubsub_dockerfile]
+# [END eventarc_pubsub_dockerfile]
