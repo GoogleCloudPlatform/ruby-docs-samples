@@ -39,6 +39,7 @@ Style/GlobalVars:
   Exclude:
     - "kms/kms.rb"
     - "iot/iot.rb"
+    - "functions/slack/app.rb"
 Style/GuardClause:
   Enabled: false
 Style/IfUnlessModifier:
