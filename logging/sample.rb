@@ -89,8 +89,8 @@ def list_log_entries log_name:
   # log_name = "my_log_name"
   logging = Google::Cloud::Logging.new
   entries = logging.entries filter: "logName:#{log_name}",
-                            max: 1000,
-                            order: "timestamp desc"
+                            max:    1000,
+                            order:  "timestamp desc"
 
   entries.each do |entry|
     puts "[#{entry.timestamp}] #{entry.log_name} #{entry.payload.inspect}"
