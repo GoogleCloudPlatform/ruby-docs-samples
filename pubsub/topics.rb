@@ -351,7 +351,7 @@ def publish_resume_publish project_id:, topic_name:
         puts "Message \##{i} successfully published."
       else
         puts "Message \##{i} failed to publish"
-        topic.resume_publish("ordering-key")
+        topic.resume_publish "ordering-key"
       end
     end
   end
@@ -440,7 +440,7 @@ if $PROGRAM_NAME == __FILE__
         publish_message_async_with_custom_attributes    <project_id> <topic_name>                     Publish messages asynchronously with custom attributes
         publish_messages_async_with_batch_settings      <project_id> <topic_name>                     Publish messages asynchronously in batch
         publish_messages_async_with_concurrency_control <project_id> <topic_name>                     Publish messages asynchronously with concurrency control
-        publish_ordered_messages                         <project_id> <topic_name>                     Publish messages asynchronously with ordering keys
+        publish_ordered_messages                        <project_id> <topic_name>                     Publish messages asynchronously with ordering keys
         publish_resume_publish                          <project_id> <topic_name>                     Publish messages asynchronously with ordering keys and resume on failure
     USAGE
   end
