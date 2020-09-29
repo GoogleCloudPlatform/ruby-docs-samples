@@ -1,16 +1,16 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    cloud_events (0.1.1)
-    functions_framework (0.5.1)
+    cloud_events (0.1.2)
+    functions_framework (0.7.0)
       cloud_events (~> 0.1)
       puma (~> 4.3)
       rack (~> 2.1)
-    minitest (5.14.1)
+    minitest (5.14.2)
     minitest-focus (1.2.1)
       minitest (>= 4, < 6)
-    nio4r (2.5.2)
-    puma (4.3.5)
+    nio4r (2.5.4)
+    puma (4.3.6)
       nio4r (~> 2.0)
     rack (2.2.3)
     rake (13.0.1)
@@ -19,10 +19,10 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  functions_framework (~> 0.3)
+  functions_framework (~> 0.7)
   minitest (~> 5.14)
   minitest-focus (~> 1.1)
   rake (>= 12.0)
 
 BUNDLED WITH
-   1.17.2
+   1.17.3
