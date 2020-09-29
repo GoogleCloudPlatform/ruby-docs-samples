@@ -17,7 +17,7 @@ require "helper"
 describe "functions_firebase_rtdb" do
   include FunctionsFramework::Testing
 
-  let(:source) { "//firestore.googleapis.com/projects/project-id/databases/(default)/documents/gcf-test/12345678" }
+  let(:source) { "//firebase.googleapis.com/projects/_/instances/my-project-id/refs/gcf-test/xyz" }
   let(:type) { "google.firebase.database.document.v1.updated" }
 
   it "responds to firestore rtdb update event" do
