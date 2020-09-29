@@ -25,4 +25,4 @@ FunctionsFramework.cloud_event "hello_auth" do |event|
   logger.info "Created at: #{payload['metadata']['createdAt']}"
   logger.info "Email: #{payload['email']}" if payload.key? "email"
 end
-# [END functions_firebase_firestore]
+# [END functions_firebase_auth]
