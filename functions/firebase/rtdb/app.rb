@@ -32,4 +32,4 @@ FunctionsFramework.cloud_event "hello_rtdb" do |event|
   logger.info "Admin?: #{payload.fetch 'admin', false}"
   logger.info "Delta: #{payload['delta']}"
 end
-# [END functions_firebase_firestore]
+# [END functions_firebase_rtdb]
