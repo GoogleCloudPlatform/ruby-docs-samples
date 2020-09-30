@@ -17,8 +17,9 @@ require "functions_framework"
 
 # Triggered by a change to a Firebase RTDB document.
 FunctionsFramework.cloud_event "hello_rtdb" do |event|
-  # The event parameter is a CloudEvents::Event::V1 object.
+  # Event-triggered Ruby functions receive a CloudEvents::Event::V1 object.
   # See https://cloudevents.github.io/sdk-ruby/latest/CloudEvents/Event/V1.html
+  # The Firebase event payload can be obtained from the `data` field.
   payload = event.data
 
   if payload.key? "params"
