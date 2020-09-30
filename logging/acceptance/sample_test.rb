@@ -115,12 +115,17 @@ describe "Logging Samples" do
     end
 
     it "lists entries of a log" do
-      get_entries_helper entry.log_name
+      found = get_entries_helper entry.log_name
+      # Try to reduce flakiness. We think the logging service is sometimes
+      # taking a long time to index new logs.
+      skip if found.empty?
 
       out, _err = capture_io do
-        list_log_entries
+        list_log_entries log_name: entry.log_name
       end
-      entries = logging.entries filter: 'resource.type = "gae_app"'
+      entries = logging.entries filter: "logName:#{entry.log_name}",
+                                max:    1000,
+                                order:  "timestamp desc"
       entries.map! { |entry| "[#{entry.timestamp}] #{entry.log_name} #{entry.payload.inspect}" }
       out_entries = out.split "\n"
       assert(out_entries.any? { |entry| entries.include? entry })

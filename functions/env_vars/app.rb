@@ -12,14 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-source "https://rubygems.org"
+# [START functions_env_vars]
+require "functions_framework"
 
-gem "functions_framework", "~> 0.7"
-
-group "test" do
-  gem "google-api-client", "~> 0.45"
-  gem "minitest", "~> 5.14"
-  gem "minitest-focus", "~> 1.1"
-  gem "rake", ">= 12.0"
-  gem "slack-ruby-client", "~> 0.15"
+FunctionsFramework.http "env_vars" do |_request|
+  ENV["FOO"] || "Specified environment variable is not set."
 end
+# [END functions_env_vars]

@@ -1361,6 +1361,42 @@ describe "Google Cloud Spanner API samples" do
     expect(captured_output).to include "42 Venue 42"
   end
 
+  example "query data with numeric column" do
+    database = create_singers_albums_database
+    create_venues_table
+
+    # Ignore the following capture block
+    capture do
+      write_datatypes_data project_id:  @project_id,
+                            instance_id: @instance.instance_id,
+                            database_id: database.database_id
+    end
+
+    capture do
+      add_numeric_column project_id:  @project_id,
+                         instance_id: @instance.instance_id,
+                         database_id: database.database_id
+    end
+
+    expect(captured_output).to include "Added the Revenue as a numeric column in Venues table"
+
+    capture do
+      update_data_with_numeric_column project_id:  @project_id,
+                                      instance_id: @instance.instance_id,
+                                      database_id: database.database_id
+    end
+
+    expect(captured_output).to include "Updated data"
+
+    capture do
+      query_with_numeric_parameter project_id:  @project_id,
+                                   instance_id: @instance.instance_id,
+                                   database_id: database.database_id
+    end
+
+    expect(captured_output).to include "4 0.35e5"
+  end
+
   example "write data with array types and read" do
     database = create_boxes_database
 
