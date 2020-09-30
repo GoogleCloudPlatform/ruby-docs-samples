@@ -17,8 +17,9 @@ require "functions_framework"
 
 # Triggered by a Google Analytics for Firebase log event.
 FunctionsFramework.cloud_event "hello_analytics" do |event|
-  # The event parameter is a CloudEvents::Event::V1 object.
+  # Event-triggered Ruby functions receive a CloudEvents::Event::V1 object.
   # See https://cloudevents.github.io/sdk-ruby/latest/CloudEvents/Event/V1.html
+  # The Analytics event payload can be obtained from the `data` field.
   payload = event.data
 
   logger.info "Function triggered by the following event: #{event.source}"
