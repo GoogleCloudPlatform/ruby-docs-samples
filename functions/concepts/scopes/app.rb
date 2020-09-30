@@ -12,23 +12,27 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START functions_concepts_filesystem]
 require "functions_framework"
 
-def heavy_computation
+# This is called once, on cold start
+def cold_start_time
   Time.now
 end
 
-def light_computation
+def invocation_time
   Time.now
 end
 
-global = heavy_computation
+# [START functions_concepts_scopes]
+# Calling the cold start method
+global = cold_start_time
 
 FunctionsFramework.http "concepts_scopes" do |_request|
+
   # Per-function scope
-  # This computation runs every time this function is called
-  function_var = light_computation
+  # This method is called every time this function is called
+  function_var = invocation_time
 
   "instance: #{global}; function: #{function_var}"
 end
+# [END functions_concepts_scopes]
