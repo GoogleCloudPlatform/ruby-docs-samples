@@ -29,7 +29,7 @@ end
 def bundle_update_in_cwd
   if File.file? "Gemfile"
     puts "Updating bundle in #{Dir.pwd}"
-    Bundler.with_unbundled_env do
+    Bundler.with_clean_env do
       system "bundle update"
     end
   end

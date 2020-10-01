@@ -36,9 +36,6 @@ GEM
     jwt (2.2.2)
     memoist (0.16.2)
     mini_mime (1.0.2)
-    minitest (5.14.2)
-    minitest-focus (1.2.1)
-      minitest (>= 4, < 6)
     multi_json (1.15.0)
     multipart-post (2.1.1)
     nio4r (2.5.4)
@@ -47,7 +44,6 @@ GEM
     puma (4.3.6)
       nio4r (~> 2.0)
     rack (2.2.3)
-    rake (13.0.1)
     representable (3.0.4)
       declarative (< 0.1.0)
       declarative-option (< 0.2.0)
@@ -76,9 +72,6 @@ PLATFORMS
 DEPENDENCIES
   functions_framework (~> 0.7)
   google-api-client (~> 0.45)
-  minitest (~> 5.14)
-  minitest-focus (~> 1.1)
-  rake (>= 12.0)
   slack-ruby-client (~> 0.15)
 
 BUNDLED WITH
