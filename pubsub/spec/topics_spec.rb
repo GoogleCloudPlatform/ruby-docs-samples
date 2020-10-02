@@ -103,6 +103,23 @@ describe "Pub/Sub topics sample" do
     expect(subscription.topic.name).to include(@topic_name)
   end
 
+  it "creates pull subscription with ordering enabled" do
+    @pubsub.create_topic @topic_name
+
+    expect {
+      create_ordered_pull_subscription project_id:        @project_id,
+                                       topic_name:        @topic_name,
+                                       subscription_name: @pull_subscription_name
+    }.to output(/#{@pull_subscription_name} created/).to_stdout
+
+    subscription = @pubsub.subscription @pull_subscription_name
+    expect(subscription.nil?).to eq(false)
+    expect(subscription.exists?).to eq(true)
+    expect(subscription.name).to include(@pull_subscription_name)
+    expect(subscription.topic.name).to include(@topic_name)
+    expect(subscription.message_ordering?).to eq(true)
+  end
+
   it "creates push subscription" do
     @pubsub.create_topic @topic_name
 
@@ -274,6 +291,62 @@ describe "Pub/Sub topics sample" do
         message.acknowledge!
       end
     end
+  end
+
+  it "publishes ordered messages" do
+    topic = @pubsub.create_topic @topic_name
+    subscription = topic.subscribe @pull_subscription_name
+
+    expect {
+      publish_ordered_messages project_id: @project_id,
+                               topic_name: @topic_name
+    }.not_to raise_error
+
+    messages = []
+    i = 0
+    expect_with_retry do
+      subscription.pull(max: 20).each do |message|
+        messages << message
+        expect(message.ordering_key).to eq("ordering-key")
+        expect(message.data).to eq("This is message \##{i}.")
+        i += 1
+        message.acknowledge!
+      end
+      expect(messages.length).to eq(10)
+    end
+    received_time_counter = Hash.new 0
+    messages.each do |message|
+      received_time_counter[message.publish_time] += 1
+    end
+    expect(received_time_counter.length).to eq(1)
+  end
+
+  it "publishes with resume" do
+    topic = @pubsub.create_topic @topic_name
+    subscription = topic.subscribe @pull_subscription_name
+
+    expect {
+      publish_resume_publish project_id: @project_id,
+                             topic_name: @topic_name
+    }.not_to raise_error
+
+    messages = []
+    i = 0
+    expect_with_retry do
+      subscription.pull(max: 20).each do |message|
+        messages << message
+        expect(message.ordering_key).to eq("ordering-key")
+        expect(message.data).to eq("This is message \##{i}.")
+        i += 1
+        message.acknowledge!
+      end
+      expect(messages.length).to eq(10)
+    end
+    received_time_counter = Hash.new 0
+    messages.each do |message|
+      received_time_counter[message.publish_time] += 1
+    end
+    expect(received_time_counter.length).to eq(1)
   end
 
   it "deletes topic" do
