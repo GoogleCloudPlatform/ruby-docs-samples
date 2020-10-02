@@ -144,7 +144,7 @@ def create_pull_subscription project_id:, topic_name:, subscription_name:
 end
 
 def create_ordered_pull_subscription project_id:, topic_name:, subscription_name:
-  # [START pubsub_create_ordered_pull_subscription]
+  # [START pubsub_enable_subscription_ordering]
   # project_id        = "Your Google Cloud Project ID"
   # topic_name        = "Your Pubsub topic name"
   # subscription_name = "Your Pubsub subscription name"
@@ -157,7 +157,7 @@ def create_ordered_pull_subscription project_id:, topic_name:, subscription_name
                                  message_ordering: true
 
   puts "Pull subscription #{subscription_name} created with message ordering."
-  # [END pubsub_create_ordered_pull_subscription]
+  # [END pubsub_enable_subscription_ordering]
 end
 
 def create_push_subscription project_id:, topic_name:, subscription_name:, endpoint:
@@ -304,7 +304,7 @@ def publish_messages_async_with_concurrency_control project_id:, topic_name:
 end
 
 def publish_ordered_messages project_id:, topic_name:
-  # [START pubsub_publish_ordered_messages]
+  # [START pubsub_publish_with_ordering_keys]
   # project_id = "Your Google Cloud Project ID"
   # topic_name = "Your Pubsub topic name"
   require "google/cloud/pubsub"
@@ -324,13 +324,13 @@ def publish_ordered_messages project_id:, topic_name:
   end
 
   # Stop the async_publisher to send all queued messages immediately.
-  topic.async_publisher.stop.wait!
+  topic.async_publisher.stop!
   puts "Messages published asynchronously in batch."
-  # [END pubsub_publish_ordered_messages]
+  # [END pubsub_publish_with_ordering_keys]
 end
 
 def publish_resume_publish project_id:, topic_name:
-  # [START pubsub_publish_resume_publish]
+  # [START pubsub_resume_publish_with_ordering_keys]
   # project_id = "Your Google Cloud Project ID"
   # topic_name = "Your Pubsub topic name"
   require "google/cloud/pubsub"
@@ -351,14 +351,16 @@ def publish_resume_publish project_id:, topic_name:
         puts "Message \##{i} successfully published."
       else
         puts "Message \##{i} failed to publish"
+        # Allow publishing to continue on "ordering-key" after processing the
+        # failure.
         topic.resume_publish "ordering-key"
       end
     end
   end
 
   # Stop the async_publisher to send all queued messages immediately.
-  topic.async_publisher.stop.wait!
-  # [END pubsub_publish_resume_publish]
+  topic.async_publisher.stop!
+  # [END pubsub_resume_publish_with_ordering_keys]
 end
 
 if $PROGRAM_NAME == __FILE__
