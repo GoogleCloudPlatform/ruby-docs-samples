@@ -28,7 +28,6 @@ end
 global = cold_start_time
 
 FunctionsFramework.http "concepts_scopes" do |_request|
-
   # Per-function scope
   # This method is called every time this function is called
   function_var = invocation_time

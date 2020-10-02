@@ -24,17 +24,17 @@ describe "functions_slack" do
   let(:timestamp) { "2020-01-01" }
   let(:body) { "text=Ruby" }
   let(:url) { "http://example.com:8080" }
-  let(:signature) {
+  let :signature do
     digest = OpenSSL::Digest::SHA256.new
     hex_hash = OpenSSL::HMAC.hexdigest digest, signing_secret, "v0:#{timestamp}:#{body}"
     "v0=#{hex_hash}"
-  }
+  end
   let(:headers) { ["X-Slack-Request-Timestamp: #{timestamp}", "X-Slack-Signature: #{signature}"] }
   let(:wrong_headers) { ["X-Slack-Request-Timestamp: #{timestamp}", "X-Slack-Signature: #{signature}x"] }
   let(:request) { make_post_request url, body, headers }
   let(:invalid_request) { make_post_request url, body, wrong_headers }
   let(:query) { "Ruby" }
-  let(:kg_response) {
+  let :kg_response do
     OpenStruct.new item_list_element: [
       {
         "result" => {
@@ -50,9 +50,9 @@ describe "functions_slack" do
         }
       }
     ]
-  }
+  end
   let(:empty_kg_response) { OpenStruct.new item_list_element: [] }
-  let(:slack_response) {
+  let :slack_response do
     {
       "response_type" => "in_channel",
       "text"          => "Query: #{query}",
@@ -65,14 +65,14 @@ describe "functions_slack" do
         }
       ]
     }
-  }
-  let(:empty_slack_response) {
+  end
+  let :empty_slack_response do
     {
       "response_type" => "in_channel",
       "text"          => "Query: #{query}",
       "attachments"   => [{ "text" => "No results match your query." }]
     }
-  }
+  end
 
   it "returns an error on a GET request" do
     load_temporary "slack/app.rb" do
@@ -99,7 +99,7 @@ describe "functions_slack" do
 
       globals = run_startup_tasks "kg_search"
       mock_client = ::Minitest::Mock.new
-      mock_client.expect(:search_entities, kg_response, [query: query, limit: 1])
+      mock_client.expect :search_entities, kg_response, [query: query, limit: 1]
       globals[:kg_search].client = mock_client
 
       request = make_post_request url, body, headers
