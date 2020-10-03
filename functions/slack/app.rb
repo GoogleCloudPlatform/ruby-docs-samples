@@ -40,9 +40,9 @@ class KGSearch
     # Save signing secret for use by the signature validation method.
     @signing_secret = signing_secret
   end
-# [END functions_slack_setup]
+  # [END functions_slack_setup]
 
-# [START functions_verify_webhook]
+  # [START functions_verify_webhook]
   # slack-ruby-client expects a Rails-style request object with a "headers"
   # method, but the Functions Framework provides only a Rack request.
   # To avoid bringing in Rails as a dependency, we'll create a simple class
@@ -53,7 +53,8 @@ class KGSearch
     def headers
       env.each_with_object({}) do |(key, val), result|
         if /^HTTP_(\w+)$/ =~ key
-          result[$1.split("_").map(&:capitalize).join("-")] = val
+          header = Regexp.last_match(1).split("_").map(&:capitalize).join("-")
+          result[header] = val
         end
       end
     end
@@ -70,9 +71,9 @@ class KGSearch
                                                signing_secret: @signing_secret
     slack_request.valid?
   end
-# [END functions_verify_webhook]
+  # [END functions_verify_webhook]
 
-# [START functions_slack_request]
+  # [START functions_slack_request]
   # This is a method of the KGSearch class.
   # It makes an API call to the Knowledge Graph Search Service, and formats
   # a Slack message as a nested Hash object.
@@ -80,9 +81,9 @@ class KGSearch
     response = @client.search_entities query: query, limit: 1
     format_slack_message query, response
   end
-# [END functions_slack_request]
+  # [END functions_slack_request]
 
-# [START functions_slack_format]
+  # [START functions_slack_format]
   # This is a method of the KGSearch class.
   # It takes a raw SearchResponse from the Knowledge Graph Search Service,
   # and formats a Slack message.
@@ -104,7 +105,7 @@ class KGSearch
       "text"          => "Query: #{query}",
       "attachments"   => [attachment.compact] }
   end
-# [END functions_slack_format]
+  # [END functions_slack_format]
 
   attr_accessor :client
 end
