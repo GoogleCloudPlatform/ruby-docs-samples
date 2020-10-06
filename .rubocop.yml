@@ -23,9 +23,6 @@ Metrics/LineLength:
   Enabled: false
 Metrics/MethodLength:
   Enabled: false
-Naming/AccessorMethodName:
-  Exclude:
-    - "firestore/add_data.rb"
 Style/BlockComments:
   Exclude:
     - "**/routes.rb"
