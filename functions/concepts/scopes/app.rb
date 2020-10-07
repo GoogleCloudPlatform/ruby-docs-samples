@@ -14,24 +14,41 @@
 
 require "functions_framework"
 
-# This is called once, on cold start
-def cold_start_time
-  Time.now
+def perform_heavy_computation
+  "heavy computation result"
 end
 
-def invocation_time
-  Time.now
+def perform_light_computation
+  "light computation result"
 end
 
 # [START functions_concepts_scopes]
-# Calling the cold start method
-global = cold_start_time
+# Global (instance-wide) scope.
+# This block runs on cold start, before any function is invoked.
+#
+# Note: It is usually best to run global initialization in an on_startup block
+# instead at the top level of the Ruby file. This is because top-level code
+# could be executed to verify the function during deployment, whereas an
+# on_startup block is run only when an actual function instance is starting up.
+FunctionsFramework.on_startup do
+  instance_data = perform_heavy_computation
+
+  # To pass data into function invocations, the best practice is to set a
+  # key-value pair using the Ruby Function Framework's built-in "set_global"
+  # method. Functions can call the "global" method to retrieve the data by key.
+  # (You can also use Ruby global variables or "toplevel" local variables, but
+  # they can make it difficult to isolate global data for testing.)
+  set_global :my_instance_data, instance_data
+end
 
 FunctionsFramework.http "concepts_scopes" do |_request|
-  # Per-function scope
-  # This method is called every time this function is called
-  function_var = invocation_time
+  # Per-function scope.
+  # This method is called every time this function is called.
+  invocation_data = perform_light_computation
 
-  "instance: #{global}; function: #{function_var}"
+  # Retrieve the data computed by the on_startup block.
+  instance_data = global :my_instance_data
+
+  "instance: #{instance_data}; function: #{invocation_data}"
 end
 # [END functions_concepts_scopes]
