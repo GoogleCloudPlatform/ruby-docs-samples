@@ -22,7 +22,7 @@ describe "functions_concepts_scopes" do
       request = make_get_request "http://example.com:8080/"
       response = call_http "concepts_scopes", request
       assert_equal 200, response.status
-      assert_match(/function:/, response.body.join)
+      assert_equal "instance: heavy computation result; function: light computation result", response.body.join
     end
   end
 end
