@@ -12,21 +12,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START pubsub_quickstart_create_topic]
-# Imports the Google Cloud client library
-require "google/cloud/pubsub"
+def quickstart topic_name:
+  # [START pubsub_quickstart_create_topic]
+  # [START require_library]
+  # Imports the Google Cloud client library
+  require "google/cloud/pubsub"
+  # [END require_library]
 
-# Your Google Cloud Platform project ID
-project_id = "YOUR_PROJECT_ID"
+  # Instantiates a client
+  pubsub = Google::Cloud::Pubsub.new
 
-# Instantiates a client
-pubsub = Google::Cloud::Pubsub.new project: project_id
+  # The name for the new topic
+  # topic_name = "my-new-topic"
 
-# The name for the new topic
-topic_name = "my-new-topic"
+  # Creates the new topic
+  topic = pubsub.create_topic topic_name
 
-# Creates the new topic
-topic = pubsub.create_topic topic_name
+  puts "Topic #{topic.name} created."
+  # [END pubsub_quickstart_create_topic]
+end
 
-puts "Topic #{topic.name} created."
-# [END pubsub_quickstart_create_topic]
+quickstart topic_name: ARGV.shift if $PROGRAM_NAME == __FILE__

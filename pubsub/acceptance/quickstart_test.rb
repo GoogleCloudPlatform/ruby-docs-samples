@@ -1,4 +1,4 @@
-# Copyright 2015 Google, Inc
+# Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,19 +12,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-source "https://rubygems.org"
+require_relative "helper"
+require_relative "../quickstart.rb"
 
-gem "google-cloud-pubsub"
-gem "sinatra"
+describe "quickstart" do
+  let(:pubsub) { Google::Cloud::Pubsub.new }
+  let(:topic_name) { "my-new-topic" }
 
-group :test do
-  gem "rack-test"
-  gem "rspec"
-  gem "rspec-retry"
-  gem "rspec_junit_formatter"
-  gem "google-style", "~> 1.24.0"
-  gem "minitest", "~> 5.13"
-  gem "minitest-focus", "~> 1.1"
-  gem "minitest-junit"
-  gem "rake"
+  before do
+    if (t = pubsub.topic topic_name)
+      t.delete
+    end
+
+    refute pubsub.topic(topic_name)
+  end
+focus
+  it "quickstart_create_topic" do
+    assert_output "Topic projects/#{pubsub.project}/topics/#{topic_name} created.\n" do
+      quickstart topic_name: topic_name
+    end
+
+    assert pubsub.topic(topic_name)
+  end
 end
