@@ -30,7 +30,6 @@ end
 describe "Pub/Sub topics sample" do
   before do
     @pubsub                 = Google::Cloud::Pubsub.new
-    @project_id             = ENV["GOOGLE_CLOUD_PROJECT"]
     @topic_name             = "my-topic"
     @pull_subscription_name = "my-pull-subscription"
     @push_subscription_name = "my-push-subscription"
@@ -67,8 +66,7 @@ describe "Pub/Sub topics sample" do
 
   it "creates topic" do
     expect {
-      create_topic project_id: @project_id,
-                   topic_name: @topic_name
+      create_topic topic_name: @topic_name
     }.to output(/#{@topic_name} created/).to_stdout
 
     topic = @pubsub.topic @topic_name
@@ -82,7 +80,7 @@ describe "Pub/Sub topics sample" do
 
     expect_with_retry do
       expect {
-        list_topics project_id: @project_id
+        list_topics
       }.to output(/#{@topic_name}/).to_stdout
     end
   end
@@ -91,8 +89,7 @@ describe "Pub/Sub topics sample" do
     @pubsub.create_topic @topic_name
 
     expect {
-      create_pull_subscription project_id:        @project_id,
-                               topic_name:        @topic_name,
+      create_pull_subscription topic_name:        @topic_name,
                                subscription_name: @pull_subscription_name
     }.to output(/#{@pull_subscription_name} created/).to_stdout
 
@@ -107,8 +104,7 @@ describe "Pub/Sub topics sample" do
     @pubsub.create_topic @topic_name
 
     expect {
-      create_ordered_pull_subscription project_id:        @project_id,
-                                       topic_name:        @topic_name,
+      create_ordered_pull_subscription topic_name:        @topic_name,
                                        subscription_name: @pull_subscription_name
     }.to output(/#{@pull_subscription_name} created/).to_stdout
 
@@ -124,8 +120,7 @@ describe "Pub/Sub topics sample" do
     @pubsub.create_topic @topic_name
 
     expect {
-      create_push_subscription project_id:        @project_id,
-                               topic_name:        @topic_name,
+      create_push_subscription topic_name:        @topic_name,
                                subscription_name: @push_subscription_name,
                                endpoint:          "https://#{@pubsub.project}.appspot.com/push"
     }.to output(/#{@push_subscription_name} created/).to_stdout
@@ -142,8 +137,7 @@ describe "Pub/Sub topics sample" do
     @pubsub.create_topic @topic_name
 
     expect {
-      get_topic_policy project_id: @project_id,
-                       topic_name: @topic_name
+      get_topic_policy topic_name: @topic_name
     }.to output(/Topic policy:/).to_stdout
   end
 
@@ -159,8 +153,7 @@ describe "Pub/Sub topics sample" do
       end
 
     expect {
-      set_topic_policy project_id: @project_id,
-                       topic_name: @topic_name
+      set_topic_policy topic_name: @topic_name
     }.not_to raise_error
 
     expect(@pubsub.topic(@topic_name).policy.roles).to \
@@ -171,8 +164,7 @@ describe "Pub/Sub topics sample" do
     @pubsub.create_topic @topic_name
 
     expect {
-      test_topic_permissions project_id: @project_id,
-                             topic_name: @topic_name
+      test_topic_permissions topic_name: @topic_name
     }.to output(/Permission to attach subscription\nPermission to publish\nPermission to update/).to_stdout
   end
 
@@ -181,8 +173,7 @@ describe "Pub/Sub topics sample" do
     subscription = topic.subscribe @pull_subscription_name
 
     expect {
-      publish_message project_id: @project_id,
-                      topic_name: @topic_name
+      publish_message topic_name: @topic_name
     }.to output(/Message published/).to_stdout
 
     expect_with_retry do
@@ -198,8 +189,7 @@ describe "Pub/Sub topics sample" do
     subscription = topic.subscribe @pull_subscription_name
 
     expect {
-      publish_message_async project_id: @project_id,
-                            topic_name: @topic_name
+      publish_message_async topic_name: @topic_name
     }.not_to raise_error
 
     expect_with_retry do
@@ -215,8 +205,7 @@ describe "Pub/Sub topics sample" do
     subscription = topic.subscribe @pull_subscription_name
 
     expect {
-      publish_message_async_with_custom_attributes project_id: @project_id,
-                                                   topic_name: @topic_name
+      publish_message_async_with_custom_attributes topic_name: @topic_name
     }.not_to raise_error
 
     expect_with_retry do
@@ -233,8 +222,7 @@ describe "Pub/Sub topics sample" do
     subscription = topic.subscribe @pull_subscription_name
 
     expect {
-      publish_messages_async_with_batch_settings project_id: @project_id,
-                                                 topic_name: @topic_name
+      publish_messages_async_with_batch_settings topic_name: @topic_name
     }.not_to raise_error
 
     messages = []
@@ -257,8 +245,7 @@ describe "Pub/Sub topics sample" do
     subscription = topic.subscribe @pull_subscription_name
 
     expect {
-      publish_messages_async_with_concurrency_control project_id: @project_id,
-                                                      topic_name: @topic_name
+      publish_messages_async_with_concurrency_control topic_name: @topic_name
     }.not_to raise_error
 
     expect_with_retry do
@@ -274,8 +261,7 @@ describe "Pub/Sub topics sample" do
     subscription = topic.subscribe @pull_subscription_name
 
     expect {
-      publish_ordered_messages project_id: @project_id,
-                               topic_name: @topic_name
+      publish_ordered_messages topic_name: @topic_name
     }.not_to raise_error
 
     messages = []
@@ -302,8 +288,7 @@ describe "Pub/Sub topics sample" do
     subscription = topic.subscribe @pull_subscription_name
 
     expect {
-      publish_resume_publish project_id: @project_id,
-                             topic_name: @topic_name
+      publish_resume_publish topic_name: @topic_name
     }.not_to raise_error
 
     messages = []
@@ -329,8 +314,7 @@ describe "Pub/Sub topics sample" do
     topic = @pubsub.create_topic @topic_name
 
     expect {
-      delete_topic project_id: @project_id,
-                   topic_name: @topic_name
+      delete_topic topic_name: @topic_name
     }.to output(/Topic #{@topic_name} deleted/).to_stdout
 
     expect(@pubsub.topic(@topic_name)).to be nil

@@ -14,14 +14,13 @@
 
 require "google/cloud/pubsub"
 
-def update_push_configuration project_id:, subscription_name:, new_endpoint:
+def update_push_configuration subscription_name:, new_endpoint:
   # [START pubsub_update_push_configuration]
-  # project_id        = "Your Google Cloud Project ID"
   # subscription_name = "Your Pubsub subscription name"
   # new_endpoint      = "Endpoint where your app receives messages""
   require "google/cloud/pubsub"
 
-  pubsub = Google::Cloud::Pubsub.new project: project_id
+  pubsub = Google::Cloud::Pubsub.new
 
   subscription          = pubsub.subscription subscription_name
   subscription.endpoint = new_endpoint
@@ -30,12 +29,11 @@ def update_push_configuration project_id:, subscription_name:, new_endpoint:
   # [END pubsub_update_push_configuration]
 end
 
-def list_subscriptions project_id:
+def list_subscriptions
   # [START pubsub_list_subscriptions]
-  # project_id = Your Google Cloud Project ID
   require "google/cloud/pubsub"
 
-  pubsub = Google::Cloud::Pubsub.new project: project_id
+  pubsub = Google::Cloud::Pubsub.new
 
   subscriptions = pubsub.list_subscriptions
 
@@ -46,13 +44,12 @@ def list_subscriptions project_id:
   # [END pubsub_list_subscriptions]
 end
 
-def delete_subscription project_id:, subscription_name:
+def delete_subscription subscription_name:
   # [START pubsub_delete_subscription]
-  # project_id        = "Your Google Cloud Project ID"
   # subscription_name = "Your Pubsub subscription name"
   require "google/cloud/pubsub"
 
-  pubsub = Google::Cloud::Pubsub.new project: project_id
+  pubsub = Google::Cloud::Pubsub.new
 
   subscription = pubsub.subscription subscription_name
   subscription.delete
@@ -61,13 +58,12 @@ def delete_subscription project_id:, subscription_name:
   # [END pubsub_delete_subscription]
 end
 
-def get_subscription_policy project_id:, subscription_name:
+def get_subscription_policy subscription_name:
   # [START pubsub_get_subscription_policy]
-  # project_id        = "Your Google Cloud Project ID"
   # subscription_name = "Your Pubsub subscription name"
   require "google/cloud/pubsub"
 
-  pubsub = Google::Cloud::Pubsub.new project: project_id
+  pubsub = Google::Cloud::Pubsub.new
 
   subscription = pubsub.subscription subscription_name
   policy       = subscription.policy
@@ -77,13 +73,12 @@ def get_subscription_policy project_id:, subscription_name:
   # [END pubsub_get_subscription_policy]
 end
 
-def set_subscription_policy project_id:, subscription_name:
+def set_subscription_policy subscription_name:
   # [START pubsub_set_subscription_policy]
-  # project_id        = "Your Google Cloud Project ID"
   # subscription_name = "Your Pubsub subscription name"
   require "google/cloud/pubsub"
 
-  pubsub = Google::Cloud::Pubsub.new project: project_id
+  pubsub = Google::Cloud::Pubsub.new
 
   subscription = pubsub.subscription subscription_name
   subscription.policy do |policy|
@@ -93,13 +88,12 @@ def set_subscription_policy project_id:, subscription_name:
   # [END pubsub_set_subscription_policy]
 end
 
-def test_subscription_permissions project_id:, subscription_name:
+def test_subscription_permissions subscription_name:
   # [START pubsub_test_subscription_permissions]
-  # project_id        = "Your Google Cloud Project ID"
   # subscription_name = "Your Pubsub subscription name"
   require "google/cloud/pubsub"
 
-  pubsub = Google::Cloud::Pubsub.new project: project_id
+  pubsub = Google::Cloud::Pubsub.new
 
   subscription = pubsub.subscription subscription_name
   permissions  = subscription.test_permissions "pubsub.subscriptions.consume",
@@ -110,14 +104,13 @@ def test_subscription_permissions project_id:, subscription_name:
   # [END pubsub_test_subscription_permissions]
 end
 
-def listen_for_messages project_id:, subscription_name:
+def listen_for_messages subscription_name:
   # [START pubsub_subscriber_async_pull]
   # [START pubsub_quickstart_subscriber]
-  # project_id        = "Your Google Cloud Project ID"
   # subscription_name = "Your Pubsub subscription name"
   require "google/cloud/pubsub"
 
-  pubsub = Google::Cloud::Pubsub.new project: project_id
+  pubsub = Google::Cloud::Pubsub.new
 
   subscription = pubsub.subscription subscription_name
   subscriber   = subscription.listen do |received_message|
@@ -134,14 +127,13 @@ def listen_for_messages project_id:, subscription_name:
   # [END pubsub_quickstart_subscriber]
 end
 
-def listen_for_messages_with_custom_attributes project_id:, subscription_name:
+def listen_for_messages_with_custom_attributes subscription_name:
   # [START pubsub_subscriber_sync_pull_custom_attributes]
   # [START pubsub_subscriber_async_pull_custom_attributes]
-  # project_id        = "Your Google Cloud Project ID"
   # subscription_name = "Your Pubsub subscription name"
   require "google/cloud/pubsub"
 
-  pubsub = Google::Cloud::Pubsub.new project: project_id
+  pubsub = Google::Cloud::Pubsub.new
 
   subscription = pubsub.subscription subscription_name
   subscriber   = subscription.listen do |received_message|
@@ -164,13 +156,12 @@ def listen_for_messages_with_custom_attributes project_id:, subscription_name:
   # [END pubsub_subscriber_sync_pull_custom_attributes]
 end
 
-def pull_messages project_id:, subscription_name:
+def pull_messages subscription_name:
   # [START pubsub_subscriber_sync_pull]
-  # project_id        = "Your Google Cloud Project ID"
   # subscription_name = "Your Pubsub subscription name"
   require "google/cloud/pubsub"
 
-  pubsub = Google::Cloud::Pubsub.new project: project_id
+  pubsub = Google::Cloud::Pubsub.new
 
   subscription = pubsub.subscription subscription_name
   subscription.pull.each do |message|
@@ -180,13 +171,12 @@ def pull_messages project_id:, subscription_name:
   # [END pubsub_subscriber_sync_pull]
 end
 
-def listen_for_messages_with_error_handler project_id:, subscription_name:
+def listen_for_messages_with_error_handler subscription_name:
   # [START pubsub_subscriber_error_listener]
-  # project_id        = "Your Google Cloud Project ID"
   # subscription_name = "Your Pubsub subscription name"
   require "google/cloud/pubsub"
 
-  pubsub = Google::Cloud::Pubsub.new project: project_id
+  pubsub = Google::Cloud::Pubsub.new
 
   subscription = pubsub.subscription subscription_name
   subscriber   = subscription.listen do |received_message|
@@ -211,13 +201,12 @@ def listen_for_messages_with_error_handler project_id:, subscription_name:
   # [END pubsub_subscriber_error_listener]
 end
 
-def listen_for_messages_with_flow_control project_id:, subscription_name:
+def listen_for_messages_with_flow_control subscription_name:
   # [START pubsub_subscriber_flow_settings]
-  # project_id        = "Your Google Cloud Project ID"
   # subscription_name = "Your Pubsub subscription name"
   require "google/cloud/pubsub"
 
-  pubsub = Google::Cloud::Pubsub.new project: project_id
+  pubsub = Google::Cloud::Pubsub.new
 
   subscription = pubsub.subscription subscription_name
   subscriber   = subscription.listen inventory: 10 do |received_message|
@@ -233,13 +222,12 @@ def listen_for_messages_with_flow_control project_id:, subscription_name:
   # [END pubsub_subscriber_flow_settings]
 end
 
-def listen_for_messages_with_concurrency_control project_id:, subscription_name:
+def listen_for_messages_with_concurrency_control subscription_name:
   # [START pubsub_subscriber_concurrency_control]
-  # project_id        = "Your Google Cloud Project ID"
   # subscription_name = "Your Pubsub subscription name"
   require "google/cloud/pubsub"
 
-  pubsub = Google::Cloud::Pubsub.new project: project_id
+  pubsub = Google::Cloud::Pubsub.new
 
   subscription = pubsub.subscription subscription_name
   # Use 2 threads for streaming, 4 threads for executing callbacks and 2 threads
@@ -263,58 +251,47 @@ end
 if $PROGRAM_NAME == __FILE__
   case ARGV.shift
   when "update_push_configuration"
-    update_push_configuration project_id:        ARGV.shift,
-                              subscription_name: ARGV.shift,
+    update_push_configuration subscription_name: ARGV.shift,
                               new_endpoint:      ARGV.shift
   when "list_subscriptions"
-    list_subscriptions project_id: ARGV.shift
+    list_subscriptions
   when "delete_subscription"
-    delete_subscription project_id:        ARGV.shift,
-                        subscription_name: ARGV.shift
+    delete_subscription subscription_name: ARGV.shift
   when "get_subscription_policy"
-    get_subscription_policy project_id:        ARGV.shift,
-                            subscription_name: ARGV.shift
+    get_subscription_policy psubscription_name: ARGV.shift
   when "set_subscription_policy"
-    set_subscription_policy project_id:        ARGV.shift,
-                            subscription_name: ARGV.shift
+    set_subscription_policy subscription_name: ARGV.shift
   when "test_subscription_permissions"
-    test_subscription_permissions project_id:        ARGV.shift,
-                                  subscription_name: ARGV.shift
+    test_subscription_permissions subscription_name: ARGV.shift
   when "listen_for_messages"
-    listen_for_messages project_id:        ARGV.shift,
-                        subscription_name: ARGV.shift
+    listen_for_messages subscription_name: ARGV.shift
   when "listen_for_messages_with_custom_attributes"
-    listen_for_messages_with_custom_attributes project_id:        ARGV.shift,
-                                               subscription_name: ARGV.shift
+    listen_for_messages_with_custom_attributes subscription_name: ARGV.shift
   when "pull_messages"
-    pull_messages project_id:        ARGV.shift,
-                  subscription_name: ARGV.shift
+    pull_messages subscription_name: ARGV.shift
   when "listen_for_messages_with_error_handler"
-    listen_for_messages_with_error_handler project_id:        ARGV.shift,
-                                           subscription_name: ARGV.shift
+    listen_for_messages_with_error_handler subscription_name: ARGV.shift
   when "listen_for_messages_with_flow_control"
-    listen_for_messages_with_flow_control project_id:        ARGV.shift,
-                                          subscription_name: ARGV.shift
+    listen_for_messages_with_flow_control subscription_name: ARGV.shift
   when "listen_for_messages_with_concurrency_control"
-    listen_for_messages_with_concurrency_control project_id:        ARGV.shift,
-                                                 subscription_name: ARGV.shift
+    listen_for_messages_with_concurrency_control subscription_name: ARGV.shift
   else
     puts <<~USAGE
       Usage: bundle exec ruby subscriptions.rb [command] [arguments]
 
       Commands:
-        update_push_configuration                    <project_id> <subscription_name> <endpoint> Update the endpoint of a push subscription
-        list_subscriptions                           <project_id>                                List subscriptions of a project
-        delete_subscription                          <project_id> <subscription_name>            Delete a subscription
-        get_subscription_policy                      <project_id> <subscription_name>            Get policies of a subscription
-        set_subscription_policy                      <project_id> <subscription_name>            Set policies of a subscription
-        test_subscription_policy                     <project_id> <subscription_name>            Test policies of a subscription
-        listen_for_messages                          <project_id> <subscription_name>            Listen for messages
-        listen_for_messages_with_custom_attributes   <project_id> <subscription_name>            Listen for messages with custom attributes
-        pull_messages                                <project_id> <subscription_name>            Pull messages
-        listen_for_messages_with_error_handler       <project_id> <subscription_name>            Listen for messages with an error handler
-        listen_for_messages_with_flow_control        <project_id> <subscription_name>            Listen for messages with flow control
-        listen_for_messages_with_concurrency_control <project_id> <subscription_name>            Listen for messages with concurrency control
+        update_push_configuration                    <subscription_name> <endpoint> Update the endpoint of a push subscription
+        list_subscriptions                                                          List subscriptions of a project
+        delete_subscription                          <subscription_name>            Delete a subscription
+        get_subscription_policy                      <subscription_name>            Get policies of a subscription
+        set_subscription_policy                      <subscription_name>            Set policies of a subscription
+        test_subscription_policy                     <subscription_name>            Test policies of a subscription
+        listen_for_messages                          <subscription_name>            Listen for messages
+        listen_for_messages_with_custom_attributes   <subscription_name>            Listen for messages with custom attributes
+        pull_messages                                <subscription_name>            Pull messages
+        listen_for_messages_with_error_handler       <subscription_name>            Listen for messages with an error handler
+        listen_for_messages_with_flow_control        <subscription_name>            Listen for messages with flow control
+        listen_for_messages_with_concurrency_control <subscription_name>            Listen for messages with concurrency control
     USAGE
   end
 end
