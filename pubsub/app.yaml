@@ -13,5 +13,7 @@
 # limitations under the License.
 
 runtime: ruby
-vm: true
+env: flex
 entrypoint: bundle exec ruby listener.rb
+liveness_check:
+    path: "/liveness_check"
