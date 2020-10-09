@@ -88,17 +88,18 @@ def get_topic_policy topic_name:
   # [END pubsub_get_topic_policy]
 end
 
-def set_topic_policy topic_name:
+def set_topic_policy topic_name:, role:, service_account_email:
   # [START pubsub_set_topic_policy]
   # topic_name = "Your Pubsub topic name"
+  # role = "roles/pubsub.publisher"
+  # service_account_email = "serviceAccount:account_name@project_name.iam.gserviceaccount.com"
   require "google/cloud/pubsub"
 
   pubsub = Google::Cloud::Pubsub.new
 
   topic = pubsub.topic topic_name
   topic.policy do |policy|
-    policy.add "roles/pubsub.publisher",
-               "serviceAccount:account_name@project_name.iam.gserviceaccount.com"
+    policy.add role, service_account_email
   end
   # [END pubsub_set_topic_policy]
 end
@@ -290,7 +291,7 @@ def publish_ordered_messages topic_name:
 
   # Stop the async_publisher to send all queued messages immediately.
   topic.async_publisher.stop!
-  puts "Messages published asynchronously in batch."
+  puts "Messages published with ordering key."
   # [END pubsub_publish_with_ordering_keys]
 end
 
@@ -340,7 +341,7 @@ if $PROGRAM_NAME == __FILE__
   when "get_topic_policy"
     get_topic_policy topic_name: ARGV.shift
   when "set_topic_policy"
-    set_topic_policy topic_name: ARGV.shift
+    set_topic_policy topic_name: ARGV.shift, role: ARGV.shift, service_account_email: ARGV.shift
   when "test_topic_permissions"
     test_topic_permissions topic_name: ARGV.shift
   when "create_pull_subscription"
@@ -376,7 +377,7 @@ if $PROGRAM_NAME == __FILE__
         list_topic_subscriptions                        <topic_name>                     List subscriptions in a topic
         delete_topic                                    <topic_name>                     Delete topic policies
         get_topic_policy                                <topic_name>                     Get topic policies
-        set_topic_policy                                <topic_name>                     Set topic policies
+        set_topic_policy                                <topic_name> <role> <service_account_email>                    Set topic policies
         test_topic_permissions                          <topic_name>                     Test topic permissions
         create_pull_subscription                        <topic_name> <subscription_name> Create a pull subscription
         create_ordered_pull_subscription                <topic_name> <subscription_name> Create a pull subscription with ordering enabled

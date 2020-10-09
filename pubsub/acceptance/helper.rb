@@ -20,3 +20,7 @@ require "securerandom"
 def random_topic_name
   "ruby-pubsub-samples-test-topic-#{SecureRandom.hex 4}"
 end
+
+def random_subscription_name
+  "ruby-pubsub-samples-test-subscription-#{SecureRandom.hex 4}"
+end

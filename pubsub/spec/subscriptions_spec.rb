@@ -140,7 +140,7 @@ describe "Pub/Sub subscriptions sample" do
   end
 
   it "listens for messages" do
-    topic = @pubsub.create_topic @topic_name
+    topic = @pubsub_publish_with_ordering_keys
     topic.subscribe @pull_subscription_name
 
     topic.publish "This is a test message."
