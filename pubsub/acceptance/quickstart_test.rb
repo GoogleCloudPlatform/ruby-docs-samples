@@ -17,21 +17,16 @@ require_relative "../quickstart.rb"
 
 describe "quickstart" do
   let(:pubsub) { Google::Cloud::Pubsub.new }
-  let(:topic_name) { "my-new-topic" }
+  let(:topic_name) { random_topic_name }
 
-  before do
-    if (t = pubsub.topic topic_name)
-      t.delete
-    end
-
-    refute pubsub.topic(topic_name)
-  end
-focus
   it "quickstart_create_topic" do
     assert_output "Topic projects/#{pubsub.project}/topics/#{topic_name} created.\n" do
       quickstart topic_name: topic_name
     end
 
-    assert pubsub.topic(topic_name)
+    topic = pubsub.topic topic_name
+    assert topic
+    # cleanup
+    topic.delete
   end
 end

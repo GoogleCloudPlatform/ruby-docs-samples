@@ -15,3 +15,8 @@
 require "minitest/autorun"
 require "minitest/focus"
 require "google/cloud/pubsub"
+require "securerandom"
+
+def random_topic_name
+  "ruby-pubsub-samples-test-topic-#{SecureRandom.hex 4}"
+end
