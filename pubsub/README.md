@@ -70,8 +70,7 @@ Usage:
     test_topic_permissions                          <project_id> <topic_name>                     Test topic permissions
     create_pull_subscription                        <project_id> <topic_name> <subscription_name> Create a pull subscription
     create_push_subscription                        <project_id> <topic_name> <subscription_name> Create a push subscription
-    publish_message                                 <project_id> <topic_name>                     Publish message 
-    publish_messages_with_batch_settings            <project_id> <topic_name>                     Publish messages in batch
+    publish_message                                 <project_id> <topic_name>                     Publish message
     publish_message_async                           <project_id> <topic_name>                     Publish messages asynchronously
     publish_messages_async_with_batch_settings      <project_id> <topic_name>                     Publish messages asynchronously in batch
     publish_message_async_with_custom_attributes    <project_id> <topic_name>                     Publish messages asynchronously with custom attributes
