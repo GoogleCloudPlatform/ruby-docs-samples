@@ -193,25 +193,6 @@ def publish_message project_id:, topic_name:
   # [END pubsub_quickstart_publisher]
 end
 
-def publish_messages_with_batch_settings project_id:, topic_name:
-  # [START pubsub_publisher_batch_settings]
-  # project_id = "Your Google Cloud Project ID"
-  # topic_name = "Your Pubsub topic name"
-  require "google/cloud/pubsub"
-
-  pubsub = Google::Cloud::Pubsub.new project: project_id
-
-  topic = pubsub.topic topic_name
-  topic.publish do |batch|
-    10.times do |i|
-      batch.publish "This is message \##{i}."
-    end
-  end
-
-  puts "Messages published in batch."
-  # [END pubsub_publisher_batch_settings]
-end
-
 def publish_message_async project_id:, topic_name:
   # [START pubsub_publish]
   # project_id = "Your Google Cloud Project ID"
@@ -400,9 +381,6 @@ if $PROGRAM_NAME == __FILE__
   when "publish_message"
     publish_message project_id: ARGV.shift,
                     topic_name: ARGV.shift
-  when "publish_messages_with_batch_settings"
-    publish_messages_with_batch_settings project_id: ARGV.shift,
-                                         topic_name: ARGV.shift
   when "publish_message_async"
     publish_message_async project_id: ARGV.shift,
                           topic_name: ARGV.shift
@@ -410,8 +388,8 @@ if $PROGRAM_NAME == __FILE__
     publish_message_async_with_custom_attributes project_id: ARGV.shift,
                                                  topic_name: ARGV.shift
   when "publish_messages_async_with_batch_settings"
-    publish_messages_with_batch_settings project_id: ARGV.shift,
-                                         topic_name: ARGV.shift
+    publish_messages_async_with_batch_settings project_id: ARGV.shift,
+                                               topic_name: ARGV.shift
   when "publish_messages_async_with_concurrency_control"
     publish_messages_async_with_concurrency_control project_id: ARGV.shift,
                                                     topic_name: ARGV.shift
@@ -437,7 +415,6 @@ if $PROGRAM_NAME == __FILE__
         create_ordered_pull_subscription                <project_id> <topic_name> <subscription_name> Create a pull subscription with ordering enabled
         create_push_subscription                        <project_id> <topic_name> <subscription_name> Create a push subscription
         publish_message                                 <project_id> <topic_name>                     Publish message
-        publish_messages_with_batch_settings            <project_id> <topic_name>                     Publish messages in batch
         publish_message_async                           <project_id> <topic_name>                     Publish messages asynchronously
         publish_message_async_with_custom_attributes    <project_id> <topic_name>                     Publish messages asynchronously with custom attributes
         publish_messages_async_with_batch_settings      <project_id> <topic_name>                     Publish messages asynchronously in batch

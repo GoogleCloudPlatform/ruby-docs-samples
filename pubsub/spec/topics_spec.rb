@@ -193,30 +193,6 @@ describe "Pub/Sub topics sample" do
     end
   end
 
-  it "publishes messages with batch settings" do
-    topic = @pubsub.create_topic @topic_name
-    subscription = topic.subscribe @pull_subscription_name
-
-    expect {
-      publish_messages_with_batch_settings project_id: @project_id,
-                                           topic_name: @topic_name
-    }.to output(/Messages published in batch/).to_stdout
-
-    messages = []
-    expect_with_retry do
-      subscription.pull(max: 20).each do |message|
-        messages << message
-        message.acknowledge!
-      end
-      expect(messages.length).to eq(10)
-    end
-    received_time_counter = Hash.new 0
-    messages.each do |message|
-      received_time_counter[message.publish_time] += 1
-    end
-    expect(received_time_counter.length).to eq(1)
-  end
-
   it "publishes messages asynchronously" do
     topic = @pubsub.create_topic @topic_name
     subscription = topic.subscribe @pull_subscription_name
