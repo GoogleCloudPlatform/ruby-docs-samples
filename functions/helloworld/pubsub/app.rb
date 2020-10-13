@@ -20,8 +20,9 @@ FunctionsFramework.cloud_event "hello_pubsub" do |event|
   # The event parameter is a CloudEvents::Event::V1 object.
   # See https://cloudevents.github.io/sdk-ruby/latest/CloudEvents/Event/V1.html
   name = Base64.decode64 event.data["message"]["data"] rescue "World"
-  # A background function does not return a response, but you can log messages
+
+  # A cloud_event function does not return a response, but you can log messages
   # or cause side effects such as sending additional events.
-  FunctionsFramework.logger.info "Hello, #{name}!"
+  logger.info "Hello, #{name}!"
 end
 # [END functions_helloworld_pubsub]
