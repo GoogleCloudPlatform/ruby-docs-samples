@@ -60,7 +60,7 @@ filter = Google::Cloud::Bigtable::RowFilter.cells_per_column 1
 puts "Reading a single row by row key"
 row = table.read_row "greeting0", filter: filter
 puts "Row key: #{row.key}, Value: #{row.cells[column_family].first.value}"
-# [START bigtable_hw_get_with_filter]
+# [END bigtable_hw_get_with_filter]
 
 # [START bigtable_hw_scan_with_filter]
 puts "Reading the entire table"
