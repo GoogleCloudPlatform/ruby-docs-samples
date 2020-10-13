@@ -120,4 +120,4 @@ def print_row row
   puts "\n"
 end
 
-# [END bigtable_filters_print]
+# [END bigtable_reads_print]
