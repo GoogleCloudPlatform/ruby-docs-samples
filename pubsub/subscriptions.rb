@@ -73,17 +73,18 @@ def get_subscription_policy subscription_name:
   # [END pubsub_get_subscription_policy]
 end
 
-def set_subscription_policy subscription_name:
+def set_subscription_policy subscription_name:, role:, service_account_email:
   # [START pubsub_set_subscription_policy]
   # subscription_name = "Your Pubsub subscription name"
+  # role = "roles/pubsub.publisher"
+  # service_account_email = "serviceAccount:account_name@project_name.iam.gserviceaccount.com"
   require "google/cloud/pubsub"
 
   pubsub = Google::Cloud::Pubsub.new
 
   subscription = pubsub.subscription subscription_name
   subscription.policy do |policy|
-    policy.add "roles/pubsub.subscriber",
-               "serviceAccount:account-name@project-name.iam.gserviceaccount.com"
+    policy.add role, service_account_email
   end
   # [END pubsub_set_subscription_policy]
 end
