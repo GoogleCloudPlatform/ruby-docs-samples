@@ -21,7 +21,7 @@ describe "subscriptions" do
   let(:subscription_name) { random_subscription_name }
   let(:endpoint) { "https://#{pubsub.project}.appspot.com/push" }
   let(:role) { "roles/pubsub.subscriber" }
-  let(:service_account_email) { "serviceAccount:acceptance-tests@#{pubsub.project}.iam.gserviceaccount.com" }
+  let(:service_account_email) { "serviceAccount:kokoro@#{pubsub.project}.iam.gserviceaccount.com" }
 
   before :all do
     @topic = pubsub.create_topic topic_name

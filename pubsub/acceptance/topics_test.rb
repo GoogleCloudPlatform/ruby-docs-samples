@@ -19,7 +19,7 @@ require_relative "../subscriptions.rb"
 describe "topics" do
   let(:pubsub) { Google::Cloud::Pubsub.new }
   let(:role) { "roles/pubsub.publisher" }
-  let(:service_account_email) { "serviceAccount:acceptance-tests@#{pubsub.project}.iam.gserviceaccount.com" }
+  let(:service_account_email) { "serviceAccount:kokoro@#{pubsub.project}.iam.gserviceaccount.com" }
   let(:topic_name) { random_topic_name }
   let(:subscription_name) { random_subscription_name }
 
