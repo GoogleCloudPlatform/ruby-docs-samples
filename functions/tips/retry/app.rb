@@ -22,14 +22,14 @@ FunctionsFramework.cloud_event "retry_or_not" do |event|
     # Simulate a failure
     raise "I failed!"
   rescue RuntimeError => e
-    FunctionsFramework.logger.warn "Caught an error: #{e}"
+    logger.warn "Caught an error: #{e}"
     if try_again
       # Raise an exception to return a 500 and trigger a retry.
-      FunctionsFramework.logger.info "Trying again..."
+      logger.info "Trying again..."
       raise ex
     else
       # Return normally to end processing of this event.
-      FunctionsFramework.logger.info "Giving up."
+      logger.info "Giving up."
     end
   end
 end

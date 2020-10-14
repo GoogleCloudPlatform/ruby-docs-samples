@@ -21,8 +21,8 @@ FunctionsFramework.cloud_event "hello_firestore" do |event|
   # See https://cloudevents.github.io/sdk-ruby/latest/CloudEvents/Event/V1.html
   payload = event.data
 
-  FunctionsFramework.logger.info "Function triggered by change to: #{event.source}"
-  FunctionsFramework.logger.info "Old value: #{payload['oldValue']}"
-  FunctionsFramework.logger.info "New value: #{payload['value']}"
+  logger.info "Function triggered by change to: #{event.source}"
+  logger.info "Old value: #{payload['oldValue']}"
+  logger.info "New value: #{payload['value']}"
 end
 # [END functions_firebase_firestore]

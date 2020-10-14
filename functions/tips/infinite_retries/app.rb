@@ -23,11 +23,11 @@ FunctionsFramework.cloud_event "avoid_infinite_retries" do |event|
   max_age_ms = 10_000
   if event_age_ms > max_age_ms
     # Ignore events that are too old.
-    FunctionsFramework.logger.info "Dropped #{event.id} (age #{event_age_ms}ms)"
+    logger.info "Dropped #{event.id} (age #{event_age_ms}ms)"
 
   else
     # Do what the function is supposed to do.
-    FunctionsFramework.logger.info "Handling #{event.id} (age #{event_age_ms}ms)..."
+    logger.info "Handling #{event.id} (age #{event_age_ms}ms)..."
     failed = true
 
     # Raise an exception to signal failure and trigger a retry.

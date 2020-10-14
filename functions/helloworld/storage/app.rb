@@ -20,12 +20,12 @@ FunctionsFramework.cloud_event "hello_gcs" do |event|
   # See https://cloudevents.github.io/sdk-ruby/latest/CloudEvents/Event/V1.html
   payload = event.data
 
-  FunctionsFramework.logger.info "Event: #{event.id}"
-  FunctionsFramework.logger.info "Event Type: #{event.type}"
-  FunctionsFramework.logger.info "Bucket: #{payload['bucket']}"
-  FunctionsFramework.logger.info "File: #{payload['name']}"
-  FunctionsFramework.logger.info "Metageneration: #{payload['metageneration']}"
-  FunctionsFramework.logger.info "Created: #{payload['timeCreated']}"
-  FunctionsFramework.logger.info "Updated: #{payload['updated']}"
+  logger.info "Event: #{event.id}"
+  logger.info "Event Type: #{event.type}"
+  logger.info "Bucket: #{payload['bucket']}"
+  logger.info "File: #{payload['name']}"
+  logger.info "Metageneration: #{payload['metageneration']}"
+  logger.info "Created: #{payload['timeCreated']}"
+  logger.info "Updated: #{payload['updated']}"
 end
 # [END functions_helloworld_storage]
