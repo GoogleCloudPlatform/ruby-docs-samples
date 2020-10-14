@@ -14,6 +14,7 @@
 
 require "minitest/autorun"
 require "minitest/focus"
+require "minitest/hooks/default"
 require "google/cloud/pubsub"
 require "securerandom"
 

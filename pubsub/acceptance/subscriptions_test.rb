@@ -23,14 +23,20 @@ describe "subscriptions" do
   let(:role) { "roles/pubsub.subscriber" }
   let(:service_account_email) { "serviceAccount:acceptance-tests@#{pubsub.project}.iam.gserviceaccount.com" }
 
-  before do
+  before :all do
     @topic = pubsub.create_topic topic_name
+  end
+
+  after :all do
+    @topic.delete
+  end
+
+  before do
     @subscription = @topic.subscribe subscription_name
   end
 
   after do
     @subscription.delete if @subscription
-    @topic.delete
   end
 
   it "pubsub_update_push_configuration, pubsub_list_subscriptions, pubsub_set_subscription_policy, pubsub_get_subscription_policy, pubsub_test_subscription_permissions, pubsub_delete_subscription" do
