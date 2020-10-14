@@ -33,14 +33,15 @@ environment variable to the path to the key file, for example:
 
 ### Set Project ID
 
-Next, set the `GOOGLE_CLOUD_PROJECT` environment variable to the project name
-set in the [Google Cloud Platfrom Developer COnsole](https://console.cloud.google.com):
+Next, set the *GOOGLE_CLOUD_PROJECT* environment variable to the project name
+set in the
+[Google Cloud Platform Developer Console](https://console.cloud.google.com):
 
-    export GOOGLE_CLOUD_PROJECT="YOUR-PROJECT-ID"
+    `export GOOGLE_CLOUD_PROJECT="YOUR-PROJECT-ID"`
 
 ### Install Dependencies
 
-1. Install the [Bundler](http://bundler.io) gem.
+1. Install the [Bundler](http://bundler.io/) gem.
 
 1. Install dependencies using:
 
@@ -48,9 +49,15 @@ set in the [Google Cloud Platfrom Developer COnsole](https://console.cloud.googl
 
 ## Run samples
 
-Deploy the push listener:
+If using the `topics.rb create_push_subscription` command (see below), first deploy the push listener. The `endpoint`
+argument to `create_push_subscription` should look like `https://my-project.appspot.com/push`.
 
     gcloud app deploy --promote
+    gcloud app logs tail -s default
+
+Run the quickstart sample to create a topic:
+
+    bundle exec ruby quickstart.rb <topic_name>
 
 Run the sample for using topics:
 
@@ -69,7 +76,7 @@ Usage:
     set_topic_policy                                <project_id> <topic_name>                     Set topic policies
     test_topic_permissions                          <project_id> <topic_name>                     Test topic permissions
     create_pull_subscription                        <project_id> <topic_name> <subscription_name> Create a pull subscription
-    create_push_subscription                        <project_id> <topic_name> <subscription_name> Create a push subscription
+    create_push_subscription                        <project_id> <topic_name> <subscription_name> <endpoint> Create a push subscription
     publish_message                                 <project_id> <topic_name>                     Publish message
     publish_message_async                           <project_id> <topic_name>                     Publish messages asynchronously
     publish_messages_async_with_batch_settings      <project_id> <topic_name>                     Publish messages asynchronously in batch
@@ -78,9 +85,9 @@ Usage:
 
 Example:
 
-    bundle exec ruby topics.rb create_topic YOUR-PROJECT-ID new_topic
+    bundle exec ruby topics.rb create_topic my-new-topic
 
-    Topic new_topic created.
+    Topic my-new-topic created.
 
 Run the sample for using subscriptions:
 
@@ -106,7 +113,7 @@ Usage:
 
 Example:
 
-    bundle exec ruby subscriptions.rb list_subscriptions YOUR-PROJECT-ID
+    bundle exec ruby subscriptions.rb list_subscriptions
 
     Subscriptions:
     YOUR-SUBSCRIPTION
