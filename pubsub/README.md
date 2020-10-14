@@ -116,7 +116,7 @@ Example:
 
 Test the sample:
 
-    bundle exec rspec
+    bundle exec rake test
 
 You will see messages pushed to the listener in
 [Google Cloud Logging](https://cloud.google.com/logging/docs/).

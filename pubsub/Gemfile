@@ -25,7 +25,4 @@ group :test do
   gem "minitest-junit"
   gem "rack-test"
   gem "rake"
-  gem "rspec"
-  gem "rspec-retry"
-  gem "rspec_junit_formatter"
 end
