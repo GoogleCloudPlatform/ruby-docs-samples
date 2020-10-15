@@ -124,6 +124,6 @@ Example:
 
 ## Test samples
 
-Test the sample:
+Test the samples using the Project ID configured above:
 
     bundle exec rake test

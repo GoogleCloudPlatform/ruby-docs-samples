@@ -23,8 +23,4 @@ post "/push" do
   response.status = 204
 end
 
-get "/liveness_check" do
-  response.status = 200
-end
-
 set :port, 8080

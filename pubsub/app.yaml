@@ -14,5 +14,3 @@
 
 runtime: ruby27
 entrypoint: bundle exec ruby listener.rb
-liveness_check:
-    path: "/liveness_check"
