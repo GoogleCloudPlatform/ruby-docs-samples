@@ -19,7 +19,7 @@ describe "quickstart" do
   let(:pubsub) { Google::Cloud::Pubsub.new }
   let(:topic_name) { random_topic_name }
 
-  it "quickstart_create_topic" do
+  it "supports quickstart_create_topic" do
     assert_output "Topic projects/#{pubsub.project}/topics/#{topic_name} created.\n" do
       quickstart topic_name: topic_name
     end

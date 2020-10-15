@@ -28,7 +28,7 @@ describe "topics" do
     @topic.delete if @topic
   end
 
-  it "pubsub_create_topic, pubsub_list_topics, pubsub_set_topic_policy, pubsub_get_topic_policy, pubsub_test_topic_permissions, pubsub_delete_topic" do
+  it "supports pubsub_create_topic, pubsub_list_topics, pubsub_set_topic_policy, pubsub_get_topic_policy, pubsub_test_topic_permissions, pubsub_delete_topic" do
     # pubsub_create_topic
     assert_output "Topic projects/#{pubsub.project}/topics/#{topic_name} created.\n" do
       create_topic topic_name: topic_name
@@ -67,7 +67,7 @@ describe "topics" do
     refute topic
   end
 
-  it "pubsub_create_pull_subscription, pubsub_list_topic_subscriptions, pubsub_quickstart_publisher, pubsub_subscriber_sync_pull" do
+  it "supports pubsub_create_pull_subscription, pubsub_list_topic_subscriptions, pubsub_quickstart_publisher, pubsub_subscriber_sync_pull" do
     #setup
     @topic = pubsub.create_topic topic_name
 
@@ -97,7 +97,7 @@ describe "topics" do
     end
   end
 
-  it "pubsub_enable_subscription_ordering, pubsub_publish_with_ordering_keys, pubsub_resume_publish_with_ordering_keys" do
+  it "supports pubsub_enable_subscription_ordering, pubsub_publish_with_ordering_keys, pubsub_resume_publish_with_ordering_keys" do
     #setup
     @topic = pubsub.create_topic topic_name
 
@@ -155,7 +155,7 @@ describe "topics" do
     assert_equal 1, received_time_counter.length
   end
 
-  it "pubsub_create_push_subscription" do
+  it "supports pubsub_create_push_subscription" do
     #setup
     @topic = pubsub.create_topic topic_name
     endpoint = "https://#{pubsub.project}.appspot.com/push"
@@ -172,7 +172,7 @@ describe "topics" do
     assert_equal endpoint, @subscription.push_config.endpoint
   end
 
-  it "pubsub_publish" do
+  it "supports pubsub_publish" do
     #setup
     @topic = pubsub.create_topic topic_name
     @subscription = @topic.subscribe random_subscription_name
@@ -193,7 +193,7 @@ describe "topics" do
     end
   end
 
-  it "pubsub_publish_custom_attributes" do
+  it "supports pubsub_publish_custom_attributes" do
     #setup
     @topic = pubsub.create_topic topic_name
     @subscription = @topic.subscribe random_subscription_name
@@ -217,7 +217,7 @@ describe "topics" do
     end
   end
 
-  it "pubsub_publisher_batch_settings" do
+  it "supports pubsub_publisher_batch_settings" do
     #setup
     @topic = pubsub.create_topic topic_name
     @subscription = @topic.subscribe random_subscription_name
@@ -242,7 +242,7 @@ describe "topics" do
     assert_equal 1, received_time_counter.length
   end
 
-  it "pubsub_publisher_concurrency_control" do
+  it "supports pubsub_publisher_concurrency_control" do
     #setup
     @topic = pubsub.create_topic topic_name
     @subscription = @topic.subscribe random_subscription_name

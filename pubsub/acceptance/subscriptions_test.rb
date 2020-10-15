@@ -38,7 +38,7 @@ describe "subscriptions" do
     @subscription.delete if @subscription
   end
 
-  it "pubsub_update_push_configuration, pubsub_list_subscriptions, pubsub_set_subscription_policy, pubsub_get_subscription_policy, pubsub_test_subscription_permissions, pubsub_delete_subscription" do
+  it "supports pubsub_update_push_configuration, pubsub_list_subscriptions, pubsub_set_subscription_policy, pubsub_get_subscription_policy, pubsub_test_subscription_permissions, pubsub_delete_subscription" do
     # pubsub_update_push_configuration
     assert_output "Push endpoint updated.\n" do
       update_push_configuration subscription_name: subscription_name, new_endpoint: endpoint
@@ -79,7 +79,7 @@ describe "subscriptions" do
     refute @subscription
   end
 
-  it "pubsub_subscriber_sync_pull" do
+  it "supports pubsub_subscriber_sync_pull" do
     @topic.publish "This is a test message."
 
     # pubsub_subscriber_sync_pull
@@ -90,7 +90,7 @@ describe "subscriptions" do
     end
   end
 
-  it "pubsub_subscriber_async_pull, pubsub_quickstart_subscriber" do
+  it "supports pubsub_subscriber_async_pull, pubsub_quickstart_subscriber" do
     @topic.publish "This is a test message."
 
     # pubsub_subscriber_async_pull
@@ -102,7 +102,7 @@ describe "subscriptions" do
     end
   end
 
-  it "pubsub_subscriber_sync_pull_custom_attributes, pubsub_subscriber_async_pull_custom_attributes" do
+  it "supports pubsub_subscriber_sync_pull_custom_attributes, pubsub_subscriber_async_pull_custom_attributes" do
     @topic.publish "This is a test message.", origin: "ruby-sample"
 
     # pubsub_subscriber_sync_pull_custom_attributes
@@ -117,7 +117,7 @@ describe "subscriptions" do
     end
   end
 
-  it "pubsub_subscriber_flow_settings" do
+  it "supports pubsub_subscriber_flow_settings" do
     @topic.publish "This is a test message."
 
     # pubsub_subscriber_flow_settings
@@ -128,7 +128,7 @@ describe "subscriptions" do
     end
   end
 
-  it "pubsub_subscriber_concurrency_control" do
+  it "supports pubsub_subscriber_concurrency_control" do
     @topic.publish "This is a test message."
 
     # pubsub_subscriber_concurrency_control
