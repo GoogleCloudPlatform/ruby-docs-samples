@@ -18,7 +18,7 @@ authentication:
 
 1. When running locally, use the [Google Cloud SDK](https://cloud.google.com/sdk/)
 
-    `gcloud auth application-default login`
+       gcloud auth application-default login
 
 1. When running on App Engine or Compute Engine, credentials are already set-up.
 However, you may need to configure your Compute Engine instance with
@@ -29,15 +29,15 @@ However, you may need to configure your Compute Engine instance with
 any environment. To use the file, set the `GOOGLE_APPLICATION_CREDENTIALS`
 environment variable to the path to the key file, for example:
 
-    `export GOOGLE_APPLICATION_CREDENTIALS=/path/to/service_account.json`
+       export GOOGLE_APPLICATION_CREDENTIALS=/path/to/service_account.json
 
 ### Set Project ID
 
-Next, set the *GOOGLE_CLOUD_PROJECT* environment variable to the project name
+Next, set the `GOOGLE_CLOUD_PROJECT` environment variable to the project name
 set in the
 [Google Cloud Platform Developer Console](https://console.cloud.google.com):
 
-    `export GOOGLE_CLOUD_PROJECT="YOUR-PROJECT-ID"`
+    export GOOGLE_CLOUD_PROJECT="YOUR-PROJECT-ID"
 
 ### Install Dependencies
 
@@ -45,12 +45,15 @@ set in the
 
 1. Install dependencies using:
 
-    `bundle install`
+       bundle install
 
 ## Run samples
 
-If using the `topics.rb create_push_subscription` command (see below), first deploy the push listener. The `endpoint`
-argument to `create_push_subscription` should look like `https://my-project.appspot.com/push`.
+If using the `topics.rb create_push_subscription` command (see below), first deploy the push listener
+App Engine app defined in `listener.rb` and configured in `app.yaml`. The `endpoint` argument to
+`create_push_subscription` should look like `https://my-project.appspot.com/push`. You can see messages
+pushed to the listener in [Google Cloud Logging](https://cloud.google.com/logging/docs/), or simply
+run `tail` on the logs as shown below.
 
     gcloud app deploy --promote
     gcloud app logs tail -s default
@@ -124,6 +127,3 @@ Example:
 Test the sample:
 
     bundle exec rake test
-
-You will see messages pushed to the listener in
-[Google Cloud Logging](https://cloud.google.com/logging/docs/).
