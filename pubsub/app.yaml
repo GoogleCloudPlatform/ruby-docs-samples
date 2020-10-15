@@ -12,8 +12,5 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-runtime: ruby
-env: flex
+runtime: ruby27
 entrypoint: bundle exec ruby listener.rb
-liveness_check:
-    path: "/liveness_check"

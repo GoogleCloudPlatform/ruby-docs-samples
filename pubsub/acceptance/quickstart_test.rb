@@ -1,4 +1,4 @@
-# Copyright 2015 Google, Inc
+# Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,28 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-ENV["RACK_ENV"] = "test"
+require_relative "helper"
+require_relative "../quickstart.rb"
 
-require_relative "../listener"
-require "spec_helper"
-require "json"
-require "base64"
+describe "quickstart" do
+  let(:pubsub) { Google::Cloud::Pubsub.new }
+  let(:topic_name) { random_topic_name }
 
-describe "Pub/Sub listener" do
-  include Rack::Test::Methods
+  it "supports quickstart_create_topic" do
+    assert_output "Topic projects/#{pubsub.project}/topics/#{topic_name} created.\n" do
+      quickstart topic_name: topic_name
+    end
 
-  def app
-    Sinatra::Application
-  end
-
-  it "accepts push" do
-    message = "Hello!"
-    message_enc = Base64.encode64 message
-    message_hash = { message: { data: message_enc } }
-    message_json = JSON.generate message_hash
-
-    post "/push", message_json
-
-    expect(last_response.status).to eq(204)
+    topic = pubsub.topic topic_name
+    assert topic
+    # cleanup
+    topic.delete
   end
 end

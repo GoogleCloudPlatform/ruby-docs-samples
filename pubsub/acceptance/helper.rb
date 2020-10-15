@@ -1,4 +1,4 @@
-# Copyright 2015 Google, Inc
+# Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,15 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "sinatra"
-require "json"
-require "base64"
+require "minitest/autorun"
+require "minitest/focus"
+require "minitest/hooks/default"
+require "google/cloud/pubsub"
+require "securerandom"
 
-post "/push" do
-  message = JSON.parse request.body.read
-  data = Base64.decode64 message["message"]["data"]
-  logger.info "Pushed Message: #{data}"
-  response.status = 204
+def random_topic_name
+  "ruby-pubsub-samples-test-topic-#{SecureRandom.hex 4}"
 end
 
-set :port, 8080
+def random_subscription_name
+  "ruby-pubsub-samples-test-subscription-#{SecureRandom.hex 4}"
+end
