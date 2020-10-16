@@ -22,6 +22,7 @@ describe "topics" do
   let(:service_account_email) { "serviceAccount:kokoro@#{pubsub.project}.iam.gserviceaccount.com" }
   let(:topic_name) { random_topic_name }
   let(:subscription_name) { random_subscription_name }
+  let(:dead_letter_topic_name) { random_topic_name }
 
   after do
     @subscription.delete if @subscription
@@ -170,6 +171,49 @@ describe "topics" do
     assert_equal endpoint, @subscription.endpoint
     assert @subscription.push_config
     assert_equal endpoint, @subscription.push_config.endpoint
+  end
+
+  it "supports pubsub_dead_letter_create_subscription, pubsub_dead_letter_update_subscription, pubsub_dead_letter_delivery_attempt" do
+    #setup
+    @topic = pubsub.create_topic topic_name
+    @dead_letter_topic = pubsub.create_topic dead_letter_topic_name
+
+    # pubsub_dead_letter_create_subscription
+    out, _err = capture_io do
+      dead_letter_create_subscription topic_name: topic_name,
+                                      subscription_name: subscription_name,
+                                      dead_letter_topic_name: dead_letter_topic_name
+    end
+    assert_includes out, "Created subscription #{subscription_name} with dead letter topic #{dead_letter_topic_name}."
+
+    @subscription = @topic.subscription subscription_name
+    assert @subscription
+    assert_equal "projects/#{pubsub.project}/subscriptions/#{subscription_name}", @subscription.name
+    assert @subscription.dead_letter_topic
+    assert_equal "projects/#{pubsub.project}/topics/#{dead_letter_topic_name}", @subscription.dead_letter_topic.name
+    assert_equal 10, @subscription.dead_letter_max_delivery_attempts
+
+    # pubsub_dead_letter_update_subscription
+    assert_output "Max delivery attempts is now 20.\n" do
+      dead_letter_update_subscription subscription_name: subscription_name
+    end
+    @subscription.reload!
+    assert @subscription.dead_letter_topic
+    assert_equal "projects/#{pubsub.project}/topics/#{dead_letter_topic_name}", @subscription.dead_letter_topic.name
+    assert_equal 20, @subscription.dead_letter_max_delivery_attempts
+
+    @topic.publish "This is a dead letter topic test message."
+    # pubsub_dead_letter_delivery_attempt
+    expect_with_retry "pubsub_dead_letter_delivery_attempt" do
+       out, _err = capture_io do
+         dead_letter_delivery_attempt subscription_name: subscription_name
+       end
+       assert_includes out, "Received message: This is a dead letter topic test message."
+       assert_includes out, "Delivery Attempt: 1"
+    end
+
+  ensure
+    @dead_letter_topic.delete if @dead_letter_topic
   end
 
   it "supports pubsub_publish" do

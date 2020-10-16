@@ -105,6 +105,21 @@ def test_subscription_permissions subscription_name:
   # [END pubsub_test_subscription_permissions]
 end
 
+def dead_letter_update_subscription subscription_name:
+  # [START pubsub_dead_letter_update_subscription]
+  # subscription_name = "Your Pubsub subscription name"
+  # role = "roles/pubsub.publisher"
+  # service_account_email = "serviceAccount:account_name@project_name.iam.gserviceaccount.com"
+  require "google/cloud/pubsub"
+
+  pubsub = Google::Cloud::Pubsub.new
+
+  subscription = pubsub.subscription subscription_name
+  subscription.dead_letter_max_delivery_attempts = 20
+  puts "Max delivery attempts is now #{subscription.dead_letter_max_delivery_attempts}."
+  # [END pubsub_dead_letter_update_subscription]
+end
+
 def listen_for_messages subscription_name:
   # [START pubsub_subscriber_async_pull]
   # [START pubsub_quickstart_subscriber]
@@ -247,6 +262,22 @@ def listen_for_messages_with_concurrency_control subscription_name:
   sleep 60
   subscriber.stop.wait!
   # [END pubsub_subscriber_concurrency_control]
+end
+
+def dead_letter_delivery_attempt subscription_name:
+  # [START pubsub_dead_letter_delivery_attempt]
+  # subscription_name = "Your Pubsub subscription name"
+  require "google/cloud/pubsub"
+
+  pubsub = Google::Cloud::Pubsub.new
+
+  subscription = pubsub.subscription subscription_name
+  subscription.pull.each do |message|
+    puts "Received message: #{message.data}"
+    puts "Delivery Attempt: #{message.delivery_attempt}"
+    message.acknowledge!
+  end
+  # [END pubsub_dead_letter_delivery_attempt]
 end
 
 if $PROGRAM_NAME == __FILE__

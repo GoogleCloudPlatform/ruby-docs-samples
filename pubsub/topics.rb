@@ -169,6 +169,26 @@ def create_push_subscription topic_name:, subscription_name:, endpoint:
   # [END pubsub_create_push_subscription]
 end
 
+def dead_letter_create_subscription topic_name:, subscription_name:, dead_letter_topic_name:
+  # [START pubsub_dead_letter_create_subscription]
+  # topic_name             = "Your Pubsub topic name"
+  # subscription_name      = "Your Pubsub subscription name"
+  # dead_letter_topic_name = "Your Pubsub dead letter topic name"
+  require "google/cloud/pubsub"
+
+  pubsub = Google::Cloud::Pubsub.new
+
+  topic             = pubsub.topic topic_name
+  dead_letter_topic = pubsub.topic dead_letter_topic_name
+  subscription      = topic.subscribe subscription_name,
+                                      dead_letter_topic:                 dead_letter_topic,
+                                      dead_letter_max_delivery_attempts: 10
+
+  puts "Created subscription #{subscription_name} with dead letter topic #{dead_letter_topic_name}."
+  puts "To process dead letter messages, remember to add a subscription to your dead letter topic."
+  # [END pubsub_dead_letter_create_subscription]
+end
+
 def publish_message topic_name:
   # [START pubsub_quickstart_publisher]
   # topic_name = "Your Pubsub topic name"
