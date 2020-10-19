@@ -44,6 +44,26 @@ def list_subscriptions
   # [END pubsub_list_subscriptions]
 end
 
+def detach_subscription subscription_name:
+  # [START pubsub_detach_subscription]
+  # subscription_name = "Your Pubsub subscription name"
+  require "google/cloud/pubsub"
+
+  pubsub = Google::Cloud::Pubsub.new
+
+  subscription = pubsub.subscription subscription_name
+  subscription.detach
+
+  sleep 120
+  subscription.reload!
+  if subscription.detached?
+    puts "Subscription is detached."
+  else
+    puts "Subscription is NOT detached."
+  end
+  # [END pubsub_detach_subscription]
+end
+
 def delete_subscription subscription_name:
   # [START pubsub_delete_subscription]
   # subscription_name = "Your Pubsub subscription name"
@@ -53,6 +73,8 @@ def delete_subscription subscription_name:
 
   subscription = pubsub.subscription subscription_name
   subscription.delete
+
+
 
   puts "Subscription #{subscription_name} deleted."
   # [END pubsub_delete_subscription]

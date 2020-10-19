@@ -38,7 +38,8 @@ describe "subscriptions" do
     @subscription.delete if @subscription
   end
 
-  it "supports pubsub_update_push_configuration, pubsub_list_subscriptions, pubsub_set_subscription_policy, pubsub_get_subscription_policy, pubsub_test_subscription_permissions, pubsub_delete_subscription" do
+  it "supports pubsub_update_push_configuration, pubsub_list_subscriptions, pubsub_set_subscription_policy, pubsub_get_subscription_policy, " \
+     "pubsub_test_subscription_permissions, pubsub_detach_subscription, pubsub_delete_subscription" do
     # pubsub_update_push_configuration
     assert_output "Push endpoint updated.\n" do
       update_push_configuration subscription_name: subscription_name, new_endpoint: endpoint
@@ -69,6 +70,11 @@ describe "subscriptions" do
     # pubsub_test_subscription_permissions
     assert_output "Permission to consume\nPermission to update\n" do
       test_subscription_permissions subscription_name: subscription_name
+    end
+
+    # pubsub_detach_subscription
+    assert_output "Subscription is detached.\n" do
+      detach_subscription subscription_name: subscription_name
     end
 
     # pubsub_delete_subscription
