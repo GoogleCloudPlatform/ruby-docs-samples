@@ -309,6 +309,27 @@ describe "topics" do
     end
   end
 
+  it "supports publish_with_error_handler" do
+    #setup
+    @topic = pubsub.create_topic topic_name
+    @subscription = @topic.subscribe random_subscription_name
+
+    # publish_with_error_handler
+    assert_output "Message published asynchronously.\n" do
+      publish_message_async topic_name: topic_name
+    end
+
+    messages = []
+    expect_with_retry "pubsub_publish" do
+      @subscription.pull(max: 1).each do |message|
+        messages << message
+        message.acknowledge!
+      end
+      assert_equal 1, messages.length
+      assert_equal "This is a test message.", messages[0].data
+    end
+  end
+
   # Pub/Sub calls may not respond immediately.
   # Wrap expectations that may require multiple attempts with this method.
   def expect_with_retry sample_name, attempts: 5

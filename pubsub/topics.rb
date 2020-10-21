@@ -290,6 +290,29 @@ def publish_messages_async_with_concurrency_control topic_name:
   # [END pubsub_publisher_concurrency_control]
 end
 
+def publish_with_error_handler topic_name:
+  # [START pubsub_publish_with_error_handler]
+  # topic_name = "Your Pubsub topic name"
+  require "google/cloud/pubsub"
+
+  pubsub = Google::Cloud::Pubsub.new
+
+  topic = pubsub.topic topic_name
+
+  begin
+    topic.publish_async "This is a test message." do |result|
+      raise "Failed to publish the message." unless result.succeeded?
+      puts "Message published asynchronously."
+    end
+
+    # Stop the async_publisher to send all queued messages immediately.
+    topic.async_publisher.stop.wait!
+  rescue StandardError => e
+    puts "Received error while publishing: #{e.message}"
+  end
+  # [END pubsub_publish_with_error_handler]
+end
+
 def publish_ordered_messages topic_name:
   # [START pubsub_publish_with_ordering_keys]
   # topic_name = "Your Pubsub topic name"
