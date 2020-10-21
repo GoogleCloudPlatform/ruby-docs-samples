@@ -74,8 +74,6 @@ def delete_subscription subscription_name:
   subscription = pubsub.subscription subscription_name
   subscription.delete
 
-
-
   puts "Subscription #{subscription_name} deleted."
   # [END pubsub_delete_subscription]
 end
@@ -300,6 +298,48 @@ def dead_letter_delivery_attempt subscription_name:
   # [END pubsub_dead_letter_delivery_attempt]
 end
 
+def subscriber_sync_pull_with_lease subscription_name:
+  # [START pubsub_subscriber_sync_pull_with_lease]
+  # subscription_name = "Your Pubsub subscription name"
+  require "google/cloud/pubsub"
+
+  pubsub = Google::Cloud::Pubsub.new
+
+  subscription = pubsub.subscription subscription_name
+  new_ack_deadline = 30
+  processed = false
+
+  # The subscriber pulls a specified number of messages.
+  received_messages = subscription.pull max: 1
+
+  # Obtain the first message.
+  message = received_messages.first
+
+  # Send the message to a non-blocking worker that starts a long-running process, such as writing
+  # the message to a table, which may take longer than the default 10-sec acknowledge deadline.
+  Thread.new do
+    sleep 15
+    processed = true
+    puts "Finished processing \"#{message.data}\"."
+  end
+
+  loop do
+    sleep 10
+    if processed
+      # If the message has been processed, acknowledge the message.
+      message.acknowledge!
+      puts "Done."
+      # Exit after the message is acknowledged.
+      break
+    else
+      # If the message has not yet been processed, reset its ack deadline.
+      message.modify_ack_deadline! new_ack_deadline
+      puts "Reset ack deadline for \"#{message.data}\" for #{new_ack_deadline} seconds."
+    end
+  end
+  # [END pubsub_subscriber_sync_pull_with_lease]
+end
+
 if $PROGRAM_NAME == __FILE__
   case ARGV.shift
   when "update_push_configuration"
@@ -333,6 +373,8 @@ if $PROGRAM_NAME == __FILE__
     listen_for_messages_with_concurrency_control subscription_name: ARGV.shift
   when "dead_letter_delivery_attempt"
     dead_letter_delivery_attempt subscription_name: ARGV.shift
+  when "subscriber_sync_pull_with_lease"
+    subscriber_sync_pull_with_lease subscription_name: ARGV.shift
   else
     puts <<~USAGE
       Usage: bundle exec ruby subscriptions.rb [command] [arguments]
@@ -353,6 +395,7 @@ if $PROGRAM_NAME == __FILE__
         listen_for_messages_with_flow_control        <subscription_name>            Listen for messages with flow control
         listen_for_messages_with_concurrency_control <subscription_name>            Listen for messages with concurrency control
         dead_letter_delivery_attempt                 <subscription_name>            Pull messages that have a delivery attempts field
+        subscriber_sync_pull_with_lease              <subscription_name>            Pull messages and reset their acknowledgement deadlines
     USAGE
   end
 end

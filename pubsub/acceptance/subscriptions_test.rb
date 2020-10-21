@@ -144,6 +144,21 @@ describe "subscriptions" do
     end
   end
 
+  it "supports pubsub_subscriber_sync_pull_with_lease" do
+    @topic.publish "This is a test message."
+    sleep 1
+
+    # # pubsub_subscriber_sync_pull_with_lease
+    expect_with_retry "pubsub_subscriber_sync_pull_with_lease" do
+      out, _err = capture_io do
+        subscriber_sync_pull_with_lease subscription_name: subscription_name
+      end
+      assert_includes out, "Reset ack deadline for \"This is a test message.\" for 30 seconds."
+      assert_includes out, "Finished processing \"This is a test message.\"."
+      assert_includes out, "Done."
+    end
+  end
+
   # Pub/Sub calls may not respond immediately.
   # Wrap expectations that may require multiple attempts with this method.
   def expect_with_retry sample_name, attempts: 2
