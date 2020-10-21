@@ -307,6 +307,8 @@ if $PROGRAM_NAME == __FILE__
                               new_endpoint:      ARGV.shift
   when "list_subscriptions"
     list_subscriptions
+  when "detach_subscription"
+    detach_subscription subscription_name: ARGV.shift
   when "delete_subscription"
     delete_subscription subscription_name: ARGV.shift
   when "get_subscription_policy"
@@ -315,6 +317,8 @@ if $PROGRAM_NAME == __FILE__
     set_subscription_policy subscription_name: ARGV.shift
   when "test_subscription_permissions"
     test_subscription_permissions subscription_name: ARGV.shift
+  when "dead_letter_update_subscription"
+    dead_letter_update_subscription subscription_name: ARGV.shift
   when "listen_for_messages"
     listen_for_messages subscription_name: ARGV.shift
   when "listen_for_messages_with_custom_attributes"
@@ -327,6 +331,8 @@ if $PROGRAM_NAME == __FILE__
     listen_for_messages_with_flow_control subscription_name: ARGV.shift
   when "listen_for_messages_with_concurrency_control"
     listen_for_messages_with_concurrency_control subscription_name: ARGV.shift
+  when "dead_letter_delivery_attempt"
+    dead_letter_delivery_attempt subscription_name: ARGV.shift
   else
     puts <<~USAGE
       Usage: bundle exec ruby subscriptions.rb [command] [arguments]
@@ -334,16 +340,19 @@ if $PROGRAM_NAME == __FILE__
       Commands:
         update_push_configuration                    <subscription_name> <endpoint> Update the endpoint of a push subscription
         list_subscriptions                                                          List subscriptions of a project
+        detach_subscription                          <subscription_name>            Detach a subscription
         delete_subscription                          <subscription_name>            Delete a subscription
         get_subscription_policy                      <subscription_name>            Get policies of a subscription
         set_subscription_policy                      <subscription_name>            Set policies of a subscription
-        test_subscription_policy                     <subscription_name>            Test policies of a subscription
+        test_subscription_permissions                <subscription_name>            Test policies of a subscription
+        dead_letter_update_subscription              <subscription_name>            Update a subscription's dead letter policy
         listen_for_messages                          <subscription_name>            Listen for messages
         listen_for_messages_with_custom_attributes   <subscription_name>            Listen for messages with custom attributes
         pull_messages                                <subscription_name>            Pull messages
         listen_for_messages_with_error_handler       <subscription_name>            Listen for messages with an error handler
         listen_for_messages_with_flow_control        <subscription_name>            Listen for messages with flow control
         listen_for_messages_with_concurrency_control <subscription_name>            Listen for messages with concurrency control
+        dead_letter_delivery_attempt                 <subscription_name>            Pull messages that have a delivery attempts field
     USAGE
   end
 end
