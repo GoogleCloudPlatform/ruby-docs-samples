@@ -407,6 +407,8 @@ if $PROGRAM_NAME == __FILE__
     publish_messages_with_batch_settings topic_name: ARGV.shift
   when "publish_messages_async_with_concurrency_control"
     publish_messages_async_with_concurrency_control topic_name: ARGV.shift
+  when "publish_with_error_handler"
+    publish_with_error_handler topic_name: ARGV.shift
   when "publish_ordered_messages"
     publish_ordered_messages topic_name: ARGV.shift
   when "publish_resume_publish"
@@ -431,6 +433,7 @@ if $PROGRAM_NAME == __FILE__
         publish_message_async_with_custom_attributes    <topic_name>                     Publish messages asynchronously with custom attributes
         publish_messages_async_with_batch_settings      <topic_name>                     Publish messages asynchronously in batch
         publish_messages_async_with_concurrency_control <topic_name>                     Publish messages asynchronously with concurrency control
+        publish_with_error_handler                      <topic_name>                     Publish messages asynchronously with error handling
         publish_ordered_messages                        <topic_name>                     Publish messages asynchronously with ordering keys
         publish_resume_publish                          <topic_name>                     Publish messages asynchronously with ordering keys and resume on failure
     USAGE
