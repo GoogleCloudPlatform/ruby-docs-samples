@@ -108,12 +108,11 @@ describe "subscriptions" do
     end
   end
 
-  it "supports pubsub_subscriber_sync_pull_custom_attributes, pubsub_subscriber_async_pull_custom_attributes" do
+  it "supports pubsub_subscriber_async_pull_custom_attributes" do
     @topic.publish "This is a test message.", origin: "ruby-sample"
 
-    # pubsub_subscriber_sync_pull_custom_attributes
     # pubsub_subscriber_async_pull_custom_attributes
-    expect_with_retry "pubsub_spubsub_subscriber_sync_pull_custom_attributesubscriber_sync_pull" do
+    expect_with_retry "pubsub_subscriber_async_pull_custom_attributes" do
       out, _err = capture_io do
         listen_for_messages_with_custom_attributes subscription_name: subscription_name
       end

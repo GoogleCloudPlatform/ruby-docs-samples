@@ -166,7 +166,6 @@ def listen_for_messages subscription_name:
 end
 
 def listen_for_messages_with_custom_attributes subscription_name:
-  # [START pubsub_subscriber_sync_pull_custom_attributes]
   # [START pubsub_subscriber_async_pull_custom_attributes]
   # subscription_name = "Your Pubsub subscription name"
   require "google/cloud/pubsub"
@@ -191,7 +190,6 @@ def listen_for_messages_with_custom_attributes subscription_name:
   sleep 60
   subscriber.stop.wait!
   # [END pubsub_subscriber_async_pull_custom_attributes]
-  # [END pubsub_subscriber_sync_pull_custom_attributes]
 end
 
 def pull_messages subscription_name:
