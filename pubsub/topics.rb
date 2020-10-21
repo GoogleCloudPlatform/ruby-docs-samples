@@ -397,6 +397,10 @@ if $PROGRAM_NAME == __FILE__
     create_push_subscription topic_name:        ARGV.shift,
                              subscription_name: ARGV.shift,
                              endpoint:          ARGV.shift
+  when "dead_letter_create_subscription"
+    dead_letter_create_subscription topic_name:             ARGV.shift,
+                                    subscription_name:      ARGV.shift,
+                                    dead_letter_topic_name: ARGV.shift
   when "publish_message"
     publish_message topic_name: ARGV.shift
   when "publish_message_async"
@@ -428,6 +432,7 @@ if $PROGRAM_NAME == __FILE__
         create_pull_subscription                        <topic_name> <subscription_name> Create a pull subscription
         create_ordered_pull_subscription                <topic_name> <subscription_name> Create a pull subscription with ordering enabled
         create_push_subscription                        <topic_name> <subscription_name> <endpoint> Create a push subscription
+        dead_letter_create_subscription                 <topic_name> <subscription_name> <dead_letter_topic_name> Create a subscription with a dead letter topic
         publish_message                                 <topic_name>                     Publish message
         publish_message_async                           <topic_name>                     Publish messages asynchronously
         publish_message_async_with_custom_attributes    <topic_name>                     Publish messages asynchronously with custom attributes
