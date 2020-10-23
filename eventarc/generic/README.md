@@ -20,13 +20,14 @@ gcloud run deploy eventarc-generic \
 
 ## Test
 
-Test your Cloud Run service by publishing a message to the topic:
+Test your Cloud Run service with cURL:
 
 ```sh
-gcloud pubsub topics publish my-topic --message="Hello there"
+URL=$(gcloud run services describe eventarc-generic --format='value(status.address.url)')
+curl -XPOST $URL -H "CE-ID: 1234" --data '{"foo":"bar"}'
 ```
 
-You may observe the Run service receiving an event in Cloud Logging.
+Observe the Run service replying with the headers and body of the sent HTTP request.
 
 ## Unit Test
 
