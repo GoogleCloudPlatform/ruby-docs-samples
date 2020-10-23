@@ -1,6 +1,6 @@
-# Eventarc – Pub/Sub tutorial
+# Eventarc - Generic
 
-This sample shows how to create a service that processes Pub/Sub messages.
+This sample shows how to create a service that receives and prints generic events.
 
 [![Run in Google Cloud][run_img]][run_link]
 
@@ -9,28 +9,13 @@ This sample shows how to create a service that processes Pub/Sub messages.
 
 ## Quickstart
 
-Create a Cloud Pub/Sub topic:
-
-```
-gcloud pubsub topics create my-topic
-```
-
-Create a Cloud Pub/Sub topic:
-
-```
-gcloud alpha events triggers create pubsub-trigger-ruby \
---target-service eventarc-pubsub \
---type com.google.cloud.pubsub.topic.publish \
---parameters topic=my-topic
-```
-
 Deploy your Cloud Run service:
 
 ```
 gcloud builds submit \
- --tag gcr.io/$(gcloud config get-value project)/eventarc-pubsub
-gcloud run deploy eventarc-pubsub \
- --image gcr.io/$(gcloud config get-value project)/eventarc-pubsub
+ --tag gcr.io/$(gcloud config get-value project)/eventarc-generic
+gcloud run deploy eventarc-generic \
+ --image gcr.io/$(gcloud config get-value project)/eventarc-generic
 ```
 
 ## Test
