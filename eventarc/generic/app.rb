@@ -29,24 +29,24 @@ post "/" do
   puts "Event received!"
 
   puts "\nHEADERS:"
-  headers = request.env.select {|k,v| k.start_with? 'HTTP_'}
-    .collect {|key, val| [key.sub(/^HTTP_/, ''), val]}
-    .collect {|key, val| "#{key}: #{val}"}
-    .sort
-  headers.each do | key, value |
+  headers = request.env.select { |k, _v| k.start_with? "HTTP_" }
+                   .collect { |key, val| [key.sub(/^HTTP_/, ""), val] }
+                   .collect { |key, val| "#{key}: #{val}" }
+                   .sort
+  headers.each do |key, value|
     if key != "Authorization"
       puts "#{key}: #{value}<br>"
     end
   end
   headers_json = headers
-  
+
   puts "\nBODY:"
   body_json = JSON.parse request.body.read
   puts body_json
-  
+
   result = {
     "headers" => headers_json,
-    "body" => body_json
+    "body"    => body_json
   }
   result.to_json
 end
