@@ -169,6 +169,26 @@ def create_push_subscription topic_name:, subscription_name:, endpoint:
   # [END pubsub_create_push_subscription]
 end
 
+def dead_letter_create_subscription topic_name:, subscription_name:, dead_letter_topic_name:
+  # [START pubsub_dead_letter_create_subscription]
+  # topic_name             = "Your Pubsub topic name"
+  # subscription_name      = "Your Pubsub subscription name"
+  # dead_letter_topic_name = "Your Pubsub dead letter topic name"
+  require "google/cloud/pubsub"
+
+  pubsub = Google::Cloud::Pubsub.new
+
+  topic             = pubsub.topic topic_name
+  dead_letter_topic = pubsub.topic dead_letter_topic_name
+  subscription      = topic.subscribe subscription_name,
+                                      dead_letter_topic:                 dead_letter_topic,
+                                      dead_letter_max_delivery_attempts: 10
+
+  puts "Created subscription #{subscription_name} with dead letter topic #{dead_letter_topic_name}."
+  puts "To process dead letter messages, remember to add a subscription to your dead letter topic."
+  # [END pubsub_dead_letter_create_subscription]
+end
+
 def publish_message topic_name:
   # [START pubsub_quickstart_publisher]
   # topic_name = "Your Pubsub topic name"
@@ -270,6 +290,29 @@ def publish_messages_async_with_concurrency_control topic_name:
   # [END pubsub_publisher_concurrency_control]
 end
 
+def publish_with_error_handler topic_name:
+  # [START pubsub_publish_with_error_handler]
+  # topic_name = "Your Pubsub topic name"
+  require "google/cloud/pubsub"
+
+  pubsub = Google::Cloud::Pubsub.new
+
+  topic = pubsub.topic topic_name
+
+  begin
+    topic.publish_async "This is a test message." do |result|
+      raise "Failed to publish the message." unless result.succeeded?
+      puts "Message published asynchronously."
+    end
+
+    # Stop the async_publisher to send all queued messages immediately.
+    topic.async_publisher.stop.wait!
+  rescue StandardError => e
+    puts "Received error while publishing: #{e.message}"
+  end
+  # [END pubsub_publish_with_error_handler]
+end
+
 def publish_ordered_messages topic_name:
   # [START pubsub_publish_with_ordering_keys]
   # topic_name = "Your Pubsub topic name"
@@ -354,6 +397,10 @@ if $PROGRAM_NAME == __FILE__
     create_push_subscription topic_name:        ARGV.shift,
                              subscription_name: ARGV.shift,
                              endpoint:          ARGV.shift
+  when "dead_letter_create_subscription"
+    dead_letter_create_subscription topic_name:             ARGV.shift,
+                                    subscription_name:      ARGV.shift,
+                                    dead_letter_topic_name: ARGV.shift
   when "publish_message"
     publish_message topic_name: ARGV.shift
   when "publish_message_async"
@@ -364,6 +411,8 @@ if $PROGRAM_NAME == __FILE__
     publish_messages_with_batch_settings topic_name: ARGV.shift
   when "publish_messages_async_with_concurrency_control"
     publish_messages_async_with_concurrency_control topic_name: ARGV.shift
+  when "publish_with_error_handler"
+    publish_with_error_handler topic_name: ARGV.shift
   when "publish_ordered_messages"
     publish_ordered_messages topic_name: ARGV.shift
   when "publish_resume_publish"
@@ -383,11 +432,13 @@ if $PROGRAM_NAME == __FILE__
         create_pull_subscription                        <topic_name> <subscription_name> Create a pull subscription
         create_ordered_pull_subscription                <topic_name> <subscription_name> Create a pull subscription with ordering enabled
         create_push_subscription                        <topic_name> <subscription_name> <endpoint> Create a push subscription
+        dead_letter_create_subscription                 <topic_name> <subscription_name> <dead_letter_topic_name> Create a subscription with a dead letter topic
         publish_message                                 <topic_name>                     Publish message
         publish_message_async                           <topic_name>                     Publish messages asynchronously
         publish_message_async_with_custom_attributes    <topic_name>                     Publish messages asynchronously with custom attributes
         publish_messages_async_with_batch_settings      <topic_name>                     Publish messages asynchronously in batch
         publish_messages_async_with_concurrency_control <topic_name>                     Publish messages asynchronously with concurrency control
+        publish_with_error_handler                      <topic_name>                     Publish messages asynchronously with error handling
         publish_ordered_messages                        <topic_name>                     Publish messages asynchronously with ordering keys
         publish_resume_publish                          <topic_name>                     Publish messages asynchronously with ordering keys and resume on failure
     USAGE

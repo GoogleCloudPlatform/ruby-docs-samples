@@ -22,6 +22,7 @@ describe "topics" do
   let(:service_account_email) { "serviceAccount:kokoro@#{pubsub.project}.iam.gserviceaccount.com" }
   let(:topic_name) { random_topic_name }
   let(:subscription_name) { random_subscription_name }
+  let(:dead_letter_topic_name) { random_topic_name }
 
   after do
     @subscription.delete if @subscription
@@ -172,6 +173,51 @@ describe "topics" do
     assert_equal endpoint, @subscription.push_config.endpoint
   end
 
+  it "supports pubsub_dead_letter_create_subscription, pubsub_dead_letter_update_subscription, pubsub_dead_letter_delivery_attempt" do
+    #setup
+    @topic = pubsub.create_topic topic_name
+    @dead_letter_topic = pubsub.create_topic dead_letter_topic_name
+    
+    begin
+      # pubsub_dead_letter_create_subscription
+      out, _err = capture_io do
+        dead_letter_create_subscription topic_name: topic_name,
+                                        subscription_name: subscription_name,
+                                        dead_letter_topic_name: dead_letter_topic_name
+      end
+      assert_includes out, "Created subscription #{subscription_name} with dead letter topic #{dead_letter_topic_name}."
+
+      @subscription = @topic.subscription subscription_name
+      assert @subscription
+      assert_equal "projects/#{pubsub.project}/subscriptions/#{subscription_name}", @subscription.name
+      assert @subscription.dead_letter_topic
+      assert_equal "projects/#{pubsub.project}/topics/#{dead_letter_topic_name}", @subscription.dead_letter_topic.name
+      assert_equal 10, @subscription.dead_letter_max_delivery_attempts
+
+      # pubsub_dead_letter_update_subscription
+      assert_output "Max delivery attempts is now 20.\n" do
+        dead_letter_update_subscription subscription_name: subscription_name
+      end
+      @subscription.reload!
+      assert @subscription.dead_letter_topic
+      assert_equal "projects/#{pubsub.project}/topics/#{dead_letter_topic_name}", @subscription.dead_letter_topic.name
+      assert_equal 20, @subscription.dead_letter_max_delivery_attempts
+
+      @topic.publish "This is a dead letter topic test message."
+      # pubsub_dead_letter_delivery_attempt
+      expect_with_retry "pubsub_dead_letter_delivery_attempt" do
+        out, _err = capture_io do
+          dead_letter_delivery_attempt subscription_name: subscription_name
+        end
+        assert_includes out, "Received message: This is a dead letter topic test message."
+        assert_includes out, "Delivery Attempt: 1"
+      end
+
+    ensure
+      @dead_letter_topic.delete
+    end
+  end
+
   it "supports pubsub_publish" do
     #setup
     @topic = pubsub.create_topic topic_name
@@ -254,6 +300,27 @@ describe "topics" do
 
     messages = []
     expect_with_retry "pubsub_publisher_concurrency_control" do
+      @subscription.pull(max: 1).each do |message|
+        messages << message
+        message.acknowledge!
+      end
+      assert_equal 1, messages.length
+      assert_equal "This is a test message.", messages[0].data
+    end
+  end
+
+  it "supports publish_with_error_handler" do
+    #setup
+    @topic = pubsub.create_topic topic_name
+    @subscription = @topic.subscribe random_subscription_name
+
+    # publish_with_error_handler
+    assert_output "Message published asynchronously.\n" do
+      publish_message_async topic_name: topic_name
+    end
+
+    messages = []
+    expect_with_retry "pubsub_publish" do
       @subscription.pull(max: 1).each do |message|
         messages << message
         message.acknowledge!

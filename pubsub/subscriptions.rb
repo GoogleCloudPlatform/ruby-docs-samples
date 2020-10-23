@@ -44,6 +44,26 @@ def list_subscriptions
   # [END pubsub_list_subscriptions]
 end
 
+def detach_subscription subscription_name:
+  # [START pubsub_detach_subscription]
+  # subscription_name = "Your Pubsub subscription name"
+  require "google/cloud/pubsub"
+
+  pubsub = Google::Cloud::Pubsub.new
+
+  subscription = pubsub.subscription subscription_name
+  subscription.detach
+
+  sleep 120
+  subscription.reload!
+  if subscription.detached?
+    puts "Subscription is detached."
+  else
+    puts "Subscription is NOT detached."
+  end
+  # [END pubsub_detach_subscription]
+end
+
 def delete_subscription subscription_name:
   # [START pubsub_delete_subscription]
   # subscription_name = "Your Pubsub subscription name"
@@ -105,6 +125,21 @@ def test_subscription_permissions subscription_name:
   # [END pubsub_test_subscription_permissions]
 end
 
+def dead_letter_update_subscription subscription_name:
+  # [START pubsub_dead_letter_update_subscription]
+  # subscription_name = "Your Pubsub subscription name"
+  # role = "roles/pubsub.publisher"
+  # service_account_email = "serviceAccount:account_name@project_name.iam.gserviceaccount.com"
+  require "google/cloud/pubsub"
+
+  pubsub = Google::Cloud::Pubsub.new
+
+  subscription = pubsub.subscription subscription_name
+  subscription.dead_letter_max_delivery_attempts = 20
+  puts "Max delivery attempts is now #{subscription.dead_letter_max_delivery_attempts}."
+  # [END pubsub_dead_letter_update_subscription]
+end
+
 def listen_for_messages subscription_name:
   # [START pubsub_subscriber_async_pull]
   # [START pubsub_quickstart_subscriber]
@@ -129,7 +164,6 @@ def listen_for_messages subscription_name:
 end
 
 def listen_for_messages_with_custom_attributes subscription_name:
-  # [START pubsub_subscriber_sync_pull_custom_attributes]
   # [START pubsub_subscriber_async_pull_custom_attributes]
   # subscription_name = "Your Pubsub subscription name"
   require "google/cloud/pubsub"
@@ -154,7 +188,6 @@ def listen_for_messages_with_custom_attributes subscription_name:
   sleep 60
   subscriber.stop.wait!
   # [END pubsub_subscriber_async_pull_custom_attributes]
-  # [END pubsub_subscriber_sync_pull_custom_attributes]
 end
 
 def pull_messages subscription_name:
@@ -249,6 +282,64 @@ def listen_for_messages_with_concurrency_control subscription_name:
   # [END pubsub_subscriber_concurrency_control]
 end
 
+def dead_letter_delivery_attempt subscription_name:
+  # [START pubsub_dead_letter_delivery_attempt]
+  # subscription_name = "Your Pubsub subscription name"
+  require "google/cloud/pubsub"
+
+  pubsub = Google::Cloud::Pubsub.new
+
+  subscription = pubsub.subscription subscription_name
+  subscription.pull.each do |message|
+    puts "Received message: #{message.data}"
+    puts "Delivery Attempt: #{message.delivery_attempt}"
+    message.acknowledge!
+  end
+  # [END pubsub_dead_letter_delivery_attempt]
+end
+
+def subscriber_sync_pull_with_lease subscription_name:
+  # [START pubsub_subscriber_sync_pull_with_lease]
+  # subscription_name = "Your Pubsub subscription name"
+  require "google/cloud/pubsub"
+
+  pubsub = Google::Cloud::Pubsub.new
+
+  subscription = pubsub.subscription subscription_name
+  new_ack_deadline = 30
+  processed = false
+
+  # The subscriber pulls a specified number of messages.
+  received_messages = subscription.pull max: 1
+
+  # Obtain the first message.
+  message = received_messages.first
+
+  # Send the message to a non-blocking worker that starts a long-running process, such as writing
+  # the message to a table, which may take longer than the default 10-sec acknowledge deadline.
+  Thread.new do
+    sleep 15
+    processed = true
+    puts "Finished processing \"#{message.data}\"."
+  end
+
+  loop do
+    sleep 10
+    if processed
+      # If the message has been processed, acknowledge the message.
+      message.acknowledge!
+      puts "Done."
+      # Exit after the message is acknowledged.
+      break
+    else
+      # If the message has not yet been processed, reset its ack deadline.
+      message.modify_ack_deadline! new_ack_deadline
+      puts "Reset ack deadline for \"#{message.data}\" for #{new_ack_deadline} seconds."
+    end
+  end
+  # [END pubsub_subscriber_sync_pull_with_lease]
+end
+
 if $PROGRAM_NAME == __FILE__
   case ARGV.shift
   when "update_push_configuration"
@@ -256,6 +347,8 @@ if $PROGRAM_NAME == __FILE__
                               new_endpoint:      ARGV.shift
   when "list_subscriptions"
     list_subscriptions
+  when "detach_subscription"
+    detach_subscription subscription_name: ARGV.shift
   when "delete_subscription"
     delete_subscription subscription_name: ARGV.shift
   when "get_subscription_policy"
@@ -264,6 +357,8 @@ if $PROGRAM_NAME == __FILE__
     set_subscription_policy subscription_name: ARGV.shift
   when "test_subscription_permissions"
     test_subscription_permissions subscription_name: ARGV.shift
+  when "dead_letter_update_subscription"
+    dead_letter_update_subscription subscription_name: ARGV.shift
   when "listen_for_messages"
     listen_for_messages subscription_name: ARGV.shift
   when "listen_for_messages_with_custom_attributes"
@@ -276,6 +371,10 @@ if $PROGRAM_NAME == __FILE__
     listen_for_messages_with_flow_control subscription_name: ARGV.shift
   when "listen_for_messages_with_concurrency_control"
     listen_for_messages_with_concurrency_control subscription_name: ARGV.shift
+  when "dead_letter_delivery_attempt"
+    dead_letter_delivery_attempt subscription_name: ARGV.shift
+  when "subscriber_sync_pull_with_lease"
+    subscriber_sync_pull_with_lease subscription_name: ARGV.shift
   else
     puts <<~USAGE
       Usage: bundle exec ruby subscriptions.rb [command] [arguments]
@@ -283,16 +382,20 @@ if $PROGRAM_NAME == __FILE__
       Commands:
         update_push_configuration                    <subscription_name> <endpoint> Update the endpoint of a push subscription
         list_subscriptions                                                          List subscriptions of a project
+        detach_subscription                          <subscription_name>            Detach a subscription
         delete_subscription                          <subscription_name>            Delete a subscription
         get_subscription_policy                      <subscription_name>            Get policies of a subscription
         set_subscription_policy                      <subscription_name>            Set policies of a subscription
-        test_subscription_policy                     <subscription_name>            Test policies of a subscription
+        test_subscription_permissions                <subscription_name>            Test policies of a subscription
+        dead_letter_update_subscription              <subscription_name>            Update a subscription's dead letter policy
         listen_for_messages                          <subscription_name>            Listen for messages
         listen_for_messages_with_custom_attributes   <subscription_name>            Listen for messages with custom attributes
         pull_messages                                <subscription_name>            Pull messages
         listen_for_messages_with_error_handler       <subscription_name>            Listen for messages with an error handler
         listen_for_messages_with_flow_control        <subscription_name>            Listen for messages with flow control
         listen_for_messages_with_concurrency_control <subscription_name>            Listen for messages with concurrency control
+        dead_letter_delivery_attempt                 <subscription_name>            Pull messages that have a delivery attempts field
+        subscriber_sync_pull_with_lease              <subscription_name>            Pull messages and reset their acknowledgement deadlines
     USAGE
   end
 end
