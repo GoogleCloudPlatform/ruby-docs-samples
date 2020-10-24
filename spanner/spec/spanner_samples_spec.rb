@@ -1647,4 +1647,17 @@ describe "Google Cloud Spanner API samples" do
     expect(singers.count).to eq 6
     expect(singers.find { |s| s[:FirstName] == "Virginia" }).not_to be nil
   end
+
+  example "get commit stats" do
+    database = create_singers_albums_database
+
+    capture do
+      commit_stats project_id:  @project_id,
+                   instance_id: @instance.instance_id,
+                   database_id: database.database_id
+    end
+
+    expect(captured_output).to match /Updated data with \d+ mutations/
+    expect(captured_output).to match /Commit was delayed by (\d+)(.*) due to overloaded servers/
+  end
 end

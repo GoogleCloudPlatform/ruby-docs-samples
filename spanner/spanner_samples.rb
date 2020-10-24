@@ -1873,6 +1873,28 @@ def set_custom_timeout_and_retry project_id:, instance_id:, database_id:
   # [END spanner_set_custom_timeout_and_retry]
 end
 
+def commit_stats project_id:, instance_id:, database_id:
+  # [START spanner_get_commit_stats]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+
+  spanner = Google::Cloud::Spanner.new project: project_id
+  client  = spanner.client instance_id, database_id
+
+  records = [
+    { SingerId: 1, FirstName: "Marc",     LastName: "Richards" },
+    { SingerId: 2, FirstName: "Catalina", LastName: "Smith"    }
+  ]
+  resp = client.upsert "Singers", records, commit_stats: true
+  puts "Updated data with #{resp.stats.mutation_count} mutations."
+  puts "Commit was delayed by #{resp.stats.overload_delay} due to overloaded servers."
+
+  # [END spanner_get_commit_stats]
+end
+
 def usage
   puts <<~USAGE
 
@@ -1950,6 +1972,7 @@ def usage
       delete_backup                      <instance_id> <backup_id> Delete a backup.
       update_backup                      <instance_id> <backup_id> Update the backup.
       set_custom_timeout_and_retry       <instance_id> <database_id> Set custom timeout and retry settings.
+      commit_stats                       <instance_id> <database_id> Get commit stats.
 
     Environment variables:
       GOOGLE_CLOUD_PROJECT must be set to your Google Cloud project ID
@@ -1990,7 +2013,7 @@ def run_sample arguments
     "list_backup_operations", "list_database_operations", "list_backups",
     "delete_backup", "update_backup_expiration_time",
     "set_custom_timeout_and_retry", "query_with_numeric_parameter",
-    "update_data_with_numeric_column"
+    "update_data_with_numeric_column", "commit_stats"
   ]
   if command.eql?("query_data_with_index") && instance_id && database_id && arguments.size >= 2
     query_data_with_index project_id:  project_id,
