@@ -1658,6 +1658,5 @@ describe "Google Cloud Spanner API samples" do
     end
 
     expect(captured_output).to match /Updated data with \d+ mutations/
-    expect(captured_output).to match /Commit was delayed by (\d+)(.*) due to overloaded servers/
   end
 end
