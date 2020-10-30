@@ -1,4 +1,4 @@
-# Events for Cloud Run – Pub/Sub tutorial
+# Eventarc – Pub/Sub tutorial
 
 This sample shows how to create a service that processes Pub/Sub messages.
 
@@ -19,7 +19,7 @@ Create a Cloud Pub/Sub topic:
 
 ```
 gcloud alpha events triggers create pubsub-trigger-ruby \
---target-service run-events-pubsub \
+--target-service eventarc-pubsub \
 --type com.google.cloud.pubsub.topic.publish \
 --parameters topic=my-topic
 ```
@@ -28,9 +28,9 @@ Deploy your Cloud Run service:
 
 ```
 gcloud builds submit \
- --tag gcr.io/$(gcloud config get-value project)/run-events-pubsub
-gcloud run deploy run-events-pubsub \
- --image gcr.io/$(gcloud config get-value project)/run-events-pubsub
+ --tag gcr.io/$(gcloud config get-value project)/eventarc-pubsub
+gcloud run deploy eventarc-pubsub \
+ --image gcr.io/$(gcloud config get-value project)/eventarc-pubsub
 ```
 
 ## Test
