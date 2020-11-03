@@ -1885,11 +1885,11 @@ def commit_stats project_id:, instance_id:, database_id:
   client  = spanner.client instance_id, database_id
 
   records = [
-    { SingerId: 1, FirstName: "Marc",     LastName: "Richards" },
-    { SingerId: 2, FirstName: "Catalina", LastName: "Smith"    }
+    { SingerId: 1, AlbumId: 1, MarketingBudget: 200_000 },
+    { SingerId: 2, AlbumId: 2, MarketingBudget: 400_000 }
   ]
   commit_options = { return_commit_stats: true }
-  resp = client.upsert "Singers", records, commit_options: commit_options
+  resp = client.upsert "Albums", records, commit_options: commit_options
   puts "Updated data with #{resp.stats.mutation_count} mutations."
 
   if resp.stats.overload_delay

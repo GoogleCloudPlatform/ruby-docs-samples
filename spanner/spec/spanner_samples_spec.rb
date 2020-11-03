@@ -1652,6 +1652,17 @@ describe "Google Cloud Spanner API samples" do
     database = create_singers_albums_database
 
     capture do
+      insert_data project_id:  @project_id,
+                  instance_id: @instance.instance_id,
+                  database_id: database.database_id
+
+      add_column project_id:  @project_id,
+                 instance_id: @instance.instance_id,
+                 database_id: database.database_id
+    end
+
+
+    capture do
       commit_stats project_id:  @project_id,
                    instance_id: @instance.instance_id,
                    database_id: database.database_id
