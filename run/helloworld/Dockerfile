@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START cloudrun_helloworld_dockerfile]
 # [START run_helloworld_dockerfile]
 
 # Use the official lightweight Ruby image.
@@ -31,3 +32,4 @@ COPY . ./
 CMD ["ruby", "./app.rb"]
 
 # [END run_helloworld_dockerfile]
+# [END cloudrun_helloworld_dockerfile]
