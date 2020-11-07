@@ -12,7 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "helper"
+# [START functions_storage_unit_test]
+require "minitest/autorun"
+require "functions_framework/testing"
 require "date"
 
 describe "functions_helloworld_storage" do
@@ -46,3 +48,4 @@ describe "functions_helloworld_storage" do
     end
   end
 end
+# [END functions_storage_unit_test]
