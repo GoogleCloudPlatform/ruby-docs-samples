@@ -140,6 +140,19 @@ def dead_letter_update_subscription subscription_name:
   # [END pubsub_dead_letter_update_subscription]
 end
 
+def dead_letter_remove subscription_name:
+  # [START pubsub_dead_letter_remove]
+  # subscription_name = "Your Pubsub subscription name"
+  require "google/cloud/pubsub"
+
+  pubsub = Google::Cloud::Pubsub.new
+
+  subscription = pubsub.subscription subscription_name
+  subscription.remove_dead_letter_policy
+  puts "Removed dead letter topic from #{subscription_name} subscription."
+  # [END pubsub_dead_letter_remove]
+end
+
 def listen_for_messages subscription_name:
   # [START pubsub_subscriber_async_pull]
   # [START pubsub_quickstart_subscriber]
@@ -359,6 +372,8 @@ if $PROGRAM_NAME == __FILE__
     test_subscription_permissions subscription_name: ARGV.shift
   when "dead_letter_update_subscription"
     dead_letter_update_subscription subscription_name: ARGV.shift
+  when "dead_letter_remove"
+    dead_letter_remove subscription_name: ARGV.shift
   when "listen_for_messages"
     listen_for_messages subscription_name: ARGV.shift
   when "listen_for_messages_with_custom_attributes"
@@ -388,6 +403,7 @@ if $PROGRAM_NAME == __FILE__
         set_subscription_policy                      <subscription_name>            Set policies of a subscription
         test_subscription_permissions                <subscription_name>            Test policies of a subscription
         dead_letter_update_subscription              <subscription_name>            Update a subscription's dead letter policy
+        dead_letter_remove                           <subscription_name>            Delete a subscription's dead letter policy
         listen_for_messages                          <subscription_name>            Listen for messages
         listen_for_messages_with_custom_attributes   <subscription_name>            Listen for messages with custom attributes
         pull_messages                                <subscription_name>            Pull messages
