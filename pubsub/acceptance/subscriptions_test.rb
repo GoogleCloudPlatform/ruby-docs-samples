@@ -146,7 +146,7 @@ describe "subscriptions" do
 
   it "supports pubsub_subscriber_sync_pull_with_lease" do
     @topic.publish "This is a test message."
-    sleep 1
+    sleep 10
 
     # # pubsub_subscriber_sync_pull_with_lease
     expect_with_retry "pubsub_subscriber_sync_pull_with_lease" do
