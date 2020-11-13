@@ -213,6 +213,14 @@ describe "topics" do
         assert_includes out, "Delivery Attempt: 1"
       end
 
+      # pubsub_dead_letter_remove
+      assert_output "Removed dead letter topic from #{subscription_name} subscription.\n" do
+        dead_letter_remove subscription_name: subscription_name
+      end
+      @subscription.reload!
+      refute @subscription.dead_letter_topic
+      refute @subscription.dead_letter_max_delivery_attempts
+
     ensure
       @dead_letter_topic.delete
     end

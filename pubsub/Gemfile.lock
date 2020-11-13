@@ -20,7 +20,7 @@ GEM
     google-cloud-env (1.4.0)
       faraday (>= 0.17.3, < 2.0)
     google-cloud-errors (1.0.1)
-    google-cloud-pubsub (2.1.0)
+    google-cloud-pubsub (2.2.0)
       concurrent-ruby (~> 1.1)
       google-cloud-core (~> 1.5)
       google-cloud-pubsub-v1 (~> 0.0)
@@ -88,7 +88,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  google-cloud-pubsub
+  google-cloud-pubsub (~> 2.2)
   minitest (~> 5.13)
   minitest-focus (~> 1.1)
   minitest-hooks (~> 1.5)
