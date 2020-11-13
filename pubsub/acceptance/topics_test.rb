@@ -347,6 +347,7 @@ describe "topics" do
   rescue Minitest::Assertion => e
     @attempt_number += 1
     puts "failed attempt #{@attempt_number} for #{sample_name}"
+    sleep @attempt_number*@attempt_number
     retry if @attempt_number < attempts
     @attempt_number = nil
     raise e

@@ -161,13 +161,14 @@ describe "subscriptions" do
 
   # Pub/Sub calls may not respond immediately.
   # Wrap expectations that may require multiple attempts with this method.
-  def expect_with_retry sample_name, attempts: 2
+  def expect_with_retry sample_name, attempts: 5
     @attempt_number ||= 0
     yield
     @attempt_number = nil
   rescue Minitest::Assertion => e
     @attempt_number += 1
     puts "failed attempt #{@attempt_number} for #{sample_name}"
+    sleep @attempt_number*@attempt_number
     retry if @attempt_number < attempts
     @attempt_number = nil
     raise e
