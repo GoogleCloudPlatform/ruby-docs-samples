@@ -1,4 +1,4 @@
-# Copyright 2015 Google, Inc.
+# Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,12 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START gae_flex_datastore_config]
+# [START gae_standard_datastore_config]
 source "https://rubygems.org"
 
 gem "google-cloud-datastore"
 gem "sinatra"
-# [END gae_flex_datastore_config]
+# [END gae_standard_datastore_config]
 
 group :test do
   gem "capybara"

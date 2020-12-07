@@ -1,4 +1,4 @@
-# Copyright 2015 Google, Inc
+# Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,12 +21,12 @@ bucket  = storage.bucket ENV["GOOGLE_CLOUD_STORAGE_BUCKET"]
 
 get "/" do
   # Present the user with an upload form
-  '
+  <<~RESPONSE
     <form method="POST" action="/upload" enctype="multipart/form-data">
       <input type="file" name="file">
       <input type="submit" value="Upload">
     </form>
-  '
+  RESPONSE
 end
 
 post "/upload" do
