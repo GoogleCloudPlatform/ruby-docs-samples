@@ -14,6 +14,9 @@
 
 require "google/apis/cloudiot_v1"
 require "google/cloud/pubsub"
+require "minitest/autorun"
+require "minitest/focus"
+require "minitest/hooks/default"
 require "rspec"
 require "securerandom"
 require "tempfile"
@@ -146,8 +149,8 @@ describe "Cloud IoT Core" do
     )
 
     device_id = "unauth_device"
-    expect {
-      $create_unauth_device.call(
+    expect_with_retry {
+       $create_unauth_device.call(
         project_id:  @project_id,
         location_id: @region,
         registry_id: registry_name,
@@ -659,5 +662,19 @@ describe "Cloud IoT Core" do
       location_id: @region,
       registry_id: registry_name
     )
+  end
+
+  # Wrap expectations that may require multiple attempts with this method.
+  def expect_with_retry sample_name, attempts: 3
+    @attempt_number ||= 0
+    yield
+    @attempt_number = nil
+  rescue Minitest::Assertion => e
+    @attempt_number += 1
+    puts "failed attempt #{@attempt_number} for #{sample_name}"
+    sleep @attempt_number*@attempt_number
+    retry if @attempt_number < attempts
+    @attempt_number = nil
+    raise e
   end
 end

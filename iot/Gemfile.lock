@@ -3,6 +3,7 @@ GEM
   specs:
     addressable (2.7.0)
       public_suffix (>= 2.0.2, < 5.0)
+    builder (3.2.4)
     concurrent-ruby (1.1.5)
     declarative (0.0.10)
     declarative-option (0.1.0)
@@ -56,6 +57,14 @@ GEM
     jwt (2.2.1)
     memoist (0.16.0)
     mini_mime (1.0.2)
+    minitest (5.14.2)
+    minitest-focus (1.2.1)
+      minitest (>= 4, < 6)
+    minitest-hooks (1.5.0)
+      minitest (> 5.3)
+    minitest-junit (0.2.0)
+      builder (~> 3.2)
+      minitest (~> 5.0)
     multi_json (1.13.1)
     multipart-post (2.1.1)
     os (1.0.1)
@@ -79,6 +88,8 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.9.0)
     rspec-support (3.9.0)
+    rspec_junit_formatter (0.4.1)
+      rspec-core (>= 2, < 4, != 2.12.0)
     signet (0.11.0)
       addressable (~> 2.3)
       faraday (~> 0.9)
@@ -92,7 +103,12 @@ PLATFORMS
 DEPENDENCIES
   google-api-client (~> 0.32.1)
   google-cloud-pubsub (~> 0.33.2)
+  minitest (~> 5.13)
+  minitest-focus (~> 1.1)
+  minitest-hooks (~> 1.5)
+  minitest-junit
   rspec
+  rspec_junit_formatter
 
 BUNDLED WITH
-   1.16.2
+   1.17.2
