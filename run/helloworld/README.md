@@ -31,8 +31,14 @@ docker run --rm -p 9090:8080 -e PORT=8080 helloworld:ruby
 
 ## Test
 
-```
+```sh
+# Set an environment variable with your GCP Project ID
+export GOOGLE_CLOUD_PROJECT=<PROJECT_ID>
+
+# Install dependencies
 bundle install
+
+# Run tests
 bundle exec rspec
 ```
 
@@ -46,8 +52,7 @@ export GOOGLE_CLOUD_PROJECT=<PROJECT_ID>
 gcloud builds submit --tag gcr.io/${GOOGLE_CLOUD_PROJECT}/helloworld
 
 # Deploy to Cloud Run
-gcloud run deploy helloworld \
---image gcr.io/${GOOGLE_CLOUD_PROJECT}/helloworld
+gcloud run deploy helloworld --image gcr.io/${GOOGLE_CLOUD_PROJECT}/helloworld
 ```
 
 Visit your deployed container by opening the service URL in a web browser.

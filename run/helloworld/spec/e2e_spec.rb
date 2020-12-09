@@ -18,6 +18,9 @@ require "securerandom"
 
 describe "E2E tests" do
   before (:all) do
+    if !ENV["GOOGLE_CLOUD_PROJECT"]
+      raise "GOOGLE_CLOUD_PROJECT env var not found."
+    end
     suffix = SecureRandom.hex(15)
     system("gcloud",
       "builds",
