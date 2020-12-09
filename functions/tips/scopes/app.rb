@@ -22,7 +22,7 @@ def perform_light_computation
   "light computation result"
 end
 
-# [START functions_concepts_scopes]
+# [START functions_tips_scopes]
 # Global (instance-wide) scope.
 # This block runs on cold start, before any function is invoked.
 #
@@ -41,7 +41,7 @@ FunctionsFramework.on_startup do
   set_global :my_instance_data, instance_data
 end
 
-FunctionsFramework.http "concepts_scopes" do |_request|
+FunctionsFramework.http "tips_scopes" do |_request|
   # Per-function scope.
   # This method is called every time this function is called.
   invocation_data = perform_light_computation
@@ -51,4 +51,4 @@ FunctionsFramework.http "concepts_scopes" do |_request|
 
   "instance: #{instance_data}; function: #{invocation_data}"
 end
-# [END functions_concepts_scopes]
+# [END functions_tips_scopes]
