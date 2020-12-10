@@ -32,13 +32,13 @@ development:
   # ActiveRecord automatically uses delays between failed connection attempts,
   # but provides no arguments for configuration.
   # [END cloud_sql_postgres_activerecord_backoff]
-  
+
   # [START cloud_sql_postgres_activerecord_create_tcp]
   username: <%= ENV["DB_USER"] %>  # e.g. "my-database-user"
   password: <%= ENV["DB_PASS"] %> # e.g. "my-database-password"
   database: <%= ENV.fetch("DB_NAME") { "vote_development" } %>
   host: <%= ENV.fetch("DB_HOST") { "127.0.0.1" }%> # '172.17.0.1' if deployed to GAE Flex
-  port: <%= ENV.fetch("DB_PORT")  { 5432 }%> 
+  port: <%= ENV.fetch("DB_PORT")  { 5432 }%>
 # [END cloud_sql_postgres_activerecord_create_tcp]
 
 
@@ -47,10 +47,14 @@ development:
 # Do not set this db to the same as development or production.
 
 test:
-  adapter: sqlite3
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  adapter: postgresql
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 1 } %>
   timeout: 5000
-  database: db/test.sqlite3
+  username: <%= ENV["DB_USER"] %>  # e.g. "my-database-user"
+  password: <%= ENV["DB_PASS"] %> # e.g. "my-database-password"
+  database: <%= ENV.fetch("DB_NAME") { "vote_production" } %>
+  host: "<%= ENV["DB_HOST"] %>"
+  port: <%= ENV["DB_PORT"] %>
 
 # [START cloud_sql_postgres_activerecord_create_socket]
 production:

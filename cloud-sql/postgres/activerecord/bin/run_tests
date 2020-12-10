@@ -1,0 +1,9 @@
+#! /bin/sh
+
+# Run the tests with default values for all
+# environment variable
+bundle exec rspec bundle exec rspec --format documentation --format RspecJunitFormatter --out sponge_log.xml | tee sponge_log.log
+
+# Run the tests again with custom environment
+# variables that force a TCP connection
+DB_HOST=localhost DB_PORT=5432 bundle exec rspec bundle exec rspec --format documentation --format RspecJunitFormatter --out sponge_log.xml | tee sponge_log.log
