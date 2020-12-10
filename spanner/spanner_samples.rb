@@ -1892,10 +1892,6 @@ def commit_stats project_id:, instance_id:, database_id:
   resp = client.upsert "Albums", records, commit_options: commit_options
   puts "Updated data with #{resp.stats.mutation_count} mutations."
 
-  if resp.stats.overload_delay
-    puts "Commit was delayed by #{resp.stats.overload_delay} seconds due to overloaded servers."
-  end
-
   # [END spanner_get_commit_stats]
 end
 
