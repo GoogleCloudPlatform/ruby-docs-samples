@@ -97,7 +97,7 @@ GEM
       cliver (~> 0.3.1)
       websocket-driver (>= 0.2.0)
     public_suffix (4.0.6)
-    puma (5.1.0)
+    puma (5.1.1)
       nio4r (~> 2.0)
     rack (2.2.3)
     rack-test (1.1.0)
@@ -207,4 +207,4 @@ DEPENDENCIES
   uglifier
 
 BUNDLED WITH
-   2.1.4
+   1.17.3
