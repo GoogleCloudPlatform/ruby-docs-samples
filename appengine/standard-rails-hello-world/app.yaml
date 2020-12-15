@@ -15,7 +15,7 @@
 # [START gae_standard_hello_rails_all]
 # [START gae_standard_hello_rails_step_1]
 entrypoint: bundle exec rackup --port $PORT
-runtime: ruby27   # or ruby26
+runtime: ruby27   # or use ruby26 if preferred
 # [END gae_standard_hello_rails_step_1]
 
 env_variables:

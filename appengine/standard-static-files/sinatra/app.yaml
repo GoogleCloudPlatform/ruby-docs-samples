@@ -11,5 +11,5 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-runtime: ruby27   # or ruby26
+runtime: ruby27   # or use ruby26 if preferred
 entrypoint: bundle exec ruby app.rb
