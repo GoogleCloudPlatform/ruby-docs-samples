@@ -23,7 +23,7 @@ describe "CloudTasks", type: :feature do
 
   before :all do
     GOOGLE_CLOUD_PROJECT = ENV["GOOGLE_CLOUD_PROJECT"]
-    location_id          = ENV["LOCATION_ID"]
+    location_id          = ENV["LOCATION_ID"] || "us-east1"
     QUEUE_ID             = "my-appengine-queue".freeze
 
     client = Google::Cloud::Tasks.cloud_tasks
@@ -32,7 +32,7 @@ describe "CloudTasks", type: :feature do
     begin
       client.get_queue parent
     rescue StandardError
-      location_id = "us-central1"
+      location_id = "us-east4"
     end
     LOCATION_ID = location_id.freeze
   end
