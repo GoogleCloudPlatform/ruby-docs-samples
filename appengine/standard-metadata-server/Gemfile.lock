@@ -66,7 +66,7 @@ DEPENDENCIES
   poltergeist
   rspec
   rspec_junit_formatter
-  sinatra
+  sinatra (~> 2.1)
 
 BUNDLED WITH
    1.17.3

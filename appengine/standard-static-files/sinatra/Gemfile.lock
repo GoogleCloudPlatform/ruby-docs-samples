@@ -74,7 +74,7 @@ DEPENDENCIES
   puma
   rspec
   rspec_junit_formatter
-  sinatra
+  sinatra (~> 2.1)
   slim
 
 BUNDLED WITH
