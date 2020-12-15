@@ -14,7 +14,7 @@
 
 source "https://rubygems.org"
 
-gem "google-cloud-tasks", "2.1.1"
+gem "google-cloud-tasks", "~>2.1"
 gem "sinatra", "~>2.1"
 
 group :test do

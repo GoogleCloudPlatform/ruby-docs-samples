@@ -102,7 +102,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  google-cloud-tasks (= 2.1.1)
+  google-cloud-tasks (~> 2.1)
   rack-test
   rspec
   rspec_junit_formatter
