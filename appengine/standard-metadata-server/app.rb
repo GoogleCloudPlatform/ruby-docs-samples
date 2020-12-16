@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START gae_flex_metadata]
+# [START gae_standard_metadata]
 require "sinatra"
 require "net/http"
 
@@ -31,4 +31,4 @@ get "/" do
 
   "Zone: #{response.body}"
 end
-# [END gae_flex_metadata]
+# [END gae_standard_metadata]
