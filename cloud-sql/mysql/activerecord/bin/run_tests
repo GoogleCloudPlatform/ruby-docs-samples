@@ -5,5 +5,5 @@
 bundle exec rspec --format documentation --format RspecJunitFormatter --out sponge_log.xml | tee sponge_log.log
 
 # Run the tests again with custom environment
-# variables that force a TCP connection
-DB_HOST=127.0.0.1; DB_PORT=5432 bundle exec rspec --format documentation --format RspecJunitFormatter --out sponge_log.xml | tee sponge_log.log
+# variables that force a Unix connection
+DB_HOST=; bundle exec rspec --format documentation --format RspecJunitFormatter --out sponge_log.xml | tee sponge_log.log

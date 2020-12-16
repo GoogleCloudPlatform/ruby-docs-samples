@@ -32,25 +32,39 @@ development:
   # ActiveRecord automatically uses delays between failed connection attempts,
   # but provides no arguments for configuration.
   # [END cloud_sql_mysql_activerecord_backoff]
-  
+
   # [START cloud_sql_mysql_activerecord_create_tcp]
   username: <%= ENV["DB_USER"] %>  # e.g. "my-database-user"
   password: <%= ENV["DB_PASS"] %> # e.g. "my-database-password"
-  database: <%= ENV.fetch("DB_NAME") { "vote_development" } %> 
-  host: <%= ENV.fetch("DB_HOST") { "127.0.0.1" }%> # '172.17.0.1' if deployed to GAE Flex
-  port: <%= ENV.fetch("DB_PORT") { 3306 }%> 
+  database: <%= ENV.fetch("DB_NAME") { "vote_development" } %>
+  host: "<%= ENV.fetch("DB_HOST") { "127.0.0.1" }%>" # '172.17.0.1' if deployed to GAE Flex
+  port: <%= ENV.fetch("DB_PORT") { 3306 }%>
+  socket: "<%= ENV.fetch("DB_SOCKET_DIR") { '/cloudsql' } %>/<%= ENV["INSTANCE_CONNECTION_NAME"] %>"
 # [END cloud_sql_mysql_activerecord_create_tcp]
-
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 
 test:
-  adapter: sqlite3
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  adapter: mysql2
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 1 } %>
   timeout: 5000
-  database: db/test.sqlite3
+  username: <%= ENV["DB_USER"] %>  # e.g. "my-database-user"
+  password: <%= ENV["DB_PASS"] %> # e.g. "my-database-password"
+  database: <%= ENV.fetch("DB_NAME") { "vote_production" } %>
+  host: "<%= ENV["DB_HOST"] %>"
+  port: <%= ENV["DB_PORT"] %>
+  socket: "<%= ENV.fetch("DB_SOCKET_DIR") { '/cloudsql' } %>/<%= ENV["INSTANCE_CONNECTION_NAME"] %>"
+
+# test_unix:
+#   adapter: mysql2
+#   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 1 } %>
+#   timeout: 5000
+#   username: <%= ENV["DB_USER"] %>  # e.g. "my-database-user"
+#   password: <%= ENV["DB_PASS"] %> # e.g. "my-database-password"
+#   database: <%= ENV.fetch("DB_NAME") { "vote_production" } %>
+#   socket: "<%= ENV.fetch("DB_SOCKET_DIR") { '/cloudsql' } %>/<%= ENV["INSTANCE_CONNECTION_NAME"] %>"
 
 # [START cloud_sql_mysql_activerecord_create_socket]
 production:

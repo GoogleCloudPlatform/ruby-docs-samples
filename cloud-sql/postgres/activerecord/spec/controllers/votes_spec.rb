@@ -45,7 +45,6 @@ RSpec.describe VotesController, type: :controller do
       get :index
       expect(response.body).to match(/SPACES are winning by 2 votes/)
     end
-
   end
 
   describe "create" do

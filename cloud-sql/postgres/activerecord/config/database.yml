@@ -53,6 +53,8 @@ test:
   username: <%= ENV["DB_USER"] %>  # e.g. "my-database-user"
   password: <%= ENV["DB_PASS"] %> # e.g. "my-database-password"
   database: <%= ENV.fetch("DB_NAME") { "vote_production" } %>
+  # DB_HOST should be the path to a local Unix socket OR a IP address of the database server.
+  # The database IP address will be 127.0.0.1 or localhost when using the Cloud SQL Proxy.
   host: "<%= ENV["DB_HOST"] %>"
   port: <%= ENV["DB_PORT"] %>
 
