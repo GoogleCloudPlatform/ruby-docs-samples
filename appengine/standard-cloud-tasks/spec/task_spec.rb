@@ -30,7 +30,7 @@ describe "CloudTasks", type: :feature do
     parent = client.queue_path project: GOOGLE_CLOUD_PROJECT, location: location_id, queue: QUEUE_ID
 
     begin
-      client.get_queue parent
+      client.get_queue name: parent
     rescue StandardError
       location_id = "us-east4"
     end

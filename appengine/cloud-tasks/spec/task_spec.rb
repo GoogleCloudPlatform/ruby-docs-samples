@@ -26,11 +26,11 @@ describe "CloudTasks", type: :feature do
     location_id          = ENV["LOCATION_ID"] || "us-east1"
     QUEUE_ID             = "my-appengine-queue".freeze
 
-    client = Google::Cloud::Tasks.new
-    parent = client.queue_path GOOGLE_CLOUD_PROJECT, location_id, QUEUE_ID
+    client = Google::Cloud::Tasks.cloud_tasks
+    parent = client.queue_path project: GOOGLE_CLOUD_PROJECT, location: location_id, queue: QUEUE_ID
 
     begin
-      client.get_queue parent
+      client.get_queue name: parent
     rescue StandardError
       location_id = "us-east4"
     end
