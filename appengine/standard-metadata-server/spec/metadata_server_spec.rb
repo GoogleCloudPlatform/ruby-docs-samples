@@ -1,4 +1,4 @@
-# Copyright 2018 Google, Inc
+# Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,13 +12,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-source "https://rubygems.org"
+require File.expand_path("../../../spec/e2e", __dir__)
+require "rspec"
+require "capybara/rspec"
+require "capybara/poltergeist"
 
-gem "google-cloud-tasks", "~>2.1"
-gem "sinatra"
+Capybara.default_driver = :poltergeist
 
-group :test do
-  gem "rack-test"
-  gem "rspec"
-  gem "rspec_junit_formatter"
+describe "Metadata server on Google App Engine", type: :feature do
+  before :all do
+    skip "End-to-end tests skipped" unless E2E.run?
+
+    @url = E2E.url
+  end
+
+  it "displays zone read from metadata server" do
+    visit @url
+
+    expect(page.body).to match(
+      /Zone: .*/
+    )
+  end
 end

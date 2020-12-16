@@ -1,4 +1,4 @@
-# Copyright 2018 Google, Inc
+# Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,13 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-source "https://rubygems.org"
+# Be sure to restart your server when you modify this file.
 
-gem "google-cloud-tasks", "~>2.1"
-gem "sinatra"
-
-group :test do
-  gem "rack-test"
-  gem "rspec"
-  gem "rspec_junit_formatter"
-end
+# Add new mime types for use in respond_to blocks:
+# Mime::Type.register "text/richtext", :rtf

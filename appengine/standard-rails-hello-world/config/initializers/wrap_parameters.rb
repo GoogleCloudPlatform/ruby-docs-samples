@@ -1,4 +1,4 @@
-# Copyright 2018 Google, Inc
+# Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,13 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-source "https://rubygems.org"
+# Be sure to restart your server when you modify this file.
 
-gem "google-cloud-tasks", "~>2.1"
-gem "sinatra"
+# This file contains settings for ActionController::ParamsWrapper which
+# is enabled by default.
 
-group :test do
-  gem "rack-test"
-  gem "rspec"
-  gem "rspec_junit_formatter"
+# Enable parameter wrapping for JSON. You can disable this by setting :format to an empty array.
+ActiveSupport.on_load :action_controller do
+  wrap_parameters format: [:json]
 end

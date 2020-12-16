@@ -1,4 +1,4 @@
-# Copyright 2018 Google, Inc
+# Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,13 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-source "https://rubygems.org"
+# [START gae_standard_hello_rails_all]
+# [START gae_standard_hello_rails_step_1]
+entrypoint: bundle exec rackup --port $PORT
+runtime: ruby27   # or use ruby26 if preferred
+# [END gae_standard_hello_rails_step_1]
 
-gem "google-cloud-tasks", "~>2.1"
-gem "sinatra"
+env_variables:
+  SECRET_KEY_BASE: [SECRET_KEY]
+# [END gae_standard_hello_rails_all]
 
-group :test do
-  gem "rack-test"
-  gem "rspec"
-  gem "rspec_junit_formatter"
-end

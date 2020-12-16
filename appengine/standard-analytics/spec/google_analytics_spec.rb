@@ -1,4 +1,4 @@
-# Copyright 2018 Google, Inc
+# Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,13 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-source "https://rubygems.org"
+require_relative "../app.rb"
+require "rspec"
+require "capybara/rspec"
 
-gem "google-cloud-tasks", "~>2.1"
-gem "sinatra"
+describe "Google Analytics", type: :feature do
+  Capybara.app = Sinatra::Application
 
-group :test do
-  gem "rack-test"
-  gem "rspec"
-  gem "rspec_junit_formatter"
+  it "can track visit event" do
+    visit "/"
+
+    expect(page).to have_content "Event tracked"
+  end
 end

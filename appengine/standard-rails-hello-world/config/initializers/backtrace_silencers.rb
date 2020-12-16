@@ -1,4 +1,4 @@
-# Copyright 2018 Google, Inc
+# Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,13 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-source "https://rubygems.org"
+# Be sure to restart your server when you modify this file.
 
-gem "google-cloud-tasks", "~>2.1"
-gem "sinatra"
+# You can add backtrace silencers for libraries that you're using but don't wish to see in your backtraces.
+# Rails.backtrace_cleaner.add_silencer { |line| line =~ /my_noisy_library/ }
 
-group :test do
-  gem "rack-test"
-  gem "rspec"
-  gem "rspec_junit_formatter"
-end
+# You can also remove all the silencers if you're trying to debug a problem that might stem from framework code.
+# Rails.backtrace_cleaner.remove_silencers!
