@@ -20,7 +20,7 @@ GEM
     faraday (1.1.0)
       multipart-post (>= 1.2, < 3)
       ruby2_keywords
-    google-api-client (0.51.0)
+    google-api-client (0.52.0)
       addressable (~> 2.5, >= 2.5.1)
       googleauth (~> 0.9)
       httpclient (>= 2.8.1, < 3.0)
@@ -35,7 +35,7 @@ GEM
     google-cloud-env (1.4.0)
       faraday (>= 0.17.3, < 2.0)
     google-cloud-errors (1.0.1)
-    google-cloud-storage (1.29.1)
+    google-cloud-storage (1.29.2)
       addressable (~> 2.5)
       digest-crc (~> 0.4)
       google-api-client (~> 0.33)
@@ -67,7 +67,7 @@ GEM
       cliver (~> 0.3.1)
       websocket-driver (>= 0.2.0)
     public_suffix (4.0.6)
-    puma (5.1.0)
+    puma (5.1.1)
       nio4r (~> 2.0)
     rack (2.2.3)
     rack-protection (2.1.0)
@@ -126,7 +126,7 @@ DEPENDENCIES
   puma
   rspec
   rspec_junit_formatter
-  sinatra
+  sinatra (~> 2.1)
 
 BUNDLED WITH
-   2.1.4
+   1.17.3

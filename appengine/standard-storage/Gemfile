@@ -16,7 +16,7 @@
 source "https://rubygems.org"
 
 gem "google-cloud-storage"
-gem "sinatra"
+gem "sinatra", "~>2.1"
 # [END gae_standard_storage_dependencies]
 
 group :test do
