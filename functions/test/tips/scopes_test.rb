@@ -14,13 +14,13 @@
 
 require "helper"
 
-describe "functions_concepts_scopes" do
+describe "functions_tips_scopes" do
   include FunctionsFramework::Testing
 
   it "generates the correct response body" do
-    load_temporary "concepts/scopes/app.rb" do
+    load_temporary "tips/scopes/app.rb" do
       request = make_get_request "http://example.com:8080/"
-      response = call_http "concepts_scopes", request
+      response = call_http "tips_scopes", request
       assert_equal 200, response.status
       assert_equal "instance: heavy computation result; function: light computation result", response.body.join
     end
