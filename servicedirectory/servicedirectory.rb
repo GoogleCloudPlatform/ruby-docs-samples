@@ -129,7 +129,7 @@ def create_endpoint project:, location:, namespace:, service:, endpoint:
   )
 
   # Set the IP Address and Port on the Endpoint
-  endpoint_data = Google::Cloud::ServiceDirectory::V1beta1::Endpoint.new(
+  endpoint_data = Google::Cloud::ServiceDirectory::V1::Endpoint.new(
     address: "10.0.0.1",
     port:    443
   )
