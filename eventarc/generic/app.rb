@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START eventarc_pubsub_server]
+# [START eventarc_generic_server]
 require "sinatra"
 require "json"
 require "base64"
@@ -20,9 +20,9 @@ require "base64"
 set :bind, "0.0.0.0"
 port = ENV["PORT"] || "8080"
 set :port, port
-# [END eventarc_pubsub_server]
+# [END eventarc_generic_server]
 
-# [START eventarc_pubsub_handler]
+# [START eventarc_generic_handler]
 post "/" do
   request.body.rewind # in case someone already read it
 
@@ -50,4 +50,4 @@ post "/" do
   }
   result.to_json
 end
-# [END eventarc_pubsub_handler]
+# [END eventarc_generic_handler]
