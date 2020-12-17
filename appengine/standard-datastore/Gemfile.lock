@@ -103,7 +103,7 @@ PLATFORMS
 
 DEPENDENCIES
   capybara
-  google-cloud-datastore
+  google-cloud-datastore (~> 2.1)
   rspec
   rspec_junit_formatter
   sinatra (~> 2.1)

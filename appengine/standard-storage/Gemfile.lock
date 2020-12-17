@@ -121,7 +121,7 @@ PLATFORMS
 
 DEPENDENCIES
   capybara
-  google-cloud-storage
+  google-cloud-storage (~> 1.29)
   poltergeist
   puma
   rspec
