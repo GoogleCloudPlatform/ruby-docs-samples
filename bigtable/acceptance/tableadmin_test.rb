@@ -15,29 +15,27 @@
 require_relative "helper"
 require_relative "../tableadmin"
 
-# TODO Update samples to match new client
 describe Google::Cloud::Bigtable, "Table Admin", :bigtable do
-
   it "create table, run table admin operations and delete table" do
     table_id = "test-table-#{SecureRandom.hex 8}"
 
-    output = capture do
-      run_table_operations @project_id, @instance_id, table_id
+    out, _err = capture_io do
+      run_table_operations bigtable_instance_id, table_id
     end
 
-    expect(output).to include "Table created #{table_id}"
-    expect(output).to include "Created column family with max age GC rule: cf1"
-    expect(output).to include "Created column family with max versions GC rule: cf2"
-    expect(output).to include "Created column family with union GC rule: cf3"
-    expect(output).to include "Created column family with intersect GC rule: cf4"
-    expect(output).to include "Created column family with a nested GC rule: cf5"
-    expect(output).to include "Updated max version GC rule of column_family: cf1"
-    expect(output).to include "Deleted column family: cf2"
+    assert_includes out, "Table created #{table_id}"
+    assert_includes out, "Created column family with max age GC rule: cf1"
+    assert_includes out, "Created column family with max versions GC rule: cf2"
+    assert_includes out, "Created column family with union GC rule: cf3"
+    assert_includes out, "Created column family with intersect GC rule: cf4"
+    assert_includes out, "Created column family with a nested GC rule: cf5"
+    assert_includes out, "Updated max version GC rule of column_family: cf1"
+    assert_includes out, "Deleted column family: cf2"
 
-    output = capture do
-      delete_table @project_id, @instance_id, table_id
+    out, _err = capture_io do
+      delete_table bigtable_instance_id, table_id
     end
 
-    expect(output).to include "Table deleted: #{table_id}"
+    assert_includes out, "Table deleted: #{table_id}"
   end
 end
