@@ -15,7 +15,7 @@
 # Import google bigtable client lib
 require "google/cloud/bigtable"
 
-def write_simple project_id, instance_id, table_id
+def write_simple instance_id, table_id
   bigtable = Google::Cloud::Bigtable.new
   #  [START bigtable_writes_simple]
   table = bigtable.table instance_id, table_id
@@ -33,7 +33,7 @@ def write_simple project_id, instance_id, table_id
   #  [END bigtable_writes_simple]
 end
 
-def write_batch project_id, instance_id, table_id
+def write_batch instance_id, table_id
   bigtable = Google::Cloud::Bigtable.new
   #  [START bigtable_writes_batch]
   table = bigtable.table instance_id, table_id
@@ -53,7 +53,7 @@ def write_batch project_id, instance_id, table_id
   #  [END bigtable_writes_batch]
 end
 
-def write_increment project_id, instance_id, table_id
+def write_increment instance_id, table_id
   bigtable = Google::Cloud::Bigtable.new
 
   #  [START bigtable_writes_increment]
@@ -69,7 +69,7 @@ def write_increment project_id, instance_id, table_id
   #  [END bigtable_writes_increment]
 end
 
-def write_conditional project_id, instance_id, table_id
+def write_conditional instance_id, table_id
   bigtable = Google::Cloud::Bigtable.new
   #  [START bigtable_writes_conditional]
   table = bigtable.table instance_id, table_id
@@ -101,19 +101,15 @@ def write_conditional project_id, instance_id, table_id
 end
 
 if $PROGRAM_NAME == __FILE__
-  project_id = ENV["GOOGLE_CLOUD_BIGTABLE_PROJECT"] ||
-               ENV["GOOGLE_CLOUD_PROJECT"]
-  # instance_id = ENV["BIGTABLE_INSTANCE"]
-
   case ARGV.shift
   when "simple"
-    write_simple project_id, ARGV.shift, ARGV.shift
+    write_simple ARGV.shift, ARGV.shift
   when "batch"
-    write_batch project_id, ARGV.shift, ARGV.shift
+    write_batch ARGV.shift, ARGV.shift
   when "increment"
-    write_increment project_id, ARGV.shift, ARGV.shift
+    write_increment ARGV.shift, ARGV.shift
   when "conditional"
-    write_conditional project_id, ARGV.shift, ARGV.shift
+    write_conditional ARGV.shift, ARGV.shift
   else
     puts <<~USAGE
       Perform Bigtable Table admin operations
