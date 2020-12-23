@@ -15,7 +15,7 @@
 # Import google bigtable client lib
 require "google/cloud/bigtable"
 
-def create_prod_instance project_id, instance_id, cluster_id, cluster_location
+def create_prod_instance instance_id, cluster_id, cluster_location
   bigtable = Google::Cloud::Bigtable.new
   puts "Check Instance Exists"
 
@@ -63,7 +63,7 @@ def create_prod_instance project_id, instance_id, cluster_id, cluster_location
   # [END bigtable_get_clusters]
 end
 
-def create_dev_instance project_id, instance_id, cluster_id, cluster_location
+def create_dev_instance instance_id, cluster_id, cluster_location
   bigtable = Google::Cloud::Bigtable.new
   puts "Creating a DEVELOPMENT Instance"
 
@@ -83,7 +83,7 @@ def create_dev_instance project_id, instance_id, cluster_id, cluster_location
   # [END bigtable_create_dev_instance]
 end
 
-def delete_instance project_id, instance_id
+def delete_instance instance_id
   bigtable = Google::Cloud::Bigtable.new
   instance = bigtable.instance instance_id
   puts "Deleting Instance: #{instance.instance_id}"
@@ -94,7 +94,7 @@ def delete_instance project_id, instance_id
   puts "Instance deleted: #{instance.instance_id}"
 end
 
-def add_cluster project_id, instance_id, cluster_id, cluster_location
+def add_cluster instance_id, cluster_id, cluster_location
   bigtable = Google::Cloud::Bigtable.new
   instance = bigtable.instance instance_id
 
@@ -119,7 +119,7 @@ def add_cluster project_id, instance_id, cluster_id, cluster_location
   puts "Cluster created: #{cluster.cluster_id}"
 end
 
-def delete_cluster project_id, instance_id, cluster_id
+def delete_cluster instance_id, cluster_id
   bigtable = Google::Cloud::Bigtable.new
   instance = bigtable.instance instance_id
   cluster = instance.cluster cluster_id
@@ -133,20 +133,17 @@ def delete_cluster project_id, instance_id, cluster_id
 end
 
 if $PROGRAM_NAME == __FILE__
-  project_id = ENV["GOOGLE_CLOUD_BIGTABLE_PROJECT"] ||
-               ENV["GOOGLE_CLOUD_PROJECT"]
-
   case ARGV.shift
   when "run"
-    create_prod_instance project_id, ARGV.shift, ARGV.shift, ARGV.shift
+    create_prod_instance ARGV.shift, ARGV.shift, ARGV.shift
   when "add-cluster"
-    add_cluster project_id, ARGV.shift, ARGV.shift, ARGV.shift
+    add_cluster ARGV.shift, ARGV.shift, ARGV.shift
   when "del-cluster"
-    delete_cluster project_id, ARGV.shift, ARGV.shift
+    delete_cluster ARGV.shift, ARGV.shift
   when "del-instance"
-    delete_instance project_id, ARGV.shift
+    delete_instance ARGV.shift
   when "dev-instance"
-    create_dev_instance project_id, ARGV.shift, ARGV.shift, ARGV.shift
+    create_dev_instance ARGV.shift, ARGV.shift, ARGV.shift
   else
     puts <<~USAGE
       Usage: bundle exec ruby instanceadmin.rb [command] [arguments]
