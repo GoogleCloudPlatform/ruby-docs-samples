@@ -16,16 +16,16 @@ require_relative "helper"
 require_relative "../filter_samples"
 
 describe Google::Cloud::Bigtable, "Filter Samples", :bigtable do
+  include Minitest::Hooks
   before(:all) do
     @table_id = "mobile-time-series-#{SecureRandom.hex 8}"
-    bigtable = Google::Cloud::Bigtable.new project_id: @project_id
+    bigtable = Google::Cloud::Bigtable.new
 
-    puts "Creating table."
     column_families = Google::Cloud::Bigtable::ColumnFamilyMap.new
     column_families.add "stats_summary", gc_rule: nil
     column_families.add "cell_plan", gc_rule: nil
 
-    @table = bigtable.create_table @instance_id, @table_id, column_families: column_families
+    @table = bigtable.create_table bigtable_instance_id, @table_id, column_families: column_families
 
     @timestamp = (Time.now.to_f * 1_000_000).round(-3)
     @timestamp_minus_hr = (Time.now.to_f * 1_000_000).round(-3) - 60 * 60 * 1000 * 1000
@@ -58,11 +58,15 @@ describe Google::Cloud::Bigtable, "Filter Samples", :bigtable do
     @table.mutate_rows entries
   end
 
+  after(:all) do
+    @table.delete if @table
+  end
+
   it 'filter_limit_row_regex' do
-    output = capture do
-      filter_limit_row_regex @project_id, @instance_id, @table_id
+    out, _err = capture_io do
+      filter_limit_row_regex bigtable_instance_id, @table_id
     end
-    expect(output).to match <<~OUTPUT
+    expected = <<~OUTPUT
       Reading data for phone#4c410523#20190501:
       Column Family cell_plan
       \tdata_plan_01gb: false @#{@timestamp}
@@ -82,13 +86,15 @@ describe Google::Cloud::Bigtable, "Filter Samples", :bigtable do
       \tos_build: PQ2A.190401.002 @#{@timestamp}
 
     OUTPUT
+
+    assert_match expected, out
   end
 
   it 'filter_limit_cells_per_col' do
-    output = capture do
-      filter_limit_cells_per_col @project_id, @instance_id, @table_id
+    out, _err = capture_io do
+      filter_limit_cells_per_col bigtable_instance_id, @table_id
     end
-    expect(output).to match <<~OUTPUT
+    expected = <<~OUTPUT
       Reading data for phone#4c410523#20190501:
       Column Family cell_plan
       \tdata_plan_01gb: false @#{@timestamp}
@@ -132,13 +138,15 @@ describe Google::Cloud::Bigtable, "Filter Samples", :bigtable do
       \tos_build: PQ2A.190406.000 @#{@timestamp}
 
     OUTPUT
+
+    assert_match expected, out
   end
 
   it 'filter_limit_cells_per_row' do
-    output = capture do
-      filter_limit_cells_per_row @project_id, @instance_id, @table_id
+    out, _err = capture_io do
+      filter_limit_cells_per_row bigtable_instance_id, @table_id
     end
-    expect(output).to match <<~OUTPUT
+    expected = <<~OUTPUT
       Reading data for phone#4c410523#20190501:
       Column Family cell_plan
       \tdata_plan_01gb: false @#{@timestamp}
@@ -169,13 +177,15 @@ describe Google::Cloud::Bigtable, "Filter Samples", :bigtable do
       \tconnected_cell: 1 @#{@timestamp}
 
     OUTPUT
+
+    assert_match expected, out
   end
 
   it 'filter_limit_cells_per_row_offset' do
-    output = capture do
-      filter_limit_cells_per_row_offset @project_id, @instance_id, @table_id
+    out, _err = capture_io do
+      filter_limit_cells_per_row_offset bigtable_instance_id, @table_id
     end
-    expect(output).to match <<~OUTPUT
+    expected = <<~OUTPUT
       Reading data for phone#4c410523#20190501:
       Column Family cell_plan
       \tdata_plan_05gb: true @#{@timestamp}
@@ -205,13 +215,15 @@ describe Google::Cloud::Bigtable, "Filter Samples", :bigtable do
       \tos_build: PQ2A.190406.000 @#{@timestamp}
 
     OUTPUT
+
+    assert_match expected, out
   end
 
   it 'filter_limit_col_family_regex' do
-    output = capture do
-      filter_limit_col_family_regex @project_id, @instance_id, @table_id
+    out, _err = capture_io do
+      filter_limit_col_family_regex bigtable_instance_id, @table_id
     end
-    expect(output).to match <<~OUTPUT
+    expected = <<~OUTPUT
       Reading data for phone#4c410523#20190501:
       Column Family stats_summary
       \tconnected_cell: 1 @#{@timestamp}
@@ -243,13 +255,15 @@ describe Google::Cloud::Bigtable, "Filter Samples", :bigtable do
       \tos_build: PQ2A.190406.000 @#{@timestamp}
 
     OUTPUT
+
+    assert_match expected, out
   end
 
   it 'filter_limit_col_qualifier_regex' do
-    output = capture do
-      filter_limit_col_qualifier_regex @project_id, @instance_id, @table_id
+    out, _err = capture_io do
+      filter_limit_col_qualifier_regex bigtable_instance_id, @table_id
     end
-    expect(output).to match <<~OUTPUT
+    expected = <<~OUTPUT
       Reading data for phone#4c410523#20190501:
       Column Family stats_summary
       \tconnected_cell: 1 @#{@timestamp}
@@ -276,13 +290,15 @@ describe Google::Cloud::Bigtable, "Filter Samples", :bigtable do
       \tconnected_wifi: 0 @#{@timestamp}
 
     OUTPUT
+
+    assert_match expected, out
   end
 
   it 'filter_limit_col_range' do
-    output = capture do
-      filter_limit_col_range @project_id, @instance_id, @table_id
+    out, _err = capture_io do
+      filter_limit_col_range bigtable_instance_id, @table_id
     end
-    expect(output).to match <<~OUTPUT
+    expected = <<~OUTPUT
       Reading data for phone#4c410523#20190501:
       Column Family cell_plan
       \tdata_plan_01gb: false @#{@timestamp}
@@ -298,13 +314,15 @@ describe Google::Cloud::Bigtable, "Filter Samples", :bigtable do
       \tdata_plan_05gb: true @#{@timestamp}
 
     OUTPUT
+
+    assert_match expected, out
   end
 
   it 'filter_limit_value_range' do
-    output = capture do
-      filter_limit_value_range @project_id, @instance_id, @table_id
+    out, _err = capture_io do
+      filter_limit_value_range bigtable_instance_id, @table_id
     end
-    expect(output).to match <<~OUTPUT
+    expected = <<~OUTPUT
       Reading data for phone#4c410523#20190501:
       Column Family stats_summary
       \tos_build: PQ2A.190405.003 @#{@timestamp}
@@ -314,13 +332,15 @@ describe Google::Cloud::Bigtable, "Filter Samples", :bigtable do
       \tos_build: PQ2A.190405.004 @#{@timestamp}
 
     OUTPUT
+
+    assert_match expected, out
   end
 
   it 'filter_limit_value_regex' do
-    output = capture do
-      filter_limit_value_regex @project_id, @instance_id, @table_id
+    out, _err = capture_io do
+      filter_limit_value_regex bigtable_instance_id, @table_id
     end
-    expect(output).to match <<~OUTPUT
+    expected = <<~OUTPUT
       Reading data for phone#4c410523#20190501:
       Column Family stats_summary
       \tos_build: PQ2A.190405.003 @#{@timestamp}
@@ -342,32 +362,37 @@ describe Google::Cloud::Bigtable, "Filter Samples", :bigtable do
       \tos_build: PQ2A.190406.000 @#{@timestamp}
 
     OUTPUT
+
+    assert_match expected, out
   end
 
   it 'filter_limit_timestamp_range' do
-    output = capture do
-      filter_limit_timestamp_range @project_id, @instance_id, @table_id
+    out, _err = capture_io do
+      filter_limit_timestamp_range bigtable_instance_id, @table_id
     end
-    expect(output).to match <<~OUTPUT
+    expected = <<~OUTPUT
       Reading data for phone#4c410523#20190501:
       Column Family cell_plan
       \tdata_plan_01gb: true @#{@timestamp_minus_hr}
 
     OUTPUT
+
+    assert_match expected, out
   end
 
   it 'filter_limit_block_all' do
-    output = capture do
-      filter_limit_block_all @project_id, @instance_id, @table_id
+    out, _err = capture_io do
+      filter_limit_block_all bigtable_instance_id, @table_id
     end
-    expect(output).to match ''
+
+    assert_match "", out
   end
 
   it 'filter_limit_pass_all' do
-    output = capture do
-      filter_limit_pass_all @project_id, @instance_id, @table_id
+    out, _err = capture_io do
+      filter_limit_pass_all bigtable_instance_id, @table_id
     end
-    expect(output).to match <<~OUTPUT
+    expected = <<~OUTPUT
       Reading data for phone#4c410523#20190501:
       Column Family cell_plan
       \tdata_plan_01gb: false @#{@timestamp}
@@ -411,13 +436,15 @@ describe Google::Cloud::Bigtable, "Filter Samples", :bigtable do
       \tos_build: PQ2A.190406.000 @#{@timestamp}
 
     OUTPUT
+
+    assert_match expected, out
   end
 
   it 'filter_modify_strip_value' do
-    output = capture do
-      filter_modify_strip_value @project_id, @instance_id, @table_id
+    out, _err = capture_io do
+      filter_modify_strip_value bigtable_instance_id, @table_id
     end
-    expect(output).to match <<~OUTPUT
+    expected = <<~OUTPUT
       Reading data for phone#4c410523#20190501:
       Column Family cell_plan
       \tdata_plan_01gb:  @#{@timestamp}
@@ -461,13 +488,15 @@ describe Google::Cloud::Bigtable, "Filter Samples", :bigtable do
       \tos_build:  @#{@timestamp}
 
     OUTPUT
+
+    assert_match expected, out
   end
 
   it 'filter_modify_apply_label' do
-    output = capture do
-      filter_modify_apply_label @project_id, @instance_id, @table_id
+    out, _err = capture_io do
+      filter_modify_apply_label bigtable_instance_id, @table_id
     end
-    expect(output).to match <<~OUTPUT
+    expected = <<~OUTPUT
       Reading data for phone#4c410523#20190501:
       Column Family cell_plan
       \tdata_plan_01gb: false @#{@timestamp} [labelled]
@@ -511,13 +540,15 @@ describe Google::Cloud::Bigtable, "Filter Samples", :bigtable do
       \tos_build: PQ2A.190406.000 @#{@timestamp} [labelled]
 
     OUTPUT
+
+    assert_match expected, out
   end
 
   it 'filter_composing_chain' do
-    output = capture do
-      filter_composing_chain @project_id, @instance_id, @table_id
+    out, _err = capture_io do
+      filter_composing_chain bigtable_instance_id, @table_id
     end
-    expect(output).to match <<~OUTPUT
+    expected = <<~OUTPUT
       Reading data for phone#4c410523#20190501:
       Column Family cell_plan
       \tdata_plan_01gb: false @#{@timestamp}
@@ -542,10 +573,10 @@ describe Google::Cloud::Bigtable, "Filter Samples", :bigtable do
   end
 
   it 'filter_composing_interleave' do
-    output = capture do
-      filter_composing_interleave @project_id, @instance_id, @table_id
+    out, _err = capture_io do
+      filter_composing_interleave bigtable_instance_id, @table_id
     end
-    expect(output).to match <<~OUTPUT
+    expected = <<~OUTPUT
       Reading data for phone#4c410523#20190501:
       Column Family cell_plan
       \tdata_plan_01gb: true @#{@timestamp_minus_hr}
@@ -578,13 +609,15 @@ describe Google::Cloud::Bigtable, "Filter Samples", :bigtable do
       \tos_build: PQ2A.190406.000 @#{@timestamp}
 
     OUTPUT
+
+    assert_match expected, out
   end
 
   it 'filter_composing_condition' do
-    output = capture do
-      filter_composing_condition @project_id, @instance_id, @table_id
+    out, _err = capture_io do
+      filter_composing_condition bigtable_instance_id, @table_id
     end
-    expect(output).to match <<~OUTPUT
+    expected = <<~OUTPUT
       Reading data for phone#4c410523#20190501:
       Column Family cell_plan
       \tdata_plan_01gb: false @#{@timestamp} [filtered-out]
@@ -628,13 +661,8 @@ describe Google::Cloud::Bigtable, "Filter Samples", :bigtable do
       \tos_build: PQ2A.190406.000 @#{@timestamp} [passed-filter]
 
     OUTPUT
+
+    assert_match expected, out
   end
-
-
-  after(:all) do
-    puts "Deleting table."
-    @table.delete
-  end
-
 end
 

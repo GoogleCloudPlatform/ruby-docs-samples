@@ -14,6 +14,7 @@
 
 require "minitest/autorun"
 require "minitest/focus"
+require "minitest/hooks/default"
 require "google/cloud/bigtable"
 require "google/cloud/bigtable/admin"
 require "securerandom"

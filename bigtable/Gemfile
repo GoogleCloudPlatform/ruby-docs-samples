@@ -22,5 +22,6 @@ group :test do
   gem "minitest", "~> 5.13"
   gem "minitest-focus", "~> 1.1"
   gem "minitest-junit"
+  gem "minitest-hooks", "~> 1.5"
   gem "rake"
 end
