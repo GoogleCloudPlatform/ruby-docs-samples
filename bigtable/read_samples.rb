@@ -18,7 +18,7 @@ require "google/cloud/bigtable"
 # Write your code here.
 # [START_EXCLUDE]
 
-def reads_row project_id, instance_id, table_id
+def reads_row instance_id, table_id
   # [START bigtable_reads_row]
   bigtable = Google::Cloud::Bigtable.new
   table = bigtable.table instance_id, table_id
@@ -29,7 +29,7 @@ end
 
 # [END bigtable_reads_row]
 
-def reads_row_partial project_id, instance_id, table_id
+def reads_row_partial instance_id, table_id
   # [START bigtable_reads_row_partial]
   bigtable = Google::Cloud::Bigtable.new
   table = bigtable.table instance_id, table_id
@@ -41,7 +41,7 @@ end
 
 # [END bigtable_reads_row_partial]
 
-def reads_rows project_id, instance_id, table_id
+def reads_rows instance_id, table_id
   # [START bigtable_reads_rows]
   bigtable = Google::Cloud::Bigtable.new
   table = bigtable.table instance_id, table_id
@@ -52,7 +52,7 @@ def reads_rows project_id, instance_id, table_id
   # [END bigtable_reads_rows]
 end
 
-def reads_row_range project_id, instance_id, table_id
+def reads_row_range instance_id, table_id
   # [START bigtable_reads_row_range]
   bigtable = Google::Cloud::Bigtable.new
   table = bigtable.table instance_id, table_id
@@ -64,7 +64,7 @@ def reads_row_range project_id, instance_id, table_id
   # [END bigtable_reads_row_range]
 end
 
-def reads_row_ranges project_id, instance_id, table_id
+def reads_row_ranges instance_id, table_id
   # [START bigtable_reads_row_ranges]
   bigtable = Google::Cloud::Bigtable.new
   table = bigtable.table instance_id, table_id
@@ -79,7 +79,7 @@ def reads_row_ranges project_id, instance_id, table_id
   # [END bigtable_reads_row_ranges]
 end
 
-def reads_prefix project_id, instance_id, table_id
+def reads_prefix instance_id, table_id
   # [START bigtable_reads_prefix]
   bigtable = Google::Cloud::Bigtable.new
   table = bigtable.table instance_id, table_id
@@ -92,7 +92,7 @@ def reads_prefix project_id, instance_id, table_id
   # [END bigtable_reads_prefix]
 end
 
-def reads_filter project_id, instance_id, table_id
+def reads_filter instance_id, table_id
   # [START bigtable_reads_filter]
   bigtable = Google::Cloud::Bigtable.new
   table = bigtable.table instance_id, table_id

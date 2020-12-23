@@ -16,15 +16,15 @@ require_relative "helper"
 require_relative "../read_samples"
 
 describe Google::Cloud::Bigtable, "Read Samples", :bigtable do
+  include Minitest::Hooks
   before(:all) do
     @table_id = "mobile-time-series-#{SecureRandom.hex 8}"
-    bigtable = Google::Cloud::Bigtable.new project_id: @project_id
+    bigtable = Google::Cloud::Bigtable.new
 
-    puts "Creating table."
     column_families = Google::Cloud::Bigtable::ColumnFamilyMap.new
     column_families.add "stats_summary", gc_rule: nil
 
-    @table = bigtable.create_table @instance_id, @table_id, column_families: column_families
+    @table = bigtable.create_table bigtable_instance_id, @table_id, column_families: column_families
 
     @timestamp = (Time.now.to_f * 1_000_000).round(-3)
 
@@ -49,35 +49,43 @@ describe Google::Cloud::Bigtable, "Read Samples", :bigtable do
     @table.mutate_rows entries
   end
 
+  after(:all) do
+    @table.delete if @table
+  end
+
   it "reads_row" do
-    output = capture do
-      reads_row @project_id, @instance_id, @table_id
+    out, _err = capture_io do
+      reads_row bigtable_instance_id, @table_id
     end
-    expect(output).to match <<~OUTPUT
+    expected = <<~OUTPUT
 Reading data for phone#4c410523#20190501:
 Column Family stats_summary
 \tconnected_cell: 1 @#{@timestamp}
 \tconnected_wifi: 1 @#{@timestamp}
 \tos_build: PQ2A.190405.003 @#{@timestamp}
 OUTPUT
+
+    assert_match expected, out
   end
 
   it "reads_row_partial" do
-    output = capture do
-      reads_row_partial @project_id, @instance_id, @table_id
+    out, _err = capture_io do
+      reads_row_partial bigtable_instance_id, @table_id
     end
-    expect(output).to match <<~OUTPUT
+    expected = <<~OUTPUT
 Reading data for phone#4c410523#20190501:
 Column Family stats_summary
 \tos_build: PQ2A.190405.003 @#{@timestamp}
 OUTPUT
+
+    assert_match expected, out
   end
 
   it "reads_rows" do
-    output = capture do
-      reads_rows @project_id, @instance_id, @table_id
+    out, _err = capture_io do
+      reads_rows bigtable_instance_id, @table_id
     end
-    expect(output).to match <<~OUTPUT
+    expected = <<~OUTPUT
 Reading data for phone#4c410523#20190501:
 Column Family stats_summary
 \tconnected_cell: 1 @#{@timestamp}
@@ -90,13 +98,15 @@ Column Family stats_summary
 \tconnected_wifi: 1 @#{@timestamp}
 \tos_build: PQ2A.190405.004 @#{@timestamp}
 OUTPUT
+
+    assert_match expected, out
   end
 
   it "reads_row_range" do
-    output = capture do
-      reads_row_range @project_id, @instance_id, @table_id
+    out, _err = capture_io do
+      reads_row_range bigtable_instance_id, @table_id
     end
-    expect(output).to match <<~OUTPUT
+    expected = <<~OUTPUT
 Reading data for phone#4c410523#20190501:
 Column Family stats_summary
 \tconnected_cell: 1 @#{@timestamp}
@@ -115,13 +125,15 @@ Column Family stats_summary
 \tconnected_wifi: 1 @#{@timestamp}
 \tos_build: PQ2A.190406.000 @#{@timestamp}
 OUTPUT
+
+    assert_match expected, out
   end
 
   it "reads_row_ranges" do
-    output = capture do
-      reads_row_ranges @project_id, @instance_id, @table_id
+    out, _err = capture_io do
+      reads_row_ranges bigtable_instance_id, @table_id
     end
-    expect(output).to match <<~OUTPUT
+    expected = <<~OUTPUT
 Reading data for phone#4c410523#20190501:
 Column Family stats_summary
 \tconnected_cell: 1 @#{@timestamp}
@@ -152,13 +164,15 @@ Column Family stats_summary
 \tconnected_wifi: 0 @#{@timestamp}
 \tos_build: PQ2A.190406.000 @#{@timestamp}
 OUTPUT
+
+    assert_match expected, out
   end
 
   it "reads_prefix" do
-    output = capture do
-      reads_prefix @project_id, @instance_id, @table_id
+    out, _err = capture_io do
+      reads_prefix bigtable_instance_id, @table_id
     end
-    expect(output).to match <<~OUTPUT
+    expected = <<~OUTPUT
 Reading data for phone#4c410523#20190501:
 Column Family stats_summary
 \tconnected_cell: 1 @#{@timestamp}
@@ -189,13 +203,15 @@ Column Family stats_summary
 \tconnected_wifi: 0 @#{@timestamp}
 \tos_build: PQ2A.190406.000 @#{@timestamp}
 OUTPUT
+
+    assert_match expected, out
   end
 
   it "reads_filter" do
-    output = capture do
-      reads_filter @project_id, @instance_id, @table_id
+    out, _err = capture_io do
+      reads_filter bigtable_instance_id, @table_id
     end
-    expect(output).to match <<~OUTPUT
+    expected = <<~OUTPUT
 Reading data for phone#4c410523#20190501:
 Column Family stats_summary
 \tos_build: PQ2A.190405.003 @#{@timestamp}
@@ -216,12 +232,7 @@ Reading data for phone#5c10102#20190502:
 Column Family stats_summary
 \tos_build: PQ2A.190406.000 @#{@timestamp}
 OUTPUT
+
+    assert_match expected, out
   end
-
-
-  after(:all) do
-    puts "Deleting table."
-    @table.delete
-  end
-
 end
