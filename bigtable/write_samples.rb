@@ -17,7 +17,7 @@ require "google/cloud/bigtable"
 
 def write_simple instance_id, table_id
   bigtable = Google::Cloud::Bigtable.new
-  #  [START bigtable_writes_simple]
+  # [START bigtable_writes_simple]
   # instance_id = "my-instance"
   # table_id    = "my-table"
   table = bigtable.table instance_id, table_id
@@ -37,7 +37,7 @@ end
 
 def write_batch instance_id, table_id
   bigtable = Google::Cloud::Bigtable.new
-  #  [START bigtable_writes_batch]
+  # [START bigtable_writes_batch]
   # instance_id = "my-instance"
   # table_id    = "my-table"
   table = bigtable.table instance_id, table_id
@@ -60,7 +60,7 @@ end
 def write_increment instance_id, table_id
   bigtable = Google::Cloud::Bigtable.new
 
-  #  [START bigtable_writes_increment]
+  # [START bigtable_writes_increment]
   # instance_id = "my-instance"
   # table_id    = "my-table"
   table = bigtable.table instance_id, table_id
@@ -77,7 +77,7 @@ end
 
 def write_conditional instance_id, table_id
   bigtable = Google::Cloud::Bigtable.new
-  #  [START bigtable_writes_conditional]
+  # [START bigtable_writes_conditional]
   # instance_id = "my-instance"
   # table_id    = "my-table"
   table = bigtable.table instance_id, table_id

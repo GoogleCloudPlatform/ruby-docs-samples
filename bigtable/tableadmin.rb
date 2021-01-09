@@ -172,7 +172,7 @@ def delete_table instance_id, table_id
   bigtable = Google::Cloud::Bigtable.new
 
   puts "Delete the table."
-  #  [START bigtable_delete_table]
+  # [START bigtable_delete_table]
   # instance_id = "my-instance"
   # table_id    = "my-table"
   table = bigtable.table instance_id, table_id
