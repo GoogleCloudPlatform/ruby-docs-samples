@@ -18,9 +18,9 @@ def hello_world instance_id, table_id, column_family, column_qualifier
   # [END bigtable_hw_imports]
 
   # [START bigtable_hw_connect]
-  # instance_id = "my-instance"
-  # table_id = "Hello-Bigtable"
-  # column_family = "cf"
+  # instance_id      = "my-instance"
+  # table_id         = "my-table"
+  # column_family    = "cf"
   # column_qualifier = "greeting"
 
   bigtable = Google::Cloud::Bigtable.new

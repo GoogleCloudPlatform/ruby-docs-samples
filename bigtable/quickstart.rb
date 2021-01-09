@@ -21,7 +21,7 @@ def quickstart instance_id, table_id
   bigtable = Google::Cloud::Bigtable.new
 
   # Your Cloud Bigtable instance ID
-  # instance_id = "my-bigtable-instance"
+  # instance_id = "my-instance"
 
   # Your Cloud Bigtable table ID
   # table_id = "my-table"

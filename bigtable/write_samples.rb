@@ -18,6 +18,8 @@ require "google/cloud/bigtable"
 def write_simple instance_id, table_id
   bigtable = Google::Cloud::Bigtable.new
   #  [START bigtable_writes_simple]
+  # instance_id = "my-instance"
+  # table_id    = "my-table"
   table = bigtable.table instance_id, table_id
   column_family = "stats_summary"
   timestamp = (Time.now.to_f * 1_000_000).round(-3)
@@ -36,6 +38,8 @@ end
 def write_batch instance_id, table_id
   bigtable = Google::Cloud::Bigtable.new
   #  [START bigtable_writes_batch]
+  # instance_id = "my-instance"
+  # table_id    = "my-table"
   table = bigtable.table instance_id, table_id
   column_family = "stats_summary"
   timestamp = (Time.now.to_f * 1_000_000).round(-3)
@@ -57,6 +61,8 @@ def write_increment instance_id, table_id
   bigtable = Google::Cloud::Bigtable.new
 
   #  [START bigtable_writes_increment]
+  # instance_id = "my-instance"
+  # table_id    = "my-table"
   table = bigtable.table instance_id, table_id
   column_family = "stats_summary"
 
@@ -72,6 +78,8 @@ end
 def write_conditional instance_id, table_id
   bigtable = Google::Cloud::Bigtable.new
   #  [START bigtable_writes_conditional]
+  # instance_id = "my-instance"
+  # table_id    = "my-table"
   table = bigtable.table instance_id, table_id
   column_family = "stats_summary"
   timestamp = (Time.now.to_f * 1_000_000).round(-3)

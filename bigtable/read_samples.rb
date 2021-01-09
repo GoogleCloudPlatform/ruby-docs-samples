@@ -20,6 +20,8 @@ require "google/cloud/bigtable"
 
 def reads_row instance_id, table_id
   # [START bigtable_reads_row]
+  # instance_id = "my-instance"
+  # table_id    = "my-table"
   bigtable = Google::Cloud::Bigtable.new
   table = bigtable.table instance_id, table_id
 
@@ -31,6 +33,8 @@ end
 
 def reads_row_partial instance_id, table_id
   # [START bigtable_reads_row_partial]
+  # instance_id = "my-instance"
+  # table_id    = "my-table"
   bigtable = Google::Cloud::Bigtable.new
   table = bigtable.table instance_id, table_id
   filter = Google::Cloud::Bigtable::RowFilter.qualifier "os_build"
@@ -43,6 +47,8 @@ end
 
 def reads_rows instance_id, table_id
   # [START bigtable_reads_rows]
+  # instance_id = "my-instance"
+  # table_id    = "my-table"
   bigtable = Google::Cloud::Bigtable.new
   table = bigtable.table instance_id, table_id
 
@@ -54,6 +60,8 @@ end
 
 def reads_row_range instance_id, table_id
   # [START bigtable_reads_row_range]
+  # instance_id = "my-instance"
+  # table_id    = "my-table"
   bigtable = Google::Cloud::Bigtable.new
   table = bigtable.table instance_id, table_id
 
@@ -66,6 +74,8 @@ end
 
 def reads_row_ranges instance_id, table_id
   # [START bigtable_reads_row_ranges]
+  # instance_id = "my-instance"
+  # table_id    = "my-table"
   bigtable = Google::Cloud::Bigtable.new
   table = bigtable.table instance_id, table_id
 
@@ -81,6 +91,8 @@ end
 
 def reads_prefix instance_id, table_id
   # [START bigtable_reads_prefix]
+  # instance_id = "my-instance"
+  # table_id    = "my-table"
   bigtable = Google::Cloud::Bigtable.new
   table = bigtable.table instance_id, table_id
 
@@ -94,6 +106,8 @@ end
 
 def reads_filter instance_id, table_id
   # [START bigtable_reads_filter]
+  # instance_id = "my-instance"
+  # table_id    = "my-table"
   bigtable = Google::Cloud::Bigtable.new
   table = bigtable.table instance_id, table_id
 

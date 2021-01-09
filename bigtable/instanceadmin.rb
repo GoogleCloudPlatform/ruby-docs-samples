@@ -20,6 +20,7 @@ def create_prod_instance instance_id, cluster_id, cluster_location
   puts "Check Instance Exists"
 
   # [START bigtable_check_instance_exists]
+  # instance_id = "my-instance"
   if bigtable.instance instance_id
     puts "Instance #{instance_id} exists"
     return
@@ -27,6 +28,9 @@ def create_prod_instance instance_id, cluster_id, cluster_location
   # [END bigtable_check_instance_exists]
 
   # [START bigtable_create_prod_instance]
+  # instance_id      = "my-instance"
+  # cluster_id       = "my-cluster"
+  # cluster_location = "us-east1-b"
   puts "Creating a PRODUCTION Instance"
   job = bigtable.create_instance(
     instance_id,
@@ -51,12 +55,14 @@ def create_prod_instance instance_id, cluster_id, cluster_location
 
   puts "Get Instance"
   # [START bigtable_get_instance]
+  # instance_id = "my-instance"
   instance = bigtable.instance instance_id
   puts "Get Instance id: #{instance.instance_id}"
   # [END bigtable_get_instance]
 
   puts "Listing Clusters of #{instance_id}"
   # [START bigtable_get_clusters]
+  # instance_id = "my-instance"
   bigtable.instance(instance_id).clusters.all do |cluster|
     puts "Cluster: #{cluster.cluster_id}"
   end
@@ -68,6 +74,9 @@ def create_dev_instance instance_id, cluster_id, cluster_location
   puts "Creating a DEVELOPMENT Instance"
 
   # [START bigtable_create_dev_instance]
+  # instance_id      = "my-instance"
+  # cluster_id       = "my-cluster"
+  # cluster_location = "us-east1-b"
   job = bigtable.create_instance(
     instance_id,
     display_name: "Sample development instance",
@@ -106,6 +115,8 @@ def add_cluster instance_id, cluster_id, cluster_location
   puts "Adding Cluster to Instance #{instance.instance_id}"
 
   # [START bigtable_create_cluster]
+  # cluster_id       = "my-cluster"
+  # cluster_location = "us-east1-b"
   job = instance.create_cluster(
     cluster_id,
     cluster_location,

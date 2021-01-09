@@ -25,6 +25,8 @@ def run_table_operations instance_id, table_id
   else
     puts "Table does not exist. Creating table #{table_id}"
     # [START bigtable_create_table]
+    # instance_id = "my-instance"
+    # table_id    = "my-table"
     table = bigtable.create_table instance_id, table_id
     puts "Table created #{table.name}"
     # [END bigtable_create_table]
@@ -32,6 +34,7 @@ def run_table_operations instance_id, table_id
 
   puts "Listing tables in instance"
   # [START bigtable_list_tables]
+  # instance_id = "my-instance"
   bigtable.tables(instance_id).all.each do |t|
     puts "Table: #{t.name}"
   end
@@ -39,6 +42,8 @@ def run_table_operations instance_id, table_id
 
   puts "Get table and print details:"
   # [START bigtable_get_table_metadata]
+  # instance_id = "my-instance"
+  # table_id    = "my-table"
   table = bigtable.table(
     instance_id,
     table_id,
@@ -168,6 +173,8 @@ def delete_table instance_id, table_id
 
   puts "Delete the table."
   #  [START bigtable_delete_table]
+  # instance_id = "my-instance"
+  # table_id    = "my-table"
   table = bigtable.table instance_id, table_id
   table.delete
   #  [END bigtable_delete_table]
