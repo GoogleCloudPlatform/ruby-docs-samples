@@ -16,8 +16,7 @@ require_relative "helper"
 require_relative "../write_samples"
 
 describe Google::Cloud::Bigtable, "Write Samples", :bigtable do
-  include Minitest::Hooks
-  before(:all) do
+  before do
     @table_id = "mobile-time-series-#{SecureRandom.hex 8}"
 
     bigtable = Google::Cloud::Bigtable.new
@@ -28,35 +27,33 @@ describe Google::Cloud::Bigtable, "Write Samples", :bigtable do
     @table = bigtable.create_table bigtable_instance_id, @table_id, column_families: column_families
   end
 
-  after(:all) do
+  after do
     @table.delete
   end
 
-  it "writes one row" do
+  it "write_simple, write_batch, write_increment, write_conditional" do
+    # write_simple
     out, _err = capture_io do
       write_simple bigtable_instance_id, @table_id
     end
 
     assert_includes out, "Successfully wrote row"
-  end
 
-  it "writes multiple rows" do
+    # write_batch
     out, _err = capture_io do
       write_batch bigtable_instance_id, @table_id
     end
 
     assert_includes out, "Successfully wrote 2 rows"
-  end
 
-  it "increments a row" do
+    #write_increment
     out, _err = capture_io do
       write_increment bigtable_instance_id, @table_id
     end
 
     assert_includes out, "Successfully updated row"
-  end
 
-  it "conditionally writes a row" do
+    # write_conditional
     out, _err = capture_io do
       write_conditional bigtable_instance_id, @table_id
     end
