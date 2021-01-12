@@ -1,12 +1,10 @@
-# frozen_string_literal: true
-
-# Copyright 2018 Google LLC
+# Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#     https://www.apache.org/licenses/LICENSE-2.0
+#     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,15 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 # Import google bigtable client lib
 require "google/cloud/bigtable"
 
-def create_prod_instance project_id, instance_id, cluster_id, cluster_location
-  bigtable = Google::Cloud::Bigtable.new project_id: project_id
+def create_prod_instance instance_id, cluster_id, cluster_location
+  bigtable = Google::Cloud::Bigtable.new
   puts "Check Instance Exists"
 
   # [START bigtable_check_instance_exists]
+  # instance_id = "my-instance"
   if bigtable.instance instance_id
     puts "Instance #{instance_id} exists"
     return
@@ -30,6 +28,9 @@ def create_prod_instance project_id, instance_id, cluster_id, cluster_location
   # [END bigtable_check_instance_exists]
 
   # [START bigtable_create_prod_instance]
+  # instance_id      = "my-instance"
+  # cluster_id       = "my-cluster"
+  # cluster_location = "us-east1-b"
   puts "Creating a PRODUCTION Instance"
   job = bigtable.create_instance(
     instance_id,
@@ -54,23 +55,28 @@ def create_prod_instance project_id, instance_id, cluster_id, cluster_location
 
   puts "Get Instance"
   # [START bigtable_get_instance]
+  # instance_id = "my-instance"
   instance = bigtable.instance instance_id
   puts "Get Instance id: #{instance.instance_id}"
   # [END bigtable_get_instance]
 
   puts "Listing Clusters of #{instance_id}"
   # [START bigtable_get_clusters]
+  # instance_id = "my-instance"
   bigtable.instance(instance_id).clusters.all do |cluster|
     puts "Cluster: #{cluster.cluster_id}"
   end
   # [END bigtable_get_clusters]
 end
 
-def create_dev_instance project_id, instance_id, cluster_id, cluster_location
-  bigtable = Google::Cloud::Bigtable.new project_id: project_id
+def create_dev_instance instance_id, cluster_id, cluster_location
+  bigtable = Google::Cloud::Bigtable.new
   puts "Creating a DEVELOPMENT Instance"
 
   # [START bigtable_create_dev_instance]
+  # instance_id      = "my-instance"
+  # cluster_id       = "my-cluster"
+  # cluster_location = "us-east1-b"
   job = bigtable.create_instance(
     instance_id,
     display_name: "Sample development instance",
@@ -86,8 +92,8 @@ def create_dev_instance project_id, instance_id, cluster_id, cluster_location
   # [END bigtable_create_dev_instance]
 end
 
-def delete_instance project_id, instance_id
-  bigtable = Google::Cloud::Bigtable.new project_id: project_id
+def delete_instance instance_id
+  bigtable = Google::Cloud::Bigtable.new
   instance = bigtable.instance instance_id
   puts "Deleting Instance: #{instance.instance_id}"
 
@@ -97,8 +103,8 @@ def delete_instance project_id, instance_id
   puts "Instance deleted: #{instance.instance_id}"
 end
 
-def add_cluster project_id, instance_id, cluster_id, cluster_location
-  bigtable = Google::Cloud::Bigtable.new project_id: project_id
+def add_cluster instance_id, cluster_id, cluster_location
+  bigtable = Google::Cloud::Bigtable.new
   instance = bigtable.instance instance_id
 
   unless instance
@@ -109,6 +115,8 @@ def add_cluster project_id, instance_id, cluster_id, cluster_location
   puts "Adding Cluster to Instance #{instance.instance_id}"
 
   # [START bigtable_create_cluster]
+  # cluster_id       = "my-cluster"
+  # cluster_location = "us-east1-b"
   job = instance.create_cluster(
     cluster_id,
     cluster_location,
@@ -122,8 +130,8 @@ def add_cluster project_id, instance_id, cluster_id, cluster_location
   puts "Cluster created: #{cluster.cluster_id}"
 end
 
-def delete_cluster project_id, instance_id, cluster_id
-  bigtable = Google::Cloud::Bigtable.new project_id: project_id
+def delete_cluster instance_id, cluster_id
+  bigtable = Google::Cloud::Bigtable.new
   instance = bigtable.instance instance_id
   cluster = instance.cluster cluster_id
   puts "Deleting Cluster: #{cluster_id}"
@@ -136,20 +144,17 @@ def delete_cluster project_id, instance_id, cluster_id
 end
 
 if $PROGRAM_NAME == __FILE__
-  project_id = ENV["GOOGLE_CLOUD_BIGTABLE_PROJECT"] ||
-               ENV["GOOGLE_CLOUD_PROJECT"]
-
   case ARGV.shift
   when "run"
-    create_prod_instance project_id, ARGV.shift, ARGV.shift, ARGV.shift
+    create_prod_instance ARGV.shift, ARGV.shift, ARGV.shift
   when "add-cluster"
-    add_cluster project_id, ARGV.shift, ARGV.shift, ARGV.shift
+    add_cluster ARGV.shift, ARGV.shift, ARGV.shift
   when "del-cluster"
-    delete_cluster project_id, ARGV.shift, ARGV.shift
+    delete_cluster ARGV.shift, ARGV.shift
   when "del-instance"
-    delete_instance project_id, ARGV.shift
+    delete_instance ARGV.shift
   when "dev-instance"
-    create_dev_instance project_id, ARGV.shift, ARGV.shift, ARGV.shift
+    create_dev_instance ARGV.shift, ARGV.shift, ARGV.shift
   else
     puts <<~USAGE
       Usage: bundle exec ruby instanceadmin.rb [command] [arguments]

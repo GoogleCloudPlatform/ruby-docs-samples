@@ -1,12 +1,10 @@
-# frozen_string_literal: true
-
-# Copyright 2019 Google LLC
+# Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#     https://www.apache.org/licenses/LICENSE-2.0
+#     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,13 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 # Import google bigtable client lib
 require "google/cloud/bigtable"
 
-def write_simple project_id, instance_id, table_id
-  bigtable = Google::Cloud::Bigtable.new project_id: project_id
-  #  [START bigtable_writes_simple]
+def write_simple instance_id, table_id
+  bigtable = Google::Cloud::Bigtable.new
+  # [START bigtable_writes_simple]
+  # instance_id = "my-instance"
+  # table_id    = "my-table"
   table = bigtable.table instance_id, table_id
   column_family = "stats_summary"
   timestamp = (Time.now.to_f * 1_000_000).round(-3)
@@ -36,9 +35,11 @@ def write_simple project_id, instance_id, table_id
   #  [END bigtable_writes_simple]
 end
 
-def write_batch project_id, instance_id, table_id
-  bigtable = Google::Cloud::Bigtable.new project_id: project_id
-  #  [START bigtable_writes_batch]
+def write_batch instance_id, table_id
+  bigtable = Google::Cloud::Bigtable.new
+  # [START bigtable_writes_batch]
+  # instance_id = "my-instance"
+  # table_id    = "my-table"
   table = bigtable.table instance_id, table_id
   column_family = "stats_summary"
   timestamp = (Time.now.to_f * 1_000_000).round(-3)
@@ -56,10 +57,12 @@ def write_batch project_id, instance_id, table_id
   #  [END bigtable_writes_batch]
 end
 
-def write_increment project_id, instance_id, table_id
-  bigtable = Google::Cloud::Bigtable.new project_id: project_id
+def write_increment instance_id, table_id
+  bigtable = Google::Cloud::Bigtable.new
 
-  #  [START bigtable_writes_increment]
+  # [START bigtable_writes_increment]
+  # instance_id = "my-instance"
+  # table_id    = "my-table"
   table = bigtable.table instance_id, table_id
   column_family = "stats_summary"
 
@@ -72,9 +75,11 @@ def write_increment project_id, instance_id, table_id
   #  [END bigtable_writes_increment]
 end
 
-def write_conditional project_id, instance_id, table_id
-  bigtable = Google::Cloud::Bigtable.new project_id: project_id
-  #  [START bigtable_writes_conditional]
+def write_conditional instance_id, table_id
+  bigtable = Google::Cloud::Bigtable.new
+  # [START bigtable_writes_conditional]
+  # instance_id = "my-instance"
+  # table_id    = "my-table"
   table = bigtable.table instance_id, table_id
   column_family = "stats_summary"
   timestamp = (Time.now.to_f * 1_000_000).round(-3)
@@ -104,19 +109,15 @@ def write_conditional project_id, instance_id, table_id
 end
 
 if $PROGRAM_NAME == __FILE__
-  project_id = ENV["GOOGLE_CLOUD_BIGTABLE_PROJECT"] ||
-               ENV["GOOGLE_CLOUD_PROJECT"]
-  # instance_id = ENV["BIGTABLE_INSTANCE"]
-
   case ARGV.shift
   when "simple"
-    write_simple project_id, ARGV.shift, ARGV.shift
+    write_simple ARGV.shift, ARGV.shift
   when "batch"
-    write_batch project_id, ARGV.shift, ARGV.shift
+    write_batch ARGV.shift, ARGV.shift
   when "increment"
-    write_increment project_id, ARGV.shift, ARGV.shift
+    write_increment ARGV.shift, ARGV.shift
   when "conditional"
-    write_conditional project_id, ARGV.shift, ARGV.shift
+    write_conditional ARGV.shift, ARGV.shift
   else
     puts <<~USAGE
       Perform Bigtable Table admin operations
