@@ -1,5 +1,7 @@
 #! /bin/sh
 
+set -e
+
 # Run the tests with default values for all
 # environment variable
 bundle exec rspec --format documentation --format RspecJunitFormatter --out sponge_log.xml | tee sponge_log.log
