@@ -2,11 +2,11 @@
 
 set -e
 
-export DB_USER = $POSTGRES_USER
-export DB_PASS = $POSTGRES_PASSWORD
-export DB_NAME = $POSTGRES_NAME
-export DB_HOST = '127.0.0.1'
-export DB_PORT = '5432'
+export DB_USER=$POSTGRES_USER
+export DB_PASS=$POSTGRES_PASSWORD
+export DB_NAME=$POSTGRES_NAME
+export DB_HOST='127.0.0.1'
+export DB_PORT='5432'
 
 # Run the tests with default values for all
 # environment variable
