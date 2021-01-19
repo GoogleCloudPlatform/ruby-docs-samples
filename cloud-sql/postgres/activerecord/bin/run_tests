@@ -2,10 +2,16 @@
 
 set -e
 
+export DB_USER = $POSTGRES_USER
+export DB_PASS = $POSTGRES_PASSWORD
+export DB_NAME = $POSTGRES_NAME
+export DB_HOST = '127.0.0.1'
+export DB_PORT = '5432'
+
 # Run the tests with default values for all
 # environment variable
 bundle exec rspec --format documentation --format RspecJunitFormatter --out sponge_log.xml | tee sponge_log.log
 
 # Run the tests again with custom environment
-# variables that force a TCP connection
-DB_HOST=127.0.0.1; DB_PORT=5432 bundle exec rspec --format documentation --format RspecJunitFormatter --out sponge_log.xml | tee sponge_log.log
+# variables that force a Unix connection
+DB_HOST=; bundle exec rspec --format documentation --format RspecJunitFormatter --out sponge_log.xml | tee sponge_log.log

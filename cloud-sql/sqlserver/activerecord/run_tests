@@ -1,0 +1,13 @@
+#! /bin/sh
+
+set -e
+
+export DB_USER = $SQLSERVER_USER
+export DB_PASS = $SQLSERVER_PASSWORD
+export DB_NAME = $SQLSERVER_NAME
+export DB_HOST = '127.0.0.1'
+export DB_PORT = '1433'
+
+# Run the tests with default values for all
+# environment variable
+bundle exec rspec --format documentation --format RspecJunitFormatter --out sponge_log.xml | tee sponge_log.log
