@@ -120,15 +120,24 @@ describe "Logging Samples" do
       # taking a long time to index new logs.
       skip if found.empty?
 
+      n = 0
+      found = false
       out, _err = capture_io do
         list_log_entries log_name: entry.log_name
       end
-      entries = logging.entries filter: "logName:#{entry.log_name}",
-                                max:    1000,
-                                order:  "timestamp desc"
-      entries.map! { |entry| "[#{entry.timestamp}] #{entry.log_name} #{entry.payload.inspect}" }
-      out_entries = out.split "\n"
-      assert(out_entries.any? { |entry| entries.include? entry })
+
+      until n > 2 || found
+        sleep 5
+        entries = logging.entries filter: "logName:#{entry.log_name}",
+                                  max:    1000,
+                                  order:  "timestamp desc"
+        entries.map! { |entry| "[#{entry.timestamp}] #{entry.log_name} #{entry.payload.inspect}" }
+        out_entries = out.split "\n"
+        found = out_entries.any? { |entry| entries.include? entry }
+        n += 1
+      end
+
+      assert found
     end
   end
 
