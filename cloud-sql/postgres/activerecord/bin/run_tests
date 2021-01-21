@@ -15,4 +15,4 @@ bundle exec rspec --format documentation --format RspecJunitFormatter --out spon
 
 # Run the tests again with custom environment
 # variables that force a Unix connection
-DB_HOST=; bundle exec rspec --format documentation --format RspecJunitFormatter --out sponge_log.xml | tee sponge_log.log
+DB_HOST=`/cloudsql/$INSTANCE_CONNECTION_NAME`; bundle exec rspec --format documentation --format RspecJunitFormatter --out sponge_log.xml | tee sponge_log.log
