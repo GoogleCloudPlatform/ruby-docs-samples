@@ -1,6 +1,7 @@
 #!/bin/bash
 
 set -e
+set -o pipefail
 
 export DB_USER=$SQLSERVER_USER
 export DB_PASS=$SQLSERVER_PASSWORD
