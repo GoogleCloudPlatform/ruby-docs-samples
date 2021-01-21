@@ -17,6 +17,7 @@ require "slim"
 require "json"
 require "base64"
 require "google/cloud/pubsub"
+require "googleauth"
 
 pubsub = Google::Cloud::Pubsub.new
 
@@ -29,6 +30,8 @@ PUBSUB_VERIFICATION_TOKEN = ENV["PUBSUB_VERIFICATION_TOKEN"]
 # List of all messages received by this instance
 messages = []
 # [END gae_flex_pubsub_messages]
+
+claims = []
 
 # [START gae_flex_pubsub_index]
 get "/" do
@@ -54,6 +57,27 @@ post "/pubsub/push" do
   messages.push payload
 end
 # [END gae_flex_pubsub_push]
+
+# [START gaeflex_net_pubsub_auth_push]
+post "/pubsub/authenticated-push" do
+  halt 400 if params[:token] != PUBSUB_VERIFICATION_TOKEN
+
+  bearer = request.env["Authorization"]
+  token = bearer.split(" ")[1]
+  begin
+    claim = Google::Auth::IDTokens.verify_oidc token, aud: "example.com"
+    claims.push claim
+  rescue Google::Auth::IDTokens::VerificationError => e
+    puts "VerificationError: #{e.message}"
+    halt 400, "Invalid token"
+  end
+
+  message = JSON.parse request.body.read
+  payload = Base64.decode64 message["message"]["data"]
+
+  messages.push payload
+end
+# [END gaeflex_net_pubsub_auth_push]
 
 __END__
 
