@@ -7,6 +7,7 @@ export DB_PASS=$MYSQL_PASSWORD
 export DB_NAME=$MYSQL_NAME
 export DB_HOST='127.0.0.1'
 export DB_PORT='3306'
+export INSTANCE_CONNECTION_NAME=$MYSQL_INSTANCE_CONNECTION_NAME
 
 # Run the tests with default values for all
 # environment variable

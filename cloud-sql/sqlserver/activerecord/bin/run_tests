@@ -7,6 +7,7 @@ export DB_PASS=$SQLSERVER_PASSWORD
 export DB_NAME=$SQLSERVER_NAME
 export DB_HOST='127.0.0.1'
 export DB_PORT='1433'
+export INSTANCE_CONNECTION_NAME=$SQLSERVER_INSTANCE_CONNECTION_NAME
 
 # Run the tests with default values for all
 # environment variable
