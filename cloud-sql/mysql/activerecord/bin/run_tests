@@ -1,7 +1,6 @@
 #!/bin/bash
 
-set -e
-set -o pipefail
+set -euo pipefail
 
 export DB_USER=$MYSQL_USER
 export DB_PASS=$MYSQL_PASSWORD

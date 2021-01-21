@@ -1,7 +1,6 @@
 #!/bin/bash
 
-set -e
-set -o pipefail
+set -euo pipefail
 
 export DB_USER=$POSTGRES_USER
 export DB_PASS=$POSTGRES_PASSWORD
