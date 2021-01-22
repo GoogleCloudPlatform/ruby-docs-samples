@@ -337,7 +337,7 @@ def subscriber_sync_pull_with_lease subscription_name:
   end
 
   loop do
-    sleep 10
+    sleep 1
     if processed
       # If the message has been processed, acknowledge the message.
       message.acknowledge!
