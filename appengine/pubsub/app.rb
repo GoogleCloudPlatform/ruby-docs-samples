@@ -62,7 +62,7 @@ end
 post "/pubsub/authenticated-push" do
   halt 400 if params[:token] != PUBSUB_VERIFICATION_TOKEN
 
-  bearer = request.env["Authorization"]
+  bearer = request.env["HTTP_AUTHORIZATION"]
   token = bearer.split(" ")[1]
   begin
     claim = Google::Auth::IDTokens.verify_oidc token, aud: "example.com"
