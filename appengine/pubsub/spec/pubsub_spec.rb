@@ -70,7 +70,7 @@ describe "PubSub", type: :feature do
       azp: '1234567890',
       email: 'pubsub@example.iam.gserviceaccount.com',
       email_verified: true,
-      iat: now,
+      iat: now - 60, # Prevent any flakiness that might come from clock skew.
       exp: now + 3600,
       iss: 'https://accounts.google.com',
       sub: '1234567890'
@@ -88,5 +88,6 @@ describe "PubSub", type: :feature do
   after :all do
     topic = @pubsub.topic @topic_name
     topic&.delete
+    Google::Auth::IDTokens.forget_sources!
   end
 end
