@@ -26,15 +26,16 @@ topic = pubsub.topic ENV["PUBSUB_TOPIC"]
 PUBSUB_VERIFICATION_TOKEN = ENV["PUBSUB_VERIFICATION_TOKEN"]
 # [END gae_flex_pubsub_env]
 
+claims = []
+
 # [START gae_flex_pubsub_messages]
 # List of all messages received by this instance
 messages = []
 # [END gae_flex_pubsub_messages]
 
-claims = []
-
 # [START gae_flex_pubsub_index]
 get "/" do
+  @claims = claims
   @messages = messages
 
   slim :index
@@ -87,6 +88,10 @@ html
   head
     title Pub/Sub Ruby on Google App Engine Managed VMs
   body
+    p Print CLAIMS:
+    ul
+      - @claims.each do |claim|
+        li = claim
     p Messages received by this instance:
     ul
       - @messages.each do |message|

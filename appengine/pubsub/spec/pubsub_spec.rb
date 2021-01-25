@@ -40,6 +40,9 @@ describe "PubSub", type: :feature do
     get "/"
 
     expect(last_response.body).to include(
+      "Print CLAIMS:"
+    )
+    expect(last_response.body).to include(
       "Messages received by this instance:"
     )
   end
