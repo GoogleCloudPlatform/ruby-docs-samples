@@ -80,7 +80,7 @@ describe "PubSub", type: :feature do
 
     post "/pubsub/authenticated-push?token=#{ENV["PUBSUB_VERIFICATION_TOKEN"]}",
          JSON.generate({ "message" => { "data" => Base64.encode64("A Message") } }),
-         { "HTTP_AUTHORIZATION" => "bearer: #{jwt_token}" }
+         { "HTTP_AUTHORIZATION" => "Bearer #{jwt_token}" }
 
     expect(last_response.status).to eq 200
   end
