@@ -17,6 +17,7 @@ require "slim"
 require "json"
 require "base64"
 require "google/cloud/pubsub"
+require "googleauth"
 
 pubsub = Google::Cloud::Pubsub.new
 
@@ -25,6 +26,8 @@ topic = pubsub.topic ENV["PUBSUB_TOPIC"]
 PUBSUB_VERIFICATION_TOKEN = ENV["PUBSUB_VERIFICATION_TOKEN"]
 # [END gae_flex_pubsub_env]
 
+claims = []
+
 # [START gae_flex_pubsub_messages]
 # List of all messages received by this instance
 messages = []
@@ -32,6 +35,7 @@ messages = []
 
 # [START gae_flex_pubsub_index]
 get "/" do
+  @claims = claims
   @messages = messages
 
   slim :index
@@ -55,6 +59,27 @@ post "/pubsub/push" do
 end
 # [END gae_flex_pubsub_push]
 
+# [START gaeflex_net_pubsub_auth_push]
+post "/pubsub/authenticated-push" do
+  halt 400 if params[:token] != PUBSUB_VERIFICATION_TOKEN
+
+  begin
+    bearer = request.env["HTTP_AUTHORIZATION"]
+    token = /Bearer (.*)/.match(bearer)[1]
+    claim = Google::Auth::IDTokens.verify_oidc token, aud: "example.com"
+    claims.push claim
+  rescue Google::Auth::IDTokens::VerificationError => e
+    puts "VerificationError: #{e.message}"
+    halt 400, "Invalid token"
+  end
+
+  message = JSON.parse request.body.read
+  payload = Base64.decode64 message["message"]["data"]
+
+  messages.push payload
+end
+# [END gaeflex_net_pubsub_auth_push]
+
 __END__
 
 @@index
@@ -63,6 +88,10 @@ html
   head
     title Pub/Sub Ruby on Google App Engine Managed VMs
   body
+    p Print CLAIMS:
+    ul
+      - @claims.each do |claim|
+        li = claim
     p Messages received by this instance:
     ul
       - @messages.each do |message|

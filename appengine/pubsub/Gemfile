@@ -20,6 +20,7 @@ gem "sinatra"
 gem "slim"
 
 group :test do
+  gem "jwt"
   gem "rack-test"
   gem "rspec"
   gem "rspec_junit_formatter"

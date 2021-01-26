@@ -15,6 +15,8 @@
 require "rspec"
 require "google/cloud/pubsub"
 require "rack/test"
+require "googleauth"
+require "jwt"
 
 describe "PubSub", type: :feature do
   include Rack::Test::Methods
@@ -25,6 +27,7 @@ describe "PubSub", type: :feature do
 
   before :all do
     ENV["PUBSUB_TOPIC"] = "flexible-topic" unless ENV["PUBSUB_TOPIC"]
+    ENV["PUBSUB_VERIFICATION_TOKEN"] = "abc123" unless ENV["PUBSUB_VERIFICATION_TOKEN"]
     @topic_name = ENV["PUBSUB_TOPIC"]
     @pubsub = Google::Cloud::Pubsub.new
 
@@ -37,6 +40,9 @@ describe "PubSub", type: :feature do
     get "/"
 
     expect(last_response.body).to include(
+      "Print CLAIMS:"
+    )
+    expect(last_response.body).to include(
       "Messages received by this instance:"
     )
   end
@@ -47,8 +53,44 @@ describe "PubSub", type: :feature do
     expect(last_response.status).to eq 303
   end
 
+  it "accepts a push" do
+    post "/pubsub/push?token=#{ENV["PUBSUB_VERIFICATION_TOKEN"]}",
+         JSON.generate({"message" => { "data" => Base64.encode64("A Message") }})
+
+    expect(last_response.status).to eq 200
+  end
+
+  it "accepts an authenticated push" do
+    public_cert_str = File.read "spec/fixtures/public_cert.pem"
+    key = OpenSSL::X509::Certificate.new(public_cert_str).public_key
+    key_info = Google::Auth::IDTokens::KeyInfo.new id: "test-key", key: key, algorithm: "RS256"
+    key_source = Google::Auth::IDTokens::StaticKeySource.new key_info
+    Google::Auth::IDTokens.instance_variable_set(:@oidc_key_source, key_source)
+
+    now = Time.now.to_i
+    jwt_payload = {
+      aud: 'example.com',
+      azp: '1234567890',
+      email: 'pubsub@example.iam.gserviceaccount.com',
+      email_verified: true,
+      iat: now - 60, # Prevent any flakiness that might come from clock skew.
+      exp: now + 3600,
+      iss: 'https://accounts.google.com',
+      sub: '1234567890'
+    }
+    private_key = OpenSSL::PKey::RSA.new File.read("spec/fixtures/private_key.pem")
+    jwt_token = JWT.encode jwt_payload, private_key, "RS256"
+
+    post "/pubsub/authenticated-push?token=#{ENV["PUBSUB_VERIFICATION_TOKEN"]}",
+         JSON.generate({ "message" => { "data" => Base64.encode64("A Message") } }),
+         { "HTTP_AUTHORIZATION" => "Bearer #{jwt_token}" }
+
+    expect(last_response.status).to eq 200
+  end
+
   after :all do
     topic = @pubsub.topic @topic_name
     topic&.delete
+    Google::Auth::IDTokens.forget_sources!
   end
 end
