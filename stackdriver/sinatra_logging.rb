@@ -24,11 +24,9 @@ Google::Cloud.configure do |config|
 end
 # [END logging_configure]
 
-# [START logging_middleware]
 require "google/cloud/logging"
 
 use Google::Cloud::Logging::Middleware
-# [END logging_middleware]
 
 get "/" do
   # [START logging_example]
