@@ -1510,6 +1510,9 @@ describe "Google Cloud Spanner API samples" do
     expect(captured_output).to match(
       /Backup #{@backup_id} of size \d+ bytes was created at/
     )
+    expect(captured_output).to match(
+      /for version of database at/
+    )
 
     @test_backup = @instance.backup @backup_id
     expect(@test_backup).not_to be nil
@@ -1528,8 +1531,8 @@ describe "Google Cloud Spanner API samples" do
     expect(captured_output).to include(
       "Waiting for restore backup operation to complete"
     )
-    expect(captured_output).to include(
-      "Database #{@database_id} was restored to #{@restored_database_id} from backup #{backup.backup_id}"
+    expect(captured_output).to match(
+      /Database #{@database_id} was restored to #{@restored_database_id} from backup #{backup.backup_id} with version time/
     )
 
     @test_database = @instance.database @restored_database_id
