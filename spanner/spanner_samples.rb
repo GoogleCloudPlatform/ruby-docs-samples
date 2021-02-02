@@ -85,6 +85,7 @@ def create_database_with_version_retention_period project_id:, instance_id:, dat
 
   spanner  = Google::Cloud::Spanner.new project: project_id
   instance = spanner.instance instance_id
+  version_retention_period = "7d"
 
   job = instance.create_database database_id, statements: [
     "CREATE TABLE Singers (
