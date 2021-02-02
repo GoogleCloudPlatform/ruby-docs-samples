@@ -171,6 +171,38 @@ describe "Google Cloud Spanner API samples" do
     expect(data_definition_statements).to include(match "CREATE TABLE Albums")
   end
 
+  example "create_database_with_version_retention_period" do
+    expect(@instance.databases.map(&:database_id)).not_to include @database_id
+
+    capture do
+      create_database_with_version_retention_period project_id:  @project_id,
+                                                    instance_id: @instance.instance_id,
+                                                    database_id: @database_id
+    end
+
+    expect(captured_output).to include(
+      "Waiting for create database operation to complete"
+    )
+    expect(captured_output).to include(
+      "Created database #{@database_id} on instance #{@instance.instance_id}"
+    )
+    expect(captured_output).to include(
+      "\tVersion retention period: 7d"
+    )
+
+    @test_database = @instance.database @database_id
+    expect(@test_database).not_to be nil
+
+    data_definition_statements = @test_database.ddl
+
+    expect(data_definition_statements.size).to eq 2
+
+    expect(data_definition_statements).to include(match "CREATE TABLE Singers")
+    expect(data_definition_statements).to include(match "CREATE TABLE Albums")
+    expect(data_definition_statements).to include(match "version_retention_period = '7d'")
+  end
+
+
   example "create table with timestamp column" do
     database = create_singers_albums_database
 
