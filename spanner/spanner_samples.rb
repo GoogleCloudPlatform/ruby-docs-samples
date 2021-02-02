@@ -76,7 +76,7 @@ def create_database project_id:, instance_id:, database_id:
 end
 
 def create_database_with_version_retention_period project_id:, instance_id:, database_id:
-  # [START spanner_create_database]
+  # [START spanner_create_database_with_version_retention_period]
   # project_id  = "Your Google Cloud project ID"
   # instance_id = "Your Spanner instance ID"
   # database_id = "Your Spanner database ID"
@@ -114,7 +114,7 @@ def create_database_with_version_retention_period project_id:, instance_id:, dat
   puts "Created database #{database_id} on instance #{instance_id}"
   puts "\tVersion retention period: #{database.version_retention_period}"
   puts "\tEarliest version time: #{database.earliest_version_time}"
-  # [END spanner_create_database]
+  # [END spanner_create_database_with_version_retention_period]
 end
 
 def create_table_with_timestamp_column project_id:, instance_id:, database_id:
