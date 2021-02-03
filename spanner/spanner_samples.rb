@@ -1685,7 +1685,7 @@ def create_backup project_id:, instance_id:, database_id:, backup_id:
   expire_time = Time.now + 14 * 24 * 3600 # 14 days from now
   version_time = Time.now
 
-  job = database.create_backup backup_id, expire_time, version_time
+  job = database.create_backup backup_id, expire_time, version_time: version_time
 
   puts "Backup operation in progress"
 
