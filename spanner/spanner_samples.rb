@@ -102,8 +102,8 @@ def create_database_with_version_retention_period project_id:, instance_id:, dat
     ) PRIMARY KEY (SingerId, AlbumId),
     INTERLEAVE IN PARENT Singers ON DELETE CASCADE",
 
-    "ALTER DATABASE `#{databaseId}`
-      SET OPTIONS ( version_retention_period = '#{versionRetentionPeriod}' )"
+    "ALTER DATABASE `#{database_id}`
+      SET OPTIONS ( version_retention_period = '#{version_retention_period}' )"
   ]
 
   puts "Waiting for create database operation to complete"
