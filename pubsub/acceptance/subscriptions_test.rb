@@ -22,7 +22,7 @@ describe "subscriptions" do
   let(:service_account_email) { "serviceAccount:kokoro@#{pubsub.project}.iam.gserviceaccount.com" }
 
   before :all do
-    @topic = pubsub.create_topic random_topic_name
+    @topic = pubsub.create_topic random_topic_id
   end
 
   after :all do

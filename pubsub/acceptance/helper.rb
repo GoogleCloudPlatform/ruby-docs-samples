@@ -18,7 +18,7 @@ require "minitest/hooks/default"
 require "google/cloud/pubsub"
 require "securerandom"
 
-def random_topic_name
+def random_topic_id
   "ruby-pubsub-samples-test-topic-#{SecureRandom.hex 4}"
 end
 
