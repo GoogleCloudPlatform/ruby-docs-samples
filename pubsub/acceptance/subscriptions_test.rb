@@ -30,7 +30,7 @@ describe "subscriptions" do
   end
 
   before do
-    @subscription = @topic.subscribe random_subscription_name
+    @subscription = @topic.subscribe random_subscription_id
   end
 
   after do
@@ -42,7 +42,7 @@ describe "subscriptions" do
      "pubsub_test_subscription_permissions, pubsub_detach_subscription, pubsub_delete_subscription" do
     # pubsub_update_push_configuration
     assert_output "Push endpoint updated.\n" do
-      update_push_configuration subscription_name: @subscription.name, new_endpoint: endpoint
+      update_push_configuration subscription_id: @subscription.name, new_endpoint: endpoint
     end
     @subscription = @topic.subscription @subscription.name
     assert @subscription
@@ -58,28 +58,28 @@ describe "subscriptions" do
     assert_includes out, "projects/#{pubsub.project}/subscriptions/"
 
     # pubsub_set_subscription_policy
-    set_subscription_policy subscription_name: @subscription.name, role: role, service_account_email: service_account_email
+    set_subscription_policy subscription_id: @subscription.name, role: role, service_account_email: service_account_email
     @subscription.reload!
     assert_equal [service_account_email], @subscription.policy.roles[role]
 
     # pubsub_get_subscription_policy
     assert_output "Subscription policy:\n#{@subscription.policy.roles}\n" do
-      get_subscription_policy subscription_name: @subscription.name
+      get_subscription_policy subscription_id: @subscription.name
     end
 
     # pubsub_test_subscription_permissions
     assert_output "Permission to consume\nPermission to update\n" do
-      test_subscription_permissions subscription_name: @subscription.name
+      test_subscription_permissions subscription_id: @subscription.name
     end
 
     # pubsub_detach_subscription
     assert_output "Subscription is detached.\n" do
-      detach_subscription subscription_name: @subscription.name
+      detach_subscription subscription_id: @subscription.name
     end
 
     # pubsub_delete_subscription
     assert_output "Subscription #{@subscription.name} deleted.\n" do
-      delete_subscription subscription_name: @subscription.name
+      delete_subscription subscription_id: @subscription.name
     end
     @subscription = @topic.subscription @subscription.name
     refute @subscription
@@ -92,7 +92,7 @@ describe "subscriptions" do
     # pubsub_subscriber_sync_pull
     expect_with_retry "pubsub_subscriber_sync_pull" do
       assert_output "Message pulled: This is a test message.\n" do
-        pull_messages subscription_name: @subscription.name
+        pull_messages subscription_id: @subscription.name
       end
     end
   end
@@ -105,7 +105,7 @@ describe "subscriptions" do
     # pubsub_quickstart_subscriber
     expect_with_retry "pubsub_subscriber_async_pull" do
       assert_output "Received message: This is a test message.\n" do
-        listen_for_messages subscription_name: @subscription.name
+        listen_for_messages subscription_id: @subscription.name
       end
     end
   end
@@ -117,7 +117,7 @@ describe "subscriptions" do
     # pubsub_subscriber_async_pull_custom_attributes
     expect_with_retry "pubsub_subscriber_async_pull_custom_attributes" do
       out, _err = capture_io do
-        listen_for_messages_with_custom_attributes subscription_name: @subscription.name
+        listen_for_messages_with_custom_attributes subscription_id: @subscription.name
       end
       assert_includes out, "Received message: This is a test message."
       assert_includes out, "Attributes:"
@@ -132,7 +132,7 @@ describe "subscriptions" do
     # pubsub_subscriber_flow_settings
     expect_with_retry "pubsub_subscriber_flow_settings" do
       assert_output "Received message: This is a test message.\n" do
-        listen_for_messages_with_flow_control subscription_name: @subscription.name
+        listen_for_messages_with_flow_control subscription_id: @subscription.name
       end
     end
   end
@@ -144,7 +144,7 @@ describe "subscriptions" do
     # pubsub_subscriber_concurrency_control
     expect_with_retry "pubsub_subscriber_concurrency_control" do
       assert_output "Received message: This is a test message.\n" do
-        listen_for_messages_with_concurrency_control subscription_name: @subscription.name
+        listen_for_messages_with_concurrency_control subscription_id: @subscription.name
       end
     end
   end
@@ -156,7 +156,7 @@ describe "subscriptions" do
     # # pubsub_subscriber_sync_pull_with_lease
     expect_with_retry "pubsub_subscriber_sync_pull_with_lease" do
       out, _err = capture_io do
-        subscriber_sync_pull_with_lease subscription_name: @subscription.name
+        subscriber_sync_pull_with_lease subscription_id: @subscription.name
         sleep 10 # Allow enough time for output from non-blocking worker to be captured.
       end
       assert_includes out, "Reset ack deadline for \"This is a test message.\" for 30 seconds."

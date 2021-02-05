@@ -23,7 +23,7 @@ def quickstart topic_id:
   pubsub = Google::Cloud::Pubsub.new
 
   # The name for the new topic
-  # topic_id = "my-new-topic"
+  # topic_id = "your-topic-id"
 
   # Creates the new topic
   topic = pubsub.create_topic topic_id

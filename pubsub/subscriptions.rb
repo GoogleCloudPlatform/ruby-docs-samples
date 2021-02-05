@@ -14,15 +14,15 @@
 
 require "google/cloud/pubsub"
 
-def update_push_configuration subscription_name:, new_endpoint:
+def update_push_configuration subscription_id:, new_endpoint:
   # [START pubsub_update_push_configuration]
-  # subscription_name = "Your Pubsub subscription name"
+  # subscription_id   = "your-subscription-id"
   # new_endpoint      = "Endpoint where your app receives messages""
   require "google/cloud/pubsub"
 
   pubsub = Google::Cloud::Pubsub.new
 
-  subscription          = pubsub.subscription subscription_name
+  subscription          = pubsub.subscription subscription_id
   subscription.endpoint = new_endpoint
 
   puts "Push endpoint updated."
@@ -44,14 +44,14 @@ def list_subscriptions
   # [END pubsub_list_subscriptions]
 end
 
-def detach_subscription subscription_name:
+def detach_subscription subscription_id:
   # [START pubsub_detach_subscription]
-  # subscription_name = "Your Pubsub subscription name"
+  # subscription_id = "your-subscription-id"
   require "google/cloud/pubsub"
 
   pubsub = Google::Cloud::Pubsub.new
 
-  subscription = pubsub.subscription subscription_name
+  subscription = pubsub.subscription subscription_id
   subscription.detach
 
   sleep 120
@@ -64,28 +64,28 @@ def detach_subscription subscription_name:
   # [END pubsub_detach_subscription]
 end
 
-def delete_subscription subscription_name:
+def delete_subscription subscription_id:
   # [START pubsub_delete_subscription]
-  # subscription_name = "Your Pubsub subscription name"
+  # subscription_id = "your-subscription-id"
   require "google/cloud/pubsub"
 
   pubsub = Google::Cloud::Pubsub.new
 
-  subscription = pubsub.subscription subscription_name
+  subscription = pubsub.subscription subscription_id
   subscription.delete
 
-  puts "Subscription #{subscription_name} deleted."
+  puts "Subscription #{subscription_id} deleted."
   # [END pubsub_delete_subscription]
 end
 
-def get_subscription_policy subscription_name:
+def get_subscription_policy subscription_id:
   # [START pubsub_get_subscription_policy]
-  # subscription_name = "Your Pubsub subscription name"
+  # subscription_id = "your-subscription-id"
   require "google/cloud/pubsub"
 
   pubsub = Google::Cloud::Pubsub.new
 
-  subscription = pubsub.subscription subscription_name
+  subscription = pubsub.subscription subscription_id
   policy       = subscription.policy
 
   puts "Subscription policy:"
@@ -93,30 +93,30 @@ def get_subscription_policy subscription_name:
   # [END pubsub_get_subscription_policy]
 end
 
-def set_subscription_policy subscription_name:, role:, service_account_email:
+def set_subscription_policy subscription_id:, role:, service_account_email:
   # [START pubsub_set_subscription_policy]
-  # subscription_name = "Your Pubsub subscription name"
-  # role = "roles/pubsub.publisher"
+  # subscription_id       = "your-subscription-id"
+  # role                  = "roles/pubsub.publisher"
   # service_account_email = "serviceAccount:account_name@project_name.iam.gserviceaccount.com"
   require "google/cloud/pubsub"
 
   pubsub = Google::Cloud::Pubsub.new
 
-  subscription = pubsub.subscription subscription_name
+  subscription = pubsub.subscription subscription_id
   subscription.policy do |policy|
     policy.add role, service_account_email
   end
   # [END pubsub_set_subscription_policy]
 end
 
-def test_subscription_permissions subscription_name:
+def test_subscription_permissions subscription_id:
   # [START pubsub_test_subscription_permissions]
-  # subscription_name = "Your Pubsub subscription name"
+  # subscription_id = "your-subscription-id"
   require "google/cloud/pubsub"
 
   pubsub = Google::Cloud::Pubsub.new
 
-  subscription = pubsub.subscription subscription_name
+  subscription = pubsub.subscription subscription_id
   permissions  = subscription.test_permissions "pubsub.subscriptions.consume",
                                                "pubsub.subscriptions.update"
 
@@ -125,43 +125,43 @@ def test_subscription_permissions subscription_name:
   # [END pubsub_test_subscription_permissions]
 end
 
-def dead_letter_update_subscription subscription_name:
+def dead_letter_update_subscription subscription_id:
   # [START pubsub_dead_letter_update_subscription]
-  # subscription_name = "Your Pubsub subscription name"
-  # role = "roles/pubsub.publisher"
+  # subscription_id       = "your-subscription-id"
+  # role                  = "roles/pubsub.publisher"
   # service_account_email = "serviceAccount:account_name@project_name.iam.gserviceaccount.com"
   require "google/cloud/pubsub"
 
   pubsub = Google::Cloud::Pubsub.new
 
-  subscription = pubsub.subscription subscription_name
+  subscription = pubsub.subscription subscription_id
   subscription.dead_letter_max_delivery_attempts = 20
   puts "Max delivery attempts is now #{subscription.dead_letter_max_delivery_attempts}."
   # [END pubsub_dead_letter_update_subscription]
 end
 
-def dead_letter_remove subscription_name:
+def dead_letter_remove subscription_id:
   # [START pubsub_dead_letter_remove]
-  # subscription_name = "Your Pubsub subscription name"
+  # subscription_id = "your-subscription-id"
   require "google/cloud/pubsub"
 
   pubsub = Google::Cloud::Pubsub.new
 
-  subscription = pubsub.subscription subscription_name
+  subscription = pubsub.subscription subscription_id
   subscription.remove_dead_letter_policy
-  puts "Removed dead letter topic from #{subscription_name} subscription."
+  puts "Removed dead letter topic from #{subscription_id} subscription."
   # [END pubsub_dead_letter_remove]
 end
 
-def listen_for_messages subscription_name:
+def listen_for_messages subscription_id:
   # [START pubsub_subscriber_async_pull]
   # [START pubsub_quickstart_subscriber]
-  # subscription_name = "Your Pubsub subscription name"
+  # subscription_id = "your-subscription-id"
   require "google/cloud/pubsub"
 
   pubsub = Google::Cloud::Pubsub.new
 
-  subscription = pubsub.subscription subscription_name
+  subscription = pubsub.subscription subscription_id
   subscriber   = subscription.listen do |received_message|
     puts "Received message: #{received_message.data}"
     received_message.acknowledge!
@@ -176,14 +176,14 @@ def listen_for_messages subscription_name:
   # [END pubsub_quickstart_subscriber]
 end
 
-def listen_for_messages_with_custom_attributes subscription_name:
+def listen_for_messages_with_custom_attributes subscription_id:
   # [START pubsub_subscriber_async_pull_custom_attributes]
-  # subscription_name = "Your Pubsub subscription name"
+  # subscription_id = "your-subscription-id"
   require "google/cloud/pubsub"
 
   pubsub = Google::Cloud::Pubsub.new
 
-  subscription = pubsub.subscription subscription_name
+  subscription = pubsub.subscription subscription_id
   subscriber   = subscription.listen do |received_message|
     puts "Received message: #{received_message.data}"
     unless received_message.attributes.empty?
@@ -203,14 +203,14 @@ def listen_for_messages_with_custom_attributes subscription_name:
   # [END pubsub_subscriber_async_pull_custom_attributes]
 end
 
-def pull_messages subscription_name:
+def pull_messages subscription_id:
   # [START pubsub_subscriber_sync_pull]
-  # subscription_name = "Your Pubsub subscription name"
+  # subscription_id = "your-subscription-id"
   require "google/cloud/pubsub"
 
   pubsub = Google::Cloud::Pubsub.new
 
-  subscription = pubsub.subscription subscription_name
+  subscription = pubsub.subscription subscription_id
   subscription.pull.each do |message|
     puts "Message pulled: #{message.data}"
     message.acknowledge!
@@ -218,14 +218,14 @@ def pull_messages subscription_name:
   # [END pubsub_subscriber_sync_pull]
 end
 
-def listen_for_messages_with_error_handler subscription_name:
+def listen_for_messages_with_error_handler subscription_id:
   # [START pubsub_subscriber_error_listener]
-  # subscription_name = "Your Pubsub subscription name"
+  # subscription_id = "your-subscription-id"
   require "google/cloud/pubsub"
 
   pubsub = Google::Cloud::Pubsub.new
 
-  subscription = pubsub.subscription subscription_name
+  subscription = pubsub.subscription subscription_id
   subscriber   = subscription.listen do |received_message|
     puts "Received message: #{received_message.data}"
     received_message.acknowledge!
@@ -248,14 +248,14 @@ def listen_for_messages_with_error_handler subscription_name:
   # [END pubsub_subscriber_error_listener]
 end
 
-def listen_for_messages_with_flow_control subscription_name:
+def listen_for_messages_with_flow_control subscription_id:
   # [START pubsub_subscriber_flow_settings]
-  # subscription_name = "Your Pubsub subscription name"
+  # subscription_id = "your-subscription-id"
   require "google/cloud/pubsub"
 
   pubsub = Google::Cloud::Pubsub.new
 
-  subscription = pubsub.subscription subscription_name
+  subscription = pubsub.subscription subscription_id
   subscriber   = subscription.listen inventory: 10 do |received_message|
     puts "Received message: #{received_message.data}"
     received_message.acknowledge!
@@ -269,14 +269,14 @@ def listen_for_messages_with_flow_control subscription_name:
   # [END pubsub_subscriber_flow_settings]
 end
 
-def listen_for_messages_with_concurrency_control subscription_name:
+def listen_for_messages_with_concurrency_control subscription_id:
   # [START pubsub_subscriber_concurrency_control]
-  # subscription_name = "Your Pubsub subscription name"
+  # subscription_id = "your-subscription-id"
   require "google/cloud/pubsub"
 
   pubsub = Google::Cloud::Pubsub.new
 
-  subscription = pubsub.subscription subscription_name
+  subscription = pubsub.subscription subscription_id
   # Use 2 threads for streaming, 4 threads for executing callbacks and 2 threads
   # for sending acknowledgements and/or delays
   subscriber   = subscription.listen streams: 2, threads: {
@@ -295,14 +295,14 @@ def listen_for_messages_with_concurrency_control subscription_name:
   # [END pubsub_subscriber_concurrency_control]
 end
 
-def dead_letter_delivery_attempt subscription_name:
+def dead_letter_delivery_attempt subscription_id:
   # [START pubsub_dead_letter_delivery_attempt]
-  # subscription_name = "Your Pubsub subscription name"
+  # subscription_id = "your-subscription-id"
   require "google/cloud/pubsub"
 
   pubsub = Google::Cloud::Pubsub.new
 
-  subscription = pubsub.subscription subscription_name
+  subscription = pubsub.subscription subscription_id
   subscription.pull.each do |message|
     puts "Received message: #{message.data}"
     puts "Delivery Attempt: #{message.delivery_attempt}"
@@ -311,14 +311,14 @@ def dead_letter_delivery_attempt subscription_name:
   # [END pubsub_dead_letter_delivery_attempt]
 end
 
-def subscriber_sync_pull_with_lease subscription_name:
+def subscriber_sync_pull_with_lease subscription_id:
   # [START pubsub_subscriber_sync_pull_with_lease]
-  # subscription_name = "Your Pubsub subscription name"
+  # subscription_id = "your-subscription-id"
   require "google/cloud/pubsub"
 
   pubsub = Google::Cloud::Pubsub.new
 
-  subscription = pubsub.subscription subscription_name
+  subscription = pubsub.subscription subscription_id
   new_ack_deadline = 30
   processed = false
 
@@ -356,62 +356,62 @@ end
 if $PROGRAM_NAME == __FILE__
   case ARGV.shift
   when "update_push_configuration"
-    update_push_configuration subscription_name: ARGV.shift,
-                              new_endpoint:      ARGV.shift
+    update_push_configuration subscription_id: ARGV.shift,
+                              new_endpoint:    ARGV.shift
   when "list_subscriptions"
     list_subscriptions
   when "detach_subscription"
-    detach_subscription subscription_name: ARGV.shift
+    detach_subscription subscription_id: ARGV.shift
   when "delete_subscription"
-    delete_subscription subscription_name: ARGV.shift
+    delete_subscription subscription_id: ARGV.shift
   when "get_subscription_policy"
-    get_subscription_policy psubscription_name: ARGV.shift
+    get_subscription_policy psubscription_id: ARGV.shift
   when "set_subscription_policy"
-    set_subscription_policy subscription_name: ARGV.shift
+    set_subscription_policy subscription_id: ARGV.shift
   when "test_subscription_permissions"
-    test_subscription_permissions subscription_name: ARGV.shift
+    test_subscription_permissions subscription_id: ARGV.shift
   when "dead_letter_update_subscription"
-    dead_letter_update_subscription subscription_name: ARGV.shift
+    dead_letter_update_subscription subscription_id: ARGV.shift
   when "dead_letter_remove"
-    dead_letter_remove subscription_name: ARGV.shift
+    dead_letter_remove subscription_id: ARGV.shift
   when "listen_for_messages"
-    listen_for_messages subscription_name: ARGV.shift
+    listen_for_messages subscription_id: ARGV.shift
   when "listen_for_messages_with_custom_attributes"
-    listen_for_messages_with_custom_attributes subscription_name: ARGV.shift
+    listen_for_messages_with_custom_attributes subscription_id: ARGV.shift
   when "pull_messages"
-    pull_messages subscription_name: ARGV.shift
+    pull_messages subscription_id: ARGV.shift
   when "listen_for_messages_with_error_handler"
-    listen_for_messages_with_error_handler subscription_name: ARGV.shift
+    listen_for_messages_with_error_handler subscription_id: ARGV.shift
   when "listen_for_messages_with_flow_control"
-    listen_for_messages_with_flow_control subscription_name: ARGV.shift
+    listen_for_messages_with_flow_control subscription_id: ARGV.shift
   when "listen_for_messages_with_concurrency_control"
-    listen_for_messages_with_concurrency_control subscription_name: ARGV.shift
+    listen_for_messages_with_concurrency_control subscription_id: ARGV.shift
   when "dead_letter_delivery_attempt"
-    dead_letter_delivery_attempt subscription_name: ARGV.shift
+    dead_letter_delivery_attempt subscription_id: ARGV.shift
   when "subscriber_sync_pull_with_lease"
-    subscriber_sync_pull_with_lease subscription_name: ARGV.shift
+    subscriber_sync_pull_with_lease subscription_id: ARGV.shift
   else
     puts <<~USAGE
       Usage: bundle exec ruby subscriptions.rb [command] [arguments]
 
       Commands:
-        update_push_configuration                    <subscription_name> <endpoint> Update the endpoint of a push subscription
-        list_subscriptions                                                          List subscriptions of a project
-        detach_subscription                          <subscription_name>            Detach a subscription
-        delete_subscription                          <subscription_name>            Delete a subscription
-        get_subscription_policy                      <subscription_name>            Get policies of a subscription
-        set_subscription_policy                      <subscription_name>            Set policies of a subscription
-        test_subscription_permissions                <subscription_name>            Test policies of a subscription
-        dead_letter_update_subscription              <subscription_name>            Update a subscription's dead letter policy
-        dead_letter_remove                           <subscription_name>            Delete a subscription's dead letter policy
-        listen_for_messages                          <subscription_name>            Listen for messages
-        listen_for_messages_with_custom_attributes   <subscription_name>            Listen for messages with custom attributes
-        pull_messages                                <subscription_name>            Pull messages
-        listen_for_messages_with_error_handler       <subscription_name>            Listen for messages with an error handler
-        listen_for_messages_with_flow_control        <subscription_name>            Listen for messages with flow control
-        listen_for_messages_with_concurrency_control <subscription_name>            Listen for messages with concurrency control
-        dead_letter_delivery_attempt                 <subscription_name>            Pull messages that have a delivery attempts field
-        subscriber_sync_pull_with_lease              <subscription_name>            Pull messages and reset their acknowledgement deadlines
+        update_push_configuration                    <subscription_id> <endpoint> Update the endpoint of a push subscription
+        list_subscriptions                                                        List subscriptions of a project
+        detach_subscription                          <subscription_id>            Detach a subscription
+        delete_subscription                          <subscription_id>            Delete a subscription
+        get_subscription_policy                      <subscription_id>            Get policies of a subscription
+        set_subscription_policy                      <subscription_id>            Set policies of a subscription
+        test_subscription_permissions                <subscription_id>            Test policies of a subscription
+        dead_letter_update_subscription              <subscription_id>            Update a subscription's dead letter policy
+        dead_letter_remove                           <subscription_id>            Delete a subscription's dead letter policy
+        listen_for_messages                          <subscription_id>            Listen for messages
+        listen_for_messages_with_custom_attributes   <subscription_id>            Listen for messages with custom attributes
+        pull_messages                                <subscription_id>            Pull messages
+        listen_for_messages_with_error_handler       <subscription_id>            Listen for messages with an error handler
+        listen_for_messages_with_flow_control        <subscription_id>            Listen for messages with flow control
+        listen_for_messages_with_concurrency_control <subscription_id>            Listen for messages with concurrency control
+        dead_letter_delivery_attempt                 <subscription_id>            Pull messages that have a delivery attempts field
+        subscriber_sync_pull_with_lease              <subscription_id>            Pull messages and reset their acknowledgement deadlines
     USAGE
   end
 end

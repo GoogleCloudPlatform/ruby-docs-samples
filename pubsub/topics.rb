@@ -16,7 +16,7 @@ require "google/cloud/pubsub"
 
 def create_topic topic_id:
   # [START pubsub_create_topic]
-  # topic_id = "Your Pubsub topic name"
+  # topic_id = "your-topic-id"
   require "google/cloud/pubsub"
 
   pubsub = Google::Cloud::Pubsub.new
@@ -44,7 +44,7 @@ end
 
 def list_topic_subscriptions topic_id:
   # [START pubsub_list_topic_subscriptions]
-  # topic_id = "Your Pubsub topic name"
+  # topic_id = "your-topic-id"
   require "google/cloud/pubsub"
 
   pubsub = Google::Cloud::Pubsub.new
@@ -61,7 +61,7 @@ end
 
 def delete_topic topic_id:
   # [START pubsub_delete_topic]
-  # topic_id = "Your Pubsub topic name"
+  # topic_id = "your-topic-id"
   require "google/cloud/pubsub"
 
   pubsub = Google::Cloud::Pubsub.new
@@ -75,7 +75,7 @@ end
 
 def get_topic_policy topic_id:
   # [START pubsub_get_topic_policy]
-  # topic_id = "Your Pubsub topic name"
+  # topic_id = "your-topic-id"
   require "google/cloud/pubsub"
 
   pubsub = Google::Cloud::Pubsub.new
@@ -90,8 +90,8 @@ end
 
 def set_topic_policy topic_id:, role:, service_account_email:
   # [START pubsub_set_topic_policy]
-  # topic_id = "Your Pubsub topic name"
-  # role = "roles/pubsub.publisher"
+  # topic_id              = "your-topic-id"
+  # role                  = "roles/pubsub.publisher"
   # service_account_email = "serviceAccount:account_name@project_name.iam.gserviceaccount.com"
   require "google/cloud/pubsub"
 
@@ -106,7 +106,7 @@ end
 
 def test_topic_permissions topic_id:
   # [START pubsub_test_topic_permissions]
-  # topic_id = "Your Pubsub topic name"
+  # topic_id = "your-topic-id"
   require "google/cloud/pubsub"
 
   pubsub = Google::Cloud::Pubsub.new
@@ -121,77 +121,77 @@ def test_topic_permissions topic_id:
   # [END pubsub_test_topic_permissions]
 end
 
-def create_pull_subscription topic_id:, subscription_name:
+def create_pull_subscription topic_id:, subscription_id:
   # [START pubsub_create_pull_subscription]
-  # topic_id        = "Your Pubsub topic name"
-  # subscription_name = "Your Pubsub subscription name"
+  # topic_id        = "your-topic-id"
+  # subscription_id = "your-subscription-id"
   require "google/cloud/pubsub"
 
   pubsub = Google::Cloud::Pubsub.new
 
   topic        = pubsub.topic topic_id
-  subscription = topic.subscribe subscription_name
+  subscription = topic.subscribe subscription_id
 
-  puts "Pull subscription #{subscription_name} created."
+  puts "Pull subscription #{subscription_id} created."
   # [END pubsub_create_pull_subscription]
 end
 
-def create_ordered_pull_subscription topic_id:, subscription_name:
+def create_ordered_pull_subscription topic_id:, subscription_id:
   # [START pubsub_enable_subscription_ordering]
-  # topic_id        = "Your Pubsub topic name"
-  # subscription_name = "Your Pubsub subscription name"
+  # topic_id        = "your-topic-id"
+  # subscription_id = "your-subscription-id"
   require "google/cloud/pubsub"
 
   pubsub = Google::Cloud::Pubsub.new
 
   topic        = pubsub.topic topic_id
-  subscription = topic.subscribe subscription_name,
+  subscription = topic.subscribe subscription_id,
                                  message_ordering: true
 
-  puts "Pull subscription #{subscription_name} created with message ordering."
+  puts "Pull subscription #{subscription_id} created with message ordering."
   # [END pubsub_enable_subscription_ordering]
 end
 
-def create_push_subscription topic_id:, subscription_name:, endpoint:
+def create_push_subscription topic_id:, subscription_id:, endpoint:
   # [START pubsub_create_push_subscription]
-  # topic_id        = "Your Pubsub topic name"
-  # subscription_name = "Your Pubsub subscription name"
-  # endpoint          = "Endpoint where your app receives messages"
+  # topic_id          = "your-topic-id"
+  # subscription_id   = "your-subscription-id"
+  # endpoint          = "https://your-test-project.appspot.com/push"
   require "google/cloud/pubsub"
 
   pubsub = Google::Cloud::Pubsub.new
 
   topic        = pubsub.topic topic_id
-  subscription = topic.subscribe subscription_name,
+  subscription = topic.subscribe subscription_id,
                                  endpoint: endpoint
 
-  puts "Push subscription #{subscription_name} created."
+  puts "Push subscription #{subscription_id} created."
   # [END pubsub_create_push_subscription]
 end
 
-def dead_letter_create_subscription topic_id:, subscription_name:, dead_letter_topic_id:
+def dead_letter_create_subscription topic_id:, subscription_id:, dead_letter_topic_id:
   # [START pubsub_dead_letter_create_subscription]
-  # topic_id             = "Your Pubsub topic name"
-  # subscription_name      = "Your Pubsub subscription name"
-  # dead_letter_topic_id = "Your Pubsub dead letter topic name"
+  # topic_id             = "your-topic-id"
+  # subscription_id      = "your-subscription-id"
+  # dead_letter_topic_id = "your-dead-letter-topic-id"
   require "google/cloud/pubsub"
 
   pubsub = Google::Cloud::Pubsub.new
 
   topic             = pubsub.topic topic_id
   dead_letter_topic = pubsub.topic dead_letter_topic_id
-  subscription      = topic.subscribe subscription_name,
+  subscription      = topic.subscribe subscription_id,
                                       dead_letter_topic:                 dead_letter_topic,
                                       dead_letter_max_delivery_attempts: 10
 
-  puts "Created subscription #{subscription_name} with dead letter topic #{dead_letter_topic_id}."
+  puts "Created subscription #{subscription_id} with dead letter topic #{dead_letter_topic_id}."
   puts "To process dead letter messages, remember to add a subscription to your dead letter topic."
   # [END pubsub_dead_letter_create_subscription]
 end
 
 def publish_message topic_id:
   # [START pubsub_quickstart_publisher]
-  # topic_id = "Your Pubsub topic name"
+  # topic_id = "your-topic-id"
   require "google/cloud/pubsub"
 
   pubsub = Google::Cloud::Pubsub.new
@@ -205,7 +205,7 @@ end
 
 def publish_message_async topic_id:
   # [START pubsub_publish]
-  # topic_id = "Your Pubsub topic name"
+  # topic_id = "your-topic-id"
   require "google/cloud/pubsub"
 
   pubsub = Google::Cloud::Pubsub.new
@@ -223,7 +223,7 @@ end
 
 def publish_message_async_with_custom_attributes topic_id:
   # [START pubsub_publish_custom_attributes]
-  # topic_id = "Your Pubsub topic name"
+  # topic_id = "your-topic-id"
   require "google/cloud/pubsub"
 
   pubsub = Google::Cloud::Pubsub.new
@@ -244,7 +244,7 @@ end
 
 def publish_messages_async_with_batch_settings topic_id:
   # [START pubsub_publisher_batch_settings]
-  # topic_id = "Your Pubsub topic name"
+  # topic_id = "your-topic-id"
   require "google/cloud/pubsub"
 
   pubsub = Google::Cloud::Pubsub.new
@@ -267,7 +267,7 @@ end
 
 def publish_messages_async_with_concurrency_control topic_id:
   # [START pubsub_publisher_concurrency_control]
-  # topic_id = "Your Pubsub topic name"
+  # topic_id = "your-topic-id"
   require "google/cloud/pubsub"
 
   pubsub = Google::Cloud::Pubsub.new
@@ -292,7 +292,7 @@ end
 
 def publish_with_error_handler topic_id:
   # [START pubsub_publish_with_error_handler]
-  # topic_id = "Your Pubsub topic name"
+  # topic_id = "your-topic-id"
   require "google/cloud/pubsub"
 
   pubsub = Google::Cloud::Pubsub.new
@@ -315,7 +315,7 @@ end
 
 def publish_ordered_messages topic_id:
   # [START pubsub_publish_with_ordering_keys]
-  # topic_id = "Your Pubsub topic name"
+  # topic_id = "your-topic-id"
   require "google/cloud/pubsub"
 
   pubsub = Google::Cloud::Pubsub.new
@@ -340,7 +340,7 @@ end
 
 def publish_resume_publish topic_id:
   # [START pubsub_resume_publish_with_ordering_keys]
-  # topic_id = "Your Pubsub topic name"
+  # topic_id = "your-topic-id"
   require "google/cloud/pubsub"
 
   pubsub = Google::Cloud::Pubsub.new
@@ -389,17 +389,17 @@ if $PROGRAM_NAME == __FILE__
     test_topic_permissions topic_id: ARGV.shift
   when "create_pull_subscription"
     create_pull_subscription topic_id:        ARGV.shift,
-                             subscription_name: ARGV.shift
+                             subscription_id: ARGV.shift
   when "create_ordered_pull_subscription"
     create_ordered_pull_subscription topic_id:        ARGV.shift,
-                                     subscription_name: ARGV.shift
+                                     subscription_id: ARGV.shift
   when "create_push_subscription"
     create_push_subscription topic_id:        ARGV.shift,
-                             subscription_name: ARGV.shift,
-                             endpoint:          ARGV.shift
+                             subscription_id: ARGV.shift,
+                             endpoint:        ARGV.shift
   when "dead_letter_create_subscription"
     dead_letter_create_subscription topic_id:             ARGV.shift,
-                                    subscription_name:      ARGV.shift,
+                                    subscription_id:      ARGV.shift,
                                     dead_letter_topic_id: ARGV.shift
   when "publish_message"
     publish_message topic_id: ARGV.shift
@@ -422,25 +422,25 @@ if $PROGRAM_NAME == __FILE__
       Usage: bundle exec ruby topics.rb [command] [arguments]
 
       Commands:
-        create_topic                                    <topic_id>                     Create a topic
-        list_topics                                                                      List topics in a project
-        list_topic_subscriptions                        <topic_id>                     List subscriptions in a topic
-        delete_topic                                    <topic_id>                     Delete topic policies
-        get_topic_policy                                <topic_id>                     Get topic policies
-        set_topic_policy                                <topic_id> <role> <service_account_email>                    Set topic policies
-        test_topic_permissions                          <topic_id>                     Test topic permissions
-        create_pull_subscription                        <topic_id> <subscription_name> Create a pull subscription
-        create_ordered_pull_subscription                <topic_id> <subscription_name> Create a pull subscription with ordering enabled
-        create_push_subscription                        <topic_id> <subscription_name> <endpoint> Create a push subscription
-        dead_letter_create_subscription                 <topic_id> <subscription_name> <dead_letter_topic_id> Create a subscription with a dead letter topic
-        publish_message                                 <topic_id>                     Publish message
-        publish_message_async                           <topic_id>                     Publish messages asynchronously
-        publish_message_async_with_custom_attributes    <topic_id>                     Publish messages asynchronously with custom attributes
-        publish_messages_async_with_batch_settings      <topic_id>                     Publish messages asynchronously in batch
-        publish_messages_async_with_concurrency_control <topic_id>                     Publish messages asynchronously with concurrency control
-        publish_with_error_handler                      <topic_id>                     Publish messages asynchronously with error handling
-        publish_ordered_messages                        <topic_id>                     Publish messages asynchronously with ordering keys
-        publish_resume_publish                          <topic_id>                     Publish messages asynchronously with ordering keys and resume on failure
+        create_topic                                    <topic_id>                                          Create a topic
+        list_topics                                                                                         List topics in a project
+        list_topic_subscriptions                        <topic_id>                                          List subscriptions in a topic
+        delete_topic                                    <topic_id>                                          Delete topic policies
+        get_topic_policy                                <topic_id>                                          Get topic policies
+        set_topic_policy                                <topic_id> <role> <service_account_email>           Set topic policies
+        test_topic_permissions                          <topic_id>                                          Test topic permissions
+        create_pull_subscription                        <topic_id> <subscription_id>                        Create a pull subscription
+        create_ordered_pull_subscription                <topic_id> <subscription_id>                        Create a pull subscription with ordering enabled
+        create_push_subscription                        <topic_id> <subscription_id> <endpoint>             Create a push subscription
+        dead_letter_create_subscription                 <topic_id> <subscription_id> <dead_letter_topic_id> Create a subscription with a dead letter topic
+        publish_message                                 <topic_id>                                          Publish message
+        publish_message_async                           <topic_id>                                          Publish messages asynchronously
+        publish_message_async_with_custom_attributes    <topic_id>                                          Publish messages asynchronously with custom attributes
+        publish_messages_async_with_batch_settings      <topic_id>                                          Publish messages asynchronously in batch
+        publish_messages_async_with_concurrency_control <topic_id>                                          Publish messages asynchronously with concurrency control
+        publish_with_error_handler                      <topic_id>                                          Publish messages asynchronously with error handling
+        publish_ordered_messages                        <topic_id>                                          Publish messages asynchronously with ordering keys
+        publish_resume_publish                          <topic_id>                                          Publish messages asynchronously with ordering keys and resume on failure
     USAGE
   end
 end

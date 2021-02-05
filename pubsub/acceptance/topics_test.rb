@@ -21,7 +21,7 @@ describe "topics" do
   let(:role) { "roles/pubsub.publisher" }
   let(:service_account_email) { "serviceAccount:kokoro@#{pubsub.project}.iam.gserviceaccount.com" }
   let(:topic_id) { random_topic_id }
-  let(:subscription_name) { random_subscription_name }
+  let(:subscription_id) { random_subscription_id }
   let(:dead_letter_topic_id) { random_topic_id }
 
   after do
@@ -73,12 +73,12 @@ describe "topics" do
     @topic = pubsub.create_topic topic_id
 
     # pubsub_create_pull_subscription
-    assert_output "Pull subscription #{subscription_name} created.\n" do
-      create_pull_subscription topic_id: topic_id, subscription_name: subscription_name
+    assert_output "Pull subscription #{subscription_id} created.\n" do
+      create_pull_subscription topic_id: topic_id, subscription_id: subscription_id
     end
-    @subscription = @topic.subscription subscription_name
+    @subscription = @topic.subscription subscription_id
     assert @subscription
-    assert_equal "projects/#{pubsub.project}/subscriptions/#{subscription_name}", @subscription.name
+    assert_equal "projects/#{pubsub.project}/subscriptions/#{subscription_id}", @subscription.name
 
     # pubsub_list_topic_subscriptions
     assert_output "Subscriptions in topic #{@topic.name}:\n#{@subscription.name}\n" do
@@ -93,7 +93,7 @@ describe "topics" do
     # pubsub_subscriber_sync_pull
     expect_with_retry "pubsub_subscriber_sync_pull" do
       assert_output "Message pulled: This is a test message.\n" do
-        pull_messages subscription_name: subscription_name
+        pull_messages subscription_id: subscription_id
       end
     end
   end
@@ -103,12 +103,12 @@ describe "topics" do
     @topic = pubsub.create_topic topic_id
 
     # pubsub_enable_subscription_ordering
-    assert_output "Pull subscription #{subscription_name} created with message ordering.\n" do
-      create_ordered_pull_subscription topic_id: topic_id, subscription_name: subscription_name
+    assert_output "Pull subscription #{subscription_id} created with message ordering.\n" do
+      create_ordered_pull_subscription topic_id: topic_id, subscription_id: subscription_id
     end
-    @subscription = @topic.subscription subscription_name
+    @subscription = @topic.subscription subscription_id
     assert @subscription
-    assert_equal "projects/#{pubsub.project}/subscriptions/#{subscription_name}", @subscription.name
+    assert_equal "projects/#{pubsub.project}/subscriptions/#{subscription_id}", @subscription.name
     assert @subscription.message_ordering?
 
     # pubsub_publish_with_ordering_keys
@@ -162,12 +162,12 @@ describe "topics" do
     endpoint = "https://#{pubsub.project}.appspot.com/push"
 
     # pubsub_create_pull_subscription
-    assert_output "Push subscription #{subscription_name} created.\n" do
-      create_push_subscription topic_id: topic_id, subscription_name: subscription_name, endpoint: endpoint
+    assert_output "Push subscription #{subscription_id} created.\n" do
+      create_push_subscription topic_id: topic_id, subscription_id: subscription_id, endpoint: endpoint
     end
-    @subscription = @topic.subscription subscription_name
+    @subscription = @topic.subscription subscription_id
     assert @subscription
-    assert_equal "projects/#{pubsub.project}/subscriptions/#{subscription_name}", @subscription.name
+    assert_equal "projects/#{pubsub.project}/subscriptions/#{subscription_id}", @subscription.name
     assert_equal endpoint, @subscription.endpoint
     assert @subscription.push_config
     assert_equal endpoint, @subscription.push_config.endpoint
@@ -182,21 +182,21 @@ describe "topics" do
       # pubsub_dead_letter_create_subscription
       out, _err = capture_io do
         dead_letter_create_subscription topic_id: topic_id,
-                                        subscription_name: subscription_name,
+                                        subscription_id: subscription_id,
                                         dead_letter_topic_id: dead_letter_topic_id
       end
-      assert_includes out, "Created subscription #{subscription_name} with dead letter topic #{dead_letter_topic_id}."
+      assert_includes out, "Created subscription #{subscription_id} with dead letter topic #{dead_letter_topic_id}."
 
-      @subscription = @topic.subscription subscription_name
+      @subscription = @topic.subscription subscription_id
       assert @subscription
-      assert_equal "projects/#{pubsub.project}/subscriptions/#{subscription_name}", @subscription.name
+      assert_equal "projects/#{pubsub.project}/subscriptions/#{subscription_id}", @subscription.name
       assert @subscription.dead_letter_topic
       assert_equal "projects/#{pubsub.project}/topics/#{dead_letter_topic_id}", @subscription.dead_letter_topic.name
       assert_equal 10, @subscription.dead_letter_max_delivery_attempts
 
       # pubsub_dead_letter_update_subscription
       assert_output "Max delivery attempts is now 20.\n" do
-        dead_letter_update_subscription subscription_name: subscription_name
+        dead_letter_update_subscription subscription_id: subscription_id
       end
       @subscription.reload!
       assert @subscription.dead_letter_topic
@@ -207,15 +207,15 @@ describe "topics" do
       # pubsub_dead_letter_delivery_attempt
       expect_with_retry "pubsub_dead_letter_delivery_attempt" do
         out, _err = capture_io do
-          dead_letter_delivery_attempt subscription_name: subscription_name
+          dead_letter_delivery_attempt subscription_id: subscription_id
         end
         assert_includes out, "Received message: This is a dead letter topic test message."
         assert_includes out, "Delivery Attempt: 1"
       end
 
       # pubsub_dead_letter_remove
-      assert_output "Removed dead letter topic from #{subscription_name} subscription.\n" do
-        dead_letter_remove subscription_name: subscription_name
+      assert_output "Removed dead letter topic from #{subscription_id} subscription.\n" do
+        dead_letter_remove subscription_id: subscription_id
       end
       @subscription.reload!
       refute @subscription.dead_letter_topic
@@ -229,7 +229,7 @@ describe "topics" do
   it "supports pubsub_publish" do
     #setup
     @topic = pubsub.create_topic topic_id
-    @subscription = @topic.subscribe random_subscription_name
+    @subscription = @topic.subscribe random_subscription_id
 
     # pubsub_publish
     assert_output "Message published asynchronously.\n" do
@@ -250,7 +250,7 @@ describe "topics" do
   it "supports pubsub_publish_custom_attributes" do
     #setup
     @topic = pubsub.create_topic topic_id
-    @subscription = @topic.subscribe random_subscription_name
+    @subscription = @topic.subscribe random_subscription_id
 
     # pubsub_publish_custom_attributes
     assert_output "Message with custom attributes published asynchronously.\n" do
@@ -274,7 +274,7 @@ describe "topics" do
   it "supports pubsub_publisher_batch_settings" do
     #setup
     @topic = pubsub.create_topic topic_id
-    @subscription = @topic.subscribe random_subscription_name
+    @subscription = @topic.subscribe random_subscription_id
 
     # pubsub_publisher_batch_settings
     assert_output "Messages published asynchronously in batch.\n" do
@@ -299,7 +299,7 @@ describe "topics" do
   it "supports pubsub_publisher_concurrency_control" do
     #setup
     @topic = pubsub.create_topic topic_id
-    @subscription = @topic.subscribe random_subscription_name
+    @subscription = @topic.subscribe random_subscription_id
 
     # pubsub_publisher_concurrency_control
     assert_output "Message published asynchronously.\n" do
@@ -320,7 +320,7 @@ describe "topics" do
   it "supports publish_with_error_handler" do
     #setup
     @topic = pubsub.create_topic topic_id
-    @subscription = @topic.subscribe random_subscription_name
+    @subscription = @topic.subscribe random_subscription_id
 
     # publish_with_error_handler
     assert_output "Message published asynchronously.\n" do
