@@ -97,7 +97,7 @@ if [[ $CHANGED_DIRS =~ "appengine" ]]; then
 fi
 
 # Most tests in the appengine/run directory are E2E.
-if [[ "${CHANGED_DIRS}" =~ "run" || "${CHANGED_DIRS}" =~ "appengine" ]]; then
+if [[ "${CHANGED_DIRS}" =~ "run" || "${CHANGED_DIRS}" =~ "appengine" || -n ${RUN_ALL_TESTS:-} ]]; then
   E2E="true"
 fi
 
