@@ -96,9 +96,8 @@ if [[ $CHANGED_DIRS =~ "appengine" ]]; then
   CHANGED_DIRS="${CHANGED_DIRS/appengine/} $AE_CHANGED_DIRS"
 fi
 
-# Most tests in the appengine directory are E2E.
-SERVERLESS=("appengine" "run")
-if [[ "${CHANGED_DIRS}" =~ "${SERVERLESS}" ]]; then
+# Most tests in the appengine/run directory are E2E.
+if [[ "${CHANGED_DIRS}" =~ "run" || "${CHANGED_DIRS}" =~ "appengine" ]]; then
   E2E="true"
 fi
 
