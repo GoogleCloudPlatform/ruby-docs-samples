@@ -38,6 +38,7 @@ def make_iap_request url:, client_id:
     puts resp.headers
   end
   # [END iap_make_request]
+  resp
 end
 
 def verify_iap_jwt iap_jwt:, project_number: nil, project_id: nil, backend_service_id: nil
