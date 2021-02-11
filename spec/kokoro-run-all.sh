@@ -96,11 +96,6 @@ if [[ $CHANGED_DIRS =~ "appengine" ]]; then
   CHANGED_DIRS="${CHANGED_DIRS/appengine/} $AE_CHANGED_DIRS"
 fi
 
-# Most tests in the appengine/run directory are E2E.
-if [[ "${CHANGED_DIRS}" =~ "run" || "${CHANGED_DIRS}" =~ "appengine" || -n ${RUN_ALL_TESTS:-} ]]; then
-  E2E="true"
-fi
-
 # RUN_ALL_TESTS after this point is used to indicate if we should run tests in every directory,
 # rather than only tests in modified directories.
 RUN_ALL_TESTS="0"
@@ -112,6 +107,11 @@ fi
 # If the test configuration changed, run all tests.
 if [[ $CHANGED_DIRS =~ "spec" || $CHANGED_DIRS =~ ".kokoro" ]]; then
   RUN_ALL_TESTS="1"
+fi
+
+# Most tests in the appengine/run directory are E2E.
+if [[ "${CHANGED_DIRS}" =~ "run" || "${CHANGED_DIRS}" =~ "appengine" || -n ${RUN_ALL_TESTS:-} ]]; then
+  E2E="true"
 fi
 
 # Start memcached (for appengine/memcache).
