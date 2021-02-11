@@ -19,13 +19,15 @@ require "stringio"
 def fetch_iap_jwt
   url = "https://print-iap-jwt-assertion-dot-cloud-iap-for-testing.uc.r.appspot.com"
   client_id = "1031437410300-ki5srmdg37qc6cl521dlqcmt4gbjufn5.apps.googleusercontent.com"
-  resp = make_iap_request url: url, client_id: client_id
   tries = 3
-  while resp.status != 200 && tries > 0
-    tries -= 1
-    sleep 5
+  status = 400
+  while status != 200 && tries > 0
     begin
       resp = make_iap_request url: url, client_id: client_id
+      status = resp.status
+    ensure
+      tries -= 1
+      sleep 5
     end
   end
   resp.body
