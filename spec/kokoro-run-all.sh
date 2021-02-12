@@ -96,22 +96,6 @@ if [[ $CHANGED_DIRS =~ "appengine" ]]; then
   CHANGED_DIRS="${CHANGED_DIRS/appengine/} $AE_CHANGED_DIRS"
 fi
 
-# The run directory has many subdirectories. Only test the modified ones.
-if [[ $CHANGED_DIRS =~ "run" ]]; then
-  AE_CHANGED_DIRS=$(git --no-pager diff --name-only HEAD $(git merge-base HEAD master) | grep "run/" | cut -d/ -f1,2 | sort | uniq || true)
-  CHANGED_DIRS="${CHANGED_DIRS/run/} $AE_CHANGED_DIRS"
-  # Install gcloud for Cloud Run samples if not installing later
-  if [[ ! -n ${RUN_ALL_TESTS:-} ]]; then
-    export PATH="$PATH:/tmp/google-cloud-sdk/bin"
-    ./.kokoro/configure_gcloud.sh
-  fi
-fi
-
-# Most tests in the appengine directory are E2E or always run E2E tests for Cloud Run
-if [[ ($CHANGED_DIRS =~ "appengine" || $CHANGED_DIRS =~ "run") && -n ${RUN_ALL_TESTS:-} ]]; then
-  E2E="true"
-fi
-
 # RUN_ALL_TESTS after this point is used to indicate if we should run tests in every directory,
 # rather than only tests in modified directories.
 RUN_ALL_TESTS="0"
@@ -123,6 +107,11 @@ fi
 # If the test configuration changed, run all tests.
 if [[ $CHANGED_DIRS =~ "spec" || $CHANGED_DIRS =~ ".kokoro" ]]; then
   RUN_ALL_TESTS="1"
+fi
+
+# Most tests in the appengine/run directory are E2E.
+if [[ "${CHANGED_DIRS}" =~ "run" || "${CHANGED_DIRS}" =~ "appengine" || -n ${RUN_ALL_TESTS:-} ]]; then
+  E2E="true"
 fi
 
 # Start memcached (for appengine/memcache).
