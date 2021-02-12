@@ -59,7 +59,7 @@ post "/pubsub/push" do
 end
 # [END gae_flex_pubsub_push]
 
-# [START gaeflex_net_pubsub_auth_push]
+# [START gaestd_ruby_pubsub_auth_push]
 post "/pubsub/authenticated-push" do
   halt 400 if params[:token] != PUBSUB_VERIFICATION_TOKEN
 
@@ -78,7 +78,7 @@ post "/pubsub/authenticated-push" do
 
   messages.push payload
 end
-# [END gaeflex_net_pubsub_auth_push]
+# [END gaestd_ruby_pubsub_auth_push]
 
 __END__
 
