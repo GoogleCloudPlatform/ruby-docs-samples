@@ -15,11 +15,11 @@
 require "functions_framework"
 
 def perform_heavy_computation
-  "heavy computation result"
+  Time.now
 end
 
 def perform_light_computation
-  "light computation result"
+  Time.now
 end
 
 # [START functions_tips_scopes]
