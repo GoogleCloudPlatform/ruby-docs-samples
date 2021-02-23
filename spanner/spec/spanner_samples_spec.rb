@@ -195,7 +195,7 @@ describe "Google Cloud Spanner API samples" do
 
     data_definition_statements = @test_database.ddl
 
-    expect(data_definition_statements.size).to eq 2
+    expect(data_definition_statements.size).to eq 3
 
     expect(data_definition_statements).to include(match "CREATE TABLE Singers")
     expect(data_definition_statements).to include(match "CREATE TABLE Albums")
