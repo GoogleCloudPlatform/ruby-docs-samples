@@ -75,6 +75,48 @@ def create_database project_id:, instance_id:, database_id:
   # [END spanner_create_database]
 end
 
+def create_database_with_version_retention_period project_id:, instance_id:, database_id:
+  # [START spanner_create_database_with_version_retention_period]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # database_id = "Your Spanner database ID"
+
+  require "google/cloud/spanner"
+
+  spanner  = Google::Cloud::Spanner.new project: project_id
+  instance = spanner.instance instance_id
+  version_retention_period = "7d"
+
+  job = instance.create_database database_id, statements: [
+    "CREATE TABLE Singers (
+      SingerId     INT64 NOT NULL,
+      FirstName    STRING(1024),
+      LastName     STRING(1024),
+      SingerInfo   BYTES(MAX)
+    ) PRIMARY KEY (SingerId)",
+
+    "CREATE TABLE Albums (
+      SingerId     INT64 NOT NULL,
+      AlbumId      INT64 NOT NULL,
+      AlbumTitle   STRING(MAX)
+    ) PRIMARY KEY (SingerId, AlbumId),
+    INTERLEAVE IN PARENT Singers ON DELETE CASCADE",
+
+    "ALTER DATABASE `#{database_id}`
+      SET OPTIONS ( version_retention_period = '#{version_retention_period}' )"
+  ]
+
+  puts "Waiting for create database operation to complete"
+
+  job.wait_until_done!
+  database = job.database
+
+  puts "Created database #{database_id} on instance #{instance_id}"
+  puts "\tVersion retention period: #{database.version_retention_period}"
+  puts "\tEarliest version time: #{database.earliest_version_time}"
+  # [END spanner_create_database_with_version_retention_period]
+end
+
 def create_table_with_timestamp_column project_id:, instance_id:, database_id:
   # [START spanner_create_table_with_timestamp_column]
   # project_id  = "Your Google Cloud project ID"
@@ -1641,15 +1683,16 @@ def create_backup project_id:, instance_id:, database_id:, backup_id:
   instance = spanner.instance instance_id
   database = instance.database database_id
   expire_time = Time.now + 14 * 24 * 3600 # 14 days from now
+  version_time = database.earliest_version_time
 
-  job = database.create_backup backup_id, expire_time
+  job = database.create_backup backup_id, expire_time, version_time: version_time
 
   puts "Backup operation in progress"
 
   job.wait_until_done!
 
   backup = instance.backup backup_id
-  puts "Backup #{backup.backup_id} of size #{backup.size_in_bytes} bytes was created at #{backup.create_time}"
+  puts "Backup #{backup.backup_id} of size #{backup.size_in_bytes} bytes was created at #{backup.create_time} for version of database at #{backup.version_time}"
   # [END spanner_create_backup]
 end
 
@@ -1673,7 +1716,7 @@ def restore_backup project_id:, instance_id:, database_id:, backup_id:
   job.wait_until_done!
 
   restore_info = job.database.restore_info
-  puts "Database #{restore_info.backup_info.source_database_id} was restored to #{database_id} from backup #{restore_info.backup_info.backup_id}"
+  puts "Database #{restore_info.backup_info.source_database_id} was restored to #{database_id} from backup #{restore_info.backup_info.backup_id} with version time #{restore_info.backup_info.version_time}"
   # [END spanner_restore_backup]
 end
 
