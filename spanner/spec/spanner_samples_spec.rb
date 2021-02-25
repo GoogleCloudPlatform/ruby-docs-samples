@@ -1614,7 +1614,7 @@ describe "Google Cloud Spanner API samples" do
       "All backups that expire before a timestamp:\n#{backup.backup_id}"
     )
     expect(captured_output).to include(
-      "All backups with a size greater than 500 bytes:\n#{backup.backup_id}"
+      "All backups with a size greater than or equal to 0 bytes:\n#{backup.backup_id}"
     )
     expect(captured_output).to include(
       "All backups that were created after a timestamp that are also ready:\n#{backup.backup_id}"

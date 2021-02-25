@@ -1830,8 +1830,8 @@ def list_backups project_id:, instance_id:, backup_id:, database_id:
     puts backup.backup_id
   end
 
-  puts "All backups with a size greater than 500 bytes:"
-  instance.backups(filter: "size_bytes > 500").all.each do |backup|
+  puts "All backups with a size greater than or equal to 0 bytes:"
+  instance.backups(filter: "size_bytes >= 0").all.each do |backup|
     puts backup.backup_id
   end
 
