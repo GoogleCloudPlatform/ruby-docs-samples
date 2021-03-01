@@ -1679,11 +1679,12 @@ def create_backup project_id:, instance_id:, database_id:, backup_id:
 
   require "google/cloud/spanner"
 
-  spanner  = Google::Cloud::Spanner.new project: project_id
+  spanner = Google::Cloud::Spanner.new project: project_id
+  client = spanner.client instance_id, database_id
   instance = spanner.instance instance_id
   database = instance.database database_id
   expire_time = Time.now + 14 * 24 * 3600 # 14 days from now
-  version_time = database.earliest_version_time
+  version_time = client.execute("SELECT CURRENT_TIMESTAMP() as timestamp").rows.first[:timestamp]
 
   job = database.create_backup backup_id, expire_time, version_time: version_time
 
@@ -1830,8 +1831,8 @@ def list_backups project_id:, instance_id:, backup_id:, database_id:
     puts backup.backup_id
   end
 
-  puts "All backups with a size greater than or equal to 0 bytes:"
-  instance.backups(filter: "size_bytes >= 0").all.each do |backup|
+  puts "All backups with a size greater than 500 bytes:"
+  instance.backups(filter: "size_bytes >= 500").all.each do |backup|
     puts backup.backup_id
   end
 
