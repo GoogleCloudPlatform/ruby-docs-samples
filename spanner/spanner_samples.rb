@@ -2065,14 +2065,6 @@ def run_sample arguments
                           database_id: database_id,
                           start_title: arguments.shift,
                           end_title:   arguments.shift
-  elsif commands.eql?("create_backup") && instance_id && database_id && arguments.size >= 2
-    require 'time'
-
-    create_backup project_id: project_id,
-                  instance_id: instance_id,
-                  database_id: database_id,
-                  backup_id: arguments.shift,
-                  version_time: Time.parse(arguments.shift)
   elsif commands.include?(command) && instance_id && database_id
     send command, project_id:  project_id,
                   instance_id: instance_id,
