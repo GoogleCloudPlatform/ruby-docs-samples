@@ -90,11 +90,15 @@ describe "Google Cloud Spanner API samples" do
                       database_id: database.database_id
     end
 
+    client = @spanner.client @instance.instance_id, database.database_id
+    version_time = client.execute("SELECT CURRENT_TIMESTAMP() as timestamp").rows.first[:timestamp]
+
     capture do
-      create_backup project_id:  @project_id,
-                    instance_id: @instance.instance_id,
-                    database_id: database.database_id,
-                    backup_id:   @backup_id
+      create_backup project_id:   @project_id,
+                    instance_id:  @instance.instance_id,
+                    database_id:  database.database_id,
+                    backup_id:    @backup_id,
+                    version_time: version_time
 
       @test_backup = @instance.backup @backup_id
     end
