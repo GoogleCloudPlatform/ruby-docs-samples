@@ -1508,7 +1508,7 @@ describe "Google Cloud Spanner API samples" do
       create_backup project_id:   @project_id,
                     instance_id:  @instance.instance_id,
                     database_id:  database.database_id,
-                    backup_id:    @backup_id
+                    backup_id:    @backup_id,
                     version_time: version_time
     end
 
