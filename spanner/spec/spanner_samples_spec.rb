@@ -1501,11 +1501,15 @@ describe "Google Cloud Spanner API samples" do
     cleanup_backup_resources
     database = create_database_with_data
 
+    client = @spanner.client @instance.instance_id, database.database_id
+    version_time = client.execute("SELECT CURRENT_TIMESTAMP() as timestamp").rows.first[:timestamp]
+
     capture do
-      create_backup project_id:  @project_id,
-                    instance_id: @instance.instance_id,
-                    database_id: database.database_id,
-                    backup_id:   @backup_id
+      create_backup project_id:   @project_id,
+                    instance_id:  @instance.instance_id,
+                    database_id:  database.database_id,
+                    backup_id:    @backup_id
+                    version_time: version_time
     end
 
     expect(captured_output).to include(
