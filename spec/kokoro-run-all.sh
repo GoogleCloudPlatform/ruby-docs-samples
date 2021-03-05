@@ -8,6 +8,13 @@
 #    are modified, in which case all tests will be run.
 #  * Nightly runs will run all tests.
 
+versions=($RUBY_VERSIONS)
+
+for version in "${versions[@]}"; do
+    if [[ $version == $KOKORO_RUBY_VERSION* ]]; then
+        rbenv global "$version"
+    fi
+done
 
 # Print out Ruby version
 ruby --version
