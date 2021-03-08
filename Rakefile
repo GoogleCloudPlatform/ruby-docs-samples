@@ -18,6 +18,7 @@ def run_tests type
     header "Installing bundle in #{dir}"
     sh "bundle update"
   end
+  
 
   each_lib do |dir|
     start_time = Time.now
