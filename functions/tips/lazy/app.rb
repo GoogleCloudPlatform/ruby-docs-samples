@@ -19,7 +19,7 @@ def file_wide_computation
   numbers.reduce(:+)
 end
 
-def file_wide_computation
+def function_specific_computation
   numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9]
   numbers.reduce(, :*)
 end
@@ -30,14 +30,16 @@ FunctionsFramework.on_startup do
   # invocation.
 
   # Declare and set non_lazy_global
-  $lazy_global = file_wide_computation
+  set_global :non_lazy_global, file_wide_computation
+
+  # Declare, but do not set, lazy_global
+  set_global :lazy_global do
+    function_specific_computation
+  end
 end
 
 FunctionsFramework.http "tips_lazy" do |_request|
-  # Per-function scope.
   # This method is called every time this function is called.
-
-  $lazy_global = function_specific_computation unless defined $lazy_global
 
   "Lazy: #{lazy_global}; non_lazy: #{non_lazy_global}"
 end
