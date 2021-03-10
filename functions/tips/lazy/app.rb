@@ -21,7 +21,7 @@ end
 
 def function_specific_computation
   numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-  numbers.reduce(, :*)
+  numbers.reduce(1, :*)
 end
 
 # [START functions_tips_lazy_globals]
@@ -41,6 +41,6 @@ end
 FunctionsFramework.http "tips_lazy" do |_request|
   # This method is called every time this function is called.
 
-  "Lazy: #{lazy_global}; non_lazy: #{non_lazy_global}"
+  "Lazy: #{:lazy_global}; non_lazy: #{:non_lazy_global}"
 end
 # [END functions_tips_lazy_globals]
