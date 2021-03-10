@@ -1670,20 +1670,21 @@ def write_read_float64_array project_id:, instance_id:, database_id:
   # [END spanner_write_read_float64_array]
 end
 
-def create_backup project_id:, instance_id:, database_id:, backup_id:
+def create_backup project_id:, instance_id:, database_id:, backup_id:, version_time:
   # [START spanner_create_backup]
   # project_id  = "Your Google Cloud project ID"
   # instance_id = "Your Spanner instance ID"
   # database_id = "Your Spanner database ID"
   # backup_id = "Your Spanner backup ID"
+  # version_time = Time.now - 60 * 60 * 24 # 1 day ago
 
   require "google/cloud/spanner"
 
-  spanner  = Google::Cloud::Spanner.new project: project_id
+  spanner = Google::Cloud::Spanner.new project: project_id
+  client = spanner.client instance_id, database_id
   instance = spanner.instance instance_id
   database = instance.database database_id
   expire_time = Time.now + 14 * 24 * 3600 # 14 days from now
-  version_time = database.earliest_version_time
 
   job = database.create_backup backup_id, expire_time, version_time: version_time
 
@@ -1831,7 +1832,7 @@ def list_backups project_id:, instance_id:, backup_id:, database_id:
   end
 
   puts "All backups with a size greater than 500 bytes:"
-  instance.backups(filter: "size_bytes > 500").all.each do |backup|
+  instance.backups(filter: "size_bytes >= 500").all.each do |backup|
     puts backup.backup_id
   end
 
@@ -2006,7 +2007,7 @@ def usage
       write_read_empty_float64_array     <instance_id> <database_id> Writes empty FLOAT64 array and read.
       write_read_null_float64_array      <instance_id> <database_id> Writes nil to FLOAT64 array and read.
       write_read_float64_array           <instance_id> <database_id> Writes FLOAT64 array and read.
-      create_backup                      <instance_id> <database_id> <backup_id> Create a backup.
+      create_backup                      <instance_id> <database_id> <backup_id> <version_time> Create a backup.
       restore_backup                     <instance_id> <database_id> <backup_id> Restore a database.
       create_backup_cancel               <instance_id> <database_id> <backup_id> Cancel a backup.
       list_backup_operations             <instance_id> List backup operations.
