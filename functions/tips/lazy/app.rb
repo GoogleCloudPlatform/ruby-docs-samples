@@ -41,6 +41,9 @@ end
 FunctionsFramework.http "tips_lazy" do |_request|
   # This method is called every time this function is called.
 
-  "Lazy: #{:lazy_global}; non_lazy: #{:non_lazy_global}"
+  lazy_global = global :lazy_global
+  non_lazy_global = global :non_lazy_global
+
+  "Lazy: #{lazy_global}; non_lazy: #{non_lazy_global}"
 end
 # [END functions_tips_lazy_globals]

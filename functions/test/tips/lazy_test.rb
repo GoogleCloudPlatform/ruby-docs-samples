@@ -1,4 +1,4 @@
-# Copyright 2020 Google LLC
+# Copyright 2021 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ describe "functions_tips_lazy" do
       request = make_get_request "http://example.com:8080/"
       response = call_http "tips_lazy", request
       assert_equal 200, response.status
-      assert_match(/Lazy: .*; non_lazy: .*/, response.body.join)
+      assert_match("Lazy: 362880; non_lazy: 45", response.body.join)
     end
   end
 end
