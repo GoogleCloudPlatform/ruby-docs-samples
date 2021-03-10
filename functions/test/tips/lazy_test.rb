@@ -1,4 +1,4 @@
-# Copyright 2020 Google LLC
+# Copyright 2021 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,6 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-source "https://rubygems.org"
+require "helper"
 
-gem "functions_framework", "~> 0.8"
+describe "functions_tips_lazy" do
+  include FunctionsFramework::Testing
+
+  it "generates the correct response body" do
+    load_temporary "tips/lazy/app.rb" do
+      request = make_get_request "http://example.com:8080/"
+      response = call_http "tips_lazy", request
+      assert_equal 200, response.status
+      assert_match("Lazy: 362880; non_lazy: 45", response.body.join)
+    end
+  end
+end
