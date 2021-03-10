@@ -5,9 +5,6 @@ AllCops:
     - "**/acceptance/**"
     - "**/spec/**"
     - "Rakefile"
-Lint/NonLocalExitFromIterator:
-  Exclude:
-    - "functions/**/*.rb"
 Lint/RescueException:
   Exclude:
     - "pubsub/subscriptions.rb"
