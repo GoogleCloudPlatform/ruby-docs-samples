@@ -16,12 +16,12 @@ require "functions_framework"
 
 def file_wide_computation
   numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-  numbers.reduce(:+)
+  numbers.reduce :+
 end
 
 def function_specific_computation
   numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-  numbers.reduce(1, :*)
+  numbers.reduce :*
 end
 
 # [START functions_tips_lazy_globals]

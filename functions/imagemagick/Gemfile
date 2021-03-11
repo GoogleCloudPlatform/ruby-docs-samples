@@ -1,4 +1,4 @@
-# Copyright 2020 Google LLC
+# Copyright 2021 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,16 +14,7 @@
 
 source "https://rubygems.org"
 
-gem "functions_framework", "~> 0.7"
-
-group "test" do
-  gem "google-apis-kgsearch_v1", "~> 0.2"
-  gem "google-cloud-firestore", "~> 2.4"
-  gem "google-cloud-storage", "~> 1.30"
-  gem "google-cloud-vision", "~> 1.1"
-  gem "mini_magick", "~> 4.11"
-  gem "minitest", "~> 5.14"
-  gem "minitest-focus", "~> 1.1"
-  gem "rake", ">= 12.0"
-  gem "slack-ruby-client", "~> 0.15"
-end
+gem "functions_framework", "~> 0.8"
+gem "google-cloud-storage", "~> 1.30"
+gem "google-cloud-vision", "~> 1.1"
+gem "mini_magick", "~> 4.11"
