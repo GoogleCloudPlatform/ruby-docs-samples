@@ -22,13 +22,6 @@ FunctionsFramework.cloud_event "hello_rtdb" do |event|
   # The Firebase event payload can be obtained from the `data` field.
   payload = event.data
 
-  if payload.key? "params"
-    logger.info "Path parameters:"
-    payload["params"].each do |param, value|
-      logger.info "  #{param}: #{value}"
-    end
-  end
-
   logger.info "Function triggered by change to: #{event.source}"
   logger.info "Admin?: #{payload.fetch 'admin', false}"
   logger.info "Delta: #{payload['delta']}"
