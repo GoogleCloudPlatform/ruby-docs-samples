@@ -124,6 +124,12 @@ fi
 # Start memcached (for appengine/memcache).
 service memcached start
 
+# Download Cloud SQL Proxy.
+wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64
+mv cloud_sql_proxy.linux.amd64 /cloud_sql_proxy
+chmod +x /cloud_sql_proxy
+mkdir /cloudsql && chmod 0777 /cloudsql
+
 if [[ $E2E = "true" ]]; then
   echo "This test run will run end-to-end tests."
 
@@ -132,17 +138,24 @@ if [[ $E2E = "true" ]]; then
 
   ./.kokoro/configure_gcloud.sh
 
-  # Download Cloud SQL Proxy.
-  wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64
-  mv cloud_sql_proxy.linux.amd64 /cloud_sql_proxy
-  chmod +x /cloud_sql_proxy
-  mkdir /cloudsql && chmod 0777 /cloudsql
-
-  # Start Cloud SQL Proxy.
+  # Start Cloud SQL Proxy for AppEngine tests.
   /cloud_sql_proxy -dir=/cloudsql -credential_file=$GOOGLE_APPLICATION_CREDENTIALS &
   export CLOUD_SQL_PROXY_PROCESS_ID=$!
   trap "kill $CLOUD_SQL_PROXY_PROCESS_ID || true" EXIT
 fi
+
+# Start Cloud SQL Proxies for Cloud SQL Tests.
+/cloud_sql_proxy -instances=${POSTGRES_INSTANCE_CONNECTION_NAME}=tcp:5432,${POSTGRES_INSTANCE_CONNECTION_NAME} -dir=/cloudsql -credential_file=$GOOGLE_APPLICATION_CREDENTIALS &
+export POSTGRES_CLOUD_SQL_PROXY_PROCESS_ID=$!
+trap "kill $POSTGRES_CLOUD_SQL_PROXY_PROCESS_ID || true" EXIT
+
+/cloud_sql_proxy -instances=${MYSQL_INSTANCE_CONNECTION_NAME}=tcp:3306,${MYSQL_INSTANCE_CONNECTION_NAME} -dir=/cloudsql -credential_file=$GOOGLE_APPLICATION_CREDENTIALS &
+export MYSQL_CLOUD_SQL_PROXY_PROCESS_ID=$!
+trap "kill $MYSQL_CLOUD_SQL_PROXY_PROCESS_ID || true" EXIT
+
+/cloud_sql_proxy -instances=${SQLSERVER_INSTANCE_CONNECTION_NAME}=tcp:1433 -credential_file=$GOOGLE_APPLICATION_CREDENTIALS &
+export SQLSERVER_CLOUD_SQL_PROXY_PROCESS_ID=$!
+trap "kill $SQLSERVER_CLOUD_SQL_PROXY_PROCESS_ID || true" EXIT
 
 # Capture failures
 EXIT_STATUS=0 # everything passed
@@ -164,7 +177,12 @@ if [[ $RUN_ALL_TESTS = "1" ]]; then
 
     start_time="$(date -u +%s)"
 
-    (bundle update && bundle exec rspec --format documentation --format RspecJunitFormatter --out sponge_log.xml | tee sponge_log.log) || set_failed_status
+    if [[ -f "${REPO_DIRECTORY}/${PRODUCT}/bin/run_tests" ]]; then
+      (bundle update && bin/run_tests) || set_failed_status
+    else
+      (bundle update && bundle exec rspec --format documentation --format RspecJunitFormatter --out sponge_log.xml | tee sponge_log.log) || set_failed_status
+    fi
+
 
     if [[ $E2E = "true" ]]; then
       # Clean up deployed version
