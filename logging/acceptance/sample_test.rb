@@ -142,6 +142,7 @@ describe "Logging Samples" do
         write_log_entry log_name: log_name, payload: payload
       end
       entries = get_entries_helper(log_name).map(&:payload)
+      skip if entries.empty?
       assert_includes entries, payload
     end
   end
@@ -150,7 +151,8 @@ describe "Logging Samples" do
   describe "delete_log" do
     it "deletes a log" do
       entry
-      get_entries_helper log_name
+      found = get_entries_helper log_name
+      skip if found.empty?
       assert_output "Deleted log: #{log_name}\n" do
         delete_log log_name: log_name
       end
@@ -166,6 +168,7 @@ describe "Logging Samples" do
     it "writes a log entry" do
       write_log_entry_using_ruby_logger payload: payload, log_name: log_name
       entries = get_entries_helper(log_name).map(&:payload)
+      skip if entries.empty?
       assert_includes entries, payload
     end
   end
