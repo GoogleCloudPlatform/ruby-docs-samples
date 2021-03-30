@@ -149,8 +149,9 @@ def create_database_with_encryption_key project_id:, instance_id:, database_id:,
   puts "Waiting for create database operation to complete"
 
   job.wait_until_done!
+  database = job.database
 
-  puts "Database #{database_id} created with encryption key #{kms_key_name}"
+  puts "Database #{database.database_id} created with encryption key #{database.encryption_config.kms_key_name}"
 
   # [END spanner_create_database_with_encryption_key]
 end
@@ -1815,9 +1816,9 @@ def restore_database_with_encryption_key project_id:, instance_id:, database_id:
   puts "Waiting for restore backup operation to complete"
 
   job.wait_until_done!
-
-  restore_info = job.database.restore_info
-  puts "Database #{restore_info.backup_info.source_database_id} was restored to #{database_id} from backup #{restore_info.backup_info.backup_id} using encryption key #{kms_key_name}"
+  database = job.database
+  restore_info = database.restore_info
+  puts "Database #{restore_info.backup_info.source_database_id} was restored to #{database.database_id} from backup #{restore_info.backup_info.backup_id} using encryption key #{database.encryption_config.kms_key_name}"
 
   # [END spanner_restore_backup_with_encryption_key]
 end
