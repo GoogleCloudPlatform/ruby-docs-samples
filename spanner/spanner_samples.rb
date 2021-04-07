@@ -129,22 +129,23 @@ def create_database_with_encryption_key project_id:, instance_id:, database_id:,
   spanner  = Google::Cloud::Spanner.new project: project_id
   instance = spanner.instance instance_id
 
-  job = instance.create_database database_id, statements: [
-    "CREATE TABLE Singers (
-      SingerId     INT64 NOT NULL,
-      FirstName    STRING(1024),
-      LastName     STRING(1024),
-      SingerInfo   BYTES(MAX)
-    ) PRIMARY KEY (SingerId)",
+  job = instance.create_database database_id,
+                                 statements:        [
+                                   "CREATE TABLE Singers (
+                                     SingerId     INT64 NOT NULL,
+                                     FirstName    STRING(1024),
+                                     LastName     STRING(1024),
+                                     SingerInfo   BYTES(MAX)
+                                   ) PRIMARY KEY (SingerId)",
 
-    "CREATE TABLE Albums (
-      SingerId     INT64 NOT NULL,
-      AlbumId      INT64 NOT NULL,
-      AlbumTitle   STRING(MAX)
-    ) PRIMARY KEY (SingerId, AlbumId),
-    INTERLEAVE IN PARENT Singers ON DELETE CASCADE"
-  ],
-  encryption_config: { kms_key_name: kms_key_name }
+                                   "CREATE TABLE Albums (
+                                     SingerId     INT64 NOT NULL,
+                                     AlbumId      INT64 NOT NULL,
+                                     AlbumTitle   STRING(MAX)
+                                   ) PRIMARY KEY (SingerId, AlbumId),
+                                   INTERLEAVE IN PARENT Singers ON DELETE CASCADE"
+                                 ],
+                                 encryption_config: { kms_key_name: kms_key_name }
 
   puts "Waiting for create database operation to complete"
 
@@ -1753,7 +1754,7 @@ def create_backup_with_encryption_key project_id:, instance_id:, database_id:, b
   expire_time = Time.now + 14 * 24 * 3600 # 14 days from now
   encryption_config = {
     encryption_type: :CUSTOMER_MANAGED_ENCRYPTION,
-    kms_key_name: kms_key_name
+    kms_key_name:    kms_key_name
   }
 
   job = database.create_backup backup_id, expire_time, version_time: version_time, encryption_config: encryption_config
@@ -1809,7 +1810,7 @@ def restore_database_with_encryption_key project_id:, instance_id:, database_id:
 
   encryption_config = {
     encryption_type: :CUSTOMER_MANAGED_ENCRYPTION,
-    kms_key_name: kms_key_name
+    kms_key_name:    kms_key_name
   }
   job = backup.restore database_id, encryption_config: encryption_config
 
