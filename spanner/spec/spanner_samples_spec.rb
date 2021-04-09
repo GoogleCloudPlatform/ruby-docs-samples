@@ -209,7 +209,7 @@ describe "Google Cloud Spanner API samples" do
   example "create_database_with_encryption_key" do
     expect(@instance.databases.map(&:database_id)).not_to include @database_id
 
-    kms_key_name = "projects/#{@project_id}/locations/us-central1/keyRings/spanner-test-keyring/cryptoKeys/spanner-test-cmek"
+    kms_key_name = "projects/#{@project_id}/locations/us-east1/keyRings/spanner-test-keyring/cryptoKeys/spanner-test-cmek"
 
     capture do
       create_database_with_encryption_key project_id:  @project_id,
@@ -1547,15 +1547,13 @@ describe "Google Cloud Spanner API samples" do
     database = create_database_with_data
 
     client = @spanner.client @instance.instance_id, database.database_id
-    version_time = client.execute("SELECT CURRENT_TIMESTAMP() as timestamp").rows.first[:timestamp]
-    kms_key_name = "projects/#{@project_id}/locations/us-central1/keyRings/spanner-test-keyring/cryptoKeys/spanner-test-cmek"
+    kms_key_name = "projects/#{@project_id}/locations/us-east1/keyRings/spanner-test-keyring/cryptoKeys/spanner-test-cmek"
 
     capture do
       create_backup_with_encryption_key project_id:   @project_id,
                                         instance_id:  @instance.instance_id,
                                         database_id:  database.database_id,
                                         backup_id:    @backup_id,
-                                        version_time: version_time,
                                         kms_key_name: kms_key_name
     end
 
@@ -1596,13 +1594,13 @@ describe "Google Cloud Spanner API samples" do
 
   example "restore database with encryption key" do
     backup = create_backup_with_data
-    kms_key_name = "projects/#{@project_id}/locations/us-central1/keyRings/spanner-test-keyring/cryptoKeys/spanner-test-cmek"
+    kms_key_name = "projects/#{@project_id}/locations/us-east1/keyRings/spanner-test-keyring/cryptoKeys/spanner-test-cmek"
 
     capture do
-      restore_database_with_encryption_key project_id:  @project_id,
-                                           instance_id: @instance.instance_id,
-                                           database_id: @restored_database_id,
-                                           backup_id:   backup.backup_id,
+      restore_database_with_encryption_key project_id:   @project_id,
+                                           instance_id:  @instance.instance_id,
+                                           database_id:  @restored_database_id,
+                                           backup_id:    backup.backup_id,
                                            kms_key_name: kms_key_name
     end
 
