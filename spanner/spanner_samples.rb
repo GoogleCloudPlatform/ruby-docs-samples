@@ -1757,7 +1757,7 @@ def create_backup_with_encryption_key project_id:, instance_id:, database_id:, b
     kms_key_name:    kms_key_name
   }
 
-  job = database.create_backup backup_id, expire_time, version_time: version_time, encryption_config: encryption_config
+  job = database.create_backup backup_id, expire_time, encryption_config: encryption_config
 
   puts "Backup operation in progress"
 
