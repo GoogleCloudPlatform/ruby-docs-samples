@@ -61,9 +61,6 @@ end
 gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 # [START gems]
-# Added at 2017-08-23 15:24:52 -0700 by franknatividad:
-gem "pg", "~> 0.21.0"
-
-# Added at 2017-08-07 11:54:12 -0700 by USER:
-gem "appengine", "~> 0.4.1"
+gem "appengine", "~> 0.6"
+gem "pg", "~> 1.2"
 # [END gems]
