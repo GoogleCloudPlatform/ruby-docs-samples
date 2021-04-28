@@ -206,6 +206,22 @@ describe "Google Cloud Spanner API samples" do
     expect(data_definition_statements).to include(match "version_retention_period = '7d'")
   end
 
+  example "create_database_with_encryption_key" do
+    expect(@instance.databases.map(&:database_id)).not_to include @database_id
+
+    kms_key_name = "projects/#{@project_id}/locations/us-central1/keyRings/spanner-test-keyring/cryptoKeys/spanner-test-cmek"
+
+    capture do
+      create_database_with_encryption_key project_id:  @project_id,
+                                          instance_id: @instance.instance_id,
+                                          database_id: @database_id,
+                                          kms_key_name: kms_key_name
+    end
+
+    expect(captured_output).to include(
+      "Database #{@database_id} created with encryption key #{kms_key_name}"
+    )
+  end
 
   example "create table with timestamp column" do
     database = create_singers_albums_database
@@ -1526,6 +1542,35 @@ describe "Google Cloud Spanner API samples" do
     expect(@test_backup).not_to be nil
   end
 
+  example "create backup with encryptio key" do
+    cleanup_backup_resources
+    database = create_database_with_data
+
+    client = @spanner.client @instance.instance_id, database.database_id
+    kms_key_name = "projects/#{@project_id}/locations/us-central1/keyRings/spanner-test-keyring/cryptoKeys/spanner-test-cmek"
+
+    capture do
+      create_backup_with_encryption_key project_id:   @project_id,
+                                        instance_id:  @instance.instance_id,
+                                        database_id:  database.database_id,
+                                        backup_id:    @backup_id,
+                                        kms_key_name: kms_key_name
+    end
+
+    expect(captured_output).to include(
+      "Backup operation in progress"
+    )
+    expect(captured_output).to match(
+      /Backup #{@backup_id} of size \d+ bytes was created at/
+    )
+    expect(captured_output).to match(
+      /using encryption key #{kms_key_name}/
+    )
+
+    @test_backup = @instance.backup @backup_id
+    expect(@test_backup).not_to be nil
+  end
+
   example "restore backup" do
     backup = create_backup_with_data
 
@@ -1541,6 +1586,29 @@ describe "Google Cloud Spanner API samples" do
     )
     expect(captured_output).to match(
       /Database #{@database_id} was restored to #{@restored_database_id} from backup #{backup.backup_id} with version time/
+    )
+
+    @test_database = @instance.database @restored_database_id
+    expect(@test_database).not_to be nil
+  end
+
+  example "restore database with encryption key" do
+    backup = create_backup_with_data
+    kms_key_name = "projects/#{@project_id}/locations/us-central1/keyRings/spanner-test-keyring/cryptoKeys/spanner-test-cmek"
+
+    capture do
+      restore_database_with_encryption_key project_id:   @project_id,
+                                           instance_id:  @instance.instance_id,
+                                           database_id:  @restored_database_id,
+                                           backup_id:    backup.backup_id,
+                                           kms_key_name: kms_key_name
+    end
+
+    expect(captured_output).to include(
+      "Waiting for restore backup operation to complete"
+    )
+    expect(captured_output).to match(
+      /Database #{@database_id} was restored to #{@restored_database_id} from backup #{backup.backup_id} using encryption key #{kms_key_name}/
     )
 
     @test_database = @instance.database @restored_database_id
