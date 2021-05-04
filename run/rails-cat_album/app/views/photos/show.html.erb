@@ -1,0 +1,11 @@
+
+<%= image_tag(@photo.image) %>
+<br>
+<%= @photo.caption %>
+<br>
+
+<%= link_to 'Edit', edit_photo_path(@photo) %> |
+<%= link_to 'Back', photos_path %> | 
+<%= link_to 'Destroy', @photo, method: :delete, data: { confirm: 'Are you sure?' } %>
+
+

@@ -1,0 +1,36 @@
+<h4>Add a photo</h4>
+
+<%= form_for @photo, url: {action: "create"}, html: {class: "nifty_form"} do |form| %>
+
+<div class="row">
+  <div class="file-field input-field col s6">
+     <div class="btn blue darken-2">
+        <span>File</span>
+        <%= form.file_field :image %>
+      </div>
+    <div class="file-path-wrapper">
+      <input class="file-path validate" type="text">
+    </div>
+  </div>
+  <div class="col s6">
+  </div>
+</div>
+
+<div class="row">
+  <div class="input-field col s6">
+    <%= form.label :caption %>
+    <%= form.text_field :caption, size: 50, class: "validate" %>
+  </div>
+  <div class="col s6">
+  </div>
+</div>
+
+  <button class="btn waves-effect waves-light blue darken-2" type="commit" name="action">Submit
+    <i class="material-icons left">send</i>
+  </button>
+
+  <%= link_to('Cancel', photos_path, class:"waves-effect waves-light btn-flat") -%>
+
+  </div>
+
+<% end %>
