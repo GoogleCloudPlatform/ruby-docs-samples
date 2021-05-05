@@ -3,6 +3,7 @@
   <% if @photos.empty? %>
     <p>Album is empty. Click on "New Photo" to add a photo.</p>
   <% end %>
+  
   <% @photos.each do |photo| %>
     <a class"img_a" href="<%= photo_path(photo) %>">
       <figure>
