@@ -1,33 +1,27 @@
-<h4>Add a photo</h4>
+<div class="container">
+  <h4>Add a photo</h4>
 
-<%= form_for @photo, url: {action: "create"}, html: {class: "nifty_form"} do |form| %>
+  <%= form_for @photo, url: {action: "create"}, html: {class: "nifty_form"} do |form| %>
 
-<div class:"row">
-  <div class:"file-field input-field col s6">
-     <div class: "btn blue darken-2">
-        <span>File</span>
+    <div class="row">
+      <div class= "btn blue darken-2">
+        <%= form.label :file %>
         <%= form.file_field :image %>
       </div>
-  </div>
-  <div class:"col s6">
-  </div>
+    </div>
+
+    <div class="row">
+      <div class="input-field col s6">
+        <%= form.label :caption %>
+        <%= form.text_field :caption, size: 50, class: "validate" %>
+      </div>
+    </div>
+
+    <button class="btn btn-success" type="commit" name="action">
+      Submit
+    </button>
+
+    <%= link_to('Cancel', photos_path) %>
+
+  <% end %>
 </div>
-
-<div class:"row">
-  <div class:"input-field col s6">
-    <%= form.label :caption %>
-    <%= form.text_field :caption, size: 50, class: "validate" %>
-  </div>
-  <div class:"col s6">
-  </div>
-</div>
-
-  <button class:"btn btn-success" type:"commit" name:"action">
-    Submit
-  </button>
-
-  <%= link_to('Cancel', photos_path) -%>
-
-  </div>
-
-<% end %>

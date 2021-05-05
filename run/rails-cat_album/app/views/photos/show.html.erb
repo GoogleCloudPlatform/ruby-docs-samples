@@ -1,11 +1,18 @@
+<div>
+  <h4>Photo detail</h4>
 
-<%= image_tag(@photo.image) %>
-<br>
-<%= @photo.caption %>
-<br>
 
-<%= link_to 'Edit', edit_photo_path(@photo), class:"btn btn-light" %> |
-<%= link_to 'Back', photos_path, class:"btn btn-light" %> | 
-<%= link_to 'Destroy', @photo, method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-danger" %>
+  <a class="img_a" href="<%= @photo %>">
+      <figure>
+        <%= image_tag(url_for(@photo.image)) %>
+        <figcaption><%= @photo.caption || '-' %></figcaption>
+      </figure>
+  </a>
 
+  <div class="show-options">
+    <%= link_to 'Edit', edit_photo_path(@photo), class:"btn btn-light" %>
+    <%= link_to 'Back', photos_path, class:"btn btn-light" %>
+    <%= link_to 'Destroy', @photo, method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-danger" %>
+  </div>
+</div>
 

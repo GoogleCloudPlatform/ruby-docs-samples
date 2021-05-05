@@ -3,7 +3,6 @@
 // You can use Sass (SCSS) here: https://sass-lang.com/
 
 body {
-  width: 90%;
   margin: 30px auto;
 }
 
@@ -78,4 +77,15 @@ img {
   text-align: left;
   font-size: 13px;
   padding-top: 100px;
+}
+
+.show-options {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 1em;
+  flex-direction: column;
+}
+
+.show-content {
+  text-align: center;
 }
