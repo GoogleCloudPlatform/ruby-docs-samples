@@ -1,12 +1,13 @@
-<p id="notice"><%= notice %></p>
 
-<h3>Photos</h3>
+
+<%
+=begin %>
 
 <table>
   <tbody>
     <% @photos.each do |photo| %>
       <tr>
-        <td><%= image_tag(url_for(photo.image), class: 'img_img') %></td>
+        <td><%= image_tag(url_for(photo.image), class: 'img') %></td>
         <td><%= photo.caption %></td>
         <td><%= link_to 'Show', photo, class:"btn btn-light" %></td>
         <td><%= link_to 'Edit', edit_photo_path(photo), class:"btn btn-light" %></td>
@@ -15,6 +16,24 @@
     <% end %>
   </tbody>
 </table>
+
+<%
+=end %>
+
+
+<div id="container">
+<% if @photos.empty? %>
+  <p>Album is empty. Click on "New Photo" to add a photo.</p>
+<% end %>
+<% for photo in @photos %>
+  <a class"img_a" href="<%= photo_path(photo) %>">
+    <figure>
+      <%= image_tag(url_for(photo.image), class: 'img_img') %>
+      <figcaption><%= photo.caption || '-' %></figcaption>
+    </figure>
+  </a>
+<% end %>
+</div>
 
 <br>
 
