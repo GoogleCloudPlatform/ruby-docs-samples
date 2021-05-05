@@ -2,5 +2,7 @@
 
 <%= render 'form', photo: @photo %>
 
-<%= link_to 'Show', @photo, class:"btn btn-success"  %>
-<%= link_to 'Back', photos_path, class:"btn btn-success"  %>
+<div class="show-options">
+  <%= link_to 'Show', @photo, class:"btn btn-primary" %>
+  <%= link_to 'Back', photos_path, class:"btn btn-primary"  %>
+</div>

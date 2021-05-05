@@ -1,7 +1,6 @@
 <div>
   <h4>Photo detail</h4>
 
-
   <a class="img_a" href="<%= @photo %>">
       <figure>
         <%= image_tag(url_for(@photo.image)) %>
@@ -15,4 +14,3 @@
     <%= link_to 'Destroy', @photo, method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-danger" %>
   </div>
 </div>
-
