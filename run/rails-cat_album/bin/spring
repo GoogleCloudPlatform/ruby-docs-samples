@@ -8,7 +8,9 @@ if !defined?(Spring) && [nil, "development", "test"].include?(ENV["RAILS_ENV"])
     Gem.use_paths Gem.dir, Bundler.bundle_path.to_s, *Gem.path
     gem "spring", spring.version
     require "spring/binstub"
-  rescue Gem::LoadError
-    # Ignore when Spring is not installed.
+    begin
+    rescue Gem::LoadError
+      # Ignore when Spring is not installed.
+    end
   end
 end
