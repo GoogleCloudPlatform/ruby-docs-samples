@@ -31,7 +31,7 @@ m = Module.new do
         bundler_version = a
       end
       next unless a =~ /\A--bundler(?:[= ](#{Gem::Version::VERSION_PATTERN}))?\z/
-      bundler_version = $1
+      bundler_version = Regexp.last_match 1
       update_index = i
     end
     bundler_version
@@ -41,35 +41,35 @@ m = Module.new do
     gemfile = ENV["BUNDLE_GEMFILE"]
     return gemfile if gemfile && !gemfile.empty?
 
-    File.expand_path("../../Gemfile", __FILE__)
+    File.expand_path "../Gemfile", __dir__
   end
 
   def lockfile
     lockfile =
-      case File.basename(gemfile)
+      case File.basename gemfile
       when "gems.rb" then gemfile.sub(/\.rb$/, gemfile)
       else "#{gemfile}.lock"
       end
-    File.expand_path(lockfile)
+    File.expand_path lockfile
   end
 
   def lockfile_version
-    return unless File.file?(lockfile)
-    lockfile_contents = File.read(lockfile)
+    return unless File.file? lockfile
+    lockfile_contents = File.read lockfile
     return unless lockfile_contents =~ /\n\nBUNDLED WITH\n\s{2,}(#{Gem::Version::VERSION_PATTERN})\n/
-    Regexp.last_match(1)
+    Regexp.last_match 1
   end
 
   def bundler_version
     @bundler_version ||=
       env_var_version || cli_arg_version ||
-        lockfile_version
+      lockfile_version
   end
 
   def bundler_requirement
     return "#{Gem::Requirement.default}.a" unless bundler_version
 
-    bundler_gem_version = Gem::Version.new(bundler_version)
+    bundler_gem_version = Gem::Version.new bundler_version
 
     requirement = bundler_gem_version.approximate_recommendation
 

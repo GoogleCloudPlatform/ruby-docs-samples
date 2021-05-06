@@ -2,7 +2,7 @@ require "test_helper"
 
 class PhotosControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @photo = photos(:one)
+    @photo = photos :one
   end
 
   test "should get index" do
@@ -16,7 +16,7 @@ class PhotosControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create photo" do
-    assert_difference('Photo.count') do
+    assert_difference "Photo.count" do
       post photos_url, params: { photo: { caption: @photo.caption } }
     end
 
@@ -39,7 +39,7 @@ class PhotosControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should destroy photo" do
-    assert_difference('Photo.count', -1) do
+    assert_difference("Photo.count", -1) do
       delete photo_url(@photo)
     end
 

@@ -1,5 +1,5 @@
 class PhotosController < ApplicationController
-  before_action :set_photo, only: %i[ show edit update destroy ]
+  before_action :set_photo, only: [:show, :edit, :update, :destroy]
 
   def index
     @photos = Photo.all
@@ -16,22 +16,22 @@ class PhotosController < ApplicationController
   end
 
   def create
-    @photo = Photo.new(photo_params)
+    @photo = Photo.new photo_params
     image = params[:photo][:image]
     caption = params[:photo][:caption]
 
     if @photo.save
-      @photo.image.attach(image) if image
-      redirect_to photos_path, notice: 'Photo was successfully uploaded.'
+      @photo.image.attach image if image
+      redirect_to photos_path, notice: "Photo was successfully uploaded."
     else
-      flash.now[:alert] = 'Photo could not be saved.'
+      flash.now[:alert] = "Photo could not be saved."
       render :new
     end
   end
 
   def update
     respond_to do |format|
-      if @photo.update(photo_params)
+      if @photo.update photo_params
         format.html { redirect_to @photo, notice: "Photo was successfully updated." }
         format.json { render :show, status: :ok, location: @photo }
       else
@@ -48,11 +48,12 @@ class PhotosController < ApplicationController
   end
 
   private
-    def set_photo
-      @photo = Photo.find(params[:id])
-    end
 
-    def photo_params
-      params.require(:photo).permit(:caption)
-    end
+  def set_photo
+    @photo = Photo.find params[:id]
+  end
+
+  def photo_params
+    params.require(:photo).permit(:caption)
+  end
 end

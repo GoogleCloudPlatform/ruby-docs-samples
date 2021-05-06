@@ -2,7 +2,7 @@ require "application_system_test_case"
 
 class PhotosTest < ApplicationSystemTestCase
   setup do
-    @photo = photos(:one)
+    @photo = photos :one
   end
 
   test "visiting the index" do
