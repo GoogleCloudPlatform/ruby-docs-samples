@@ -72,6 +72,8 @@ def dirs
   entries.uniq!
   if RUBY_VERSION.start_with? "2.4"
     entries.delete_if { |dir| dir.include? "/ruby-docs-samples/functions" }
+  elsif !RUBY_VERSION.start_with? "2.7"
+    entries.delete_if { |dir| dir.include? "/ruby-docs-samples/run/rails-cat_album" }
   end
   entries
 end
