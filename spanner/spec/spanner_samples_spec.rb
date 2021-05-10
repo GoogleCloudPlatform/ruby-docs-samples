@@ -148,6 +148,22 @@ describe "Google Cloud Spanner API samples" do
     )
   end
 
+  example "create_instance_with_processing_units" do
+    @created_instance_id = "rb-test-#{seed}"
+
+    capture do
+      create_instance project_id:  @project_id,
+                      instance_id: @created_instance_id
+    end
+
+    expect(captured_output).to include(
+      "Waiting for create instance operation to complete"
+    )
+    expect(captured_output).to include(
+      "Instance #{@created_instance_id} has 1000 processing units."
+    )
+  end
+
   example "create_database" do
     expect(@instance.databases.map(&:database_id)).not_to include @database_id
 
