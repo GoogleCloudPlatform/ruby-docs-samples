@@ -33,8 +33,8 @@ describe "functions_firebase_firestore" do
       end
 
       assert_includes err, "Function triggered by change to: #{source}"
-      assert_match(/Old value: {\"a\"=>1}/, err)
-      assert_match(/New value: {\"b\"=>2}/, err)
+      assert_match(/Old value: {"a"=>1}/, err)
+      assert_match(/New value: {"b"=>2}/, err)
     end
   end
 end

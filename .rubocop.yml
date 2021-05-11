@@ -8,7 +8,7 @@ AllCops:
 Lint/NonLocalExitFromIterator:
   Exclude:
     - "functions/**/*.rb"
-Lint/HandleExceptions:
+Lint/SuppressedException:
   Exclude:
     - "run/rails-cat_album/bin/spring"
 Lint/RescueException:
@@ -25,7 +25,7 @@ Metrics/BlockLength:
   Enabled: false
 Metrics/CyclomaticComplexity:
   Enabled: false
-Metrics/LineLength:
+Layout/LineLength:
   Enabled: false
 Metrics/MethodLength:
   Enabled: false

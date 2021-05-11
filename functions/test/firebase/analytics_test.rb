@@ -29,11 +29,11 @@ describe "functions_firebase_analytics" do
             "timestampMicros" => "1234567890123456"
           }
         ],
-        "userDim"  => {
+        "userDim" => {
           "deviceInfo" => {
             "deviceModel" => "Federation Tricorder"
           },
-          "geoInfo"    => {
+          "geoInfo" => {
             "city"    => "Auckland",
             "country" => "New Zealand"
           }

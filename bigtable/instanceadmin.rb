@@ -35,7 +35,7 @@ def create_prod_instance instance_id, cluster_id, cluster_location
   job = bigtable.create_instance(
     instance_id,
     display_name: "Sample production instance",
-    labels:       { "env": "production" },
+    labels:       { env: "production" },
     type:         :PRODUCTION # Optional as default type is :PRODUCTION
   ) do |clusters|
     clusters.add cluster_id, cluster_location, nodes: 3, storage_type: :SSD
@@ -80,7 +80,7 @@ def create_dev_instance instance_id, cluster_id, cluster_location
   job = bigtable.create_instance(
     instance_id,
     display_name: "Sample development instance",
-    labels:       { "env": "development" },
+    labels:       { env: "development" },
     type:         :DEVELOPMENT
   ) do |clusters|
     clusters.add cluster_id, cluster_location, storage_type: :HDD

@@ -12,6 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-port ENV.fetch("PORT") { 8080 }
-thread_count = ENV.fetch("THREAD_COUNT") { 8 }.to_i
+port ENV.fetch("PORT", 8080)
+thread_count = ENV.fetch("THREAD_COUNT", 8).to_i
 threads thread_count, thread_count
