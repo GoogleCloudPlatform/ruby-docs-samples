@@ -18,6 +18,6 @@ gem "google-api-client", "~> 0.24.2"
 
 group :test do
   gem "rspec"
-  gem "rspec-retry"
   gem "rspec_junit_formatter"
+  gem "rspec-retry"
 end

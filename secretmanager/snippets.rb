@@ -412,10 +412,10 @@ def update_secret project_id:, secret_id:
 
   # Create the secret.
   secret = client.update_secret(
-    secret:      {
-      name:   name,
+    secret: {
+      name: name,
       labels: {
-        "secretmanager": "rocks"
+        secretmanager: "rocks"
       }
     },
     update_mask: {

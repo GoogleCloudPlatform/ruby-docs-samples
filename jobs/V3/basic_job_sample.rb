@@ -62,7 +62,7 @@ def job_discovery_create_job project_id:, job_to_be_created:
     create_job_request = jobs::CreateJobRequest.new job: job_to_be_created
     job_created = talent_solution_client.create_job project_id, create_job_request
     puts "Job created: #{job_created.to_json}"
-    return job_created
+    job_created
   rescue StandardError => e
     puts "Exception occurred while creating job: #{e}"
   end
@@ -84,7 +84,7 @@ def job_discovery_get_job job_name:
   begin
     job_got = talent_solution_client.get_project_job job_name
     puts "Job got: #{job_got.to_json}"
-    return job_got
+    job_got
   rescue StandardError => e
     puts "Exception occurred while getting job: #{e}"
   end
@@ -108,7 +108,7 @@ def job_discovery_update_job job_name:, job_to_be_updated:
     update_job_request = jobs::UpdateJobRequest.new job: job_to_be_updated
     job_updated = talent_solution_client.patch_project_job job_name, update_job_request
     puts "Job updated: #{job_updated.to_json}"
-    return job_updated
+    job_updated
   rescue StandardError => e
     puts "Exception occurred while updating job: #{e}"
   end
@@ -136,7 +136,7 @@ def job_discovery_update_job_with_field_mask job_name:, field_mask:, job_to_be_u
     job_updated = talent_solution_client.patch_project_job job_name, update_job_request
     puts "Job updated with filedMask #{update_job_request.update_mask}. "
     puts "Updated job: #{job_updated.to_json}"
-    return job_updated
+    job_updated
   rescue StandardError => e
     puts "Exception occurred while updating job with field mask: #{e}"
   end

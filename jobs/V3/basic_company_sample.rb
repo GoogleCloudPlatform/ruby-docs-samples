@@ -50,7 +50,7 @@ def job_discovery_create_company project_id:, company_to_be_created:
     create_company_request = jobs::CreateCompanyRequest.new company: company_to_be_created
     company_created = talent_solution_client.create_company project_id, create_company_request
     puts "Company created: #{company_created.to_json}"
-    return company_created
+    company_created
   rescue StandardError => e
     puts "Exception occurred while creating company: #{e}"
   end
@@ -74,7 +74,7 @@ def job_discovery_get_company company_name:
   begin
     company_got = talent_solution_client.get_project_company company_name
     puts "Company got: #{company_got.to_json}"
-    return company_got
+    company_got
   rescue StandardError => e
     puts "Exception occurred while getting company: #{e}"
   end
@@ -101,7 +101,7 @@ def job_discovery_update_company company_name:, company_updated:
     company_updated = talent_solution_client
                       .patch_project_company(company_name, update_company_request)
     puts "Company updated: #{company_updated.to_json}"
-    return company_updated
+    company_updated
   rescue StandardError => e
     puts "Exception occurred while updating company: #{e}"
   end
@@ -131,7 +131,7 @@ def job_discovery_update_company_with_field_mask company_name:, field_mask:, com
                       .patch_project_company(company_name, update_company_request)
     puts "Company updated with filedMask #{update_company_request.update_mask}. "
     puts "Updated company: #{company_updated.to_json}"
-    return company_updated
+    company_updated
   rescue StandardError => e
     puts "Exception occurred while updating company with fieldMask: #{e}"
   end

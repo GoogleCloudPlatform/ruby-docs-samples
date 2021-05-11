@@ -581,8 +581,8 @@ def query_nested_struct_field project_id:, instance_id:, database_id:
   }
 
   client.execute(
-    "SELECT SingerId, @song_info.SongName " +
-    "FROM Singers WHERE STRUCT<FirstName STRING, LastName STRING>(FirstName, LastName) " +
+    "SELECT SingerId, @song_info.SongName " \
+    "FROM Singers WHERE STRUCT<FirstName STRING, LastName STRING>(FirstName, LastName) " \
     "IN UNNEST(@song_info.ArtistNames)",
     params: { song_info: song_info_struct }
   ).rows.each do |row|

@@ -5,10 +5,18 @@ AllCops:
     - "**/acceptance/**"
     - "**/spec/**"
     - "Rakefile"
+Layout/LineLength:
+  Enabled: false
+Lint/ConstantDefinitionInBlock:
+  Exclude:
+    - "iot/iot.rb"
+Lint/DuplicateRequire:
+  Exclude:
+    - "stackdriver/*.*"
 Lint/NonLocalExitFromIterator:
   Exclude:
     - "functions/**/*.rb"
-Lint/HandleExceptions:
+Lint/SuppressedException:
   Exclude:
     - "run/rails-cat_album/bin/spring"
 Lint/RescueException:
@@ -24,8 +32,6 @@ Metrics/AbcSize:
 Metrics/BlockLength:
   Enabled: false
 Metrics/CyclomaticComplexity:
-  Enabled: false
-Metrics/LineLength:
   Enabled: false
 Metrics/MethodLength:
   Enabled: false
