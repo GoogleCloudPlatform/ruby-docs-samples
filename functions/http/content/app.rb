@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# rubocop:disable Lint/DuplicateBranch
 # [START functions_http_content]
 require "functions_framework"
 require "json"
@@ -43,3 +44,4 @@ FunctionsFramework.http "http_content" do |request|
   "Hello #{name}!"
 end
 # [END functions_http_content]
+# rubocop:enable Lint/DuplicateBranch

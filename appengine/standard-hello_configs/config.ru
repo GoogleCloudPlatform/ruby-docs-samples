@@ -13,6 +13,6 @@
 # limitations under the License.
 
 # [START gae_standard_configs_rackup]
-require "./app.rb"
+require "./app"
 run Sinatra::Application
 # [END gae_standard_configs_rackup]
