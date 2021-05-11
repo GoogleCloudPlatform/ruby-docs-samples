@@ -5,6 +5,8 @@ AllCops:
     - "**/acceptance/**"
     - "**/spec/**"
     - "Rakefile"
+Layout/LineLength:
+  Enabled: false
 Lint/NonLocalExitFromIterator:
   Exclude:
     - "functions/**/*.rb"
@@ -24,8 +26,6 @@ Metrics/AbcSize:
 Metrics/BlockLength:
   Enabled: false
 Metrics/CyclomaticComplexity:
-  Enabled: false
-Layout/LineLength:
   Enabled: false
 Metrics/MethodLength:
   Enabled: false
