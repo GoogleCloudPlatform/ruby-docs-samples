@@ -8,6 +8,9 @@ AllCops:
 Lint/NonLocalExitFromIterator:
   Exclude:
     - "functions/**/*.rb"
+Lint/HandleExceptions:
+  Exclude:
+    - "run/rails-cat_album/bin/spring"
 Lint/RescueException:
   Exclude:
     - "pubsub/subscriptions.rb"

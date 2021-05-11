@@ -1,0 +1,17 @@
+<div class="grid-container">
+  <% if @photos.empty? %>
+    <p>Album is empty. Click on "New Photo" to add a photo.</p>
+  <% else %>
+    <% @photos.each do |photo| %>
+      <div class="card" style="width: 18rem;">
+        <div class="card-body">
+          <img class="card-img-top" src="<%= url_for(photo.image) %>" alt="Card image cap">
+          <h5 class="card-title"><%= photo.caption %></h5>
+          <%= link_to 'Show', photo_path(photo), class:"btn btn-primary" %>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+</div>
+
+<%= link_to 'New Photo', new_photo_path, class:"btn btn-info show" %>

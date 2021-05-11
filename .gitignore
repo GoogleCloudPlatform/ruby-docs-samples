@@ -5,3 +5,4 @@ vendor/
 .vscode/
 sponge_log.xml
 /Gemfile.lock
+.DS_Store
