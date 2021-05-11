@@ -7,6 +7,12 @@ AllCops:
     - "Rakefile"
 Layout/LineLength:
   Enabled: false
+Lint/ConstantDefinitionInBlock:
+  Exclude:
+    - "iot/iot.rb"
+Lint/DuplicateRequire:
+  Exclude:
+    - "stackdriver/*.*"
 Lint/NonLocalExitFromIterator:
   Exclude:
     - "functions/**/*.rb"

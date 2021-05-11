@@ -26,12 +26,12 @@ jobs_client.authorization = Google::Auth.get_application_default(
 )
 
 # ProjectId to get company list
-DEFAULT_PROJECT_ID = "projects/" + ENV["GOOGLE_CLOUD_PROJECT"]
+DEFAULT_PROJECT_ID = "projects/#{ENV['GOOGLE_CLOUD_PROJECT']}".freeze
 # Request list of companies
 response = jobs_client.list_project_companies DEFAULT_PROJECT_ID
 
 # Print the request id
-puts "Request id : " + response.metadata.request_id
+puts "Request id : #{response.metadata.request_id}"
 
 # List all companies for your project
 puts "Companies: "

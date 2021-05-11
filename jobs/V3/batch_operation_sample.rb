@@ -195,7 +195,7 @@ def job_discovery_list_jobs project_id:, company_name:
   begin
     job_got = talent_solution_client.list_project_jobs project_id, filter: "companyName = \"#{company_name}\""
     puts "Job got: #{job_got.to_json}"
-    return job_got
+    job_got
   rescue StandardError => e
     puts "Exception occurred while getting job: #{e}"
   end
@@ -218,8 +218,8 @@ def run_batch_operation_sample arguments
                                                 project_id:   default_project_id
     jobs_got = list_job_response.jobs
     jobs_got.each do |job|
-      job.title = job.title + " updated"
-      job.description = job.description + " updated"
+      job.title = "#{job.title} updated"
+      job.description = "#{job.description} updated"
     end
     job_discovery_batch_update_jobs job_to_be_updated: jobs_got
   when "batch_update_jobs_with_mask"
@@ -227,7 +227,7 @@ def run_batch_operation_sample arguments
                                                 project_id:   default_project_id
     jobs_got = list_job_response.jobs
     jobs_got.each do |job|
-      job.title = job.title + " updated with mask"
+      job.title = "#{job.title} updated with mask"
     end
     job_discovery_batch_update_jobs_with_mask job_to_be_updated: jobs_got
   when "batch_delete_jobs"

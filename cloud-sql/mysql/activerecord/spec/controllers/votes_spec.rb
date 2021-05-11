@@ -46,9 +46,6 @@ RSpec.describe VotesController, type: :controller do
       get :index
       expect(response.body).to match(/SPACES are winning by 2 votes/)
     end
-
-    it "displays the most recent 5 votes" do
-    end
   end
 
   describe "create" do
