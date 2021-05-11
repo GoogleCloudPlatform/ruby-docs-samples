@@ -19,9 +19,9 @@
 $create_registry = lambda do |project_id:, location_id:, registry_id:, pubsub_topic:|
   # [START iot_create_registry]
   # project_id   = "Your Google Cloud project ID"
-  # location_id  = "The Cloud region that you created the registry in"
-  # registry_id  = "The Google Cloud IoT Core device registry identifier"
-  # pubsub_topic = "The Google Cloud PubSub topic to use for this registry"
+  # location_id  = "The Cloud region that you created the registrar in"
+  # registry_id  = "The Google Cloud IoT Core device registrar identifier"
+  # pubsub_topic = "The Google Cloud PubSub topic to use for this registrar"
 
   require "google/apis/cloudiot_v1"
 
@@ -32,27 +32,27 @@ $create_registry = lambda do |project_id:, location_id:, registry_id:, pubsub_to
     "https://www.googleapis.com/auth/cloud-platform"
   )
 
-  # The project / location where the registry is created.
+  # The project / location where the registrar is created.
   parent = "projects/#{project_id}/locations/#{location_id}"
 
-  registry = Cloudiot::DeviceRegistry.new
-  registry.id = registry_id
-  registry.event_notification_configs = [Cloudiot::EventNotificationConfig.new]
-  registry.event_notification_configs[0].pubsub_topic_name = pubsub_topic
+  registrar = Cloudiot::DeviceRegistry.new
+  registrar.id = registry_id
+  registrar.event_notification_configs = [Cloudiot::EventNotificationConfig.new]
+  registrar.event_notification_configs[0].pubsub_topic_name = pubsub_topic
 
-  registry = iot_client.create_project_location_registry(
-    parent, registry
+  registrar = iot_client.create_project_location_registry(
+    parent, registrar
   )
 
-  puts "Created registry: #{registry.name}"
+  puts "Created registrar: #{registrar.name}"
   # [END iot_create_registry]
 end
 
 $delete_registry = lambda do |project_id:, location_id:, registry_id:|
   # [START iot_delete_registry]
   # project_id  = "Your Google Cloud project ID"
-  # location_id = "The Cloud region that you created the registry in"
-  # registry_id = "The Google Cloud IoT Core device registry identifier"
+  # location_id = "The Cloud region that you created the registrar in"
+  # registry_id = "The Google Cloud IoT Core device registrar identifier"
 
   require "google/apis/cloudiot_v1"
 
@@ -67,15 +67,15 @@ $delete_registry = lambda do |project_id:, location_id:, registry_id:|
   resource = "projects/#{project_id}/locations/#{location_id}/registries/#{registry_id}"
 
   result = iot_client.delete_project_location_registry resource
-  puts "Deleted registry: #{registry_id}"
+  puts "Deleted registrar: #{registry_id}"
   # [END iot_delete_registry]
 end
 
 $get_iam_policy = lambda do |project_id:, location_id:, registry_id:|
   # [START iot_get_iam_policy]
   # project_id  = "Your Google Cloud project ID"
-  # location_id = "The Cloud region the registry is located in"
-  # registry_id = "The registry to get an IAM policy for"
+  # location_id = "The Cloud region the registrar is located in"
+  # registry_id = "The registrar to get an IAM policy for"
 
   require "google/apis/cloudiot_v1"
 
@@ -108,8 +108,8 @@ end
 $get_registry = lambda do |project_id:, location_id:, registry_id:|
   # [START iot_get_registry]
   # project_id  = "Your Google Cloud project ID"
-  # location_id = "The Cloud region that you created the registry in"
-  # registry_id = "The Google Cloud IoT Core device registry identifier"
+  # location_id = "The Cloud region that you created the registrar in"
+  # registry_id = "The Google Cloud IoT Core device registrar identifier"
 
   require "google/apis/cloudiot_v1"
 
@@ -124,16 +124,16 @@ $get_registry = lambda do |project_id:, location_id:, registry_id:|
   resource = "projects/#{project_id}/locations/#{location_id}/registries/#{registry_id}"
 
   # List the devices in the provided region
-  registry = iot_client.get_project_location_registry(
+  registrar = iot_client.get_project_location_registry(
     resource
   )
 
-  puts "#{registry.id}:"
-  puts "\tHTTP Config: #{registry.http_config.http_enabled_state}"
-  puts "\tMQTT Config: #{registry.mqtt_config.mqtt_enabled_state}"
-  puts "\tName: #{registry.name}"
-  if registry.event_notification_configs
-    registry.event_notification_configs.each do |config|
+  puts "#{registrar.id}:"
+  puts "\tHTTP Config: #{registrar.http_config.http_enabled_state}"
+  puts "\tMQTT Config: #{registrar.mqtt_config.mqtt_enabled_state}"
+  puts "\tName: #{registrar.name}"
+  if registrar.event_notification_configs
+    registrar.event_notification_configs.each do |config|
       puts "\tTopic: #{config.pubsub_topic_name}"
     end
   else
@@ -166,7 +166,7 @@ $list_registries = lambda do |project_id:, location_id:|
 
   puts "Registries:"
   if registries.device_registries && registries.device_registries.any?
-    registries.device_registries.each { |registry| puts "\t#{registry.id}" }
+    registries.device_registries.each { |registrar| puts "\t#{registrar.id}" }
   else
     puts "\tNo device registries found in this region for your project."
   end
@@ -176,8 +176,8 @@ end
 $set_iam_policy = lambda do |project_id:, location_id:, registry_id:, member:, role:|
   # [START iot_set_iam_policy]
   # project_id  = "Your Google Cloud project ID"
-  # location_id = "The Cloud region the registry is located in"
-  # registry_id = "The registry to set an IAM policy for"
+  # location_id = "The Cloud region the registrar is located in"
+  # registry_id = "The registrar to set an IAM policy for"
   # member      = "The member to add to the policy bindings"
   # role        = "The role for the binding the policy is set to"
 
@@ -221,8 +221,8 @@ end
 $create_es_device = lambda do |project_id:, location_id:, registry_id:, device_id:, cert_path:|
   # [START iot_create_es_device]
   # project_id  = "Your Google Cloud project ID"
-  # location_id = "The Cloud region the registry is located in"
-  # registry_id = "The registry to create a device in"
+  # location_id = "The Cloud region the registrar is located in"
+  # registry_id = "The registrar to create a device in"
   # device_id   = "The identifier of the device to create"
   # cert_path   = "The path to the EC certificate"
 
@@ -264,8 +264,8 @@ end
 $create_rsa_device = lambda do |project_id:, location_id:, registry_id:, device_id:, cert_path:|
   # [START iot_create_rsa_device]
   # project_id  = "Your Google Cloud project ID"
-  # location_id = "The Cloud region the registry is located in"
-  # registry_id = "The registry to create a device in"
+  # location_id = "The Cloud region the registrar is located in"
+  # registry_id = "The registrar to create a device in"
   # device_id   = "The identifier of the device to create"
   # cert_path   = "The path to the RSA certificate"
 
@@ -304,8 +304,8 @@ end
 $create_unauth_device = lambda do |project_id:, location_id:, registry_id:, device_id:|
   # [START iot_create_unauth_device]
   # project_id  = "Your Google Cloud project ID"
-  # location_id = "The Cloud region the registry is located in"
-  # registry_id = "The registry to create a device in"
+  # location_id = "The Cloud region the registrar is located in"
+  # registry_id = "The registrar to create a device in"
   # device_id   = "The identifier of the device to create"
 
   require "google/apis/cloudiot_v1"
@@ -337,8 +337,8 @@ end
 $delete_device = lambda do |project_id:, location_id:, registry_id:, device_id:|
   # [START iot_delete_device]
   # project_id  = "Your Google Cloud project ID"
-  # location_id = "The Cloud region the registry is located in"
-  # registry_id = "The registry to create a device in"
+  # location_id = "The Cloud region the registrar is located in"
+  # registry_id = "The registrar to create a device in"
   # device_id   = "The identifier of the device to delete"
 
   require "google/apis/cloudiot_v1"
@@ -366,8 +366,8 @@ end
 $list_devices = lambda do |project_id:, location_id:, registry_id:|
   # [START iot_list_devices]
   # project_id  = "Your Google Cloud project ID"
-  # location_id = "The Cloud region the registry is located in"
-  # registry_id = "The registry to list devices from"
+  # location_id = "The Cloud region the registrar is located in"
+  # registry_id = "The registrar to list devices from"
 
   require "google/apis/cloudiot_v1"
 
@@ -398,8 +398,8 @@ end
 $get_device = lambda do |project_id:, location_id:, registry_id:, device_id:|
   # [START iot_get_device]
   # project_id  = "Your Google Cloud project ID"
-  # location_id = "The Cloud region the registry is located in"
-  # registry_id = "The registry to get a device from"
+  # location_id = "The Cloud region the registrar is located in"
+  # registry_id = "The registrar to get a device from"
   # device_id   = "The identifier of the device to get"
 
   require "google/apis/cloudiot_v1"
@@ -437,8 +437,8 @@ end
 $get_device_configs = lambda do |project_id:, location_id:, registry_id:, device_id:|
   # [START iot_get_device_configs]
   # project_id  = "Your Google Cloud project ID"
-  # location_id = "The Cloud region the registry is located in"
-  # registry_id = "The registry to get a device from"
+  # location_id = "The Cloud region the registrar is located in"
+  # registry_id = "The registrar to get a device from"
   # device_id   = "The identifier of the device to get configurations for"
 
   require "google/apis/cloudiot_v1"
@@ -467,8 +467,8 @@ end
 $get_device_states = lambda do |project_id:, location_id:, registry_id:, device_id:|
   # [START iot_get_device_state]
   # project_id  = "Your Google Cloud project ID"
-  # location_id = "The Cloud region the registry is located in"
-  # registry_id = "The registry to get device states from"
+  # location_id = "The Cloud region the registrar is located in"
+  # registry_id = "The registrar to get device states from"
   # device_id   = "The identifier of the device to get states for"
 
   require "google/apis/cloudiot_v1"
@@ -501,8 +501,8 @@ end
 $patch_es_device = lambda do |project_id:, location_id:, registry_id:, device_id:, cert_path:|
   # [START iot_patch_es]
   # project_id  = "Your Google Cloud project ID"
-  # location_id = "The Cloud region the registry is located in"
-  # registry_id = "The registry to create a device in"
+  # location_id = "The Cloud region the registrar is located in"
+  # registry_id = "The registrar to create a device in"
   # device_id = "The identifier of the device to patch"
   # cert_path = "The path to the EC certificate"
 
@@ -551,8 +551,8 @@ end
 $patch_rsa_device = lambda do |project_id:, location_id:, registry_id:, device_id:, cert_path:|
   # [START iot_patch_rsa]
   # project_id  = "Your Google Cloud project ID"
-  # location_id = "The Cloud region the registry is located in"
-  # registry_id = "The registry to create a device in"
+  # location_id = "The Cloud region the registrar is located in"
+  # registry_id = "The registrar to create a device in"
   # device_id   = "The identifier of the device to patch"
   # cert_path   = "The path to the RSA certificate"
 
@@ -599,8 +599,8 @@ end
 $send_device_config = lambda do |project_id:, location_id:, registry_id:, device_id:, data:|
   # [START iot_set_device_config]
   # project_id  = "Your Google Cloud project ID"
-  # location_id = "The Cloud region the registry is located in"
-  # registry_id = "The registry to get a device from"
+  # location_id = "The Cloud region the registrar is located in"
+  # registry_id = "The registrar to get a device from"
   # device_id   = "The identifier of the device to set configurations on"
   # data        = "The data, e.g. {fan: on} to send to the device"
 
@@ -629,8 +629,8 @@ end
 $send_device_command = lambda do |project_id:, location_id:, registry_id:, device_id:, data:|
   # [START iot_send_command]
   # project_id  = "Your Google Cloud project ID"
-  # location_id = "The Cloud region the registry is located in"
-  # registry_id = "The registry containing the device to send commands to"
+  # location_id = "The Cloud region the registrar is located in"
+  # registry_id = "The registrar containing the device to send commands to"
   # device_id   = "The identifier of the device to send commands to"
   # data        = "The command, e.g. {move: forward} to send to the device"
 
@@ -660,8 +660,8 @@ end
 $bind_device_to_gateway = lambda do |project_id:, location_id:, registry_id:, gateway_id:, device_id:|
   # [START iot_bind_device_to_gateway]
   # project_id  = "Your Google Cloud project ID"
-  # location_id = "The Cloud region the registry is located in"
-  # registry_id = "The registry to create a device in"
+  # location_id = "The Cloud region the registrar is located in"
+  # registry_id = "The registrar to create a device in"
   # gateway_id  = "The Gateway to bind to"
   # device_id   = "The identifier of the device to bind"
 
@@ -689,8 +689,8 @@ end
 $unbind_device_from_gateway = lambda do |project_id:, location_id:, registry_id:, gateway_id:, device_id:|
   # [START iot_unbind_device_from_gateway]
   # project_id  = "Your Google Cloud project ID"
-  # location_id = "The Cloud region the registry is located in"
-  # registry_id = "The registry to bind a device in"
+  # location_id = "The Cloud region the registrar is located in"
+  # registry_id = "The registrar to bind a device in"
   # gateway_id  = "The Gateway to bind to"
   # device_id   = "The identifier of the device to bind"
 
@@ -718,8 +718,8 @@ end
 $create_gateway = lambda do |project_id:, location_id:, registry_id:, gateway_id:, cert_path:, alg:|
   # [START iot_create_gateway]
   # project_id  = "Your Google Cloud project ID"
-  # location_id = "The Cloud region the registry is located in"
-  # registry_id = "The registry to create a gateway in"
+  # location_id = "The Cloud region the registrar is located in"
+  # registry_id = "The registrar to create a gateway in"
   # gateway_id  = "The identifier of the gateway to create"
   # cert_path   = "The path to the certificate"
   # alg         = "ES256 || RS256"
@@ -774,8 +774,8 @@ end
 $delete_gateway = lambda do |project_id:, location_id:, registry_id:, gateway_id:|
   # [START iot_delete_gateway]
   # project_id  = "Your Google Cloud project ID"
-  # location_id = "The Cloud region the registry is located in"
-  # registry_id = "The registry to create a device in"
+  # location_id = "The Cloud region the registrar is located in"
+  # registry_id = "The registrar to create a device in"
   # gateway_id   = "The identifier of the gateway to delete"
 
   require "google/apis/cloudiot_v1"
@@ -805,8 +805,8 @@ end
 $list_devices_for_gateway = lambda do |project_id:, location_id:, registry_id:, gateway_id:|
   # [START iot_list_devices_for_gateway]
   # project_id  = "Your Google Cloud project ID"
-  # location_id = "The Cloud region for the registry"
-  # registry_id = "The registry to list gateway-bound devices in"
+  # location_id = "The Cloud region for the registrar"
+  # registry_id = "The registrar to list gateway-bound devices in"
   # gateway_id = "The gateway to list devices on"
 
   require "google/apis/cloudiot_v1"
@@ -838,8 +838,8 @@ end
 $list_gateways = lambda do |project_id:, location_id:, registry_id:|
   # [START iot_list_gateways]
   # project_id  = "Your Google Cloud project ID"
-  # location_id = "The Cloud region for the registry"
-  # registry_id = "The registry to list gateways in"
+  # location_id = "The Cloud region for the registrar"
+  # registry_id = "The registrar to list gateways in"
 
   require "google/apis/cloudiot_v1"
 
@@ -866,7 +866,7 @@ $list_gateways = lambda do |project_id:, location_id:, registry_id:|
       end
     end
   else
-    puts "\tNo gateways found in this registry."
+    puts "\tNo gateways found in this registrar."
   end
   # [END iot_list_gateways]
 end
@@ -1059,22 +1059,22 @@ def run_sample arguments
       Usage: bundle exec ruby iot.rb [command] [arguments]
 
       Registry Management Commands:
-        create_registry <location> <registry_id> <pubsub_topic> Create a device registry.
-        delete_registry <location> <registry_id> Delete a device registry.
-        get_registry <location> <registry_id> Get the provided device registry.
-        get_iam_policy <location> <registry_id> Get the IAM policy for a registry.
+        create_registry <location> <registry_id> <pubsub_topic> Create a device registrar.
+        delete_registry <location> <registry_id> Delete a device registrar.
+        get_registry <location> <registry_id> Get the provided device registrar.
+        get_iam_policy <location> <registry_id> Get the IAM policy for a registrar.
         list_registries <location> List the device registries in the provided region.
-        set_iam_policy <location> <registry_id> <member> <role> Set the IAM policy for a registry to a single member / role.
+        set_iam_policy <location> <registry_id> <member> <role> Set the IAM policy for a registrar to a single member / role.
 
       Device Management Commands:
         create_es_device <location> <registry_id> <device_id> <public_key_path> Create a device with an ES256 credential
         create_rsa_device <location> <registry_id> <device_id> <public_key_path> Create a device with an RSA credential
         create_unauth_device <location> <registry_id> <device_id> Create a device without credentials
-        delete_device <location> <registry_id> <device_id> Delete a device from a registry
-        get_device <location> <registry_id> <device_id> Gets a device from a registry.
+        delete_device <location> <registry_id> <device_id> Delete a device from a registrar
+        get_device <location> <registry_id> <device_id> Gets a device from a registrar.
         get_device_configs <location> <registry_id> <device_id> List device configurations.
         get_device_states <location> <registry_id> <device_id> List device state history.
-        list_devices <location> <registry_id> List the devices in the provided registry.
+        list_devices <location> <registry_id> List the devices in the provided registrar.
         patch_es_device <location> <registry_id> <device_id> <public_key_path> Patch a device with an ES256 credential
         patch_rsa_device <location> <registry_id> <device_id> <public_key_path> Patch a device with an RSA credential
         send_command <location> <registry_id> <device_id> <data> Send a command to a device.
@@ -1083,7 +1083,7 @@ def run_sample arguments
       Beta device management commands:
         create_gateway <location> <registry_id> <gateway_id> <cert_path> <alg> Create a gateway
         delete_gateway <location> <registry_id> <device_id> Delete a gateway
-        list_gateways <location> <registry_id> List gateways in a registry
+        list_gateways <location> <registry_id> List gateways in a registrar
         list_devices_for_gateway <location> <registry_id> <gateway_id> List devices for gateway
         bind_device_to_gateway <location> <registry_id> <gateway_id> <device_id> Bind device to gateway
         unbind_device_from_gateway <location> <registry_id> <gateway_id> <device_id> Unbind device from gateway
