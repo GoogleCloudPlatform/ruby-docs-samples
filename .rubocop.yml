@@ -16,9 +16,6 @@ Lint/DuplicateRequire:
 Lint/NonLocalExitFromIterator:
   Exclude:
     - "functions/**/*.rb"
-Lint/SuppressedException:
-  Exclude:
-    - "run/rails-cat_album/bin/spring"
 Lint/RescueException:
   Exclude:
     - "pubsub/subscriptions.rb"
