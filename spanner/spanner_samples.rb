@@ -2215,6 +2215,9 @@ def run_sample arguments
                           database_id: database_id,
                           start_title: arguments.shift,
                           end_title:   arguments.shift
+  elsif command.eql?("create_instance") && instance_id
+    create_instance project_id:  project_id,
+                    instance_id: instance_id
   elsif commands.include?(command) && instance_id && database_id
     send command, project_id:  project_id,
                   instance_id: instance_id,
