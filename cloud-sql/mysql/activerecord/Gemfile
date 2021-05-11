@@ -61,5 +61,5 @@ gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem "sqlite3", "~> 1.4"
 
-gem "rspec-rails", "~> 3.8"
 gem "rspec_junit_formatter"
+gem "rspec-rails", "~> 3.8"

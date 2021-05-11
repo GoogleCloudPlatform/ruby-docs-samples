@@ -210,7 +210,7 @@ def print_row row
   row.cells.each do |column_family, data|
     puts "Column Family #{column_family}"
     data.each do |cell|
-      labels = !cell.labels.empty? ? " [#{cell.labels.join ','}]" : ""
+      labels = cell.labels.empty? ? "" : " [#{cell.labels.join ','}]"
       puts "\t#{cell.qualifier}: #{cell.value} @#{cell.timestamp}#{labels}"
     end
   end

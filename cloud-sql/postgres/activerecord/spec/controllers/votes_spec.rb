@@ -50,9 +50,9 @@ RSpec.describe VotesController, type: :controller do
   describe "create" do
     it "casts a vote for a candidate via postgres over #{ENV['DB_HOST']}" do
       post :create, params: { candidate: "TABS" }
-      expect(response.body).to match(/Vote successfully cast for \"TABS\"/)
+      expect(response.body).to match(/Vote successfully cast for "TABS"/)
       post :create, params: { candidate: "SPACES" }
-      expect(response.body).to match(/Vote successfully cast for \"SPACES\"/)
+      expect(response.body).to match(/Vote successfully cast for "SPACES"/)
     end
 
     it "updates the vote total via postgres over #{ENV['DB_HOST']}" do

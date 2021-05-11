@@ -14,7 +14,7 @@
 
 
 # [START cloud_tasks_appengine_standard_quickstart]
-STDOUT.sync = true # Recommended to reduce log transmission delays
+$stdout.sync = true # Recommended to reduce log transmission delays
 
 require "sinatra"
 require "json"
