@@ -18,7 +18,6 @@ Lint/NonLocalExitFromIterator:
     - "functions/**/*.rb"
 Lint/RescueException:
   Exclude:
-    - "pubsub/subscriptions.rb"
     - "appengine/sendgrid/app.rb"
 Lint/SuppressedException:
   Exclude:
