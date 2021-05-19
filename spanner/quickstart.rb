@@ -32,11 +32,8 @@ database_id = "my-database"
 database_client = spanner.client instance_id, database_id
 
 # Execute a simple SQL statement
-database_client.transaction do |transaction|
-  results = transaction.execute "SELECT 1"
-
-  results.rows.each do |row|
-    puts row
-  end
+results = database_client.execute_query "SELECT 1"
+results.rows.each do |row|
+  puts row
 end
 # [END spanner_quickstart]
