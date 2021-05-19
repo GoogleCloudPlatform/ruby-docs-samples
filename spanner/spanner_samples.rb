@@ -1503,7 +1503,7 @@ def write_read_bool_array project_id:, instance_id:, database_id:
   client = spanner.client instance_id, database_id
 
   box_id = SecureRandom.uuid
-  client.insert "Boxes", BoxId: box_id, ErrorChecks: [true, false, true]
+  client.insert "Boxes", [{ BoxId: box_id, ErrorChecks: [true, false, true] }]
   results = client.read "Boxes", [:BoxId, :ErrorChecks], keys: box_id
 
   results.rows.each do |row|
@@ -1536,7 +1536,7 @@ def write_read_empty_int64_array project_id:, instance_id:, database_id:
   client = spanner.client instance_id, database_id
 
   box_id = SecureRandom.uuid
-  client.insert "Boxes", BoxId: box_id, Heights: []
+  client.insert "Boxes", [{ BoxId: box_id, Heights: [] }]
   results = client.read "Boxes", [:BoxId, :Heights], keys: box_id
 
   results.rows.each do |row|
@@ -1569,7 +1569,7 @@ def write_read_null_int64_array project_id:, instance_id:, database_id:
   client = spanner.client instance_id, database_id
 
   box_id = SecureRandom.uuid
-  client.insert "Boxes", BoxId: box_id, Heights: [nil, nil, nil]
+  client.insert "Boxes", [{ BoxId: box_id, Heights: [nil, nil, nil] }]
   results = client.read "Boxes", [:BoxId, :Heights], keys: box_id
 
   results.rows.each do |row|
@@ -1602,7 +1602,7 @@ def write_read_int64_array project_id:, instance_id:, database_id:
   client = spanner.client instance_id, database_id
 
   box_id = SecureRandom.uuid
-  client.insert "Boxes", BoxId: box_id, Heights: [10, 11, 12]
+  client.insert "Boxes", [{ BoxId: box_id, Heights: [10, 11, 12] }]
   results = client.read "Boxes", [:BoxId, :Heights], keys: box_id
 
   results.rows.each do |row|
@@ -1635,7 +1635,7 @@ def write_read_empty_float64_array project_id:, instance_id:, database_id:
   client = spanner.client instance_id, database_id
 
   box_id = SecureRandom.uuid
-  client.insert "Boxes", BoxId: box_id, Weights: []
+  client.insert "Boxes", [{ BoxId: box_id, Weights: [] }]
   results = client.read "Boxes", [:BoxId, :Weights], keys: box_id
 
   results.rows.each do |row|
@@ -1668,7 +1668,7 @@ def write_read_null_float64_array project_id:, instance_id:, database_id:
   client = spanner.client instance_id, database_id
 
   box_id = SecureRandom.uuid
-  client.insert "Boxes", BoxId: box_id, Weights: [nil, nil, nil]
+  client.insert "Boxes", [{ BoxId: box_id, Weights: [nil, nil, nil] }]
   results = client.read "Boxes", [:BoxId, :Weights], keys: box_id
 
   results.rows.each do |row|
@@ -1701,7 +1701,7 @@ def write_read_float64_array project_id:, instance_id:, database_id:
   client = spanner.client instance_id, database_id
 
   box_id = SecureRandom.uuid
-  client.insert "Boxes", BoxId: box_id, Weights: [10.001, 11.1212, 104.4123101]
+  client.insert "Boxes", [{ BoxId: box_id, Weights: [10.001, 11.1212, 104.4123101] }]
   results = client.read "Boxes", [:BoxId, :Weights], keys: box_id
 
   results.rows.each do |row|
