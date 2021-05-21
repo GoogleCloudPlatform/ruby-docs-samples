@@ -51,7 +51,7 @@ def create_instance_with_processing_units project_id:, instance_id:
   instance = spanner.instance instance_id
 
   job = spanner.create_instance instance_id,
-                                name:   instance_id,
+                                name: "Low cost instance",
                                 config: "regional-us-central1",
                                 processing_units: 500,
                                 labels: { cloud_spanner_samples: true }

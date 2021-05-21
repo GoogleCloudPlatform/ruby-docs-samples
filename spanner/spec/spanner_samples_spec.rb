@@ -133,34 +133,36 @@ describe "Google Cloud Spanner API samples" do
   attr_reader :captured_output
 
   example "create_instance" do
-    @created_instance_id = "rb-test-#{seed}"
+    instance_id = "rb-test-#{seed}"
+    @created_instance_ids << instance_id
 
     capture do
       create_instance project_id:  @project_id,
-                      instance_id: @created_instance_id
+                      instance_id: instance_id
     end
 
     expect(captured_output).to include(
       "Waiting for create instance operation to complete"
     )
     expect(captured_output).to include(
-      "Created instance #{@created_instance_id}"
+      "Created instance #{instance_id}"
     )
   end
 
   example "create_instance_with_processing_units" do
-    @created_instance_id = "rb-test-#{seed}"
+    instance_id = "rb-test-processing-unit-#{seed}"
+    @created_instance_ids << instance_id
 
     capture do
-      create_instance project_id:  @project_id,
-                      instance_id: @created_instance_id
+      create_instance_with_processing_units project_id: @project_id,
+                                            instance_id: instance_id
     end
 
     expect(captured_output).to include(
       "Waiting for create instance operation to complete"
     )
     expect(captured_output).to include(
-      "Instance #{@created_instance_id} has 1000 processing units."
+      "Instance #{instance_id} has 500 processing units."
     )
   end
 
