@@ -1,0 +1,40 @@
+steps:
+  - id: "build image"
+    name: "gcr.io/cloud-builders/docker"
+    entrypoint: 'bash'
+    args: ["-c", "docker build --build-arg MASTER_KEY=$$RAILS -t gcr.io/${PROJECT_ID}/${_SERVICE_NAME} . "]
+    secretEnv: ["RAILS"]
+
+  - id: "push image"
+    name: "gcr.io/cloud-builders/docker"
+    args: ["push", "gcr.io/${PROJECT_ID}/${_SERVICE_NAME}"]
+
+  - id: "apply migrations"
+    name: "gcr.io/google-appengine/exec-wrapper"
+    args:
+      [
+        "-i",
+        "gcr.io/$PROJECT_ID/${_SERVICE_NAME}",
+        "-s",
+        "${PROJECT_ID}:${_REGION}:${_INSTANCE_NAME}",
+        "--", 
+        "bundle", 
+        "exec", 
+        "rake", 
+        "db:migrate"
+      ]
+
+substitutions:
+  _REGION: us-central1
+  _SERVICE_NAME: media-ranker
+  _INSTANCE_NAME: cloud-run-rails
+  _SECRET_NAME: rails-master-key
+
+availableSecrets:
+  secretManager:
+  - versionName: projects/${PROJECT_ID}/secrets/${_SECRET_NAME}/versions/latest
+    env: RAILS
+
+images:
+  - "gcr.io/${PROJECT_ID}/${_SERVICE_NAME}"
+
