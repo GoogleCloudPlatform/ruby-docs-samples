@@ -1677,35 +1677,35 @@ describe "Google Cloud Spanner API samples" do
                    database_id: backup.database_id
     end
 
-    # Segregate each list operation output.
-    output_segements = captured_output.split(/(All backups)/)
+    # Segregate each list backup filters output.
+    output_segments = captured_output.split(/(All backups)/)
                                       .reject(&:empty?)
                                       .each_slice(2)
                                       .map(&:join)
 
-    expect(output_segements.shift).to include("All backups", backup.backup_id)
+    expect(output_segments.shift).to include("All backups", backup.backup_id)
 
-    expect(output_segements.shift).to include(
+    expect(output_segments.shift).to include(
       "All backups with backup name containing",
       "\"#{backup.backup_id}\":\n#{backup.backup_id}"
     )
 
-    expect(output_segements.shift).to include(
+    expect(output_segments.shift).to include(
       "All backups for databases with a name containing",
       "\"#{backup.database_id}\":\n#{backup.backup_id}"
     )
 
-    expect(output_segements.shift).to include(
+    expect(output_segments.shift).to include(
       "All backups that expire before a timestamp", backup.backup_id
     )
-    expect(output_segements.shift).to include(
+    expect(output_segments.shift).to include(
       "All backups with a size greater than 500 bytes", backup.backup_id
     )
-    expect(output_segements.shift).to include(
+    expect(output_segments.shift).to include(
       "All backups that were created after a timestamp that are also ready",
       backup.backup_id
     )
-    expect(output_segements.shift).to include(
+    expect(output_segments.shift).to include(
       "All backups with pagination", backup.backup_id
     )
 
