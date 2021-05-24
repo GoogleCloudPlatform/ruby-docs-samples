@@ -82,7 +82,7 @@ test:
 #
 production:
   <<: *default
-  database: cat-abum-db
+  database: cat-album-db
   username: postgres
   password: <%= Rails.application.credentials.gcp[:db_password] %>
   host: "<%= ENV.fetch("DB_SOCKET_DIR") { '/cloudsql' } %>/trambui-test-1:us-central1:cat-album"
