@@ -24,6 +24,14 @@ if File.exist?(key_file)
   ENV["RAILS_MASTER_KEY"] = File.read(key_file)
 end
 
+# to get access to RAILS_MASTER_KEY during apply migrations build step
+if ENV["RAILS_MASTER_KEY_SECRET"].present?
+  require "google/cloud/secret_manager/v1"
+  client = ::Google::Cloud::SecretManager::V1::SecretManagerService::Client.new
+  value = client.access_secret_version(name: ENV["RAILS_MASTER_KEY_SECRET"]).payload.data
+  ENV["RAILS_MASTER_KEY"] ||= value # could also just "=" here
+end
+
 module RailsCatAlbum
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
