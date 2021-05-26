@@ -3,7 +3,7 @@ assign_issues_by:
   - 'api: cloudiot'
   to:
   - joeklemm
- - labels:
+- labels:
   - 'api: bigtable'
   - 'api: datastore'
   - 'api: firestore'
