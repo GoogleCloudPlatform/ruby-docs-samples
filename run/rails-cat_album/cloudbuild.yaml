@@ -11,20 +11,13 @@ steps:
 
   - id: "apply migrations"
     name: "gcr.io/google-appengine/exec-wrapper"
+    entrypoint: "bash"
     args:
       [
-        "-i",
-        "gcr.io/$PROJECT_ID/${_SERVICE_NAME}",
-        "-s",
-        "${PROJECT_ID}:${_REGION}:${_INSTANCE_NAME}",
-        "-e",
-        "RAILS_MASTER_KEY_SECRET=projects/${PROJECT_ID}/secrets/${_SECRET_NAME}/versions/latest",
-        "--", 
-        "bundle", 
-        "exec", 
-        "rake", 
-        "db:migrate"
+        "-c",
+        "/buildstep/execute.sh -i gcr.io/$PROJECT_ID/${_SERVICE_NAME} -s ${PROJECT_ID}:${_REGION}:${_INSTANCE_NAME} -e RAILS_MASTER_KEY=$$RAILS_KEY -- bundle exec rails db:migrate"
       ]
+    secretEnv: ["RAILS_KEY"]
 
 substitutions:
   _REGION: us-central1
