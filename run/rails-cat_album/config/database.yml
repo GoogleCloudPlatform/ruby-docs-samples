@@ -20,6 +20,7 @@ default: &default
   # For details on connection pooling, see Rails configuration guide
   # https://guides.rubyonrails.org/configuring.html#database-pooling
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  timeout: 5000
 
 development:
   <<: *default
@@ -81,6 +82,7 @@ test:
 #
 production:
   <<: *default
-  database: rails_cat_album_production
-  username: rails_cat_album
-  password: <%= ENV['RAILS_CAT_ALBUM_DATABASE_PASSWORD'] %>
+  database: cat-album-db
+  username: postgres
+  password: <%= Rails.application.credentials.gcp[:db_password] %>
+  host: "<%= ENV.fetch("DB_SOCKET_DIR") { '/cloudsql' } %>/trambui-test-1:us-central1:cat-album"
