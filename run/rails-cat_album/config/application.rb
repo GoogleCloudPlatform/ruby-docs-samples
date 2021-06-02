@@ -16,9 +16,9 @@ require "rails/test_unit/railtie"
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-key_file = File.join("config", "master.key")
-if File.exist?(key_file)
-  ENV["RAILS_MASTER_KEY"] = File.read(key_file)
+key_file = File.join "config", "master.key"
+if File.exist? key_file
+  ENV["RAILS_MASTER_KEY"] = File.read key_file
 end
 
 module RailsCatAlbum
