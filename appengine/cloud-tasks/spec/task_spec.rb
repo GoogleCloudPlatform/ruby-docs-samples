@@ -59,6 +59,7 @@ describe "CloudTasks", type: :feature do
     output = `ruby #{snippet_filepath} #{GOOGLE_CLOUD_PROJECT} #{LOCATION_ID} \
               #{QUEUE_ID} #{payload}`
 
+    puts output
     expect(output).to include "Created task"
   end
 end
