@@ -278,7 +278,7 @@ DEPENDENCIES
   bootsnap (>= 1.4.4)
   byebug
   capybara (>= 3.26)
-  dotenv-rails
+  dotenv-rails (~> 2.1, >= 2.1.1)
   google-cloud-storage (~> 1.31, >= 1.31.1)
   jbuilder (~> 2.7)
   listen (~> 3.3)
