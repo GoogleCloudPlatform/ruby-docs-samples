@@ -9,5 +9,5 @@ local:
 # Remember not to checkin your GCS keyfile to a repository
 google:
   service: GCS
-  project: trambui-test-1
-  bucket: cat_album_storage
+  project: <%= ENV["GOOGLE_PROJECT_ID"] %>
+  bucket: <%= ENV["STORAGE_BUCKET_NAME"] %>
