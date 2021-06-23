@@ -5,7 +5,7 @@
     <% @photos.each do |photo| %>
       <div class="card" style="width: 18rem;">
         <div class="card-body">
-          <img class="card-img-top" src="<%= url_for(photo.image) %>" alt="Card image cap">
+          <img class="card-img-top" src="<%= image_url photo %>" alt="Card image cap">
           <h5 class="card-title"><%= photo.caption %></h5>
           <%= link_to 'Show', photo_path(photo), class:"btn btn-primary" %>
         </div>
