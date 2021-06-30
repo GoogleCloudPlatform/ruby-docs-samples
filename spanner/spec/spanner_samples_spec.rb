@@ -159,7 +159,7 @@ describe "Google Cloud Spanner API samples" do
     end
 
     expect(captured_output).to include(
-      "Waiting for create instance operation to complete"
+      "Waiting for creating instance operation to complete"
     )
     expect(captured_output).to include(
       "Instance #{instance_id} has 500 processing units."

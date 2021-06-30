@@ -56,7 +56,7 @@ def create_instance_with_processing_units project_id:, instance_id:
                                 processing_units: 500,
                                 labels: { cloud_spanner_samples: true }
 
-  puts "Waiting for create instance operation to complete"
+  puts "Waiting for creating instance operation to complete"
 
   job.wait_until_done!
 
