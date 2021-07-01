@@ -14,7 +14,6 @@
 require "spec_helper"
 
 feature "Managing Books" do
-
   scenario "No books have been added" do
     visit "/"
 
@@ -135,13 +134,12 @@ feature "Managing Books" do
   scenario "Deleting a book" do
     Book.delete_all
     book = Book.create! title: "A Tale of Two Cities", author: "Charles Dickens"
-    expect(Book.exists? book.id).to be true
+    expect(Book.exists?(book.id)).to be true
 
     visit "/"
     click_link "A Tale of Two Cities"
     click_link "Delete Book"
 
-    expect(Book.exists? book.id).to be false
+    expect(Book.exists?(book.id)).to be false
   end
-
 end

@@ -21,7 +21,13 @@ class Book
 
   validates :title, presence: true
 
-  attr_accessor :id, :title, :author, :published_on, :description, :image_url, :cover_image
+  attr_accessor :id
+  attr_accessor :title
+  attr_accessor :author
+  attr_accessor :published_on
+  attr_accessor :description
+  attr_accessor :image_url
+  attr_accessor :cover_image
 
   # Return a Google::Cloud::Firestore::Dataset for the configured collection.
   # The collection is used to create, read, update, and delete entity objects.
@@ -44,7 +50,7 @@ class Book
       config = Rails.application.config.x.settings
       # [START bookshelf_cloud_storage_client]
       require "google/cloud/storage"
-      bucket_id = project_id + "_bucket"
+      bucket_id = "#{project_id}_bucket"
       storage = Google::Cloud::Storage.new project_id: config["project_id"],
                                            credentials: config["keyfile"]
       bucket = storage.bucket bucket_id
@@ -68,14 +74,15 @@ class Book
       query.get do |book|
         books << Book.from_snapspot(book)
       end
-    rescue
+    rescue StandardError
+      # Do nothing
     end
     books
   end
 
   def self.requires_pagination last_title
     if last_title
-      collection
+      collection # rubocop:disable Style/NumericPredicate
         .order(:title)
         .limit(1)
         .start_after(last_title)
@@ -165,7 +172,7 @@ class Book
     end
   end
 
-##################
+  ##################
 
   def persisted?
     id.present?

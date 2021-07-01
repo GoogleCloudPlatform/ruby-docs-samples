@@ -61,8 +61,7 @@ def validate_assertion assertion
   key_id = JSON.parse(a_header)["kid"]
   cert = OpenSSL::PKey::EC.new settings.certificates[key_id]
   info = JWT.decode assertion, cert, true, algorithm: "ES256", audience: settings.audience
-  return info[0]["email"], info[0]["sub"]
-
+  [info[0]["email"], info[0]["sub"]]
 rescue StandardError => e
   puts "Failed to validate assertion: #{e}"
   [nil, nil]

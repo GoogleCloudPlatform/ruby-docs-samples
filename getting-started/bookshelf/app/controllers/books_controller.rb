@@ -12,7 +12,6 @@
 # limitations under the License.
 
 class BooksController < ApplicationController
-
   PER_PAGE = 10
 
   def index
@@ -66,5 +65,4 @@ class BooksController < ApplicationController
     params.require(:book).permit :title, :author, :published_on, :description,
                                  :cover_image
   end
-
 end

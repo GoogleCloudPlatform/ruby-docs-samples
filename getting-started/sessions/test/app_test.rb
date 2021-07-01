@@ -1,6 +1,6 @@
-require File.expand_path "../test_helper.rb", __FILE__
+require File.expand_path "test_helper.rb", __dir__
 
-include Rack::Test::Methods
+include Rack::Test::Methods # rubocop:disable Style/MixinUsage
 
 def app
   Sinatra::Application
@@ -14,7 +14,7 @@ class FirestoreSessionMock < Rack::Session::Abstract::Persisted
 
   def find_session _req, session_id
     return [generate_sid, {}] if session_id.nil?
-    return session_id, @data[session_id]
+    [session_id, @data[session_id]]
   end
 
   def write_session _req, session_id, new_session, _opts
@@ -30,7 +30,7 @@ end
 
 describe "app" do
   before do
-    @mock_session = lambda do |app, options = {}| 
+    @mock_session = lambda do |app, _options = {}|
       FirestoreSessionMock.new app, {}
     end
   end
@@ -41,13 +41,12 @@ describe "app" do
       greetings = /"Hello World"|"Hallo Welt"|"Ciao Mondo"|"Salut le Monde"|"Hola Mundo"/
       assert_match greetings, last_response.body
     end
-    
   end
 
   it "should display the number of views" do
     Rack::Session::FirestoreSession.stub :new, @mock_session do
       get "/"
-      assert_match /\d+ views for /, last_response.body
+      assert_match(/\d+ views for /, last_response.body)
     end
   end
 

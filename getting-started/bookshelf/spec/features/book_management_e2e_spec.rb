@@ -14,13 +14,12 @@
 
 # TEMP: Disable bookshelf E2E tests because they use firestore which isn't
 # available in the E2E project.
-if false
+if false # rubocop:disable Lint/LiteralAsCondition
   require "e2e_spec_helper"
 
   E2E.sample_dir = "bookshelf"
 
   feature "Managing Books (e2e)" do
-
     scenario "Adding a book with missing fields (e2e)", :e2e do
       visit E2E.url
       click_link "Add Book"
@@ -56,11 +55,10 @@ if false
 
     scenario "Deleting a book (e2e)", :e2e do
       visit E2E.url
-      first(:link , "A Tale of Two Cities").click
+      first(:link, "A Tale of Two Cities").click
       click_link "Delete Book"
 
-      expect(current_path).to eq '/books'
+      expect(current_path).to eq "/books"
     end
-
   end
 end

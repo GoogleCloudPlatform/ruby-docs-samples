@@ -12,7 +12,6 @@
 # limitations under the License.
 
 Rails.application.routes.draw do
-
   # Route root of application to BooksController#index action
   root "books#index"
 
@@ -21,5 +20,4 @@ Rails.application.routes.draw do
 
   get "/logs", to: "stackdriver#logs"
   get "/errors", to: "stackdriver#errors"
-
 end

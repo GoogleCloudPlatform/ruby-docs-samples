@@ -13,7 +13,7 @@
 
 class StackdriverController < ApplicationController
   def logs
-    Rails.logger.add(Logger::INFO, "Hey, you triggered a custom log entry. Good job!")
+    Rails.logger.add Logger::INFO, "Hey, you triggered a custom log entry. Good job!"
     redirect_to "/books", flash: { success: "Log message sent" }
   end
 
