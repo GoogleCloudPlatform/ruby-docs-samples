@@ -1,2 +1,2 @@
 ignoreFiles:
-  - "getting-started/**/*.rb"
+  - "getting-started/**/*"
