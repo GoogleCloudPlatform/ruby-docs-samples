@@ -6,7 +6,6 @@ Rake::TestTask.new :test do |t|
   t.warning = false
 end
 
-Rake::TestTask.new :acceptance do |t|
-  t.test_files = FileList["acceptance/**/*_test.rb"]
-  t.warning = false
+task :acceptance do
+  puts "cancelled until can be run concurrently"
 end
