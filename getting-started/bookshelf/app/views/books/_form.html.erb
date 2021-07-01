@@ -1,0 +1,48 @@
+<%#
+  Copyright 2019 Google LLC.
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+%>
+
+<h3>Book</h3>
+
+<% if @book.errors.any? %>
+  <div class="errors">
+    <% @book.errors.full_messages.each do |message| %>
+      <div class="alert alert-danger"><%= message %></div>
+    <% end %>
+  </div>
+<% end %>
+
+<%= form_for @book, :html => { :multipart => true } do |f| %>
+  <div class="form-group">
+    <%= f.label :title %>
+    <%= f.text_field :title %>
+  </div>
+  <div class="form-group">
+    <%= f.label :author %>
+    <%= f.text_field :author %>
+  </div>
+  <div class="form-group">
+    <%= f.label :published_on, "Date Published" %>
+    <%= f.date_field :published_on %>
+  </div>
+  <div class="form-group">
+    <%= f.label :description %>
+    <%= f.text_area :description %>
+  </div>
+  <div class="form-group">
+    <%= f.label :cover_image %>
+    <%= f.file_field :cover_image %>
+  </div>
+  <button class="btn btn-success" type="submit">Save</button>
+<% end %>
