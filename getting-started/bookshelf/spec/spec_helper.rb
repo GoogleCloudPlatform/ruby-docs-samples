@@ -12,6 +12,7 @@
 # limitations under the License.
 
 ENV["RAILS_ENV"] ||= "test"
+ENV["GOOGLE_CLOUD_PROJECT"] = ENV["FIRESTORE_PROJECT_ID"]
 
 require File.expand_path("../../config/environment", __FILE__)
 
