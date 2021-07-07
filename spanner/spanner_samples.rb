@@ -47,7 +47,7 @@ def create_instance_with_processing_units project_id:, instance_id:
 
   require "google/cloud/spanner"
 
-  spanner  = Google::Cloud::Spanner.new project: project_id
+  spanner = Google::Cloud::Spanner.new project: project_id
 
   job = spanner.create_instance instance_id,
                                 name: "Low cost instance",
