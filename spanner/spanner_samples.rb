@@ -40,6 +40,37 @@ def create_instance project_id:, instance_id:
   # [END spanner_create_instance]
 end
 
+def create_instance_with_processing_units project_id:, instance_id:
+  # [START spanner_create_instance_with_processing_units]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+
+  require "google/cloud/spanner"
+
+  spanner = Google::Cloud::Spanner.new project: project_id
+
+  job = spanner.create_instance instance_id,
+                                name: "Low cost instance",
+                                config: "regional-us-central1",
+                                processing_units: 500,
+                                labels: { cloud_spanner_samples: true }
+
+  puts "Waiting for creating instance operation to complete"
+
+  job.wait_until_done!
+
+  if job.error?
+    puts job.error
+  else
+    puts "Created instance #{instance_id}"
+  end
+
+  instance = spanner.instance instance_id
+  puts "Instance #{instance_id} has #{instance.processing_units} processing units."
+
+  # [END spanner_create_instance_with_processing_units]
+end
+
 def create_database project_id:, instance_id:, database_id:
   # [START spanner_create_database]
   # project_id  = "Your Google Cloud project ID"
