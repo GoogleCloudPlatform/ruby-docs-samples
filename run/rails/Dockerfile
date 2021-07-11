@@ -12,7 +12,7 @@ WORKDIR /app
 
 # Application dependencies
 COPY Gemfile Gemfile.lock ./
-RUN bundle install
+RUN bundle install --deployment --without="development test"
 
 # Copy application code to the container image
 COPY . /app
