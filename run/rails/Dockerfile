@@ -1,6 +1,6 @@
 # Use the official Ruby image from Docker Hub
 # https://hub.docker.com/_/ruby
-FROM ruby:2.7
+FROM ruby:3.0
 
 RUN (curl -sL https://deb.nodesource.com/setup_14.x | bash -) && apt-get update && apt-get install -y nodejs 
 
@@ -28,4 +28,4 @@ ENV RAILS_MASTER_KEY=${MASTER_KEY}
 RUN bundle exec rake assets:precompile
 
 EXPOSE 8080
-CMD ["rails", "server", "-b", "0.0.0.0", "-p", "8080"]
+CMD ["bin/rails", "server", "-b", "0.0.0.0", "-p", "8080"]
