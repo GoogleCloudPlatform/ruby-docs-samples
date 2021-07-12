@@ -72,7 +72,7 @@ def dirs
   entries.uniq!
   if RUBY_VERSION.start_with? "2.4"
     entries.delete_if { |dir| dir.include? "/ruby-docs-samples/functions" }
-  elsif !RUBY_VERSION.start_with? "2.7"
+  elsif !RUBY_VERSION.start_with? "3.0"
     entries.delete_if { |dir| dir.include? "/ruby-docs-samples/run/rails" }
   end
   entries
