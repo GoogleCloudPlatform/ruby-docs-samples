@@ -1,6 +1,9 @@
 # Use the official Ruby image from Docker Hub
 # https://hub.docker.com/_/ruby
-FROM ruby:3.0
+
+# Pinning the OS to buster because the nodejs install script is buster-specific.
+# Be sure to update the nodejs install command if the base image OS is updated.
+FROM ruby:3.0-buster
 
 RUN (curl -sS https://deb.nodesource.com/gpgkey/nodesource.gpg.key | gpg --dearmor | apt-key add -) && \
     echo "deb https://deb.nodesource.com/node_14.x buster main buster main"      > /etc/apt/sources.list.d/nodesource.list && \
