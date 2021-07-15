@@ -29,7 +29,7 @@ RSpec.configure do |config|
     @restored_database_id = "restored_db_#{seed}"
     @spanner              = Google::Cloud::Spanner.new project: @project_id
     @instance             = @spanner.instance @instance_id
-    @created_instance_id  = nil
+    @created_instance_ids = []
   end
 
   config.after :all do
@@ -41,11 +41,12 @@ RSpec.configure do |config|
   end
 
   def cleanup_instance_resources
-    return unless @created_instance_id
+    @created_instance_ids.each do |instance_id|
+      instance = @spanner.instance instance_id
+      instance.delete if instance
+    end
 
-    instance = @spanner.instance @created_instance_id
-    instance.delete
-    @created_instance_id = nil
+    @created_instance_ids.clear
   end
 
   def cleanup_database_resources

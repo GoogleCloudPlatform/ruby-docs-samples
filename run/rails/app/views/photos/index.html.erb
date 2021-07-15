@@ -1,3 +1,9 @@
+<br>
+<div class="row justify-content-center">
+  <%= link_to 'New Photo', new_photo_path, class:"btn btn-info show" %>
+</div>
+<br>
+
 <div class="grid-container">
   <% if @photos.empty? %>
     <p>Album is empty. Click on "New Photo" to add a photo.</p>
@@ -13,5 +19,3 @@
     <% end %>
   <% end %>
 </div>
-
-<%= link_to 'New Photo', new_photo_path, class:"btn btn-info show" %>
