@@ -7,7 +7,9 @@ local:
   root: <%= Rails.root.join("storage") %>
 
 # Remember not to checkin your GCS keyfile to a repository
+# [START cloud_storage]
 google:
   service: GCS
   project: <%= ENV["GOOGLE_PROJECT_ID"] %>
   bucket: <%= ENV["STORAGE_BUCKET_NAME"] %>
+# [END cloud_storage]
