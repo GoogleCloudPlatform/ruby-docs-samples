@@ -1,6 +1,6 @@
-require File.expand_path "../../test/test_helper.rb", __FILE__
+require File.expand_path "../test/test_helper.rb", __dir__
 
-include Rack::Test::Methods
+include Rack::Test::Methods # rubocop:disable Style/MixinUsage
 
 def app
   Sinatra::Application
@@ -37,7 +37,7 @@ describe "app" do
 
   it "should display the number of views" do
     get "/"
-    assert_match /\d+ views for /, last_response.body
+    assert_match(/\d+ views for /, last_response.body)
   end
 
   it "should increment the number of views on successive views" do
