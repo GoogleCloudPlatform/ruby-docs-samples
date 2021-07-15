@@ -80,9 +80,11 @@ test:
 # Read https://guides.rubyonrails.org/configuring.html#configuring-a-database
 # for a full overview on how database connection configuration can be specified.
 #
+# [START cloudrun_rails_database]
 production:
   <<: *default
   database: <%= ENV["PRODUCTION_DB_NAME"] %>
   username: <%= ENV["PRODUCTION_DB_USERNAME"] %>
   password: <%= Rails.application.credentials.gcp[:db_password] %>
   host: "<%= ENV.fetch("DB_SOCKET_DIR") { '/cloudsql' } %>/<%= ENV["CLOUD_SQL_CONNECTION_NAME"] %>"
+# [END cloudrun_rails_database]

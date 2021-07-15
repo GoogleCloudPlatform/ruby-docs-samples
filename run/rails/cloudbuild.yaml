@@ -1,3 +1,4 @@
+# [START cloudrun_rails_cloudbuild]
 steps:
   - id: "build image"
     name: "gcr.io/cloud-builders/docker"
@@ -32,4 +33,4 @@ availableSecrets:
 
 images:
   - "gcr.io/${PROJECT_ID}/${_SERVICE_NAME}"
-
+# [END cloudrun_rails_cloudbuild]
