@@ -168,6 +168,11 @@ if [[ $RUN_ALL_TESTS = "1" ]]; then
   echo "Running all tests"
   SPEC_DIRS=$(find * -type d -name 'spec' -path "*/*" -not -path "*vendor/*" -exec dirname {} \; | sort | uniq)
   for PRODUCT in $SPEC_DIRS; do
+    # Skip bookshelf tests on ruby 3
+    if [[ $PRODUCT == "getting-started/bookshelf" && $KOKORO_RUBY_VERSION == "newest" ]]; then
+      continue
+    fi
+
     # Run Tests
     echo "[$PRODUCT]"
     export TEST_DIR="$PRODUCT"
@@ -197,6 +202,11 @@ else
   SPEC_DIRS=$(find $CHANGED_DIRS -type d -name 'spec' -path "*/*" -not -path "*vendor/*" -exec dirname {} \; | sort | uniq)
   echo "Running tests in modified directories: $SPEC_DIRS"
   for PRODUCT in $SPEC_DIRS; do
+    # Skip bookshelf tests on ruby 3
+    if [[ $PRODUCT == "getting-started/bookshelf" && $KOKORO_RUBY_VERSION == "newest" ]]; then
+      continue
+    fi
+
     # Run Tests
     echo "[$PRODUCT]"
     export TEST_DIR="$PRODUCT"
