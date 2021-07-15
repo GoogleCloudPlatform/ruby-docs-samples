@@ -13,4 +13,5 @@ group :development do
   gem "minitest", "~> 5.13"
   gem "rack-test", "~> 1.1"
   gem "rake", "~> 13.0"
+  gem "rspec_junit_formatter"
 end

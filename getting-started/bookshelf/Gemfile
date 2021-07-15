@@ -44,6 +44,7 @@ group :test do
   gem "phantomjs", require: "phantomjs/poltergeist"
   gem "poltergeist"
   gem "rack-test"
+  gem "rspec_junit_formatter"
   gem "rspec-rails"
   gem "rspec-retry"
 end
