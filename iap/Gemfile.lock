@@ -1,7 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    addressable (2.7.0)
+    addressable (2.8.0)
       public_suffix (>= 2.0.2, < 5.0)
     diff-lcs (1.4.1)
     faraday (1.0.1)
@@ -18,7 +18,7 @@ GEM
     multi_json (1.14.1)
     multipart-post (2.1.1)
     os (1.1.0)
-    public_suffix (4.0.5)
+    public_suffix (4.0.6)
     rspec (3.9.0)
       rspec-core (~> 3.9.0)
       rspec-expectations (~> 3.9.0)
