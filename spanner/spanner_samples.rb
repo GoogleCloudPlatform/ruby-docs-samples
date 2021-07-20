@@ -1481,7 +1481,13 @@ def query_with_query_options project_id:, instance_id:, database_id:
   client  = spanner.client instance_id, database_id
 
   sql_query = "SELECT VenueId, VenueName, LastUpdateTime FROM Venues"
-  query_options = { optimizer_version: "1", optimizer_statistics_package: "latest" }
+  query_options = {
+    optimizer_version: "1",
+    # The list of available statistics packagebs can be
+    # found by querying the "INFORMATION_SCHEMA.SPANNER_STATISTICS"
+    # table.
+    optimizer_statistics_package: "latest"
+  }
 
   client.execute(sql_query, query_options: query_options).rows.each do |row|
     puts "#{row[:VenueId]} #{row[:VenueName]} #{row[:LastUpdateTime]}"
@@ -1497,7 +1503,13 @@ def create_client_with_query_options project_id:, instance_id:, database_id:
 
   require "google/cloud/spanner"
 
-  query_options = { optimizer_version: "1", optimizer_statistics_package: "auto_20191128_14_47_22UTC" }
+  query_options = {
+    optimizer_version: "1",
+    # The list of available statistics packages can be
+    # found by querying the "INFORMATION_SCHEMA.SPANNER_STATISTICS"
+    # table.
+    optimizer_statistics_package: "latest"
+  }
 
   spanner = Google::Cloud::Spanner.new project: project_id
   client  = spanner.client instance_id, database_id, query_options: query_options
