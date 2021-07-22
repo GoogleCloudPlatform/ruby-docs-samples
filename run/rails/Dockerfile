@@ -6,7 +6,7 @@
 FROM ruby:3.0-buster
 
 RUN (curl -sS https://deb.nodesource.com/gpgkey/nodesource.gpg.key | gpg --dearmor | apt-key add -) && \
-    echo "deb https://deb.nodesource.com/node_14.x buster main buster main"      > /etc/apt/sources.list.d/nodesource.list && \
+    echo "deb https://deb.nodesource.com/node_14.x buster main"      > /etc/apt/sources.list.d/nodesource.list && \
     apt-get update && apt-get install -y nodejs lsb-release
 
 RUN (curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -) && \
@@ -17,7 +17,12 @@ WORKDIR /app
 
 # Application dependencies
 COPY Gemfile Gemfile.lock ./
-RUN bundle install --deployment --without="development test"
+
+RUN gem install bundler && \
+    bundle config set --local deployment 'true' && \
+    bundle config set --local without 'development test' && \
+    bundle install
+
 
 # Copy application code to the container image
 COPY . /app
