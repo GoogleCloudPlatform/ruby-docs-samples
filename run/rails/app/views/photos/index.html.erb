@@ -4,10 +4,12 @@
 </div>
 <br>
 
-<div class="grid-container">
-  <% if @photos.empty? %>
+<% if @photos.empty? %>
+  <div class="row justify-content-center">
     <p>Album is empty. Click on "New Photo" to add a photo.</p>
-  <% else %>
+  </div>
+<% else %>
+  <div class="grid-container">
     <% @photos.each do |photo| %>
       <div class="card" style="width: 18rem;">
         <div class="card-body">
@@ -17,5 +19,5 @@
         </div>
       </div>
     <% end %>
-  <% end %>
-</div>
+  </div>
+<% end %>
