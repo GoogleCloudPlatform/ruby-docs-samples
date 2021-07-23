@@ -64,4 +64,17 @@ RSpec.configure do |config|
     @test_backup = @instance.backup @backup_id
     @test_backup&.delete
   end
+
+  def capture
+    real_stdout = $stdout
+    $stdout = StringIO.new
+    yield
+    @captured_output = $stdout.string
+  ensure
+    $stdout = real_stdout
+  end
+
+  def captured_output
+    @captured_output
+  end
 end
