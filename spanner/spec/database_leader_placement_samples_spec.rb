@@ -26,8 +26,7 @@ describe "Spanner database leader placement" do
 
   example "instance_config" do
     capture do
-      instance_config project_id: @project_id,
-                      instance_config_id: "cloud-devel-global-config"
+      instance_config project_id: @project_id, instance_config_id: "nam6"
     end
 
     expect(captured_output).to include(
@@ -45,7 +44,7 @@ describe "Spanner database leader placement" do
     )
   end
 
-  example "create_database_with_default_leader" do
+  example "create_and_update_database_with_default_leader" do
     capture do
       create_database_with_default_leader project_id: @project_id,
                                           instance_id: @instance_id,
@@ -55,13 +54,6 @@ describe "Spanner database leader placement" do
 
     expect(captured_output).to include(@database_id)
     expect(captured_output).to include("default leader: us-central1")
-  end
-
-  example "update_database_with_default_leader" do
-    create_database_with_default_leader project_id: @project_id,
-                                        instance_id: @instance_id,
-                                        database_id: @database_id,
-                                        default_leader: "us-central1"
 
     capture do
       update_database_with_default_leader project_id: @project_id,

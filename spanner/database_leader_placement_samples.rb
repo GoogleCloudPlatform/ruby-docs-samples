@@ -65,7 +65,7 @@ def list_databases project_id:, instance_id:
   databases = db_admin_client.list_databases parent: instance_path
 
   databases.each do |db|
-    puts db.name
+    puts "#{db.name} : default leader #{db.default_leader}"
   end
 
   # [END spanner_list_databases]
@@ -200,7 +200,7 @@ def usage
     Usage: bundle exec ruby database_samples.rb [command] [arguments]
 
     Commands:
-      instance_config                           <instance_id> <instance_config_id> Get instance config
+      instance_config                           <instance_config_id> Get instance config
       list_instance_configs                     List instance configs
       list_databases                            <instance_id> List databases
       create_database_with_default_leader       <instance_id> <database_id> <default_leader> Create database with default leader
@@ -214,37 +214,27 @@ def usage
 end
 
 def run_sample arguments
+  commands = [
+    "instance_config", "list_instance_configs", "list_databases",
+    "create_database_with_default_leader",
+    "update_database_with_default_leader", "database_ddl",
+    "query_information_schema_database_options"
+  ]
+
   command = arguments.shift
   project_id = ENV["GOOGLE_CLOUD_PROJECT"]
 
-  case command
-  when "instance_config"
-    instance_config project_id: project_id, instance_config_id: arguments.shift
-  when "list_instance_configs"
-    list_instance_configs project_id: project_id
-  when "list_databases"
-    list_databases project_id: project_id, instance_id: arguments.shift
-  when "create_database_with_default_leader"
-    create_database_with_default_leader project_id: project_id,
-                                        instance_id: arguments.shift,
-                                        database_id: arguments.shift,
-                                        default_leader: arguments.shift
-  when "update_database_with_default_leader"
-    update_database_with_default_leader project_id: project_id,
-                                        instance_id: arguments.shift,
-                                        database_id: arguments.shift,
-                                        default_leader: arguments.shift
-  when "database_ddl"
-    database_ddl project_id: project_id,
-                 instance_id: arguments.shift,
-                 database_id: arguments.shift
-  when "query_information_schema_database_options"
-    query_information_schema_database_options project_id: project_id,
-                                              instance_id: arguments.shift,
-                                              database_id: arguments.shift
-  else
-    usage
+  return usage unless commands.include? command
+
+  sample_method = method command
+  parameters = { project_id: project_id }
+
+  sample_method.parameters.each do |paramater|
+    next if paramater.last == :project_id
+    parameters[paramater.last] = arguments.shift
   end
+
+  sample_method.call(**parameters)
 end
 
 run_sample ARGV if $PROGRAM_NAME == __FILE__
