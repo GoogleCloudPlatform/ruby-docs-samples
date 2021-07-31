@@ -196,8 +196,7 @@ end
 
 def usage
   puts <<~USAGE
-
-    Usage: bundle exec ruby database_samples.rb [command] [arguments]
+    Usage: bundle exec ruby database_leader_placement_samples.rb [command] [arguments]
 
     Commands:
       instance_config                           <instance_config_id> Get instance config
