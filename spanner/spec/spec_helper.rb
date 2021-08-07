@@ -42,6 +42,8 @@ RSpec.configure do |config|
   end
 
   def cleanup_instance_resources
+    return unless @created_instance_ids
+
     @created_instance_ids.each do |instance_id|
       instance = @spanner.instance instance_id
       instance.delete if instance
