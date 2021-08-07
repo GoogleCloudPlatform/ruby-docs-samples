@@ -106,7 +106,8 @@ def create_database_with_default_leader \
     )"
   ]
 
-  job = db_admin_client.create_database parent: instance_path,
+  job = db_admin_client.create_database \
+    parent: instance_path,
     create_statement: "CREATE DATABASE `#{database_id}`",
     extra_statements: statements
 
