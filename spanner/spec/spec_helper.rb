@@ -34,6 +34,7 @@ RSpec.configure do |config|
 
   config.after :all do
     cleanup_backup_resources
+    cleanup_instance_resources
   end
 
   def seed
@@ -76,5 +77,30 @@ RSpec.configure do |config|
 
   def captured_output
     @captured_output
+  end
+
+  def instance_admin_client
+    @instance_admin_client ||=
+      Google::Cloud::Spanner::Admin::Instance::V1::InstanceAdmin::Client.new
+  end
+
+  def project_path
+    instance_admin_client.project_path project: @project_id
+  end
+
+  def instance_config_path instance_config_id
+    instance_admin_client.instance_config_path \
+      project: @project_id, instance_config: instance_config_id
+  end
+
+  def instance_path instance_id
+    instance_admin_client.instance_path \
+      project: @project_id, instance: instance_id
+  end
+
+  def find_instance instance_id
+    instance_admin_client.get_instance name: instance_path(instance_id)
+  rescue Google::Cloud::NotFoundError
+    nil
   end
 end
