@@ -121,17 +121,6 @@ describe "Google Cloud Spanner API samples" do
     @test_database
   end
 
-  # Capture and return STDOUT output by block
-  def capture
-    real_stdout = $stdout
-    $stdout = StringIO.new
-    yield
-    @captured_output = $stdout.string
-  ensure
-    $stdout = real_stdout
-  end
-  attr_reader :captured_output
-
   example "create_instance" do
     instance_id = "rb-test-#{seed}"
     @created_instance_ids << instance_id

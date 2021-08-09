@@ -41,6 +41,20 @@ RSpec.configure do |config|
     $spanner_example_seed ||= SecureRandom.hex 8
   end
 
+  # Capture and return STDOUT output by block
+  def capture
+    real_stdout = $stdout
+    $stdout = StringIO.new
+    yield
+    @captured_output = $stdout.string
+  ensure
+    $stdout = real_stdout
+  end
+
+  def captured_output
+    @captured_output
+  end
+
   def cleanup_instance_resources
     return unless @created_instance_ids
 
@@ -68,19 +82,6 @@ RSpec.configure do |config|
     @test_backup&.delete
   end
 
-  def capture
-    real_stdout = $stdout
-    $stdout = StringIO.new
-    yield
-    @captured_output = $stdout.string
-  ensure
-    $stdout = real_stdout
-  end
-
-  def captured_output
-    @captured_output
-  end
-
   def instance_admin_client
     @instance_admin_client ||=
       Google::Cloud::Spanner::Admin::Instance::V1::InstanceAdmin::Client.new
@@ -104,5 +105,21 @@ RSpec.configure do |config|
     instance_admin_client.get_instance name: instance_path(instance_id)
   rescue Google::Cloud::NotFoundError
     nil
+  end
+
+  def create_test_database database_id, statements: []
+    db_admin_client = \
+      Google::Cloud::Spanner::Admin::Database::V1::DatabaseAdmin::Client.new
+
+    instance_path = db_admin_client.instance_path project: @project_id,
+                                                  instance: @instance_id
+
+    job = db_admin_client.create_database \
+      parent: instance_path,
+      create_statement: "CREATE DATABASE `#{database_id}`",
+      extra_statements: Array(statements)
+
+    job.wait_until_done!
+    database = job.results
   end
 end
