@@ -1,4 +1,4 @@
-# Copyright 2021 Google, Inc
+# Copyright 2021 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -11,6 +11,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+require_relative "./utils"
 
 def request_tagging project_id:, instance_id:, database_id:
   # [START spanner_set_request_tag]
@@ -78,21 +80,11 @@ end
 
 def run_sample arguments
   commands = ["request_tagging", "transaction_tagging"]
-
   command = arguments.shift
-  project_id = ENV["GOOGLE_CLOUD_PROJECT"]
 
   return usage unless commands.include? command
 
-  sample_method = method command
-  parameters = { project_id: project_id }
-
-  sample_method.parameters.each do |paramater|
-    next if paramater.last == :project_id
-    parameters[paramater.last] = arguments.shift
-  end
-
-  sample_method.call(**parameters)
+  run_command command, arguments, ENV["GOOGLE_CLOUD_PROJECT"]
 end
 
 run_sample ARGV if $PROGRAM_NAME == __FILE__
