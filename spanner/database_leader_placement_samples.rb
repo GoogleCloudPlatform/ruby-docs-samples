@@ -1,4 +1,4 @@
-# Copyright 2021 Google, Inc
+# Copyright 2021 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,7 +27,6 @@ def instance_config project_id:, instance_config_id:
   config = instance_admin_client.get_instance_config name: instance_config_path
 
   puts "Available leader options for instance config #{config.name} : #{config.leader_options}"
-
   # [END spanner_get_instance_config]
 end
 
@@ -46,7 +45,6 @@ def list_instance_configs project_id:
   configs.each do |c|
     puts "Available leader options for instance config #{c.name} : #{c.leader_options}"
   end
-
   # [END spanner_list_instance_configs]
 end
 
@@ -67,7 +65,6 @@ def list_databases project_id:, instance_id:
   databases.each do |db|
     puts "#{db.name} : default leader #{db.default_leader}"
   end
-
   # [END spanner_list_databases]
 end
 
@@ -115,7 +112,6 @@ def create_database_with_default_leader \
   database = job.results
 
   puts "Created database [#{database.name}] with default leader: #{database.default_leader}"
-
   # [END spanner_create_database_with_default_leader]
 end
 
@@ -168,7 +164,6 @@ def database_ddl project_id:, instance_id:, database_id:
   ddl = db_admin_client.get_database_ddl database: db_path
 
   puts ddl.statements
-
   # [END spanner_get_database_ddl]
 end
 
@@ -191,7 +186,6 @@ def query_information_schema_database_options \
   ).rows.each do |row|
     puts row
   end
-
   # [END spanner_query_information_schema_database_options]
 end
 
