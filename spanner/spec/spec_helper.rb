@@ -87,6 +87,11 @@ RSpec.configure do |config|
       Google::Cloud::Spanner::Admin::Instance::V1::InstanceAdmin::Client.new
   end
 
+  def db_admin_client
+    @db_admin_client ||=
+      Google::Cloud::Spanner::Admin::Database::V1::DatabaseAdmin::Client.new
+  end
+
   def project_path
     instance_admin_client.project_path project: @project_id
   end
