@@ -14,12 +14,12 @@
 
 def run_command command, arguments, project_id
   sample_method = method command
-  parameters = { project_id: project_id }
+  parameters = {}
 
   sample_method.parameters.each do |paramater|
     next if paramater.last == :project_id
     parameters[paramater.last] = arguments.shift
   end
 
-  sample_method.call(**parameters)
+  sample_method.call(project_id: project_id, **parameters)
 end
