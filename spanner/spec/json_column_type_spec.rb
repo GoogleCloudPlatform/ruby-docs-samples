@@ -41,7 +41,7 @@ describe "Spanner database JSON datatype" do
     cleanup_database_resources
   end
 
-  example "add_json_column" do
+  example "add_json_column_update_and_query_data" do
     capture do
       add_json_column project_id: @project_id,
                       instance_id: @instance_id,
@@ -51,12 +51,6 @@ describe "Spanner database JSON datatype" do
     expect(captured_output).to include(
       "Added VenueDetails column to Venues table in database #{@database_id}"
     )
-  end
-
-  example "update_data_with_json_column" do
-    add_json_column project_id: @project_id,
-                    instance_id: @instance_id,
-                    database_id: @database_id
 
     client = @spanner.client @instance_id, @database_id
     client.insert "Venues", [{ VenueId: 1 }, { VenueId: 2 }]
@@ -68,19 +62,6 @@ describe "Spanner database JSON datatype" do
     end
 
     expect(captured_output).to include("Rows are updated")
-  end
-
-  example "query_with_json_params" do
-    add_json_column project_id: @project_id,
-                    instance_id: @instance_id,
-                    database_id: @database_id
-
-    client = @spanner.client @instance_id, @database_id
-    client.insert "Venues", [{ VenueId: 1 }, { VenueId: 2 }]
-
-    update_data_with_json_column project_id: @project_id,
-                                 instance_id: @instance_id,
-                                 database_id: @database_id
 
     capture do
       query_with_json_params project_id: @project_id,
