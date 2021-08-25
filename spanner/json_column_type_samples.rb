@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+require_relative "./utils"
+
 def add_json_column project_id:, instance_id:, database_id:
   # [START spanner_add_json_column]
   # project_id  = "Your Google Cloud project ID"
@@ -117,21 +119,11 @@ def run_sample arguments
   commands = [
     "add_json_column", "update_data_with_json_column", "query_with_json_params"
   ]
-
   command = arguments.shift
-  project_id = ENV["GOOGLE_CLOUD_PROJECT"]
 
   return usage unless commands.include? command
 
-  sample_method = method command
-  parameters = {}
-
-  sample_method.parameters.each do |paramater|
-    next if paramater.last == :project_id
-    parameters[paramater.last] = arguments.shift
-  end
-
-  sample_method.call(project_id: project_id, **parameters)
+  run_command command, arguments, ENV["GOOGLE_CLOUD_PROJECT"]
 end
 
 run_sample ARGV if $PROGRAM_NAME == __FILE__
