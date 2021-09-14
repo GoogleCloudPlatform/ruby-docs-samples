@@ -5,7 +5,7 @@ source "https://rubygems.org"
 git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
 
 # [START getting_started_sessions_requirements]
-gem "google-cloud-firestore", "~> 1.2"
+gem "google-cloud-firestore", "~> 2.0"
 gem "sinatra", "~> 2.0"
 # [END getting_started_sessions_requirements]
 
