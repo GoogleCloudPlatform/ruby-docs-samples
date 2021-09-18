@@ -59,18 +59,20 @@ def update_data_with_json_column project_id:, instance_id:, database_id:
   # array of objects that should be inserted into a JSON column. If we were
   # to specify this value as an array instead of a string, the client
   # library would encode this value as ARRAY<JSON> instead of JSON.
+  venue_details_string = [
+    {
+      name: "room 1",
+      open: true
+    },
+    {
+      name: "room 2",
+      open: false
+    }
+  ].to_json
+
   rows = [{
     VenueId: 2,
-    VenueDetails: [
-      {
-        name: "room 1",
-        open: true
-      },
-      {
-        name: "room 2",
-        open: false
-      }
-    ].to_json
+    VenueDetails: venue_details_string
   }]
   client.update "Venues", rows
 
