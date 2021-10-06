@@ -91,6 +91,7 @@ describe "Google Cloud Spanner tagging samples" do
     end
 
 
-    expect(captured_output).to include "Capacity of Venue 1 updated to 400"
+    expect(captured_output).to include "Venue capacities updated."
+    expect(captured_output).to include "New venue inserted."
   end
 end
