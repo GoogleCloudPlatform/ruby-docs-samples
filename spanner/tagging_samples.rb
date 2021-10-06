@@ -54,13 +54,13 @@ def transaction_tagging project_id:, instance_id:, database_id:
     puts "Venue capacities updated."
 
     tx.execute_update \
-      "INSERT INTO Venues (VenueId, VenueName, Capacity, OutdoorVenue) " \
-      + "VALUES (@venue_id, @venue_name, @capacity, @outdoor_venue)",
+      "INSERT INTO Venues (VenueId, VenueName, Capacity, OutdoorVenue) "\
+      "VALUES (@venue_id, @venue_name, @capacity, @outdoor_venue)",
       params: {
         venue_id: 81,
         venue_name: "Venue 81",
         capacity: 1440,
-        outdoor_venue: true,
+        outdoor_venue: true
       },
       request_options: { tag: "app=concert,env=dev,action=insert" }
 
