@@ -47,20 +47,24 @@ def transaction_tagging project_id:, instance_id:, database_id:
   client = spanner.client instance_id, database_id
 
   client.transaction request_options: { tag: "app=cart,env=dev" } do |tx|
-    venues = tx.execute \
-      "SELECT VenueId, VenueName, Capacity FROM Venues WHERE OutdoorVenue = @outdoor_venue",
-      params: { outdoor_venue: true },
-      request_options: { tag: "app=concert,env=dev,action=select" }
+    tx.execute_update \
+      "UPDATE Venues SET Capacity = CAST(Capacity/4 AS INT64) WHERE OutdoorVenue = false",
+      request_options: { tag: "app=concert,env=dev,action=update" }
 
-    venues.rows.each do |venue|
-      capacity = (venue["Capacity"] / 4).round
-      tx.execute_update \
-        "UPDATE Venues SET Capacity = @capacity WHERE VenueId = @venue_id",
-        params: { venue_id: venue["VenueId"], capacity: capacity },
-        request_options: { tag: "app=concert,env=dev,action=update" }
+    puts "Venue capacities updated."
 
-      puts "Capacity of #{venue['VenueName']} updated to #{capacity}"
-    end
+    tx.execute_update \
+      "INSERT INTO Venues (VenueId, VenueName, Capacity, OutdoorVenue) "\
+      "VALUES (@venue_id, @venue_name, @capacity, @outdoor_venue)",
+      params: {
+        venue_id: 81,
+        venue_name: "Venue 81",
+        capacity: 1440,
+        outdoor_venue: true
+      },
+      request_options: { tag: "app=concert,env=dev,action=insert" }
+
+    puts "New venue inserted."
   end
 
   # [END spanner_set_transaction_tag]
