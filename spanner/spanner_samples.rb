@@ -18,15 +18,21 @@ def create_instance project_id:, instance_id:
   # instance_id = "Your Spanner instance ID"
 
   require "google/cloud/spanner"
+  require "google/cloud/spanner/admin/instance"
 
-  spanner  = Google::Cloud::Spanner.new project: project_id
-  instance = spanner.instance instance_id
+  instance_admin_client = Google::Cloud::Spanner::Admin::Instance.instance_admin project_id: project_id
 
-  job = spanner.create_instance instance_id,
-                                name:   instance_id,
-                                config: "regional-us-central1",
-                                nodes:  2,
-                                labels: { cloud_spanner_samples: true }
+  project_path = instance_admin_client.project_path project: project_id
+  instance_path = instance_admin_client.instance_path project: project_id, instance: instance_id 
+  instance_config_path = instance_admin_client.instance_config_path project: project_id, instance_config: "regional-us-central1"
+
+  job = instance_admin_client.create_instance parent: project_path,
+                                              instance_id: instance_id,
+                                              instance: { name: instance_path,
+                                                          config: instance_config_path,
+                                                          display_name: instance_id,
+                                                          node_count: 2,
+                                                          labels: { "cloud_spanner_samples": "true" } }
 
   puts "Waiting for create instance operation to complete"
 
