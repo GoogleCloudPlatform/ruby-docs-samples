@@ -52,14 +52,22 @@ def create_instance_with_processing_units project_id:, instance_id:
   # instance_id = "Your Spanner instance ID"
 
   require "google/cloud/spanner"
+  require "google/cloud/spanner/admin/instance"
 
-  spanner = Google::Cloud::Spanner.new project: project_id
+  instance_admin_client = Google::Cloud::Spanner::Admin::Instance.instance_admin project_id: project_id
 
-  job = spanner.create_instance instance_id,
-                                name: "Low cost instance",
-                                config: "regional-us-central1",
-                                processing_units: 500,
-                                labels: { cloud_spanner_samples: true }
+  project_path = instance_admin_client.project_path project: project_id
+  instance_path = instance_admin_client.instance_path project: project_id, instance: instance_id 
+  instance_config_path = instance_admin_client.instance_config_path project: project_id, instance_config: "regional-us-central1"
+
+  job = instance_admin_client.create_instance parent: project_path,
+                                              instance_id: instance_id,
+                                              instance: { name: instance_path,
+                                                          config: instance_config_path,
+                                                          display_name: instance_id,
+                                                          processing_units: 500,
+                                                          labels: { "cloud_spanner_samples": "true" } }
+
 
   puts "Waiting for creating instance operation to complete"
 
@@ -71,7 +79,7 @@ def create_instance_with_processing_units project_id:, instance_id:
     puts "Created instance #{instance_id}"
   end
 
-  instance = spanner.instance instance_id
+  instance = instance_admin_client.get_instance name: instance_path
   puts "Instance #{instance_id} has #{instance.processing_units} processing units."
 
   # [END spanner_create_instance_with_processing_units]
@@ -84,26 +92,34 @@ def create_database project_id:, instance_id:, database_id:
   # database_id = "Your Spanner database ID"
 
   require "google/cloud/spanner"
+  require "google/cloud/spanner/admin/database"
 
-  spanner  = Google::Cloud::Spanner.new project: project_id
-  instance = spanner.instance instance_id
+  database_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin project_id: project_id
 
-  job = instance.create_database database_id, statements: [
-    "CREATE TABLE Singers (
-      SingerId     INT64 NOT NULL,
-      FirstName    STRING(1024),
-      LastName     STRING(1024),
-      SingerInfo   BYTES(MAX)
-    ) PRIMARY KEY (SingerId)",
+  instance_path = database_admin_client.instance_path project: project_id, instance: instance_id
 
-    "CREATE TABLE Albums (
-      SingerId     INT64 NOT NULL,
-      AlbumId      INT64 NOT NULL,
-      AlbumTitle   STRING(MAX)
-    ) PRIMARY KEY (SingerId, AlbumId),
-    INTERLEAVE IN PARENT Singers ON DELETE CASCADE"
-  ]
+  db_path = database_admin_client.database_path project: project_id,
+                                 instance: instance_id,
+                                 database: database_id
 
+  job = database_admin_client.create_database parent: instance_path,
+    create_statement: "CREATE DATABASE `#{database_id}`",
+    extra_statements: [
+      "CREATE TABLE Singers (
+        SingerId     INT64 NOT NULL,
+        FirstName    STRING(1024),
+        LastName     STRING(1024),
+        SingerInfo   BYTES(MAX)
+      ) PRIMARY KEY (SingerId)",
+  
+      "CREATE TABLE Albums (
+        SingerId     INT64 NOT NULL,
+        AlbumId      INT64 NOT NULL,
+        AlbumTitle   STRING(MAX)
+      ) PRIMARY KEY (SingerId, AlbumId),
+      INTERLEAVE IN PARENT Singers ON DELETE CASCADE"
+    ]
+  
   puts "Waiting for create database operation to complete"
 
   job.wait_until_done!
@@ -2185,7 +2201,7 @@ def run_sample arguments
   project_id  = ENV["GOOGLE_CLOUD_PROJECT"]
 
   commands = [
-    "create_instance", "create_database", "create_table_with_timestamp_column",
+    "create_instance", "create_instance_with_processing_units", "create_database", "create_table_with_timestamp_column",
     "insert_data", "insert_data_with_timestamp_column", "query_data",
     "query_data_with_timestamp_column", "read_data", "delete_data", "read_stale_data",
     "create_index", "create_storing_index", "add_column", "add_timestamp_column",
