@@ -98,10 +98,6 @@ def create_database project_id:, instance_id:, database_id:
 
   instance_path = database_admin_client.instance_path project: project_id, instance: instance_id
 
-  db_path = database_admin_client.database_path project: project_id,
-                                 instance: instance_id,
-                                 database: database_id
-
   job = database_admin_client.create_database parent: instance_path,
     create_statement: "CREATE DATABASE `#{database_id}`",
     extra_statements: [
@@ -135,12 +131,21 @@ def create_database_with_version_retention_period project_id:, instance_id:, dat
   # database_id = "Your Spanner database ID"
 
   require "google/cloud/spanner"
+  require "google/cloud/spanner/admin/database"
 
-  spanner  = Google::Cloud::Spanner.new project: project_id
-  instance = spanner.instance instance_id
-  version_retention_period = "7d"
+  database_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin project_id: project_id
 
-  job = instance.create_database database_id, statements: [
+  instance_path = database_admin_client.instance_path project: project_id, instance: instance_id
+
+  version_retention_period = "7d"    
+
+  db_path = database_admin_client.database_path project: project_id,
+                                   instance: instance_id,
+                                   database: database_id
+
+  job = database_admin_client.create_database parent: instance_path,
+    create_statement: "CREATE DATABASE `#{database_id}`",
+    extra_statements: [
     "CREATE TABLE Singers (
       SingerId     INT64 NOT NULL,
       FirstName    STRING(1024),
@@ -162,7 +167,7 @@ def create_database_with_version_retention_period project_id:, instance_id:, dat
   puts "Waiting for create database operation to complete"
 
   job.wait_until_done!
-  database = job.database
+  database = database_admin_client.get_database name: db_path
 
   puts "Created database #{database_id} on instance #{instance_id}"
   puts "\tVersion retention period: #{database.version_retention_period}"
@@ -2202,7 +2207,7 @@ def run_sample arguments
 
   commands = [
     "create_instance", "create_instance_with_processing_units", "create_database", "create_table_with_timestamp_column",
-    "insert_data", "insert_data_with_timestamp_column", "query_data",
+    "create_database_with_version_retention_period", "insert_data", "insert_data_with_timestamp_column", "query_data",
     "query_data_with_timestamp_column", "read_data", "delete_data", "read_stale_data",
     "create_index", "create_storing_index", "add_column", "add_timestamp_column",
     "add_numeric_column", "update_data", "query_data_with_new_column",
