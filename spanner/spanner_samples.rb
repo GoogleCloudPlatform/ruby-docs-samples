@@ -1892,7 +1892,7 @@ def create_backup project_id:, instance_id:, database_id:, backup_id:, version_t
   job.wait_until_done!
 
   backup = database_admin_client.get_backup name: backup_path
-  puts "Backup #{backup.name} of size #{backup.size_bytes} bytes was created at #{backup.create_time} for version of database at #{backup.version_time}"
+  puts "Backup #{backup_id} of size #{backup.size_bytes} bytes was created at #{backup.create_time} for version of database at #{backup.version_time}"
   # [END spanner_create_backup]
 end
 
@@ -1905,25 +1905,39 @@ def create_backup_with_encryption_key project_id:, instance_id:, database_id:, b
   # kms_key_name = "Your backup encryption database KMS key"
 
   require "google/cloud/spanner"
+  require "google/cloud/spanner/admin/database"
+  require "google/cloud/spanner/admin/instance"
 
-  spanner = Google::Cloud::Spanner.new project: project_id
-  client = spanner.client instance_id, database_id
-  instance = spanner.instance instance_id
-  database = instance.database database_id
+  instance_admin_client = Google::Cloud::Spanner::Admin::Instance.instance_admin 
+  database_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin
+
+  instance_path = instance_admin_client.instance_path project: project_id, instance: instance_id 
+  db_path = database_admin_client.database_path project: project_id,
+                                   instance: instance_id,
+                                   database: database_id
+  backup_path = database_admin_client.backup_path project: project_id,
+                                                  instance: instance_id,
+                                                  backup: backup_id                            
   expire_time = Time.now + 14 * 24 * 3600 # 14 days from now
   encryption_config = {
     encryption_type: :CUSTOMER_MANAGED_ENCRYPTION,
     kms_key_name:    kms_key_name
   }
-
-  job = database.create_backup backup_id, expire_time, encryption_config: encryption_config
-
+                                                 
+  job = database_admin_client.create_backup parent: instance_path, 
+                                            backup_id: backup_id, 
+                                            backup: {
+                                                database: db_path,
+                                                expire_time: expire_time
+                                              },
+                                            encryption_config: encryption_config  
+  
   puts "Backup operation in progress"
 
   job.wait_until_done!
 
-  backup = instance.backup backup_id
-  puts "Backup #{backup.backup_id} of size #{backup.size_in_bytes} bytes was created at #{backup.create_time} using encryption key #{kms_key_name}"
+  backup = database_admin_client.get_backup name: backup_path
+  puts "Backup #{backup_id} of size #{backup.size_bytes} bytes was created at #{backup.create_time} using encryption key #{kms_key_name}"
 
   # [END spanner_create_backup_with_encryption_key]
 end
