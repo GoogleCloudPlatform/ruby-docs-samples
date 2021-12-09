@@ -233,8 +233,6 @@ def create_table_with_timestamp_column project_id:, instance_id:, database_id:
 
   database_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin
 
-  instance_path = database_admin_client.instance_path project: project_id, instance: instance_id
-
   db_path = database_admin_client.database_path project: project_id,
                                    instance: instance_id,
                                    database: database_id
@@ -420,12 +418,16 @@ def create_index project_id:, instance_id:, database_id:
   # database_id = "Your Spanner database ID"
 
   require "google/cloud/spanner"
+  require "google/cloud/spanner/admin/database"
 
-  spanner  = Google::Cloud::Spanner.new project: project_id
-  instance = spanner.instance instance_id
-  database = instance.database database_id
+  database_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin
 
-  job = database.update statements: [
+  db_path = database_admin_client.database_path project: project_id,
+                                   instance: instance_id,
+                                   database: database_id
+
+  job = database_admin_client.update_database_ddl database: db_path,
+  statements: [
     "CREATE INDEX AlbumsByAlbumTitle ON Albums(AlbumTitle)"
   ]
 
