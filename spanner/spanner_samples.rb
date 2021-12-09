@@ -20,7 +20,7 @@ def create_instance project_id:, instance_id:
   require "google/cloud/spanner"
   require "google/cloud/spanner/admin/instance"
 
-  instance_admin_client = Google::Cloud::Spanner::Admin::Instance.instance_admin project_id: project_id
+  instance_admin_client = Google::Cloud::Spanner::Admin::Instance.instance_admin 
 
   project_path = instance_admin_client.project_path project: project_id
   instance_path = instance_admin_client.instance_path project: project_id, instance: instance_id 
@@ -54,7 +54,7 @@ def create_instance_with_processing_units project_id:, instance_id:
   require "google/cloud/spanner"
   require "google/cloud/spanner/admin/instance"
 
-  instance_admin_client = Google::Cloud::Spanner::Admin::Instance.instance_admin project_id: project_id
+  instance_admin_client = Google::Cloud::Spanner::Admin::Instance.instance_admin
 
   project_path = instance_admin_client.project_path project: project_id
   instance_path = instance_admin_client.instance_path project: project_id, instance: instance_id 
@@ -94,7 +94,7 @@ def create_database project_id:, instance_id:, database_id:
   require "google/cloud/spanner"
   require "google/cloud/spanner/admin/database"
 
-  database_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin project_id: project_id
+  database_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin
 
   instance_path = database_admin_client.instance_path project: project_id, instance: instance_id
 
@@ -133,7 +133,7 @@ def create_database_with_version_retention_period project_id:, instance_id:, dat
   require "google/cloud/spanner"
   require "google/cloud/spanner/admin/database"
 
-  database_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin project_id: project_id
+  database_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin
 
   instance_path = database_admin_client.instance_path project: project_id, instance: instance_id
 
@@ -183,12 +183,19 @@ def create_database_with_encryption_key project_id:, instance_id:, database_id:,
   # kms_key_name = "Database eencryption KMS key"
 
   require "google/cloud/spanner"
+  require "google/cloud/spanner/admin/database"
 
-  spanner  = Google::Cloud::Spanner.new project: project_id
-  instance = spanner.instance instance_id
+  database_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin
 
-  job = instance.create_database database_id,
-                                 statements:        [
+  instance_path = database_admin_client.instance_path project: project_id, instance: instance_id
+
+  db_path = database_admin_client.database_path project: project_id,
+                                   instance: instance_id,
+                                   database: database_id
+
+  job = database_admin_client.create_database parent: instance_path,
+                                  create_statement: "CREATE DATABASE `#{database_id}`",
+                                  extra_statements: [
                                    "CREATE TABLE Singers (
                                      SingerId     INT64 NOT NULL,
                                      FirstName    STRING(1024),
@@ -208,9 +215,9 @@ def create_database_with_encryption_key project_id:, instance_id:, database_id:,
   puts "Waiting for create database operation to complete"
 
   job.wait_until_done!
-  database = job.database
+  database = database_admin_client.get_database name: db_path
 
-  puts "Database #{database.database_id} created with encryption key #{database.encryption_config.kms_key_name}"
+  puts "Database #{database_id} created with encryption key #{database.encryption_config.kms_key_name}"
 
   # [END spanner_create_database_with_encryption_key]
 end
