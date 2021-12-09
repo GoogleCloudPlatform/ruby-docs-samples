@@ -1627,11 +1627,16 @@ def write_read_empty_int64_array project_id:, instance_id:, database_id:
   # database_id = "Your Spanner database ID"
 
   require "google/cloud/spanner"
+  require "google/cloud/spanner/admin/database"
   require "securerandom"
 
-  spanner = Google::Cloud::Spanner.new project: project_id
-  database = spanner.database instance_id, database_id
-  job = database.update statements: [
+  database_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin
+
+  db_path = database_admin_client.database_path project: project_id,
+                                   instance: instance_id,
+                                   database: database_id
+
+  job = database_admin_client.update_database_ddl database: db_path, statements: [
     "CREATE TABLE Boxes (
         BoxId             STRING(36) NOT NULL,
         Heights           ARRAY<INT64>,
@@ -1639,8 +1644,10 @@ def write_read_empty_int64_array project_id:, instance_id:, database_id:
         ErrorChecks       ARRAY<BOOL>
       ) PRIMARY KEY (BoxId)"
   ]
-  job.wait_until_done!
 
+  job.wait_until_done!
+  
+  spanner = Google::Cloud::Spanner.new project: project_id
   client = spanner.client instance_id, database_id
 
   box_id = SecureRandom.uuid
