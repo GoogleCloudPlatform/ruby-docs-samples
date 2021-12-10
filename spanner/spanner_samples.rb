@@ -2120,46 +2120,47 @@ def list_backups project_id:, instance_id:, backup_id:, database_id:
   # database_id = "Your Spanner databaseID"
 
   require "google/cloud/spanner"
+  require "google/cloud/spanner/admin/database"
 
-  spanner  = Google::Cloud::Spanner.new project: project_id
-  instance = spanner.instance instance_id
+  database_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin
+  instance_path = database_admin_client.instance_path project: project_id, instance: instance_id
 
   puts "All backups"
-  instance.backups.all.each do |backup|
-    puts backup.backup_id
+  database_admin_client.list_backups(parent: instance_path).each do |backup|
+    puts backup.name
   end
 
   puts "All backups with backup name containing \"#{backup_id}\":"
-  instance.backups(filter: "name:#{backup_id}").all.each do |backup|
-    puts backup.backup_id
+  database_admin_client.list_backups(parent: instance_path, filter: "name:#{backup_id}").each do |backup|
+    puts backup.name
   end
 
   puts "All backups for databases with a name containing \"#{database_id}\":"
-  instance.backups(filter: "database:#{database_id}").all.each do |backup|
-    puts backup.backup_id
+  database_admin_client.list_backups(parent: instance_path, filter: "database:#{database_id}").each do |backup|
+    puts backup.name
   end
 
   puts "All backups that expire before a timestamp:"
   expire_time = Time.now + 30 * 24 * 3600 # 30 days from now
-  instance.backups(filter: "expire_time < \"#{expire_time.iso8601}\"").all.each do |backup|
-    puts backup.backup_id
+  database_admin_client.list_backups(parent: instance_path, filter: "expire_time < \"#{expire_time.iso8601}\"").each do |backup|
+    puts backup.name
   end
 
   puts "All backups with a size greater than 500 bytes:"
-  instance.backups(filter: "size_bytes >= 500").all.each do |backup|
-    puts backup.backup_id
+  database_admin_client.list_backups(parent: instance_path, filter: "size_bytes >= 500").each do |backup|
+    puts backup.name
   end
 
   puts "All backups that were created after a timestamp that are also ready:"
   create_time = Time.now - 24 * 3600 # From 1 day ago
-  instance.backups(filter: "create_time >= \"#{create_time.iso8601}\" AND state:READY").all.each do |backup|
-    puts backup.backup_id
+  database_admin_client.list_backups(parent: instance_path, filter: "create_time >= \"#{create_time.iso8601}\" AND state:READY").each do |backup|
+    puts backup.name
   end
 
   puts "All backups with pagination:"
-  list = instance.backups page_size: 5
+  list = database_admin_client.list_backups parent: instance_path, page_size: 5
   list.each do |backup|
-    puts backup.backup_id
+    puts backup.name
   end
   # [END spanner_list_backups]
 end
@@ -2385,8 +2386,8 @@ def run_sample arguments
                           end_title:   arguments.shift
   elsif commands.include?(command) && instance_id && database_id
     send command, project_id:  project_id,
-                  instance_id: instance_id
-                  # database_id: database_id
+                  instance_id: instance_id,
+                  database_id: database_id
   else
     usage
   end
