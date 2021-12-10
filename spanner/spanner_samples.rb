@@ -2068,16 +2068,18 @@ def list_backup_operations project_id:, instance_id:, database_id:
   # database_id = "Your Spanner database ID"
 
   require "google/cloud/spanner"
+  require "google/cloud/spanner/admin/database"
 
-  spanner  = Google::Cloud::Spanner.new project: project_id
-  instance = spanner.instance instance_id
+  database_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin
+  instance_path = database_admin_client.instance_path project: project_id, instance: instance_id
 
-  jobs = instance.backup_operations filter: "metadata.@type:type.googleapis.com/google.spanner.admin.database.v1.CreateBackupMetadata"
-  jobs.each do |job|
+  jobs = database_admin_client.list_backup_operations parent: instance_path,
+                                                      filter: "metadata.@type:type.googleapis.com/google.spanner.admin.database.v1.CreateBackupMetadata"
+  jobs.each do |job|  
     if job.error?
       puts job.error
     else
-      puts "Backup #{job.backup.backup_id} on database #{database_id} is #{job.progress_percent}% complete"
+      puts "Backup #{job.results.name} on database #{database_id} is #{job.metadata.progress.progress_percent}% complete"
     end
   end
   # [END spanner_list_backup_operations]
