@@ -2172,12 +2172,15 @@ def delete_backup project_id:, instance_id:, backup_id:
   # backup_id = "Your Spanner backup ID"
 
   require "google/cloud/spanner"
+  require "google/cloud/spanner/admin/database"
 
-  spanner  = Google::Cloud::Spanner.new project: project_id
-  instance = spanner.instance instance_id
+  database_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin
+  instance_path = database_admin_client.instance_path project: project_id, instance: instance_id
+  backup_path = database_admin_client.backup_path project: project_id,
+                                                  instance: instance_id,
+                                                  backup: backup_id   
 
-  backup = instance.backup backup_id
-  backup.delete
+  database_admin_client.delete_backup name: backup_path
   puts "Backup #{backup_id} deleted"
   # [END spanner_delete_backup]
 end
