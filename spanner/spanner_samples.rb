@@ -1865,12 +1865,10 @@ def create_backup project_id:, instance_id:, database_id:, backup_id:, version_t
 
   require "google/cloud/spanner"
   require "google/cloud/spanner/admin/database"
-  require "google/cloud/spanner/admin/instance"
 
-  instance_admin_client = Google::Cloud::Spanner::Admin::Instance.instance_admin 
   database_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin
 
-  instance_path = instance_admin_client.instance_path project: project_id, instance: instance_id 
+  instance_path = database_admin_client.instance_path project: project_id, instance: instance_id 
   db_path = database_admin_client.database_path project: project_id,
                                    instance: instance_id,
                                    database: database_id
@@ -1906,12 +1904,10 @@ def create_backup_with_encryption_key project_id:, instance_id:, database_id:, b
 
   require "google/cloud/spanner"
   require "google/cloud/spanner/admin/database"
-  require "google/cloud/spanner/admin/instance"
 
-  instance_admin_client = Google::Cloud::Spanner::Admin::Instance.instance_admin 
   database_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin
 
-  instance_path = instance_admin_client.instance_path project: project_id, instance: instance_id 
+  instance_path = database_admin_client.instance_path project: project_id, instance: instance_id 
   db_path = database_admin_client.database_path project: project_id,
                                    instance: instance_id,
                                    database: database_id
@@ -1950,19 +1946,31 @@ def restore_backup project_id:, instance_id:, database_id:, backup_id:
   # backup_id = "Your Spanner backup ID"
 
   require "google/cloud/spanner"
+  require "google/cloud/spanner/admin/database"
 
-  spanner  = Google::Cloud::Spanner.new project: project_id
-  instance = spanner.instance instance_id
+  database_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin
 
-  backup = instance.backup backup_id
-  job = backup.restore database_id
+  instance_path = database_admin_client.instance_path project: project_id, instance: instance_id
+
+  db_path = database_admin_client.database_path project: project_id,
+                                   instance: instance_id,
+                                   database: database_id
+
+  backup_path = database_admin_client.backup_path project: project_id,
+                                                  instance: instance_id,
+                                                  backup: backup_id    
+
+  job = database_admin_client.restore_database parent: instance_path, 
+                                               database_id: database_id,
+                                               backup: backup_path
 
   puts "Waiting for restore backup operation to complete"
 
   job.wait_until_done!
 
-  restore_info = job.database.restore_info
-  puts "Database #{restore_info.backup_info.source_database_id} was restored to #{database_id} from backup #{restore_info.backup_info.backup_id} with version time #{restore_info.backup_info.version_time}"
+  database = database_admin_client.get_database name: db_path
+  restore_info = database.restore_info
+  puts "Database #{restore_info.backup_info.source_database} was restored to #{database_id} from backup #{restore_info.backup_info.backup} with version time #{restore_info.backup_info.version_time}"
   # [END spanner_restore_backup]
 end
 
@@ -1975,24 +1983,35 @@ def restore_database_with_encryption_key project_id:, instance_id:, database_id:
   # kms_key_name = "Your backup encryption database KMS key"
 
   require "google/cloud/spanner"
+  require "google/cloud/spanner/admin/database"
 
-  spanner  = Google::Cloud::Spanner.new project: project_id
-  instance = spanner.instance instance_id
+  database_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin
 
-  backup = instance.backup backup_id
+  instance_path = database_admin_client.instance_path project: project_id, instance: instance_id
+
+  db_path = database_admin_client.database_path project: project_id,
+                                   instance: instance_id,
+                                   database: database_id
+
+  backup_path = database_admin_client.backup_path project: project_id,
+                                                  instance: instance_id,
+                                                  backup: backup_id   
 
   encryption_config = {
     encryption_type: :CUSTOMER_MANAGED_ENCRYPTION,
     kms_key_name:    kms_key_name
   }
-  job = backup.restore database_id, encryption_config: encryption_config
+  job = database_admin_client.restore_database parent: instance_path, 
+                                               database_id: database_id,
+                                               backup: backup_path, 
+                                               encryption_config: encryption_config
 
   puts "Waiting for restore backup operation to complete"
 
   job.wait_until_done!
-  database = job.database
+  database = database_admin_client.get_database name: db_path
   restore_info = database.restore_info
-  puts "Database #{restore_info.backup_info.source_database_id} was restored to #{database.database_id} from backup #{restore_info.backup_info.backup_id} using encryption key #{database.encryption_config.kms_key_name}"
+  puts "Database #{restore_info.backup_info.source_database} was restored to #{database_id} from backup #{restore_info.backup_info.backup} using encryption key #{database.encryption_config.kms_key_name}"
 
   # [END spanner_restore_backup_with_encryption_key]
 end
