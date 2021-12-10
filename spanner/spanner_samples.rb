@@ -2192,12 +2192,17 @@ def update_backup project_id:, instance_id:, backup_id:
   # backup_id = "Your Spanner backup ID"
 
   require "google/cloud/spanner"
+  require "google/cloud/spanner/admin/database"
 
-  spanner  = Google::Cloud::Spanner.new project: project_id
-  instance = spanner.instance instance_id
-
-  backup = instance.backup backup_id
-  backup.expire_time = backup.expire_time + 2_592_000 # Extending the expiry time by 30 days.
+  database_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin
+  instance_path = database_admin_client.instance_path project: project_id, instance: instance_id
+  backup_path = database_admin_client.backup_path project: project_id,
+                                                  instance: instance_id,
+                                                  backup: backup_id   
+  backup = database_admin_client.get_backup name: backup_path
+  backup.expire_time = Time.now + 60 * 24 * 3600   # Extending the expiry time by 60 days from now.                                                   
+  database_admin_client.update_backup backup: backup, 
+                                      update_mask: { paths: ["expire_time"] }                                                
 
   puts "Expiration time updated: #{backup.expire_time}"
   # [END spanner_update_backup]
@@ -2379,7 +2384,7 @@ def run_sample arguments
     "delete_backup", "update_backup_expiration_time",
     "set_custom_timeout_and_retry", "query_with_numeric_parameter",
     "update_data_with_numeric_column", "commit_stats", "create_database_with_encryption_key",
-    "create_backup_with_encryption_key", "restore_database_with_encryption_key"
+    "create_backup_with_encryption_key", "restore_database_with_encryption_key", "update_backup"
   ]
   if command.eql?("query_data_with_index") && instance_id && database_id && arguments.size >= 2
     query_data_with_index project_id:  project_id,
@@ -2390,7 +2395,7 @@ def run_sample arguments
   elsif commands.include?(command) && instance_id && database_id
     send command, project_id:  project_id,
                   instance_id: instance_id,
-                  database_id: database_id
+                  backup_id: database_id
   else
     usage
   end
