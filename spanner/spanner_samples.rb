@@ -2024,22 +2024,38 @@ def create_backup_cancel project_id:, instance_id:, database_id:, backup_id:
   # backup_id = "Your Spanner backup ID"
 
   require "google/cloud/spanner"
+  require "google/cloud/spanner/admin/database"
 
-  spanner  = Google::Cloud::Spanner.new project: project_id
-  instance = spanner.instance instance_id
-  database = instance.database database_id
+  database_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin
+
+  instance_path = database_admin_client.instance_path project: project_id, instance: instance_id
+
+  db_path = database_admin_client.database_path project: project_id,
+                                   instance: instance_id,
+                                   database: database_id
+
+  backup_path = database_admin_client.backup_path project: project_id,
+                                                  instance: instance_id,
+                                                  backup: backup_id   
+
   expire_time = Time.now + 14 * 24 * 3600 # 14 days from now
 
-  job = database.create_backup backup_id, expire_time
+  job = database_admin_client.create_backup parent: instance_path, 
+                                            backup_id: backup_id, 
+                                            backup: {
+                                                database: db_path,
+                                                expire_time: expire_time
+                                              }
 
   puts "Backup operation in progress"
 
   job.cancel
   job.wait_until_done!
 
-  backup = instance.backup backup_id
-
-  backup.delete if backup
+  begin
+    backup = database_admin_client.get_backup name: backup_path
+    database_admin_client.delete_backup name: backup_path if backup
+  rescue; end
 
   puts "#{backup_id} creation job cancelled"
   # [END spanner_cancel_backup_create]
