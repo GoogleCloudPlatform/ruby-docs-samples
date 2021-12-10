@@ -2091,22 +2091,23 @@ def list_database_operations project_id:, instance_id:
   # instance_id = "Your Spanner instance ID"
 
   require "google/cloud/spanner"
+  require "google/cloud/spanner/admin/database"
 
-  spanner  = Google::Cloud::Spanner.new project: project_id
-  instance = spanner.instance instance_id
-
-  jobs = instance.database_operations filter: "metadata.@type:type.googleapis.com/google.spanner.admin.database.v1.OptimizeRestoredDatabaseMetadata"
+  database_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin
+  instance_path = database_admin_client.instance_path project: project_id, instance: instance_id
+  jobs = database_admin_client.list_database_operations parent: instance_path,
+  filter: "metadata.@type:type.googleapis.com/google.spanner.admin.database.v1.OptimizeRestoredDatabaseMetadata"
 
   jobs.each do |job|
     if job.error?
       puts job.error
-    elsif job.database
-      progress_percent = job.grpc.metadata.progress.progress_percent
-      puts "Database #{job.database.database_id} restored from backup is #{progress_percent}% optimized"
+    elsif job.results
+      progress_percent = job.metadata.progress.progress_percent
+      puts "Database #{job.results.name} restored from backup is #{progress_percent}% optimized"
     end
   end
 
-  puts "List database operations with optimized database filter found #{jobs.length} jobs."
+  puts "List database operations with optimized database filter found #{jobs.count} jobs."
 
   # [END spanner_list_database_operations]
 end
@@ -2384,8 +2385,8 @@ def run_sample arguments
                           end_title:   arguments.shift
   elsif commands.include?(command) && instance_id && database_id
     send command, project_id:  project_id,
-                  instance_id: instance_id,
-                  database_id: database_id
+                  instance_id: instance_id
+                  # database_id: database_id
   else
     usage
   end
