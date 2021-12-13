@@ -20,10 +20,10 @@ def create_instance project_id:, instance_id:
   require "google/cloud/spanner"
   require "google/cloud/spanner/admin/instance"
 
-  instance_admin_client = Google::Cloud::Spanner::Admin::Instance.instance_admin
+  instance_admin_client = Google::Cloud::Spanner::Admin::Instance.instance_admin 
 
   project_path = instance_admin_client.project_path project: project_id
-  instance_path = instance_admin_client.instance_path project: project_id, instance: instance_id
+  instance_path = instance_admin_client.instance_path project: project_id, instance: instance_id 
   instance_config_path = instance_admin_client.instance_config_path project: project_id, instance_config: "regional-us-central1"
 
   job = instance_admin_client.create_instance parent: project_path,
@@ -32,7 +32,7 @@ def create_instance project_id:, instance_id:
                                                           config: instance_config_path,
                                                           display_name: instance_id,
                                                           node_count: 2,
-                                                          labels: { cloud_spanner_samples: "true" } }
+                                                          labels: { "cloud_spanner_samples": "true" } }
 
   puts "Waiting for create instance operation to complete"
 
@@ -57,7 +57,7 @@ def create_instance_with_processing_units project_id:, instance_id:
   instance_admin_client = Google::Cloud::Spanner::Admin::Instance.instance_admin
 
   project_path = instance_admin_client.project_path project: project_id
-  instance_path = instance_admin_client.instance_path project: project_id, instance: instance_id
+  instance_path = instance_admin_client.instance_path project: project_id, instance: instance_id 
   instance_config_path = instance_admin_client.instance_config_path project: project_id, instance_config: "regional-us-central1"
 
   job = instance_admin_client.create_instance parent: project_path,
@@ -66,7 +66,7 @@ def create_instance_with_processing_units project_id:, instance_id:
                                                           config: instance_config_path,
                                                           display_name: instance_id,
                                                           processing_units: 500,
-                                                          labels: { cloud_spanner_samples: "true" } }
+                                                          labels: { "cloud_spanner_samples": "true" } }
 
 
   puts "Waiting for creating instance operation to complete"
@@ -99,23 +99,23 @@ def create_database project_id:, instance_id:, database_id:
   instance_path = database_admin_client.instance_path project: project_id, instance: instance_id
 
   job = database_admin_client.create_database parent: instance_path,
-                                              create_statement: "CREATE DATABASE `#{database_id}`",
-                                              extra_statements: [
-                                                "CREATE TABLE Singers (
+    create_statement: "CREATE DATABASE `#{database_id}`",
+    extra_statements: [
+      "CREATE TABLE Singers (
         SingerId     INT64 NOT NULL,
         FirstName    STRING(1024),
         LastName     STRING(1024),
         SingerInfo   BYTES(MAX)
       ) PRIMARY KEY (SingerId)",
-
-                                                "CREATE TABLE Albums (
+  
+      "CREATE TABLE Albums (
         SingerId     INT64 NOT NULL,
         AlbumId      INT64 NOT NULL,
         AlbumTitle   STRING(MAX)
       ) PRIMARY KEY (SingerId, AlbumId),
       INTERLEAVE IN PARENT Singers ON DELETE CASCADE"
-                                              ]
-
+    ]
+  
   puts "Waiting for create database operation to complete"
 
   job.wait_until_done!
@@ -137,32 +137,32 @@ def create_database_with_version_retention_period project_id:, instance_id:, dat
 
   instance_path = database_admin_client.instance_path project: project_id, instance: instance_id
 
-  version_retention_period = "7d"
+  version_retention_period = "7d"    
 
   db_path = database_admin_client.database_path project: project_id,
-                                                instance: instance_id,
-                                                database: database_id
+                                   instance: instance_id,
+                                   database: database_id
 
   job = database_admin_client.create_database parent: instance_path,
-                                              create_statement: "CREATE DATABASE `#{database_id}`",
-                                              extra_statements: [
-                                                "CREATE TABLE Singers (
+    create_statement: "CREATE DATABASE `#{database_id}`",
+    extra_statements: [
+    "CREATE TABLE Singers (
       SingerId     INT64 NOT NULL,
       FirstName    STRING(1024),
       LastName     STRING(1024),
       SingerInfo   BYTES(MAX)
     ) PRIMARY KEY (SingerId)",
 
-                                                "CREATE TABLE Albums (
+    "CREATE TABLE Albums (
       SingerId     INT64 NOT NULL,
       AlbumId      INT64 NOT NULL,
       AlbumTitle   STRING(MAX)
     ) PRIMARY KEY (SingerId, AlbumId),
     INTERLEAVE IN PARENT Singers ON DELETE CASCADE",
 
-                                                "ALTER DATABASE `#{database_id}`
+    "ALTER DATABASE `#{database_id}`
       SET OPTIONS ( version_retention_period = '#{version_retention_period}' )"
-                                              ]
+  ]
 
   puts "Waiting for create database operation to complete"
 
@@ -190,27 +190,27 @@ def create_database_with_encryption_key project_id:, instance_id:, database_id:,
   instance_path = database_admin_client.instance_path project: project_id, instance: instance_id
 
   db_path = database_admin_client.database_path project: project_id,
-                                                instance: instance_id,
-                                                database: database_id
+                                   instance: instance_id,
+                                   database: database_id
 
   job = database_admin_client.create_database parent: instance_path,
-                                              create_statement: "CREATE DATABASE `#{database_id}`",
-                                              extra_statements: [
-                                                "CREATE TABLE Singers (
+                                  create_statement: "CREATE DATABASE `#{database_id}`",
+                                  extra_statements: [
+                                   "CREATE TABLE Singers (
                                      SingerId     INT64 NOT NULL,
                                      FirstName    STRING(1024),
                                      LastName     STRING(1024),
                                      SingerInfo   BYTES(MAX)
                                    ) PRIMARY KEY (SingerId)",
 
-                                                "CREATE TABLE Albums (
+                                   "CREATE TABLE Albums (
                                      SingerId     INT64 NOT NULL,
                                      AlbumId      INT64 NOT NULL,
                                      AlbumTitle   STRING(MAX)
                                    ) PRIMARY KEY (SingerId, AlbumId),
                                    INTERLEAVE IN PARENT Singers ON DELETE CASCADE"
-                                              ],
-                                              encryption_config: { kms_key_name: kms_key_name }
+                                 ],
+                                 encryption_config: { kms_key_name: kms_key_name }
 
   puts "Waiting for create database operation to complete"
 
@@ -234,12 +234,12 @@ def create_table_with_timestamp_column project_id:, instance_id:, database_id:
   database_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin
 
   db_path = database_admin_client.database_path project: project_id,
-                                                instance: instance_id,
-                                                database: database_id
+                                   instance: instance_id,
+                                   database: database_id
 
   job = database_admin_client.update_database_ddl database: db_path,
-                                                  statements: [
-                                                    "CREATE TABLE Performances (
+  statements: [
+    "CREATE TABLE Performances (
       SingerId     INT64 NOT NULL,
       VenueId      INT64 NOT NULL,
       EventDate    Date,
@@ -247,7 +247,7 @@ def create_table_with_timestamp_column project_id:, instance_id:, database_id:
       LastUpdateTime TIMESTAMP NOT NULL OPTIONS (allow_commit_timestamp=true)
      ) PRIMARY KEY (SingerId, VenueId, EventDate),
      INTERLEAVE IN PARENT Singers ON DELETE CASCADE"
-                                                  ]
+  ]
 
   puts "Waiting for update database operation to complete"
 
@@ -423,13 +423,13 @@ def create_index project_id:, instance_id:, database_id:
   database_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin
 
   db_path = database_admin_client.database_path project: project_id,
-                                                instance: instance_id,
-                                                database: database_id
+                                   instance: instance_id,
+                                   database: database_id
 
   job = database_admin_client.update_database_ddl database: db_path,
-                                                  statements: [
-                                                    "CREATE INDEX AlbumsByAlbumTitle ON Albums(AlbumTitle)"
-                                                  ]
+  statements: [
+    "CREATE INDEX AlbumsByAlbumTitle ON Albums(AlbumTitle)"
+  ]
 
   puts "Waiting for database update to complete"
 
@@ -451,14 +451,14 @@ def create_storing_index project_id:, instance_id:, database_id:
   database_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin
 
   db_path = database_admin_client.database_path project: project_id,
-                                                instance: instance_id,
-                                                database: database_id
+                                   instance: instance_id,
+                                   database: database_id
 
   job = database_admin_client.update_database_ddl database: db_path,
-                                                  statements: [
-                                                    "CREATE INDEX AlbumsByAlbumTitle2 ON Albums(AlbumTitle)
+   statements: [
+    "CREATE INDEX AlbumsByAlbumTitle2 ON Albums(AlbumTitle)
      STORING (MarketingBudget)"
-                                                  ]
+  ]
 
   puts "Waiting for database update to complete"
 
@@ -480,13 +480,13 @@ def add_column project_id:, instance_id:, database_id:
   database_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin
 
   db_path = database_admin_client.database_path project: project_id,
-                                                instance: instance_id,
-                                                database: database_id
+                                   instance: instance_id,
+                                   database: database_id
 
   job = database_admin_client.update_database_ddl database: db_path,
-                                                  statements: [
-                                                    "ALTER TABLE Albums ADD COLUMN MarketingBudget INT64"
-                                                  ]
+   statements: [
+    "ALTER TABLE Albums ADD COLUMN MarketingBudget INT64"
+  ]
 
   puts "Waiting for database update to complete"
 
@@ -508,14 +508,14 @@ def add_timestamp_column project_id:, instance_id:, database_id:
   database_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin
 
   db_path = database_admin_client.database_path project: project_id,
-                                                instance: instance_id,
-                                                database: database_id
+                                   instance: instance_id,
+                                   database: database_id
 
   job = database_admin_client.update_database_ddl database: db_path,
-                                                  statements: [
-                                                    "ALTER TABLE Albums ADD COLUMN LastUpdateTime TIMESTAMP
+   statements: [
+    "ALTER TABLE Albums ADD COLUMN LastUpdateTime TIMESTAMP
      OPTIONS (allow_commit_timestamp=true)"
-                                                  ]
+  ]
 
   puts "Waiting for database update to complete"
 
@@ -537,13 +537,13 @@ def add_numeric_column project_id:, instance_id:, database_id:
   database_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin
 
   db_path = database_admin_client.database_path project: project_id,
-                                                instance: instance_id,
-                                                database: database_id
+                                   instance: instance_id,
+                                   database: database_id
 
   job = database_admin_client.update_database_ddl database: db_path,
-                                                  statements: [
-                                                    "ALTER TABLE Venues ADD COLUMN Revenue NUMERIC"
-                                                  ]
+   statements: [
+    "ALTER TABLE Venues ADD COLUMN Revenue NUMERIC"
+  ]
 
   puts "Waiting for database update to complete"
 
@@ -1594,8 +1594,8 @@ def write_read_bool_array project_id:, instance_id:, database_id:
   database_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin
 
   db_path = database_admin_client.database_path project: project_id,
-                                                instance: instance_id,
-                                                database: database_id
+                                   instance: instance_id,
+                                   database: database_id
 
   job = database_admin_client.update_database_ddl database: db_path, statements: [
     "CREATE TABLE Boxes (
@@ -1633,8 +1633,8 @@ def write_read_empty_int64_array project_id:, instance_id:, database_id:
   database_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin
 
   db_path = database_admin_client.database_path project: project_id,
-                                                instance: instance_id,
-                                                database: database_id
+                                   instance: instance_id,
+                                   database: database_id
 
   job = database_admin_client.update_database_ddl database: db_path, statements: [
     "CREATE TABLE Boxes (
@@ -1646,7 +1646,7 @@ def write_read_empty_int64_array project_id:, instance_id:, database_id:
   ]
 
   job.wait_until_done!
-
+  
   spanner = Google::Cloud::Spanner.new project: project_id
   client = spanner.client instance_id, database_id
 
@@ -1673,8 +1673,8 @@ def write_read_null_int64_array project_id:, instance_id:, database_id:
   database_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin
 
   db_path = database_admin_client.database_path project: project_id,
-                                                instance: instance_id,
-                                                database: database_id
+                                   instance: instance_id,
+                                   database: database_id
 
   job = database_admin_client.update_database_ddl database: db_path, statements: [
     "CREATE TABLE Boxes (
@@ -1683,9 +1683,9 @@ def write_read_null_int64_array project_id:, instance_id:, database_id:
       Weights           ARRAY<FLOAT64>,
       ErrorChecks       ARRAY<BOOL>
       ) PRIMARY KEY (BoxId)"
-  ]
-  job.wait_until_done!
-
+    ]
+    job.wait_until_done!
+    
   spanner = Google::Cloud::Spanner.new project: project_id
   client = spanner.client instance_id, database_id
 
@@ -1712,8 +1712,8 @@ def write_read_int64_array project_id:, instance_id:, database_id:
   database_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin
 
   db_path = database_admin_client.database_path project: project_id,
-                                                instance: instance_id,
-                                                database: database_id
+                                   instance: instance_id,
+                                   database: database_id
 
   job = database_admin_client.update_database_ddl database: db_path, statements: [
     "CREATE TABLE Boxes (
@@ -1722,9 +1722,9 @@ def write_read_int64_array project_id:, instance_id:, database_id:
       Weights           ARRAY<FLOAT64>,
       ErrorChecks       ARRAY<BOOL>
       ) PRIMARY KEY (BoxId)"
-  ]
+    ]
   job.wait_until_done!
-
+    
   spanner = Google::Cloud::Spanner.new project: project_id
   client = spanner.client instance_id, database_id
 
@@ -1751,8 +1751,8 @@ def write_read_empty_float64_array project_id:, instance_id:, database_id:
   database_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin
 
   db_path = database_admin_client.database_path project: project_id,
-                                                instance: instance_id,
-                                                database: database_id
+                                   instance: instance_id,
+                                   database: database_id
 
   job = database_admin_client.update_database_ddl database: db_path, statements: [
     "CREATE TABLE Boxes (
@@ -1761,9 +1761,9 @@ def write_read_empty_float64_array project_id:, instance_id:, database_id:
       Weights           ARRAY<FLOAT64>,
       ErrorChecks       ARRAY<BOOL>
       ) PRIMARY KEY (BoxId)"
-  ]
+    ]
   job.wait_until_done!
-
+    
   spanner = Google::Cloud::Spanner.new project: project_id
   client = spanner.client instance_id, database_id
 
@@ -1790,8 +1790,8 @@ def write_read_null_float64_array project_id:, instance_id:, database_id:
   database_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin
 
   db_path = database_admin_client.database_path project: project_id,
-                                                instance: instance_id,
-                                                database: database_id
+                                   instance: instance_id,
+                                   database: database_id
 
   job = database_admin_client.update_database_ddl database: db_path, statements: [
     "CREATE TABLE Boxes (
@@ -1800,9 +1800,9 @@ def write_read_null_float64_array project_id:, instance_id:, database_id:
       Weights           ARRAY<FLOAT64>,
       ErrorChecks       ARRAY<BOOL>
       ) PRIMARY KEY (BoxId)"
-  ]
+    ]
   job.wait_until_done!
-
+    
   spanner = Google::Cloud::Spanner.new project: project_id
   client = spanner.client instance_id, database_id
 
@@ -1829,8 +1829,8 @@ def write_read_float64_array project_id:, instance_id:, database_id:
   database_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin
 
   db_path = database_admin_client.database_path project: project_id,
-                                                instance: instance_id,
-                                                database: database_id
+                                   instance: instance_id,
+                                   database: database_id
 
   job = database_admin_client.update_database_ddl database: db_path, statements: [
     "CREATE TABLE Boxes (
@@ -1839,9 +1839,9 @@ def write_read_float64_array project_id:, instance_id:, database_id:
       Weights           ARRAY<FLOAT64>,
       ErrorChecks       ARRAY<BOOL>
       ) PRIMARY KEY (BoxId)"
-  ]
+    ]
   job.wait_until_done!
-
+    
   spanner = Google::Cloud::Spanner.new project: project_id
   client = spanner.client instance_id, database_id
 
@@ -1868,22 +1868,22 @@ def create_backup project_id:, instance_id:, database_id:, backup_id:, version_t
 
   database_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin
 
-  instance_path = database_admin_client.instance_path project: project_id, instance: instance_id
+  instance_path = database_admin_client.instance_path project: project_id, instance: instance_id 
   db_path = database_admin_client.database_path project: project_id,
-                                                instance: instance_id,
-                                                database: database_id
+                                   instance: instance_id,
+                                   database: database_id
   backup_path = database_admin_client.backup_path project: project_id,
                                                   instance: instance_id,
-                                                  backup: backup_id
+                                                  backup: backup_id                            
   expire_time = Time.now + 14 * 24 * 3600 # 14 days from now
-
-  job = database_admin_client.create_backup parent: instance_path,
-                                            backup_id: backup_id,
+                                                 
+  job = database_admin_client.create_backup parent: instance_path, 
+                                            backup_id: backup_id, 
                                             backup: {
-                                              database: db_path,
+                                                database: db_path,
                                                 expire_time: expire_time,
                                                 version_time: version_time
-                                            }
+                                              }
 
   puts "Backup operation in progress"
 
@@ -1907,27 +1907,27 @@ def create_backup_with_encryption_key project_id:, instance_id:, database_id:, b
 
   database_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin
 
-  instance_path = database_admin_client.instance_path project: project_id, instance: instance_id
+  instance_path = database_admin_client.instance_path project: project_id, instance: instance_id 
   db_path = database_admin_client.database_path project: project_id,
-                                                instance: instance_id,
-                                                database: database_id
+                                   instance: instance_id,
+                                   database: database_id
   backup_path = database_admin_client.backup_path project: project_id,
                                                   instance: instance_id,
-                                                  backup: backup_id
+                                                  backup: backup_id                            
   expire_time = Time.now + 14 * 24 * 3600 # 14 days from now
   encryption_config = {
     encryption_type: :CUSTOMER_MANAGED_ENCRYPTION,
     kms_key_name:    kms_key_name
   }
-
-  job = database_admin_client.create_backup parent: instance_path,
-                                            backup_id: backup_id,
+                                                 
+  job = database_admin_client.create_backup parent: instance_path, 
+                                            backup_id: backup_id, 
                                             backup: {
-                                              database: db_path,
+                                                database: db_path,
                                                 expire_time: expire_time
-                                            },
-                                            encryption_config: encryption_config
-
+                                              },
+                                            encryption_config: encryption_config  
+  
   puts "Backup operation in progress"
 
   job.wait_until_done!
@@ -1953,14 +1953,14 @@ def restore_backup project_id:, instance_id:, database_id:, backup_id:
   instance_path = database_admin_client.instance_path project: project_id, instance: instance_id
 
   db_path = database_admin_client.database_path project: project_id,
-                                                instance: instance_id,
-                                                database: database_id
+                                   instance: instance_id,
+                                   database: database_id
 
   backup_path = database_admin_client.backup_path project: project_id,
                                                   instance: instance_id,
-                                                  backup: backup_id
+                                                  backup: backup_id    
 
-  job = database_admin_client.restore_database parent: instance_path,
+  job = database_admin_client.restore_database parent: instance_path, 
                                                database_id: database_id,
                                                backup: backup_path
 
@@ -1990,20 +1990,20 @@ def restore_database_with_encryption_key project_id:, instance_id:, database_id:
   instance_path = database_admin_client.instance_path project: project_id, instance: instance_id
 
   db_path = database_admin_client.database_path project: project_id,
-                                                instance: instance_id,
-                                                database: database_id
+                                   instance: instance_id,
+                                   database: database_id
 
   backup_path = database_admin_client.backup_path project: project_id,
                                                   instance: instance_id,
-                                                  backup: backup_id
+                                                  backup: backup_id   
 
   encryption_config = {
     encryption_type: :CUSTOMER_MANAGED_ENCRYPTION,
     kms_key_name:    kms_key_name
   }
-  job = database_admin_client.restore_database parent: instance_path,
+  job = database_admin_client.restore_database parent: instance_path, 
                                                database_id: database_id,
-                                               backup: backup_path,
+                                               backup: backup_path, 
                                                encryption_config: encryption_config
 
   puts "Waiting for restore backup operation to complete"
@@ -2031,21 +2031,21 @@ def create_backup_cancel project_id:, instance_id:, database_id:, backup_id:
   instance_path = database_admin_client.instance_path project: project_id, instance: instance_id
 
   db_path = database_admin_client.database_path project: project_id,
-                                                instance: instance_id,
-                                                database: database_id
+                                   instance: instance_id,
+                                   database: database_id
 
   backup_path = database_admin_client.backup_path project: project_id,
                                                   instance: instance_id,
-                                                  backup: backup_id
+                                                  backup: backup_id   
 
   expire_time = Time.now + 14 * 24 * 3600 # 14 days from now
 
-  job = database_admin_client.create_backup parent: instance_path,
-                                            backup_id: backup_id,
+  job = database_admin_client.create_backup parent: instance_path, 
+                                            backup_id: backup_id, 
                                             backup: {
-                                              database: db_path,
+                                                database: db_path,
                                                 expire_time: expire_time
-                                            }
+                                              }
 
   puts "Backup operation in progress"
 
@@ -2055,9 +2055,8 @@ def create_backup_cancel project_id:, instance_id:, database_id:, backup_id:
   begin
     backup = database_admin_client.get_backup name: backup_path
     database_admin_client.delete_backup name: backup_path if backup
-  rescue StandardError
-    nil # no cleanup needed when a backup is not created
-  end
+  rescue; end
+
   puts "#{backup_id} creation job cancelled"
   # [END spanner_cancel_backup_create]
 end
@@ -2076,7 +2075,7 @@ def list_backup_operations project_id:, instance_id:, database_id:
 
   jobs = database_admin_client.list_backup_operations parent: instance_path,
                                                       filter: "metadata.@type:type.googleapis.com/google.spanner.admin.database.v1.CreateBackupMetadata"
-  jobs.each do |job|
+  jobs.each do |job|  
     if job.error?
       puts job.error
     else
@@ -2097,7 +2096,7 @@ def list_database_operations project_id:, instance_id:
   database_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin
   instance_path = database_admin_client.instance_path project: project_id, instance: instance_id
   jobs = database_admin_client.list_database_operations parent: instance_path,
-                                                        filter: "metadata.@type:type.googleapis.com/google.spanner.admin.database.v1.OptimizeRestoredDatabaseMetadata"
+  filter: "metadata.@type:type.googleapis.com/google.spanner.admin.database.v1.OptimizeRestoredDatabaseMetadata"
 
   jobs.each do |job|
     if job.error?
@@ -2179,7 +2178,7 @@ def delete_backup project_id:, instance_id:, backup_id:
   instance_path = database_admin_client.instance_path project: project_id, instance: instance_id
   backup_path = database_admin_client.backup_path project: project_id,
                                                   instance: instance_id,
-                                                  backup: backup_id
+                                                  backup: backup_id   
 
   database_admin_client.delete_backup name: backup_path
   puts "Backup #{backup_id} deleted"
@@ -2199,11 +2198,11 @@ def update_backup project_id:, instance_id:, backup_id:
   instance_path = database_admin_client.instance_path project: project_id, instance: instance_id
   backup_path = database_admin_client.backup_path project: project_id,
                                                   instance: instance_id,
-                                                  backup: backup_id
+                                                  backup: backup_id   
   backup = database_admin_client.get_backup name: backup_path
-  backup.expire_time = Time.now + 60 * 24 * 3600 # Extending the expiry time by 60 days from now.
-  database_admin_client.update_backup backup: backup,
-                                      update_mask: { paths: ["expire_time"] }
+  backup.expire_time = Time.now + 60 * 24 * 3600   # Extending the expiry time by 60 days from now.                                                   
+  database_admin_client.update_backup backup: backup, 
+                                      update_mask: { paths: ["expire_time"] }                                                
 
   puts "Expiration time updated: #{backup.expire_time}"
   # [END spanner_update_backup]
