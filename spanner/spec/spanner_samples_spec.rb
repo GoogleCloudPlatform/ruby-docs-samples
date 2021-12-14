@@ -139,7 +139,7 @@ describe "Google Cloud Spanner API samples" do
   end
 
   example "create_instance_with_processing_units" do
-    instance_id = "rb-test-processing-unit-#{seed}"
+    instance_id = "rb-test-pu-#{seed}"
     @created_instance_ids << instance_id
 
     capture do
@@ -1580,6 +1580,7 @@ describe "Google Cloud Spanner API samples" do
 
   example "restore backup" do
     backup = create_backup_with_data
+    database = @instance.database @database_id
 
     capture do
       restore_backup project_id:  @project_id,
@@ -1592,7 +1593,7 @@ describe "Google Cloud Spanner API samples" do
       "Waiting for restore backup operation to complete"
     )
     expect(captured_output).to match(
-      /Database #{@database_id} was restored to #{@restored_database_id} from backup #{backup.backup_id} with version time/
+      /Database #{database.path} was restored to #{@restored_database_id} from backup #{backup.path} with version time/
     )
 
     @test_database = @instance.database @restored_database_id
@@ -1601,6 +1602,7 @@ describe "Google Cloud Spanner API samples" do
 
   example "restore database with encryption key" do
     backup = create_backup_with_data
+    database = @instance.database @database_id
     kms_key_name = "projects/#{@project_id}/locations/us-central1/keyRings/spanner-test-keyring/cryptoKeys/spanner-test-cmek"
 
     capture do
@@ -1615,7 +1617,7 @@ describe "Google Cloud Spanner API samples" do
       "Waiting for restore backup operation to complete"
     )
     expect(captured_output).to match(
-      /Database #{@database_id} was restored to #{@restored_database_id} from backup #{backup.backup_id} using encryption key #{kms_key_name}/
+      /Database #{database.path} was restored to #{@restored_database_id} from backup #{backup.path} using encryption key #{kms_key_name}/
     )
 
     @test_database = @instance.database @restored_database_id
@@ -1646,7 +1648,6 @@ describe "Google Cloud Spanner API samples" do
 
   example "list backup operations" do
     backup = create_backup_with_data
-
     capture do
       list_backup_operations project_id:  @project_id,
                              instance_id: @instance.instance_id,
@@ -1654,7 +1655,7 @@ describe "Google Cloud Spanner API samples" do
     end
 
     expect(captured_output).to match(
-      /Backup #{backup.backup_id} on database #{@database_id} is \d+% complete/
+      /Backup #{backup.path} on database #{@database_id} is \d+% complete/
     )
 
     @test_backup = @instance.backup @backup_id

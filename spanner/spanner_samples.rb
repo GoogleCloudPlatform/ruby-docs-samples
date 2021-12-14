@@ -2396,7 +2396,7 @@ def run_sample arguments
   elsif commands.include?(command) && instance_id && database_id
     send command, project_id:  project_id,
                   instance_id: instance_id,
-                  backup_id: database_id
+                  database_id: database_id
   else
     usage
   end
