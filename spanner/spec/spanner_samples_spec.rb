@@ -1691,11 +1691,11 @@ describe "Google Cloud Spanner API samples" do
                                       .each_slice(2)
                                       .map(&:join)
 
-    expect(output_segments.shift).to include("All backups", backup.backup_id)
+    expect(output_segments.shift).to include("All backups", backup.path)
 
     expect(output_segments.shift).to include(
       "All backups with backup name containing",
-      "\"#{backup.backup_id}\":\n#{backup.backup_id}"
+      "\"#{backup.backup_id}\":\n#{backup.path}"
     )
 
     expect(output_segments.shift).to include(
