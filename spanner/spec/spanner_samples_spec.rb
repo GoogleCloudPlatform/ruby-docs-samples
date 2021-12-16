@@ -1700,7 +1700,7 @@ describe "Google Cloud Spanner API samples" do
 
     expect(output_segments.shift).to include(
       "All backups for databases with a name containing",
-      "\"#{backup.database_id}\":\n#{backup.backup_id}"
+      "\"#{backup.database_id}\":\n#{backup.path}"
     )
 
     expect(output_segments.shift).to include(
