@@ -181,9 +181,9 @@ if [[ $RUN_ALL_TESTS = "1" ]]; then
     start_time="$(date -u +%s)"
 
     if [[ -f "${REPO_DIRECTORY}/${PRODUCT}/bin/run_tests" ]]; then
-      (bin/run_tests) || set_failed_status
+      (bundle update && bin/run_tests) || set_failed_status
     else
-      (bundle exec rspec --format documentation --format RspecJunitFormatter --out sponge_log.xml | tee sponge_log.log) || set_failed_status
+      (bundle update && bundle exec rspec --format documentation --format RspecJunitFormatter --out sponge_log.xml | tee sponge_log.log) || set_failed_status
     fi
 
 
@@ -214,7 +214,7 @@ else
 
     start_time="$(date -u +%s)"
 
-    (bundle exec rspec --format documentation --format RspecJunitFormatter --out sponge_log.xml | tee sponge_log.log) || set_failed_status
+    (bundle update && bundle exec rspec --format documentation --format RspecJunitFormatter --out sponge_log.xml | tee sponge_log.log) || set_failed_status
 
     if [[ $E2E = "true" ]]; then
       # Clean up deployed version
