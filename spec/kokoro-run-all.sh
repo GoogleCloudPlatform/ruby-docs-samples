@@ -161,7 +161,7 @@ function set_failed_status {
   EXIT_STATUS=1
 }
 
-(bundle update && bundle exec rubocop) || set_failed_status
+(bundle update --conservative && bundle exec rubocop) || set_failed_status
 (bundle exec rake acceptance) || set_failed_status
 
 if [[ $RUN_ALL_TESTS = "1" ]]; then
@@ -181,9 +181,9 @@ if [[ $RUN_ALL_TESTS = "1" ]]; then
     start_time="$(date -u +%s)"
 
     if [[ -f "${REPO_DIRECTORY}/${PRODUCT}/bin/run_tests" ]]; then
-      (bundle update && bin/run_tests) || set_failed_status
+      (bundle update --conservative && bin/run_tests) || set_failed_status
     else
-      (bundle update && bundle exec rspec --format documentation --format RspecJunitFormatter --out sponge_log.xml | tee sponge_log.log) || set_failed_status
+      (bundle update --conservative && bundle exec rspec --format documentation --format RspecJunitFormatter --out sponge_log.xml | tee sponge_log.log) || set_failed_status
     fi
 
 
@@ -214,7 +214,7 @@ else
 
     start_time="$(date -u +%s)"
 
-    (bundle update && bundle exec rspec --format documentation --format RspecJunitFormatter --out sponge_log.xml | tee sponge_log.log) || set_failed_status
+    (bundle update --conservative && bundle exec rspec --format documentation --format RspecJunitFormatter --out sponge_log.xml | tee sponge_log.log) || set_failed_status
 
     if [[ $E2E = "true" ]]; then
       # Clean up deployed version
