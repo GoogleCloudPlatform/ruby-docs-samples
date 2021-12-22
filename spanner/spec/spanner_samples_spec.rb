@@ -1549,7 +1549,7 @@ describe "Google Cloud Spanner API samples" do
     expect(@test_backup).not_to be nil
   end
 
-  example "create backup with encryptio key" do
+  xexample "create backup with encryptio key" do
     cleanup_backup_resources
     database = create_database_with_data
 
@@ -1578,7 +1578,7 @@ describe "Google Cloud Spanner API samples" do
     expect(@test_backup).not_to be nil
   end
 
-  example "restore backup" do
+  xexample "restore backup" do
     backup = create_backup_with_data
     database = @instance.database @database_id
 
@@ -1600,7 +1600,7 @@ describe "Google Cloud Spanner API samples" do
     expect(@test_database).not_to be nil
   end
 
-  example "restore database with encryption key" do
+  xexample "restore database with encryption key" do
     backup = create_backup_with_data
     database = @instance.database @database_id
     kms_key_name = "projects/#{@project_id}/locations/us-west1/keyRings/spanner-test-keyring1/cryptoKeys/spanner-test-cmek"
@@ -1662,7 +1662,7 @@ describe "Google Cloud Spanner API samples" do
     expect(@test_backup).not_to be nil
   end
 
-  example "list database operations" do
+  xexample "list database operations" do
     database = restore_database_from_backup
 
     capture do
@@ -1721,7 +1721,7 @@ describe "Google Cloud Spanner API samples" do
     expect(@test_backup).not_to be nil
   end
 
-  example "delete backup" do
+  xexample "delete backup" do
     backup = create_backup_with_data
 
     capture do
@@ -1738,7 +1738,7 @@ describe "Google Cloud Spanner API samples" do
     expect(@test_backup).to be nil
   end
 
-  example "update backup" do
+  xexample "update backup" do
     backup = create_backup_with_data
 
     capture do
