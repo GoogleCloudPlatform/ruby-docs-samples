@@ -72,7 +72,6 @@ export ALTERNATE_GOOGLE_CLOUD_STORAGE_BUCKET="$GOOGLE_CLOUD_STORAGE_BUCKET-alt"
 
 # Run Spanner tests if RUN_ALL_TESTS is set.
 if [[ -n ${RUN_ALL_TESTS:-} ]]; then
-  # using new instance created in us-west1 due to OMG/43748 which makes backup operations to take a very long time
   export GOOGLE_CLOUD_SPANNER_TEST_INSTANCE=ruby-test-instance
   export GOOGLE_CLOUD_SPANNER_PROJECT=cloud-samples-ruby-test-0
 fi
