@@ -73,7 +73,7 @@ export ALTERNATE_GOOGLE_CLOUD_STORAGE_BUCKET="$GOOGLE_CLOUD_STORAGE_BUCKET-alt"
 # Run Spanner tests if RUN_ALL_TESTS is set.
 if [[ -n ${RUN_ALL_TESTS:-} ]]; then
   # using new instance created in us-west1 due to OMG/43748 which makes backup operations to take a very long time
-  export GOOGLE_CLOUD_SPANNER_TEST_INSTANCE=ruby-test-instance1
+  export GOOGLE_CLOUD_SPANNER_TEST_INSTANCE=ruby-test-instance
   export GOOGLE_CLOUD_SPANNER_PROJECT=cloud-samples-ruby-test-0
 fi
 
@@ -162,7 +162,7 @@ function set_failed_status {
   EXIT_STATUS=1
 }
 
-(bundle update --conservative && bundle exec rubocop) || set_failed_status
+(bundle update && bundle exec rubocop) || set_failed_status
 (bundle exec rake acceptance) || set_failed_status
 
 if [[ $RUN_ALL_TESTS = "1" ]]; then
@@ -182,9 +182,9 @@ if [[ $RUN_ALL_TESTS = "1" ]]; then
     start_time="$(date -u +%s)"
 
     if [[ -f "${REPO_DIRECTORY}/${PRODUCT}/bin/run_tests" ]]; then
-      (bundle update --conservative && bin/run_tests) || set_failed_status
+      (bundle update && bin/run_tests) || set_failed_status
     else
-      (bundle update --conservative && bundle exec rspec --format documentation --format RspecJunitFormatter --out sponge_log.xml | tee sponge_log.log) || set_failed_status
+      (bundle update && bundle exec rspec --format documentation --format RspecJunitFormatter --out sponge_log.xml | tee sponge_log.log) || set_failed_status
     fi
 
 
@@ -215,7 +215,7 @@ else
 
     start_time="$(date -u +%s)"
 
-    (bundle update --conservative && bundle exec rspec --format documentation --format RspecJunitFormatter --out sponge_log.xml | tee sponge_log.log) || set_failed_status
+    (bundle update && bundle exec rspec --format documentation --format RspecJunitFormatter --out sponge_log.xml | tee sponge_log.log) || set_failed_status
 
     if [[ $E2E = "true" ]]; then
       # Clean up deployed version
