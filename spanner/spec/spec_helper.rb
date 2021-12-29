@@ -14,6 +14,8 @@
 
 require "rspec"
 require "google/cloud/spanner"
+require "google/cloud/spanner/admin/instance"
+require "google/cloud/spanner/admin/database"
 
 RSpec.configure do |config|
   config.before :all do
@@ -83,13 +85,11 @@ RSpec.configure do |config|
   end
 
   def instance_admin_client
-    @instance_admin_client ||=
-      Google::Cloud::Spanner::Admin::Instance::V1::InstanceAdmin::Client.new
+    @instance_admin_client ||= Google::Cloud::Spanner::Admin::Instance.instance_admin
   end
 
   def db_admin_client
-    @db_admin_client ||=
-      Google::Cloud::Spanner::Admin::Database::V1::DatabaseAdmin::Client.new
+    @db_admin_client ||= Google::Cloud::Spanner::Admin::Database.database_admin
   end
 
   def project_path
@@ -113,8 +113,7 @@ RSpec.configure do |config|
   end
 
   def create_test_database database_id, statements: []
-    db_admin_client = \
-      Google::Cloud::Spanner::Admin::Database::V1::DatabaseAdmin::Client.new
+    db_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin
 
     instance_path = db_admin_client.instance_path project: @project_id,
                                                   instance: @instance_id

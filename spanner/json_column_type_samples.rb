@@ -21,9 +21,9 @@ def add_json_column project_id:, instance_id:, database_id:
   # database_id = "Your Spanner database ID"
 
   require "google/cloud/spanner"
+  require "google/cloud/spanner/admin/database"
 
-  db_admin_client = \
-    Google::Cloud::Spanner::Admin::Database::V1::DatabaseAdmin::Client.new
+  db_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin
 
   database_path = db_admin_client.database_path project: project_id,
                                                 instance: instance_id,

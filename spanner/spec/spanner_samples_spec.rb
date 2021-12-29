@@ -139,7 +139,7 @@ describe "Google Cloud Spanner API samples" do
   end
 
   example "create_instance_with_processing_units" do
-    instance_id = "rb-test-processing-unit-#{seed}"
+    instance_id = "rb-test-pu-#{seed}"
     @created_instance_ids << instance_id
 
     capture do
@@ -1549,7 +1549,7 @@ describe "Google Cloud Spanner API samples" do
     expect(@test_backup).not_to be nil
   end
 
-  example "create backup with encryptio key" do
+  xexample "create backup with encryptio key" do
     cleanup_backup_resources
     database = create_database_with_data
 
@@ -1578,8 +1578,9 @@ describe "Google Cloud Spanner API samples" do
     expect(@test_backup).not_to be nil
   end
 
-  example "restore backup" do
+  xexample "restore backup" do
     backup = create_backup_with_data
+    database = @instance.database @database_id
 
     capture do
       restore_backup project_id:  @project_id,
@@ -1592,15 +1593,16 @@ describe "Google Cloud Spanner API samples" do
       "Waiting for restore backup operation to complete"
     )
     expect(captured_output).to match(
-      /Database #{@database_id} was restored to #{@restored_database_id} from backup #{backup.backup_id} with version time/
+      /Database #{database.path} was restored to #{@restored_database_id} from backup #{backup.path} with version time/
     )
 
     @test_database = @instance.database @restored_database_id
     expect(@test_database).not_to be nil
   end
 
-  example "restore database with encryption key" do
+  xexample "restore database with encryption key" do
     backup = create_backup_with_data
+    database = @instance.database @database_id
     kms_key_name = "projects/#{@project_id}/locations/us-central1/keyRings/spanner-test-keyring/cryptoKeys/spanner-test-cmek"
 
     capture do
@@ -1615,7 +1617,7 @@ describe "Google Cloud Spanner API samples" do
       "Waiting for restore backup operation to complete"
     )
     expect(captured_output).to match(
-      /Database #{@database_id} was restored to #{@restored_database_id} from backup #{backup.backup_id} using encryption key #{kms_key_name}/
+      /Database #{database.path} was restored to #{@restored_database_id} from backup #{backup.path} using encryption key #{kms_key_name}/
     )
 
     @test_database = @instance.database @restored_database_id
@@ -1646,7 +1648,6 @@ describe "Google Cloud Spanner API samples" do
 
   example "list backup operations" do
     backup = create_backup_with_data
-
     capture do
       list_backup_operations project_id:  @project_id,
                              instance_id: @instance.instance_id,
@@ -1654,14 +1655,14 @@ describe "Google Cloud Spanner API samples" do
     end
 
     expect(captured_output).to match(
-      /Backup #{backup.backup_id} on database #{@database_id} is \d+% complete/
+      /Backup #{backup.path} on database #{@database_id} is \d+% complete/
     )
 
     @test_backup = @instance.backup @backup_id
     expect(@test_backup).not_to be nil
   end
 
-  example "list database operations" do
+  xexample "list database operations" do
     database = restore_database_from_backup
 
     capture do
@@ -1690,16 +1691,16 @@ describe "Google Cloud Spanner API samples" do
                                       .each_slice(2)
                                       .map(&:join)
 
-    expect(output_segments.shift).to include("All backups", backup.backup_id)
+    expect(output_segments.shift).to include("All backups", backup.path)
 
     expect(output_segments.shift).to include(
       "All backups with backup name containing",
-      "\"#{backup.backup_id}\":\n#{backup.backup_id}"
+      "\"#{backup.backup_id}\":\n#{backup.path}"
     )
 
     expect(output_segments.shift).to include(
       "All backups for databases with a name containing",
-      "\"#{backup.database_id}\":\n#{backup.backup_id}"
+      "\"#{backup.database_id}\":\n#{backup.path}"
     )
 
     expect(output_segments.shift).to include(
@@ -1720,7 +1721,7 @@ describe "Google Cloud Spanner API samples" do
     expect(@test_backup).not_to be nil
   end
 
-  example "delete backup" do
+  xexample "delete backup" do
     backup = create_backup_with_data
 
     capture do
@@ -1737,7 +1738,7 @@ describe "Google Cloud Spanner API samples" do
     expect(@test_backup).to be nil
   end
 
-  example "update backup" do
+  xexample "update backup" do
     backup = create_backup_with_data
 
     capture do
