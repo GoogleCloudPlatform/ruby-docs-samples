@@ -2,7 +2,7 @@
   "name": "rails-cat-album",
   "private": true,
   "dependencies": {
-    "@rails/activestorage": "^6.0.0",
+    "@rails/activestorage": "^6.0.0 || ^7.0.0",
     "@rails/ujs": "^6.0.0",
     "@rails/webpacker": "5.3.0",
     "webpack": "^4.46.0 || ^5.0.0",
