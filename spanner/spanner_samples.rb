@@ -2241,7 +2241,7 @@ def copy_backup project_id:, instance_id:, backup_id:, source_backup_id:
   job.wait_until_done!
 
   backup = database_admin_client.get_backup name: backup_path
-  puts "Backup #{backup_id} of size #{backup.size_bytes} bytes was copied at #{backup.create_time} from #{source_backup}"
+  puts "Backup #{backup_id} of size #{backup.size_bytes} bytes was copied at #{backup.create_time} from #{source_backup} for version #{source_backup.version_time}"
   # [END spanner_copy_backup]
 end
 
