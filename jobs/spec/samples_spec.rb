@@ -235,8 +235,9 @@ describe "Cloud Job Discovery Samples" do
       job_created = job_discovery_create_job job_to_be_created: job_generated,
                                              project_id:        @default_project_id
       sleep 10
-      long_filter_result =
-        job_discovery_filters_on_long_value_custom_attribute project_id:   @default_project_id
+      long_filter_result = try_with_backoff "long filter results" do 
+        job_discovery_filters_on_long_value_custom_attribute project_id: @default_project_id
+      end  
       string_filter_result =
         job_discovery_filters_on_string_value_custom_attribute project_id:   @default_project_id
       multi_filters_result =
@@ -265,9 +266,10 @@ describe "Cloud Job Discovery Samples" do
       job_created = job_discovery_create_job job_to_be_created: job_generated,
                                              project_id:        @default_project_id
       sleep 10
-      email_alert_search_result =
+      email_alert_search_result = try_with_backoff "email alert search result" do 
         job_discovery_email_alert_search project_id:   @default_project_id,
                                          company_name: company_created.name
+      end
       job_discovery_delete_job job_name: job_created.name
       job_discovery_delete_company company_name: company_created.name
       expect(email_alert_search_result.matching_jobs).not_to be nil
@@ -291,9 +293,11 @@ describe "Cloud Job Discovery Samples" do
       job_created = job_discovery_create_job job_to_be_created: job_generated,
                                              project_id:        @default_project_id
       sleep 10
-      search_result = job_discovery_featured_jobs_search company_name: company_created.name,
-                                                         query:        "Lab",
-                                                         project_id:   @default_project_id
+      search_result = try_with_backoff "search result" do 
+        job_discovery_featured_jobs_search company_name: company_created.name,
+                                           query:        "Lab",
+                                           project_id:   @default_project_id
+      end
       job_discovery_delete_job job_name: job_created.name
       job_discovery_delete_company company_name: company_created.name
       expect(search_result.matching_jobs).not_to be nil
@@ -317,9 +321,11 @@ describe "Cloud Job Discovery Samples" do
                                              project_id:        @default_project_id
 
       sleep 10
-      keyword_search_result = job_discovery_basic_keyword_search company_name: company_created.name,
-                                                                 query:        job_created.title,
-                                                                 project_id:   @default_project_id
+      keyword_search_result = try_with_backoff "keyword search result" do 
+        job_discovery_basic_keyword_search company_name: company_created.name,
+                                           query:        job_created.title,
+                                           project_id:   @default_project_id+"asd"
+      end
       filter_search_result = job_discovery_category_filter_search company_name: company_created.name,
                                                                   categories:   [:SCIENCE_AND_ENGINEERING],
                                                                   project_id:   @default_project_id
@@ -366,8 +372,10 @@ describe "Cloud Job Discovery Samples" do
       job_created = job_discovery_create_job job_to_be_created: job_generated,
                                              project_id:        @default_project_id
       sleep 10
-      search_result = job_discovery_histogram_search company_name: company_created.name,
-                                                     project_id:   @default_project_id
+      search_result = try_with_backoff "search result" do 
+        job_discovery_histogram_search company_name: company_created.name,
+                                       project_id:   @default_project_id
+      end
       job_discovery_delete_job job_name: job_created.name
       job_discovery_delete_company company_name: company_created.name
       expect(search_result.matching_jobs).not_to be nil
@@ -395,10 +403,12 @@ describe "Cloud Job Discovery Samples" do
       job_created2 = job_discovery_create_job job_to_be_created: job_generated2,
                                               project_id:        @default_project_id
       sleep 10
-      basic_search_result = job_discovery_basic_location_search company_name: company_created.name,
-                                                                location:     "Mountain View, CA",
-                                                                distance:     0.5,
-                                                                project_id:   @default_project_id
+      basic_search_result = try_with_backoff "basic search result" do 
+        job_discovery_basic_location_search company_name: company_created.name,
+                                            location:     "Mountain View, CA",
+                                            distance:     0.5,
+                                            project_id:   @default_project_id
+      end
       keyword_search_result = job_discovery_keyword_location_search company_name: company_created.name,
                                                                     location:     "Mountain View, CA",
                                                                     distance:     0.5,
@@ -427,6 +437,19 @@ describe "Cloud Job Discovery Samples" do
       puts "location_search_sample not all succeeded"
     ensure
       $stdout = StringIO.new
+    end
+  end
+
+  def try_with_backoff msg = nil, limit: 10
+    count = 0
+    loop do
+      begin
+        result = yield
+        return result if count >= limit || !result.nil? 
+        count += 1
+        puts "Retry (#{count}): #{msg}"
+        sleep count
+      end
     end
   end
 end
