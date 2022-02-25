@@ -324,7 +324,7 @@ describe "Cloud Job Discovery Samples" do
       keyword_search_result = try_with_backoff "keyword search result" do 
         job_discovery_basic_keyword_search company_name: company_created.name,
                                            query:        job_created.title,
-                                           project_id:   @default_project_id+"asd"
+                                           project_id:   @default_project_id
       end
       filter_search_result = job_discovery_category_filter_search company_name: company_created.name,
                                                                   categories:   [:SCIENCE_AND_ENGINEERING],
