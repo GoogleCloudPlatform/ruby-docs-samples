@@ -18,9 +18,9 @@ def instance_config project_id:, instance_config_id:
   # instance_config_id = "Spanner instance config ID"
 
   require "google/cloud/spanner"
+  require "google/cloud/spanner/admin/instance"
 
-  instance_admin_client = \
-    Google::Cloud::Spanner::Admin::Instance::V1::InstanceAdmin::Client.new
+  instance_admin_client = Google::Cloud::Spanner::Admin::Instance.instance_admin
 
   instance_config_path = instance_admin_client.instance_config_path \
     project: project_id, instance_config: instance_config_id
@@ -35,9 +35,9 @@ def list_instance_configs project_id:
   # project_id  = "Your Google Cloud project ID"
 
   require "google/cloud/spanner"
+  require "google/cloud/spanner/admin/instance"
 
-  instance_admin_client = \
-    Google::Cloud::Spanner::Admin::Instance::V1::InstanceAdmin::Client.new
+  instance_admin_client = Google::Cloud::Spanner::Admin::Instance.instance_admin
 
   project_path = instance_admin_client.project_path project: project_id
   configs = instance_admin_client.list_instance_configs parent: project_path
@@ -54,9 +54,9 @@ def list_databases project_id:, instance_id:
   # instance_id = "Your Spanner instance ID"
 
   require "google/cloud/spanner"
+  require "google/cloud/spanner/admin/database"
 
-  db_admin_client = \
-    Google::Cloud::Spanner::Admin::Database::V1::DatabaseAdmin::Client.new
+  db_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin project_id: project_id
 
   instance_path = db_admin_client.instance_path project: project_id,
                                                 instance: instance_id
@@ -77,9 +77,9 @@ def create_database_with_default_leader \
   # default_leader = "Spanner database default leader"
 
   require "google/cloud/spanner"
+  require "google/cloud/spanner/admin/database"
 
-  db_admin_client = \
-    Google::Cloud::Spanner::Admin::Database::V1::DatabaseAdmin::Client.new
+  db_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin project_id: project_id
 
   instance_path = \
     db_admin_client.instance_path project: project_id, instance: instance_id
@@ -124,9 +124,9 @@ def update_database_with_default_leader \
   # default_leader = "Spanner database default leader"
 
   require "google/cloud/spanner"
+  require "google/cloud/spanner/admin/database"
 
-  db_admin_client = \
-    Google::Cloud::Spanner::Admin::Database::V1::DatabaseAdmin::Client.new
+  db_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin project_id: project_id
 
   db_path = db_admin_client.database_path project: project_id,
                                           instance: instance_id,
@@ -154,9 +154,9 @@ def database_ddl project_id:, instance_id:, database_id:
   # database_id = "Your Spanner database ID"
 
   require "google/cloud/spanner"
+  require "google/cloud/spanner/admin/database"
 
-  db_admin_client = \
-    Google::Cloud::Spanner::Admin::Database::V1::DatabaseAdmin::Client.new
+  db_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin project_id: project_id
 
   db_path = db_admin_client.database_path project: project_id,
                                           instance: instance_id,

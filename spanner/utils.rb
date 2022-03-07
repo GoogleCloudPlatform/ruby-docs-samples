@@ -1,4 +1,4 @@
-# Copyright 2020 Google, LLC
+# Copyright 2021 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,25 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require_relative "helper"
-require_relative "../quickstart.rb"
+def run_command command, arguments, project_id
+  sample_method = method command
+  parameters = {}
 
-describe "Logging Quickstart" do
-  parallelize_me!
-
-  let(:log_name) { "logging_samples_test_#{SecureRandom.hex}" }
-  let(:payload) { "logging sample test payload" }
-
-  after do
-    logging.delete_log log_name
+  sample_method.parameters.each do |paramater|
+    next if paramater.last == :project_id
+    parameters[paramater.last] = arguments.shift
   end
 
-  it "creates a new log entry" do
-    assert_output "Logged #{payload}\n" do
-      quickstart payload: payload, log_name: log_name
-    end
-
-    entries = get_entries_helper log_name
-    assert_equal entries.first.payload, payload
-  end
+  sample_method.call(project_id: project_id, **parameters)
 end

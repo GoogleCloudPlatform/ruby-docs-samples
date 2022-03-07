@@ -14,6 +14,8 @@
 
 require "rspec"
 require "google/cloud/spanner"
+require "google/cloud/spanner/admin/instance"
+require "google/cloud/spanner/admin/database"
 
 RSpec.configure do |config|
   config.before :all do
@@ -39,6 +41,20 @@ RSpec.configure do |config|
 
   def seed
     $spanner_example_seed ||= SecureRandom.hex 8
+  end
+
+  # Capture and return STDOUT output by block
+  def capture
+    real_stdout = $stdout
+    $stdout = StringIO.new
+    yield
+    @captured_output = $stdout.string
+  ensure
+    $stdout = real_stdout
+  end
+
+  def captured_output
+    @captured_output
   end
 
   def cleanup_instance_resources
@@ -68,22 +84,12 @@ RSpec.configure do |config|
     @test_backup&.delete
   end
 
-  def capture
-    real_stdout = $stdout
-    $stdout = StringIO.new
-    yield
-    @captured_output = $stdout.string
-  ensure
-    $stdout = real_stdout
-  end
-
-  def captured_output
-    @captured_output
-  end
-
   def instance_admin_client
-    @instance_admin_client ||=
-      Google::Cloud::Spanner::Admin::Instance::V1::InstanceAdmin::Client.new
+    @instance_admin_client ||= Google::Cloud::Spanner::Admin::Instance.instance_admin
+  end
+
+  def db_admin_client
+    @db_admin_client ||= Google::Cloud::Spanner::Admin::Database.database_admin
   end
 
   def project_path
@@ -104,5 +110,20 @@ RSpec.configure do |config|
     instance_admin_client.get_instance name: instance_path(instance_id)
   rescue Google::Cloud::NotFoundError
     nil
+  end
+
+  def create_test_database database_id, statements: []
+    db_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin
+
+    instance_path = db_admin_client.instance_path project: @project_id,
+                                                  instance: @instance_id
+
+    job = db_admin_client.create_database \
+      parent: instance_path,
+      create_statement: "CREATE DATABASE `#{database_id}`",
+      extra_statements: Array(statements)
+
+    job.wait_until_done!
+    database = job.results
   end
 end
