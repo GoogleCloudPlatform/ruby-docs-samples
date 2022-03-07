@@ -14,8 +14,8 @@
 
 # [START getting_started_gce_startup_script]
 # Install Stackdriver logging agent
-curl -sSO https://dl.google.com/cloudagents/install-logging-agent.sh
-bash install-logging-agent.sh
+curl -sSO https://dl.google.com/cloudagents/add-logging-agent-repo.sh
+bash add-logging-agent-repo.sh --also-install
 
 # Install dependencies
 apt-get update && apt-get -y upgrade && apt-get install -y autoconf bison \
