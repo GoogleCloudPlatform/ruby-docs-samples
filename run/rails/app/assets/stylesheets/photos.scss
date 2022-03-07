@@ -1,0 +1,19 @@
+// Place all the styles related to the Photos controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: https://sass-lang.com/
+
+.grid-container {
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+  justify-content: space-evenly;
+}
+
+.show-content {
+  text-align: center;
+}
+
+.card {
+  margin: 0 auto;
+  float: none; 
+  margin-bottom: 10px;
+}

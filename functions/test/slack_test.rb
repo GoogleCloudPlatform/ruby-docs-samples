@@ -25,7 +25,7 @@ describe "functions_slack" do
   let(:body) { "text=Ruby" }
   let(:url) { "http://example.com:8080" }
   let :signature do
-    digest = OpenSSL::Digest::SHA256.new
+    digest = OpenSSL::Digest.new "SHA256"
     hex_hash = OpenSSL::HMAC.hexdigest digest, signing_secret, "v0:#{timestamp}:#{body}"
     "v0=#{hex_hash}"
   end

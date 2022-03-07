@@ -1,0 +1,15 @@
+test:
+  service: Disk
+  root: <%= Rails.root.join("tmp/storage") %>
+
+local:
+  service: Disk
+  root: <%= Rails.root.join("storage") %>
+
+# Remember not to checkin your GCS keyfile to a repository
+# [START cloudrun_rails_storage]
+google:
+  service: GCS
+  project: <%= ENV["GOOGLE_PROJECT_ID"] %>
+  bucket: <%= ENV["STORAGE_BUCKET_NAME"] %>
+# [END cloudrun_rails_storage]

@@ -7,7 +7,8 @@
 
 # The yoshi-ruby team is the default owner for anything not
 # explicitly taken by someone else.
-*                               @googleapis/yoshi-ruby
+*                               @GoogleCloudPlatform/yoshi-ruby
 
-/iot/          @gcseh @GoogleCloudPlatform/api-iot @googleapis/yoshi-ruby
-/jobs/         @googleapis/ml-apis @googleapis/yoshi-ruby
+/cloud-sql/    @GoogleCloudPlatform/infra-db-dpes @GoogleCloudPlatform/yoshi-ruby
+/iot/          @gcseh @GoogleCloudPlatform/api-iot @GoogleCloudPlatform/yoshi-ruby
+/jobs/         @googleapis/ml-apis @GoogleCloudPlatform/yoshi-ruby

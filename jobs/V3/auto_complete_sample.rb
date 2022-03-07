@@ -29,7 +29,7 @@ def job_discovery_job_title_auto_complete project_id:, company_name:, query:
   page_size = 10
   type = "JOB_TITLE"
   language_code = "en-US"
-  result = talent_solution_client.complete_project(
+  talent_solution_client.complete_project(
     project_id, company_name: company_name, page_size: page_size, query: query,
       language_code: language_code, type: type
   ) do |result, err|
@@ -39,7 +39,6 @@ def job_discovery_job_title_auto_complete project_id:, company_name:, query:
       puts "Error when auto completing job title. Error message: #{err.to_json}"
     end
   end
-  result
   # [END job_discovery_job_title_auto_complete]
 end
 

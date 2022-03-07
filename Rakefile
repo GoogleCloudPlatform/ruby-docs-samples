@@ -73,6 +73,11 @@ def dirs
   if RUBY_VERSION.start_with? "2.4"
     entries.delete_if { |dir| dir.include? "/ruby-docs-samples/functions" }
   end
+  if RUBY_VERSION.start_with? "3.0"
+    entries.delete_if { |dir| dir.include? "/ruby-docs-samples/getting-started" }
+  else
+    entries.delete_if { |dir| dir.include? "/ruby-docs-samples/run/rails" }
+  end
   entries
 end
 

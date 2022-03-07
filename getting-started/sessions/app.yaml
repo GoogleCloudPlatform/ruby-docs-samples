@@ -1,0 +1,4 @@
+# [START getting_started_sessions_runtime]
+runtime: ruby25
+entrypoint: bundle exec ruby app.rb
+# [END getting_started_sessions_runtime]

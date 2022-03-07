@@ -1,0 +1,14 @@
+<div class="show-content">
+
+  <h2>Photo detail</h2>
+
+  <div class="card" style="width: 30rem;">
+    <div class="card-body">
+      <img class="card-img-top" src="<%= image_url @photo %>" alt="Card image cap">
+      <h5 class="card-title"><%= @photo.caption %></h5>
+      <%= link_to 'Edit', edit_photo_path(@photo), class:"btn btn-light" %>
+      <%= link_to 'Back', photos_path, class:"btn btn-light" %>
+      <%= link_to 'Destroy', @photo, method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-danger" %>
+    </div>
+  </div>
+</div>

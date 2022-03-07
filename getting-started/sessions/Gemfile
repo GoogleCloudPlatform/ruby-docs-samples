@@ -1,0 +1,17 @@
+# frozen_string_literal: true
+
+source "https://rubygems.org"
+
+git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
+
+# [START getting_started_sessions_requirements]
+gem "google-cloud-firestore", "~> 2.0"
+gem "sinatra", "~> 2.0"
+# [END getting_started_sessions_requirements]
+
+group :development do
+  gem "minitest", "~> 5.13"
+  gem "rack-test", "~> 1.1"
+  gem "rake", "~> 13.0"
+  gem "rspec_junit_formatter"
+end

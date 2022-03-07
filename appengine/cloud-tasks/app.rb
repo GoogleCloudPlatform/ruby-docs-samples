@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-STDOUT.sync = true
+$stdout.sync = true
 
 # [START cloud_tasks_appengine_quickstart]
 require "sinatra"

@@ -1,1 +1,2 @@
-
+ignoreFiles:
+  - "**/getting-started/**/*"

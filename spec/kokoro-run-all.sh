@@ -8,13 +8,11 @@
 #    are modified, in which case all tests will be run.
 #  * Nightly runs will run all tests.
 
-versions=($RUBY_VERSIONS)
-
-for version in "${versions[@]}"; do
-    if [[ $version == $KOKORO_RUBY_VERSION* ]]; then
-        rbenv global "$version"
-    fi
-done
+if [[ $KOKORO_RUBY_VERSION == "newest" ]]; then
+    rbenv global "$NEWEST_RUBY_VERSION"
+else
+    rbenv global "$OLDEST_RUBY_VERSION"
+fi
 
 # Print out Ruby version
 ruby --version
@@ -87,8 +85,8 @@ fi
 
 cd github/ruby-docs-samples/
 
-# CHANGED_DIRS is the list of top-level directories that changed. CHANGED_DIRS will be empty when run on master.
-CHANGED_DIRS=$(git --no-pager diff --name-only HEAD $(git merge-base HEAD master) | grep "/" | cut -d/ -f1 | sort | uniq || true)
+# CHANGED_DIRS is the list of top-level directories that changed. CHANGED_DIRS will be empty when run on main.
+CHANGED_DIRS=$(git --no-pager diff --name-only HEAD $(git merge-base HEAD main) | grep "/" | cut -d/ -f1 | sort | uniq || true)
 
 # Filter out any nonexisting directories. This handles the case when a directory is removed.
 CHANGED_DIRS_ARRAY=($CHANGED_DIRS)
@@ -99,7 +97,7 @@ CHANGED_DIRS="${CHANGED_DIRS_ARRAY[*]}"
 
 # The appengine directory has many subdirectories. Only test the modified ones.
 if [[ $CHANGED_DIRS =~ "appengine" ]]; then
-  AE_CHANGED_DIRS=$(git --no-pager diff --name-only HEAD $(git merge-base HEAD master) | grep "appengine/" | cut -d/ -f1,2 | sort | uniq || true)
+  AE_CHANGED_DIRS=$(git --no-pager diff --name-only HEAD $(git merge-base HEAD main) | grep "appengine/" | cut -d/ -f1,2 | sort | uniq || true)
   CHANGED_DIRS="${CHANGED_DIRS/appengine/} $AE_CHANGED_DIRS"
 fi
 
@@ -170,6 +168,11 @@ if [[ $RUN_ALL_TESTS = "1" ]]; then
   echo "Running all tests"
   SPEC_DIRS=$(find * -type d -name 'spec' -path "*/*" -not -path "*vendor/*" -exec dirname {} \; | sort | uniq)
   for PRODUCT in $SPEC_DIRS; do
+    # Skip bookshelf tests on ruby 3
+    if [[ $PRODUCT == "getting-started/bookshelf" && $KOKORO_RUBY_VERSION == "newest" ]]; then
+      continue
+    fi
+
     # Run Tests
     echo "[$PRODUCT]"
     export TEST_DIR="$PRODUCT"
@@ -199,6 +202,11 @@ else
   SPEC_DIRS=$(find $CHANGED_DIRS -type d -name 'spec' -path "*/*" -not -path "*vendor/*" -exec dirname {} \; | sort | uniq)
   echo "Running tests in modified directories: $SPEC_DIRS"
   for PRODUCT in $SPEC_DIRS; do
+    # Skip bookshelf tests on ruby 3
+    if [[ $PRODUCT == "getting-started/bookshelf" && $KOKORO_RUBY_VERSION == "newest" ]]; then
+      continue
+    fi
+
     # Run Tests
     echo "[$PRODUCT]"
     export TEST_DIR="$PRODUCT"

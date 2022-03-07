@@ -14,6 +14,8 @@
 
 require "rspec"
 require "google/cloud/spanner"
+require "google/cloud/spanner/admin/instance"
+require "google/cloud/spanner/admin/database"
 
 RSpec.configure do |config|
   config.before :all do
@@ -29,23 +31,41 @@ RSpec.configure do |config|
     @restored_database_id = "restored_db_#{seed}"
     @spanner              = Google::Cloud::Spanner.new project: @project_id
     @instance             = @spanner.instance @instance_id
-    @created_instance_id  = nil
+    @created_instance_ids = []
   end
 
   config.after :all do
     cleanup_backup_resources
+    cleanup_instance_resources
   end
 
   def seed
     $spanner_example_seed ||= SecureRandom.hex 8
   end
 
-  def cleanup_instance_resources
-    return unless @created_instance_id
+  # Capture and return STDOUT output by block
+  def capture
+    real_stdout = $stdout
+    $stdout = StringIO.new
+    yield
+    @captured_output = $stdout.string
+  ensure
+    $stdout = real_stdout
+  end
 
-    instance = @spanner.instance @created_instance_id
-    instance.delete
-    @created_instance_id = nil
+  def captured_output
+    @captured_output
+  end
+
+  def cleanup_instance_resources
+    return unless @created_instance_ids
+
+    @created_instance_ids.each do |instance_id|
+      instance = @spanner.instance instance_id
+      instance.delete if instance
+    end
+
+    @created_instance_ids.clear
   end
 
   def cleanup_database_resources
@@ -62,5 +82,48 @@ RSpec.configure do |config|
 
     @test_backup = @instance.backup @backup_id
     @test_backup&.delete
+  end
+
+  def instance_admin_client
+    @instance_admin_client ||= Google::Cloud::Spanner::Admin::Instance.instance_admin
+  end
+
+  def db_admin_client
+    @db_admin_client ||= Google::Cloud::Spanner::Admin::Database.database_admin
+  end
+
+  def project_path
+    instance_admin_client.project_path project: @project_id
+  end
+
+  def instance_config_path instance_config_id
+    instance_admin_client.instance_config_path \
+      project: @project_id, instance_config: instance_config_id
+  end
+
+  def instance_path instance_id
+    instance_admin_client.instance_path \
+      project: @project_id, instance: instance_id
+  end
+
+  def find_instance instance_id
+    instance_admin_client.get_instance name: instance_path(instance_id)
+  rescue Google::Cloud::NotFoundError
+    nil
+  end
+
+  def create_test_database database_id, statements: []
+    db_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin
+
+    instance_path = db_admin_client.instance_path project: @project_id,
+                                                  instance: @instance_id
+
+    job = db_admin_client.create_database \
+      parent: instance_path,
+      create_statement: "CREATE DATABASE `#{database_id}`",
+      extra_statements: Array(statements)
+
+    job.wait_until_done!
+    database = job.results
   end
 end
