@@ -3,7 +3,7 @@
   "private": true,
   "dependencies": {
     "@rails/activestorage": "^6.0.0",
-    "@rails/ujs": "^6.0.0",
+    "@rails/ujs": "^6.0.0 || ^7.0.0",
     "webpack": "^5.69.1",
     "webpack-cli": "^4.9.2"
   },
