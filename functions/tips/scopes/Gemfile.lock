@@ -7,7 +7,7 @@ GEM
       puma (>= 4.3.0, < 6.a)
       rack (~> 2.1)
     nio4r (2.5.8)
-    puma (5.5.2)
+    puma (5.6.2)
       nio4r (~> 2.0)
     rack (2.2.3)
 
