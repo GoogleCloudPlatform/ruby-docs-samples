@@ -26,8 +26,8 @@ def postgresql_create_database project_id:, instance_id:, database_id:
   instance_path = database_admin_client.instance_path project: project_id, instance: instance_id
 
   job = database_admin_client.create_database parent: instance_path,
-    create_statement: "CREATE DATABASE \"#{database_id}\"",
-    database_dialect: :POSTGRESQL
+                                              create_statement: "CREATE DATABASE \"#{database_id}\"",
+                                              database_dialect: :POSTGRESQL
 
   puts "Waiting for create database operation to complete"
 

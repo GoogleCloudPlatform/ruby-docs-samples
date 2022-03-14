@@ -26,8 +26,8 @@ def spanner_postgresql_query_parameter project_id:, instance_id:, database_id:
   sql_query = "SELECT SingerId, FirstName, LastName FROM Singers WHERE FirstName LIKE $1"
   params = { p1: "A%" }
 
-  results = client.execute(sql_query, params: params)
-  
+  results = client.execute sql_query, params: params
+
   results.rows.each do |row|
     puts "SingerId: #{row[:singerid]}"
     puts "FirstName: #{row[:firstname]}"

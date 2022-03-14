@@ -35,7 +35,7 @@ def spanner_postgresql_cast_data_type project_id:, instance_id:, database_id:
   QUERY
 
   results = client.execute sql_query
-  
+
   results.rows.each do |row|
     puts "str: #{row[:str]}"
     puts "int: #{row[:int]}"

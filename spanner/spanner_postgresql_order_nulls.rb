@@ -29,7 +29,7 @@ def spanner_postgresql_order_nulls project_id:, instance_id:, database_id:
       b.batch_update "INSERT INTO Singers (SingerId, FirstName) VALUES (1, 'Alice')"
       b.batch_update "INSERT INTO Singers (SingerId, FirstName) VALUES (2, 'Bruce')"
       b.batch_update "INSERT INTO Singers (SingerId, FirstName) VALUES ($1, $2)",
-        params: { p1: 3, p2: nil}
+                     params: { p1: 3, p2: nil }
     end
   end
 
@@ -62,12 +62,12 @@ def spanner_postgresql_order_nulls project_id:, instance_id:, database_id:
     ordered_names << row[:FirstName]
   end
 
-  # This returns the singers in order Bruce, Alice, null, 
+  # This returns the singers in order Bruce, Alice, null,
   results = client.execute "SELECT FirstName FROM Singers ORDER BY FirstName NULLS LAST"
   results.rows.each do |row|
     ordered_names << row[:FirstName]
   end
 
-  return ordered_names
+  ordered_names
   # [END spanner_postgresql_order_nulls]
 end

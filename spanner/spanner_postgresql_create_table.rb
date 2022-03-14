@@ -24,8 +24,8 @@ def spanner_postgresql_create_table project_id:, instance_id:, database_id:
   db_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin project: project_id
 
   db_path = db_admin_client.database_path project: project_id,
-                                            instance: instance_id,
-                                            database: database_id
+                                          instance: instance_id,
+                                          database: database_id
 
   create_table_query = <<~QUERY
     CREATE TABLE Singers (

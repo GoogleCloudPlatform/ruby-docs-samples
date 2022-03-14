@@ -17,13 +17,13 @@ def spanner_postgresql_dml_with_parameters project_id:, instance_id:, database_i
   # project_id  = "Your Google Cloud project ID"
   # instance_id = "Your Spanner instance ID"
   # database_id = "Your Spanner database ID"
-  
+
   require "google/cloud/spanner"
 
   spanner = Google::Cloud::Spanner.new project: project_id
   client  = spanner.client instance_id, database_id
 
-  # Spanner implementation of PostgreSQL supports positional parameters. Named parameters are not supported. 
+  # Spanner implementation of PostgreSQL supports positional parameters. Named parameters are not supported.
   sql_query = "INSERT INTO Singers (SingerId, FirstName, LastName) VALUES ($1, $2, $3), ($4, $5, $6)"
   params = { p1: 103, p2: "Olivia", p3: "Garcia",
              p4: 105, p5: "George", p6: "Harrison" }

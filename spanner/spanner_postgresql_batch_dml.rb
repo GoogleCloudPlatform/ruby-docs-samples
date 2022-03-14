@@ -27,7 +27,7 @@ def postgresql_batch_dml project_id:, instance_id:, database_id:
   client.transaction do |transaction|
     row_counts = transaction.batch_update do |b|
       b.batch_update "INSERT INTO Singers (SingerId, FirstName, LastName) VALUES ($1, $2, $3)",
-        params: { p1: 3, p2: "Olivia", p3: "Garcia" }
+                     params: { p1: 3, p2: "Olivia", p3: "Garcia" }
     end
   end
 
