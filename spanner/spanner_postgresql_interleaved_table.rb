@@ -24,26 +24,27 @@ def spanner_postgresql_interleaved_table project_id:, instance_id:, database_id:
   db_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin project: project_id
 
   db_path = db_admin_client.database_path project: project_id,
-                                            instance: instance_id,
-                                            database: database_id
+                                          instance: instance_id,
+                                          database: database_id
 
   create_table_queries = <<~QUERY
-    CREATE TABLE Authors 
-      (AuthorId bigint NOT NULL,
+    CREATE TABLE Authors (
+      AuthorId bigint NOT NULL,
       FirstName varchar(1024),
       LastName varchar(1024),
       Rating double precision,
-      PRIMARY KEY (AuthorId));
-    CREATE TABLE Books 
-      (AuthorId bigint NOT NULL,
+      PRIMARY KEY (AuthorId)
+    );
+    CREATE TABLE Books (
+      AuthorId bigint NOT NULL,
       BookId bigint NOT NULL,
       BookTitle text,
       PRIMARY KEY (AuthorId, BookId)
-      ) INTERLEAVE IN PARENT Authors ON DELETE CASCADE;
+    ) INTERLEAVE IN PARENT Authors ON DELETE CASCADE;
   QUERY
 
   job = db_admin_client.update_database_ddl database: db_path,
-                                          statements: [create_table_queries]
+                                            statements: [create_table_queries]
 
   job.wait_until_done!
 

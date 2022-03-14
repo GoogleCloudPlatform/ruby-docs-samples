@@ -24,21 +24,24 @@ def spanner_postgresql_identifier_case_sensitivity project_id:, instance_id:, da
   db_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin project: project_id
 
   db_path = db_admin_client.database_path project: project_id,
-                                            instance: instance_id,
-                                            database: database_id
+                                          instance: instance_id,
+                                          database: database_id
 
-  create_concerts_query = "CREATE TABLE Concerts (" +
-    # ConcertId will be folded to `concertid`.
-    "  ConcertId      bigint NOT NULL PRIMARY KEY," +
-    # Location and Time are double-quoted and will therefore retain their
-    # mixed case and are case-sensitive. This means that any statement that
-    # references any of these columns must use double quotes.
-    "  \"Location\" varchar(1024) NOT NULL," +
-    "  \"Time\"  timestamptz NOT NULL" +
-    ")"
+  # ConcertId will be folded to `concertid`.
+  # Location and Time are double-quoted and will therefore retain their
+  # mixed case and are case-sensitive. This means that any statement that
+  # references any of these columns must use double quotes.
+  create_concerts_query = <<~QUERY
+    CREATE TABLE Concerts (
+      ConcertId bigint NOT NULL PRIMARY KEY,
+      \"Location\" varchar(1024) NOT NULL,
+      \"Time\"  timestamptz NOT NULL
+    )
+  QUERY
+
 
   job = db_admin_client.update_database_ddl database: db_path,
-                                        statements: [create_concerts_query]
+                                            statements: [create_concerts_query]
 
   job.wait_until_done!
 
@@ -57,13 +60,12 @@ def spanner_postgresql_identifier_case_sensitivity project_id:, instance_id:, da
   # columns were double-quoted or not during creation.
   client.commit do |c|
     c.insert "Concerts", [
-      { ConcertId: 1, Location: "Venue 1", Time: Time.utc(2022, "Mar", 11) },
+      { ConcertId: 1, Location: "Venue 1", Time: Time.utc(2022, "Mar", 11) }
     ]
   end
 
   results = client.execute "SELECT * FROM Concerts"
   results.rows.each do |row|
-
     # ConcertId was not double quoted while table creation, so it is automatically folded to lower case.
     # Accessing the column by its name in a result set must therefore use all lower-case letters.
     puts "ConcertId: #{row[:concertid]}"
@@ -87,12 +89,12 @@ def spanner_postgresql_identifier_case_sensitivity project_id:, instance_id:, da
   # PostgreSQL case sensitivity with DML statements.
   # DML statements must also follow the PostgreSQL case rules.
   sql_query = "INSERT INTO Concerts (ConcertId, \"Location\", \"Time\") VALUES($1, $2, $3)"
-  params = { p1: 2, p2: "Venue 2", p3: Time.utc(2022, "Mar", 11)}
+  params = { p1: 2, p2: "Venue 2", p3: Time.utc(2022, "Mar", 11) }
   row_count = nil
   client.transaction do |transaction|
     row_count = transaction.execute_update sql_query, params: params
   end
-  
+
   puts "Inserted #{row_count} row(s)"
   # [END spanner_postgresql_identifier_case_sensitivity]
 end

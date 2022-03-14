@@ -21,16 +21,20 @@ def spanner_postgresql_information_schema project_id:, instance_id:, database_id
   spanner = Google::Cloud::Spanner.new project: project_id
   client  = spanner.client instance_id, database_id
 
-  sql_query = "SELECT table_catalog, table_schema, table_name, " +
-              # The following columns are only available for PostgreSQL databases.
-              "user_defined_type_catalog, " +
-              "user_defined_type_schema, " +
-              "user_defined_type_name " +
-              "FROM INFORMATION_SCHEMA.tables " +
-              "WHERE table_schema='public'"
-  
+  # The user_defined_type_* columns below are only available for PostgreSQL databases.
+  sql_query = <<~QUERY
+    SELECT table_catalog,
+           table_schema,
+           table_name,
+           user_defined_type_catalog,
+           user_defined_type_schema,
+           user_defined_type_name
+    FROM INFORMATION_SCHEMA.tables
+    WHERE table_schema='public'
+  QUERY
+
   results = client.execute sql_query
-  
+
   results.rows.each do |row|
     puts "Catalog: #{row[:table_catalog]}"
     puts "Schema: #{row[:table_schema]}"
