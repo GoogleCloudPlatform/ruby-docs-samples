@@ -13,20 +13,24 @@
 # limitations under the License.
 
 require_relative "./spec_helper"
+require_relative "./spanner_postgresql_helper"
 require_relative "../spanner_postgresql_partitioned_dml"
 
 describe "Google Cloud Spanner Postgres examples" do
   before :each do
-    # cleanup_database_resources
+    cleanup_database_resources
   end
 
   after :each do
-    # cleanup_database_resources
+    cleanup_database_resources
     # cleanup_instance_resources
   end
 
   example "spanner_postgresql_partitioned_dml" do
-    # database = create_singers_albums_database
+    database = create_spangres_singers_albums_database
+    create_spangres_singers_table
+    add_data_to_spangres_singers_table
+
     capture do
       spanner_postgresql_partitioned_dml project_id: @project_id,
                                          instance_id: @instance_id,
