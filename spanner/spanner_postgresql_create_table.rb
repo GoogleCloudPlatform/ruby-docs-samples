@@ -48,5 +48,5 @@ def spanner_postgresql_create_table project_id:, instance_id:, database_id:
 
   puts "Created a table using PostgreSQL dialect"
 
-  # [END spanner_postgresql_batch_dml]
+  # [END spanner_postgresql_create_table]
 end

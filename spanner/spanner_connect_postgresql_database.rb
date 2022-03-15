@@ -29,7 +29,7 @@ def spanner_connect_postgresql_database project_id:, instance_id:, database_id:
   results.rows.each do |row|
     puts "Result: #{row[:message]}"
   end
-  # [END spanner_postgresql_batch_dml]
+  # [END spanner_connect_postgresql_database]
 end
 
 if $PROGRAM_NAME == __FILE__
