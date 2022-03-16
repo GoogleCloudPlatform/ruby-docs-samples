@@ -41,10 +41,10 @@ def add_data_to_spangres_singers_table
   client  = spanner.client @instance.instance_id, @database_id
   client.commit do |c|
     c.insert "Singers", [
-      { SingerId: 1, FirstName: "Ann", LastName: "Louis" },
-      { SingerId: 2, FirstName: "Olivia", LastName: "Garcia" },
-      { SingerId: 3, FirstName: "Alice", LastName: "Henderson" },
-      { SingerId: 4, FirstName: "Bruce", LastName: "Allison" }
+      { SingerId: 1, FirstName: "Ann", LastName: "Louis", Rating: BigDecimal("3.6") },
+      { SingerId: 2, FirstName: "Olivia", LastName: "Garcia", Rating: BigDecimal("2.1") },
+      { SingerId: 3, FirstName: "Alice", LastName: "Henderson", Rating: BigDecimal("4.8") },
+      { SingerId: 4, FirstName: "Bruce", LastName: "Allison", Rating: BigDecimal("2.7") }
     ]
   end
 end

@@ -23,14 +23,17 @@ def spanner_postgresql_numeric_data_type project_id:, instance_id:, database_id:
   spanner = Google::Cloud::Spanner.new project: project_id
   client  = spanner.client instance_id, database_id
 
-  results = client.execute "SELECT SingerId, FirstName FROM Singers WHERE SingerId LIKE $1",
-                           params: { p1: 1 },
+  # Fetch all singers whose rating is above 3
+  results = client.execute "SELECT SingerId, FirstName, Rating FROM Singers WHERE Rating > $1",
+                           params: { p1: BigDecimal(3) },
                            types: { p1: :PG_NUMERIC }
 
   results.rows.each do |row|
     puts "SingerId: #{row[:singerid]}"
     puts "FirstName: #{row[:firstname]}"
-    puts "LastName: #{row[:lastname]}"
+
+    # Converts a bigdecimal from scientific notation (0.36e1) to human-readable format (3.6)
+    puts "Rating: #{row[:rating].to_s 'F'}"
   end
   # [END spanner_postgresql_numeric_data_type]
 end

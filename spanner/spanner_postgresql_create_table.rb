@@ -32,6 +32,7 @@ def spanner_postgresql_create_table project_id:, instance_id:, database_id:
       SingerId bigint NOT NULL PRIMARY KEY,
       FirstName varchar(1024),
       LastName varchar(1024),
+      Rating numeric,
       SingerInfo bytea
     );
   QUERY
