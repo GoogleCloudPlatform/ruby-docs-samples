@@ -37,7 +37,7 @@ describe "Google Cloud Spanner Postgres examples" do
     expect(captured_output).to include "1"
     expect(captured_output).to include "2"
     expect(captured_output).to include "3"
-    expect(captured_output).to include "4" # How to test this? It is returned as bytes
+    expect(captured_output).to include "4"
     expect(captured_output).to include "5"
     expect(captured_output).to include "true"
     expect(captured_output).to include "2021-11-03 09:35:01 UTC"
