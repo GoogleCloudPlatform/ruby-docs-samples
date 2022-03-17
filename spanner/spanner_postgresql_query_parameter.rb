@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START spanner_postgresql_cast_data_type]
+# [START spanner_postgresql_query_parameter]
 def spanner_postgresql_query_parameter project_id:, instance_id:, database_id:
   # project_id  = "Your Google Cloud project ID"
   # instance_id = "Your Spanner instance ID"
@@ -34,4 +34,8 @@ def spanner_postgresql_query_parameter project_id:, instance_id:, database_id:
     puts "LastName: #{row[:lastname]}"
   end
 end
-# [END spanner_postgresql_cast_data_type]
+# [END spanner_postgresql_query_parameter]
+
+if $PROGRAM_NAME == __FILE__
+  spanner_postgresql_query_parameter project_id: ARGV.shift, instance_id: ARGV.shift, database_id: ARGV.shift
+end

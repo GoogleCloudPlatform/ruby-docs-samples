@@ -32,3 +32,7 @@ def spanner_postgresql_functions project_id:, instance_id:, database_id:
   end
 end
 # [END spanner_postgresql_functions]
+
+if $PROGRAM_NAME == __FILE__
+  spanner_postgresql_functions project_id: ARGV.shift, instance_id: ARGV.shift, database_id: ARGV.shift
+end

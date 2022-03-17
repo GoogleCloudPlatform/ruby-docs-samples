@@ -56,3 +56,7 @@ def spanner_postgresql_interleaved_table project_id:, instance_id:, database_id:
   puts "Created interleaved table hierarchy using PostgreSQL dialect."
 end
 # [END spanner_postgresql_interleaved_table]
+
+if $PROGRAM_NAME == __FILE__
+  spanner_postgresql_interleaved_table project_id: ARGV.shift, instance_id: ARGV.shift, database_id: ARGV.shift
+end

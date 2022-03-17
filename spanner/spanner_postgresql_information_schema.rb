@@ -47,3 +47,7 @@ def spanner_postgresql_information_schema project_id:, instance_id:, database_id
   end
 end
 # [END spanner_postgresql_information_schema]
+
+if $PROGRAM_NAME == __FILE__
+  spanner_postgresql_information_schema project_id: ARGV.shift, instance_id: ARGV.shift, database_id: ARGV.shift
+end

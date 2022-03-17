@@ -98,3 +98,7 @@ def spanner_postgresql_identifier_case_sensitivity project_id:, instance_id:, da
   puts "Inserted #{row_count} row(s)"
 end
 # [END spanner_postgresql_identifier_case_sensitivity]
+
+if $PROGRAM_NAME == __FILE__
+  spanner_postgresql_identifier_case_sensitivity project_id: ARGV.shift, instance_id: ARGV.shift, database_id: ARGV.shift
+end
