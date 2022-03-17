@@ -26,10 +26,11 @@ def spanner_postgresql_order_nulls project_id:, instance_id:, database_id:
   row_counts = nil
   client.transaction do |transaction|
     row_counts = transaction.batch_update do |b|
-      b.batch_update "INSERT INTO Singers (SingerId, FirstName) VALUES (1, 'Alice')"
-      b.batch_update "INSERT INTO Singers (SingerId, FirstName) VALUES (2, 'Bruce')"
+      b.batch_update "INSERT INTO Singers (SingerId, FirstName) VALUES (51, 'Alice')"
+      b.batch_update "INSERT INTO Singers (SingerId, FirstName) VALUES (52, 'Bruce')"
       b.batch_update "INSERT INTO Singers (SingerId, FirstName) VALUES ($1, $2)",
-                     params: { p1: 3, p2: nil }
+                     params: { p1: 53, p2: nil },
+                     types: { p2: :STRING }
     end
   end
 
@@ -43,31 +44,35 @@ def spanner_postgresql_order_nulls project_id:, instance_id:, database_id:
   #    ORDER BY clause.
 
   ordered_names = []
-
-  # This returns the singers in order Alice, Bruce, null
+  # This returns the singers in order Alice, Bruce, nil
   results = client.execute "SELECT FirstName FROM Singers ORDER BY FirstName"
   results.rows.each do |row|
-    ordered_names << row[:FirstName]
+    ordered_names << row[:firstname]
   end
+  puts "Result 1: #{ordered_names}"
 
-  # This returns the singers in order null, Bruce, Alice
+  ordered_names = []
+  # This returns the singers in order nil, Bruce, Alice
   results = client.execute "SELECT FirstName FROM Singers ORDER BY FirstName DESC"
   results.rows.each do |row|
-    ordered_names << row[:FirstName]
+    ordered_names << row[:firstname]
   end
+  puts "Result 2: #{ordered_names}"
 
-  # This returns the singers in order null, Alice, Bruce
+  ordered_names = []
+  # This returns the singers in order nil, Alice, Bruce
   results = client.execute "SELECT FirstName FROM Singers ORDER BY FirstName NULLS FIRST"
   results.rows.each do |row|
-    ordered_names << row[:FirstName]
+    ordered_names << row[:firstname]
   end
+  puts "Result 3: #{ordered_names}"
 
-  # This returns the singers in order Bruce, Alice, null,
+  ordered_names = []
+  # This returns the singers in order Alice, ̉Bruce, nil
   results = client.execute "SELECT FirstName FROM Singers ORDER BY FirstName NULLS LAST"
   results.rows.each do |row|
-    ordered_names << row[:FirstName]
+    ordered_names << row[:firstname]
   end
-
-  ordered_names
+  puts "Result 4: #{ordered_names}"
 end
 # [END spanner_postgresql_order_nulls]
