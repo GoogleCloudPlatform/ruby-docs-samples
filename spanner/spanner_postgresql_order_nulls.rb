@@ -12,13 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START spanner_postgresql_order_nulls]
+require "google/cloud/spanner"
+
 def spanner_postgresql_order_nulls project_id:, instance_id:, database_id:
-  # [START spanner_postgresql_order_nulls]
   # project_id  = "Your Google Cloud project ID"
   # instance_id = "Your Spanner instance ID"
   # database_id = "Your Spanner database ID"
-
-  require "google/cloud/spanner"
 
   spanner = Google::Cloud::Spanner.new project: project_id
   client  = spanner.client instance_id, database_id
@@ -69,5 +69,5 @@ def spanner_postgresql_order_nulls project_id:, instance_id:, database_id:
   end
 
   ordered_names
-  # [END spanner_postgresql_order_nulls]
 end
+# [END spanner_postgresql_order_nulls]

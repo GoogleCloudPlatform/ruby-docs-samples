@@ -12,14 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START spanner_postgresql_create_database]
+require "google/cloud/spanner"
+require "google/cloud/spanner/admin/database"
+
 def postgresql_create_database project_id:, instance_id:, database_id:
-  # [START spanner_postgresql_create_database]
   # project_id  = "Your Google Cloud project ID"
   # instance_id = "Your Spanner instance ID"
   # database_id = "Your Spanner database ID"
-
-  require "google/cloud/spanner"
-  require "google/cloud/spanner/admin/database"
 
   database_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin project: project_id
 
@@ -34,8 +34,8 @@ def postgresql_create_database project_id:, instance_id:, database_id:
   job.wait_until_done!
 
   puts "Created database #{database_id} on instance #{instance_id}"
-  # [END spanner_postgresql_create_database]
 end
+# [END spanner_postgresql_create_database]
 
 if $PROGRAM_NAME == __FILE__
   postgresql_create_database project_id: ARGV.shift, instance_id: ARGV.shift, database_id: ARGV.shift

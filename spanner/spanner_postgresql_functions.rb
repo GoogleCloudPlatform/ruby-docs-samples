@@ -12,13 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START spanner_postgresql_functions]
+require "google/cloud/spanner"
+
 def spanner_postgresql_functions project_id:, instance_id:, database_id:
-  # [START spanner_postgresql_functions]
   # project_id  = "Your Google Cloud project ID"
   # instance_id = "Your Spanner instance ID"
   # database_id = "Your Spanner database ID"
-
-  require "google/cloud/spanner"
 
   spanner = Google::Cloud::Spanner.new project: project_id
   client  = spanner.client instance_id, database_id
@@ -30,5 +30,5 @@ def spanner_postgresql_functions project_id:, instance_id:, database_id:
   results.rows.each do |row|
     puts "Timestamp #{row[:t]}"
   end
-  # [END spanner_postgresql_functions]
 end
+# [END spanner_postgresql_functions]

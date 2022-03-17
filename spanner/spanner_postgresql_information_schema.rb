@@ -12,8 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START spanner_postgresql_information_schema]
+require "google/cloud/spanner"
+
 def spanner_postgresql_information_schema project_id:, instance_id:, database_id:
-  # [START spanner_postgresql_information_schema]
   # project_id  = "Your Google Cloud project ID"
   # instance_id = "Your Spanner instance ID"
   # database_id = "Your Spanner database ID"
@@ -43,5 +45,5 @@ def spanner_postgresql_information_schema project_id:, instance_id:, database_id
     puts "User Defined Type: Schema #{row[:user_defined_type_schema]}"
     puts "User Defined Type: Name #{row[:user_defined_type_name]}"
   end
-  # [END spanner_postgresql_information_schema]
 end
+# [END spanner_postgresql_information_schema]

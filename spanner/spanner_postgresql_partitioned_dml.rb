@@ -12,13 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START spanner_postgresql_partitioned_dml]
+require "google/cloud/spanner"
+
 def spanner_postgresql_partitioned_dml project_id:, instance_id:, database_id:
-  # [START spanner_postgresql_partitioned_dml]
   # project_id  = "Your Google Cloud project ID"
   # instance_id = "Your Spanner instance ID"
   # database_id = "Your Spanner database ID"
-
-  require "google/cloud/spanner"
 
   spanner = Google::Cloud::Spanner.new project: project_id
   client  = spanner.client instance_id, database_id
@@ -34,5 +34,5 @@ def spanner_postgresql_partitioned_dml project_id:, instance_id:, database_id:
   row_count = client.execute_partition_update sql_query
 
   puts "#{row_count} row(s) deleted."
-  # [END spanner_postgresql_partitioned_dml]
 end
+# [END spanner_postgresql_partitioned_dml]

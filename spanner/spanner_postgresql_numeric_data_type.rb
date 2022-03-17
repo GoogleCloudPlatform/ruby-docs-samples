@@ -12,13 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START spanner_postgresql_numeric_data_type]
+require "google/cloud/spanner"
+
 def spanner_postgresql_numeric_data_type project_id:, instance_id:, database_id:
-  # [START spanner_postgresql_numeric_data_type]
   # project_id  = "Your Google Cloud project ID"
   # instance_id = "Your Spanner instance ID"
   # database_id = "Your Spanner database ID"
-
-  require "google/cloud/spanner"
 
   spanner = Google::Cloud::Spanner.new project: project_id
   client  = spanner.client instance_id, database_id
@@ -35,5 +35,5 @@ def spanner_postgresql_numeric_data_type project_id:, instance_id:, database_id:
     # Converts a bigdecimal from scientific notation (0.36e1) to human-readable format (3.6)
     puts "Rating: #{row[:rating].to_s 'F'}"
   end
-  # [END spanner_postgresql_numeric_data_type]
 end
+# [END spanner_postgresql_numeric_data_type]

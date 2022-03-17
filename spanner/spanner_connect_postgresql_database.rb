@@ -12,13 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START spanner_connect_postgresql_database]
+require "google/cloud/spanner"
+
 def spanner_connect_postgresql_database project_id:, instance_id:, database_id:
-  # [START spanner_connect_postgresql_database]
   # project_id  = "Your Google Cloud project ID"
   # instance_id = "Your Spanner instance ID"
   # database_id = "Your Spanner database ID"
-
-  require "google/cloud/spanner"
 
   spanner = Google::Cloud::Spanner.new project: project_id
   client  = spanner.client instance_id, database_id
@@ -29,8 +29,8 @@ def spanner_connect_postgresql_database project_id:, instance_id:, database_id:
   results.rows.each do |row|
     puts "Result: #{row[:message]}"
   end
-  # [END spanner_connect_postgresql_database]
 end
+# [END spanner_connect_postgresql_database]
 
 if $PROGRAM_NAME == __FILE__
   spanner_connect_postgresql_database project_id: ARGV.shift, instance_id: ARGV.shift, database_id: ARGV.shift

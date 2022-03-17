@@ -12,14 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START spanner_postgresql_identifier_case_sensitivity]
+require "google/cloud/spanner"
+require "google/cloud/spanner/admin/database"
+
 def spanner_postgresql_identifier_case_sensitivity project_id:, instance_id:, database_id:
-  # [START spanner_postgresql_identifier_case_sensitivity]
   # project_id  = "Your Google Cloud project ID"
   # instance_id = "Your Spanner instance ID"
   # database_id = "Your Spanner database ID"
-
-  require "google/cloud/spanner"
-  require "google/cloud/spanner/admin/database"
 
   db_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin project: project_id
 
@@ -96,5 +96,5 @@ def spanner_postgresql_identifier_case_sensitivity project_id:, instance_id:, da
   end
 
   puts "Inserted #{row_count} row(s)"
-  # [END spanner_postgresql_identifier_case_sensitivity]
 end
+# [END spanner_postgresql_identifier_case_sensitivity]

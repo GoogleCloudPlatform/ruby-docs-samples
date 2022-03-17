@@ -12,8 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START spanner_postgresql_cast_data_type]
 def spanner_postgresql_query_parameter project_id:, instance_id:, database_id:
-  # [START spanner_postgresql_cast_data_type]
   # project_id  = "Your Google Cloud project ID"
   # instance_id = "Your Spanner instance ID"
   # database_id = "Your Spanner database ID"
@@ -33,5 +33,5 @@ def spanner_postgresql_query_parameter project_id:, instance_id:, database_id:
     puts "FirstName: #{row[:firstname]}"
     puts "LastName: #{row[:lastname]}"
   end
-  # [END spanner_postgresql_cast_data_type]
 end
+# [END spanner_postgresql_cast_data_type]
