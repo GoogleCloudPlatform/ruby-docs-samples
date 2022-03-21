@@ -23,7 +23,7 @@ describe "Google Cloud Spanner Postgres examples" do
 
   after :each do
     cleanup_database_resources
-    # cleanup_instance_resources
+    cleanup_instance_resources
   end
 
   example "spanner_postgresql_query_parameter" do
