@@ -2209,6 +2209,42 @@ def update_backup project_id:, instance_id:, backup_id:
   # [END spanner_update_backup]
 end
 
+def copy_backup project_id:, instance_id:, backup_id:, source_backup_id:
+  # [START spanner_copy_backup]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "The ID of the destination instance that will contain the backup copy"
+  # backup_id = "The ID of the backup copy"
+  # source_backup = "The source backup to be copied"
+
+  require "google/cloud/spanner"
+  require "google/cloud/spanner/admin/database"
+
+  database_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin
+
+  instance_path = database_admin_client.instance_path project: project_id, instance: instance_id
+  backup_path = database_admin_client.backup_path project: project_id,
+                                                  instance: instance_id,
+                                                  backup: backup_id
+  source_backup = database_admin_client.backup_path project: project_id,
+                                                    instance: instance_id,
+                                                    backup: source_backup_id
+
+  expire_time = Time.now + 14 * 24 * 3600 # 14 days from now
+
+  job = database_admin_client.copy_backup parent: instance_path,
+                                          backup_id: backup_id,
+                                          source_backup: source_backup,
+                                          expire_time: expire_time
+
+  puts "Copy backup operation in progress"
+
+  job.wait_until_done!
+
+  backup = database_admin_client.get_backup name: backup_path
+  puts "Backup #{backup_id} of size #{backup.size_bytes} bytes was copied at #{backup.create_time} from #{source_backup} for version #{backup.version_time}"
+  # [END spanner_copy_backup]
+end
+
 def set_custom_timeout_and_retry project_id:, instance_id:, database_id:
   # [START spanner_set_custom_timeout_and_retry]
   # project_id  = "Your Google Cloud project ID"
@@ -2342,6 +2378,7 @@ def usage
       list_backups                         <instance_id> <backup_id> <database_id> List and filter backups.
       delete_backup                        <instance_id> <backup_id> Delete a backup.
       update_backup                        <instance_id> <backup_id> Update the backup.
+      copy_backup                          <instance_id> <backup_id> <source_backup> Copies a backup
       set_custom_timeout_and_retry         <instance_id> <database_id> Set custom timeout and retry settings.
       commit_stats                         <instance_id> <database_id> Get commit stats.
 
@@ -2382,7 +2419,7 @@ def run_sample arguments
     "write_read_null_float64_array", "write_read_float64_array",
     "create_backup", "restore_backup", "create_backup_cancel",
     "list_backup_operations", "list_database_operations", "list_backups",
-    "delete_backup", "update_backup_expiration_time",
+    "delete_backup", "update_backup_expiration_time", "copy_backup",
     "set_custom_timeout_and_retry", "query_with_numeric_parameter",
     "update_data_with_numeric_column", "commit_stats", "create_database_with_encryption_key",
     "create_backup_with_encryption_key", "restore_database_with_encryption_key", "update_backup"
