@@ -14,7 +14,7 @@
 
 require_relative "./spec_helper"
 require_relative "./spanner_postgresql_helper"
-require_relative "../spanner_connect_postgresql_database"
+require_relative "../spanner_postgresql_add_column"
 
 describe "Google Cloud Spanner Postgres examples" do
   before :each do
@@ -26,14 +26,15 @@ describe "Google Cloud Spanner Postgres examples" do
     cleanup_instance_resources
   end
 
-  example "connect to database" do
+  example "spanner_postgresql_add_column" do
     database = create_spangres_singers_albums_database
+    create_spangres_singers_table
     capture do
-      spanner_connect_postgresql_database project_id: @project_id,
-                                          instance_id: @instance_id,
-                                          database_id: @database_id
+      spanner_postgresql_add_column project_id: @project_id,
+                                    instance_id: @instance_id,
+                                    database_id: @database_id
     end
 
-    expect(captured_output).to include "Hello from Spanner PostgreSQL!"
+    expect(captured_output).to include "Added Age column to Singers table in datbase #{@database_id}"
   end
 end
