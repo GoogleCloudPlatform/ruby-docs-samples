@@ -35,7 +35,6 @@ describe "Google Cloud Spanner Postgres examples" do
                                         database_id: @database_id
     end
 
-    expect(captured_output).to include @database_id
     expect(captured_output).to include "public"
     expect(captured_output).to include "singers"
     expect(captured_output).to include "Catalog"
