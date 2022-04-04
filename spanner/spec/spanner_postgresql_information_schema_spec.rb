@@ -37,7 +37,6 @@ describe "Google Cloud Spanner Postgres examples" do
 
     expect(captured_output).to include "public"
     expect(captured_output).to include "singers"
-    expect(captured_output).to include "Catalog"
     expect(captured_output).to include "Schema"
     expect(captured_output).to include "Name"
   end

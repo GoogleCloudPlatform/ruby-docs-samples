@@ -25,10 +25,8 @@ def spanner_postgresql_information_schema project_id:, instance_id:, database_id
 
   # The user_defined_type_* columns below are only available for PostgreSQL databases.
   sql_query = <<~QUERY
-    SELECT table_catalog,
-           table_schema,
+    SELECT table_schema,
            table_name,
-           user_defined_type_catalog,
            user_defined_type_schema,
            user_defined_type_name
     FROM INFORMATION_SCHEMA.tables
@@ -38,10 +36,8 @@ def spanner_postgresql_information_schema project_id:, instance_id:, database_id
   results = client.execute sql_query
 
   results.rows.each do |row|
-    puts "Catalog: #{row[:table_catalog]}"
     puts "Schema: #{row[:table_schema]}"
     puts "Name: #{row[:table_name]}"
-    puts "User Defined Type: Catalog #{row[:user_defined_type_catalog]}"
     puts "User Defined Type: Schema #{row[:user_defined_type_schema]}"
     puts "User Defined Type: Name #{row[:user_defined_type_name]}"
   end
