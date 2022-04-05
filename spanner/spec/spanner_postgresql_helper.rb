@@ -13,8 +13,8 @@
 # limitations under the License.
 
 require "google/cloud/spanner"
+require "google/cloud/spanner/admin/database"
 require_relative "../spanner_postgresql_create_database"
-require_relative "../spanner_postgresql_create_table"
 
 def create_spangres_singers_albums_database
   capture do
@@ -30,9 +30,31 @@ end
 
 def create_spangres_singers_table
   capture do
-    spanner_postgresql_create_table project_id:  @project_id,
-                                    instance_id: @instance.instance_id,
-                                    database_id: @database_id
+    db_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin project: @project_id
+
+    db_path = db_admin_client.database_path project: @project_id,
+                                            instance: @instance.instance_id,
+                                            database: @database_id
+  
+    create_table_query = <<~QUERY
+      CREATE TABLE Singers (
+        SingerId bigint NOT NULL PRIMARY KEY,
+        FirstName varchar(1024),
+        LastName varchar(1024),
+        Rating numeric,
+        SingerInfo bytea
+      );
+    QUERY
+  
+    job = db_admin_client.update_database_ddl database: db_path,
+                                              statements: [create_table_query]
+  
+    job.wait_until_done!
+  
+    if job.error?
+      puts "Error while creating table. Code: #{job.error.code}. Message: #{job.error.message}"
+      raise GRPC::BadStatus.new(job.error.code, job.error.message)
+    end
   end
 end
 
