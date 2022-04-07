@@ -48,7 +48,7 @@ def create_instance_config project_id:, instance_config_id:
     display_name: "Ruby test custom instance config",
     config_type: :USER_MANAGED,
     base_config: base_instance_config_path,
-    replicas: custom_replicas,
+    replicas: custom_replicas
   }
   request = {
     parent: project_path,
@@ -86,7 +86,7 @@ def update_instance_config project_id:, instance_config_id:
     project: project_id, instance_config: instance_config_id
   config = instance_admin_client.get_instance_config name: instance_config_path
 
-  labels_map = Google::Protobuf::Map.new(:string, :string)
+  labels_map = Google::Protobuf::Map.new :string, :string
   labels_map["cloud_spanner_samples"] = "true"
   labels_map["updates"] = "true"
 
@@ -170,7 +170,7 @@ end
 
 def run_sample arguments
   commands = [
-    "create_instance_config", "update_instance_config", "delete_instance_config", "list_instance_config_operations",
+    "create_instance_config", "update_instance_config", "delete_instance_config", "list_instance_config_operations"
   ]
 
   command = arguments.shift
@@ -179,7 +179,7 @@ def run_sample arguments
   return usage unless commands.include? command
 
   sample_method = method command
-  parameters = { project_id: project_id }
+  parameters = {  project_id: project_id }
 
   sample_method.parameters.each do |paramater|
     next if paramater.last == :project_id
