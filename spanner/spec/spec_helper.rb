@@ -32,6 +32,7 @@ RSpec.configure do |config|
     @spanner              = Google::Cloud::Spanner.new project: @project_id
     @instance             = @spanner.instance @instance_id
     @created_instance_ids = []
+    @created_instance_config_ids = []
   end
 
   config.after :all do
