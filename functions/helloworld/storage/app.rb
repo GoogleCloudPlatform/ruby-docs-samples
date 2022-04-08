@@ -16,7 +16,8 @@
 require "functions_framework"
 
 FunctionsFramework.cloud_event "hello_gcs" do |event|
-  # The event parameter is a CloudEvents::Event::V1 object.
+  # This function supports all Cloud Storage events.
+  # The `event` parameter is a CloudEvents::Event::V1 object.
   # See https://cloudevents.github.io/sdk-ruby/latest/CloudEvents/Event/V1.html
   payload = event.data
 
