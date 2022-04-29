@@ -38,7 +38,7 @@ shown below.
 Use these terminal commands to initialize environment variables:
 ```bash
 export GOOGLE_APPLICATION_CREDENTIALS=/path/to/service/account/key.json
-export DB_HOST='127.0.0.1'
+export INSTANCE_HOST='127.0.0.1'
 export DB_PORT='5432'
 export DB_USER='<DB_USER_NAME>'
 export DB_PASS='<DB_PASSWORD>'
@@ -57,7 +57,7 @@ Then use this command to launch the proxy in the background:
 Use these PowerShell commands to initialize environment variables:
 ```powershell
 $env:GOOGLE_APPLICATION_CREDENTIALS="<CREDENTIALS_JSON_FILE>"
-$env:DB_HOST="127.0.0.1"
+$env:INSTANCE_HOST="127.0.0.1"
 $env:DB_PORT="5432"
 $env:DB_USER="<DB_USER_NAME>"
 $env:DB_PASS="<DB_PASSWORD>"
@@ -84,15 +84,11 @@ sudo mkdir /cloudsql
 sudo chown -R $USER /cloudsql
 ```
 
-You'll also need to initialize an environment variable containing the directory you just created:
-```bash
-export DB_SOCKET_DIR=/path/to/the/new/directory
-```
-
 Use these terminal commands to initialize other environment variables as well:
 ```bash
 export GOOGLE_APPLICATION_CREDENTIALS=/path/to/service/account/key.json
 export INSTANCE_CONNECTION_NAME='<MY-PROJECT>:<INSTANCE-REGION>:<INSTANCE-NAME>'
+export INSTANCE_UNIX_SOCKET='./cloudsql/<MY-PROJECT>:<INSTANCE-REGION>:<INSTANCE-NAME>'
 export DB_USER='<DB_USER_NAME>'
 export DB_PASS='<DB_PASSWORD>'
 export DB_NAME='<DB_NAME>'
@@ -103,7 +99,7 @@ help keep secrets safe.
 
 Then use this command to launch the proxy in the background:
 ```bash
-./cloud_sql_proxy -dir=$DB_SOCKET_DIR --instances=$INSTANCE_CONNECTION_NAME --credential_file=$GOOGLE_APPLICATION_CREDENTIALS &
+./cloud_sql_proxy -dir=./cloudsql --instances=$INSTANCE_CONNECTION_NAME --credential_file=$GOOGLE_APPLICATION_CREDENTIALS &
 ```
 
 ### Testing the application
