@@ -50,7 +50,7 @@ help keep secrets safe.
 
 Then use this command to launch the proxy in the background:
 ```bash
-./cloud_sql_proxy -instances=<project-id>:<region>:<instance-name>=tcp:5432 -credential_file=$GOOGLE_APPLICATION_CREDENTIALS &
+./cloud_sql_proxy -instances=<PROJECT-ID>:<INSTANCE-REGION>:<INSTANCE-NAME>=tcp:5432 -credential_file=$GOOGLE_APPLICATION_CREDENTIALS &
 ```
 
 #### Windows/PowerShell
@@ -69,7 +69,7 @@ help keep secrets safe.
 
 Then use this command to launch the proxy in a separate PowerShell session:
 ```powershell
-Start-Process -filepath "C:\<path to proxy exe>" -ArgumentList "-instances=<project-id>:<region>:<instance-name>=tcp:5432 -credential_file=<CREDENTIALS_JSON_FILE>"
+Start-Process -filepath "C:\<path to proxy exe>" -ArgumentList "-instances=<PROJECT-ID>:<INSTANCE-REGION>:<INSTANCE-NAME>=tcp:5432 -credential_file=<CREDENTIALS_JSON_FILE>"
 ```
 
 ### Launch proxy with Unix Domain Socket
@@ -80,8 +80,8 @@ To use a Unix socket, you'll need to create a directory and give write access to
 the proxy. For example:
 
 ```bash
-sudo mkdir /cloudsql
-sudo chown -R $USER /cloudsql
+sudo mkdir ./cloudsql
+sudo chown -R $USER ./cloudsql
 ```
 
 Use these terminal commands to initialize other environment variables as well:
@@ -128,11 +128,10 @@ To allow your app to connect to your Cloud SQL instance when the app is deployed
 
     ```
     env_variables:
-      DB_USER: MY_DB_USER
-      DB_PASS: MY_DB_PASSWORD
-      DB_NAME: MY_DATABASE
-      # e.g. my-awesome-project:us-central1:my-cloud-sql-instance
-      CLOUD_SQL_CONNECTION_NAME: <MY-PROJECT>:<INSTANCE-REGION>:<MY-DATABASE>
+      INSTANCE_UNIX_SOCKET: /cloudsql/<PROJECT-ID>:<INSTANCE-REGION>:<INSTANCE-NAME>
+      DB_USER: YOUR_DB_USER_NAME
+      DB_PASS: YOUR_DB_PASSWORD
+      DB_NAME: YOUR_DB_NAME
     ```
 
 SECRET_KEY_BASE can be found by running:

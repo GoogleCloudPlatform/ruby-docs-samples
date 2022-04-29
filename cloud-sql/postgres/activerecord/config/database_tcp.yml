@@ -1,4 +1,4 @@
-# Copyright 2020 Google, Inc
+# Copyright 2022 Google, Inc
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -45,35 +45,8 @@ tcp: &tcp
   port: <%= ENV.fetch("DB_PORT") { 5432 }%>
   # [END cloud_sql_postgres_activerecord_connect_tcp]
 
-# [START cloud_sql_postgres_activerecord_connect_unix]
-unix: &unix
-  adapter: postgresql
-  # Configure additional properties here.
-  # [END cloud_sql_postgres_activerecord_connect_unix]
-  pool: 5
-  timeout: 5000
-
-  # [START cloud_sql_postgres_activerecord_connect_unix]
-  # Note: Saving credentials in environment variables is convenient, but not
-  # secure - consider a more secure solution such as
-  # Cloud Secret Manager (https://cloud.google.com/secret-manager) to help
-  # keep secrets safe.
-  username: <%= ENV["DB_USER"] %>  # e.g. "my-database-user"
-  password: <%= ENV["DB_PASS"] %> # e.g. "my-database-password"
-  database: <%= ENV.fetch("DB_NAME") { "vote_development" } %>
-  # Specify the Unix socket path as host
-  host: "<%= ENV["INSTANCE_UNIX_SOCKET"] %>"
-  port: <%= ENV["DB_PORT"] %>
-  # [END cloud_sql_postgres_activerecord_connect_unix]
-
 development:
   <<: *tcp
-
-development_tcp:
-  <<: *tcp
-
-development_unix:
-  <<: *unix
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -83,24 +56,6 @@ test:
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 1 } %>
   database: <%= ENV.fetch("DB_NAME") { "vote_test" } %>
 
-test_tcp:
-  <<: *tcp
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 1 } %>
-  database: <%= ENV.fetch("DB_NAME") { "vote_test" } %>
-
-test_unix:
-  <<: *unix
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 1 } %>
-  database: <%= ENV.fetch("DB_NAME") { "vote_test" } %>
-
 production:
-  <<: *unix
-  database: <%= ENV.fetch("DB_NAME") { "vote_production" } %>
-
-production_tcp:
   <<: *tcp
-  database: <%= ENV.fetch("DB_NAME") { "vote_production" } %>
-
-production_unix:
-  <<: *unix
   database: <%= ENV.fetch("DB_NAME") { "vote_production" } %>

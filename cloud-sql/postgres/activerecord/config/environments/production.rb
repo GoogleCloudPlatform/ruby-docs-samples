@@ -91,4 +91,14 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  # Use a Unix socket when INSTANCE_UNIX_SOCKET (e.g. /cloudsql/project:region:instance) is defined
+  if ENV["INSTANCE_UNIX_SOCKET"]
+    self.paths['config/database'] = 'config/database_unix.yml'
+  # Use a TCP socket when INSTANCE_HOST (e.g. 127.0.0.1) is defined
+  elsif ENV["INSTANCE_HOST"]
+    self.paths['config/database'] = 'config/database_tcp.yml'
+  else
+    raise "Missing database connection type. Please define one of INSTANCE_HOST or INSTANCE_UNIX_SOCKET"
+  end
 end
