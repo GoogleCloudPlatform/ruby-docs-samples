@@ -15,4 +15,6 @@ bundle exec rspec --format documentation --format RspecJunitFormatter --out spon
 
 # Run the tests again with custom environment
 # variables that force a Unix connection
-INSTANCE_UNIX_SOCKET=$SOCKET_PATH; INSTANCE_HOST=$SOCKET_PATH; bundle exec rspec --format documentation --format RspecJunitFormatter --out sponge_log.xml | tee sponge_log.log
+export INSTANCE_UNIX_SOCKET=$SOCKET_PATH; \
+export INSTANCE_HOST=$SOCKET_PATH; \
+bundle exec rspec --format documentation --format RspecJunitFormatter --out sponge_log.xml | tee sponge_log.log
