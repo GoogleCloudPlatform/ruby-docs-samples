@@ -13,7 +13,7 @@
 # limitations under the License.
 
 entrypoint: bundle exec rackup --port $PORT
-runtime: ruby25
+runtime: ruby27
 
 env_variables:
   SECRET_KEY_BASE: <SECRET_KEY>

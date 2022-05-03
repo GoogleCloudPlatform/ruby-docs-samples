@@ -16,7 +16,7 @@
 tcp: &tcp
   adapter: postgresql
   # Configure additional properties here.
-  # [END cloud_sql_postgres_activerecord_connect_tcp]
+# [END cloud_sql_postgres_activerecord_connect_tcp]
   # [START cloud_sql_postgres_activerecord_limit]
   # 'pool' is the maximum number of permanent connections to keep.
   pool: 5

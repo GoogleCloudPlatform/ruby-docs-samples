@@ -76,12 +76,11 @@ Start-Process -filepath "C:\<path to proxy exe>" -ArgumentList "-instances=<PROJ
 NOTE: this option is currently only supported on Linux and Mac OS. Windows users should use the
 [Launch proxy with TCP](#launch-proxy-with-tcp) option.
 
-To use a Unix socket, you'll need to create a directory and give write access to the user running
+To use a Unix socket, you'll need to create a directory for running
 the proxy. For example:
 
 ```bash
-sudo mkdir ./cloudsql
-sudo chown -R $USER ./cloudsql
+mkdir ./cloudsql
 ```
 
 Use these terminal commands to initialize other environment variables as well:
