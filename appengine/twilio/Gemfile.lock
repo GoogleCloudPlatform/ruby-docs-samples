@@ -14,12 +14,13 @@ GEM
     mime-types-data (3.2016.0521)
     mini_portile2 (2.4.0)
     multipart-post (2.0.0)
-    mustermann (1.0.2)
+    mustermann (1.1.1)
+      ruby2_keywords (~> 0.0.1)
     netrc (0.11.0)
     nokogiri (1.10.1)
       mini_portile2 (~> 2.4.0)
-    rack (2.0.6)
-    rack-protection (2.0.3)
+    rack (2.2.3)
+    rack-protection (2.2.0)
       rack
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
@@ -40,12 +41,15 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.7.0)
     rspec-support (3.7.1)
-    sinatra (2.0.3)
+    rspec_junit_formatter (0.5.1)
+      rspec-core (>= 2, < 4, != 2.12.0)
+    ruby2_keywords (0.0.5)
+    sinatra (2.2.0)
       mustermann (~> 1.0)
-      rack (~> 2.0)
-      rack-protection (= 2.0.3)
+      rack (~> 2.2)
+      rack-protection (= 2.2.0)
       tilt (~> 2.0)
-    tilt (2.0.8)
+    tilt (2.0.10)
     twilio-ruby (5.11.2)
       faraday (~> 0.9)
       jwt (>= 1.5, <= 2.5)
@@ -61,6 +65,7 @@ DEPENDENCIES
   rack-test
   rest-client
   rspec
+  rspec_junit_formatter
   sinatra
   twilio-ruby
 

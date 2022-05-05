@@ -17,11 +17,12 @@ GEM
     mime-types-data (3.2016.0521)
     multi_json (1.13.1)
     multipart-post (2.0.0)
-    mustermann (1.0.2)
+    mustermann (1.1.1)
+      ruby2_keywords (~> 0.0.1)
     netrc (0.11.0)
     public_suffix (3.0.2)
-    rack (2.0.5)
-    rack-protection (2.0.3)
+    rack (2.2.3)
+    rack-protection (2.2.0)
       rack
     rack-test (1.0.0)
       rack (>= 1.0, < 3)
@@ -42,17 +43,20 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.7.0)
     rspec-support (3.7.1)
+    rspec_junit_formatter (0.5.1)
+      rspec-core (>= 2, < 4, != 2.12.0)
+    ruby2_keywords (0.0.5)
     signet (0.8.1)
       addressable (~> 2.3)
       faraday (~> 0.9)
       jwt (>= 1.5, < 3.0)
       multi_json (~> 1.10)
-    sinatra (2.0.3)
+    sinatra (2.2.0)
       mustermann (~> 1.0)
-      rack (~> 2.0)
-      rack-protection (= 2.0.3)
+      rack (~> 2.2)
+      rack-protection (= 2.2.0)
       tilt (~> 2.0)
-    tilt (2.0.8)
+    tilt (2.0.10)
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.5)
@@ -65,6 +69,7 @@ DEPENDENCIES
   rack-test
   rest-client
   rspec
+  rspec_junit_formatter
   signet
   sinatra
 
