@@ -37,7 +37,7 @@ shown below.
 Use these terminal commands to initialize environment variables:
 ```bash
 export GOOGLE_APPLICATION_CREDENTIALS=/path/to/service/account/key.json
-export DB_HOST='127.0.0.1'
+export INSTANCE_HOST='127.0.0.1'
 export DB_PORT='3306'
 export DB_USER='<DB_USER_NAME>'
 export DB_PASS='<DB_PASSWORD>'
@@ -49,14 +49,14 @@ help keep secrets safe.
 
 Then use this command to launch the proxy in the background:
 ```bash
-./cloud_sql_proxy -instances=<project-id>:<region>:<instance-name>=tcp:3306 -credential_file=$GOOGLE_APPLICATION_CREDENTIALS &
+./cloud_sql_proxy -instances=<PROJECT-ID>:<INSTANCE-REGION>:<INSTANCE-NAME>=tcp:3306 -credential_file=$GOOGLE_APPLICATION_CREDENTIALS &
 ```
 
 #### Windows/PowerShell
 Use these PowerShell commands to initialize environment variables:
 ```powershell
 $env:GOOGLE_APPLICATION_CREDENTIALS="<CREDENTIALS_JSON_FILE>"
-$env:DB_HOST="127.0.0.1"
+$env:INSTANCE_HOST="127.0.0.1"
 $env:DB_PORT="3306"
 $env:DB_USER="<DB_USER_NAME>"
 $env:DB_PASS="<DB_PASSWORD>"
@@ -68,30 +68,25 @@ help keep secrets safe.
 
 Then use this command to launch the proxy in a separate PowerShell session:
 ```powershell
-Start-Process -filepath "C:\<path to proxy exe>" -ArgumentList "-instances=<project-id>:<region>:<instance-name>=tcp:3306 -credential_file=<CREDENTIALS_JSON_FILE>"
+Start-Process -filepath "C:\<path to proxy exe>" -ArgumentList "-instances=<PROJECT-ID>:<INSTANCE-REGION>:<INSTANCE-NAME>=tcp:3306 -credential_file=<CREDENTIALS_JSON_FILE>"
 ```
 
 ### Launch proxy with Unix Domain Socket
 NOTE: this option is currently only supported on Linux and Mac OS. Windows users should use the
 [Launch proxy with TCP](#launch-proxy-with-tcp) option.
 
-To use a Unix socket, you'll need to create a directory and give write access to the user running
+To use a Unix socket, you'll need to create a directory for running
 the proxy. For example:
 
 ```bash
-sudo mkdir /cloudsql
-sudo chown -R $USER /cloudsql
-```
-
-You'll also need to initialize an environment variable containing the directory you just created:
-```bash
-export DB_SOCKET_DIR=/path/to/the/new/directory
+mkdir ./cloudsql
 ```
 
 Use these terminal commands to initialize other environment variables as well:
 ```bash
 export GOOGLE_APPLICATION_CREDENTIALS=/path/to/service/account/key.json
 export INSTANCE_CONNECTION_NAME='<MY-PROJECT>:<INSTANCE-REGION>:<INSTANCE-NAME>'
+export INSTANCE_UNIX_SOCKET='./cloudsql/<MY-PROJECT>:<INSTANCE-REGION>:<INSTANCE-NAME>'
 export DB_USER='<DB_USER_NAME>'
 export DB_PASS='<DB_PASSWORD>'
 export DB_NAME='<DB_NAME>'
@@ -102,12 +97,12 @@ help keep secrets safe.
 
 Then use this command to launch the proxy in the background:
 ```bash
-./cloud_sql_proxy -dir=$DB_SOCKET_DIR --instances=$INSTANCE_CONNECTION_NAME --credential_file=$GOOGLE_APPLICATION_CREDENTIALS &
+./cloud_sql_proxy -dir=./cloudsql --instances=$INSTANCE_CONNECTION_NAME --credential_file=$GOOGLE_APPLICATION_CREDENTIALS &
 ```
 
 ### Testing the application
 
-Next, setup install the requirements:
+Next, install the requirements:
 ```bash
 bundle install
 ```
@@ -127,16 +122,21 @@ Navigate towards `http://localhost:3000` to verify your application is running c
 
 ## Deploy to Google App Engine Standard
 
-To allow your app to connect to your Cloud SQL instance when the app is deployed, add the user, password, database, and instance connection name variables from Cloud SQL to the related environment variables in the `app.standard.yaml` file. The deployed application will connect using Unix sockets.
+First, install the requirements:
+```bash
+bundle install
+```
+
+To allow your app to connect to your Cloud SQL instance when the app is deployed, add the user, password, database, and instance connection name variables from Cloud SQL to the related environment variables in the [app.standard.yaml](app.standard.yaml) file. The deployed application will connect using Unix sockets.
 
     ```
     env_variables:
-      DB_USER: MY_DB_USER
-      DB_PASS: MY_DB_PASSWORD
-      DB_NAME: MY_DATABASE
-      # e.g. my-awesome-project:us-central1:my-cloud-sql-instance
-      CLOUD_SQL_CONNECTION_NAME: <MY-PROJECT>:<INSTANCE-REGION>:<MY-DATABASE>
+      INSTANCE_UNIX_SOCKET: /cloudsql/<PROJECT-ID>:<INSTANCE-REGION>:<INSTANCE-NAME>
+      DB_USER: YOUR_DB_USER_NAME
+      DB_PASS: YOUR_DB_PASSWORD
+      DB_NAME: YOUR_DB_NAME
     ```
+
 
 SECRET_KEY_BASE can be found by running:
 ```bash
@@ -154,12 +154,30 @@ gcloud app deploy app.standard.yaml
 To run on GAE-Flex, create an App Engine project by following the setup for these 
 [instructions](https://cloud.google.com/appengine/docs/flexible/ruby/quickstart).
 
-First, update `app.flexible.yaml` with the correct values to pass the environment 
+Next, in the [Cloud console IAM](https://console.cloud.google.com/iam-admin) section find the Cloud Build service account named 'cloudbuild' and edit its permissions to add the "Cloud SQL Client" role.
+
+Next, edit [Gemfile](Gemfile) to uncomment the following line of code:
+```bash
+gem 'mini_racer', platforms: :ruby
+``` 
+
+Next, install the requirements:
+```bash
+bundle install
+```
+
+Next, update [app.flexible.yaml](app.flexible.yaml) with the correct values to pass the environment 
 variables into the runtime.
 
 SECRET_KEY_BASE can be found by running:
 ```bash
 bundle exec rails secret
+```
+
+Next, (with the `cloud_sql_proxy` running locally) create your production database. You only need to do this once:
+```bash
+RAILS_ENV=production bundle exec rails db:setup
+RAILS_ENV=production bundle exec rails db:seed
 ```
 
 To deploy to App Engine Flexible, run the following command:
