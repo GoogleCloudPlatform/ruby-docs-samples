@@ -103,7 +103,7 @@ Then use this command to launch the proxy in the background:
 
 ### Testing the application
 
-Next, setup install the requirements:
+Next, install the requirements:
 ```bash
 bundle install
 ```
@@ -123,7 +123,12 @@ Navigate towards `http://localhost:3000` to verify your application is running c
 
 ## Deploy to Google App Engine Standard
 
-To allow your app to connect to your Cloud SQL instance when the app is deployed, add the user, password, database, and instance connection name variables from Cloud SQL to the related environment variables in the `app.standard.yaml` file. The deployed application will connect using Unix sockets.
+First, install the requirements:
+```bash
+bundle install
+```
+
+To allow your app to connect to your Cloud SQL instance when the app is deployed, add the user, password, database, and instance connection name variables from Cloud SQL to the related environment variables in the [app.standard.yaml](app.standard.yaml) file. The deployed application will connect using Unix sockets.
 
     ```
     env_variables:
@@ -149,12 +154,30 @@ gcloud app deploy app.standard.yaml
 To run on GAE-Flex, create an App Engine project by following the setup for these 
 [instructions](https://cloud.google.com/appengine/docs/flexible/ruby/quickstart).
 
-First, update `app.flexible.yaml` with the correct values to pass the environment 
+Next, in the [Cloud console IAM](https://console.cloud.google.com/iam-admin) section find the Cloud Build service account named 'cloudbuild' and edit its permissions to add the "Cloud SQL Client" role.
+
+Next, edit [Gemfile](Gemfile) to uncomment the following line of code:
+```bash
+gem 'mini_racer', platforms: :ruby
+``` 
+
+Next, install the requirements:
+```bash
+bundle install
+```
+
+Next, update [app.flexible.yaml](app.flexible.yaml) with the correct values to pass the environment 
 variables into the runtime.
 
 SECRET_KEY_BASE can be found by running:
 ```bash
 bundle exec rails secret
+```
+
+Next, (with the `cloud_sql_proxy` running locally) create your production database. You only need to do this once:
+```bash
+RAILS_ENV=production bundle exec rails db:setup
+RAILS_ENV=production bundle exec rails db:seed
 ```
 
 To deploy to App Engine Flexible, run the following command:
