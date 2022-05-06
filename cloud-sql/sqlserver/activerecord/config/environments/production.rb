@@ -91,4 +91,11 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  # Define INSTANCE_HOST (e.g. 127.0.0.1) for TCP socket.
+  if ENV["INSTANCE_HOST"]
+    paths["config/database"] = "config/database_tcp.yml"
+  else
+    raise "Missing database connection type. Please define INSTANCE_HOST"
+  end
 end
