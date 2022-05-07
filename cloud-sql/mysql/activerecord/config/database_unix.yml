@@ -29,7 +29,7 @@ unix: &unix
   database: <%= ENV.fetch("DB_NAME") { "vote_development" } %>
   # Specify the Unix socket path as host
   socket: "<%= ENV["INSTANCE_UNIX_SOCKET"] %>"
-# [END cloud_sql_mysql_activerecord_connect_unix]
+  # [END cloud_sql_mysql_activerecord_connect_unix]
 
 development:
   <<: *unix
