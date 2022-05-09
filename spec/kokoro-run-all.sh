@@ -214,7 +214,11 @@ else
 
     start_time="$(date -u +%s)"
 
-    (bundle update && bundle exec rspec --format documentation --format RspecJunitFormatter --out sponge_log.xml | tee sponge_log.log) || set_failed_status
+    if [[ -f "${REPO_DIRECTORY}/${PRODUCT}/bin/run_tests" ]]; then
+      (bundle update && bin/run_tests) || set_failed_status
+    else
+      (bundle update && bundle exec rspec --format documentation --format RspecJunitFormatter --out sponge_log.xml | tee sponge_log.log) || set_failed_status
+    fi
 
     if [[ $E2E = "true" ]]; then
       # Clean up deployed version
