@@ -156,11 +156,6 @@ To run on GAE-Flex, create an App Engine project by following the setup for thes
 
 Next, in the [Cloud console IAM](https://console.cloud.google.com/iam-admin) section find the Cloud Build service account named 'cloudbuild' and edit its permissions to add the "Cloud SQL Client" role.
 
-Next, edit [Gemfile](Gemfile) to uncomment the following line of code:
-```bash
-gem 'mini_racer', platforms: :ruby
-``` 
-
 Next, install the requirements:
 ```bash
 bundle install
