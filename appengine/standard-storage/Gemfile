@@ -15,8 +15,9 @@
 # [START gae_standard_storage_dependencies]
 source "https://rubygems.org"
 
-gem "google-cloud-storage", "~>1.29"
-gem "sinatra", "~>2.1"
+gem "google-cloud-storage", "~>1.36"
+gem "sinatra", "~>2.2"
+gem "webrick", "~> 1.7"
 # [END gae_standard_storage_dependencies]
 
 group :test do

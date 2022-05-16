@@ -13,9 +13,9 @@
 # limitations under the License.
 
 # [START gae_standard_storage_yaml]
-runtime: ruby27    # or ruby26 if preferred
+runtime: ruby30
 entrypoint: bundle exec ruby app.rb
 
 env_variables:
-  GOOGLE_CLOUD_STORAGE_BUCKET: <your-bucket-name>
+    GOOGLE_CLOUD_STORAGE_BUCKET: <your-bucket-name>
 # [END gae_standard_storage_yaml]
