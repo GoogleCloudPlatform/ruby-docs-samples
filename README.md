@@ -10,6 +10,11 @@ See our other [Google Cloud Platform github
 repos](https://github.com/GoogleCloudPlatform) for sample applications and
 scaffolding for other frameworks and use cases.
 
+## Google Cloud Samples
+
+To browse ready to use code samples check [Google Cloud Samples](https://cloud.google.com/docs/samples?l=ruby).
+
+
 ## Run Locally
 1. Clone this repo.
    ```
