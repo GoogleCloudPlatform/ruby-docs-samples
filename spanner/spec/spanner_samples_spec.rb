@@ -1692,6 +1692,24 @@ describe "Google Cloud Spanner API samples" do
     expect(@test_backup).not_to be nil
   end
 
+  example "list copy backup operations" do
+    backup = create_backup_with_data
+
+    capture do
+      list_copy_backup_operations project_id:  @project_id,
+                                  instance_id: @instance.instance_id,
+                                  backup_id: @backup_id,
+                                  database_id: backup.database_id
+    end
+
+    expect(captured_output).to match(
+      /Backup #{backup.path} on database #{@database_id} is \d+% complete/
+    )
+
+    @test_backup = @instance.backup @backup_id
+    expect(@test_backup).not_to be nil
+  end
+
   xexample "list database operations" do
     database = restore_database_from_backup
 
