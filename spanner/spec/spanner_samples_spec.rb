@@ -106,6 +106,16 @@ describe "Google Cloud Spanner API samples" do
     @test_backup
   end
 
+  def create_copy_backup
+    capture do
+      copy_backup project_id: @project_id,
+                  instance_id: @instance.instance_id,
+                  backup_id: @copied_backup_id,
+                  source_backup_id: @backup_id
+    end
+    @instance.backup @copied_backup_id
+  end
+
   def restore_database_from_backup
     backup = create_backup_with_data
 
@@ -1694,7 +1704,7 @@ describe "Google Cloud Spanner API samples" do
 
   example "list copy backup operations" do
     backup = create_backup_with_data
-
+    copied_backup = create_copy_backup
     capture do
       list_copy_backup_operations project_id:  @project_id,
                                   instance_id: @instance.instance_id,
@@ -1703,7 +1713,7 @@ describe "Google Cloud Spanner API samples" do
     end
 
     expect(captured_output).to match(
-      /Backup #{backup.path} on database #{@database_id} is \d+% complete/
+      /Backup #{copied_backup.path} on database #{@database_id} is \d+% complete/
     )
 
     @test_backup = @instance.backup @backup_id
