@@ -2107,7 +2107,7 @@ def list_copy_backup_operations project_id:, instance_id:, backup_id:, database_
     if job.error?
       puts job.error
     else
-      puts "Backup #{job.results.name} on database #{database_id} is #{job.metadata.progress.progress_percent}% complete"
+      puts "Backup #{job.results.name} on source backup #{backup_id} is #{job.metadata.progress.progress_percent}% complete"
     end
   end
   # [END spanner_list_copy_backup_operations]

@@ -1713,7 +1713,7 @@ describe "Google Cloud Spanner API samples" do
     end
 
     expect(captured_output).to match(
-      /Backup #{copied_backup.path} on database #{@database_id} is \d+% complete/
+      /Backup #{copied_backup.path} on source backup #{@backup_id} is \d+% complete/
     )
 
     @test_backup = @instance.backup @backup_id
