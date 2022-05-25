@@ -58,4 +58,14 @@ Rails.application.configure do
   # Use an evented file watcher to asynchronously detect changes in source code,
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
+
+  # Use a Unix socket when INSTANCE_UNIX_SOCKET (e.g. /cloudsql/project:region:instance) is defined
+  if ENV["INSTANCE_UNIX_SOCKET"]
+    paths["config/database"] = "config/database_unix.yml"
+  # Use a TCP socket when INSTANCE_HOST (e.g. 127.0.0.1) is defined
+  elsif ENV["INSTANCE_HOST"]
+    paths["config/database"] = "config/database_tcp.yml"
+  else
+    raise "Missing database connection type. Please define one of INSTANCE_HOST or INSTANCE_UNIX_SOCKET"
+  end
 end

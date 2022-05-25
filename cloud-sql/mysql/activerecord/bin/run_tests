@@ -5,9 +5,9 @@ set -euo pipefail
 export DB_USER=$MYSQL_USER
 export DB_PASS=$MYSQL_PASSWORD
 export DB_NAME=$MYSQL_NAME
-export DB_HOST='127.0.0.1'
+export INSTANCE_HOST='127.0.0.1'
 export DB_PORT='3306'
-export INSTANCE_CONNECTION_NAME=$MYSQL_INSTANCE_CONNECTION_NAME
+export SOCKET_PATH="/cloudsql/$MYSQL_INSTANCE_CONNECTION_NAME"
 
 # Run the tests with default values for all
 # environment variable
@@ -15,4 +15,6 @@ bundle exec rspec --format documentation --format RspecJunitFormatter --out spon
 
 # Run the tests again with custom environment
 # variables that force a Unix connection
-DB_HOST=; bundle exec rspec --format documentation --format RspecJunitFormatter --out sponge_log.xml | tee sponge_log.log
+export INSTANCE_UNIX_SOCKET=$SOCKET_PATH; \
+export INSTANCE_HOST=$SOCKET_PATH; \
+bundle exec rspec --format documentation --format RspecJunitFormatter --out sponge_log.xml | tee sponge_log.log
