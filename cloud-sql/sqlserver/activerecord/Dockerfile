@@ -15,7 +15,7 @@
 # Pull the Google base image for Ruby
 # Use the official Ruby image.
 # https://hub.docker.com/_/ruby
-FROM ruby:3.1-buster
+FROM ruby:2.6-buster
 
 # Install FreeTDS, a dependency of the tiny_tds Ruby connector
 RUN apt-get update && apt-get --assume-yes install freetds-dev freetds-bin  
