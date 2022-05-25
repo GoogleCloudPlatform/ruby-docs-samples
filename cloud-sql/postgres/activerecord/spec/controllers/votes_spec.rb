@@ -24,12 +24,12 @@ RSpec.describe VotesController, type: :controller do
   end
 
   describe "index" do
-    it "displays the vote totals connecting via postgres over #{ENV['DB_HOST']}" do
+    it "displays the vote totals connecting via postgres over #{ENV['INSTANCE_HOST']}" do
       get :index
       expect(response.body).to match(/5 votes/)
     end
 
-    it "compares the vote totals via postgres over #{ENV['DB_HOST']}" do
+    it "compares the vote totals via postgres over #{ENV['INSTANCE_HOST']}" do
       get :index
       expect(response.body).to match(/are evenly matched/)
       Vote.create candidate: "TABS"
@@ -48,14 +48,14 @@ RSpec.describe VotesController, type: :controller do
   end
 
   describe "create" do
-    it "casts a vote for a candidate via postgres over #{ENV['DB_HOST']}" do
+    it "casts a vote for a candidate via postgres over #{ENV['INSTANCE_HOST']}" do
       post :create, params: { candidate: "TABS" }
       expect(response.body).to match(/Vote successfully cast for "TABS"/)
       post :create, params: { candidate: "SPACES" }
       expect(response.body).to match(/Vote successfully cast for "SPACES"/)
     end
 
-    it "updates the vote total via postgres over #{ENV['DB_HOST']}" do
+    it "updates the vote total via postgres over #{ENV['INSTANCE_HOST']}" do
       get :index
       expect(response.body).to match(/are evenly matched/)
       post :create, params: { candidate: "TABS" }
@@ -63,7 +63,7 @@ RSpec.describe VotesController, type: :controller do
       expect(response.body).to match(/TABS are winning by 1 vote/)
     end
 
-    it "fails with invalid input via postgres over #{ENV['DB_HOST']}" do
+    it "fails with invalid input via postgres over #{ENV['INSTANCE_HOST']}" do
       post :create, params: { candidate: "UNDERSCORES" }
       expect(response.body).to match(/is not included in the list/)
     end
