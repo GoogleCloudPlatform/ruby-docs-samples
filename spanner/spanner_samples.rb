@@ -2090,7 +2090,6 @@ def list_copy_backup_operations project_id:, instance_id:, backup_id:
   # [START spanner_list_copy_backup_operations]
   # project_id  = "Your Google Cloud project ID"
   # instance_id = "Your Spanner instance ID"
-  # database_id = "Your Spanner database ID"
   # backup_id = "You Spanner backup ID"
 
   require "google/cloud/spanner"
