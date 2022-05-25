@@ -1708,8 +1708,7 @@ describe "Google Cloud Spanner API samples" do
     capture do
       list_copy_backup_operations project_id:  @project_id,
                                   instance_id: @instance.instance_id,
-                                  backup_id: @backup_id,
-                                  database_id: backup.database_id
+                                  backup_id: @backup_id
     end
 
     expect(captured_output).to match(

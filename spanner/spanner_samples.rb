@@ -2086,7 +2086,7 @@ def list_backup_operations project_id:, instance_id:, database_id:
   # [END spanner_list_backup_operations]
 end
 
-def list_copy_backup_operations project_id:, instance_id:, backup_id:, database_id:
+def list_copy_backup_operations project_id:, instance_id:, backup_id:
   # [START spanner_list_copy_backup_operations]
   # project_id  = "Your Google Cloud project ID"
   # instance_id = "Your Spanner instance ID"
