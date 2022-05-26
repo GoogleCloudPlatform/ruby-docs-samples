@@ -43,4 +43,11 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
+
+  # Define INSTANCE_HOST (e.g. 127.0.0.1) for TCP socket.
+  if ENV["INSTANCE_HOST"]
+    paths["config/database"] = "config/database_tcp.yml"
+  else
+    raise "Missing database connection type. Please define INSTANCE_HOST"
+  end
 end
