@@ -85,6 +85,9 @@ fi
 
 cd github/ruby-docs-samples/
 
+# Workaround for new security feature in git 2.35.2 (see https://github.blog/2022-04-12-git-security-vulnerability-announced/)
+git config --global --add safe.directory $(/bin/pwd)
+
 # CHANGED_DIRS is the list of top-level directories that changed. CHANGED_DIRS will be empty when run on main.
 CHANGED_DIRS=$(git --no-pager diff --name-only HEAD $(git merge-base HEAD main) | grep "/" | cut -d/ -f1 | sort | uniq || true)
 
