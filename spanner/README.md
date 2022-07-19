@@ -65,7 +65,7 @@ environment variable to the path to the key file, for example:
       query_data_with_new_column         <instance_id> <database_id> Query Data with New Column
       query_data_with_timestamp_column   <instance_id> <database_id> Queries data from altered table where the commit timestamp column was added
       write_struct_data                  <instance_id> <database_id> Inserts sample data that can be used for STRUCT queries
-      query_with_struct                  <instance_id> <database_id> Queries data using a STRUCT paramater
+      query_with_struct                  <instance_id> <database_id> Queries data using a STRUCT parameter
       query_with_array_of_struct         <instance_id> <database_id> Queries data using an array of STRUCT values as parameter
       query_struct_field                 <instance_id> <database_id> Queries data by accessing field from a STRUCT parameter
       query_nested_struct_field          <instance_id> <database_id> Queries data by accessing field from nested STRUCT parameters
