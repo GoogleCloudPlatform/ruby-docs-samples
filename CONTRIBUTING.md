@@ -55,7 +55,14 @@ For instructions regarding development environment setup, please visit [the docu
 
 ## Style Guide
 
-Samples in this repository follow the
+The [Google Cloud Samples Style Guide][style-guide] is considered the primary
+guidelines for all Google Cloud samples. This section details some additional,
+Ruby-specific rules that will be merged into the Samples Style Guide in the near
+future.
+
+[style-guide]: https://googlecloudplatform.github.io/samples-style-guide/
+
+Samples in this repository also follow the
 [GitHub Ruby Styleguide](https://github.com/styleguide/ruby)
 except where noted otherwise.
 
