@@ -8,6 +8,8 @@
 #    are modified, in which case all tests will be run.
 #  * Nightly runs will run all tests.
 
+echo "Trampoline version $TRAMPOLINE_VERSION"
+
 if [[ $KOKORO_RUBY_VERSION == "newest" ]]; then
     rbenv global "$NEWEST_RUBY_VERSION"
 else
