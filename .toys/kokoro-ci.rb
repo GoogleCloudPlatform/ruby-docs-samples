@@ -48,7 +48,7 @@ def report_results
   @failures.each do |failure|
     puts failure, :red, :bold
   end
-  unless presubmit?
+  if !presubmit? && !ENV["KOKORO_BUILD_ID"]
     chmod "+x", "#{gfile_dir}/linux_amd64/flakybot"
     exec ["#{gfile_dir}/linux_amd64/flakybot"]
   end
@@ -166,7 +166,8 @@ def filter_by_changed_paths
   changed_paths = capture(["git", "--no-pager", "diff", "--name-only", "HEAD", base_sha]).split("\n")
   puts "Changed paths:", :bold
   changed_paths.each { |changed_path| puts changed_path }
-  if changed_paths.any? { |changed_path| changed_path.start_with?("spec/") || changed_path.start_with?(".kokoro/") }
+  infra_dirs = ["spec/", ".kokoro/", ".toys/"]
+  if changed_paths.any? { |changed_path| infra_dirs.any? { |dir| changed_path.start_with? dir } }
     # Spanner takes a long time, so omit it when testing infrastructure changes
     @products.delete "spanner"
     puts "Test drivers may have changed; running all tests except spanner.", :bold
@@ -316,11 +317,7 @@ def test_product dir
       if File.file? "bin/run_tests"
         test_exec "RUN_TESTS:#{dir}", ["bin/run_tests"]
       elsif File.directory? "spec"
-        test_exec "SPEC:#{dir}",
-                  ["bundle", "exec", "rspec",
-                   "--format", "documentation",
-                   "--format", "RspecJunitFormatter",
-                   "--out", "sponge_log.xml"]
+        test_rspec dir
       elsif File.directory? "test"
         test_minitest dir
       else
@@ -334,12 +331,23 @@ def test_product dir
 end
 
 ##
+# Run a rspec-based test.
+#
+def test_rspec dir
+  cmd = ["bundle", "exec", "rspec", "--format", "documentation"]
+  cmd += ["--format", "RspecJunitFormatter", "--out", "sponge_log.xml"] unless presubmit?
+  test_exec "SPEC:#{dir}", cmd
+end
+
+##
 # Run a minitest-based test.
 #
 def test_minitest dir
   test_exec "MINITEST:#{dir}" do
     test_files = Dir.glob("test/**/*_test.rb")
-    exec_ruby ["-Itest", "-w", "-", "--junit", "--junit-filename=sponge_log.xml"], in: :controller do |controller|
+    args = ["-Itest", "-w"]
+    args += ["-", "--junit", "--junit-filename=sponge_log.xml"] unless presubmit?
+    exec_ruby args, in: :controller do |controller|
       controller.in.puts "require 'minitest/autorun'"
       test_files.each do |path|
         controller.in.puts "load '#{path}'"
