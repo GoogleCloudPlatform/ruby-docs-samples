@@ -35,7 +35,7 @@ describe "functions_slack" do
   let(:invalid_request) { make_post_request url, body, wrong_headers }
   let(:query) { "Ruby" }
   let :kg_response do
-    OpenStruct.new item_list_element: [
+    OpenStruct.new item_list_element: [ # rubocop:disable Style/OpenStructUse
       {
         "result" => {
           "name"                => query,
@@ -51,7 +51,7 @@ describe "functions_slack" do
       }
     ]
   end
-  let(:empty_kg_response) { OpenStruct.new item_list_element: [] }
+  let(:empty_kg_response) { OpenStruct.new item_list_element: [] } # rubocop:disable Style/OpenStructUse
   let :slack_response do
     {
       "response_type" => "in_channel",
