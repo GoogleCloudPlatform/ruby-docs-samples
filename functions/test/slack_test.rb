@@ -99,7 +99,7 @@ describe "functions_slack" do
 
       globals = run_startup_tasks "kg_search"
       mock_client = ::Minitest::Mock.new
-      mock_client.expect :search_entities, kg_response, [query: query, limit: 1]
+      mock_client.expect :search_entities, kg_response, [], query: query, limit: 1
       globals[:kg_search].client = mock_client
 
       request = make_post_request url, body, headers
