@@ -337,9 +337,9 @@ describe "Cloud IoT Core" do
         location_id: @region,
         registry_id: unknown_regname
       )
-    }.to raise_error(
-      /notFound/m
-    )
+    }.to raise_error(Google::Apis::ClientError) { |err|
+      expect(err.status_code).to eq 404
+    }
   end
 
   example "Get unknown device" do
@@ -352,9 +352,9 @@ describe "Cloud IoT Core" do
         registry_id: unknown_regname,
         device_id:   unknown_devname
       )
-    }.to raise_error(
-      /notFound/m
-    )
+    }.to raise_error(Google::Apis::ClientError) { |err|
+      expect(err.status_code).to eq 404
+    }
   end
 
   example "List devices without registry" do
@@ -365,9 +365,9 @@ describe "Cloud IoT Core" do
         location_id: @region,
         registry_id: unknown_regname
       )
-    }.to raise_error(
-      /notFound/m
-    )
+    }.to raise_error(Google::Apis::ClientError) { |err|
+      expect(err.status_code).to eq 404
+    }
   end
 
   example "Patches device" do
