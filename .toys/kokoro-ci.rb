@@ -349,6 +349,7 @@ def test_minitest dir
     args = ["-Itest", "-w"]
     args += ["-", "--junit", "--junit-filename=sponge_log.xml"] unless presubmit?
     exec_ruby args, in: :controller do |controller|
+      controller.in.puts "require 'bundler/setup'"
       controller.in.puts "require 'minitest/autorun'"
       test_files.each do |path|
         controller.in.puts "load '#{path}'"

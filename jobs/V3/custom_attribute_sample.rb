@@ -125,8 +125,8 @@ def job_discovery_filters_on_multi_custom_attributes project_id:
   request_metadata = jobs::RequestMetadata.new user_id:    "HashedUserId",
                                                session_id: "HashedSessionId",
                                                domain:     "www.google.com"
-  custom_attribute_filter = "NOT EMPTY(someFieldName1) "\
-    "AND ((255 <= someFieldName2) OR (someFieldName2 <= 213))"
+  custom_attribute_filter = "NOT EMPTY(someFieldName1) " \
+                            "AND ((255 <= someFieldName2) OR (someFieldName2 <= 213))"
   job_query = jobs::JobQuery.new custom_attribute_filter: custom_attribute_filter
   search_jobs_request = jobs::SearchJobsRequest.new request_metadata: request_metadata,
                                                     job_query:        job_query,
