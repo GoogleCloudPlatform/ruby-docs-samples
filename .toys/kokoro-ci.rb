@@ -132,10 +132,17 @@ end
 # Find all directories with tests, and set them in the `@products` variable.
 #
 def list_products
+  # Paths that look like tests for us to run but aren't.
+  # Currently, we include the rails tests for the run/rails tutorial.
+  omit_list = ["run/rails/test"]
   @products = []
   (Dir.glob("*/Gemfile") + Dir.glob("*/*/Gemfile")).each do |gemfile|
     dir = File.dirname gemfile
-    @products << dir if File.directory?("#{dir}/test") || File.directory?("#{dir}/spec")
+    if (File.directory?("#{dir}/test") && !omit_list.include?("#{dir}/test")) ||
+       (File.directory?("#{dir}/spec") && !omit_list.include?("#{dir}/spec")) ||
+       (File.executable?("#{dir}/bin/run_tests") && !omit_list.include?("#{dir}/bin/run_tests"))
+      @products << dir
+    end
   end
   puts "Found #{@products.size} total test directories"
 end
@@ -315,7 +322,7 @@ def test_product dir
   start_time = Time.now.to_i
   Dir.chdir dir do
     if test_exec "BUNDLE:#{dir}", ["bundle", "update"]
-      if File.file? "bin/run_tests"
+      if File.executable? "bin/run_tests"
         test_exec "RUN_TESTS:#{dir}", ["bin/run_tests"]
       elsif File.directory? "spec"
         test_rspec dir
