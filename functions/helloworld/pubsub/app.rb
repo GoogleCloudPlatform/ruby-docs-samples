@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START functions_cloudevent_pubsub]
 # [START functions_helloworld_pubsub]
 require "functions_framework"
 require "base64"
@@ -25,4 +26,5 @@ FunctionsFramework.cloud_event "hello_pubsub" do |event|
   # or cause side effects such as sending additional events.
   logger.info "Hello, #{name}!"
 end
+# [END functions_cloudevent_pubsub]
 # [END functions_helloworld_pubsub]
