@@ -16,16 +16,15 @@ env: flex
 runtime: custom
 
 env_variables:
-  SECRET_KEY_BASE: [SECRET_KEY]
+  SECRET_KEY_BASE: <SECRET_KEY>
   RAILS_ENV: production
-  INSTANCE_CONNECTION_NAME: [<MY-PROJECT>:<INSTANCE-REGION>:<INSTANCE-NAME>]
-  DB_USER: [MY_DB_USER]
-  DB_PASS: [MY_DB_PASS]
+  DB_USER: <YOUR_DB_USER_NAME>
+  DB_PASS: <YOUR_DB_PASSWORD>
   # Use a different name for your production database from your development database
-  DB_NAME: [MY_DB_NAME] 
-  DB_HOST: '172.17.0.1'
+  DB_NAME: <YOUR_DB_NAME>
+  INSTANCE_HOST: '172.17.0.1'
   DB_PORT: 1433
 
 
 beta_settings:
-  cloud_sql_instances: [INSTANCE_CONNECTION_NAME]=tcp:1433
+  cloud_sql_instances: <MY-PROJECT>:<INSTANCE-REGION>:<INSTANCE-NAME>=tcp:1433

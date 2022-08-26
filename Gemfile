@@ -15,8 +15,8 @@
 source "https://rubygems.org"
 
 group :development, :test do
-  gem "google-style", "~> 1.25.1"
-  gem "minitest", "~> 5.13"
+  gem "google-style", "~> 1.26.1"
+  gem "minitest", "~> 5.16"
   gem "minitest-focus", "~> 1.1"
   gem "minitest-junit"
   gem "rake", "~> 13.0"

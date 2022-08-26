@@ -54,7 +54,7 @@ def transaction_tagging project_id:, instance_id:, database_id:
     puts "Venue capacities updated."
 
     tx.execute_update \
-      "INSERT INTO Venues (VenueId, VenueName, Capacity, OutdoorVenue) "\
+      "INSERT INTO Venues (VenueId, VenueName, Capacity, OutdoorVenue) " \
       "VALUES (@venue_id, @venue_name, @capacity, @outdoor_venue)",
       params: {
         venue_id: 81,

@@ -1258,12 +1258,16 @@ def update_using_batch_dml project_id:, instance_id:, database_id:
   row_counts = nil
   client.transaction do |transaction|
     row_counts = transaction.batch_update do |b|
-      b.batch_update "INSERT INTO Albums "\
-        "(SingerId, AlbumId, AlbumTitle, MarketingBudget) "\
+      b.batch_update(
+        "INSERT INTO Albums " \
+        "(SingerId, AlbumId, AlbumTitle, MarketingBudget) " \
         "VALUES (1, 3, 'Test Album Title', 10000)"
-      b.batch_update "UPDATE Albums "\
-        "SET MarketingBudget = MarketingBudget * 2 "\
+      )
+      b.batch_update(
+        "UPDATE Albums " \
+        "SET MarketingBudget = MarketingBudget * 2 " \
         "WHERE SingerId = 1 and AlbumId = 3"
+      )
     end
   end
 
@@ -1875,7 +1879,7 @@ def create_backup project_id:, instance_id:, database_id:, backup_id:, version_t
   backup_path = database_admin_client.backup_path project: project_id,
                                                   instance: instance_id,
                                                   backup: backup_id
-  expire_time = Time.now + 14 * 24 * 3600 # 14 days from now
+  expire_time = Time.now + (14 * 24 * 3600) # 14 days from now
 
   job = database_admin_client.create_backup parent: instance_path,
                                             backup_id: backup_id,
@@ -1914,7 +1918,7 @@ def create_backup_with_encryption_key project_id:, instance_id:, database_id:, b
   backup_path = database_admin_client.backup_path project: project_id,
                                                   instance: instance_id,
                                                   backup: backup_id
-  expire_time = Time.now + 14 * 24 * 3600 # 14 days from now
+  expire_time = Time.now + (14 * 24 * 3600) # 14 days from now
   encryption_config = {
     encryption_type: :CUSTOMER_MANAGED_ENCRYPTION,
     kms_key_name:    kms_key_name
@@ -2038,7 +2042,7 @@ def create_backup_cancel project_id:, instance_id:, database_id:, backup_id:
                                                   instance: instance_id,
                                                   backup: backup_id
 
-  expire_time = Time.now + 14 * 24 * 3600 # 14 days from now
+  expire_time = Time.now + (14 * 24 * 3600) # 14 days from now
 
   job = database_admin_client.create_backup parent: instance_path,
                                             backup_id: backup_id,
@@ -2084,6 +2088,32 @@ def list_backup_operations project_id:, instance_id:, database_id:
     end
   end
   # [END spanner_list_backup_operations]
+end
+
+def list_copy_backup_operations project_id:, instance_id:, backup_id:
+  # [START spanner_list_copy_backup_operations]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "Your Spanner instance ID"
+  # backup_id = "You Spanner backup ID"
+
+  require "google/cloud/spanner"
+  require "google/cloud/spanner/admin/database"
+
+  database_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin
+  instance_path = database_admin_client.instance_path project: project_id, instance: instance_id
+
+  filter = "(metadata.@type:type.googleapis.com/google.spanner.admin.database.v1.CopyBackupMetadata) AND (metadata.source_backup:#{backup_id})"
+
+  jobs = database_admin_client.list_backup_operations parent: instance_path,
+                                                      filter: filter
+  jobs.each do |job|
+    if job.error?
+      puts job.error
+    else
+      puts "Backup #{job.results.name} on source backup #{backup_id} is #{job.metadata.progress.progress_percent}% complete"
+    end
+  end
+  # [END spanner_list_copy_backup_operations]
 end
 
 def list_database_operations project_id:, instance_id:
@@ -2142,7 +2172,7 @@ def list_backups project_id:, instance_id:, backup_id:, database_id:
   end
 
   puts "All backups that expire before a timestamp:"
-  expire_time = Time.now + 30 * 24 * 3600 # 30 days from now
+  expire_time = Time.now + (30 * 24 * 3600) # 30 days from now
   database_admin_client.list_backups(parent: instance_path, filter: "expire_time < \"#{expire_time.iso8601}\"").each do |backup|
     puts backup.name
   end
@@ -2153,7 +2183,7 @@ def list_backups project_id:, instance_id:, backup_id:, database_id:
   end
 
   puts "All backups that were created after a timestamp that are also ready:"
-  create_time = Time.now - 24 * 3600 # From 1 day ago
+  create_time = Time.now - (24 * 3600) # From 1 day ago
   database_admin_client.list_backups(parent: instance_path, filter: "create_time >= \"#{create_time.iso8601}\" AND state:READY").each do |backup|
     puts backup.name
   end
@@ -2201,12 +2231,48 @@ def update_backup project_id:, instance_id:, backup_id:
                                                   instance: instance_id,
                                                   backup: backup_id
   backup = database_admin_client.get_backup name: backup_path
-  backup.expire_time = Time.now + 60 * 24 * 3600 # Extending the expiry time by 60 days from now.
+  backup.expire_time = Time.now + (60 * 24 * 3600) # Extending the expiry time by 60 days from now.
   database_admin_client.update_backup backup: backup,
                                       update_mask: { paths: ["expire_time"] }
 
   puts "Expiration time updated: #{backup.expire_time}"
   # [END spanner_update_backup]
+end
+
+def copy_backup project_id:, instance_id:, backup_id:, source_backup_id:
+  # [START spanner_copy_backup]
+  # project_id  = "Your Google Cloud project ID"
+  # instance_id = "The ID of the destination instance that will contain the backup copy"
+  # backup_id = "The ID of the backup copy"
+  # source_backup = "The source backup to be copied"
+
+  require "google/cloud/spanner"
+  require "google/cloud/spanner/admin/database"
+
+  database_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin
+
+  instance_path = database_admin_client.instance_path project: project_id, instance: instance_id
+  backup_path = database_admin_client.backup_path project: project_id,
+                                                  instance: instance_id,
+                                                  backup: backup_id
+  source_backup = database_admin_client.backup_path project: project_id,
+                                                    instance: instance_id,
+                                                    backup: source_backup_id
+
+  expire_time = Time.now + (14 * 24 * 3600) # 14 days from now
+
+  job = database_admin_client.copy_backup parent: instance_path,
+                                          backup_id: backup_id,
+                                          source_backup: source_backup,
+                                          expire_time: expire_time
+
+  puts "Copy backup operation in progress"
+
+  job.wait_until_done!
+
+  backup = database_admin_client.get_backup name: backup_path
+  puts "Backup #{backup_id} of size #{backup.size_bytes} bytes was copied at #{backup.create_time} from #{source_backup} for version #{backup.version_time}"
+  # [END spanner_copy_backup]
 end
 
 def set_custom_timeout_and_retry project_id:, instance_id:, database_id:
@@ -2342,6 +2408,7 @@ def usage
       list_backups                         <instance_id> <backup_id> <database_id> List and filter backups.
       delete_backup                        <instance_id> <backup_id> Delete a backup.
       update_backup                        <instance_id> <backup_id> Update the backup.
+      copy_backup                          <instance_id> <backup_id> <source_backup> Copies a backup
       set_custom_timeout_and_retry         <instance_id> <database_id> Set custom timeout and retry settings.
       commit_stats                         <instance_id> <database_id> Get commit stats.
 
@@ -2382,7 +2449,7 @@ def run_sample arguments
     "write_read_null_float64_array", "write_read_float64_array",
     "create_backup", "restore_backup", "create_backup_cancel",
     "list_backup_operations", "list_database_operations", "list_backups",
-    "delete_backup", "update_backup_expiration_time",
+    "delete_backup", "update_backup_expiration_time", "copy_backup",
     "set_custom_timeout_and_retry", "query_with_numeric_parameter",
     "update_data_with_numeric_column", "commit_stats", "create_database_with_encryption_key",
     "create_backup_with_encryption_key", "restore_database_with_encryption_key", "update_backup"

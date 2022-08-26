@@ -67,6 +67,13 @@ post "/pubsub/authenticated-push" do
     bearer = request.env["HTTP_AUTHORIZATION"]
     token = /Bearer (.*)/.match(bearer)[1]
     claim = Google::Auth::IDTokens.verify_oidc token, aud: "example.com"
+
+    # IMPORTANT: you should validate claim details not covered by signature
+    # and audience verification above, including:
+    #   - Ensure that `claim["email"]` is equal to the expected service
+    #     account set up in the push subscription settings.
+    #   - Ensure that `claim["email_verified"]` is set to true.
+
     claims.push claim
   rescue Google::Auth::IDTokens::VerificationError => e
     puts "VerificationError: #{e.message}"

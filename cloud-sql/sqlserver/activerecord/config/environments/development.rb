@@ -58,4 +58,11 @@ Rails.application.configure do
   # Use an evented file watcher to asynchronously detect changes in source code,
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
+
+  # Define INSTANCE_HOST (e.g. 127.0.0.1) for TCP socket.
+  if ENV["INSTANCE_HOST"]
+    paths["config/database"] = "config/database_tcp.yml"
+  else
+    raise "Missing database connection type. Please define INSTANCE_HOST"
+  end
 end

@@ -22,8 +22,9 @@ group "test" do
   gem "google-cloud-storage", "~> 1.30"
   gem "google-cloud-vision", "~> 1.1"
   gem "mini_magick", "~> 4.11"
-  gem "minitest", "~> 5.14"
+  gem "minitest", "~> 5.16"
   gem "minitest-focus", "~> 1.1"
+  gem "minitest-junit", "~> 1.1"
   gem "rake", ">= 12.0"
-  gem "slack-ruby-client", "~> 0.15"
+  gem "slack-ruby-client", "~> 1.0"
 end

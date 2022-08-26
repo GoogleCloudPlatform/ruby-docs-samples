@@ -24,7 +24,7 @@ describe "functions_firebase_reactive" do
   it "responds to firestore reactive update event" do
     load_temporary "firebase/reactive/app.rb" do
       mock_firestore.expect :doc, mock_firestore_doc, [document_name]
-      mock_firestore_doc.expect :set, nil, [{ original: "HELLO" }]
+      mock_firestore_doc.expect :set, nil, [{ original: "HELLO" }], merge: false
       firestore_client = FunctionsFramework::Function::LazyGlobal.new(proc { mock_firestore })
 
       payload = { "value" => { "fields" => { "original" => { "stringValue" => "Hello" } } } }

@@ -106,6 +106,16 @@ describe "Google Cloud Spanner API samples" do
     @test_backup
   end
 
+  def create_copy_backup
+    capture do
+      copy_backup project_id: @project_id,
+                  instance_id: @instance.instance_id,
+                  backup_id: @copied_backup_id,
+                  source_backup_id: @backup_id
+    end
+    @instance.backup @copied_backup_id
+  end
+
   def restore_database_from_backup
     backup = create_backup_with_data
 
@@ -1549,6 +1559,36 @@ describe "Google Cloud Spanner API samples" do
     expect(@test_backup).not_to be nil
   end
 
+  example "copy backup" do
+    cleanup_backup_resources
+    create_backup_with_data
+
+    backup_id = "test_bu_copied"
+
+    capture do
+      copy_backup project_id: @project_id,
+                  instance_id: @instance.instance_id,
+                  backup_id: backup_id,
+                  source_backup_id: @backup_id
+    end
+
+    expect(captured_output).to include(
+      "Copy backup operation in progress"
+    )
+    expect(captured_output).to match(
+      /Backup #{backup_id} of size \d+ bytes was copied at/
+    )
+
+    test_backup = @instance.backup backup_id
+    expect(test_backup).not_to be nil
+
+    #Clean up copied backup
+    test_backup&.delete
+
+    test_backup = @instance.backup backup_id
+    expect(test_backup).to be_nil
+  end
+
   xexample "create backup with encryptio key" do
     cleanup_backup_resources
     database = create_database_with_data
@@ -1656,6 +1696,23 @@ describe "Google Cloud Spanner API samples" do
 
     expect(captured_output).to match(
       /Backup #{backup.path} on database #{@database_id} is \d+% complete/
+    )
+
+    @test_backup = @instance.backup @backup_id
+    expect(@test_backup).not_to be nil
+  end
+
+  example "list copy backup operations" do
+    backup = create_backup_with_data
+    copied_backup = create_copy_backup
+    capture do
+      list_copy_backup_operations project_id:  @project_id,
+                                  instance_id: @instance.instance_id,
+                                  backup_id: @backup_id
+    end
+
+    expect(captured_output).to match(
+      /Backup #{copied_backup.path} on source backup #{@backup_id} is \d+% complete/
     )
 
     @test_backup = @instance.backup @backup_id

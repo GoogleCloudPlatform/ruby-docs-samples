@@ -12,11 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START functions_cloudevent_storage]
 # [START functions_helloworld_storage]
 require "functions_framework"
 
 FunctionsFramework.cloud_event "hello_gcs" do |event|
-  # The event parameter is a CloudEvents::Event::V1 object.
+  # This function supports all Cloud Storage events.
+  # The `event` parameter is a CloudEvents::Event::V1 object.
   # See https://cloudevents.github.io/sdk-ruby/latest/CloudEvents/Event/V1.html
   payload = event.data
 
@@ -28,4 +30,5 @@ FunctionsFramework.cloud_event "hello_gcs" do |event|
   logger.info "Created: #{payload['timeCreated']}"
   logger.info "Updated: #{payload['updated']}"
 end
+# [END functions_cloudevent_storage]
 # [END functions_helloworld_storage]

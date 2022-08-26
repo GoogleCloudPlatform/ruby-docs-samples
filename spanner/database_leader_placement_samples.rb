@@ -181,8 +181,8 @@ def query_information_schema_database_options \
 
   client.execute(
     "SELECT s.OPTION_NAME, s.OPTION_VALUE " \
-    "FROM INFORMATION_SCHEMA.DATABASE_OPTIONS s" \
-    " WHERE s.OPTION_NAME = 'default_leader'"
+    "FROM INFORMATION_SCHEMA.DATABASE_OPTIONS s " \
+    "WHERE s.OPTION_NAME = 'default_leader'"
   ).rows.each do |row|
     puts row
   end
