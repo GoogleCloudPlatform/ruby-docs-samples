@@ -20,7 +20,7 @@ ruby ">= 2.5"
 gem "google-cloud-error_reporting"
 gem "google-cloud-firestore", "~> 2.0"
 gem "google-cloud-storage", "~> 1.10"
-gem "rails", "~> 5.2.3"
+gem "rails", ">= 5.2.3", "< 7.0.4"
 
 gem "jquery-rails"
 
