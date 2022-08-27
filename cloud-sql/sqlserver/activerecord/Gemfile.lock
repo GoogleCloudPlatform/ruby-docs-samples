@@ -90,7 +90,7 @@ GEM
       actionview (>= 5.0.0)
       activesupport (>= 5.0.0)
     libv8-node (16.10.0.0)
-    listen (3.6.0)
+    listen (3.7.1)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
     loofah (2.18.0)
@@ -227,7 +227,7 @@ DEPENDENCIES
   chromedriver-helper
   coffee-rails (~> 4.2)
   jbuilder (~> 2.5)
-  listen (>= 3.5, < 3.7)
+  listen (>= 3.5, < 3.8)
   mini_racer
   puma (~> 3.11)
   rails (~> 5.2.4)
