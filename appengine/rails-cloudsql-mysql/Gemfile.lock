@@ -150,7 +150,7 @@ GEM
     mini_portile2 (2.5.0)
     minitest (5.14.0)
     multi_json (1.15.0)
-    mysql2 (0.4.10)
+    mysql2 (0.5.4)
     nio4r (2.5.2)
     nokogiri (1.11.1)
       mini_portile2 (~> 2.5.0)
@@ -274,7 +274,7 @@ DEPENDENCIES
   capybara
   jbuilder (~> 2.5)
   listen (>= 3.0.5, < 3.2)
-  mysql2 (~> 0.4.8)
+  mysql2 (>= 0.4.8, < 0.6)
   poltergeist
   puma (~> 3.7)
   rails (~> 5.1.3)
