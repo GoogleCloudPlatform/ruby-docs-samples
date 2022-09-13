@@ -14,7 +14,7 @@
 
 require_relative "./spec_helper"
 require_relative "./spanner_postgresql_helper"
-require_relative "../spanner_postgresql_jsonb_data_type"
+require_relative "../spanner_postgresql_jsonb_add_column"
 
 describe "Google Cloud Spanner Postgres examples" do
   before :each do
@@ -30,13 +30,11 @@ describe "Google Cloud Spanner Postgres examples" do
     database = create_spangres_singers_albums_database
     create_spangres_venues_table
     capture do
-      spanner_postgresql_jsonb_data_type project_id: @project_id,
+      spanner_postgresql_jsonb_add_column project_id: @project_id,
                                          instance_id: @instance_id,
                                          database_id: @database_id
     end
 
     expect(captured_output).to include "Added Venues column to VenueDetails table in database #{@database_id}"
-    expect(captured_output).to include "Inserted data into Venues table"
-    expect(captured_output).to include "{rating: 9, open: true}"
   end
 end
