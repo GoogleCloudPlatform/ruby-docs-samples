@@ -12,10 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START spanner_add_and_drop_database_roles]
+# [START spanner_add_and_drop_database_role]
 require "google/cloud/spanner"
 
-def spanner_add_and_drop_database_roles project_id:, instance_id:, database_id:
+def spanner_add_and_drop_database_role project_id:, instance_id:, database_id:
   # project_id  = "Your Google Cloud project ID"
   # instance_id = "Your Spanner instance ID"
   # database_id = "Your Spanner database ID"
@@ -45,8 +45,8 @@ def spanner_add_and_drop_database_roles project_id:, instance_id:, database_id:
   job.wait_until_done!
   puts "Revoked privileges and dropped role #{role_child}"
 end
-# [END spanner_add_and_drop_database_roles]
+# [END spanner_add_and_drop_database_role]
 
 if $PROGRAM_NAME == __FILE__
-  spanner_add_and_drop_database_roles project_id: ARGV.shift, instance_id: ARGV.shift, database_id: ARGV.shift
+  spanner_add_and_drop_database_role project_id: ARGV.shift, instance_id: ARGV.shift, database_id: ARGV.shift
 end

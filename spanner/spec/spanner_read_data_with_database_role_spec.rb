@@ -28,7 +28,7 @@ describe "Google Cloud Spanner Database roles" do
 
   example "Read data with database roles" do
     create_database_with_data
-    spanner_add_and_drop_database_roles project_id: @project_id,
+    spanner_add_and_drop_database_role project_id: @project_id,
                                         instance_id: @instance_id,
                                         database_id: @database_id
 

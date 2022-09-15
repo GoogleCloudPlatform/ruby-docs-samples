@@ -28,7 +28,7 @@ describe "Google Cloud Spanner Database roles" do
   example "Add and Drop roles" do
     create_singers_albums_database
     capture do
-      spanner_add_and_drop_database_roles project_id: @project_id,
+      spanner_add_and_drop_database_role project_id: @project_id,
                                           instance_id: @instance_id,
                                           database_id: @database_id
     end
