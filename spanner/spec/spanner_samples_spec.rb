@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require_relative "../spanner_samples"
 require_relative "./spec_helper"
 
 describe "Google Cloud Spanner API samples" do
@@ -23,112 +22,6 @@ describe "Google Cloud Spanner API samples" do
   after :each do
     cleanup_database_resources
     cleanup_instance_resources
-  end
-
-  # Creates a temporary database with random ID (will be dropped after test)
-  # (re-uses create_database to create database with Albums/Singers schema)
-  def create_singers_albums_database
-    capture do
-      create_database project_id:  @project_id,
-                      instance_id: @instance.instance_id,
-                      database_id: @database_id
-
-      @test_database = @instance.database @database_id
-    end
-
-    @test_database
-  end
-
-  def create_performances_table
-    capture do
-      create_table_with_timestamp_column project_id:  @project_id,
-                                         instance_id: @instance.instance_id,
-                                         database_id: @database_id
-    end
-  end
-
-  def create_venues_table
-    capture do
-      create_table_with_datatypes project_id:  @project_id,
-                                  instance_id: @instance.instance_id,
-                                  database_id: @database_id
-    end
-  end
-
-  def create_boxes_database
-    job = @instance.create_database @database_id
-    job.wait_until_done!
-    @test_database = job.database
-  end
-
-  def create_database_with_data
-    database = create_singers_albums_database
-
-    capture do
-      write_using_dml project_id:  @project_id,
-                      instance_id: @instance.instance_id,
-                      database_id: database.database_id
-
-      @test_database = @instance.database @database_id
-    end
-
-    @test_database
-  end
-
-  # Creates or return existing temporary backup with random ID (will be dropped
-  # after test)
-  def create_backup_with_data
-    @test_backup = @instance.backup @backup_id
-
-    return @test_backup if @test_backup
-
-    database = create_singers_albums_database
-
-    capture do
-      write_using_dml project_id:  @project_id,
-                      instance_id: @instance.instance_id,
-                      database_id: database.database_id
-    end
-
-    client = @spanner.client @instance.instance_id, database.database_id
-    version_time = client.execute("SELECT CURRENT_TIMESTAMP() as timestamp").rows.first[:timestamp]
-
-    capture do
-      create_backup project_id:   @project_id,
-                    instance_id:  @instance.instance_id,
-                    database_id:  database.database_id,
-                    backup_id:    @backup_id,
-                    version_time: version_time
-
-      @test_backup = @instance.backup @backup_id
-    end
-
-    @test_backup
-  end
-
-  def create_copy_backup
-    capture do
-      copy_backup project_id: @project_id,
-                  instance_id: @instance.instance_id,
-                  backup_id: @copied_backup_id,
-                  source_backup_id: @backup_id
-    end
-    @instance.backup @copied_backup_id
-  end
-
-  def restore_database_from_backup
-    backup = create_backup_with_data
-
-    capture do
-      restore_backup project_id:  @project_id,
-                     instance_id: @instance.instance_id,
-                     database_id: @restored_database_id,
-                     backup_id:   backup.backup_id
-
-      @test_database = @instance.database @restored_database_id
-    end
-
-    @test_database
   end
 
   example "create_instance" do

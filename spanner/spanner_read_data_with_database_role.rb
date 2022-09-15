@@ -22,7 +22,7 @@ def spanner_read_data_with_database_role project_id:, instance_id:, database_id:
 
   role = "new_parent"
   spanner = Google::Cloud::Spanner.new project: project_id
-  client = db.client instance_id, database_id, database_role: role
+  client = spanner.client instance_id, database_id, database_role: role
 
   result = client.execute_sql "SELECT * FROM Singers"
 

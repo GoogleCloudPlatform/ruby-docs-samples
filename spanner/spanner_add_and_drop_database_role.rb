@@ -29,7 +29,7 @@ def spanner_add_and_drop_database_roles project_id:, instance_id:, database_id:
   job = admin_client.update_database_ddl database: db_path, statements:[
     "CREATE ROLE #{role_parent}",
     "GRANT SELECT ON TABLE Singers TO ROLE #{role_parent}",
-    "CREATE ROLE #{role_child}".format(),
+    "CREATE ROLE #{role_child}",
     "GRANT ROLE #{role_parent} TO ROLE #{role_child}"
   ]
   

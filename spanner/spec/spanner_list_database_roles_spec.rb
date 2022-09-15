@@ -13,10 +13,10 @@
 # limitations under the License.
 
 require_relative "./spec_helper"
-require_relative "./spanner_postgresql_helper"
-require_relative "../spanner_postgresql_numeric_data_type"
+require_relative "../spanner_list_database_roles"
+require_relative "../spanner_add_and_drop_database_role"
 
-describe "Google Cloud Spanner Postgres examples" do
+describe "Google Cloud Spanner Database roles" do
   before :each do
     cleanup_database_resources
   end
@@ -26,23 +26,19 @@ describe "Google Cloud Spanner Postgres examples" do
     cleanup_instance_resources
   end
 
-  example "spanner_postgresql_numeric_data_type" do
-    database = create_spangres_singers_albums_database
-    create_spangres_singers_table
-    add_data_to_spangres_singers_table
+  example "List database roles" do
+    create_singers_albums_database
+    spanner_add_and_drop_database_roles project_id: @project_id,
+                                        instance_id: @instance_id,
+                                        database_id: @database_id
 
     capture do
-      spanner_postgresql_numeric_data_type project_id: @project_id,
-                                           instance_id: @instance_id,
-                                           database_id: @database_id
+      spanner_list_database_roles project_id: @project_id,
+                                  instance_id: @instance_id,
+                                  database_id: @database_id
     end
 
-    expect(captured_output).to include "SingerId: 1"
-    expect(captured_output).to include "FirstName: Ann"
-    expect(captured_output).to include "Rating: 3.6"
-    
-    expect(captured_output).to include "SingerId: 3"
-    expect(captured_output).to include "FirstName: Alice"
-    expect(captured_output).to include "Rating: 4.8"
+    expect(captured_output).to include "new_parent"
+
   end
 end
