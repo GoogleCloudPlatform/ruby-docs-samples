@@ -26,22 +26,22 @@ def spanner_add_and_drop_database_role project_id:, instance_id:, database_id:
 
   db_path = admin_client.database_path project: project_id, instance: instance_id, database: database_id
 
-  job = admin_client.update_database_ddl database: db_path, statements:[
+  job = admin_client.update_database_ddl database: db_path, statements: [
     "CREATE ROLE #{role_parent}",
     "GRANT SELECT ON TABLE Singers TO ROLE #{role_parent}",
     "CREATE ROLE #{role_child}",
     "GRANT ROLE #{role_parent} TO ROLE #{role_child}"
   ]
-  
+
   job.wait_until_done!
   puts "Created roles #{role_parent} and #{role_child} and granted privileges"
-  
 
-  job = admin_client.update_database_ddl database: db_path, statements:[
+
+  job = admin_client.update_database_ddl database: db_path, statements: [
     "REVOKE ROLE #{role_parent} FROM ROLE #{role_child}",
     "DROP ROLE #{role_child}"
   ]
-  
+
   job.wait_until_done!
   puts "Revoked privileges and dropped role #{role_child}"
 end

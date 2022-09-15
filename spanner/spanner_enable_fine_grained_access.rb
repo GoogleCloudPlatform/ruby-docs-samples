@@ -34,14 +34,14 @@ def spanner_enable_fine_grained_access project_id:, instance_id:, database_id:, 
     role: "roles/spanner.fineGrainedAccessUser",
     members: [iam_member],
     condition: Google::Type::Expr.new(
-        title: title,
-        expression: "resource.name.endsWith('/databaseRoles/#{database_role}')",
+      title: title,
+      expression: "resource.name.endsWith('/databaseRoles/#{database_role}')"
     )
   )
-    
+
   policy.bindings << binding
   result = admin_client.set_iam_policy resource: db_path, policy: policy
- 
+
   puts "Enabled fine-grained access in IAM."
 end
 # [END spanner_enable_fine_grained_access]

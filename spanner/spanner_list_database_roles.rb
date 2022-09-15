@@ -34,5 +34,5 @@ end
 # [END spanner_list_database_roles]
 
 if $PROGRAM_NAME == __FILE__
-    spanner_list_database_roles project_id: ARGV.shift, instance_id: ARGV.shift, database_id: ARGV.shift
+  spanner_list_database_roles project_id: ARGV.shift, instance_id: ARGV.shift, database_id: ARGV.shift
 end
