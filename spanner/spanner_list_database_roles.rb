@@ -24,8 +24,7 @@ def spanner_list_database_roles project_id:, instance_id:, database_id:
 
   db_path = admin_client.database_path project: project_id, instance: instance_id, database: database_id
 
-  request = Google::Cloud::Spanner::Admin::Database::V1::ListDatabaseRolesRequest.new parent: db_path
-  result = admin_client.list_database_roles request
+  result = admin_client.list_database_roles parent: db_path
 
   puts "List of Database roles:"
   result.each do |role|
