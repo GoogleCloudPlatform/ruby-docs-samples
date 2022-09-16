@@ -4,6 +4,7 @@ GEM
     addressable (2.8.1)
       public_suffix (>= 2.0.2, < 6.0)
     concurrent-ruby (1.1.10)
+    declarative (0.0.20)
     diff-lcs (1.5.0)
     faraday (2.5.2)
       faraday-net_http (>= 2.0, < 3.1)
@@ -19,6 +20,17 @@ GEM
       googleapis-common-protos-types (>= 1.3.1, < 2.a)
       googleauth (~> 1.0)
       grpc (~> 1.36)
+    google-apis-core (0.8.0)
+      addressable (~> 2.5, >= 2.5.1)
+      googleauth (>= 0.16.2, < 2.a)
+      httpclient (>= 2.8.1, < 3.a)
+      mini_mime (~> 1.0)
+      representable (~> 3.0)
+      retriable (>= 2.0, < 4.a)
+      rexml
+      webrick
+    google-apis-iam_v1 (0.34.0)
+      google-apis-core (>= 0.7, < 2.a)
     google-cloud-core (1.6.0)
       google-cloud-env (~> 1.0)
       google-cloud-errors (~> 1.0)
@@ -63,11 +75,19 @@ GEM
       google-protobuf (~> 3.14)
       googleapis-common-protos (>= 1.3.12, < 2.0)
       grpc (~> 1.27)
+    httpclient (2.8.3)
     jwt (2.5.0)
     memoist (0.16.2)
+    mini_mime (1.1.2)
     multi_json (1.15.0)
     os (1.1.4)
     public_suffix (5.0.0)
+    representable (3.2.0)
+      declarative (< 0.1.0)
+      trailblazer-option (>= 0.1.1, < 0.2.0)
+      uber (< 0.2.0)
+    retriable (3.1.2)
+    rexml (3.2.5)
     rspec (3.11.0)
       rspec-core (~> 3.11.0)
       rspec-expectations (~> 3.11.0)
@@ -89,11 +109,15 @@ GEM
       faraday (>= 0.17.5, < 3.a)
       jwt (>= 1.5, < 3.0)
       multi_json (~> 1.10)
+    trailblazer-option (0.1.2)
+    uber (0.1.0)
+    webrick (1.7.0)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  google-apis-iam_v1
   google-cloud-spanner
   rspec
   rspec_junit_formatter

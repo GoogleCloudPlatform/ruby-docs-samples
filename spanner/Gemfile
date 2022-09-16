@@ -19,4 +19,5 @@ gem "google-cloud-spanner"
 group :test do
   gem "rspec"
   gem "rspec_junit_formatter"
+  gem "google-apis-iam_v1"
 end

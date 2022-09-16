@@ -13,30 +13,47 @@
 # limitations under the License.
 
 require_relative "./spec_helper"
+require "google/apis/iam_v1"
 require_relative "../spanner_enable_fine_grained_access"
 
 describe "Google Cloud Spanner Database roles" do
   before :each do
+    @client = Google::Apis::IamV1::IamService.new
+    scopes =  ["https://www.googleapis.com/auth/cloud-platform"]
+    @client.authorization = Google::Auth.get_application_default(scopes)
+    
+    @service_account = create_service_account
     cleanup_database_resources
   end
 
   after :each do
+    cleanup_service_account
     cleanup_database_resources
     cleanup_instance_resources
   end
 
   example "Enable fine grained access" do
     create_singers_albums_database
-    iam_member = "serviceAccount:spanner-samples-test@helical-zone-771.iam.gserviceaccount.com"
     capture do
       spanner_enable_fine_grained_access project_id: @project_id,
                                          instance_id: @instance_id,
                                          database_id: @database_id,
-                                         iam_member: iam_member, 
+                                         iam_member: "serviceAccount:#{@service_account.email}", 
                                          database_role: "new_parent", 
                                          title: "Test condition"
     end
 
     expect(captured_output).to include "Enabled fine-grained access in IAM"
+  end
+
+
+  def create_service_account
+    request = Google::Apis::IamV1::CreateServiceAccountRequest.new
+    request.account_id = "test-sample-1234"
+    @client.create_service_account "projects/#{@project_id}", request
+  end
+
+  def cleanup_service_account
+    @client.delete_project_service_account  @service_account.name
   end
 end
