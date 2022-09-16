@@ -38,7 +38,9 @@ describe "Google Cloud Spanner Database roles" do
                                            database_id: @database_id
     end
 
-    expect(captured_output).to include "SingerId: 12, FirstName: Melissa, LastName: Garcia"
+    expect(captured_output).to include "SingerId: 12"
+    expect(captured_output).to include "FirstName: Melissa"
+    expect(captured_output).to include "LastName: Garcia"
 
   end
 end

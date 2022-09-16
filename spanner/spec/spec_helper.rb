@@ -129,7 +129,7 @@ RSpec.configure do |config|
     database = job.results
   end
 
-    # Creates a temporary database with random ID (will be dropped after test)
+  # Creates a temporary database with random ID (will be dropped after test)
   # (re-uses create_database to create database with Albums/Singers schema)
   def create_singers_albums_database
     capture do

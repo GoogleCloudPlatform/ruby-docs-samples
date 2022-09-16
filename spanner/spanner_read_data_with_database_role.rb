@@ -27,7 +27,9 @@ def spanner_read_data_with_database_role project_id:, instance_id:, database_id:
   result = client.execute_sql "SELECT * FROM Singers"
 
   result.rows.each do |row|
-    puts "SingerId: #{row[:SingerId]}, FirstName: #{row[:FirstName]}, LastName: #{row[:LastName]}"
+    puts "SingerId: #{row[:SingerId]}" 
+    puts "FirstName: #{row[:FirstName]}" 
+    puts "LastName: #{row[:LastName]}"
   end
 end
 # [END spanner_read_data_with_database_role]
