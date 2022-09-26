@@ -15,7 +15,7 @@ GEM
     diff-lcs (1.4.4)
     mini_mime (1.0.2)
     mini_portile2 (2.4.0)
-    mustermann (1.1.1)
+    mustermann (3.0.0)
       ruby2_keywords (~> 0.0.1)
     nio4r (2.5.4)
     nokogiri (1.10.10)
@@ -27,8 +27,8 @@ GEM
     public_suffix (4.0.6)
     puma (5.1.1)
       nio4r (~> 2.0)
-    rack (2.2.3)
-    rack-protection (2.1.0)
+    rack (2.2.4)
+    rack-protection (3.0.0)
       rack
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
@@ -48,17 +48,17 @@ GEM
     rspec-support (3.10.0)
     rspec_junit_formatter (0.4.1)
       rspec-core (>= 2, < 4, != 2.12.0)
-    ruby2_keywords (0.0.2)
-    sinatra (2.1.0)
-      mustermann (~> 1.0)
-      rack (~> 2.2)
-      rack-protection (= 2.1.0)
+    ruby2_keywords (0.0.5)
+    sinatra (3.0.0)
+      mustermann (~> 3.0)
+      rack (~> 2.2, >= 2.2.4)
+      rack-protection (= 3.0.0)
       tilt (~> 2.0)
     slim (4.1.0)
       temple (>= 0.7.6, < 0.9)
       tilt (>= 2.0.6, < 2.1)
     temple (0.8.2)
-    tilt (2.0.10)
+    tilt (2.0.11)
     websocket-driver (0.7.3)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
@@ -74,7 +74,7 @@ DEPENDENCIES
   puma
   rspec
   rspec_junit_formatter
-  sinatra (~> 2.1)
+  sinatra (>= 2.1, < 4)
   slim
 
 BUNDLED WITH
