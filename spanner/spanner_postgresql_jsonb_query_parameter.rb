@@ -26,6 +26,7 @@ def spanner_postgresql_jsonb_query_parameter project_id:, instance_id:, database
     WHERE CAST(venuedetails ->> 'rating' AS INTEGER) > $1
   QUERY
 
+  # pass parameterized query's params represented by position
   results = client.execute sql_query, params: { p1: 5 }
   puts results.rows.first
 
