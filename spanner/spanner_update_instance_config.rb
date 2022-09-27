@@ -25,7 +25,7 @@ def spanner_update_instance_config user_config_id:
   request = {
     instance_config: config,
     update_mask: { paths: ["display_name", "labels"] },
-    validate_only: false,
+    validate_only: false
   }
   job = instance_admin_client.update_instance_config request
 

@@ -16,7 +16,7 @@ require_relative "../spanner_list_instance_config_operations"
 require_relative "./spec_helper"
 
 describe "Spanner custom instance config" do
-  example "List Opetations" do
+  example "List Operations" do
     capture do
       spanner_list_instance_config_operations project_id: @project_id
     end

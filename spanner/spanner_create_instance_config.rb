@@ -16,7 +16,7 @@
 require "google/cloud/spanner"
 require "google/cloud/spanner/admin/instance"
 
-def spanner_create_instance_config project_id:,user_config_name:, base_config_id:
+def spanner_create_instance_config project_id:, user_config_name:, base_config_id:
   # project_id  = "Your Google Cloud project ID"
   # user_config_name = "The customer managed instance configuration name. The name must start with 'custom-'"
   # base_config_id = "Base configuration ID to be used for creation, e.g projects/<project>/instanceConfigs/nam11"
