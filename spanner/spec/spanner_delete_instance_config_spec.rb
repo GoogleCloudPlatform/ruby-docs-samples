@@ -18,7 +18,7 @@ require_relative "./spec_helper"
 
 describe "Spanner custom instance config" do
   example "Delete" do
-    base_config_id = instance_config_path("nam11")
+    base_config_id = instance_config_path("nam7")
     user_config = "custom-ruby-samples-config-#{SecureRandom.hex(8)}"
     spanner_create_instance_config project_id: @project_id,
                                    user_config_name: user_config,
