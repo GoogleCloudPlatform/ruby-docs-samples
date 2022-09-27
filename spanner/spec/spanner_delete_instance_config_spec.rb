@@ -23,8 +23,6 @@ describe "Spanner custom instance config" do
     spanner_create_instance_config project_id: @project_id,
                                    user_config_name: user_config,
                                    base_config_id: base_config_id
-    @created_instance_config_ids << user_config
-
     capture do
       spanner_delete_instance_config user_config_id: instance_config_path(user_config)
     end

@@ -17,7 +17,6 @@ require "google/cloud/spanner"
 require "google/cloud/spanner/admin/instance"
 
 def spanner_delete_instance_config user_config_id:
-  # project_id  = "Your Google Cloud project ID"
   # user_config_id = "The customer managed instance configuration ID, e.g projects/<project>/instanceConfigs/custom-nam11"
   instance_admin_client.delete_instance_config name: user_config_id
   puts "Deleted instance configuration #{user_config_id}"

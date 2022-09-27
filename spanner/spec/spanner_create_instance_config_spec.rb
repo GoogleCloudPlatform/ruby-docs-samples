@@ -27,7 +27,7 @@ describe "Spanner custom instance config" do
   example "Create" do
     base_config_id = instance_config_path("nam7")
     user_config = "custom-ruby-samples-config-#{SecureRandom.hex(8)}"
-    @created_instance_config_ids << user_config
+    @created_instance_config_ids << instance_config_path(user_config)
 
     capture do
       spanner_create_instance_config project_id: @project_id,
