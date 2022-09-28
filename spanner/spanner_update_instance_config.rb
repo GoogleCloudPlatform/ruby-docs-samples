@@ -18,6 +18,7 @@ require "google/cloud/spanner/admin/instance"
 
 def spanner_update_instance_config user_config_id:
   # user_config_id = "The customer managed instance configuration ID, e.g projects/<project>/instanceConfigs/custom-nam11"
+  instance_admin_client = Google::Cloud::Spanner::Admin::Instance::V1::InstanceAdmin::Client.new
   config = instance_admin_client.get_instance_config name: user_config_id
   config.display_name = "updated custom instance config"
   config.labels["updated"] = "true"

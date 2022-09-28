@@ -18,6 +18,7 @@ require "google/cloud/spanner/admin/instance"
 
 def spanner_list_instance_config_operations project_id:
   # project_id  = "Your Google Cloud project ID"
+  instance_admin_client = Google::Cloud::Spanner::Admin::Instance::V1::InstanceAdmin::Client.new
   project_path = instance_admin_client.project_path project: project_id
 
   jobs = instance_admin_client.list_instance_config_operations parent: project_path,

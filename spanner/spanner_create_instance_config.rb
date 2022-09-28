@@ -22,7 +22,7 @@ def spanner_create_instance_config project_id:, user_config_name:, base_config_i
   # base_config_id = "Base configuration ID to be used for creation, e.g projects/<project>/instanceConfigs/nam11"
   puts "using project #{project_id} instance configuration #{base_config_id}"
 
-  instance_admin_client = Google::Cloud::Spanner::Admin::Instance.instance_admin
+  instance_admin_client = Google::Cloud::Spanner::Admin::Instance::V1::InstanceAdmin::Client.new
   project_path = instance_admin_client.project_path project: project_id
   base_instance_config = instance_admin_client.get_instance_config name: base_config_id
 
