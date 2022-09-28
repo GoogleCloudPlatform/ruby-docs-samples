@@ -26,6 +26,10 @@ def spanner_create_instance_config project_id:, user_config_name:, base_config_i
   project_path = instance_admin_client.project_path project: project_id
   base_instance_config = instance_admin_client.get_instance_config name: base_config_id
 
+  configs = instance_admin_client.list_instance_configs parent: project_path
+  configs.each do |c|
+    puts "Available optional replicas for instance config #{c.name} : #{c.optional_replicas}"
+  end
   puts "using path #{project_path} instance configuration #{base_instance_config}"
   # The replicas for the custom instance configuration must include all the replicas of the base
   # configuration, in addition to at least one from the list of optional replicas of the base
