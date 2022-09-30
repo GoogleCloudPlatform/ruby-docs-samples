@@ -21,7 +21,7 @@ def spanner_create_instance_config project_id:, user_config_name:, base_config_i
   # user_config_name = "Your custom instance configuration name, The name must start with 'custom-'"
   # base_config_id = "Base configuration ID to be used for creation, e.g projects/<project>/instanceConfigs/nam11"
 
-  instance_admin_client = Google::Cloud::Spanner::Admin::Instance::V1::InstanceAdmin::Client.new
+  instance_admin_client = Google::Cloud::Spanner::Admin::Instance.instance_admin
   project_path = instance_admin_client.project_path project: project_id
   base_instance_config = instance_admin_client.get_instance_config name: base_config_id
   # The replicas for the custom instance configuration must include all the replicas of the base
