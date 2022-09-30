@@ -18,19 +18,12 @@ require "google/cloud/spanner/admin/instance"
 
 def spanner_create_instance_config project_id:, user_config_name:, base_config_id:
   # project_id  = "Your Google Cloud project ID"
-  # user_config_name = "The customer managed instance configuration name. The name must start with 'custom-'"
+  # user_config_name = "Your custom instance configuration name, The name must start with 'custom-'"
   # base_config_id = "Base configuration ID to be used for creation, e.g projects/<project>/instanceConfigs/nam11"
-  puts "using project #{project_id} instance configuration #{base_config_id}"
 
   instance_admin_client = Google::Cloud::Spanner::Admin::Instance::V1::InstanceAdmin::Client.new
   project_path = instance_admin_client.project_path project: project_id
   base_instance_config = instance_admin_client.get_instance_config name: base_config_id
-
-  configs = instance_admin_client.list_instance_configs parent: project_path
-  configs.each do |c|
-    puts "Available optional replicas for instance config #{c.name} : #{c.optional_replicas}"
-  end
-  puts "using path #{project_path} instance configuration #{base_instance_config}"
   # The replicas for the custom instance configuration must include all the replicas of the base
   # configuration, in addition to at least one from the list of optional replicas of the base
   # configuration.
@@ -38,13 +31,9 @@ def spanner_create_instance_config project_id:, user_config_name:, base_config_i
   base_instance_config.replicas.each do |replica|
     custom_replicas << replica
   end
-  puts "optinal replicas #{base_instance_config.optional_replicas[0]}"
-
   custom_replicas << base_instance_config.optional_replicas[0]
   custom_instance_config_id = instance_admin_client.instance_config_path \
     project: project_id, instance_config: user_config_name
-  puts "using replicas #{custom_replicas}"
-
   custom_instance_config = {
     name: custom_instance_config_id,
     display_name: "custom-ruby-samples",
