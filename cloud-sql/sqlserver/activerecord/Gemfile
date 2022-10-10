@@ -64,4 +64,4 @@ end
 gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem "rspec_junit_formatter"
-gem "rspec-rails", "~> 3.8"
+gem "rspec-rails", ">= 3.8", "< 6.0.1"
