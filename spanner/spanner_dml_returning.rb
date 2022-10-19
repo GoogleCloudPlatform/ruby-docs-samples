@@ -25,7 +25,7 @@ require "google/cloud/spanner"
 #
 def spanner_delete_dml_returning project_id:, instance_id:, database_id:
 
-  spanner = Google::Cloud::Spanner.new project: project_id, endpoint: 'staging-wrenchworks.sandbox.googleapis.com'
+  spanner = Google::Cloud::Spanner.new project: project_id
   client = spanner.client instance_id, database_id
 
   client.transaction do |transaction|
@@ -52,7 +52,7 @@ require "google/cloud/spanner"
 #
 def spanner_update_dml_returning project_id:, instance_id:, database_id:
 
-  spanner = Google::Cloud::Spanner.new project: project_id, endpoint: 'staging-wrenchworks.sandbox.googleapis.com'
+  spanner = Google::Cloud::Spanner.new project: project_id
   client = spanner.client instance_id, database_id
 
   client.transaction do |transaction|
@@ -79,7 +79,7 @@ require "google/cloud/spanner"
 #
 def spanner_insert_dml_returning project_id:, instance_id:, database_id:
 
-  spanner = Google::Cloud::Spanner.new project: project_id, endpoint: 'staging-wrenchworks.sandbox.googleapis.com'
+  spanner = Google::Cloud::Spanner.new project: project_id
   client = spanner.client instance_id, database_id
 
   client.transaction do |transaction|
@@ -92,13 +92,3 @@ def spanner_insert_dml_returning project_id:, instance_id:, database_id:
 end
 
 # [END spanner_insert_dml_returning]
-
-require_relative 'spanner_samples'
-if $PROGRAM_NAME == __FILE__
-  project_id = 'appdev-soda-spanner-staging'
-  database_id = "test_#{SecureRandom.hex 8}"
-  instance_id = 'diptanshu-test-instance'
-  create_database project_id: project_id, instance_id: instance_id, database_id: database_id
-  insert_data project_id: project_id, instance_id: instance_id, database_id: database_id
-  spanner_insert_dml_returning project_id: project_id, instance_id: instance_id, database_id: database_id
-end

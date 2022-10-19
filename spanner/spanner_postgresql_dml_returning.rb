@@ -25,7 +25,7 @@ require "google/cloud/spanner"
 #
 def spanner_postgresql_delete_dml_returning project_id:, instance_id:, database_id:
 
-  spanner = Google::Cloud::Spanner.new project: project_id, endpoint: 'staging-wrenchworks.sandbox.googleapis.com'
+  spanner = Google::Cloud::Spanner.new project: project_id
   client = spanner.client instance_id, database_id
 
   client.transaction do |transaction|
@@ -52,7 +52,7 @@ require "google/cloud/spanner"
 #
 def spanner_postgresql_update_dml_returning project_id:, instance_id:, database_id:
 
-  spanner = Google::Cloud::Spanner.new project: project_id, endpoint: 'staging-wrenchworks.sandbox.googleapis.com'
+  spanner = Google::Cloud::Spanner.new project: project_id
   client = spanner.client instance_id, database_id
 
   client.transaction do |transaction|
@@ -79,7 +79,7 @@ require "google/cloud/spanner"
 #
 def spanner_postgresql_insert_dml_returning project_id:, instance_id:, database_id:
 
-  spanner = Google::Cloud::Spanner.new project: project_id, endpoint: 'staging-wrenchworks.sandbox.googleapis.com'
+  spanner = Google::Cloud::Spanner.new project: project_id
   client = spanner.client instance_id, database_id
 
   client.transaction do |transaction|
@@ -92,42 +92,3 @@ def spanner_postgresql_insert_dml_returning project_id:, instance_id:, database_
 end
 
 # [END spanner_postgresql_insert_dml_returning]
-
-require_relative 'spanner_postgresql_create_database'
-if $PROGRAM_NAME == __FILE__
-  project_id = 'appdev-soda-spanner-staging'
-  database_id = "test_#{SecureRandom.hex 8}"
-  instance_id = 'diptanshu-test-instance'
-  postgresql_create_database project_id: project_id, instance_id: instance_id, database_id: database_id
-  db_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin project: @project_id, endpoint: 'staging-wrenchworks.sandbox.googleapis.com'
-  db_path = db_admin_client.database_path project:  project_id,
-                                          instance: instance_id,
-                                          database: database_id
-  create_table_query = <<~QUERY
-    CREATE TABLE Singers (
-      SingerId bigint NOT NULL PRIMARY KEY,
-      FirstName varchar(1024),
-      LastName varchar(1024),
-      Rating numeric,
-      SingerInfo bytea
-    );
-  QUERY
-  job = db_admin_client.update_database_ddl database: db_path,
-                                            statements: [create_table_query]
-  job.wait_until_done!
-  if job.error?
-    puts "Error while creating table. Code: #{job.error.code}. Message: #{job.error.message}"
-    raise GRPC::BadStatus.new(job.error.code, job.error.message)
-  end
-  spanner = Google::Cloud::Spanner.new project: project_id, endpoint: 'staging-wrenchworks.sandbox.googleapis.com'
-  client  = spanner.client instance_id, database_id
-  client.commit do |c|
-    c.insert "Singers", [
-      { SingerId: 1, FirstName: "Ann", LastName: "Louis", Rating: BigDecimal("3.6") },
-      { SingerId: 2, FirstName: "Olivia", LastName: "Garcia", Rating: BigDecimal("2.1") },
-      { SingerId: 3, FirstName: "Alice", LastName: "Henderson", Rating: BigDecimal("4.8") },
-      { SingerId: 4, FirstName: "Bruce", LastName: "Allison", Rating: BigDecimal("2.7") }
-    ]
-  end
-  spanner_postgresql_update_dml_returning project_id: project_id, instance_id: instance_id, database_id: database_id
-end
