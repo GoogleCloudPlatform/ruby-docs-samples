@@ -14,7 +14,9 @@
 
 require_relative "./spec_helper"
 require_relative "./spanner_postgresql_helper"
-require_relative "../spanner_postgresql_dml_returning"
+require_relative "../spanner_postgresql_delete_dml_returning"
+require_relative "../spanner_postgresql_update_dml_returning"
+require_relative "../spanner_postgresql_insert_dml_returning"
 
 describe "Google Cloud Spanner Postgres examples" do
   before :each do

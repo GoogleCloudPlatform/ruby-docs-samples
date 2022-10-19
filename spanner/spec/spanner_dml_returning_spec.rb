@@ -13,7 +13,9 @@
 # limitations under the License.
 
 require_relative "./spec_helper"
-require_relative "../spanner_dml_returning"
+require_relative "../spanner_delete_dml_returning"
+require_relative "../spanner_update_dml_returning"
+require_relative "../spanner_insert_dml_returning"
 
 describe "Google Cloud Spanner Postgres examples" do
   before :each do
