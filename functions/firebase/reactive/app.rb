@@ -46,6 +46,6 @@ FunctionsFramework.cloud_event "make_upper_case" do |event|
   doc_name = event.subject.split("documents/").last
   affected_doc = global(:firestore_client).doc doc_name
   new_doc_data = { original: new_value }
-  affected_doc.set new_doc_data
+  affected_doc.set new_doc_data, merge: false
 end
 # [END functions_firebase_reactive]

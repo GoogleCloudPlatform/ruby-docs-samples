@@ -35,7 +35,7 @@ describe "functions_slack" do
   let(:invalid_request) { make_post_request url, body, wrong_headers }
   let(:query) { "Ruby" }
   let :kg_response do
-    OpenStruct.new item_list_element: [
+    OpenStruct.new item_list_element: [ # rubocop:disable Style/OpenStructUse
       {
         "result" => {
           "name"                => query,
@@ -51,7 +51,7 @@ describe "functions_slack" do
       }
     ]
   end
-  let(:empty_kg_response) { OpenStruct.new item_list_element: [] }
+  let(:empty_kg_response) { OpenStruct.new item_list_element: [] } # rubocop:disable Style/OpenStructUse
   let :slack_response do
     {
       "response_type" => "in_channel",
@@ -99,7 +99,7 @@ describe "functions_slack" do
 
       globals = run_startup_tasks "kg_search"
       mock_client = ::Minitest::Mock.new
-      mock_client.expect :search_entities, kg_response, [query: query, limit: 1]
+      mock_client.expect :search_entities, kg_response, [], query: query, limit: 1
       globals[:kg_search].client = mock_client
 
       request = make_post_request url, body, headers

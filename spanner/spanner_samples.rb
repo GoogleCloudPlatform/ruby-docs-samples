@@ -1258,12 +1258,16 @@ def update_using_batch_dml project_id:, instance_id:, database_id:
   row_counts = nil
   client.transaction do |transaction|
     row_counts = transaction.batch_update do |b|
-      b.batch_update "INSERT INTO Albums "\
-        "(SingerId, AlbumId, AlbumTitle, MarketingBudget) "\
+      b.batch_update(
+        "INSERT INTO Albums " \
+        "(SingerId, AlbumId, AlbumTitle, MarketingBudget) " \
         "VALUES (1, 3, 'Test Album Title', 10000)"
-      b.batch_update "UPDATE Albums "\
-        "SET MarketingBudget = MarketingBudget * 2 "\
+      )
+      b.batch_update(
+        "UPDATE Albums " \
+        "SET MarketingBudget = MarketingBudget * 2 " \
         "WHERE SingerId = 1 and AlbumId = 3"
+      )
     end
   end
 
@@ -1875,7 +1879,7 @@ def create_backup project_id:, instance_id:, database_id:, backup_id:, version_t
   backup_path = database_admin_client.backup_path project: project_id,
                                                   instance: instance_id,
                                                   backup: backup_id
-  expire_time = Time.now + 14 * 24 * 3600 # 14 days from now
+  expire_time = Time.now + (14 * 24 * 3600) # 14 days from now
 
   job = database_admin_client.create_backup parent: instance_path,
                                             backup_id: backup_id,
@@ -1914,7 +1918,7 @@ def create_backup_with_encryption_key project_id:, instance_id:, database_id:, b
   backup_path = database_admin_client.backup_path project: project_id,
                                                   instance: instance_id,
                                                   backup: backup_id
-  expire_time = Time.now + 14 * 24 * 3600 # 14 days from now
+  expire_time = Time.now + (14 * 24 * 3600) # 14 days from now
   encryption_config = {
     encryption_type: :CUSTOMER_MANAGED_ENCRYPTION,
     kms_key_name:    kms_key_name
@@ -2038,7 +2042,7 @@ def create_backup_cancel project_id:, instance_id:, database_id:, backup_id:
                                                   instance: instance_id,
                                                   backup: backup_id
 
-  expire_time = Time.now + 14 * 24 * 3600 # 14 days from now
+  expire_time = Time.now + (14 * 24 * 3600) # 14 days from now
 
   job = database_admin_client.create_backup parent: instance_path,
                                             backup_id: backup_id,
@@ -2168,7 +2172,7 @@ def list_backups project_id:, instance_id:, backup_id:, database_id:
   end
 
   puts "All backups that expire before a timestamp:"
-  expire_time = Time.now + 30 * 24 * 3600 # 30 days from now
+  expire_time = Time.now + (30 * 24 * 3600) # 30 days from now
   database_admin_client.list_backups(parent: instance_path, filter: "expire_time < \"#{expire_time.iso8601}\"").each do |backup|
     puts backup.name
   end
@@ -2179,7 +2183,7 @@ def list_backups project_id:, instance_id:, backup_id:, database_id:
   end
 
   puts "All backups that were created after a timestamp that are also ready:"
-  create_time = Time.now - 24 * 3600 # From 1 day ago
+  create_time = Time.now - (24 * 3600) # From 1 day ago
   database_admin_client.list_backups(parent: instance_path, filter: "create_time >= \"#{create_time.iso8601}\" AND state:READY").each do |backup|
     puts backup.name
   end
@@ -2227,7 +2231,7 @@ def update_backup project_id:, instance_id:, backup_id:
                                                   instance: instance_id,
                                                   backup: backup_id
   backup = database_admin_client.get_backup name: backup_path
-  backup.expire_time = Time.now + 60 * 24 * 3600 # Extending the expiry time by 60 days from now.
+  backup.expire_time = Time.now + (60 * 24 * 3600) # Extending the expiry time by 60 days from now.
   database_admin_client.update_backup backup: backup,
                                       update_mask: { paths: ["expire_time"] }
 
@@ -2255,7 +2259,7 @@ def copy_backup project_id:, instance_id:, backup_id:, source_backup_id:
                                                     instance: instance_id,
                                                     backup: source_backup_id
 
-  expire_time = Time.now + 14 * 24 * 3600 # 14 days from now
+  expire_time = Time.now + (14 * 24 * 3600) # 14 days from now
 
   job = database_admin_client.copy_backup parent: instance_path,
                                           backup_id: backup_id,
