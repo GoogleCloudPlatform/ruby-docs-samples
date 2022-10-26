@@ -19,9 +19,11 @@ def spanner_postgresql_jsonb_query_parameter project_id:, instance_id:, database
   # project_id  = "Your Google Cloud project ID"
   # instance_id = "Your Spanner instance ID"
   # database_id = "Your Spanner database ID"
+  spanner = Google::Cloud::Spanner.new project: project_id
+  client  = spanner.client instance_id, database_id
 
   sql_query = <<~QUERY
-    SELECT venueid, venuedetails 
+    SELECT venueid, venuedetails
     FROM Venues
     WHERE CAST(venuedetails ->> 'rating' AS INTEGER) > $1
   QUERY
@@ -33,7 +35,6 @@ def spanner_postgresql_jsonb_query_parameter project_id:, instance_id:, database
   # Read JSONB value from table
   results = client.read "Venues", [:VenueId, :VenueDetails], keys: 19
   puts results.rows.first
-
 end
 # [END spanner_postgresql_jsonb_query_parameter]
 

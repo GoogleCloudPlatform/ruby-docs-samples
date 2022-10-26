@@ -23,30 +23,30 @@ def spanner_postgresql_jsonb_update_data project_id:, instance_id:, database_id:
   # Insert JSONB data into table
   spanner = Google::Cloud::Spanner.new project: project_id
   client  = spanner.client instance_id, database_id
-  
+
   data = [
     {
       VenueId: "19",
-      VenueDetails: {rating: 9, open: true}
+      VenueDetails: { rating: 9, open: true }
     },
     {
       VenueId: "4",
       VenueDetails: [
-      {
-        name: null,
-        open: true
-      },
-      {
-        name: "room 2",
-        open: false
-      },
-      {
-        main_hall: {
-          description: "this is the biggest space",
-          size: 200
+        {
+          name: null,
+          open: true
+        },
+        {
+          name: "room 2",
+          open: false
+        },
+        {
+          main_hall: {
+            description: "this is the biggest space",
+            size: 200
+          }
         }
-      }
-    ]
+      ]
     },
     {
       VenueId: "42",
@@ -54,7 +54,7 @@ def spanner_postgresql_jsonb_update_data project_id:, instance_id:, database_id:
         name: null,
         open: {
           Monday: true,
-          Tuesday: false,
+          Tuesday: false
         },
         tags: ["large", "airy"]
       }
@@ -63,7 +63,6 @@ def spanner_postgresql_jsonb_update_data project_id:, instance_id:, database_id:
 
   client.upsert "Venues", data
   puts "Inserted data into Venues table"
-
 end
 # [END spanner_postgresql_jsonb_update_data]
 
