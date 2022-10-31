@@ -24,14 +24,13 @@ require "google/cloud/spanner"
 # @param database_id [String] The ID of the database.
 #
 def spanner_postgresql_insert_dml_returning project_id:, instance_id:, database_id:
-
   spanner = Google::Cloud::Spanner.new project: project_id
   client = spanner.client instance_id, database_id
 
   client.transaction do |transaction|
     results = transaction.execute_query "INSERT INTO Singers (SingerId, FirstName, LastName) VALUES (12, 'Melissa', 'Garcia'), (13, 'Russell', 'Morales'), (14, 'Jacqueline', 'Long'), (15, 'Dylan', 'Shaw') RETURNING *"
     results.rows.each do |row|
-      puts "Insert singers with id: #{row[:singerid]}, FirstName: #{row[:firstname]}, LastName: #{row[:lastname]}"
+      puts "Inserted singers with id: #{row[:singerid]}, FirstName: #{row[:firstname]}, LastName: #{row[:lastname]}"
     end
     puts "Inserted row(s) count: #{results.row_count}"
   end

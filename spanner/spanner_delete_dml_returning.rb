@@ -24,7 +24,6 @@ require "google/cloud/spanner"
 # @param database_id [String] The ID of the database.
 #
 def spanner_delete_dml_returning project_id:, instance_id:, database_id:
-
   spanner = Google::Cloud::Spanner.new project: project_id
   client = spanner.client instance_id, database_id
 

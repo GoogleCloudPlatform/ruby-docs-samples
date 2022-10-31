@@ -17,7 +17,7 @@ require_relative "../spanner_delete_dml_returning"
 require_relative "../spanner_update_dml_returning"
 require_relative "../spanner_insert_dml_returning"
 
-describe "Google Cloud Spanner Postgres examples" do
+describe "Google Cloud Spanner DML examples" do
   before :each do
     cleanup_database_resources
     create_singers_albums_database
