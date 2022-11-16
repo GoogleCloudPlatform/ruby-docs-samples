@@ -60,10 +60,10 @@ describe "Google Cloud Spanner Postgres DML examples" do
                                               database_id: @database_id
     end
 
-    expect(captured_output).to include("Insert singers with id: 12, FirstName: Melissa, LastName: Garcia")
-    expect(captured_output).to include("Insert singers with id: 13, FirstName: Russell, LastName: Morales")
-    expect(captured_output).to include("Insert singers with id: 14, FirstName: Jacqueline, LastName: Long")
-    expect(captured_output).to include("Insert singers with id: 15, FirstName: Dylan, LastName: Shaw")
+    expect(captured_output).to include("Inserted singers with id: 12, FirstName: Melissa, LastName: Garcia")
+    expect(captured_output).to include("Inserted singers with id: 13, FirstName: Russell, LastName: Morales")
+    expect(captured_output).to include("Inserted singers with id: 14, FirstName: Jacqueline, LastName: Long")
+    expect(captured_output).to include("Inserted singers with id: 15, FirstName: Dylan, LastName: Shaw")
     expect(captured_output).to include("Inserted row(s) count: 4")
   end
 end
