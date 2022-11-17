@@ -28,7 +28,6 @@ describe "Google Cloud Spanner Postgres DML examples" do
 
   after :each do
     cleanup_database_resources
-    cleanup_instance_resources
   end
 
   example "spanner_postgresql_delete_dml_returning" do
