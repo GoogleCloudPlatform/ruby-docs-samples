@@ -35,6 +35,8 @@ GEM
     rspec-mocks (3.9.1)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.9.0)
+    rspec-retry (0.6.2)
+      rspec-core (> 3.3)
     rspec-support (3.9.3)
     rspec_junit_formatter (0.4.1)
       rspec-core (>= 2, < 4, != 2.12.0)
@@ -57,9 +59,10 @@ DEPENDENCIES
   rack-test
   rest-client
   rspec
+  rspec-retry
   rspec_junit_formatter
   rubysl-securerandom
   sinatra (~> 2.0)
 
 BUNDLED WITH
-   1.17.3
+   2.3.25

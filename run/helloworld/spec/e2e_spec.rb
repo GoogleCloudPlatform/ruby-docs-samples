@@ -13,6 +13,7 @@
 # limitations under the License.
 
 require "rspec"
+require "rspec/retry"
 require "rest-client"
 require "securerandom"
 
@@ -69,10 +70,15 @@ describe "E2E tests" do
     )
   end
 
-  it "Can make request to service" do
-    response = RestClient.get @url, Authorization: "Bearer #{@token}"
-    expect(response.body).to eq("Hello Test!")
-    expect(response.code).to eq(200)
+  it "Can make request to service", :retry => 3 do
+    begin
+      response = RestClient.get @url, Authorization: "Bearer #{@token}"
+      expect(response.body).to eq("Hello Test!")
+      expect(response.code).to eq(200)
+    rescue RestClient::InternalServerError => error
+      log.error error.message
+      raise
+    end
   end
 
 end
