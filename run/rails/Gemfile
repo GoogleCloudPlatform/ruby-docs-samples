@@ -12,7 +12,7 @@ gem "puma", "~> 5.0"
 gem "sassc", "~> 2.4.0"
 gem "sass-rails", ">= 6"
 #  Transpile app-like JavaScript. Read more: https://github.com/rails/jsbundling-rails/blob/main/docs/switch_from_webpacker.md
-gem "jsbundling-rails", "~> 1.0.1"
+gem "jsbundling-rails", ">= 1.0.1", "< 1.2"
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem "jbuilder", "~> 2.7"
 # Use Redis adapter to run Action Cable in production
