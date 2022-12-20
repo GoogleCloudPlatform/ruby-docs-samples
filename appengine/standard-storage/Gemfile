@@ -20,7 +20,7 @@ gem "sinatra", "~>2.1"
 # [END gae_standard_storage_dependencies]
 
 group :test do
-  gem "capybara", "~>3.38.0"
+  gem "capybara", "~>3.38"
   gem "poltergeist"
   gem "puma"
   gem "rspec"
