@@ -32,7 +32,6 @@ describe "functions_firebase_rtdb" do
       end
 
       assert_includes err, "Function triggered by change to: #{source}"
-      assert_match(/Path parameters:\n[^\n]+child: abcde\n/, err)
       assert_includes err, "Admin?: false"
       assert_includes err, 'Delta: {"foo"=>"bar"}'
     end

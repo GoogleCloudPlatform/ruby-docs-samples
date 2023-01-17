@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START functions_cloudevent_storage]
 # [START functions_helloworld_storage]
 require "functions_framework"
 
@@ -29,4 +30,5 @@ FunctionsFramework.cloud_event "hello_gcs" do |event|
   logger.info "Created: #{payload['timeCreated']}"
   logger.info "Updated: #{payload['updated']}"
 end
+# [END functions_cloudevent_storage]
 # [END functions_helloworld_storage]

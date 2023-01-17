@@ -55,7 +55,7 @@ describe "functions_imagemagick" do
           }
         ]
       )
-      mock_vision.expect :safe_search_detection, result, [{ image: gs_url }]
+      mock_vision.expect :safe_search_detection, result, [], image: gs_url
       _out, err = capture_subprocess_io do
         call_event "blur_offensive_images", cloud_event, globals: { vision_client: vision_client }
       end
@@ -79,7 +79,7 @@ describe "functions_imagemagick" do
       )
       tempfile_path = nil
       fake_blur_bucket = Object.new
-      mock_vision.expect :safe_search_detection, result, [{ image: gs_url }]
+      mock_vision.expect :safe_search_detection, result, [], image: gs_url
       mock_storage.expect :bucket, mock_bucket, [bucket_name]
       mock_bucket.expect :file, mock_file, [file_name]
       mock_file.expect :download, nil do |tempfile|

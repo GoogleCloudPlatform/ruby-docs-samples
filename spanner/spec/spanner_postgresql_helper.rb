@@ -58,6 +58,33 @@ def create_spangres_singers_table
   end
 end
 
+def create_spangres_venues_table
+  capture do
+    db_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin project: @project_id
+
+    db_path = db_admin_client.database_path project: @project_id,
+                                            instance: @instance.instance_id,
+                                            database: @database_id
+  
+    create_table_query = <<~QUERY
+      CREATE TABLE Venues (
+        VenueId bigint NOT NULL PRIMARY KEY,
+        Name varchar(1024),
+      );
+    QUERY
+  
+    job = db_admin_client.update_database_ddl database: db_path,
+                                              statements: [create_table_query]
+  
+    job.wait_until_done!
+  
+    if job.error?
+      puts "Error while creating table. Code: #{job.error.code}. Message: #{job.error.message}"
+      raise GRPC::BadStatus.new(job.error.code, job.error.message)
+    end
+  end
+end
+
 def add_data_to_spangres_singers_table
   spanner = Google::Cloud::Spanner.new project: @project_id
   client  = spanner.client @instance.instance_id, @database_id
