@@ -31,26 +31,27 @@ describe "E2E tests" do
       "--substitutions=_SUFFIX=#{suffix}"
     )
 
-    sleep 10 # Wait for serivce to be available for describe
     @service = "helloworld-#{suffix}"
 
-    io = IO.popen(
-      "gcloud run services describe #{@service} "\
-      "--project=#{ENV["GOOGLE_CLOUD_PROJECT"]} "\
-      "--platform=managed "\
-      "--region=us-central1 "\
-      "--format=value'('status.url')'"
-    )
-    url = io.read
+    try_with_backoff "waiting for service to be available" do
+      io = IO.popen(
+        "gcloud run services describe #{@service} "\
+        "--project=#{ENV["GOOGLE_CLOUD_PROJECT"]} "\
+        "--platform=managed "\
+        "--region=us-central1 "\
+        "--format=value'('status.url')'"
+      )
+      url = io.read
 
-    if url.downcase.include? "error"
-      raise "Error: Can not retrieve Cloud Run service URL: #{url}"
-    end
-    @url = url.chomp
+      if url.downcase.include? "error"
+        raise "Error: Can not retrieve Cloud Run service URL: #{url}"
+      end
+      @url = url.chomp
 
-    if @url.empty?
-      raise "Error: No service url found. For example: https://service-x8xabcdefg-uc.a.run.app"
-    end
+      if @url.empty?
+        raise "Error: No service url found. For example: https://service-x8xabcdefg-uc.a.run.app"
+      end
+    end  
 
     io = IO.popen("gcloud auth print-identity-token")
     token = io.read
@@ -81,4 +82,17 @@ describe "E2E tests" do
     end
   end
 
+  def try_with_backoff msg = nil, limit: 10
+    count = 0
+    loop do
+      begin
+        yield
+      rescue  
+        raise if count >= limit 
+        count += 1
+        puts "Retry (#{count}): #{msg}"
+        sleep count * (10 + rand(10))
+      end
+    end
+  end
 end
