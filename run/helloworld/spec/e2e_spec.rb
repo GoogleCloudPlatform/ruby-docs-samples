@@ -31,6 +31,7 @@ describe "E2E tests" do
       "--substitutions=_SUFFIX=#{suffix}"
     )
 
+    sleep 30 # Wait for serivce to be available for describe
     @service = "helloworld-#{suffix}"
 
     try_with_backoff "waiting for service to be available" do
