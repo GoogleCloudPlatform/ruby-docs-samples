@@ -80,5 +80,4 @@ describe "E2E tests" do
       raise
     end
   end
-
 end
