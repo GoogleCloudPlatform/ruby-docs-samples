@@ -1,4 +1,6 @@
-  specs:
+ GEM
+    remote: https://rubygems.org/
+    specs:
     addressable (2.8.1)
       public_suffix (>= 2.0.2, < 6.0)
     concurrent-ruby (1.1.10)
@@ -113,6 +115,7 @@
 
 PLATFORMS
   ruby
+
 DEPENDENCIES
   google-apis-iam_v1
   google-cloud-spanner
