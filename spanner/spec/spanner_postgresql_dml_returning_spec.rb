@@ -24,6 +24,8 @@ describe "Google Cloud Spanner Postgres DML examples" do
     create_spangres_singers_albums_database
     create_spangres_singers_table
     add_data_to_spangres_singers_table
+    create_spangres_albums_table
+    add_data_to_spangres_albums_table
   end
 
   after :each do

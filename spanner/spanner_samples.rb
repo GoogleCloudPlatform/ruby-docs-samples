@@ -105,13 +105,15 @@ def create_database project_id:, instance_id:, database_id:
         SingerId     INT64 NOT NULL,
         FirstName    STRING(1024),
         LastName     STRING(1024),
-        SingerInfo   BYTES(MAX)
+        SingerInfo   BYTES(MAX),
+        FullName STRING(2048) AS (ARRAY_TO_STRING([FirstName, LastName], \" \")) STORED
       ) PRIMARY KEY (SingerId)",
 
                                                 "CREATE TABLE Albums (
         SingerId     INT64 NOT NULL,
         AlbumId      INT64 NOT NULL,
-        AlbumTitle   STRING(MAX)
+        AlbumTitle   STRING(MAX),
+        MarketingBudget INT64
       ) PRIMARY KEY (SingerId, AlbumId),
       INTERLEAVE IN PARENT Singers ON DELETE CASCADE"
                                               ]
@@ -150,13 +152,15 @@ def create_database_with_version_retention_period project_id:, instance_id:, dat
       SingerId     INT64 NOT NULL,
       FirstName    STRING(1024),
       LastName     STRING(1024),
-      SingerInfo   BYTES(MAX)
+      SingerInfo   BYTES(MAX),
+      FullName STRING(2048) AS (ARRAY_TO_STRING([FirstName, LastName], \" \")) STORED
     ) PRIMARY KEY (SingerId)",
 
                                                 "CREATE TABLE Albums (
       SingerId     INT64 NOT NULL,
       AlbumId      INT64 NOT NULL,
-      AlbumTitle   STRING(MAX)
+      AlbumTitle   STRING(MAX),
+      MarketingBudget INT64
     ) PRIMARY KEY (SingerId, AlbumId),
     INTERLEAVE IN PARENT Singers ON DELETE CASCADE",
 
@@ -201,8 +205,7 @@ def create_database_with_encryption_key project_id:, instance_id:, database_id:,
                                      FirstName    STRING(1024),
                                      LastName     STRING(1024),
                                      SingerInfo   BYTES(MAX),
-                                     FullName STRING(2048) AS
-                                     (ARRAY_TO_STRING([FirstName, LastName]
+                                     FullName STRING(2048) AS (ARRAY_TO_STRING([FirstName, LastName], \" \")) STORED
                                    ) PRIMARY KEY (SingerId)",
 
                                                 "CREATE TABLE Albums (
@@ -280,11 +283,11 @@ def insert_data project_id:, instance_id:, database_id:
       { SingerId: 5, FirstName: "David",    LastName: "Lomond"   }
     ]
     c.insert "Albums", [
-      { SingerId: 1, AlbumId: 1, AlbumTitle: "Total Junk"              },
-      { SingerId: 1, AlbumId: 2, AlbumTitle: "Go, Go, Go"              },
-      { SingerId: 2, AlbumId: 1, AlbumTitle: "Green"                   },
-      { SingerId: 2, AlbumId: 2, AlbumTitle: "Forever Hold Your Peace" },
-      { SingerId: 2, AlbumId: 3, AlbumTitle: "Terrified"               }
+      { SingerId: 1, AlbumId: 1, AlbumTitle: "Total Junk", MarketingBudget: 20000},
+      { SingerId: 1, AlbumId: 2, AlbumTitle: "Go, Go, Go" , MarketingBudget: 20000},
+      { SingerId: 2, AlbumId: 1, AlbumTitle: "Green"  , MarketingBudget: 20000},
+      { SingerId: 2, AlbumId: 2, AlbumTitle: "Forever Hold Your Peace", MarketingBudget: 20000},
+      { SingerId: 2, AlbumId: 3, AlbumTitle: "Terrified", MarketingBudget: 20000}
     ]
   end
 

@@ -35,14 +35,15 @@ def create_spangres_singers_table
     db_path = db_admin_client.database_path project: @project_id,
                                             instance: @instance.instance_id,
                                             database: @database_id
-  
+
     create_table_query = <<~QUERY
       CREATE TABLE Singers (
         SingerId bigint NOT NULL PRIMARY KEY,
         FirstName varchar(1024),
         LastName varchar(1024),
         Rating numeric,
-        SingerInfo bytea
+        SingerInfo bytea,
+        FullName character varying(2048) GENERATED ALWAYS AS (FirstName || ' ' || LastName) STORED
       );
     QUERY
   
@@ -51,6 +52,36 @@ def create_spangres_singers_table
   
     job.wait_until_done!
   
+    if job.error?
+      puts "Error while creating table. Code: #{job.error.code}. Message: #{job.error.message}"
+      raise GRPC::BadStatus.new(job.error.code, job.error.message)
+    end
+  end
+end
+
+def create_spangres_albums_table
+  capture do
+    db_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin project: @project_id
+
+    db_path = db_admin_client.database_path project: @project_id,
+                                            instance: @instance.instance_id,
+                                            database: @database_id
+
+    create_table_query = <<~QUERY
+          CREATE TABLE Albums (
+            SingerId     bigint NOT NULL,
+            AlbumId      bigint NOT NULL,
+            AlbumTitle   character varying(1024),
+            MarketingBudget bigint,
+            PRIMARY KEY (SingerId, AlbumId)
+          ) INTERLEAVE IN PARENT Singers ON DELETE CASCADE;
+        QUERY
+
+    job = db_admin_client.update_database_ddl database: db_path,
+                                              statements: [create_table_query]
+
+    job.wait_until_done!
+
     if job.error?
       puts "Error while creating table. Code: #{job.error.code}. Message: #{job.error.message}"
       raise GRPC::BadStatus.new(job.error.code, job.error.message)
@@ -92,8 +123,22 @@ def add_data_to_spangres_singers_table
     c.insert "Singers", [
       { SingerId: 1, FirstName: "Ann", LastName: "Louis", Rating: BigDecimal("3.6") },
       { SingerId: 2, FirstName: "Olivia", LastName: "Garcia", Rating: BigDecimal("2.1") },
-      { SingerId: 3, FirstName: "Alice", LastName: "Henderson", Rating: BigDecimal("4.8") },
+      { SingerId: 3, FirstName: "Alice", LastName: "Trentor", Rating: BigDecimal("4.8") },
       { SingerId: 4, FirstName: "Bruce", LastName: "Allison", Rating: BigDecimal("2.7") }
     ]
   end
+end
+
+def add_data_to_spangres_albums_table
+  spanner = Google::Cloud::Spanner.new project: @project_id
+  client  = spanner.client @instance.instance_id, @database_id
+  client.commit do |c|
+      c.insert "Albums", [
+        { SingerId: 1, AlbumId: 1, AlbumTitle: "Total Junk", MarketingBudget: 20000},
+        { SingerId: 1, AlbumId: 2, AlbumTitle: "Go, Go, Go" , MarketingBudget: 20000},
+        { SingerId: 2, AlbumId: 1, AlbumTitle: "Green"  , MarketingBudget: 20000},
+        { SingerId: 2, AlbumId: 2, AlbumTitle: "Forever Hold Your Peace", MarketingBudget: 20000},
+        { SingerId: 2, AlbumId: 3, AlbumTitle: "Terrified", MarketingBudget: 20000}
+      ]
+    end
 end
