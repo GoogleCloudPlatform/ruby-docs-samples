@@ -283,11 +283,11 @@ def insert_data project_id:, instance_id:, database_id:
       { SingerId: 5, FirstName: "David",    LastName: "Lomond"   }
     ]
     c.insert "Albums", [
-      { SingerId: 1, AlbumId: 1, AlbumTitle: "Total Junk", MarketingBudget: 20000},
-      { SingerId: 1, AlbumId: 2, AlbumTitle: "Go, Go, Go" , MarketingBudget: 20000},
-      { SingerId: 2, AlbumId: 1, AlbumTitle: "Green"  , MarketingBudget: 20000},
-      { SingerId: 2, AlbumId: 2, AlbumTitle: "Forever Hold Your Peace", MarketingBudget: 20000},
-      { SingerId: 2, AlbumId: 3, AlbumTitle: "Terrified", MarketingBudget: 20000}
+      { SingerId: 1, AlbumId: 1, AlbumTitle: "Total Junk", MarketingBudget: 20_000 },
+      { SingerId: 1, AlbumId: 2, AlbumTitle: "Go, Go, Go", MarketingBudget: 20_000 },
+      { SingerId: 2, AlbumId: 1, AlbumTitle: "Green", MarketingBudget: 20_000 },
+      { SingerId: 2, AlbumId: 2, AlbumTitle: "Forever Hold Your Peace", MarketingBudget: 20_000 },
+      { SingerId: 2, AlbumId: 3, AlbumTitle: "Terrified", MarketingBudget: 20_000 }
     ]
   end
 
