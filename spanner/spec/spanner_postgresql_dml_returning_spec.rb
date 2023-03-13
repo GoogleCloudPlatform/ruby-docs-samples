@@ -36,7 +36,7 @@ describe "Google Cloud Spanner Postgres DML examples" do
                                              instance_id: @instance_id,
                                              database_id: @database_id
     end
-    puts captured_output
+
     expect(captured_output).to include("Alice Trentor")
     expect(captured_output).to include("Deleted row(s) count: 1")
   end
@@ -47,7 +47,7 @@ describe "Google Cloud Spanner Postgres DML examples" do
                                               instance_id: @instance_id,
                                               database_id: @database_id
     end
-    puts captured_output
+
     expect(captured_output).to include("40000")
     expect(captured_output).to include("Updated row(s) count: 1")
   end
@@ -58,7 +58,7 @@ describe "Google Cloud Spanner Postgres DML examples" do
                                               instance_id: @instance_id,
                                               database_id: @database_id
     end
-    puts captured_output
+
     expect(captured_output).to include("Melissa Garcia")
     expect(captured_output).to include("Russell Morales")
     expect(captured_output).to include("Jacqueline Long")
