@@ -1,6 +1,6 @@
- GEM
-    remote: https://rubygems.org/
-    specs:
+GEM
+  remote: https://rubygems.org/
+  specs:
     addressable (2.8.1)
       public_suffix (>= 2.0.2, < 6.0)
     concurrent-ruby (1.1.10)
