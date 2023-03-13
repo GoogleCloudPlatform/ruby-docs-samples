@@ -37,7 +37,7 @@ describe "Google Cloud Spanner Postgres DML examples" do
                                              database_id: @database_id
     end
     puts captured_output
-    expect(captured_output).to include("Deleted singer with id: 3, FirstName: Alice")
+    expect(captured_output).to include("Alice Trentor")
     expect(captured_output).to include("Deleted row(s) count: 1")
   end
 
@@ -48,7 +48,7 @@ describe "Google Cloud Spanner Postgres DML examples" do
                                               database_id: @database_id
     end
     puts captured_output
-    expect(captured_output).to include("Updated Singer with SingerId: 1, FirstName: Ann, LastName: Louis_update")
+    expect(captured_output).to include("40000")
     expect(captured_output).to include("Updated row(s) count: 1")
   end
 
@@ -59,10 +59,10 @@ describe "Google Cloud Spanner Postgres DML examples" do
                                               database_id: @database_id
     end
     puts captured_output
-    expect(captured_output).to include("Inserted singers with id: 12, FirstName: Melissa, LastName: Garcia")
-    expect(captured_output).to include("Inserted singers with id: 13, FirstName: Russell, LastName: Morales")
-    expect(captured_output).to include("Inserted singers with id: 14, FirstName: Jacqueline, LastName: Long")
-    expect(captured_output).to include("Inserted singers with id: 15, FirstName: Dylan, LastName: Shaw")
+    expect(captured_output).to include("Melissa Garcia")
+    expect(captured_output).to include("Russell Morales")
+    expect(captured_output).to include("Jacqueline Long")
+    expect(captured_output).to include("Dylan Shaw")
     expect(captured_output).to include("Inserted row(s) count: 4")
   end
 end

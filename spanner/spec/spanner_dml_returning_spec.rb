@@ -36,8 +36,8 @@ describe "Google Cloud Spanner DML examples" do
                                    instance_id: @instance_id,
                                    database_id: @database_id
     end
-    captured_output
-    expect(captured_output).to include("Deleted singer with id: 3, FirstName: Alice")
+    puts captured_output
+    expect(captured_output).to include("Alice Trentor")
     expect(captured_output).to include("Deleted row(s) count: 1")
   end
 
@@ -47,8 +47,8 @@ describe "Google Cloud Spanner DML examples" do
                                    instance_id: @instance_id,
                                    database_id: @database_id
     end
-    captured_output
-    expect(captured_output).to include("Updated Album with AlbumId: 1, SingerId: 1, AlbumTitle: Total Junk updated")
+    puts captured_output
+    expect(captured_output).to include("40000")
     expect(captured_output).to include("Updated row(s) count: 1")
   end
 
@@ -59,10 +59,10 @@ describe "Google Cloud Spanner DML examples" do
                                    database_id: @database_id
     end
     puts captured_output
-    expect(captured_output).to include("Inserted singers with id: 12, FirstName: Melissa")
-    expect(captured_output).to include("Inserted singers with id: 13, FirstName: Russell")
-    expect(captured_output).to include("Inserted singers with id: 14, FirstName: Jacqueline")
-    expect(captured_output).to include("Inserted singers with id: 15, FirstName: Dylan")
+    expect(captured_output).to include("Melissa Garcia")
+    expect(captured_output).to include("Russell Morales")
+    expect(captured_output).to include("Jacqueline Long")
+    expect(captured_output).to include("Dylan Shaw")
     expect(captured_output).to include("Inserted row(s) count: 4")
   end
 end
