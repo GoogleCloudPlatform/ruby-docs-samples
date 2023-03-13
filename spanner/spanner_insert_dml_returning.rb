@@ -28,9 +28,10 @@ def spanner_insert_dml_returning project_id:, instance_id:, database_id:
   client = spanner.client instance_id, database_id
 
   client.transaction do |transaction|
-    results = transaction.execute_query "INSERT INTO Singers (SingerId, FirstName, LastName) VALUES (12, 'Melissa', 'Garcia'), (13, 'Russell', 'Morales'), (14, 'Jacqueline', 'Long'), (15, 'Dylan', 'Shaw') THEN RETURN *"
+    results = transaction.execute_query "INSERT INTO Singers (SingerId, FirstName, LastName)
+                                         VALUES (12, 'Melissa', 'Garcia'), (13, 'Russell', 'Morales'), (14, 'Jacqueline', 'Long'), (15, 'Dylan', 'Shaw') THEN RETURN FullName"
     results.rows.each do |row|
-      puts "Inserted singers with id: #{row[:SingerId]}, FirstName: #{row[:FirstName]}"
+      puts "Inserted singers with FullName: #{row[:FullName]}"
     end
     puts "Inserted row(s) count: #{results.row_count}"
   end

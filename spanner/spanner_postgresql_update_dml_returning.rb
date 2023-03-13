@@ -28,9 +28,9 @@ def spanner_postgresql_update_dml_returning project_id:, instance_id:, database_
   client = spanner.client instance_id, database_id
 
   client.transaction do |transaction|
-    results = transaction.execute_query "UPDATE Singers SET LastName = LastName || '_update' WHERE SingerId = 1 RETURNING *"
+    results = transaction.execute_query "UPDATE Albums SET MarketingBudget = MarketingBudget * 2  WHERE SingerId = 1 and AlbumId = 1 RETURNING MarketingBudget"
     results.rows.each do |row|
-      puts "Updated Singer with SingerId: #{row[:singerid]}, FirstName: #{row[:firstname]}, LastName: #{row[:lastname]}"
+      puts "Updated Albums with MarketingBudget: #{row[:MarketingBudget]}"
     end
     puts "Updated row(s) count: #{results.row_count}"
   end

@@ -28,9 +28,9 @@ def spanner_postgresql_delete_dml_returning project_id:, instance_id:, database_
   client = spanner.client instance_id, database_id
 
   client.transaction do |transaction|
-    results = transaction.execute_query "DELETE FROM singers WHERE firstname = 'Alice' RETURNING singerid, firstname"
+    results = transaction.execute_query "DELETE FROM singers WHERE firstname = 'Alice' RETURNING SingerId, FullName"
     results.rows.each do |row|
-      puts "Deleted singer with id: #{row[:singerid]}, FirstName: #{row[:firstname]}"
+      puts "Deleted singer with SingerId: #{row[:SingerId]}, FullName: #{row[:FullName]}"
     end
     puts "Deleted row(s) count: #{results.row_count}"
   end
