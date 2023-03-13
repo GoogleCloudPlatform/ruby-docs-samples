@@ -28,8 +28,13 @@ def spanner_insert_dml_returning project_id:, instance_id:, database_id:
   client = spanner.client instance_id, database_id
 
   client.transaction do |transaction|
+    # Insert records into the SINGERS table and returns the generated column
+    # FullName of the inserted records using ‘THEN RETURN FullName’.
+    # It is also possible to return all columns of all the inserted records
+    # by using ‘THEN RETURN *’.
     results = transaction.execute_query "INSERT INTO Singers (SingerId, FirstName, LastName)
-                                         VALUES (12, 'Melissa', 'Garcia'), (13, 'Russell', 'Morales'), (14, 'Jacqueline', 'Long'), (15, 'Dylan', 'Shaw') THEN RETURN FullName"
+                                         VALUES (12, 'Melissa', 'Garcia'), (13, 'Russell', 'Morales'), (14, 'Jacqueline', 'Long'), (15, 'Dylan', 'Shaw')
+                                         THEN RETURN FullName"
     results.rows.each do |row|
       puts "Inserted singers with FullName: #{row[:FullName]}"
     end

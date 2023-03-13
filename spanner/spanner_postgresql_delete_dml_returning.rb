@@ -28,6 +28,11 @@ def spanner_postgresql_delete_dml_returning project_id:, instance_id:, database_
   client = spanner.client instance_id, database_id
 
   client.transaction do |transaction|
+    # Delete records from SINGERS table satisfying a particular condition and
+    # returns the SingerId and FullName column of the deleted records using
+    # ‘RETURNING SingerId, FullName’.
+    # It is also possible to return all columns of all the deleted records
+    # by using ‘RETURNING *’.
     results = transaction.execute_query "DELETE FROM singers WHERE firstname = 'Alice' RETURNING SingerId, FullName"
     results.rows.each do |row|
       puts "Deleted singer with SingerId: #{row[:singerid]}, FullName: #{row[:fullname]}"
