@@ -32,7 +32,7 @@ def spanner_postgresql_insert_dml_returning project_id:, instance_id:, database_
     # FullName of the inserted records using ‘RETURNING FullName’.
     # It is also possible to return all columns of all the inserted
     # records by using ‘RETURNING *’.
-    results = transaction.execute_query "INSERT INTO Singers (SingerId, FirstName, LastName) 
+    results = transaction.execute_query "INSERT INTO Singers (SingerId, FirstName, LastName)
                                          VALUES (12, 'Melissa', 'Garcia'), (13, 'Russell', 'Morales'), (14, 'Jacqueline', 'Long'), (15, 'Dylan', 'Shaw')
                                          RETURNING FullName"
     results.rows.each do |row|
