@@ -28,9 +28,17 @@ def spanner_update_dml_returning project_id:, instance_id:, database_id:
   client = spanner.client instance_id, database_id
 
   client.transaction do |transaction|
-    results = transaction.execute_query "UPDATE Albums SET AlbumTitle = CONCAT(AlbumTitle, ' updated') WHERE SingerId = 1 and AlbumId = 1 THEN RETURN *"
+    # Update MarketingBudget column for records satisfying a particular
+    # condition and returns the modified MarketingBudget column of the
+    # updated records using ‘THEN RETURN MarketingBudget’.
+    #
+    # It is also possible to return all columns of all the updated records
+    # by using ‘THEN RETURN *’.
+    results = transaction.execute_query "UPDATE Albums SET MarketingBudget = MarketingBudget * 2
+                                         WHERE SingerId = 1 and AlbumId = 1
+                                         THEN RETURN MarketingBudget"
     results.rows.each do |row|
-      puts "Updated Album with AlbumId: #{row[:AlbumId]}, SingerId: #{row[:SingerId]}, AlbumTitle: #{row[:AlbumTitle]}"
+      puts "Updated Album with MarketingBudget: #{row[:MarketingBudget]}"
     end
     puts "Updated row(s) count: #{results.row_count}"
   end

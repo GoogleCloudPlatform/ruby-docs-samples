@@ -20,8 +20,8 @@ require_relative "../spanner_insert_dml_returning"
 describe "Google Cloud Spanner DML examples" do
   before :each do
     cleanup_database_resources
-    create_singers_albums_database
-    insert_data project_id: @project_id,
+    create_dml_singers_albums_database
+    insert_dml_data project_id: @project_id,
                 instance_id: @instance_id,
                 database_id: @database_id
   end
@@ -37,7 +37,7 @@ describe "Google Cloud Spanner DML examples" do
                                    database_id: @database_id
     end
 
-    expect(captured_output).to include("Deleted singer with id: 3, FirstName: Alice")
+    expect(captured_output).to include("Alice Trentor")
     expect(captured_output).to include("Deleted row(s) count: 1")
   end
 
@@ -48,7 +48,7 @@ describe "Google Cloud Spanner DML examples" do
                                    database_id: @database_id
     end
 
-    expect(captured_output).to include("Updated Album with AlbumId: 1, SingerId: 1, AlbumTitle: Total Junk updated")
+    expect(captured_output).to include("40000")
     expect(captured_output).to include("Updated row(s) count: 1")
   end
 
@@ -59,10 +59,10 @@ describe "Google Cloud Spanner DML examples" do
                                    database_id: @database_id
     end
 
-    expect(captured_output).to include("Inserted singers with id: 12, FirstName: Melissa")
-    expect(captured_output).to include("Inserted singers with id: 13, FirstName: Russell")
-    expect(captured_output).to include("Inserted singers with id: 14, FirstName: Jacqueline")
-    expect(captured_output).to include("Inserted singers with id: 15, FirstName: Dylan")
+    expect(captured_output).to include("Melissa Garcia")
+    expect(captured_output).to include("Russell Morales")
+    expect(captured_output).to include("Jacqueline Long")
+    expect(captured_output).to include("Dylan Shaw")
     expect(captured_output).to include("Inserted row(s) count: 4")
   end
 end

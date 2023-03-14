@@ -222,6 +222,41 @@ def create_database_with_encryption_key project_id:, instance_id:, database_id:,
   # [END spanner_create_database_with_encryption_key]
 end
 
+def create_dml_database project_id:, instance_id:, database_id:
+  require "google/cloud/spanner"
+  require "google/cloud/spanner/admin/database"
+
+  database_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin
+
+  instance_path = database_admin_client.instance_path project: project_id, instance: instance_id
+
+  job = database_admin_client.create_database parent: instance_path,
+                                              create_statement: "CREATE DATABASE `#{database_id}`",
+                                              extra_statements: [
+                                                "CREATE TABLE Singers (
+        SingerId     INT64 NOT NULL,
+        FirstName    STRING(1024),
+        LastName     STRING(1024),
+        SingerInfo   BYTES(MAX),
+        FullName STRING(2048) AS (ARRAY_TO_STRING([FirstName, LastName], \" \")) STORED
+      ) PRIMARY KEY (SingerId)",
+
+                                                "CREATE TABLE Albums (
+        SingerId     INT64 NOT NULL,
+        AlbumId      INT64 NOT NULL,
+        AlbumTitle   STRING(MAX),
+        MarketingBudget INT64
+      ) PRIMARY KEY (SingerId, AlbumId),
+      INTERLEAVE IN PARENT Singers ON DELETE CASCADE"
+                                              ]
+
+  puts "Waiting for create database operation to complete"
+
+  job.wait_until_done!
+
+  puts "Created database #{database_id} on instance #{instance_id}"
+end
+
 def create_table_with_timestamp_column project_id:, instance_id:, database_id:
   # [START spanner_create_table_with_timestamp_column]
   # project_id  = "Your Google Cloud project ID"
@@ -277,16 +312,42 @@ def insert_data project_id:, instance_id:, database_id:
       { SingerId: 5, FirstName: "David",    LastName: "Lomond"   }
     ]
     c.insert "Albums", [
-      { SingerId: 1, AlbumId: 1, AlbumTitle: "Total Junk"              },
-      { SingerId: 1, AlbumId: 2, AlbumTitle: "Go, Go, Go"              },
-      { SingerId: 2, AlbumId: 1, AlbumTitle: "Green"                   },
+      { SingerId: 1, AlbumId: 1, AlbumTitle: "Total Junk" },
+      { SingerId: 1, AlbumId: 2, AlbumTitle: "Go, Go, Go" },
+      { SingerId: 2, AlbumId: 1, AlbumTitle: "Green" },
       { SingerId: 2, AlbumId: 2, AlbumTitle: "Forever Hold Your Peace" },
-      { SingerId: 2, AlbumId: 3, AlbumTitle: "Terrified"               }
+      { SingerId: 2, AlbumId: 3, AlbumTitle: "Terrified" }
     ]
   end
 
   puts "Inserted data"
   # [END spanner_insert_data]
+end
+
+def insert_dml_data project_id:, instance_id:, database_id:
+  require "google/cloud/spanner"
+
+  spanner = Google::Cloud::Spanner.new project: project_id
+  client  = spanner.client instance_id, database_id
+
+  client.commit do |c|
+    c.insert "Singers", [
+      { SingerId: 1, FirstName: "Marc",     LastName: "Richards" },
+      { SingerId: 2, FirstName: "Catalina", LastName: "Smith"    },
+      { SingerId: 3, FirstName: "Alice",    LastName: "Trentor"  },
+      { SingerId: 4, FirstName: "Lea",      LastName: "Martin"   },
+      { SingerId: 5, FirstName: "David",    LastName: "Lomond"   }
+    ]
+    c.insert "Albums", [
+      { SingerId: 1, AlbumId: 1, AlbumTitle: "Total Junk", MarketingBudget: 20_000 },
+      { SingerId: 1, AlbumId: 2, AlbumTitle: "Go, Go, Go", MarketingBudget: 20_000 },
+      { SingerId: 2, AlbumId: 1, AlbumTitle: "Green", MarketingBudget: 20_000 },
+      { SingerId: 2, AlbumId: 2, AlbumTitle: "Forever Hold Your Peace", MarketingBudget: 20_000 },
+      { SingerId: 2, AlbumId: 3, AlbumTitle: "Terrified", MarketingBudget: 20_000 }
+    ]
+  end
+
+  puts "Inserted data"
 end
 
 def insert_data_with_timestamp_column project_id:, instance_id:, database_id:

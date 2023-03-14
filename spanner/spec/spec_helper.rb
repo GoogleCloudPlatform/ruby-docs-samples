@@ -38,7 +38,7 @@ RSpec.configure do |config|
   end
 
   config.after :all do
-    cleanup_backup_resources
+    # cleanup_backup_resources
     cleanup_instance_resources
   end
 
@@ -137,6 +137,18 @@ RSpec.configure do |config|
       create_database project_id:  @project_id,
                       instance_id: @instance.instance_id,
                       database_id: @database_id
+
+      @test_database = @instance.database @database_id
+    end
+
+    @test_database
+  end
+
+  def create_dml_singers_albums_database
+    capture do
+      create_dml_database project_id:  @project_id,
+                          instance_id: @instance.instance_id,
+                          database_id: @database_id
 
       @test_database = @instance.database @database_id
     end
