@@ -20,8 +20,8 @@ require_relative "../spanner_insert_dml_returning"
 describe "Google Cloud Spanner DML examples" do
   before :each do
     cleanup_database_resources
-    create_singers_albums_database
-    insert_data project_id: @project_id,
+    create_dml_singers_albums_database
+    insert_dml_data project_id: @project_id,
                 instance_id: @instance_id,
                 database_id: @database_id
   end

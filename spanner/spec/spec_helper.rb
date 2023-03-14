@@ -144,6 +144,18 @@ RSpec.configure do |config|
     @test_database
   end
 
+  def create_dml_singers_albums_database
+    capture do
+      create_dml_database project_id:  @project_id,
+                          instance_id: @instance.instance_id,
+                          database_id: @database_id
+
+      @test_database = @instance.database @database_id
+    end
+
+    @test_database
+  end
+
   def create_performances_table
     capture do
       create_table_with_timestamp_column project_id:  @project_id,
