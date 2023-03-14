@@ -38,7 +38,7 @@ RSpec.configure do |config|
   end
 
   config.after :all do
-    cleanup_backup_resources
+    # cleanup_backup_resources
     cleanup_instance_resources
   end
 

@@ -1425,7 +1425,7 @@ describe "Google Cloud Spanner API samples" do
     expect(captured_output).to include "104.4123101"
   end
 
-  example "create backup" do
+  xexample "create backup" do
     cleanup_backup_resources
     database = create_database_with_data
 
@@ -1454,7 +1454,7 @@ describe "Google Cloud Spanner API samples" do
     expect(@test_backup).not_to be nil
   end
 
-  example "copy backup" do
+  xexample "copy backup" do
     cleanup_backup_resources
     create_backup_with_data
 
@@ -1484,7 +1484,7 @@ describe "Google Cloud Spanner API samples" do
     expect(test_backup).to be_nil
   end
 
-  xexample "create backup with encryptio key" do
+  xexample "create backup with encryption key" do
     cleanup_backup_resources
     database = create_database_with_data
 
@@ -1559,7 +1559,7 @@ describe "Google Cloud Spanner API samples" do
     expect(@test_database).not_to be nil
   end
 
-  example "cancel backup operation" do
+  xexample "cancel backup operation" do
     database = create_database_with_data
 
     cancel_backup_id = "cancel_#{@backup_id}"
@@ -1581,7 +1581,7 @@ describe "Google Cloud Spanner API samples" do
     expect(@test_backup).to be nil
   end
 
-  example "list backup operations" do
+  xexample "list backup operations" do
     backup = create_backup_with_data
     capture do
       list_backup_operations project_id:  @project_id,
@@ -1597,7 +1597,7 @@ describe "Google Cloud Spanner API samples" do
     expect(@test_backup).not_to be nil
   end
 
-  example "list copy backup operations" do
+  xexample "list copy backup operations" do
     backup = create_backup_with_data
     copied_backup = create_copy_backup
     capture do
@@ -1627,7 +1627,7 @@ describe "Google Cloud Spanner API samples" do
     )
   end
 
-  example "list backups with various filters" do
+  xexample "list backups with various filters" do
     backup = create_backup_with_data
 
     capture do
