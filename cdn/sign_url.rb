@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START signed_url]
 # [START cloudcdn_sign_url]
 def signed_url url:, key_name:, key:, expiration:
   # url        = "URL of the endpoint served by Cloud CDN"
@@ -45,7 +44,6 @@ def signed_url url:, key_name:, key:, expiration:
   signed_url = "#{url}&Signature=#{encoded_signature}"
 end
 # [END cloudcdn_sign_url]
-# [END signed_url]
 
 if $PROGRAM_NAME == __FILE__
   if ARGV.count == 4
