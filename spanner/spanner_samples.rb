@@ -656,7 +656,7 @@ def query_with_struct project_id:, instance_id:, database_id:
     "(FirstName, LastName) = @name",
     params: { name: name_struct }
   ).rows.each do |row|
-    puts row[:SingerId].to_s
+    puts row[:SingerId]
   end
   # [END spanner_query_data_with_struct]
 end
@@ -687,7 +687,7 @@ def query_with_array_of_struct project_id:, instance_id:, database_id:
     "STRUCT<FirstName STRING, LastName STRING>(FirstName, LastName) IN UNNEST(@names)",
     params: { names: band_members }
   ).rows.each do |row|
-    puts row[:SingerId].to_s
+    puts row[:SingerId]
   end
   # [END spanner_query_data_with_array_of_struct]
 end
@@ -708,7 +708,7 @@ def query_struct_field project_id:, instance_id:, database_id:
     "SELECT SingerId FROM Singers WHERE FirstName = @name.FirstName",
     params: { name: name_struct }
   ).rows.each do |row|
-    puts row[:SingerId].to_s
+    puts row[:SingerId]
   end
   # [END spanner_field_access_on_struct_parameters]
 end
@@ -737,7 +737,7 @@ def query_nested_struct_field project_id:, instance_id:, database_id:
     "IN UNNEST(@song_info.ArtistNames)",
     params: { song_info: song_info_struct }
   ).rows.each do |row|
-    puts (row[:SingerId]).to_s, (row[:SongName]).to_s
+    puts (row[:SingerId]), (row[:SongName])
   end
   # [END spanner_field_access_on_nested_struct_parameters]
 end
