@@ -65,7 +65,7 @@ environment variable to the path to the key file, for example:
       query_data_with_new_column         <instance_id> <database_id> Query Data with New Column
       query_data_with_timestamp_column   <instance_id> <database_id> Queries data from altered table where the commit timestamp column was added
       write_struct_data                  <instance_id> <database_id> Inserts sample data that can be used for STRUCT queries
-      query_with_struct                  <instance_id> <database_id> Queries data using a STRUCT paramater
+      query_with_struct                  <instance_id> <database_id> Queries data using a STRUCT parameter
       query_with_array_of_struct         <instance_id> <database_id> Queries data using an array of STRUCT values as parameter
       query_struct_field                 <instance_id> <database_id> Queries data by accessing field from a STRUCT parameter
       query_nested_struct_field          <instance_id> <database_id> Queries data by accessing field from nested STRUCT parameters
@@ -78,7 +78,7 @@ environment variable to the path to the key file, for example:
       insert_using_dml                   <instance_id> <database_id> Insert Data using a DML statement.
       update_using_dml                   <instance_id> <database_id> Update Data using a DML statement.
       delete_using_dml                   <instance_id> <database_id> Delete Data using a DML statement.
-      update_using_dml_with_timestamp    <instance_id> <database_id> Update the timestamp value of specifc records using a DML statement.
+      update_using_dml_with_timestamp    <instance_id> <database_id> Update the timestamp value of specific records using a DML statement.
       write_and_read_using_dml           <instance_id> <database_id> Insert data using a DML statement and then read the inserted data.
       update_using_dml_with_struct       <instance_id> <database_id> Update data using a DML statement combined with a Spanner struct.
       write_using_dml                    <instance_id> <database_id> Insert multiple records using a DML statement.
