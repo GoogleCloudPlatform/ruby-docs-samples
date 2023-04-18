@@ -16,7 +16,7 @@ source "https://rubygems.org"
 gem "sinatra"
 gem "slim"
 gem "webrick"
-ruby '~>3.2.1'
+ruby "~>3.2.1"
 
 group :test do
   gem "capybara"

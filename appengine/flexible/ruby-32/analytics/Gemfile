@@ -14,8 +14,9 @@
 
 source "https://rubygems.org"
 
-gem "webrick"
 gem "sinatra"
+gem "webrick"
+
 group :test do
   gem "capybara"
   gem "rspec"
