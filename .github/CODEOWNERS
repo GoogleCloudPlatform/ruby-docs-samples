@@ -10,6 +10,9 @@
 *                               @GoogleCloudPlatform/yoshi-ruby
 
 /cloud-sql/    @GoogleCloudPlatform/infra-db-dpes @GoogleCloudPlatform/yoshi-ruby
-/iot/          @gcseh @GoogleCloudPlatform/api-iot @GoogleCloudPlatform/yoshi-ruby
+/iot/          @GoogleCloudPlatform/api-iot @GoogleCloudPlatform/yoshi-ruby
 /jobs/         @googleapis/ml-apis @GoogleCloudPlatform/yoshi-ruby
+
+# Self-service 
+
 /appengine     @GoogleCloudPlatform/yoshi-ruby @GoogleCloudPlatform/serverless-runtimes
