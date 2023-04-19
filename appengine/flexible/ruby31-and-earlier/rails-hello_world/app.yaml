@@ -12,14 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START all]
-# [START step_1]
 entrypoint: bundle exec rackup --port $PORT
 env: flex
 runtime: ruby
-# [END step_1]
 
 env_variables:
   SECRET_KEY_BASE: [SECRET_KEY]
-# [END all]
-
