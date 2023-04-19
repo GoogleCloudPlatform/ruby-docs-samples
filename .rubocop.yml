@@ -62,7 +62,7 @@ Style/MethodDefParentheses:
   EnforcedStyle: require_no_parentheses_except_multiline
 Style/MixinUsage:
   Exclude:
-    - "appengine/rails*/**/*"
+    - "appengine/**/rails*/**/*"
 Style/Next:
   Enabled: false
 Style/SafeNavigation:
