@@ -11,7 +11,7 @@
 
 /cloud-sql/    @GoogleCloudPlatform/infra-db-dpes @GoogleCloudPlatform/yoshi-ruby
 /iot/          @GoogleCloudPlatform/api-iot @GoogleCloudPlatform/yoshi-ruby
-/jobs/         @googleapis/ml-apis @GoogleCloudPlatform/yoshi-ruby
+/jobs/         @GoogleCloudPlatform/ml-apis @GoogleCloudPlatform/yoshi-ruby
 
 # Self-service 
 
