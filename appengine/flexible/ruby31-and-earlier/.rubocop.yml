@@ -1,0 +1,4 @@
+Style/MixinUsage:
+  Exclude:
+    - "**/bin/setup"
+    - "**/bin/update"
