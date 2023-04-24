@@ -19,7 +19,6 @@ entrypoint: bundle exec ruby app.rb
 
 runtime_config:
   operating_system: ubuntu22
-  runtime_version: 3.2
 
 env_variables:
   GOOGLE_CLOUD_STORAGE_BUCKET: <your-bucket-name>

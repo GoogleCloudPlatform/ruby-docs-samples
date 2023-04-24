@@ -18,7 +18,6 @@ entrypoint: bundle exec ruby app.rb
 instance_class: F2
 runtime_config:
   operating_system: ubuntu22
-  runtime_version: 3.2
 
 # [START gae_pubsub_yaml]
 env_variables:

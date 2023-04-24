@@ -17,4 +17,3 @@ env: flex
 entrypoint: bundle exec ruby app.rb
 runtime_config:
   operating_system: ubuntu22
-  runtime_version: 3.2

@@ -18,7 +18,6 @@ env: flex
 entrypoint: bundle exec ruby app.rb
 runtime_config:
   operating_system: ubuntu22
-  runtime_version: 3.2
 
 # Use only a single instance, so that this local-memory-only chat app will work
 # consistently with multiple users. To work across multiple instances, an
