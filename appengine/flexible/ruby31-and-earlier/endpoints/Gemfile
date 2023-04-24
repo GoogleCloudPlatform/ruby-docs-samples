@@ -1,0 +1,18 @@
+source "https://rubygems.org"
+
+gem "json"
+gem "rack-cors"
+gem "sinatra"
+
+# Dependencies for ./clients/
+group :development do
+  gem "rest-client"
+  gem "signet"
+end
+
+# Dependencies for ./spec/
+group :test do
+  gem "rack-test"
+  gem "rspec"
+  gem "rspec_junit_formatter"
+end

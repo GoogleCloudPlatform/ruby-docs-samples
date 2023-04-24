@@ -1,0 +1,9 @@
+runtime: ruby
+env: flex
+entrypoint: bundle exec ruby app.rb
+
+beta_settings:
+  # Enable Google Cloud Endpoints API management.
+  use_endpoints_api_management: true
+  # Specify the Open API specification.
+  endpoints_swagger_spec_file: openapi.yaml
