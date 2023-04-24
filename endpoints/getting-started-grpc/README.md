@@ -3,7 +3,7 @@
 It is assumed that you have a working Ruby environment and a Google
 Cloud account and [SDK](https://cloud.google.com/sdk/) configured.
 
-1. Install depenencies:
+1. Install dependencies:
 
     ```bash
     bundle
