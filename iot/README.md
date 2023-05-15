@@ -4,6 +4,8 @@ width="96"/>
 
 # Google Cloud IoT Core API Samples
 
+## Google Cloud IoT Core is being retired on August 16, 2023. Please find the suitable migration options from [here](https://cloud.google.com/iot-core/). 
+
 ## Description
 
 These samples show how to use the [Google Cloud IoT Core API](https://cloud.google.com/iot-core/).

@@ -31,7 +31,7 @@ describe "E2E tests" do
       "--substitutions=_SUFFIX=#{suffix}"
     )
 
-    sleep 10 # Wait for serivce to be available for describe
+    sleep 20 # Wait for serivce to be available for describe
     @service = "helloworld-#{suffix}"
 
     io = IO.popen(
