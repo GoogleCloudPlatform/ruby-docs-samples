@@ -4,6 +4,7 @@ AllCops:
   Exclude:
     - "**/acceptance/**"
     - "**/spec/**"
+    - "**/skip_spec/**"
     - "Rakefile"
 Layout/LineLength:
   Enabled: false
