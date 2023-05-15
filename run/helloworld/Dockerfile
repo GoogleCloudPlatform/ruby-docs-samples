@@ -17,7 +17,7 @@
 
 # Use the official lightweight Ruby image.
 # https://hub.docker.com/_/ruby
-FROM ruby:2.7-slim
+FROM ruby:3.2-slim
 
 # Install production dependencies.
 WORKDIR /usr/src/app
