@@ -26,7 +26,7 @@ RUN (curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -) && \
 WORKDIR /app
 
 # Application dependencies
-COPY Gemfile Gemfile.lock* ./
+COPY Gemfile Gemfile.lock ./
 
 RUN gem install bundler && \
     bundle config set --local deployment 'true' && \
