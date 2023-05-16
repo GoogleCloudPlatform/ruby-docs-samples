@@ -13,7 +13,7 @@
 
 # Use the official Ruby image from Docker Hub
 # https://hub.docker.com/_/ruby
-FROM ruby:3.0-buster
+FROM ruby:2.7-buster
 
 RUN (curl -sS https://deb.nodesource.com/gpgkey/nodesource.gpg.key | gpg --dearmor | apt-key add -) && \
     echo "deb https://deb.nodesource.com/node_14.x buster main"      > /etc/apt/sources.list.d/nodesource.list && \
@@ -41,8 +41,6 @@ ENV RAILS_ENV=production
 ENV RAILS_SERVE_STATIC_FILES=true
 # Redirect Rails log to STDOUT for Cloud Run to capture
 ENV RAILS_LOG_TO_STDOUT=true
-ARG MASTER_KEY
-ENV RAILS_MASTER_KEY=${MASTER_KEY}
 
 # pre-compile Rails assets with master key
 RUN bundle exec rake assets:precompile
