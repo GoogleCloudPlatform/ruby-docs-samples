@@ -21,7 +21,7 @@ FROM ruby:3.2-buster
 
 # Install production dependencies.
 WORKDIR /usr/src/app
-COPY Gemfile ./
+COPY Gemfile Gemfile.lock ./
 ENV BUNDLE_FROZEN=true
 RUN gem install bundler && bundle config set --local without 'test'
 
