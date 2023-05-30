@@ -16,8 +16,7 @@
 require "google/cloud/spanner"
 
 ##
-# This is a snippet for showcasing how to use DML return feature with delete
-# operation.
+# This is a snippet for showcasing how to create table with foreign key delete cascade.
 #
 # @param project_id  [String] The ID of the Google Cloud project.
 # @param instance_id [String] The ID of the spanner instance.
