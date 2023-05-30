@@ -30,7 +30,6 @@ def make_iap_request url:, client_id:
   resp = Faraday.get url, nil, headers
 
   if resp.status == 200
-    puts "X-Goog-Iap-Jwt-Assertion:"
     puts resp.body
   else
     puts "Error requesting IAP"
