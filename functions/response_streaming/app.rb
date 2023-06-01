@@ -19,7 +19,7 @@ require "cgi"
 require "json"
 require "google/cloud/bigquery"
 
-FunctionsFramework.http "stream_big_query" do |request|
+FunctionsFramework.http "stream_big_query" do |_request|
   bigquery = Google::Cloud::Bigquery.new
   sql = "SELECT abstract FROM `bigquery-public-data.breathe.bioasq` LIMIT 1000"
 
