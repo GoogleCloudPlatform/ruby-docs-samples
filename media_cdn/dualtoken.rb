@@ -100,7 +100,7 @@ class Dualtoken
         if expiration_time
             expiration_utc = expiration_time.utc.to_i
         elsif
-            expiration_utc = Time.now.to_i + 3600
+            expiration_utc = Time.now.to_i + 300
         end
         field = "Expires=#{expiration_utc}"
         tokens.append(field)
