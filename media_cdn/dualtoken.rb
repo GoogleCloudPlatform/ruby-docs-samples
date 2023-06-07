@@ -34,24 +34,24 @@ class Dualtoken
 
     def sign_token(base64_key:, signature_algorithm:, start_time: nil, expiration_time: nil, full_path: nil, path_globs: nil, url_prefix: nil, session_id: nil, data: nil, headers: nil, ip_ranges: nil)
         """
-        Gets the Signed URL Suffix string for the Media CDN' Short token URL requests.
+        Gets the signed URL Suffix string for the Media CDN short token URL requests.
         One of (`url_prefix`, `full_path`, `path_globs`) must be included in each input.
         Args:
-            base64_key: Secret key as a base64 encoded string.
-            signature_algorithm: Algorithm can be either `SHA1` or `SHA256` or `Ed25519`.
-            start_time: Start time as a UTC datetime object.
-            expiration_time: Expiration time as a UTC datetime object. If None, an expiration time 5 mins from now will be used.
+            base64_key: a secret key as a base64 encoded string.
+            signature_algorithm: an algorithm as `SHA1`, `SHA256`, or `Ed25519`.
+            start_time: the start time as a UTC datetime object.
+            expiration_time: the expiration time as a UTC datetime object. If a value is not specified, an expiration time 5 mins from now will be used.
             url_prefix: the URL prefix to sign, including protocol.
                         For example: http://example.com/path/ for URLs under /path or http://example.com/path?param=1
-            full_path:  A full path to sign, starting with the first '/'.
+            full_path:  a full path to sign, starting with the first '/'.
                         For example: /path/to/content.mp4
             path_globs: a set of ','- or '!'-delimited path glob strings.
                         For example: /tv/*!/film/* to sign paths starting with /tv/ or /film/ in any URL.
             session_id: a unique identifier for the session
-            data: data payload to include in the token
-            headers: header name and value to include in the signed token in name=value format.  May be specified more than once.
+            data: an arbitrary data payload to include in the token
+            headers: the header name and value to be included in the signed token should follow name=value format.  May be specified more than once.
                         For example: [{'name': 'foo', 'value': 'bar'}, {'name': 'baz', 'value': 'qux'}]
-            ip_ranges: A list of comma separated ip ranges. Both IPv4 and IPv6 ranges are acceptable.
+            ip_ranges: a list of comma-separated IP ranges. Both IPv4 and IPv6 ranges are acceptable.
                         For example: '203.0.113.0/24,2001:db8:4a7f:a732/64'
 
         Returns:
@@ -83,7 +83,7 @@ class Dualtoken
             tokens.append(field)
             to_sign.append(field)
         else
-            raise "User Input Missing: One of `url_prefix`, `full_path` or `path_globs` must be specified"
+            raise "User input missing: One of `url_prefix`, `full_path`, or `path_globs` must be specified."
         end
 
         # check & parse optional params
@@ -162,7 +162,7 @@ class Dualtoken
             signature = digest.encode "utf-8"
             tokens.append("hmac=#{signature}")
         else
-            raise "Input Missing Error: `signature_algorithm` can only be one of `sha1`, `sha256`"
+            raise "Input missing error: `signature_algorithm` can only be one of `sha1`, `sha256`, or `ed25519`."
         end
         return tokens.join('~')
     end 
