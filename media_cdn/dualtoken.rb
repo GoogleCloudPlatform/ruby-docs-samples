@@ -34,13 +34,13 @@ class Dualtoken
 
     def sign_token(base64_key:, signature_algorithm:, start_time: nil, expiration_time: nil, full_path: nil, path_globs: nil, url_prefix: nil, session_id: nil, data: nil, headers: nil, ip_ranges: nil)
         """
-        Gets the signed URL Suffix string for the Media CDN short token URL requests.
+        Gets the signed URL suffix string for the Media CDN short token URL requests.
         One of (`url_prefix`, `full_path`, `path_globs`) must be included in each input.
         Args:
             base64_key: a secret key as a base64 encoded string.
             signature_algorithm: an algorithm as `SHA1`, `SHA256`, or `Ed25519`.
             start_time: the start time as a UTC datetime object.
-            expiration_time: the expiration time as a UTC datetime object. If a value is not specified, an expiration time 5 mins from now will be used.
+            expiration_time: the expiration time as a UTC datetime object. If a value is not specified, the expiration time will be set to 5 mins from now.
             url_prefix: the URL prefix to sign, including protocol.
                         For example: http://example.com/path/ for URLs under /path or http://example.com/path?param=1
             full_path:  a full path to sign, starting with the first '/'.
