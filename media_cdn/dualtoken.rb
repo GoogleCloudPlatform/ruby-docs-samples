@@ -20,7 +20,6 @@ require "ed25519"
 
 class Dualtoken
   def base64_encoder value
-
     #   Returns a base64-encoded string compatible with Media CDN.
     #
     #   Media CDN uses URL-safe base64 encoding and strips off the padding at the end.

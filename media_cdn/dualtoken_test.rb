@@ -19,8 +19,8 @@ require "test/unit"
 
 class DualTokenAuthTestCase < Test::Unit::TestCase
   def setup
-    @start_time = Time.utc(2022,9,13,0)
-    @expires_time = Time.utc(2022,9,13,12)
+    @start_time = Time.utc 2022, 9, 13, 0
+    @expires_time = Time.utc 2022, 9, 13, 12
     @session_id = "test-id"
     @data = "test-data"
     @ip_ranges = "203.0.113.0/24,2001:db8:4a7f:a732/64"
