@@ -20,11 +20,11 @@ require "ed25519"
 
 class Dualtoken
   def base64_encoder value
-    #
+
     #   Returns a base64-encoded string compatible with Media CDN.
     #
     #   Media CDN uses URL-safe base64 encoding and strips off the padding at the end.
-    #
+
     encoded_str = Base64.urlsafe_encode64(value).encode("utf-8")
     encoded_str.delete "="
   end
@@ -91,7 +91,7 @@ class Dualtoken
       tokens.append field
       to_sign.append field
     else
-      raise "User input missing: One of `url_prefix`, `full_path`, or `path_globs` must be specified."
+      raise "User input missing: one of `url_prefix`, `full_path`, or `path_globs` must be specified."
     end
 
     # check & parse optional params
