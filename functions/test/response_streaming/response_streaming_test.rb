@@ -20,9 +20,10 @@ describe "functions_response_streaming" do
 
   it "response streamed successfully" do
     load_temporary "response_streaming/app.rb" do
-      request = make_post_request "http://example.com:8080/", ""
+      request = make_post_request "http://example.com:8080/?name=Ruby", ""
       response = call_http "stream_big_query", request
       assert_equal 200, response.status
+      assert_equal 1000, response.body.count
     end
   end
 end

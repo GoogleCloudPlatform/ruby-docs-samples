@@ -18,6 +18,7 @@ gem "functions_framework", "~> 1.0"
 
 group "test" do
   gem "google-apis-kgsearch_v1", "~> 0.2"
+  gem "google-cloud-bigquery", "~> 1.42"
   gem "google-cloud-firestore", "~> 2.4"
   gem "google-cloud-storage", "~> 1.30"
   gem "google-cloud-vision", "~> 1.1"
