@@ -23,7 +23,7 @@ require "ed25519"
 # Returns a base64-encoded string compatible with Media CDN.
 #
 def base64_encoder value
-  encoded_str = Base64.urlsafe_encode64(value).encode("utf-8").delete "="
+  encoded_str = Base64.urlsafe_encode64(value, padding:false)
 end
 
 ##
