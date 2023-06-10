@@ -37,7 +37,7 @@ describe "Google Media CDN dual token test" do
         ).to eq "URLPrefix=aHR0cDovLzEwLjIwLjMwLjQwLw~Expires=1663070400~Signature=OQLXEjnApFGJaGZ_jvp2R7VY5q3ic-HT3igFpi9iPsJRXtQuvPF4cxZUT-rtCqzteXx3vSRhk09FxgDQauO_DA"
     end
 
-    it "test_sign_token_for_ed25519_url_prefix" do
+    it "test_sign_token_for_ed25519_path_glob" do
         expect(
             sign_token(
                 base64_key: "DJUcnLguVFKmVCFnWGubG1MZg7fWAnxacMjKDhVZMGI=",
@@ -173,4 +173,3 @@ describe "Google Media CDN dual token test" do
         ).to eq "PathGlobs=/*~Starts=1663027200~Expires=1663070400~SessionID=test-id~Data=test-data~Headers=Foo,BAZ~IPRanges=MjAzLjAuMTEzLjAvMjQsMjAwMTpkYjg6NGE3ZjphNzMyLzY0~hmac=dda9c3d6f3b2e867a09fbb76209ea138dd81f8512210f970d1e92f90927bef4b"
     end
 end
-

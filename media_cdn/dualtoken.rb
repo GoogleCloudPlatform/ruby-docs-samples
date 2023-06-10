@@ -18,18 +18,21 @@ require "time"
 require "openssl"
 require "ed25519"
 
-##
+# Encodes the string with Base64 compatible with Media CDN.
 # Media CDN uses URL-safe base64 encoding and strips off the padding at the end.
-# Returns a base64-encoded string compatible with Media CDN.
 #
-def base64_encoder value
-  encoded_str = Base64.urlsafe_encode64(value, padding:false)
+# @param value [String] string to encode
+# @return [String] encoded string
+def base64_encode value
+  encoded_str = Base64.urlsafe_encode64 value, padding: false
 end
 
-##
-# header names
-# Returns an array that aggregates all header names
+# Header names
+# Returns a string that aggregates all header names, separated by ",".
 #
+# @param headers [Array<Hash<String,String>]] headers
+#
+# @return [String] the aggregated string
 def header_names headers
   header_names = []
   headers.each do |header|
@@ -38,11 +41,13 @@ def header_names headers
   header_names.join ","
 end
 
-##
-# header pairs
-# Returns an array that aggregates all header names and values,
-# with each follows name=value format
+# Header pairs
+# Returns a string that aggregates all header name and value pairs,
+# with each follows name=value format, separated by ','
 #
+# @param headers [Array<Hash<String,String>]] headers
+#
+# @return [String] the aggregated string
 def header_pairs headers
   header_pairs = []
   headers.each do |header|
@@ -51,37 +56,35 @@ def header_pairs headers
   header_pairs.join ","
 end
 
-##
 # Gets the signed URL suffix string for the Media CDN short token URL requests.
 # One of (`url_prefix`, `full_path`, `path_globs`) must be included in each input.
 #
-# Args:
-# - @param [String] base64_key: a secret key as a base64 encoded string.
-# - @param [Symbol] signature_algorithm: an algorithm as `:SHA1`, `:SHA256`, or `:Ed25519`.
-# - @param [Time object] start_time: the start time as a Time object.
-# - @param [Time object] expiration_time: the expiration time as a Time object.
-#                                         If a value is not specified, the expiration time will be set to 5 mins from now.
-# - @param [String] url_prefix: the URL prefix to sign, including protocol.
-#                               For example: http://example.com/path/ for URLs under /path
-#                               or http://example.com/path?param=1
-# - @param [String] full_path: a full path to sign, starting with the first '/'.
-#                              For example: /path/to/content.mp4
-# - @param [String] path_globs: a set of ','- or '!'- delimited strings.
-#                               For example: /tv/*!/film/* to sign paths starting with /tv/ or /film/ in any URL.
-# - @param [String] session_id: a unique identifier for the session.
-# - @param [String] data: an arbitrary data payload to include in the token.
-# - @param [Array] headers: the header name and value should follow name:value format.
-#                           May be specified more than once.
-#                           For example: [{'name': 'foo', 'value': 'bar'},
-#                                         {'name': 'baz', 'value': 'qux'}]
-# - @param [String] ip_ranges: a list of comma-separated IP ranges.
-#                              Both IPv4 and IPv6 ranges are acceptable.
-#                              For example: '203.0.113.0/24,2001:db8:4a7f:a732/64'
+# @param base64_key [String] a secret key as a base64 encoded string.
+# @param signature_algorithm [Symbol] an algorithm as `:SHA1`, `:SHA256`, or `:Ed25519`.
+# @param start_time [Time] the start time as a Time object.
+# @param expiration_time [Time] the expiration time as a Time object.
+#                               If a value is not specified, the expiration time will be set to 5 mins from now.
+# @param url_prefix [String] the URL prefix to sign, including protocol.
+#                            For example: http://example.com/path/ for URLs
+#                            under /path or http://example.com/path?param=1
+# @param full_path [String] a full path to sign, starting with the first '/'.
+#                           For example: /path/to/content.mp4
+# @param path_globs [String] a set of ','- or '!'- delimited strings.
+#                            For example: /tv/*!/film/* to sign paths starting with /tv/ or /film/ in any URL.
+# @param session_id [String] a unique identifier for the session.
+# @param data [String] an arbitrary data payload to include in the token.
+# @param headers [Array<Hash<String,String>>] array of header name and value pairs.
+#                                             For example:
+#                                             [{'name': 'foo', 'value': 'bar'},
+#                                              {'name': 'baz', 'value': 'qux'}]
+# @param ip_ranges [String] a list of comma-separated IP ranges.
+#                           Both IPv4 and IPv6 ranges are acceptable.
+#                           For example: '203.0.113.0/24,2001:db8:4a7f:a732/64'
 #
-# Returns:
-# - @return [String] The Signed URL appended with the query parameters
-#     based on the specified URL prefix and configuration.
+# @return [String] The Signed URL appended with the query parameters,
+#                  based on the specified URL prefix and configuration.
 #
+# @raise [ArgumentError] any of the required arguments are missing.
 def sign_token(
   base64_key:,
   signature_algorithm:,
@@ -112,13 +115,11 @@ def sign_token(
     tokens.append "FullPath"
     to_sign.append "FullPath=#{full_path}"
   elsif !path_globs.nil?
-    path_globs = path_globs.strip
-    field = "PathGlobs=#{path_globs}"
+    field = "PathGlobs=#{path_globs.strip}"
     tokens.append field
     to_sign.append field
   elsif !url_prefix.nil?
-    encoded_url_prefix = base64_encoder(url_prefix).encode("utf-8")
-    field = "URLPrefix=#{encoded_url_prefix}"
+    field = "URLPrefix=#{base64_encode url_prefix}"
     tokens.append field
     to_sign.append field
   else
@@ -162,8 +163,7 @@ def sign_token(
 
   # ip-range
   unless ip_ranges.nil?
-    encoded_ip_ranges = base64_encoder(ip_ranges.encode("ascii"))
-    field = "IPRanges=#{encoded_ip_ranges}"
+    field = "IPRanges=#{base64_encode ip_ranges}"
     tokens.append field
     to_sign.append field
   end
@@ -175,7 +175,7 @@ def sign_token(
   case algo
   when :ed25519
     digest = Ed25519::SigningKey.new(decoded_key).sign(to_sign_bytes)
-    signature = base64_encoder digest
+    signature = base64_encode digest
     tokens.append "Signature=#{signature}"
   # SHA256
   when :sha256
@@ -193,5 +193,4 @@ def sign_token(
   end
   tokens.join "~"
 end
-
 # [END mediacdn_dualtoken_sign_token]
