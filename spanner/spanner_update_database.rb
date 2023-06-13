@@ -27,9 +27,12 @@ def spanner_update_database project_id:, instance_id:, database_id:
   db_path = client.database_path project: project_id, instance: instance_id, database: database_id
   database = client.get_database name: db_path
 
+  puts "Updating database #{database.name}"
   database.enable_drop_protection = true
   job = client.update_database database: database, update_mask: { paths: ["enable_drop_protection"] }
+  puts "Waiting for update operation for #{database.name} to complete..."
   job.wait_until_done!
+  puts "Updated database #{database.name}"
 end
 
 # [END spanner_update_database]
