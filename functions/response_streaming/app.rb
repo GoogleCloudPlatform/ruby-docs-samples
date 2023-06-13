@@ -13,7 +13,6 @@
 # limitations under the License.
 
 # [START functions_response_streaming]
-
 require "functions_framework"
 require "google/cloud/bigquery"
 
@@ -37,5 +36,4 @@ FunctionsFramework.http "stream_big_query" do |_request|
   end
   [200, {}, body]
 end
-
 # [END functions_response_streaming]
