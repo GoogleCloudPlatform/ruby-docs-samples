@@ -1,4 +1,4 @@
-# Copyright 2020 Google LLC
+# Copyright 2023 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,20 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-source "https://rubygems.org"
+require "minitest/autorun"
+require "functions_framework/testing"
 
-gem "functions_framework", "~> 1.0"
+describe "functions_response_streaming" do
+  include FunctionsFramework::Testing
 
-group "test" do
-  gem "google-apis-kgsearch_v1", "~> 0.2"
-  gem "google-cloud-bigquery", "~> 1.42"
-  gem "google-cloud-firestore", "~> 2.4"
-  gem "google-cloud-storage", "~> 1.30"
-  gem "google-cloud-vision", "~> 1.1"
-  gem "mini_magick", "~> 4.11"
-  gem "minitest", "~> 5.16"
-  gem "minitest-focus", "~> 1.1"
-  gem "minitest-junit", "~> 1.1"
-  gem "rake", ">= 12.0"
-  gem "slack-ruby-client", ">= 1.0", "< 3"
+  it "response streamed successfully" do
+    load_temporary "response_streaming/app.rb" do
+      request = make_post_request "http://example.com:8080/?name=Ruby", ""
+      response = call_http "stream_big_query", request
+      assert_equal 200, response.status
+      assert_equal 1000, response.body.count
+    end
+  end
 end
