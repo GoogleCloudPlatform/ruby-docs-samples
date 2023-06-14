@@ -21,7 +21,7 @@ FunctionsFramework.http "hello_http" do |request|
   # The request parameter is a Rack::Request object.
   # See https://www.rubydoc.info/gems/rack/Rack/Request
   name = request.params["name"] ||
-         (JSON.parse(request.body.read)["name"] rescue nil) ||
+         (request.body.rewind && JSON.parse(request.body.read)["name"] rescue nil) ||
          "World"
   # Return the response body as a string.
   # You can also return a Rack::Response object, a Rack response array, or
