@@ -85,6 +85,8 @@ end
 #                  based on the specified URL prefix and configuration.
 #
 # @raise [ArgumentError] any of the required arguments are missing.
+#
+# rubocop:disable Metrics/PerceivedComplexity
 def sign_token(
   base64_key:,
   signature_algorithm:,
@@ -193,4 +195,6 @@ def sign_token(
   end
   tokens.join "~"
 end
+# rubocop:enable Metrics/PerceivedComplexity
+#
 # [END mediacdn_dualtoken_sign_token]
