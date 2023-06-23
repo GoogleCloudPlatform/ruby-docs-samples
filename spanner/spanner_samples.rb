@@ -973,7 +973,9 @@ def spanner_batch_client project_id:, instance_id:, database_id:
   batch_snapshot = batch_client.batch_snapshot strong: true
 
   # Get partitions for specified query
-  partitions       = batch_snapshot.partition_query "SELECT SingerId, FirstName, LastName FROM Singers"
+  # data_boost_enabled option is an optional parameter which can be used for partition read
+  # and query to execute the request via spanner independent compute resources.
+  partitions       = batch_snapshot.partition_query "SELECT SingerId, FirstName, LastName FROM Singers", data_boost_enabled: true
   total_partitions = partitions.size
 
   # Enqueue a new thread pool job
