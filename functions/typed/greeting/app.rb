@@ -1,4 +1,4 @@
-# Copyright 2020 Google LLC
+# Copyright 2023 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,20 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-source "https://rubygems.org"
+# [START functions_typed_greeting]
+require "functions_framework"
 
-gem "functions_framework", "~> 1.4", ">= 1.4.1"
-
-group "test" do
-  gem "google-apis-kgsearch_v1", "~> 0.2"
-  gem "google-cloud-bigquery", "~> 1.42"
-  gem "google-cloud-firestore", "~> 2.4"
-  gem "google-cloud-storage", "~> 1.30"
-  gem "google-cloud-vision", "~> 1.1"
-  gem "mini_magick", "~> 4.11"
-  gem "minitest", "~> 5.16"
-  gem "minitest-focus", "~> 1.1"
-  gem "minitest-junit", "~> 1.1"
-  gem "rake", ">= 12.0"
-  gem "slack-ruby-client", ">= 1.0", "< 3"
+FunctionsFramework.typed "greeting" do |req|
+  {
+    message: "Hello #{req['first_name']} #{req['last_name']}!"
+  }
 end
+# [END functions_typed_greeting]
