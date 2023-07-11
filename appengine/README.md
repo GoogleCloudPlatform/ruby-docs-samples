@@ -59,7 +59,7 @@ variables to run most tests in this directory:
   * `TEST_DIR`: This is the relative path of the directory you're testing (e.g. `appengine/analytics`).
   * `BUILD_ID`: A unique ID for deployments.
   * `GOOGLE_APPLICATION_CREDENTIALS`: Path to credentials json file
-  *  `E2E_GOOGLE_CLOUD_PROJECT`: Project ID to deploy
+  * `E2E_GOOGLE_CLOUD_PROJECT`: Project ID to deploy
 
 Then run:
 
