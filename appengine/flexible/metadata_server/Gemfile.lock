@@ -14,10 +14,18 @@ GEM
       xpath (~> 3.2)
     cliver (0.3.2)
     diff-lcs (1.5.0)
+    faraday (2.7.10)
+      faraday-net_http (>= 2.0, < 3.1)
+      ruby2_keywords (>= 0.0.4)
+    faraday-net_http (3.0.2)
     matrix (0.4.2)
     mini_mime (1.1.2)
+    mini_portile2 (2.8.2)
     mustermann (3.0.0)
       ruby2_keywords (~> 0.0.1)
+    nokogiri (1.14.3)
+      mini_portile2 (~> 2.8.0)
+      racc (~> 1.4)
     nokogiri (1.14.3-x86_64-linux)
       racc (~> 1.4)
     poltergeist (1.18.1)
@@ -62,15 +70,20 @@ GEM
       nokogiri (~> 1.8)
 
 PLATFORMS
+  ruby
   x86_64-linux
 
 DEPENDENCIES
   capybara
+  faraday
   poltergeist
   rspec
   rspec_junit_formatter
   sinatra
   webrick
+
+RUBY VERSION
+   ruby 3.2.1p31
 
 BUNDLED WITH
    2.4.12
