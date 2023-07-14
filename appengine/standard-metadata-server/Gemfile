@@ -18,9 +18,7 @@ gem "sinatra", "~>2.2"
 gem "webrick", "~> 1.7"
 
 group :test do
-  gem "capybara"
   gem "faraday"
-  gem "poltergeist"
   gem "rspec"
   gem "rspec_junit_formatter"
 end
