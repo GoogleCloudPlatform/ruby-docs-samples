@@ -14,10 +14,7 @@
 
 require File.expand_path("../../../spec/e2e", __dir__)
 require "rspec"
-require "capybara/rspec"
-require "capybara/poltergeist"
-
-Capybara.default_driver = :poltergeist
+require "faraday"
 
 describe "Metadata server on Google App Engine", type: :feature do
   before :all do
@@ -27,9 +24,9 @@ describe "Metadata server on Google App Engine", type: :feature do
   end
 
   it "displays IP address read from metadata server" do
-    visit @url
+    response = Faraday.get @url
 
-    expect(page.body).to match(
+    expect(response.body).to match(
       /External IP: \d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/
     )
   end

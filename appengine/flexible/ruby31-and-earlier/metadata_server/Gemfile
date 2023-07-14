@@ -17,8 +17,7 @@ source "https://rubygems.org"
 gem "sinatra"
 
 group :test do
-  gem "capybara"
-  gem "poltergeist"
+  gem "faraday"
   gem "rspec"
   gem "rspec_junit_formatter"
 end
