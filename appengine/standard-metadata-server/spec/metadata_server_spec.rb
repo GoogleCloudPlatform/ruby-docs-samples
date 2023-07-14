@@ -24,7 +24,7 @@ describe "Metadata server on Google App Engine", type: :feature do
   end
 
   it "displays zone read from metadata server" do
-    response = Faraday.get(@url)
+    response = Faraday.get @url
 
     expect(response.body).to match(
       /Zone: .*/

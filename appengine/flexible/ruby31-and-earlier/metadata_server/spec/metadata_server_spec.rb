@@ -24,7 +24,7 @@ describe "Metadata server on Google App Engine", type: :feature do
   end
 
   it "displays IP address read from metadata server" do
-    response = Faraday.get(@url)
+    response = Faraday.get @url
 
     expect(response.body).to match(
       /External IP: \d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/
