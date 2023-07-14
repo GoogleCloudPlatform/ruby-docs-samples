@@ -14,7 +14,7 @@
 
 require File.expand_path("../../../spec/e2e", __dir__)
 require "rspec"
-require 'faraday'
+require "faraday"
 
 describe "Metadata server on Google App Engine", type: :feature do
   before :all do
