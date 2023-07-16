@@ -1,4 +1,4 @@
-FROM debian:jessie
+FROM debian:bookworm
 
 ENV RACK_ENV production
 
