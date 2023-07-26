@@ -22,7 +22,7 @@ require "google/cloud/spanner"
 # @param instance_id [String] The ID of the spanner instance.
 # @param database_id [String] The ID of the database.
 #
-def spanner_create_table_with_foreign_key_delete_cascade project_id:, instance_id:, database_id:   
+def spanner_create_table_with_foreign_key_delete_cascade project_id:, instance_id:, database_id:
   db_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin
 
   database_path = db_admin_client.database_path project: project_id,
@@ -30,23 +30,22 @@ def spanner_create_table_with_foreign_key_delete_cascade project_id:, instance_i
                                                 database: database_id
 
   job = db_admin_client.update_database_ddl database: database_path, statements: [
-    "CREATE TABLE Customers (\
-        CustomerId INT64 NOT NULL,\
-        CustomerName STRING(62) NOT NULL,\
-    ) PRIMARY KEY (CustomerId)",
-    "CREATE TABLE ShoppingCarts (\
-        CartId INT64 NOT NULL,\
-        CustomerId INT64 NOT NULL,\
-        CustomerName STRING(62) NOT NULL,\
-        CONSTRAINT FKShoppingCartsCustomerId FOREIGN KEY (CustomerId)\
-        REFERENCES Customers (CustomerId) ON DELETE CASCADE\
-    ) PRIMARY KEY (CartId)"
+    %{ CREATE TABLE Customers (
+        CustomerId INT64 NOT NULL,
+        CustomerName STRING(62) NOT NULL,
+        ) PRIMARY KEY (CustomerId)},
+    %{ CREATE TABLE ShoppingCarts (
+        CartId INT64 NOT NULL,
+        CustomerId INT64 NOT NULL,
+        CustomerName STRING(62) NOT NULL,
+        CONSTRAINT FKShoppingCartsCustomerId FOREIGN KEY (CustomerId)
+        REFERENCES Customers (CustomerId) ON DELETE CASCADE
+    ) PRIMARY KEY (CartId)}
   ]
 
   puts "Waiting for operation to complete..."
   job.wait_until_done!
-  puts "Created Customers and ShoppingCarts table with FKShoppingCartsCustomerId \
-  foreign key constraint on database #{database_id} on instance #{instance_id}"
- 
+  puts "Created Customers and ShoppingCarts table with FKShoppingCartsCustomerId " +
+       "foreign key constraint on database #{database_id} on instance #{instance_id}"
 end
 # [END spanner_create_table_with_foreign_key_delete_cascade]

@@ -28,7 +28,7 @@ def spanner_alter_table_with_foreign_key_delete_cascade project_id:, instance_id
   database_path = db_admin_client.database_path project: project_id,
                                                 instance: instance_id,
                                                 database: database_id
-  
+
 
   job = db_admin_client.update_database_ddl database: database_path, statements: [
     "ALTER TABLE ShoppingCarts\
@@ -40,8 +40,7 @@ def spanner_alter_table_with_foreign_key_delete_cascade project_id:, instance_id
 
   puts "Waiting for operation to complete..."
   job.wait_until_done!
-  puts "Altered ShoppingCarts table with FKShoppingCartsCustomerName\
-        foreign key constraint on database #{database_id} on instance #{instance_id}"
- 
+  puts "Altered ShoppingCarts table with FKShoppingCartsCustomerName" +
+       "foreign key constraint on database #{database_id} on instance #{instance_id}"
 end
 # [END spanner_alter_table_with_foreign_key_delete_cascade]

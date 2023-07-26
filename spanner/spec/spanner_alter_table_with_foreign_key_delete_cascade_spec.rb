@@ -19,7 +19,7 @@ require_relative "../spanner_create_table_with_foreign_key_delete_cascade"
 
 describe "Google Cloud Spanner Foreign key cascade examples" do
   before :each do
-    @fkdc_database_id = @database_id+"fkdc"
+    @fkdc_database_id = @database_id + "fkdc"
     @fkdc_database = create_test_database @fkdc_database_id
     spanner_create_table_with_foreign_key_delete_cascade project_id: @project_id,
                                                            instance_id: @instance_id,
@@ -39,7 +39,7 @@ describe "Google Cloud Spanner Foreign key cascade examples" do
     end
 
     expect(captured_output).to include 
-    "Altered ShoppingCarts table with FKShoppingCartsCustomerName\
-    foreign key constraint on database #{@fkdc_database_id} on instance #{@instance_id}"
+    "Altered ShoppingCarts table with FKShoppingCartsCustomerName " +
+    "foreign key constraint on database #{@fkdc_database_id} on instance #{@instance_id}"
   end
 end

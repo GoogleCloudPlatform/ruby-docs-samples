@@ -39,7 +39,7 @@ describe "Google Cloud Spanner Foreign key cascade examples" do
     end
 
     expect(captured_output).to include 
-    "Altered ShoppingCarts table to drop FKShoppingCartsCustomerName\
-    foreign key constraint on database #{@fkdc_database_id} on instance #{@instance_id}"
+    "Altered ShoppingCarts table to drop FKShoppingCartsCustomerName " +
+    "foreign key constraint on database #{@fkdc_database_id} on instance #{@instance_id}"
   end
 end
