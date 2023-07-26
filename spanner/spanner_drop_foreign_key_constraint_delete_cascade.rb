@@ -37,7 +37,7 @@ def spanner_drop_foreign_key_constraint_delete_cascade project_id:, instance_id:
 
   puts "Waiting for operation to complete..."
   job.wait_until_done!
-  puts "Altered ShoppingCarts table to drop FKShoppingCartsCustomerName " +
-       "foreign key constraint on database #{database_id} on instance #{instance_id}"
+  puts "Altered ShoppingCarts table to drop FKShoppingCartsCustomerName\
+        foreign key constraint on database #{database_id} on instance #{instance_id}"
 end
 # [END spanner_drop_foreign_key_constraint_delete_cascade]

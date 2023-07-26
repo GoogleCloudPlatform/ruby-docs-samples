@@ -45,7 +45,7 @@ def spanner_create_table_with_foreign_key_delete_cascade project_id:, instance_i
 
   puts "Waiting for operation to complete..."
   job.wait_until_done!
-  puts "Created Customers and ShoppingCarts table with FKShoppingCartsCustomerId " +
-       "foreign key constraint on database #{database_id} on instance #{instance_id}"
+  puts "Created Customers and ShoppingCarts table with FKShoppingCartsCustomerId \
+  foreign key constraint on database #{database_id} on instance #{instance_id}"
 end
 # [END spanner_create_table_with_foreign_key_delete_cascade]
