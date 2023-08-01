@@ -10,6 +10,8 @@ and staffing agencies to improve job site engagement and candidate conversion.
 
 [jobs_docs]: https://cloud.google.com/job-discovery/docs/
 
+## Google Cloud Jobs v3 is [deprecated](https://cloud.google.com/talent-solution/job-search/docs/migrate). Please refer [google-cloud-talent](https://github.com/googleapis/google-cloud-ruby/tree/main/google-cloud-talent) for newer implementation. 
+
 ## Setup
 
 ### Authentication
