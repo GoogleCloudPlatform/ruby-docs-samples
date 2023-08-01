@@ -38,6 +38,5 @@ def spanner_create_sequence project_id:, instance_id:, database_id:
   puts "Waiting for operation to complete..."
   job.wait_until_done!
   puts "Created Seq sequence and Customers table, where the key column CustomerId uses the sequence as a default value"
-
 end
 # [END spanner_create_sequence]

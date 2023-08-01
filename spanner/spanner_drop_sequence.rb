@@ -38,6 +38,5 @@ def spanner_drop_sequence project_id:, instance_id:, database_id:
   puts "Waiting for operation to complete..."
   job.wait_until_done!
   puts "Altered Customers table to drop DEFAULT from CustomerId column and dropped the Seq sequence"
-
 end
 # [END spanner_drop_sequence]

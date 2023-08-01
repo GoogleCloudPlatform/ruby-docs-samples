@@ -37,6 +37,5 @@ def spanner_alter_sequence project_id:, instance_id:, database_id:
   puts "Waiting for operation to complete..."
   job.wait_until_done!
   puts "Altered Seq sequence to skip an inclusive range between 1000 and 5000000"
-
 end
 # [END spanner_alter_sequence]
