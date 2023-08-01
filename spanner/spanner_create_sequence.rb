@@ -32,7 +32,7 @@ def spanner_create_sequence project_id:, instance_id:, database_id:
 
   job = db_admin_client.update_database_ddl database: database_path, statements: [
     "CREATE SEQUENCE Seq OPTIONS (sequence_kind = 'bit_reversed_positive')",
-    "CREATE TABLE Customers (CustomerId INT64 DEFAULT (GET_NEXT_SEQUENCE_VALUE('Seq')), CustomerName STRING(1024)) PRIMARY KEY (CustomerId)"
+    "CREATE TABLE Customers (CustomerId INT64 DEFAULT (GET_NEXT_SEQUENCE_VALUE(Sequence Seq)), CustomerName STRING(1024)) PRIMARY KEY (CustomerId)"
   ]
 
   puts "Waiting for operation to complete..."
