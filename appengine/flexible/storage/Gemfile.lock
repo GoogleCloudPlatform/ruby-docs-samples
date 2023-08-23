@@ -72,7 +72,7 @@ GEM
       cliver (~> 0.3.1)
       websocket-driver (>= 0.2.0)
     public_suffix (5.0.1)
-    puma (6.2.2)
+    puma (6.3.1)
       nio4r (~> 2.0)
     racc (1.6.2)
     rack (2.2.6.4)
