@@ -78,7 +78,7 @@ class E2E
 
     def cleanup()
       # determine build number
-      version = @url.match(/https:\/\/(.+)-dot-(.+).appspot.com/)
+      version = @url.match(/https:\/\/(.+)-dot-(.+)\.appspot\.com/)
       unless version
         puts "you must pass a build ID or define ENV[\"BUILD_ID\"]"
         return 1
