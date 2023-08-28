@@ -41,7 +41,7 @@ DEPENDENCIES
   rspec
   rspec_junit_formatter
   sinatra
-  webrick
+  webrick (~> 1.8)
 
 RUBY VERSION
    ruby 3.2.2p53

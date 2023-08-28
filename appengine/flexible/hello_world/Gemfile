@@ -16,10 +16,10 @@
 source "https://rubygems.org"
 
 gem "sinatra"
-gem "webrick", "~> 1.7"
+gem "webrick", "~> 1.8"
 
 # [END gae_flex_quickstart_dependencies]
-ruby "~>3.2.1"
+ruby "~>3.2"
 group :test do
   gem "rack-test"
   gem "rspec"
