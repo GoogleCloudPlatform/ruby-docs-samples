@@ -1,70 +1,76 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    addressable (2.6.0)
-      public_suffix (>= 2.0.2, < 4.0)
-    capybara (3.18.0)
+    addressable (2.8.5)
+      public_suffix (>= 2.0.2, < 6.0)
+    capybara (3.39.2)
       addressable
+      matrix
       mini_mime (>= 0.1.3)
       nokogiri (~> 1.8)
       rack (>= 1.6.0)
       rack-test (>= 0.6.3)
-      regexp_parser (~> 1.2)
+      regexp_parser (>= 1.5, < 3.0)
       xpath (~> 3.2)
     cliver (0.3.2)
-    daemons (1.3.1)
-    diff-lcs (1.3)
+    daemons (1.4.1)
+    diff-lcs (1.5.0)
     eventmachine (1.2.7)
-    faye-websocket (0.10.7)
+    faye-websocket (0.11.3)
       eventmachine (>= 0.12.0)
       websocket-driver (>= 0.5.1)
-    mini_mime (1.0.1)
-    mini_portile2 (2.4.0)
-    mustermann (1.0.3)
-    nokogiri (1.10.3)
-      mini_portile2 (~> 2.4.0)
+    matrix (0.4.2)
+    mini_mime (1.1.5)
+    mustermann (3.0.0)
+      ruby2_keywords (~> 0.0.1)
+    nokogiri (1.15.4-x86_64-linux)
+      racc (~> 1.4)
     poltergeist (1.18.1)
       capybara (>= 2.1, < 4)
       cliver (~> 0.3.1)
       websocket-driver (>= 0.2.0)
-    public_suffix (3.0.3)
-    rack (2.0.7)
-    rack-protection (2.0.5)
-      rack
-    rack-test (1.1.0)
-      rack (>= 1.0, < 3)
-    regexp_parser (1.4.0)
-    rspec (3.8.0)
-      rspec-core (~> 3.8.0)
-      rspec-expectations (~> 3.8.0)
-      rspec-mocks (~> 3.8.0)
-    rspec-core (3.8.0)
-      rspec-support (~> 3.8.0)
-    rspec-expectations (3.8.3)
+    public_suffix (5.0.3)
+    racc (1.7.1)
+    rack (2.2.8)
+    rack-protection (3.1.0)
+      rack (~> 2.2, >= 2.2.4)
+    rack-test (2.1.0)
+      rack (>= 1.3)
+    regexp_parser (2.8.1)
+    rspec (3.12.0)
+      rspec-core (~> 3.12.0)
+      rspec-expectations (~> 3.12.0)
+      rspec-mocks (~> 3.12.0)
+    rspec-core (3.12.2)
+      rspec-support (~> 3.12.0)
+    rspec-expectations (3.12.3)
       diff-lcs (>= 1.2.0, < 2.0)
-      rspec-support (~> 3.8.0)
-    rspec-mocks (3.8.0)
+      rspec-support (~> 3.12.0)
+    rspec-mocks (3.12.6)
       diff-lcs (>= 1.2.0, < 2.0)
-      rspec-support (~> 3.8.0)
-    rspec-support (3.8.0)
-    sinatra (2.0.5)
-      mustermann (~> 1.0)
-      rack (~> 2.0)
-      rack-protection (= 2.0.5)
+      rspec-support (~> 3.12.0)
+    rspec-support (3.12.1)
+    rspec_junit_formatter (0.6.0)
+      rspec-core (>= 2, < 4, != 2.12.0)
+    ruby2_keywords (0.0.5)
+    sinatra (3.1.0)
+      mustermann (~> 3.0)
+      rack (~> 2.2, >= 2.2.4)
+      rack-protection (= 3.1.0)
       tilt (~> 2.0)
-    thin (1.7.2)
+    thin (1.8.2)
       daemons (~> 1.0, >= 1.0.9)
       eventmachine (~> 1.0, >= 1.0.4)
       rack (>= 1, < 3)
-    tilt (2.0.9)
-    websocket-driver (0.7.0)
+    tilt (2.2.0)
+    websocket-driver (0.7.6)
       websocket-extensions (>= 0.1.0)
-    websocket-extensions (0.1.3)
+    websocket-extensions (0.1.5)
     xpath (3.2.0)
       nokogiri (~> 1.8)
 
 PLATFORMS
-  ruby
+  x86_64-linux
 
 DEPENDENCIES
   capybara
@@ -72,8 +78,9 @@ DEPENDENCIES
   poltergeist
   rack-test
   rspec
+  rspec_junit_formatter
   sinatra
   thin
 
 BUNDLED WITH
-   1.17.1
+   2.4.19
