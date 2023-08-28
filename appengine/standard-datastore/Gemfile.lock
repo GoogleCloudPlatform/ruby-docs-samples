@@ -115,8 +115,8 @@ DEPENDENCIES
   google-cloud-datastore (~> 2.2)
   rspec
   rspec_junit_formatter
-  sinatra
-  webrick
+  sinatra (~> 3.1)
+  webrick (~> 1.8)
 
 BUNDLED WITH
    2.4.19

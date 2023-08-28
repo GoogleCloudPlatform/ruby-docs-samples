@@ -39,11 +39,11 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  puma
+  puma (~> 6.3)
   rack-test
   rspec
   rspec_junit_formatter
-  sinatra
+  sinatra (~> 3.1)
 
 BUNDLED WITH
    2.4.19

@@ -59,7 +59,7 @@ DEPENDENCIES
   rspec
   rspec_junit_formatter
   rubysl-securerandom
-  sinatra
+  sinatra (~> 3.1)
 
 BUNDLED WITH
    2.4.19
