@@ -16,8 +16,8 @@
 source "https://rubygems.org"
 
 gem "google-cloud-datastore", "~>2.2"
-gem "sinatra", "~>2.2"
-gem "webrick", "~> 1.7"
+gem "sinatra" #, "~>2.2"
+gem "webrick" #, "~> 1.7"
 # [END gae_standard_datastore_config]
 
 group :test do

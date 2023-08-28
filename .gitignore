@@ -1,4 +1,5 @@
 .ruby-version
+.ruby-gemset
 client_secrets.json
 .bundle/
 vendor/
