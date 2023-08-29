@@ -10,3 +10,4 @@ sponge_log.xml
 */.idea
 .idea
 tmp/
+log/
