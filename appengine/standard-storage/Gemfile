@@ -15,13 +15,13 @@
 # [START gae_standard_storage_dependencies]
 source "https://rubygems.org"
 
-gem "google-cloud-storage", "~>1.36"
-gem "sinatra", "~>2.2"
-gem "webrick", "~> 1.7"
+gem "google-cloud-storage", "~>1.44"
+gem "sinatra", "~>3.1"
+gem "webrick", "~> 1.8"
 # [END gae_standard_storage_dependencies]
 
 group :test do
-  gem "capybara", "~>3.38"
+  gem "capybara", "~>3.39"
   gem "poltergeist"
   gem "puma"
   gem "rspec"

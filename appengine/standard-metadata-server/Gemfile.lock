@@ -6,34 +6,34 @@ GEM
       faraday-net_http (>= 2.0, < 3.1)
       ruby2_keywords (>= 0.0.4)
     faraday-net_http (3.0.2)
-    mustermann (1.1.1)
+    mustermann (3.0.0)
       ruby2_keywords (~> 0.0.1)
-    rack (2.2.3)
-    rack-protection (2.2.0)
-      rack
-    rspec (3.11.0)
-      rspec-core (~> 3.11.0)
-      rspec-expectations (~> 3.11.0)
-      rspec-mocks (~> 3.11.0)
-    rspec-core (3.11.0)
-      rspec-support (~> 3.11.0)
-    rspec-expectations (3.11.0)
+    rack (2.2.8)
+    rack-protection (3.1.0)
+      rack (~> 2.2, >= 2.2.4)
+    rspec (3.12.0)
+      rspec-core (~> 3.12.0)
+      rspec-expectations (~> 3.12.0)
+      rspec-mocks (~> 3.12.0)
+    rspec-core (3.12.2)
+      rspec-support (~> 3.12.0)
+    rspec-expectations (3.12.3)
       diff-lcs (>= 1.2.0, < 2.0)
-      rspec-support (~> 3.11.0)
-    rspec-mocks (3.11.1)
+      rspec-support (~> 3.12.0)
+    rspec-mocks (3.12.6)
       diff-lcs (>= 1.2.0, < 2.0)
-      rspec-support (~> 3.11.0)
-    rspec-support (3.11.0)
-    rspec_junit_formatter (0.5.1)
+      rspec-support (~> 3.12.0)
+    rspec-support (3.12.1)
+    rspec_junit_formatter (0.6.0)
       rspec-core (>= 2, < 4, != 2.12.0)
     ruby2_keywords (0.0.5)
-    sinatra (2.2.0)
-      mustermann (~> 1.0)
-      rack (~> 2.2)
-      rack-protection (= 2.2.0)
+    sinatra (3.1.0)
+      mustermann (~> 3.0)
+      rack (~> 2.2, >= 2.2.4)
+      rack-protection (= 3.1.0)
       tilt (~> 2.0)
-    tilt (2.0.10)
-    webrick (1.7.0)
+    tilt (2.2.0)
+    webrick (1.8.1)
 
 PLATFORMS
   ruby
@@ -42,8 +42,8 @@ DEPENDENCIES
   faraday
   rspec
   rspec_junit_formatter
-  sinatra (~> 2.2)
-  webrick (~> 1.7)
+  sinatra (~> 3.1)
+  webrick (~> 1.8)
 
 BUNDLED WITH
-   1.17.3
+   2.4.19
