@@ -14,9 +14,9 @@
 require_relative "../app.rb"
 require "rspec"
 require "capybara/rspec"
-require "capybara/poltergeist"
+require "capybara/cuprite"
 
-Capybara.default_driver = :poltergeist
+Capybara.default_driver = :cuprite
 Capybara.server = :puma, { Silent: true }
 
 feature "Serving static files" do

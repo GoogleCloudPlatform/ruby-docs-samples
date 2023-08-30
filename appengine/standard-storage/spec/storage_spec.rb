@@ -15,11 +15,11 @@
 require_relative "../app.rb"
 require "rspec"
 require "capybara/rspec"
-require "capybara/poltergeist"
+require "capybara/cuprite"
 
 describe "Cloud Storage", type: :feature do
   before do
-    Capybara.current_driver = :poltergeist
+    Capybara.current_driver = :cuprite
   end
   it "can upload and get public URL of uploaded file" do
     Capybara.app = Sinatra::Application
