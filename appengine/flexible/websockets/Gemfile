@@ -9,7 +9,7 @@ gem "thin"
 
 group :test do
   gem "capybara"
-  gem "poltergeist"
+  gem "cuprite"
   gem "rack-test"
   gem "rspec"
   gem "rspec_junit_formatter"

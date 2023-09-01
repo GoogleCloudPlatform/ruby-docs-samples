@@ -22,7 +22,7 @@ gem "webrick", "~> 1.8"
 
 group :test do
   gem "capybara", "~>3.39"
-  gem "poltergeist"
+  gem "cuprite"
   gem "puma"
   gem "rspec"
   gem "rspec_junit_formatter"

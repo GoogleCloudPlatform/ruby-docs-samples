@@ -20,7 +20,7 @@ ruby "~>3.2"
 
 group :test do
   gem "capybara"
-  gem "poltergeist"
+  gem "cuprite"
   gem "puma"
   gem "rspec"
   gem "rspec_junit_formatter"
