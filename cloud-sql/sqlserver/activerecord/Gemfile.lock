@@ -112,7 +112,8 @@ GEM
       mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
     public_suffix (4.0.7)
-    puma (3.12.6)
+    puma (5.6.7)
+      nio4r (~> 2.0)
     racc (1.6.0)
     rack (2.2.3)
     rack-test (1.1.0)
@@ -227,9 +228,9 @@ DEPENDENCIES
   chromedriver-helper
   coffee-rails (~> 4.2)
   jbuilder (~> 2.5)
-  listen (>= 3.5, < 3.7)
+  listen (>= 3.5, < 3.8.1)
   mini_racer
-  puma (~> 3.11)
+  puma (~> 5.6)
   rails (~> 5.2.4)
   rspec-rails (~> 3.8)
   rspec_junit_formatter
