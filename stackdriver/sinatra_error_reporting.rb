@@ -39,7 +39,7 @@ get "/raise" do
   require "google/cloud/error_reporting"
 
   begin
-    raise "Raise an exception for Error Reporting."
+    raise "Something went wrong"
   rescue StandardError => e
     Google::Cloud::ErrorReporting.report e
   end
