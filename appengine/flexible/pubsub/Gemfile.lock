@@ -107,7 +107,7 @@ GEM
     webrick (1.8.1)
 
 PLATFORMS
-  x86_64-linux
+  ruby
 
 DEPENDENCIES
   google-cloud-pubsub

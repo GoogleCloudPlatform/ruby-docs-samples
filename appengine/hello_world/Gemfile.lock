@@ -33,7 +33,7 @@ GEM
     tilt (2.2.0)
 
 PLATFORMS
-  x86_64-linux
+  ruby
 
 DEPENDENCIES
   rack-test
