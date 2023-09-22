@@ -47,7 +47,7 @@ GEM
     nio4r (2.5.9)
     os (1.1.4)
     public_suffix (5.0.1)
-    puma (6.3.0)
+    puma (6.3.1)
       nio4r (~> 2.0)
     rack (3.0.8)
     representable (3.2.0)
@@ -76,7 +76,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  functions_framework (>= 1.4.1)
+  functions_framework (~> 1.4, >= 1.4.1)
   google-apis-kgsearch_v1 (~> 0.2)
   slack-ruby-client (>= 1.0, < 3)
 
