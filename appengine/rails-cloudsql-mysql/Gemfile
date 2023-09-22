@@ -61,6 +61,6 @@ end
 gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 # [START gems]
-gem "mysql2", "~> 0.5.5"
 gem "appengine", "~> 0.7"
+gem "mysql2", "~> 0.5.5"
 # [END gems]
