@@ -13,7 +13,7 @@
 
 require "spec_helper"
 
-Capybara.default_driver = :poltergeist
+Capybara.default_driver = :cuprite
 Capybara.server = :puma, { Silent: true }
 
 feature "Serving static files" do

@@ -29,9 +29,11 @@ GEM
       websocket-driver (>= 0.6, < 0.8)
     matrix (0.4.2)
     mini_mime (1.1.5)
+    mini_portile2 (2.8.4)
     mustermann (3.0.0)
       ruby2_keywords (~> 0.0.1)
-    nokogiri (1.15.4-x86_64-linux)
+    nokogiri (1.15.4)
+      mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     public_suffix (5.0.3)
     racc (1.7.1)
@@ -75,7 +77,7 @@ GEM
       nokogiri (~> 1.8)
 
 PLATFORMS
-  x86_64-linux
+  ruby
 
 DEPENDENCIES
   capybara

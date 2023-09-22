@@ -68,8 +68,7 @@ GEM
     webrick (1.8.1)
 
 PLATFORMS
-  x86_64-darwin-21
-  x86_64-linux
+  ruby
 
 DEPENDENCIES
   google-apis-jobs_v3 (~> 0.24)
