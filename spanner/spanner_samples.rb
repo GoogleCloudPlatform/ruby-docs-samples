@@ -2353,9 +2353,9 @@ def set_custom_timeout_and_retry project_id:, instance_id:, database_id:
   timeout = 60.0
   retry_policy = {
     initial_delay: 0.5,
-    max_delay:     64.0,
+    max_delay:     16.0,
     multiplier:    1.5,
-    retry_codes:   ["UNAVAILABLE", "DEADLINE_EXCEEDED"]
+    retry_codes:   ["UNAVAILABLE"]
   }
   call_options = { timeout: timeout, retry_policy: retry_policy }
 
