@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define version: 20_190_903_195_401 do
+ActiveRecord::Schema[7.0].define version: 20_231_006_092_705 do
   create_table "votes", force: :cascade do |t|
     t.string "candidate", null: false
     t.datetime "created_at", null: false
