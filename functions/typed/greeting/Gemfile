@@ -15,5 +15,5 @@
 source "https://rubygems.org"
 
 gem "functions_framework", "~> 1.4", ">= 1.4.1"
-gem "google-apis-kgsearch_v1", "~> 0.2"
-gem "slack-ruby-client", ">= 1.0", "< 3"
+gem "google-apis-kgsearch_v1", "~> 0.13"
+gem "slack-ruby-client", ">= 2.0", "< 3"
