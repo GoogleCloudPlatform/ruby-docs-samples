@@ -19,7 +19,7 @@ limitations under the License.
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js" integrity="sha256-53f7070cc4c81c278c72f7a106fd71434e766cf49b26d6ee8b0e1003d7132b3d"></script>
 </head>
 <body>
 <nav class="red lighten-1">
@@ -30,7 +30,7 @@ limitations under the License.
 <div class="section">
     <div class="center">
         <h4>
-            <%= if @tab_count == @space_count 
+            <%= if @tab_count == @space_count
                   "TABS and SPACES are evenly matched!"
                 elsif @tab_count > @space_count
                   "TABS are winning by #{@tab_count - @space_count} vote#{@tab_count - @space_count > 1 ? "s" : ""}!"
@@ -58,7 +58,7 @@ limitations under the License.
     </div>
     <h4 class="header center">Recent Votes</h4>
     <ul class="container collection center">
-      <% @recent_votes.each do |vote| %> 
+      <% @recent_votes.each do |vote| %>
       <%= render partial: "vote", locals: { vote: vote } %>
       <% end %>
     </ul>
