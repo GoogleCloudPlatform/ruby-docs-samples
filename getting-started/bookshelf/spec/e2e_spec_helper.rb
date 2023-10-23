@@ -12,10 +12,10 @@
 # limitations under the License.
 
 require "spec_helper"
-require "capybara/poltergeist"
+require "capybara/cuprite"
 
-# use the poltergeist (phantomjs) driver for the test
-Capybara.current_driver = :poltergeist
+# use the cuprite (qmake) driver for the test
+Capybara.current_driver = :cuprite
 Capybara.server = :webrick
 
 RSpec.configure do |config|

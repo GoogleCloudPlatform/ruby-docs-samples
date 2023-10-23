@@ -15,9 +15,9 @@
 require_relative "../app.rb"
 require "rspec"
 require "capybara/rspec"
-require "capybara/poltergeist"
+require "capybara/cuprite"
 
-Capybara.javascript_driver = :poltergeist
+Capybara.javascript_driver = :cuprite
 
 Capybara.app = Sinatra::Application
 

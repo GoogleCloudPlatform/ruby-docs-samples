@@ -17,7 +17,7 @@ require File.expand_path("../config/environment", __dir__)
 require File.expand_path("../../../../spec/e2e", __dir__)
 require "rspec/rails"
 require "capybara/rails"
-require "capybara/poltergeist"
+require "capybara/cuprite"
 require "rack/test"
 
 RSpec.configure do |config|

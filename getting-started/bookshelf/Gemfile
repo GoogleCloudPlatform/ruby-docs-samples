@@ -41,8 +41,7 @@ gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 group :test do
   gem "capybara"
-  gem "phantomjs", require: "phantomjs/poltergeist"
-  gem "poltergeist"
+  gem "cuprite"
   gem "rack-test"
   gem "rspec_junit_formatter"
   gem "rspec-rails"
