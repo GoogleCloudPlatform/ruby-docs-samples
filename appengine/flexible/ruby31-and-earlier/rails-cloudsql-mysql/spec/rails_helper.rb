@@ -6,14 +6,14 @@ abort "The Rails environment is running in production mode!" if Rails.env.produc
 require "spec_helper"
 require "rspec/rails"
 require "capybara/rspec"
-require "capybara/poltergeist"
+require "capybara/cuprite"
 
 require File.expand_path "../../../spec/e2e", __dir__
 
 # Checks for pending migration and applies them before tests are run.
 ActiveRecord::Migration.maintain_test_schema!
 
-Capybara.current_driver = :poltergeist
+Capybara.current_driver = :cuprite
 
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures

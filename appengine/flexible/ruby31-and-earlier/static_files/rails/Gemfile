@@ -22,7 +22,7 @@ gem "uglifier"
 
 group :test do
   gem "capybara"
-  gem "poltergeist"
+  gem "cuprite"
   gem "puma"
   gem "rspec_junit_formatter"
   gem "rspec-rails"
