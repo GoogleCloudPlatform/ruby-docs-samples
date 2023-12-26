@@ -14,8 +14,8 @@
 require "json"
 
 class E2E
+  attr_accessor :test_name
   class << self
-    attr_accessor :test_name
 
     def run?
       # Only run end-to-end tests when E2E environment variable is set to TRUE
