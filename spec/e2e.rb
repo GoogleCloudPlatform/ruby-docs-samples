@@ -15,6 +15,8 @@ require "json"
 
 class E2E
   class << self
+    attr_accessor :test_name
+
     def run?
       # Only run end-to-end tests when E2E environment variable is set to TRUE
       ENV["E2E"] == "true"
@@ -106,9 +108,9 @@ class E2E
 
     def versionize name
       version_name = name.tr "^A-Za-z0-9", ""
-      name_length  = 10
+      name_length  = 7
 
-      random_char = ('a'..'z').to_a[rand(26)]
+      random_char = ('a'..'z').to_a.shuffle[0,4].join
       "#{version_name[-name_length, name_length]}#{random_char}" || version_name
     end
 
