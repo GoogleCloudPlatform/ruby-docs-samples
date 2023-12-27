@@ -93,7 +93,7 @@ class E2E
       end
 
       # run gcloud command
-      exec "gcloud app versions list --format=\"value(version.id)\" --filter=\"version.id~*#{build_id}*\" | xargs -r gcloud app versions delete --quiet"
+      exec "gcloud app versions list --format=\"value(version.id)\" --filter=\"version.id~#{build_id}$\" | xargs -r gcloud app versions delete --quiet"
 
       # return the result of the gcloud delete command
       if $CHILD_STATUS.to_i != 0
