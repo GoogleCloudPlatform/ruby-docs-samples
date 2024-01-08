@@ -1,4 +1,4 @@
-# Copyright 2023 Google, Inc
+# Copyright 2024 Google, Inc
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
 # limitations under the License.
 
 require_relative "./spec_helper"
-require_relative "../spanner_directed_Read"
+require_relative "../spanner_directed_read"
 
 describe "Google Cloud Spanner Directed Read examples" do
   before :each do
