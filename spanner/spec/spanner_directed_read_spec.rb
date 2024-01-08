@@ -28,7 +28,7 @@ describe "Google Cloud Spanner Directed Read examples" do
     cleanup_database_resources
   end
 
-  fexample "spanner_directed_read" do
+  example "spanner_directed_read" do
     capture do
         spanner_directed_read project_id: @project_id,
                               instance_id: @instance_id,

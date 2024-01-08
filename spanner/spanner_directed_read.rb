@@ -48,7 +48,7 @@ def spanner_directed_read project_id:, instance_id:, database_id:
   client  = spanner.client instance_id, database_id, directed_read_options: directed_read_options_for_client
 
   directed_read_options = { include_replicas: { replica_selections: [{ type: "READ_WRITE" }], auto_failover_disabled: true } }
-  results = client.execute_sql "SELECT SingerId, AlbumId, AlbumTitle FROM Albums", directed_read_options: directed_read_options
+  result = client.execute_sql "SELECT SingerId, AlbumId, AlbumTitle FROM Albums", directed_read_options: directed_read_options
   result.rows.each do |row|
     puts "SingerId: #{row[:SingerId]}"
     puts "AlbumId: #{row[:AlbumId]}"
