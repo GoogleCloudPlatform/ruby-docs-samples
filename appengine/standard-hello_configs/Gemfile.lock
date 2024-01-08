@@ -4,8 +4,8 @@ GEM
     diff-lcs (1.5.0)
     mustermann (3.0.0)
       ruby2_keywords (~> 0.0.1)
-    nio4r (2.5.9)
-    puma (6.3.1)
+    nio4r (2.7.0)
+    puma (6.4.2)
       nio4r (~> 2.0)
     rack (2.2.8)
     rack-protection (3.1.0)
@@ -39,7 +39,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  puma (~> 6.3)
+  puma (~> 6.4)
   rack-test
   rspec
   rspec_junit_formatter
