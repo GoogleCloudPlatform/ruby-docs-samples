@@ -15,6 +15,7 @@ require "json"
 
 class E2E
   class << self
+
     def run?
       # Only run end-to-end tests when E2E environment variable is set to TRUE
       ENV["E2E"] == "true"
@@ -92,8 +93,7 @@ class E2E
       end
 
       # run gcloud command
-      test_name = versionize test_dir
-      exec "gcloud app versions delete #{test_name}-#{build_id} -q"
+      exec "gcloud app versions list --format=\"value(version.id)\" --filter=\"version.id~#{build_id}$\" | xargs -r gcloud app versions delete --quiet"
 
       # return the result of the gcloud delete command
       if $CHILD_STATUS.to_i != 0
@@ -107,9 +107,9 @@ class E2E
 
     def versionize name
       version_name = name.tr "^A-Za-z0-9", ""
-      name_length  = 10
+      name_length  = 7
 
-      random_char = ('a'..'z').to_a[rand(26)]
+      random_char = ('a'..'z').to_a.shuffle[0,4].join
       "#{version_name[-name_length, name_length]}#{random_char}" || version_name
     end
 
