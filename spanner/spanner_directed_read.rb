@@ -41,21 +41,21 @@ def spanner_directed_read project_id:, instance_id:, database_id:
   #  Spanner will not route requests to a replica outside the
   #  include_replicas list even if all the specified replicas are
   #  unavailable or unhealthy. The default value is `false`.
-  directed_read_options_for_client = { 
-    include_replicas: { 
-      replica_selections: [{ location: "us-east4" }] 
-    } 
+  directed_read_options_for_client = {
+    include_replicas: {
+      replica_selections: [{ location: "us-east4" }]
+    }
   }
 
   # Instantiates a client with directedReadOptions
   spanner = Google::Cloud::Spanner.new project: project_id
   client  = spanner.client instance_id, database_id, directed_read_options: directed_read_options_for_client
 
-  directed_read_options = { 
-    include_replicas: { 
-      replica_selections: [{ type: "READ_WRITE" }], 
-      auto_failover_disabled: true 
-    } 
+  directed_read_options = {
+    include_replicas: {
+      replica_selections: [{ type: "READ_WRITE" }],
+      auto_failover_disabled: true
+    }
   }
 
   result = client.execute_sql "SELECT SingerId, AlbumId, AlbumTitle FROM Albums", directed_read_options: directed_read_options
