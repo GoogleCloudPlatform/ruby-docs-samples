@@ -23,7 +23,7 @@ require "google/cloud/spanner"
 # @param database_id [String] The ID of the database.
 #
 def spanner_directed_read project_id:, instance_id:, database_id:
-  # Only one of exclude_eplicas or include_replicas can be set.
+  # Only one of exclude_replicas or include_replicas can be set.
   # Each accepts a list of replica_selections which contains location and type
   #   * `location` - The location must be one of the regions within the
   #      multi-region configuration of your database.
@@ -37,17 +37,27 @@ def spanner_directed_read project_id:, instance_id:, database_id:
   #   * `location:us-east1 type:READ_ONLY` --> The "READ_ONLY" type replica(s)
   #                          in location "us-east1" will be used to process
   #                          the request.
-  #  includ_replicas also contains an option for auto_failover_disabled. If set
+  #  include_replicas also contains an option for auto_failover_disabled. If set
   #  Spanner will not route requests to a replica outside the
   #  include_replicas list even if all the specified replicas are
   #  unavailable or unhealthy. The default value is `false`.
-  directed_read_options_for_client = { include_replicas: { replica_selections: [{ location: "us-east4" }] } }
+  directed_read_options_for_client = { 
+    include_replicas: { 
+      replica_selections: [{ location: "us-east4" }] 
+    } 
+  }
 
   # Instantiates a client with directedReadOptions
   spanner = Google::Cloud::Spanner.new project: project_id
   client  = spanner.client instance_id, database_id, directed_read_options: directed_read_options_for_client
 
-  directed_read_options = { include_replicas: { replica_selections: [{ type: "READ_WRITE" }], auto_failover_disabled: true } }
+  directed_read_options = { 
+    include_replicas: { 
+      replica_selections: [{ type: "READ_WRITE" }], 
+      auto_failover_disabled: true 
+    } 
+  }
+
   result = client.execute_sql "SELECT SingerId, AlbumId, AlbumTitle FROM Albums", directed_read_options: directed_read_options
   result.rows.each do |row|
     puts "SingerId: #{row[:SingerId]}"
