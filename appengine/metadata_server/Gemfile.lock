@@ -2,7 +2,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     base64 (0.2.0)
-    diff-lcs (1.5.0)
+    diff-lcs (1.5.1)
     faraday (2.9.0)
       faraday-net_http (>= 2.0, < 3.2)
     faraday-net_http (3.1.0)
@@ -11,7 +11,7 @@ GEM
       ruby2_keywords (~> 0.0.1)
     net-http (0.4.1)
       uri
-    rack (3.0.8)
+    rack (3.0.9)
     rack-protection (4.0.0)
       base64 (>= 0.1.0)
       rack (>= 3.0.0, < 4)
