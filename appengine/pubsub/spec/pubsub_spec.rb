@@ -55,7 +55,8 @@ describe "PubSub", type: :feature do
 
   it "accepts a push" do
     post "/pubsub/push?token=#{ENV["PUBSUB_VERIFICATION_TOKEN"]}",
-         JSON.generate({"message" => { "data" => Base64.encode64("A Message") }})
+         {"message" => { "data" => Base64.encode64("A Message") }}.to_json, 
+         "CONTENT_TYPE" => "application/json"
 
     expect(last_response.status).to eq 200
   end
@@ -82,8 +83,8 @@ describe "PubSub", type: :feature do
     jwt_token = JWT.encode jwt_payload, private_key, "RS256"
 
     post "/pubsub/authenticated-push?token=#{ENV["PUBSUB_VERIFICATION_TOKEN"]}",
-         JSON.generate({ "message" => { "data" => Base64.encode64("A Message") } }),
-         { "HTTP_AUTHORIZATION" => "Bearer #{jwt_token}" }
+         { "message" => { "data" => Base64.encode64("A Message") } }.to_json,
+         { "HTTP_AUTHORIZATION" => "Bearer #{jwt_token}", "CONTENT_TYPE" => "application/json" }
 
     expect(last_response.status).to eq 200
   end
