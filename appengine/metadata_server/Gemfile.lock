@@ -1,38 +1,43 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    diff-lcs (1.5.0)
-    faraday (2.7.10)
-      faraday-net_http (>= 2.0, < 3.1)
-      ruby2_keywords (>= 0.0.4)
-    faraday-net_http (3.0.2)
+    base64 (0.2.0)
+    diff-lcs (1.5.1)
+    faraday (2.9.0)
+      faraday-net_http (>= 2.0, < 3.2)
+    faraday-net_http (3.1.0)
+      net-http
     mustermann (3.0.0)
       ruby2_keywords (~> 0.0.1)
+    net-http (0.4.1)
+      uri
     rack (2.2.8)
-    rack-protection (3.1.0)
+    rack-protection (3.2.0)
+      base64 (>= 0.1.0)
       rack (~> 2.2, >= 2.2.4)
-    rspec (3.12.0)
-      rspec-core (~> 3.12.0)
-      rspec-expectations (~> 3.12.0)
-      rspec-mocks (~> 3.12.0)
-    rspec-core (3.12.2)
-      rspec-support (~> 3.12.0)
-    rspec-expectations (3.12.3)
+    rspec (3.13.0)
+      rspec-core (~> 3.13.0)
+      rspec-expectations (~> 3.13.0)
+      rspec-mocks (~> 3.13.0)
+    rspec-core (3.13.0)
+      rspec-support (~> 3.13.0)
+    rspec-expectations (3.13.0)
       diff-lcs (>= 1.2.0, < 2.0)
-      rspec-support (~> 3.12.0)
-    rspec-mocks (3.12.6)
+      rspec-support (~> 3.13.0)
+    rspec-mocks (3.13.0)
       diff-lcs (>= 1.2.0, < 2.0)
-      rspec-support (~> 3.12.0)
-    rspec-support (3.12.1)
+      rspec-support (~> 3.13.0)
+    rspec-support (3.13.0)
     rspec_junit_formatter (0.6.0)
       rspec-core (>= 2, < 4, != 2.12.0)
     ruby2_keywords (0.0.5)
-    sinatra (3.1.0)
+    sinatra (3.2.0)
       mustermann (~> 3.0)
       rack (~> 2.2, >= 2.2.4)
-      rack-protection (= 3.1.0)
+      rack-protection (= 3.2.0)
       tilt (~> 2.0)
-    tilt (2.2.0)
+    tilt (2.3.0)
+    uri (0.13.0)
 
 PLATFORMS
   ruby
@@ -41,7 +46,7 @@ DEPENDENCIES
   faraday
   rspec
   rspec_junit_formatter
-  sinatra
+  sinatra (~> 3.2)
 
 BUNDLED WITH
-   2.4.19
+   2.4.22
