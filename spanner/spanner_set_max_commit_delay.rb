@@ -35,9 +35,9 @@ def spanner_set_max_commit_delay project_id:, instance_id:, database_id:
   # is willing to incur in order to improve throughput.
   # The commit delay must be at least 0ms and at most 500ms.
   # Default value is nil.
-  commit_options = { 
-    return_commit_stats: true, 
-    max_commit_delay: 100 
+  commit_options = {
+    return_commit_stats: true,
+    max_commit_delay: 100
   }
   resp = client.upsert "Albums", records, commit_options: commit_options
   puts "Updated data with #{resp.stats.mutation_count} mutations."
