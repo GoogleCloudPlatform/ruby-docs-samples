@@ -31,6 +31,10 @@ def spanner_set_max_commit_delay project_id:, instance_id:, database_id:
     { SingerId: 1, AlbumId: 1, MarketingBudget: 200_000 },
     { SingerId: 2, AlbumId: 2, MarketingBudget: 400_000 }
   ]
+  # max_commit_delay is the amount of latency in millisecond, this request
+  # is willing to incur in order to improve throughput.
+  # The commit delay must be at least 0ms and at most 500ms.
+  # Default value is nil.
   commit_options = { 
     return_commit_stats: true, 
     max_commit_delay: 100 
