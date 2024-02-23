@@ -74,10 +74,12 @@ RSpec.configure do |config|
   def cleanup_database_resources
     return unless @instance
 
-    @test_database = @instance.database @database_id
-    @test_database&.drop
-    @test_database = @instance.database @restored_database_id
-    @test_database&.drop
+    with_retry "cleanup database" do 
+      @test_database = @instance.database @database_id
+      @test_database&.drop
+      @test_database = @instance.database @restored_database_id
+      @test_database&.drop
+    end
   end
 
   def cleanup_backup_resources
@@ -246,5 +248,18 @@ RSpec.configure do |config|
     end
 
     @test_database
+  end
+
+  def with_retry action, attempts: 5
+    @attempt_number ||= 0
+    yield
+    @attempt_number = nil
+  rescue Exception => e
+    @attempt_number += 1
+    puts "failed attempt #{@attempt_number} for #{action}"
+    sleep @attempt_number*@attempt_number
+    retry if @attempt_number < attempts
+    @attempt_number = nil
+    raise e
   end
 end
