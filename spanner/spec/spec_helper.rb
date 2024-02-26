@@ -258,7 +258,7 @@ RSpec.configure do |config|
       multiplier: 2,
       tries: [retries, max_retries].min
     ) do
-      yield
+      return yield
     end
     raise
   end
