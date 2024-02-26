@@ -74,7 +74,7 @@ RSpec.configure do |config|
   def cleanup_database_resources
     return unless @instance
 
-    with_retry "cleanup database" do 
+    with_retry do 
       @test_database = @instance.database @database_id
       @test_database&.drop
       @test_database = @instance.database @restored_database_id
@@ -250,16 +250,16 @@ RSpec.configure do |config|
     @test_database
   end
 
-  def with_retry action, attempts: 5
-    @attempt_number ||= 0
-    yield
-    @attempt_number = nil
-  rescue Exception => e
-    @attempt_number += 1
-    puts "failed attempt #{@attempt_number} for #{action}"
-    sleep @attempt_number*@attempt_number
-    retry if @attempt_number < attempts
-    @attempt_number = nil
-    raise e
+  def with_retry retries: 5
+    max_retries = 10
+    Retriable.retriable(
+      on: Google::Cloud::DeadlineExceededError,
+      base_interval: 1,
+      multiplier: 2,
+      tries: [retries, max_retries].min
+    ) do
+      yield
+    end
+    raise
   end
 end
