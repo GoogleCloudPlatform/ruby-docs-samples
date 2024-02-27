@@ -74,10 +74,12 @@ RSpec.configure do |config|
   def cleanup_database_resources
     return unless @instance
 
-    @test_database = @instance.database @database_id
-    @test_database&.drop
-    @test_database = @instance.database @restored_database_id
-    @test_database&.drop
+    with_retry do 
+      @test_database = @instance.database @database_id
+      @test_database&.drop
+      @test_database = @instance.database @restored_database_id
+      @test_database&.drop
+    end
   end
 
   def cleanup_backup_resources
@@ -246,5 +248,18 @@ RSpec.configure do |config|
     end
 
     @test_database
+  end
+
+  def with_retry retries: 5
+    max_retries = 10
+    Retriable.retriable(
+      on: Google::Cloud::DeadlineExceededError,
+      base_interval: 1,
+      multiplier: 2,
+      tries: [retries, max_retries].min
+    ) do
+      return yield
+    end
+    raise
   end
 end
