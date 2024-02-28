@@ -69,7 +69,7 @@ GEM
       uri
     os (1.1.4)
     public_suffix (5.0.4)
-    rack (3.0.9)
+    rack (3.0.9.1)
     rack-protection (4.0.0)
       base64 (>= 0.1.0)
       rack (>= 3.0.0, < 4)
