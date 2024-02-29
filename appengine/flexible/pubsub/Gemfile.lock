@@ -67,7 +67,7 @@ GEM
       ruby2_keywords (~> 0.0.1)
     os (1.1.4)
     public_suffix (5.0.3)
-    rack (2.2.8)
+    rack (2.2.8.1)
     rack-protection (3.1.0)
       rack (~> 2.2, >= 2.2.4)
     rack-test (2.1.0)
