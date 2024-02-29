@@ -8,7 +8,7 @@ GEM
     faraday-net_http (3.0.2)
     mustermann (3.0.0)
       ruby2_keywords (~> 0.0.1)
-    rack (2.2.8)
+    rack (2.2.8.1)
     rack-protection (3.1.0)
       rack (~> 2.2, >= 2.2.4)
     rspec (3.12.0)
