@@ -20,7 +20,7 @@ GEM
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     racc (1.7.3)
-    rack (2.0.6)
+    rack (2.2.8.1)
     rack-protection (2.0.3)
       rack
     rack-test (1.1.0)
