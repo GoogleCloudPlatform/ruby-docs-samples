@@ -22,7 +22,7 @@ GEM
       ruby2_keywords (~> 0.0.1)
     netrc (0.11.0)
     public_suffix (4.0.3)
-    rack (2.2.2)
+    rack (2.2.8.1)
     rack-cors (1.1.1)
       rack (>= 2.0.0)
     rack-protection (2.0.8.1)
@@ -47,6 +47,8 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.9.0)
     rspec-support (3.9.2)
+    rspec_junit_formatter (0.6.0)
+      rspec-core (>= 2, < 4, != 2.12.0)
     ruby2_keywords (0.0.2)
     signet (0.12.0)
       addressable (~> 2.3)
@@ -72,6 +74,7 @@ DEPENDENCIES
   rack-test
   rest-client
   rspec
+  rspec_junit_formatter
   signet
   sinatra
 
