@@ -11,7 +11,7 @@ GEM
       ruby2_keywords (~> 0.0.1)
     net-http (0.4.1)
       uri
-    rack (2.2.8)
+    rack (2.2.8.1)
     rack-protection (3.2.0)
       base64 (>= 0.1.0)
       rack (~> 2.2, >= 2.2.4)
