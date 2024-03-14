@@ -14,7 +14,8 @@ describe "Ruby Endpoints Sample" do
   end
 
   it "POST /echo renders message from request body" do
-    post "/echo", '{"message":"hello from test"}'
+    data = {"message" => "hello from test"}
+    post "/echo", data.to_json, "CONTENT_TYPE" => "application/json"
 
     expect(last_response.status).to eq 200
     expect(last_response.content_type).to eq "application/json"
