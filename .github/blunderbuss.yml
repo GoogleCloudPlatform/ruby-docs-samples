@@ -1,3 +1,6 @@
+# Configuration for the Blunderbuss GitHub app. For more info see
+# https://github.com/googleapis/repo-automation-bots/tree/main/packages/blunderbuss
+
 assign_issues_by:
 - labels:
   - 'api: cloudiot'
@@ -16,7 +19,7 @@ assign_issues_by:
 - labels:
   - 'api: spanner'
   to:
-  - shivgautam
+  - dazuma
 
 assign_prs_by:
 - labels:
@@ -33,3 +36,6 @@ assign_prs_by:
   - 'api: cloudsql'
   to:
   - GoogleCloudPlatform/infra-db-sdk
+
+assign_issues:
+  - 'dazuma'
