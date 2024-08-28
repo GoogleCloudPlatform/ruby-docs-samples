@@ -34,8 +34,7 @@ describe "Google Cloud Spanner Foreign key cascade examples" do
                                                            database_id: @fkdc_database_id
     end
 
-    expect(captured_output).to include 
-    "Created Customers and ShoppingCarts table with FKShoppingCartsCustomerId "+  
-    "foreign key constraint on database #{@fkdc_database_id} on instance #{@instance_id}"
+    expect(captured_output).to include "Created Customers and ShoppingCarts table with FKShoppingCartsCustomerId"
+    expect(captured_output).to include "foreign key constraint on database #{@fkdc_database_id} on instance #{@instance_id}"
   end
 end

@@ -39,8 +39,8 @@ describe "Google Cloud Spanner Sequence examples" do
                                database_id: @seq_database_id
     end
 
-    expect(captured_output).to include 
-    "Created Seq sequence and Customers table, where the key column CustomerId uses the sequence as a default value"
+    expect(captured_output).to include \
+      "Created Seq sequence and Customers table, where the key column CustomerId uses the sequence as a default value"
   end
 
   example "spanner_alter_sequence" do
@@ -54,15 +54,15 @@ describe "Google Cloud Spanner Sequence examples" do
                              database_id: @seq_database_id
     end
 
-    expect(captured_output).to include 
-    "Altered Seq sequence to skip an inclusive range between 1000 and 5000000"
+    expect(captured_output).to include \
+      "Altered Seq sequence to skip an inclusive range between 1000 and 5000000"
 
     spanner_drop_sequence project_id: @project_id,
                             instance_id: @instance_id,
                             database_id: @seq_database_id
   end
 
-  example "spanner_alter_sequence" do
+  example "spanner_alter_sequence 2" do
     spanner_create_sequence project_id: @project_id,
                             instance_id: @instance_id,
                             database_id: @seq_database_id
@@ -73,8 +73,8 @@ describe "Google Cloud Spanner Sequence examples" do
                              database_id: @seq_database_id
     end
 
-    expect(captured_output).to include 
-    "Altered Customers table to drop DEFAULT from CustomerId column and dropped the Seq sequence"
+    expect(captured_output).to include \
+      "Altered Customers table to drop DEFAULT from CustomerId column and dropped the Seq sequence"
   end
 end
 
@@ -94,8 +94,8 @@ describe "Google Cloud Spanner Sequence examples for postgresql" do
                                    database_id: @database_id
         end
     
-        expect(captured_output).to include 
-        "Created Seq sequence and Customers table, where the key column CustomerId uses the sequence as a default value"
+        expect(captured_output).to include \
+          "Created Seq sequence and Customers table, where its key column CustomerId uses the sequence as a default value"
       end
     
       example "spanner_postgresql_alter_sequence" do
@@ -109,15 +109,15 @@ describe "Google Cloud Spanner Sequence examples for postgresql" do
                                  database_id: @database_id
         end
     
-        expect(captured_output).to include 
-        "Altered Seq sequence to skip an inclusive range between 1000 and 5000000"
+        expect(captured_output).to include \
+          "Altered Seq sequence to skip an inclusive range between 1000 and 5000000"
     
         spanner_postgresql_drop_sequence project_id: @project_id,
                                 instance_id: @instance_id,
                                 database_id: @database_id
       end
     
-      example "spanner_postgresql_alter_sequence" do
+      example "spanner_postgresql_alter_sequence 2" do
         spanner_postgresql_create_sequence project_id: @project_id,
                                 instance_id: @instance_id,
                                 database_id: @database_id
@@ -128,7 +128,7 @@ describe "Google Cloud Spanner Sequence examples for postgresql" do
                                  database_id: @database_id
         end
     
-        expect(captured_output).to include 
-        "Altered Customers table to drop DEFAULT from CustomerId column and dropped the Seq sequence"
+        expect(captured_output).to include \
+          "Altered Customers table to drop DEFAULT from CustomerId column and dropped the Seq sequence"
       end
   end
