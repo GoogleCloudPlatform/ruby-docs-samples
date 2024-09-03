@@ -2,18 +2,11 @@
 # https://hub.docker.com/_/ruby
 
 # [START cloudrun_rails_base_image]
-# Pinning the OS to bookworm because the nodejs install script is bookworm-specific.
-# Be sure to update the nodejs install command if the base image OS is updated.
 FROM ruby:3.3-bookworm
 # [END cloudrun_rails_base_image]
 
-RUN (curl -sS https://deb.nodesource.com/gpgkey/nodesource.gpg.key | gpg --dearmor | apt-key add -) && \
-    echo "deb https://deb.nodesource.com/node_22.x bookworm main"      > /etc/apt/sources.list.d/nodesource.list && \
-    apt-get update && apt-get install -y nodejs lsb-release
-
-RUN (curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -) && \
-    echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
-    apt-get update && apt-get install -y yarn
+RUN apt update && apt install yarnpkg nodejs && \
+    ln -s /usr/bin/yarnpkg /usr/bin/yarn
 
 WORKDIR /app
 
@@ -24,7 +17,6 @@ RUN gem install bundler && \
     bundle config set --local deployment 'true' && \
     bundle config set --local without 'development test' && \
     bundle install
-
 
 # Copy application code to the container image
 COPY . /app
