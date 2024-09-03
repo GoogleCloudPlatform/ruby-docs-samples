@@ -20,7 +20,8 @@ steps:
       ]
     secretEnv: ["RAILS_KEY"]
 
-
+options:
+  dynamicSubstitutions: true
 
 substitutions:
   _REGION: us-central1
