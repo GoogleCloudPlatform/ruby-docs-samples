@@ -5,7 +5,7 @@
 FROM ruby:3.3-bookworm
 # [END cloudrun_rails_base_image]
 
-RUN apt update && apt install yarnpkg nodejs && \
+RUN apt update && apt install -y yarnpkg nodejs && \
     ln -s /usr/bin/yarnpkg /usr/bin/yarn
 
 WORKDIR /app
