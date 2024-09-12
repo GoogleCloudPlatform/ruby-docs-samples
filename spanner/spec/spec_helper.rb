@@ -93,7 +93,7 @@ RSpec.configure do |config|
     end
   end
 
-  def cleanup_backup_resources instance
+  def cleanup_backup_resources instance = @instance
     return unless instance
 
     @test_backup = instance.backup @backup_id

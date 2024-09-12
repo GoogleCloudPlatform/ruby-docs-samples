@@ -12,10 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-def create_instance project_id, instance_id, instance_config_id = "regional-us-central1"
+def create_instance project_id:, instance_id:, instance_config_id: "regional-us-central1"
   # [START spanner_create_instance]
   # project_id  = "Your Google Cloud project ID"
   # instance_id = "Your Spanner instance ID"
+  # instance_config_id = "Your Spanner InstanceConfig ID"
 
   require "google/cloud/spanner"
   require "google/cloud/spanner/admin/instance"
@@ -229,7 +230,7 @@ def create_database_with_multiple_kms_keys(
   # project_id  = "Your Google Cloud project ID"
   # instance_id = "Your Spanner instance ID"
   # database_id = "Your Spanner database ID"
-  # kms_key_names = "List of Database encryption KMS keys"
+  # kms_key_names = ["key1", "key2", "key3"]
 
   require "google/cloud/spanner"
   require "google/cloud/spanner/admin/database"
@@ -2077,7 +2078,7 @@ def create_backup_with_multiple_kms_keys(
   # instance_id = "Your Spanner instance ID"
   # database_id = "Your Spanner database ID"
   # backup_id = "Your Spanner backup ID"
-  # kms_key_names = "Your list of backup encryption database KMS keys"
+  # kms_key_names = ["key1", "key2", "key3"]
 
   require "google/cloud/spanner"
   require "google/cloud/spanner/admin/database"
@@ -2204,7 +2205,7 @@ def restore_database_with_multiple_kms_keys(
   # instance_id = "Your Spanner instance ID"
   # database_id = "Your Spanner database ID of where to restore"
   # backup_id = "Your Spanner backup ID"
-  # kms_key_names = "Your list of backup encryption database KMS key"
+  # kms_key_names = ["key1", "key2", "key3"]
 
   require "google/cloud/spanner"
   require "google/cloud/spanner/admin/database"
@@ -2508,7 +2509,7 @@ def copy_backup_with_multiple_kms_keys(project_id:, instance_id:, backup_id:,
   # instance_id = "The ID of the destination instance that will contain the backup copy"
   # backup_id = "The ID of the backup copy"
   # source_backup = "The source backup to be copied"
-  # kms_key_names = "List of KMS key names to protect the copied backup"
+  # kms_key_names = ["key1", "key2", "key3"]
 
   require "google/cloud/spanner"
   require "google/cloud/spanner/admin/database"
