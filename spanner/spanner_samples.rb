@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-def create_instance project_id:, instance_id:
+def create_instance project_id, instance_id, instance_config_id = "regional-us-central1"
   # [START spanner_create_instance]
   # project_id  = "Your Google Cloud project ID"
   # instance_id = "Your Spanner instance ID"
@@ -24,7 +24,7 @@ def create_instance project_id:, instance_id:
 
   project_path = instance_admin_client.project_path project: project_id
   instance_path = instance_admin_client.instance_path project: project_id, instance: instance_id
-  instance_config_path = instance_admin_client.instance_config_path project: project_id, instance_config: "regional-us-central1"
+  instance_config_path = instance_admin_client.instance_config_path project: project_id, instance_config: instance_config_id
 
   job = instance_admin_client.create_instance parent: project_path,
                                               instance_id: instance_id,
@@ -223,7 +223,8 @@ def create_database_with_encryption_key project_id:, instance_id:, database_id:,
 end
 
 def create_database_with_multiple_kms_keys(
-  project_id:, instance_id:, database_id:, kms_key_names:)
+  project_id:, instance_id:, database_id:, kms_key_names:
+)
   # [START spanner_create_database_with_MR_CMEK]
   # project_id  = "Your Google Cloud project ID"
   # instance_id = "Your Spanner instance ID"
@@ -236,7 +237,8 @@ def create_database_with_multiple_kms_keys(
   database_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin
 
   instance_path = database_admin_client.instance_path(
-    project: project_id, instance: instance_id)
+    project: project_id, instance: instance_id
+  )
 
   encryption_config = {
     kms_key_names: kms_key_names
@@ -2068,7 +2070,8 @@ def create_backup_with_encryption_key project_id:, instance_id:, database_id:, b
 end
 
 def create_backup_with_multiple_kms_keys(
-  project_id:, instance_id:, database_id:, backup_id:, kms_key_names:)
+  project_id:, instance_id:, database_id:, backup_id:, kms_key_names:
+)
   # [START spanner_create_backup_with_MR_CMEK]
   # project_id  = "Your Google Cloud project ID"
   # instance_id = "Your Spanner instance ID"
@@ -2082,7 +2085,8 @@ def create_backup_with_multiple_kms_keys(
   database_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin
 
   instance_path = database_admin_client.instance_path(
-    project: project_id, instance: instance_id)
+    project: project_id, instance: instance_id
+  )
   db_path = database_admin_client.database_path project: project_id,
                                                 instance: instance_id,
                                                 database: database_id
@@ -2193,7 +2197,8 @@ def restore_database_with_encryption_key project_id:, instance_id:, database_id:
 end
 
 def restore_database_with_multiple_kms_keys(
-  project_id:, instance_id:, database_id:, backup_id:, kms_key_names:)
+  project_id:, instance_id:, database_id:, backup_id:, kms_key_names:
+)
   # [START spanner_restore_backup_with_MR_CMEK]
   # project_id  = "Your Google Cloud project ID"
   # instance_id = "Your Spanner instance ID"
@@ -2207,7 +2212,8 @@ def restore_database_with_multiple_kms_keys(
   database_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin
 
   instance_path = database_admin_client.instance_path(
-    project: project_id, instance: instance_id)
+    project: project_id, instance: instance_id
+  )
 
   db_path = database_admin_client.database_path project: project_id,
                                                 instance: instance_id,
@@ -2225,7 +2231,8 @@ def restore_database_with_multiple_kms_keys(
     parent: instance_path,
     database_id: database_id,
     backup: backup_path,
-    encryption_config: encryption_config)
+    encryption_config: encryption_config
+  )
 
   puts "Waiting for restore backup operation to complete"
 
@@ -2495,7 +2502,7 @@ def copy_backup project_id:, instance_id:, backup_id:, source_backup_id:
 end
 
 def copy_backup_with_multiple_kms_keys(project_id:, instance_id:, backup_id:,
-    source_backup_id:, kms_key_names:)
+                                       source_backup_id:, kms_key_names:)
   # [START spanner_copy_backup_with_MR_CMEK]
   # project_id  = "Your Google Cloud project ID"
   # instance_id = "The ID of the destination instance that will contain the backup copy"
@@ -2509,7 +2516,8 @@ def copy_backup_with_multiple_kms_keys(project_id:, instance_id:, backup_id:,
   database_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin
 
   instance_path = database_admin_client.instance_path(
-    project: project_id, instance: instance_id)
+    project: project_id, instance: instance_id
+  )
   backup_path = database_admin_client.backup_path project: project_id,
                                                   instance: instance_id,
                                                   backup: backup_id
@@ -2526,7 +2534,7 @@ def copy_backup_with_multiple_kms_keys(project_id:, instance_id:, backup_id:,
   job = database_admin_client.copy_backup parent: instance_path,
                                           backup_id: backup_id,
                                           source_backup: source_backup,
-                                          expire_time: expire_time
+                                          expire_time: expire_time,
                                           encryption_config: encryption_config
 
   puts "Copy backup operation in progress"
@@ -2535,8 +2543,8 @@ def copy_backup_with_multiple_kms_keys(project_id:, instance_id:, backup_id:,
 
   backup = database_admin_client.get_backup name: backup_path
   puts "Backup #{backup_id} of size #{backup.size_bytes} bytes was copied at " \
-    "#{backup.create_time} from #{source_backup} for version " \
-    "#{backup.version_time} using encryption keys #{kms_key_names}"
+       "#{backup.create_time} from #{source_backup} for version " \
+       "#{backup.version_time} using encryption keys #{kms_key_names}"
   # [END spanner_copy_backup_with_MR_CMEK]
 end
 
@@ -2603,6 +2611,7 @@ def usage
       create_instance                      <instance_id> Create Instance
       create_database                      <instance_id> <database_id> Create Database
       create_database_with_encryption_key  <instance_id> <database_id> Create Database with encryption
+      create_database_with_multiple_kms_keys <instance_id> <database_id> Create Database with multiple KMS keys
       create_table_with_timestamp_column   <instance_id> <database_id> Create table Performances with commit timestamp column
       insert_data                          <instance_id> <database_id> Insert Data
       insert_data_with_timestamp_column    <instance_id> <database_id> Inserts data into Performances table containing the commit timestamp column
@@ -2665,8 +2674,10 @@ def usage
       write_read_float64_array             <instance_id> <database_id> Writes FLOAT64 array and read.
       create_backup                        <instance_id> <database_id> <backup_id> <version_time> Create a backup.
       create_backup_with_encryption_key    <instance_id> <database_id> <backup_id> <kms_key_name> Create a backup using encryption key.
+      create_backup_with_multiple_kms_keys <instance_id> <database_id> <backup_id> "<kms_key_name>,<kms_key_name>" Create a backup using multiple KMS keys.
       restore_backup                       <instance_id> <database_id> <backup_id> Restore a database.
       restore_database_with_encryption_key <instance_id> <database_id> <backup_id> <kms_key_name> Restore a database using encryption key.
+      restore_database_with_multiple_kms_keys <instance_id> <database_id> <backup_id> "<kms_key_name>,<kms_key_name>" Restore a database using multiple KMS keys
       create_backup_cancel                 <instance_id> <database_id> <backup_id> Cancel a backup.
       list_backup_operations               <instance_id> List backup operations.
       list_database_operations             <instance_id> List database operations.
@@ -2674,6 +2685,7 @@ def usage
       delete_backup                        <instance_id> <backup_id> Delete a backup.
       update_backup                        <instance_id> <backup_id> Update the backup.
       copy_backup                          <instance_id> <backup_id> <source_backup> Copies a backup
+      copy_backup_with_multiple_kms_keys   <instance_id> <backup_id> <source_backup> "<kms_key_name>,<kms_key_name>" Copies a backup with multiple KMS keys
       set_custom_timeout_and_retry         <instance_id> <database_id> Set custom timeout and retry settings.
       commit_stats                         <instance_id> <database_id> Get commit stats.
 

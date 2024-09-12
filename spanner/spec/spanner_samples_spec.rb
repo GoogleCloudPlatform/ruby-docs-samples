@@ -133,6 +133,20 @@ describe "Google Cloud Spanner API samples" do
     )
   end
 
+  example "create_database_with_multiple_kms_keys" do
+    capture do
+      create_database_with_multiple_kms_keys project_id: @project_id,
+                                             instance_id: @mr_instance_id,
+                                             database_id: @database_id,
+                                             kms_key_names: @kms_key_names
+    end
+
+    expect(captured_output).to include("Database #{@database_id}")
+    expect(captured_output).to include("#{@kms_key_names[0]}")
+    expect(captured_output).to include("#{@kms_key_names[1]}")
+    expect(captured_output).to include("#{@kms_key_names[2]}")
+  end
+
   example "create table with timestamp column" do
     database = create_singers_albums_database
 
@@ -241,7 +255,7 @@ describe "Google Cloud Spanner API samples" do
                         instance_id: @instance.instance_id,
                         database_id: database.database_id
     end
-    expect(captured_output).to match /6/
+    expect(captured_output).to match(/6/)
   end
 
   example "query with array of struct" do
@@ -277,7 +291,7 @@ describe "Google Cloud Spanner API samples" do
                          instance_id: @instance.instance_id,
                          database_id: database.database_id
     end
-    expect(captured_output).to match /6/
+    expect(captured_output).to match(/6/)
   end
 
   example "query nested struct field" do
@@ -294,7 +308,7 @@ describe "Google Cloud Spanner API samples" do
                                 instance_id: @instance.instance_id,
                                 database_id: database.database_id
     end
-    expect(captured_output).to match /6\nImagination\n9\nImagination/
+    expect(captured_output).to match(/6\nImagination\n9\nImagination/)
   end
 
   example "query data with timestamp column" do
@@ -330,7 +344,7 @@ describe "Google Cloud Spanner API samples" do
                                        database_id: database.database_id
     end
 
-    expect(captured_output).to match /1 1 100000 \d+/
+    expect(captured_output).to match(/1 1 100000 \d+/)
   end
 
   example "read data" do
@@ -370,8 +384,8 @@ describe "Google Cloud Spanner API samples" do
 
     capture do
       delete_data project_id:  @project_id,
-                instance_id: @instance.instance_id,
-                database_id: database.database_id
+                  instance_id: @instance.instance_id,
+                  database_id: database.database_id
     end
 
     capture do
@@ -529,7 +543,7 @@ describe "Google Cloud Spanner API samples" do
                  database_id: database.database_id
     end
 
-    albums = client.execute("SELECT * FROM Albums").rows.map &:to_h
+    albums = client.execute("SELECT * FROM Albums").rows.map(&:to_h)
     expect(albums).to include(
       SingerId: 1, AlbumId: 1, AlbumTitle: "Total Junk", MarketingBudget: nil
     )
@@ -542,7 +556,7 @@ describe "Google Cloud Spanner API samples" do
 
     expect(captured_output).to include "Updated data"
 
-    albums = client.execute("SELECT * FROM Albums").rows.map &:to_h
+    albums = client.execute("SELECT * FROM Albums").rows.map(&:to_h)
     expect(albums).to include(
       SingerId: 1, AlbumId: 1, AlbumTitle: "Total Junk", MarketingBudget: 100_000
     )
@@ -570,7 +584,7 @@ describe "Google Cloud Spanner API samples" do
                            database_id: database.database_id
     end
 
-    albums = client.execute("SELECT * FROM Albums").rows.map &:to_h
+    albums = client.execute("SELECT * FROM Albums").rows.map(&:to_h)
     expect(albums).to include(
       SingerId: 1, AlbumId: 1, AlbumTitle: "Total Junk", MarketingBudget: nil, LastUpdateTime: nil
     )
@@ -583,7 +597,7 @@ describe "Google Cloud Spanner API samples" do
 
     expect(captured_output).to include "Updated data"
 
-    albums = client.execute("SELECT * FROM Albums").rows.map &:to_h
+    albums = client.execute("SELECT * FROM Albums").rows.map(&:to_h)
     expect(albums).not_to include(
       LastUpdateTime: nil
     )
@@ -1148,8 +1162,8 @@ describe "Google Cloud Spanner API samples" do
 
       # Add MarketingBudget column (re-use add_column to add)
       add_column project_id:  @project_id,
-                  instance_id: @instance.instance_id,
-                  database_id: database.database_id
+                 instance_id: @instance.instance_id,
+                 database_id: database.database_id
     end
 
     client = @spanner.client @instance.instance_id, database.database_id
@@ -1158,16 +1172,16 @@ describe "Google Cloud Spanner API samples" do
 
     expect {
       update_using_batch_dml project_id:  @project_id,
-                      instance_id: @instance.instance_id,
-                      database_id: database.database_id
+                             instance_id: @instance.instance_id,
+                             database_id: database.database_id
     }.to output("Executed 2 SQL statements using Batch DML.\n").to_stdout
 
     albums = client.execute("SELECT * FROM Albums").rows.to_a
     expect(albums.count).to eq 6
-    expect(albums.find {|s| s[:AlbumTitle] == "Test Album Title" }).not_to be nil
+    expect(albums.find { |s| s[:AlbumTitle] == "Test Album Title" }).not_to be nil
 
-    album  = client.read("Albums", [:MarketingBudget], keys: [[1,3]]).rows.first
-    expect(album[:MarketingBudget]).to  eq 20_000
+    album = client.read("Albums", [:MarketingBudget], keys: [[1, 3]]).rows.first
+    expect(album[:MarketingBudget]).to eq 20_000
   end
 
   example "create table with supported datatypes columns" do
@@ -1215,7 +1229,7 @@ describe "Google Cloud Spanner API samples" do
     database = create_singers_albums_database
     create_venues_table
 
-   # Ignore the following capture block
+    # Ignore the following capture block
     capture do
       write_datatypes_data project_id:  @project_id,
                            instance_id: @instance.instance_id,
@@ -1241,8 +1255,8 @@ describe "Google Cloud Spanner API samples" do
 
     capture do
       query_with_bytes project_id:  @project_id,
-                      instance_id: @instance.instance_id,
-                      database_id: database.database_id
+                       instance_id: @instance.instance_id,
+                       database_id: database.database_id
     end
 
     expect(captured_output).to include "4 Venue 4"
@@ -1258,8 +1272,8 @@ describe "Google Cloud Spanner API samples" do
 
     capture do
       query_with_float project_id:  @project_id,
-                      instance_id: @instance.instance_id,
-                      database_id: database.database_id
+                       instance_id: @instance.instance_id,
+                       database_id: database.database_id
     end
 
     expect(captured_output).to include "4 Venue 4 0.8"
@@ -1267,8 +1281,8 @@ describe "Google Cloud Spanner API samples" do
 
     capture do
       query_with_int project_id:  @project_id,
-                      instance_id: @instance.instance_id,
-                      database_id: database.database_id
+                     instance_id: @instance.instance_id,
+                     database_id: database.database_id
     end
 
     expect(captured_output).to include "19 Venue 19 6300"
@@ -1276,16 +1290,16 @@ describe "Google Cloud Spanner API samples" do
 
     capture do
       query_with_string project_id:  @project_id,
-                      instance_id: @instance.instance_id,
-                      database_id: database.database_id
+                        instance_id: @instance.instance_id,
+                        database_id: database.database_id
     end
 
     expect(captured_output).to include "42 Venue 42"
 
     capture do
       query_with_timestamp project_id:  @project_id,
-                      instance_id: @instance.instance_id,
-                      database_id: database.database_id
+                           instance_id: @instance.instance_id,
+                           database_id: database.database_id
     end
 
     expect(captured_output).to include "4 Venue 4"
@@ -1306,8 +1320,8 @@ describe "Google Cloud Spanner API samples" do
 
     capture do
       query_with_query_options project_id:  @project_id,
-                      instance_id: @instance.instance_id,
-                      database_id: database.database_id
+                               instance_id: @instance.instance_id,
+                               database_id: database.database_id
     end
 
     expect(captured_output).to include "4 Venue 4"
@@ -1316,8 +1330,8 @@ describe "Google Cloud Spanner API samples" do
 
     capture do
       create_client_with_query_options project_id:  @project_id,
-                      instance_id: @instance.instance_id,
-                      database_id: database.database_id
+                                       instance_id: @instance.instance_id,
+                                       database_id: database.database_id
     end
 
     expect(captured_output).to include "4 Venue 4"
@@ -1332,8 +1346,8 @@ describe "Google Cloud Spanner API samples" do
     # Ignore the following capture block
     capture do
       write_datatypes_data project_id:  @project_id,
-                            instance_id: @instance.instance_id,
-                            database_id: database.database_id
+                           instance_id: @instance.instance_id,
+                           database_id: database.database_id
     end
 
     capture do
@@ -1477,11 +1491,42 @@ describe "Google Cloud Spanner API samples" do
     test_backup = @instance.backup backup_id
     expect(test_backup).not_to be nil
 
-    #Clean up copied backup
+    # Clean up copied backup
     test_backup&.delete
 
     test_backup = @instance.backup backup_id
     expect(test_backup).to be_nil
+  end
+
+  example "copy backup with multiple KMS keys" do
+    create_backup_with_data @mr_instance
+
+    backup_id = "test_mr_cmek_copied"
+
+    capture do
+      copy_backup_with_multiple_kms_keys project_id: @project_id,
+                                         instance_id: @mr_instance.instance_id,
+                                         backup_id: backup_id,
+                                         source_backup_id: @backup_id,
+                                         kms_key_names: @kms_key_names
+    end
+
+    expect(captured_output).to include("Copy backup operation in progress")
+    expect(captured_output).to match(
+      /Backup #{backup_id} of size \d+ bytes was copied at/
+    )
+    expect(captured_output).to include("#{@kms_key_names[0]}")
+    expect(captured_output).to include("#{@kms_key_names[1]}")
+    expect(captured_output).to include("#{@kms_key_names[2]}")
+
+    base_backup = @mr_instance.backup @backup_id
+    test_backup = @mr_instance.backup backup_id
+    expect(base_backup).not_to be nil
+    expect(test_backup).not_to be nil
+
+    # Clean up backups
+    base_backup&.delete
+    test_backup&.delete
   end
 
   xexample "create backup with encryption key" do
@@ -1511,6 +1556,33 @@ describe "Google Cloud Spanner API samples" do
 
     @test_backup = @instance.backup @backup_id
     expect(@test_backup).not_to be nil
+  end
+
+  example "create backup with multiple KMS keys" do
+    database = create_database_with_data @mr_instance
+
+    backup_id = "test_mr_cmek_created"
+
+    capture do
+      create_backup_with_multiple_kms_keys project_id:   @project_id,
+                                           instance_id:  @mr_instance.instance_id,
+                                           database_id:  database.database_id,
+                                           backup_id:    backup_id,
+                                           kms_key_names: @kms_key_names
+    end
+
+    expect(captured_output).to include("Backup operation in progress")
+    expect(captured_output).to match(
+      /Backup #{@backup_id} of size \d+ bytes was created at/
+    )
+    expect(captured_output).to include("#{@kms_key_names[0]}")
+    expect(captured_output).to include("#{@kms_key_names[1]}")
+    expect(captured_output).to include("#{@kms_key_names[2]}")
+
+    @test_backup = @mr_instance.backup backup_id
+    expect(@test_backup).not_to be nil
+    # Clean up
+    test_backup&.delete
   end
 
   xexample "restore backup" do
@@ -1557,6 +1629,35 @@ describe "Google Cloud Spanner API samples" do
 
     @test_database = @instance.database @restored_database_id
     expect(@test_database).not_to be nil
+  end
+
+  example "restore database with multiple KMS keys" do
+    backup = create_backup_with_data @mr_instance
+    database = @mr_instance.database @database_id
+
+    capture do
+      restore_database_with_multiple_kms_keys project_id:   @project_id,
+                                              instance_id:  @mr_instance_id,
+                                              database_id:  @restored_database_id,
+                                              backup_id:    backup.backup_id,
+                                              kms_key_names: @kms_key_names
+    end
+
+    expect(captured_output).to include(
+      "Waiting for restore backup operation to complete"
+    )
+    expect(captured_output).to include("#{@kms_key_names[0]}")
+    expect(captured_output).to include("#{@kms_key_names[1]}")
+    expect(captured_output).to include("#{@kms_key_names[2]}")
+
+    @test_database = @mr_instance.database @restored_database_id
+    expect(@test_database).not_to be nil
+
+    test_backup = @mr_instance.backup backup_id
+    expect(test_backup).not_to be nil
+
+    # Clean up backup
+    test_backup&.delete
   end
 
   xexample "cancel backup operation" do
@@ -1639,9 +1740,9 @@ describe "Google Cloud Spanner API samples" do
 
     # Segregate each list backup filters output.
     output_segments = captured_output.split(/(All backups)/)
-                                      .reject(&:empty?)
-                                      .each_slice(2)
-                                      .map(&:join)
+                                     .reject(&:empty?)
+                                     .each_slice(2)
+                                     .map(&:join)
 
     expect(output_segments.shift).to include("All backups", backup.path)
 
@@ -1720,8 +1821,8 @@ describe "Google Cloud Spanner API samples" do
 
     expect {
       set_custom_timeout_and_retry project_id:  @project_id,
-                       instance_id: @instance.instance_id,
-                       database_id: database.database_id
+                                   instance_id: @instance.instance_id,
+                                   database_id: database.database_id
     }.to output("1 record inserted.\n").to_stdout
 
     singers = client.execute("SELECT * FROM Singers").rows.to_a
@@ -1749,6 +1850,6 @@ describe "Google Cloud Spanner API samples" do
                    database_id: database.database_id
     end
 
-    expect(captured_output).to match /Updated data with \d+ mutations/
+    expect(captured_output).to match(/Updated data with \d+ mutations/)
   end
 end
