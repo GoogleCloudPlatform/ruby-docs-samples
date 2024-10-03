@@ -14,6 +14,7 @@
 
 require "helper"
 require "openssl"
+require "ostruct"
 
 describe "functions_slack" do
   include FunctionsFramework::Testing
