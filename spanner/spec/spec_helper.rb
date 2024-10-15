@@ -35,7 +35,9 @@ RSpec.configure do |config|
     @instance             = @spanner.instance @instance_id
     @mr_instance_id       = "rb-test-#{seed}"
     # Create multi-region instance for CMEK
-    create_instance @project_id, @mr_instance_id, "nam3"
+    create_instance project_id: @project_id,
+                    instance_id: @mr_instance_id,
+                    instance_config_id: "nam3"
     @mr_instance          = @spanner.instance @mr_instance_id
     @created_instance_ids = []
     @created_instance_ids << @mr_instance_id
