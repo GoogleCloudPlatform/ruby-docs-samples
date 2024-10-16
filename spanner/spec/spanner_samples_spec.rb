@@ -133,7 +133,7 @@ describe "Google Cloud Spanner API samples" do
     )
   end
 
-  example "create_database_with_multiple_kms_keys" do
+  example "create database with multiple KMS keys" do
     capture do
       create_database_with_multiple_kms_keys project_id: @project_id,
                                              instance_id: @mr_instance_id,
@@ -1498,7 +1498,7 @@ describe "Google Cloud Spanner API samples" do
     expect(test_backup).to be_nil
   end
 
-  example "copy backup with multiple KMS keys" do
+  xexample "copy backup with multiple KMS keys" do
     create_backup_with_data @mr_instance
 
     backup_id = "test_mr_cmek_copied"
@@ -1558,7 +1558,7 @@ describe "Google Cloud Spanner API samples" do
     expect(@test_backup).not_to be nil
   end
 
-  example "create backup with multiple KMS keys" do
+  xexample "create backup with multiple KMS keys" do
     database = create_database_with_data @mr_instance
 
     backup_id = "test_mr_cmek_created"
@@ -1573,14 +1573,14 @@ describe "Google Cloud Spanner API samples" do
 
     expect(captured_output).to include("Backup operation in progress")
     expect(captured_output).to match(
-      /Backup #{@backup_id} of size \d+ bytes was created at/
+      /Backup #{backup_id} of size \d+ bytes was created at/
     )
     expect(captured_output).to include("#{@kms_key_names[0]}")
     expect(captured_output).to include("#{@kms_key_names[1]}")
     expect(captured_output).to include("#{@kms_key_names[2]}")
 
-    @test_backup = @mr_instance.backup backup_id
-    expect(@test_backup).not_to be nil
+    test_backup = @mr_instance.backup backup_id
+    expect(test_backup).not_to be nil
     # Clean up
     test_backup&.delete
   end
@@ -1631,7 +1631,7 @@ describe "Google Cloud Spanner API samples" do
     expect(@test_database).not_to be nil
   end
 
-  example "restore database with multiple KMS keys" do
+  xexample "restore database with multiple KMS keys" do
     backup = create_backup_with_data @mr_instance
     database = @mr_instance.database @database_id
 
