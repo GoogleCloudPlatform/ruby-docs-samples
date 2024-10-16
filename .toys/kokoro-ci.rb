@@ -110,6 +110,7 @@ def setup_env
 
   # Single project for spanner
   ENV["GOOGLE_CLOUD_SPANNER_TEST_INSTANCE"] = "ruby-test-instance"
+  ENV["GOOGLE_CLOUD_SPANNER_MR_TEST_INSTANCE"] = "ruby-mr-test-instance"
   ENV["GOOGLE_CLOUD_SPANNER_PROJECT"] = "cloud-samples-ruby-test-0"
 
   # Used by E2E tests
@@ -267,7 +268,7 @@ def install_cloud_sql_proxy
   end
   chmod "+x", "/bin/cloud_sql_proxy"
   mkdir "/cloudsql"
-  chmod 0777, "/cloudsql"
+  chmod 0o777, "/cloudsql"
   @cloud_sql_proxy_installed = true
 end
 
@@ -290,7 +291,7 @@ def install_gcloud_cli
   exec ["gcloud", "-q", "components", "update"]
   exec ["gcloud", "config", "set", "disable_prompts", "True"]
   exec ["gcloud", "config", "set", "project", assert_env("E2E_GOOGLE_CLOUD_PROJECT")]
-  exec ["gcloud", "config", "set", "app/promote_by_default",  "false"]
+  exec ["gcloud", "config", "set", "app/promote_by_default", "false"]
   exec ["gcloud", "auth", "activate-service-account", "--key-file", gac_path]
   exec ["gcloud", "info"]
   @gcloud_cli_installed = true
@@ -316,7 +317,7 @@ end
 # Run tests in the given directory.
 #
 def test_product dir
-  is_e2e = !presubmit? && newest_ruby? || dir.start_with?("run/") || dir.start_with?("appengine/")
+  is_e2e = (!presubmit? && newest_ruby?) || dir.start_with?("run/") || dir.start_with?("appengine/")
   ENV["E2E"] = is_e2e.to_s
   ENV["TEST_DIR"] = dir
   start_time = Time.now.to_i
@@ -352,7 +353,7 @@ end
 #
 def test_minitest dir
   test_exec "MINITEST:#{dir}" do
-    test_files = Dir.glob("test/**/*_test.rb")
+    test_files = Dir.glob "test/**/*_test.rb"
     args = ["-Itest", "-w"]
     args += ["-", "--junit", "--junit-filename=sponge_log.xml"] unless presubmit?
     exec_ruby args, in: :controller do |controller|
@@ -372,7 +373,7 @@ def test_exec name, command = nil
   puts "**** RUNNING: #{name} ...", :cyan, :bold
   result =
     if command
-      exec(command)
+      exec command
     elsif block_given?
       yield
     end
@@ -404,7 +405,7 @@ end
 
 def presubmit?
   unless defined? @is_presubmit
-    @is_presubmit = (/system-tests/ =~ assert_env("KOKORO_BUILD_ARTIFACTS_SUBDIR")).nil?
+    @is_presubmit = (/system-tests/ =~ assert_env "KOKORO_BUILD_ARTIFACTS_SUBDIR").nil?
   end
   @is_presubmit
 end

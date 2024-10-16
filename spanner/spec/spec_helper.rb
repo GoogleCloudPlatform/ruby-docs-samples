@@ -20,8 +20,8 @@ require_relative "../spanner_samples"
 
 RSpec.configure do |config|
   config.before :all do
-    if ENV["GOOGLE_CLOUD_SPANNER_TEST_INSTANCE"].nil? || ENV["GOOGLE_CLOUD_SPANNER_PROJECT"].nil?
-      skip "GOOGLE_CLOUD_SPANNER_TEST_INSTANCE and/or GOOGLE_CLOUD_SPANNER_PROJECT not defined"
+    if ENV["GOOGLE_CLOUD_SPANNER_TEST_INSTANCE"].nil? || ENV["GOOGLE_CLOUD_SPANNER_MR_TEST_INSTANCE"].nil? || ENV["GOOGLE_CLOUD_SPANNER_PROJECT"].nil?
+      skip "GOOGLE_CLOUD_SPANNER_TEST_INSTANCE, GOOGLE_CLOUD_SPANNER_MR_TEST_INSTANCE and/or GOOGLE_CLOUD_SPANNER_PROJECT not defined"
     end
 
     @project_id           = ENV["GOOGLE_CLOUD_SPANNER_PROJECT"]
@@ -33,14 +33,9 @@ RSpec.configure do |config|
     @restored_database_id = "restored_db_#{seed}"
     @spanner              = Google::Cloud::Spanner.new project: @project_id
     @instance             = @spanner.instance @instance_id
-    @mr_instance_id       = "rb-test-#{seed}"
-    # Create multi-region instance for CMEK
-    create_instance project_id: @project_id,
-                    instance_id: @mr_instance_id,
-                    instance_config_id: "nam3"
+    @mr_instance_id       = ENV["GOOGLE_CLOUD_SPANNER_MR_TEST_INSTANCE"]
     @mr_instance          = @spanner.instance @mr_instance_id
     @created_instance_ids = []
-    @created_instance_ids << @mr_instance_id
     @created_instance_config_ids = []
     # A list of KMS key names to be used with CMEK
     @kms_key_names = [
