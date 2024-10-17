@@ -110,6 +110,7 @@ def setup_env
 
   # Single project for spanner
   ENV["GOOGLE_CLOUD_SPANNER_TEST_INSTANCE"] = "ruby-test-instance"
+  ENV["GOOGLE_CLOUD_SPANNER_MR_TEST_INSTANCE"] = "ruby-mr-test-instance"
   ENV["GOOGLE_CLOUD_SPANNER_PROJECT"] = "cloud-samples-ruby-test-0"
 
   # Used by E2E tests

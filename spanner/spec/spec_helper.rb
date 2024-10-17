@@ -20,8 +20,8 @@ require_relative "../spanner_samples"
 
 RSpec.configure do |config|
   config.before :all do
-    if ENV["GOOGLE_CLOUD_SPANNER_TEST_INSTANCE"].nil? || ENV["GOOGLE_CLOUD_SPANNER_PROJECT"].nil?
-      skip "GOOGLE_CLOUD_SPANNER_TEST_INSTANCE and/or GOOGLE_CLOUD_SPANNER_PROJECT not defined"
+    if ENV["GOOGLE_CLOUD_SPANNER_TEST_INSTANCE"].nil? || ENV["GOOGLE_CLOUD_SPANNER_MR_TEST_INSTANCE"].nil? || ENV["GOOGLE_CLOUD_SPANNER_PROJECT"].nil?
+      skip "GOOGLE_CLOUD_SPANNER_TEST_INSTANCE, GOOGLE_CLOUD_SPANNER_MR_TEST_INSTANCE and/or GOOGLE_CLOUD_SPANNER_PROJECT not defined"
     end
 
     @project_id           = ENV["GOOGLE_CLOUD_SPANNER_PROJECT"]
@@ -33,8 +33,16 @@ RSpec.configure do |config|
     @restored_database_id = "restored_db_#{seed}"
     @spanner              = Google::Cloud::Spanner.new project: @project_id
     @instance             = @spanner.instance @instance_id
+    @mr_instance_id       = ENV["GOOGLE_CLOUD_SPANNER_MR_TEST_INSTANCE"]
+    @mr_instance          = @spanner.instance @mr_instance_id
     @created_instance_ids = []
     @created_instance_config_ids = []
+    # A list of KMS key names to be used with CMEK
+    @kms_key_names = [
+      "projects/#{@project_id}/locations/us-central1/keyRings/spanner-test-keyring/cryptoKeys/spanner-test-cmek",
+      "projects/#{@project_id}/locations/us-east1/keyRings/spanner-test-keyring/cryptoKeys/spanner-test-cmek",
+      "projects/#{@project_id}/locations/us-east4/keyRings/spanner-test-keyring/cryptoKeys/spanner-test-cmek"
+    ]
   end
 
   config.after :all do
@@ -74,7 +82,7 @@ RSpec.configure do |config|
   def cleanup_database_resources
     return unless @instance
 
-    with_retry do 
+    with_retry do
       @test_database = @instance.database @database_id
       @test_database&.drop
       @test_database = @instance.database @restored_database_id
@@ -82,10 +90,10 @@ RSpec.configure do |config|
     end
   end
 
-  def cleanup_backup_resources
-    return unless @instance
+  def cleanup_backup_resources instance = @instance
+    return unless instance
 
-    @test_backup = @instance.backup @backup_id
+    @test_backup = instance.backup @backup_id
     @test_backup&.delete
   end
 
@@ -134,13 +142,13 @@ RSpec.configure do |config|
 
   # Creates a temporary database with random ID (will be dropped after test)
   # (re-uses create_database to create database with Albums/Singers schema)
-  def create_singers_albums_database
+  def create_singers_albums_database instance = @instance
     capture do
       create_database project_id:  @project_id,
-                      instance_id: @instance.instance_id,
+                      instance_id: instance.instance_id,
                       database_id: @database_id
 
-      @test_database = @instance.database @database_id
+      @test_database = instance.database @database_id
     end
 
     @test_database
@@ -180,15 +188,15 @@ RSpec.configure do |config|
     @test_database = job.database
   end
 
-  def create_database_with_data
-    database = create_singers_albums_database
+  def create_database_with_data instance = @instance
+    database = create_singers_albums_database instance
 
     capture do
       write_using_dml project_id:  @project_id,
-                      instance_id: @instance.instance_id,
+                      instance_id: instance.instance_id,
                       database_id: database.database_id
 
-      @test_database = @instance.database @database_id
+      @test_database = instance.database @database_id
     end
 
     @test_database
@@ -196,30 +204,30 @@ RSpec.configure do |config|
 
   # Creates or return existing temporary backup with random ID (will be dropped
   # after test)
-  def create_backup_with_data
-    @test_backup = @instance.backup @backup_id
+  def create_backup_with_data instance = @instance
+    @test_backup = instance.backup @backup_id
 
     return @test_backup if @test_backup
 
-    database = create_singers_albums_database
+    database = create_singers_albums_database instance
 
     capture do
       write_using_dml project_id:  @project_id,
-                      instance_id: @instance.instance_id,
+                      instance_id: instance.instance_id,
                       database_id: database.database_id
     end
 
-    client = @spanner.client @instance.instance_id, database.database_id
+    client = @spanner.client instance.instance_id, database.database_id
     version_time = client.execute("SELECT CURRENT_TIMESTAMP() as timestamp").rows.first[:timestamp]
 
     capture do
       create_backup project_id:   @project_id,
-                    instance_id:  @instance.instance_id,
+                    instance_id:  instance.instance_id,
                     database_id:  database.database_id,
                     backup_id:    @backup_id,
                     version_time: version_time
 
-      @test_backup = @instance.backup @backup_id
+      @test_backup = instance.backup @backup_id
     end
 
     @test_backup
