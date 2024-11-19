@@ -3,12 +3,12 @@ steps:
   - id: "build image"
     name: "gcr.io/cloud-builders/docker"
     entrypoint: 'bash'
-    args: ["-c", "docker build --build-arg MASTER_KEY=$$RAILS_KEY -t gcr.io/${PROJECT_ID}/${_SERVICE_NAME} . "]
+    args: ["-c", "docker build --build-arg MASTER_KEY=$$RAILS_KEY -t ${_IMAGE_NAME} . "]
     secretEnv: ["RAILS_KEY"]
 
   - id: "push image"
     name: "gcr.io/cloud-builders/docker"
-    args: ["push", "gcr.io/${PROJECT_ID}/${_SERVICE_NAME}"]
+    args: ["push", "${_IMAGE_NAME}"]
 
   - id: "apply migrations"
     name: "gcr.io/google-appengine/exec-wrapper"
@@ -25,6 +25,9 @@ substitutions:
   _SERVICE_NAME: rails-cat-album
   _INSTANCE_NAME: cat-album
   _SECRET_NAME: rails-master-key
+  _AR_REPO_NAME: cloud-run-source-deploy
+  _IMAGE_NAME: ${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_AR_REPO_NAME}/${_SERVICE_NAME}
+  _CLOUD_SQL_CONNECTION_NAME: ${PROJECT_ID}:${_REGION}:${_INSTANCE_NAME}
 
 availableSecrets:
   secretManager:
@@ -32,5 +35,5 @@ availableSecrets:
     env: RAILS_KEY
 
 images:
-  - "gcr.io/${PROJECT_ID}/${_SERVICE_NAME}"
+  - "${_IMAGE_NAME}"
 # [END cloudrun_rails_cloudbuild]
