@@ -11,7 +11,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# [START functions_framework_version]
 source "https://rubygems.org"
 
 gem "functions_framework", "~> 1.4"
+# [END functions_framework_version]
