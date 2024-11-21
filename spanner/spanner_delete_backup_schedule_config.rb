@@ -13,6 +13,10 @@
 # limitations under the License.
 
 # [START spanner_delete_backup_schedule_config]
+<<<<<<< HEAD
+=======
+require "google/cloud/spanner/admin/database"
+>>>>>>> 886cdfcf (This PR adds code samples for the following APIs:)
 require "google/cloud/spanner/admin/database/v1"
 
 ##
@@ -25,11 +29,19 @@ require "google/cloud/spanner/admin/database/v1"
 #
 def spanner_delete_backup_schedule project_id:, instance_id:, database_id:, backup_schedule_id:
   client = Google::Cloud::Spanner::Admin::Database.database_admin project_id: project_id
+<<<<<<< HEAD
   backup_schedule_name = "#{project_id}_#{instance_id}_#{database_id}_#{backup_schedule_id}"
 
   request = {
     backup_schedule_name: backup_schedule_name
   }
+=======
+  backup_schedule_name = "projects/#{project_id}/instances/#{instance_id}/databases/#{database_id}/backupSchedules/#{backup_schedule_id}"
+
+  request = Google::Cloud::Spanner::Admin::Database::V1::DeleteBackupScheduleRequest.new(
+    name: backup_schedule_name
+  )
+>>>>>>> 886cdfcf (This PR adds code samples for the following APIs:)
 
   client.delete_backup_schedule request
   puts "Deleted backup schedule for #{backup_schedule_name}"

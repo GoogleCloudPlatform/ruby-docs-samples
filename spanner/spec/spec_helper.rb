@@ -27,7 +27,7 @@ RSpec.configure do |config|
     @project_id           = ENV["GOOGLE_CLOUD_SPANNER_PROJECT"]
     @instance_id          = ENV["GOOGLE_CLOUD_SPANNER_TEST_INSTANCE"]
     @seed                 = SecureRandom.hex 8
-    @database_id          = "test_db_#{seed}"
+    @database_id          = "test-1"
     @backup_id            = "test_bu_#{seed}"
     @copied_backup_id     = "test_cbu_#{seed}"
     @restored_database_id = "restored_db_#{seed}"

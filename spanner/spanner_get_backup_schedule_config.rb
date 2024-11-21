@@ -13,10 +13,18 @@
 # limitations under the License.
 
 # [START spanner_get_backup_schedule_config]
+<<<<<<< HEAD
 require "google/cloud/spanner/admin/database/v1"
 
 ##
 # This is a snippet for showcasing how to get a schedule for creating backups.
+=======
+require "google/cloud/spanner/admin/database"
+require "google/cloud/spanner/admin/database/v1"
+
+##
+# This is a snippet for showcasing how to get a backup creation schedule.
+>>>>>>> 886cdfcf (This PR adds code samples for the following APIs:)
 #
 # @param project_id  [String] The ID of the Google Cloud project.
 # @param instance_id [String] The ID of the spanner instance.
@@ -25,6 +33,7 @@ require "google/cloud/spanner/admin/database/v1"
 #
 def spanner_get_backup_schedule project_id:, instance_id:, database_id:, backup_schedule_id:
   client = Google::Cloud::Spanner::Admin::Database.database_admin project_id: project_id
+<<<<<<< HEAD
   backup_schedule_name = "#{project_id}_#{instance_id}_#{database_id}_#{backup_schedule_id}"
 
   request = {
@@ -34,5 +43,15 @@ def spanner_get_backup_schedule project_id:, instance_id:, database_id:, backup_
   backup_schedule = client.get_backup_schedule request
   puts "Backup schedule: #{backup_schedule.name}"
   puts backup_schedule
+=======
+  backup_schedule_name = "projects/#{project_id}/instances/#{instance_id}/databases/#{database_id}/backupSchedules/#{backup_schedule_id}"
+
+  request = Google::Cloud::Spanner::Admin::Database::V1::GetBackupScheduleRequest.new(
+    name: backup_schedule_name
+  )
+
+  backup_schedule = client.get_backup_schedule request
+  puts "Backup schedule: #{backup_schedule.name}"
+>>>>>>> 886cdfcf (This PR adds code samples for the following APIs:)
 end
 # [END spanner_get_backup_schedule_config]
