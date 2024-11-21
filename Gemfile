@@ -20,4 +20,5 @@ group :development, :test do
   gem "minitest-focus", "~> 1.1"
   gem "minitest-junit"
   gem "rake", "~> 13.0"
+  gem "rspec"
 end
