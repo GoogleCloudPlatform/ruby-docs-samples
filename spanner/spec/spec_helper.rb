@@ -35,6 +35,7 @@ RSpec.configure do |config|
     @instance             = @spanner.instance @instance_id
     @mr_instance_id       = ENV["GOOGLE_CLOUD_SPANNER_MR_TEST_INSTANCE"]
     @mr_instance          = @spanner.instance @mr_instance_id
+    @backup_schedule_id   = "test_schedule_#{seed}"
     @created_instance_ids = []
     @created_instance_config_ids = []
     # A list of KMS key names to be used with CMEK
