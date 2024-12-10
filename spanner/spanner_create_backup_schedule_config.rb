@@ -24,39 +24,33 @@ require "google/cloud/spanner/admin/database/v1"
 # @param database_id [String] The ID of the database.
 # @param backup_schedule_id [String] The ID of the backup schedule to be created.
 #
-def spanner_create_backup_schedule project_id:, instance_id:, database_id:, backup_schedule_id:
-  client = Google::Cloud::Spanner::Admin::Database.database_admin project_id: project_id
+def spanner_create_backup_schedule(project_id:, instance_id:, database_id:, backup_schedule_id:) client = Google::Cloud::Spanner::Admin::Database.database_admin project_id: project_id
   database_name = "projects/#{project_id}/instances/#{instance_id}/databases/#{database_id}"
-
-  # For creating schedule for incremental backup use:
-  # backup_spec = Google::Cloud::Spanner::Admin::Database::V1::IncrementalBackupSpec.new
+  
+ # For creating schedule for incremental backup use:
+   # backup_spec = Google::Cloud::Spanner::Admin::Database::V1::IncrementalBackupSpec.new
   backup_spec = Google::Cloud::Spanner::Admin::Database::V1::FullBackupSpec.new
   retention_duration = Google::Protobuf::Duration.new(seconds: 3600 * 24)
-
   encryption_type = Google::Cloud::Spanner::Admin::Database::V1::CreateBackupEncryptionConfig::EncryptionType::USE_DATABASE_ENCRYPTION
   encryption_config = Google::Cloud::Spanner::Admin::Database::V1::CreateBackupEncryptionConfig.new(
-    encryption_type: encryption_type
-  )
-
+  encryption_type: encryption_type,
+)
   cron_spec = Google::Cloud::Spanner::Admin::Database::V1::CrontabSpec.new(text: "30 12 * * *")
   backup_schedule_spec = Google::Cloud::Spanner::Admin::Database::V1::BackupScheduleSpec.new(
-    cron_spec: cron_spec
-  )
-
+  cron_spec: cron_spec,
+)
   backup_schedule = Google::Cloud::Spanner::Admin::Database::V1::BackupSchedule.new(
-    full_backup_spec: backup_spec,
-    retention_duration: retention_duration,
-    spec: backup_schedule_spec,
-    encryption_config: encryption_config
-  )
-
+  full_backup_spec: backup_spec,
+  retention_duration: retention_duration,
+  spec: backup_schedule_spec,
+  encryption_config: encryption_config,
+)
   request = Google::Cloud::Spanner::Admin::Database::V1::CreateBackupScheduleRequest.new(
-    parent: database_name,
-    backup_schedule_id: backup_schedule_id,
-    backup_schedule: backup_schedule
-  )
-
+  parent: database_name,
+  backup_schedule_id: backup_schedule_id,
+  backup_schedule: backup_schedule,
+)
   created_backup_schedule = client.create_backup_schedule request
-  puts "Created backup schedule for #{created_backup_schedule.name}"
-end
+  puts "Created backup schedule for #{created_backup_schedule.name}" end
+
 # [END spanner_create_backup_schedule_config]

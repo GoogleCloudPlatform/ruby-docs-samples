@@ -13,10 +13,7 @@
 # limitations under the License.
 
 # [START spanner_list_backup_schedules_config]
-<<<<<<< HEAD
-=======
 require "google/cloud/spanner/admin/database"
->>>>>>> 886cdfcf (This PR adds code samples for the following APIs:)
 require "google/cloud/spanner/admin/database/v1"
 
 ##
@@ -25,35 +22,14 @@ require "google/cloud/spanner/admin/database/v1"
 # @param project_id  [String] The ID of the Google Cloud project.
 # @param instance_id [String] The ID of the spanner instance.
 # @param database_id [String] The ID of the database.
-<<<<<<< HEAD
-# @param backup_schedule_id [String] The ID of the backup schedule to be created.
 #
-def spanner_list_backup_schedules project_id:, instance_id:, database_id:, backup_schedule_id:
-  client = Google::Cloud::Spanner::Admin::Database.database_admin project_id: project_id
-  backup_schedule_name = "#{project_id}_#{instance_id}_#{database_id}_#{backup_schedule_id}"
-
-  request = {
-    backup_schedule_name: backup_schedule_name
-  }
-
-  backup_schedule = client.get_backup_schedule request
-  puts "Backup schedule: #{backup_schedule.name}"
-  puts backup_schedule
-end
-# [END spanner_get_backup_schedule_config]
-=======
-#
-def spanner_list_backup_schedules project_id:, instance_id:, database_id:
-  client = Google::Cloud::Spanner::Admin::Database.database_admin project_id: project_id
+def spanner_list_backup_schedules(project_id:, instance_id:, database_id:) client = Google::Cloud::Spanner::Admin::Database.database_admin project_id: project_id
   database_name = "projects/#{project_id}/instances/#{instance_id}/databases/#{database_id}"
-
   request = Google::Cloud::Spanner::Admin::Database::V1::ListBackupSchedulesRequest.new(
-    parent: database_name
-  )
-
+  parent: database_name,
+)
   backup_schedules_list = client.list_backup_schedules request
   puts "Backup schedules list for #{database_name}"
-  backup_schedules_list.each {|backup_schedule| puts backup_schedule.name}
-end
+  backup_schedules_list.each { |backup_schedule| puts backup_schedule.name } end
+
 # [END spanner_list_backup_schedules_config]
->>>>>>> 886cdfcf (This PR adds code samples for the following APIs:)

@@ -24,25 +24,25 @@ RSpec.configure do |config|
       skip "GOOGLE_CLOUD_SPANNER_TEST_INSTANCE, GOOGLE_CLOUD_SPANNER_MR_TEST_INSTANCE and/or GOOGLE_CLOUD_SPANNER_PROJECT not defined"
     end
 
-    @project_id           = ENV["GOOGLE_CLOUD_SPANNER_PROJECT"]
-    @instance_id          = ENV["GOOGLE_CLOUD_SPANNER_TEST_INSTANCE"]
-    @seed                 = SecureRandom.hex 8
-    @database_id          = "test-1"
-    @backup_id            = "test_bu_#{seed}"
-    @copied_backup_id     = "test_cbu_#{seed}"
+    @project_id = ENV["GOOGLE_CLOUD_SPANNER_PROJECT"]
+    @instance_id = ENV["GOOGLE_CLOUD_SPANNER_TEST_INSTANCE"]
+    @seed = SecureRandom.hex 8
+    @database_id = "test_db_#{seed}"
+    @backup_id = "test_bu_#{seed}"
+    @copied_backup_id = "test_cbu_#{seed}"
     @restored_database_id = "restored_db_#{seed}"
-    @spanner              = Google::Cloud::Spanner.new project: @project_id
-    @instance             = @spanner.instance @instance_id
-    @mr_instance_id       = ENV["GOOGLE_CLOUD_SPANNER_MR_TEST_INSTANCE"]
-    @mr_instance          = @spanner.instance @mr_instance_id
-    @backup_schedule_id   = "test_schedule_#{seed}"
+    @spanner = Google::Cloud::Spanner.new project: @project_id
+    @instance = @spanner.instance @instance_id
+    @mr_instance_id = ENV["GOOGLE_CLOUD_SPANNER_MR_TEST_INSTANCE"]
+    @mr_instance = @spanner.instance @mr_instance_id
+    @backup_schedule_id = "test_schedule_#{seed}"
     @created_instance_ids = []
     @created_instance_config_ids = []
     # A list of KMS key names to be used with CMEK
     @kms_key_names = [
       "projects/#{@project_id}/locations/us-central1/keyRings/spanner-test-keyring/cryptoKeys/spanner-test-cmek",
       "projects/#{@project_id}/locations/us-east1/keyRings/spanner-test-keyring/cryptoKeys/spanner-test-cmek",
-      "projects/#{@project_id}/locations/us-east4/keyRings/spanner-test-keyring/cryptoKeys/spanner-test-cmek"
+      "projects/#{@project_id}/locations/us-east4/keyRings/spanner-test-keyring/cryptoKeys/spanner-test-cmek",
     ]
   end
 
@@ -91,7 +91,7 @@ RSpec.configure do |config|
     end
   end
 
-  def cleanup_backup_resources instance = @instance
+  def cleanup_backup_resources(instance = @instance)
     return unless instance
 
     @test_backup = instance.backup @backup_id
@@ -110,23 +110,23 @@ RSpec.configure do |config|
     instance_admin_client.project_path project: @project_id
   end
 
-  def instance_config_path instance_config_id
+  def instance_config_path(instance_config_id)
     instance_admin_client.instance_config_path \
       project: @project_id, instance_config: instance_config_id
   end
 
-  def instance_path instance_id
+  def instance_path(instance_id)
     instance_admin_client.instance_path \
       project: @project_id, instance: instance_id
   end
 
-  def find_instance instance_id
+  def find_instance(instance_id)
     instance_admin_client.get_instance name: instance_path(instance_id)
   rescue Google::Cloud::NotFoundError
     nil
   end
 
-  def create_test_database database_id, statements: []
+  def create_test_database(database_id, statements: [])
     db_admin_client = Google::Cloud::Spanner::Admin::Database.database_admin
 
     instance_path = db_admin_client.instance_path project: @project_id,
@@ -143,9 +143,9 @@ RSpec.configure do |config|
 
   # Creates a temporary database with random ID (will be dropped after test)
   # (re-uses create_database to create database with Albums/Singers schema)
-  def create_singers_albums_database instance = @instance
+  def create_singers_albums_database(instance = @instance)
     capture do
-      create_database project_id:  @project_id,
+      create_database project_id: @project_id,
                       instance_id: instance.instance_id,
                       database_id: @database_id
 
@@ -157,7 +157,7 @@ RSpec.configure do |config|
 
   def create_dml_singers_albums_database
     capture do
-      create_dml_database project_id:  @project_id,
+      create_dml_database project_id: @project_id,
                           instance_id: @instance.instance_id,
                           database_id: @database_id
 
@@ -169,7 +169,7 @@ RSpec.configure do |config|
 
   def create_performances_table
     capture do
-      create_table_with_timestamp_column project_id:  @project_id,
+      create_table_with_timestamp_column project_id: @project_id,
                                          instance_id: @instance.instance_id,
                                          database_id: @database_id
     end
@@ -177,7 +177,7 @@ RSpec.configure do |config|
 
   def create_venues_table
     capture do
-      create_table_with_datatypes project_id:  @project_id,
+      create_table_with_datatypes project_id: @project_id,
                                   instance_id: @instance.instance_id,
                                   database_id: @database_id
     end
@@ -189,11 +189,11 @@ RSpec.configure do |config|
     @test_database = job.database
   end
 
-  def create_database_with_data instance = @instance
+  def create_database_with_data(instance = @instance)
     database = create_singers_albums_database instance
 
     capture do
-      write_using_dml project_id:  @project_id,
+      write_using_dml project_id: @project_id,
                       instance_id: instance.instance_id,
                       database_id: database.database_id
 
@@ -205,7 +205,7 @@ RSpec.configure do |config|
 
   # Creates or return existing temporary backup with random ID (will be dropped
   # after test)
-  def create_backup_with_data instance = @instance
+  def create_backup_with_data(instance = @instance)
     @test_backup = instance.backup @backup_id
 
     return @test_backup if @test_backup
@@ -213,7 +213,7 @@ RSpec.configure do |config|
     database = create_singers_albums_database instance
 
     capture do
-      write_using_dml project_id:  @project_id,
+      write_using_dml project_id: @project_id,
                       instance_id: instance.instance_id,
                       database_id: database.database_id
     end
@@ -222,10 +222,10 @@ RSpec.configure do |config|
     version_time = client.execute("SELECT CURRENT_TIMESTAMP() as timestamp").rows.first[:timestamp]
 
     capture do
-      create_backup project_id:   @project_id,
-                    instance_id:  instance.instance_id,
-                    database_id:  database.database_id,
-                    backup_id:    @backup_id,
+      create_backup project_id: @project_id,
+                    instance_id: instance.instance_id,
+                    database_id: database.database_id,
+                    backup_id: @backup_id,
                     version_time: version_time
 
       @test_backup = instance.backup @backup_id
@@ -248,10 +248,10 @@ RSpec.configure do |config|
     backup = create_backup_with_data
 
     capture do
-      restore_backup project_id:  @project_id,
+      restore_backup project_id: @project_id,
                      instance_id: @instance.instance_id,
                      database_id: @restored_database_id,
-                     backup_id:   backup.backup_id
+                     backup_id: backup.backup_id
 
       @test_database = @instance.database @restored_database_id
     end
@@ -259,13 +259,13 @@ RSpec.configure do |config|
     @test_database
   end
 
-  def with_retry retries: 5
+  def with_retry(retries: 5)
     max_retries = 10
     Retriable.retriable(
       on: Google::Cloud::DeadlineExceededError,
       base_interval: 1,
       multiplier: 2,
-      tries: [retries, max_retries].min
+      tries: [retries, max_retries].min,
     ) do
       return yield
     end

@@ -24,39 +24,31 @@ require "google/cloud/spanner/admin/database/v1"
 # @param database_id [String] The ID of the database.
 # @param backup_schedule_id [String] The ID of the backup schedule to be created.
 #
-def spanner_update_backup_schedule project_id:, instance_id:, database_id:, backup_schedule_id:
-  client = Google::Cloud::Spanner::Admin::Database.database_admin project_id: project_id
+def spanner_update_backup_schedule(project_id:, instance_id:, database_id:, backup_schedule_id:) client = Google::Cloud::Spanner::Admin::Database.database_admin project_id: project_id
   backup_schedule_name = "projects/#{project_id}/instances/#{instance_id}/databases/#{database_id}/backupSchedules/#{backup_schedule_id}"
-
   retention_duration = Google::Protobuf::Duration.new(seconds: 3600 * 24)
-
   encryption_type = Google::Cloud::Spanner::Admin::Database::V1::CreateBackupEncryptionConfig::EncryptionType::GOOGLE_DEFAULT_ENCRYPTION
   encryption_config = Google::Cloud::Spanner::Admin::Database::V1::CreateBackupEncryptionConfig.new(
-    encryption_type: encryption_type
-  )
-
+  encryption_type: encryption_type,
+)
   cron_spec = Google::Cloud::Spanner::Admin::Database::V1::CrontabSpec.new(text: "45 10 * * *")
   backup_schedule_spec = Google::Cloud::Spanner::Admin::Database::V1::BackupScheduleSpec.new(
-    cron_spec: cron_spec
-  )
-
+  cron_spec: cron_spec,
+)
   backup_schedule = Google::Cloud::Spanner::Admin::Database::V1::BackupSchedule.new(
-    name: backup_schedule_name,
-    retention_duration: retention_duration,
-    spec: backup_schedule_spec,
-    encryption_config: encryption_config
-  )
-
+  name: backup_schedule_name,
+  retention_duration: retention_duration,
+  spec: backup_schedule_spec,
+  encryption_config: encryption_config,
+)
   field_mask = Google::Protobuf::FieldMask.new(
-    paths: ['retention_duration', 'spec.cron_spec.text', 'encryption_config']
-  )
-
+  paths: ["retention_duration", "spec.cron_spec.text", "encryption_config"],
+)
   request = Google::Cloud::Spanner::Admin::Database::V1::UpdateBackupScheduleRequest.new(
-    backup_schedule: backup_schedule,
-    update_mask: field_mask
-  )
-
+  backup_schedule: backup_schedule,
+  update_mask: field_mask,
+)
   updated_backup_schedule = client.update_backup_schedule request
-  puts "Updated backup schedule for #{updated_backup_schedule.name}"
-end
+  puts "Updated backup schedule for #{updated_backup_schedule.name}" end
+
 # [END spanner_update_backup_schedule_config]
