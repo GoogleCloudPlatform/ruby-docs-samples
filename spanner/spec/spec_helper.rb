@@ -30,6 +30,7 @@ RSpec.configure do |config|
     @database_id          = "test_db_#{seed}"
     @backup_id            = "test_bu_#{seed}"
     @copied_backup_id     = "test_cbu_#{seed}"
+    @backup_schedule_id   = "test_schedule_#{seed}"
     @restored_database_id = "restored_db_#{seed}"
     @spanner              = Google::Cloud::Spanner.new project: @project_id
     @instance             = @spanner.instance @instance_id
