@@ -9,13 +9,26 @@ This sample shows how to create a service that receives and prints generic event
 
 ## Quickstart
 
+Set your environment variables:
+
+```
+export GOOGLE_CLOUD_PROJECT=<PROJECT_ID>
+export GOOGLE_CLOUD_REGION=<REGION>
+```
+
+Create an Artifact Registry:
+
+```
+gcloud artifacts repositories create containers --repository-format docker --location ${GOOGLE_CLOUD_REGION}
+```
+
 Deploy your Cloud Run service:
 
 ```
 gcloud builds submit \
- --tag gcr.io/$(gcloud config get-value project)/eventarc-generic
+ --tag ${GOOGLE_CLOUD_REGION}-docker.pkg.dev/${GOOGLE_CLOUD_PROJECT}/containers/eventarc-generic
 gcloud run deploy eventarc-generic \
- --image gcr.io/$(gcloud config get-value project)/eventarc-generic
+ --image ${GOOGLE_CLOUD_REGION}-docker.pkg.dev/${GOOGLE_CLOUD_PROJECT}/containers/eventarc-generic
 ```
 
 ## Test
