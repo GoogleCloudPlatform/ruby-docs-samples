@@ -15,11 +15,11 @@
 steps:
 - # Build the renderer image
   name: gcr.io/cloud-builders/docker:latest
-  args: ['build', '--tag=gcr.io/$PROJECT_ID/eventarc-${_SUFFIX}', '.']
+  args: ['build', '--tag=us-docker.pkg.dev/$PROJECT_ID/containers/eventarc-${_SUFFIX}', '.']
 
 - # Push the container image to Container Registry
   name: gcr.io/cloud-builders/docker
-  args: ['push', 'gcr.io/$PROJECT_ID/eventarc-${_SUFFIX}']
+  args: ['push', 'us-docker.pkg.dev/$PROJECT_ID/containers/eventarc-${_SUFFIX}']
 
 - # Deploy to Cloud Run
   name: gcr.io/google.com/cloudsdktool/cloud-sdk
@@ -28,11 +28,11 @@ steps:
   - run
   - deploy
   - eventarc-${_SUFFIX}
-  - --image=gcr.io/$PROJECT_ID/eventarc-${_SUFFIX}
+  - --image=us-docker.pkg.dev/$PROJECT_ID/containers/eventarc-${_SUFFIX}
   - --region=us-central1
   - --platform=managed
   - --no-allow-unauthenticated
   - --set-env-vars=NAME=Test
 
 images:
-  - 'gcr.io/$PROJECT_ID/eventarc-${_SUFFIX}'
+  - 'us-docker.pkg.dev/$PROJECT_ID/containers/eventarc-${_SUFFIX}'
