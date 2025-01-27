@@ -16,6 +16,11 @@ This sample shows how to deploy a Hello World application to Cloud Run.
     ```sh
     git clone https://github.com/GoogleCloudPlatform/ruby-docs-samples.git
     ```
+1. Create an Artifact Registry:
+
+    ```sh
+    gcloud artifacts repositories create containers --repository-format docker --location ${GOOGLE_CLOUD_REGION}
+    ```
 
 ## Build
 
@@ -48,11 +53,14 @@ bundle exec rspec
 # Set an environment variable with your GCP Project ID
 export GOOGLE_CLOUD_PROJECT=<PROJECT_ID>
 
+# Set an environment variable with your Google Cloud region
+export GOOGLE_CLOUD_REGION=<REGION>
+
 # Submit a build using Google Cloud Build
-gcloud builds submit --tag gcr.io/${GOOGLE_CLOUD_PROJECT}/helloworld
+gcloud builds submit --tag ${GOOGLE_CLOUD_REGION}-docker.pkg.dev/${GOOGLE_CLOUD_PROJECT}/containers/helloworld
 
 # Deploy to Cloud Run
-gcloud run deploy helloworld --image gcr.io/${GOOGLE_CLOUD_PROJECT}/helloworld
+gcloud run deploy helloworld --image ${GOOGLE_CLOUD_REGION}-docker.pkg.dev/${GOOGLE_CLOUD_PROJECT}/containers/helloworld
 ```
 
 Visit your deployed container by opening the service URL in a web browser.

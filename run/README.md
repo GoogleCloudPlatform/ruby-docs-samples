@@ -22,6 +22,12 @@ For more Cloud Run samples beyond Ruby, see the main list in the [Cloud Run Samp
     git clone https://github.com/GoogleCloudPlatform/ruby-docs-samples.git
     ```
 
+1. Create an Artifact Registry:
+
+    ```sh
+    gcloud artifacts repositories create containers --repository-format docker --location ${GOOGLE_CLOUD_REGION}
+    ```
+
 ## How to run a sample locally
 
 1. [Install docker locally](https://docs.docker.com/install/)
@@ -75,14 +81,14 @@ For more Cloud Run samples beyond Ruby, see the main list in the [Cloud Run Samp
 1. Build your container image using Cloud Build, by running the following command from the directory containing the Dockerfile:
 
     ```sh
-    gcloud builds submit --tag gcr.io/${GOOGLE_CLOUD_PROJECT}/${SAMPLE}
+    gcloud builds submit --tag ${GOOGLE_CLOUD_REGION}-docker.pkg.dev/${GOOGLE_CLOUD_PROJECT}/containers/${SAMPLE}
     ```
 
 1. Deploy the container image using the following command:
 
     ```sh
     gcloud run deploy ${SAMPLE} \
-      --image gcr.io/${GOOGLE_CLOUD_PROJECT}/${SAMPLE}
+      --image ${GOOGLE_CLOUD_REGION}-docker.pkg.dev/${GOOGLE_CLOUD_PROJECT}/containers/${SAMPLE}
     ```
 
 See [Building containers][run_build] and [Deploying container images][run_deploy]
