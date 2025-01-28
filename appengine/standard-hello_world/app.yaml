@@ -13,7 +13,7 @@
 # limitations under the License.
 
 # [START gae_standard_quickstart_yaml]
-runtime: ruby30
+runtime: ruby32
 entrypoint: bundle exec ruby app.rb
 instance_class: F2
 # [END gae_standard_quickstart_yaml]
