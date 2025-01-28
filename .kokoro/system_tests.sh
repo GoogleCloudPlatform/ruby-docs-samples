@@ -6,7 +6,7 @@ set -e -u
 if [[ $KOKORO_RUBY_VERSION == "newest" ]]; then
   rbenv global "$NEWEST_RUBY_VERSION"
 else
-  rbenv global "$RUBY_32_VERSION"
+  rbenv global "$OLDEST_RUBY_VERSION"
 fi
 ruby --version
 
