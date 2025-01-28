@@ -334,7 +334,8 @@ def test_product dir
       end
     end
   end
-  exec ["bundle", "exec", "ruby", "spec/e2e_cleanup.rb", dir, @build_id] if is_e2e
+  #exec ["bundle", "exec", "ruby", "spec/e2e_cleanup.rb", dir, @build_id] if is_e2e
+  puts "TEMP DISABLE CLEANUP FOR DEBUGGING"
   finish_time = Time.now.to_i
   puts "Tests for #{dir} took #{finish_time - start_time} seconds"
 end
