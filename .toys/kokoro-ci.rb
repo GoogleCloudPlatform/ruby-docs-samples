@@ -137,7 +137,7 @@ def list_products
   # Currently, we include the rails tests for the run/rails tutorial.
   omit_list = ["run/rails/test"]
   @products = []
-  (Dir.glob("*/Gemfile") + Dir.glob("*/*/Gemfile")).each do |gemfile|
+  Dir.glob("*/**/Gemfile").each do |gemfile|
     dir = File.dirname gemfile
     if (File.directory?("#{dir}/test") && !omit_list.include?("#{dir}/test")) ||
        (File.directory?("#{dir}/spec") && !omit_list.include?("#{dir}/spec")) ||
