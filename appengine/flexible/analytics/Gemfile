@@ -18,7 +18,7 @@ gem "sinatra"
 
 group :test do
   gem "capybara"
+  gem "puma"
   gem "rspec"
   gem "rspec_junit_formatter"
-  gem "puma"
 end

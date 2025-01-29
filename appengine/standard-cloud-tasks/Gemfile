@@ -18,8 +18,8 @@ gem "google-cloud-tasks", "~>2.1"
 gem "sinatra"
 
 group :test do
+  gem "puma"
   gem "rack-test"
   gem "rspec"
   gem "rspec_junit_formatter"
-  gem "puma"
 end
