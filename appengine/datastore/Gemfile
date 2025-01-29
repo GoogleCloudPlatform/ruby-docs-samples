@@ -20,8 +20,8 @@ gem "sinatra"
 # [END gae_flex_datastore_config]
 
 group :test do
-  gem "puma"
   gem "capybara"
+  gem "puma"
   gem "rspec"
   gem "rspec_junit_formatter"
 end
