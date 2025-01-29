@@ -16,11 +16,11 @@
 source "https://rubygems.org"
 
 gem "sinatra"
-gem "webrick", "~> 1.8"
 
 # [END gae_flex_quickstart_dependencies]
 ruby "~>3.2"
 group :test do
+  gem "puma"
   gem "rack-test"
   gem "rspec"
   gem "rspec_junit_formatter"

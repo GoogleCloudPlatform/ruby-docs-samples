@@ -18,6 +18,7 @@ gem "sinatra", "~> 3.2"
 
 group :test do
   gem "faraday"
+  gem "puma"
   gem "rspec"
   gem "rspec_junit_formatter"
 end
