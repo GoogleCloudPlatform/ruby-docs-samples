@@ -15,7 +15,7 @@
 # [START gae_standard_quickstart_dependencies]
 source "https://rubygems.org"
 
-gem "sinatra", "~> 2.2.0"
+gem "sinatra", "~> 4.1.0"
 gem "webrick", "~> 1.7"
 # [END gae_standard_quickstart_dependencies]
 
