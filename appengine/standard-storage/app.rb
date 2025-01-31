@@ -20,8 +20,8 @@ require "google/cloud/storage"
 configure :development do
   set :host_authorization, { permitted_hosts: [] }
 end
-# [START gae_standard_storage_app]
 
+# [START gae_standard_storage_app]
 storage = Google::Cloud::Storage.new
 bucket  = storage.bucket ENV["GOOGLE_CLOUD_STORAGE_BUCKET"]
 
