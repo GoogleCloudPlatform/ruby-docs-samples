@@ -11,6 +11,9 @@ GEM
       ruby2_keywords (~> 0.0.1)
     net-http (0.4.1)
       uri
+    nio4r (2.7.4)
+    puma (6.6.0)
+      nio4r (~> 2.0)
     rack (2.2.8.1)
     rack-protection (3.2.0)
       base64 (>= 0.1.0)
@@ -44,6 +47,7 @@ PLATFORMS
 
 DEPENDENCIES
   faraday
+  puma
   rspec
   rspec_junit_formatter
   sinatra (~> 3.2)
