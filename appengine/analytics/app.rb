@@ -16,6 +16,13 @@
 require "sinatra"
 require "net/http"
 
+# [END gae_flex_analytics_track_event]
+# Allows all hosts in development
+configure :development do
+  set :host_authorization, { permitted_hosts: [] }
+end
+
+# [START gae_flex_analytics_track_event]
 # The following environment variable is set by app.yaml when running on GAE,
 # but will need to be manually set when running locally. See README.md.
 GA_TRACKING_ID = ENV["GA_TRACKING_ID"]

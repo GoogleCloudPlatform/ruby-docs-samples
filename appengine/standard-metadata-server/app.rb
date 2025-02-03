@@ -16,6 +16,13 @@
 require "sinatra"
 require "net/http"
 
+# [END gae_standard_metadata]
+# Allows all hosts in development
+configure :development do
+  set :host_authorization, { permitted_hosts: [] }
+end
+
+# [START gae_standard_metadata]
 get "/" do
   uri = URI.parse(
     "http://metadata.google.internal/computeMetadata/v1" +
