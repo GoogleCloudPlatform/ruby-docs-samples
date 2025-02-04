@@ -23,7 +23,7 @@ Capybara.app = Sinatra::Application
 
 Capybara.register_server :thin do |app, port, host|
   require "rack/handler/thin"
-  Rack::Handler::Thin.run(app, :Port => port, :Host => host, browser_options: {'no-sandbox': nil})
+  Rack::Handler::Thin.run(app, :Port => port, :Host => host)
 end
 
 Capybara.server = :thin

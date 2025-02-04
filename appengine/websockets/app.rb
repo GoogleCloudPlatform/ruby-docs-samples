@@ -21,13 +21,6 @@ require "thin"
 
 Faye::WebSocket.load_adapter "thin"
 
-# [END gae_flex_websockets]
-# Allows all hosts in development
-configure :development do
-  set :host_authorization, { permitted_hosts: [] }
-end
-
-# [START gae_flex_websockets]
 # For the purposes of this example, use a global variable to keep track of
 # all connected clients in order to send chat messages. This approach limits
 # us to a single server and a single process; a more robust solution would be
