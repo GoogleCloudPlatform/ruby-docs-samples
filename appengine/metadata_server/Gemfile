@@ -15,6 +15,7 @@
 source "https://rubygems.org"
 
 gem "puma"
+gem "rackup", "~> 1.0"
 gem "sinatra"
 
 group :test do

@@ -18,6 +18,9 @@ GEM
     rack-protection (3.2.0)
       base64 (>= 0.1.0)
       rack (~> 2.2, >= 2.2.4)
+    rackup (1.0.1)
+      rack (< 3)
+      webrick
     rspec (3.13.0)
       rspec-core (~> 3.13.0)
       rspec-expectations (~> 3.13.0)
@@ -41,6 +44,7 @@ GEM
       tilt (~> 2.0)
     tilt (2.3.0)
     uri (0.13.0)
+    webrick (1.9.1)
 
 PLATFORMS
   ruby
@@ -48,6 +52,7 @@ PLATFORMS
 DEPENDENCIES
   faraday
   puma
+  rackup (~> 1.0)
   rspec
   rspec_junit_formatter
   sinatra
