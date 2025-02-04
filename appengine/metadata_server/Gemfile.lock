@@ -50,7 +50,7 @@ DEPENDENCIES
   puma
   rspec
   rspec_junit_formatter
-  sinatra (~> 3.2)
+  sinatra
 
 BUNDLED WITH
    2.4.22
