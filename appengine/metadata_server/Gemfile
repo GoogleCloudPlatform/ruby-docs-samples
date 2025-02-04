@@ -14,8 +14,8 @@
 
 source "https://rubygems.org"
 
-gem "sinatra"
 gem "puma"
+gem "sinatra"
 
 group :test do
   gem "faraday"
