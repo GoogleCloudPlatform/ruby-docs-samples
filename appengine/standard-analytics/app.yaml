@@ -13,7 +13,7 @@
 # limitations under the License.
 
 # [START gae_standard_analytics_env_variables]
-runtime: ruby30
+runtime: ruby33
 entrypoint: bundle exec ruby app.rb
 
 env_variables:

@@ -16,6 +16,13 @@
 require "sinatra"
 require "google/cloud/storage"
 
+# [END gae_flex_storage_app]
+# Allows all hosts in development
+configure :development do
+  set :host_authorization, { permitted_hosts: [] }
+end
+
+# [START gae_flex_storage_app]
 storage = Google::Cloud::Storage.new
 bucket  = storage.bucket ENV["GOOGLE_CLOUD_STORAGE_BUCKET"]
 

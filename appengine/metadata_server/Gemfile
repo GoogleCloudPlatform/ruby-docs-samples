@@ -14,7 +14,9 @@
 
 source "https://rubygems.org"
 
-gem "sinatra", "~> 3.2"
+gem "puma"
+gem "rackup", "~> 1.0"
+gem "sinatra"
 
 group :test do
   gem "faraday"
