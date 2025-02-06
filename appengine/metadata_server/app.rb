@@ -15,6 +15,12 @@
 # [START gae_flex_metadata]
 require "sinatra"
 require "net/http"
+# [END gae_flex_metadata]
+
+configure :development do
+  set :host_authorization, { permitted_hosts: [] }
+end
+# [START gae_flex_metadata]
 
 get "/" do
   uri = URI.parse(

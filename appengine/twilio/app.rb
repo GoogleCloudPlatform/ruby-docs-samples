@@ -15,6 +15,10 @@
 require "sinatra"
 require "twilio-ruby"
 
+configure :development do
+  set :host_authorization, { permitted_hosts: [] }
+end
+
 TWILIO_ACCOUNT_SID = ENV["TWILIO_ACCOUNT_SID"]
 TWILIO_AUTH_TOKEN  = ENV["TWILIO_AUTH_TOKEN"]
 TWILIO_NUMBER      = ENV["TWILIO_NUMBER"]

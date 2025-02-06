@@ -16,6 +16,12 @@
 require "digest/sha2"
 require "sinatra"
 require "google/cloud/datastore"
+# [END gae_flex_datastore_app]
+
+configure :development do
+  set :host_authorization, { permitted_hosts: [] }
+end
+# [START gae_flex_datastore_app]
 
 get "/" do
   datastore = Google::Cloud::Datastore.new

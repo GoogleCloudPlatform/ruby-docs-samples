@@ -19,6 +19,10 @@ require "base64"
 require "google/cloud/pubsub"
 require "googleauth"
 
+configure :development do
+  set :host_authorization, { permitted_hosts: [] }
+end
+
 pubsub = Google::Cloud::Pubsub.new
 
 # [START gae_flex_pubsub_env]

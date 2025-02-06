@@ -17,6 +17,12 @@ $stdout.sync = true
 # [START cloud_tasks_appengine_quickstart]
 require "sinatra"
 require "json"
+# [END cloud_tasks_appengine_quickstart]
+
+configure :development do
+  set :host_authorization, { permitted_hosts: [] }
+end
+# [START cloud_tasks_appengine_quickstart]
 
 get "/" do
   # Basic index to verify app is serving
