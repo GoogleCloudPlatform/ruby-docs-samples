@@ -21,6 +21,11 @@ require "googleauth"
 
 pubsub = Google::Cloud::Pubsub.new
 
+# Allows all hosts in development
+configure :development do
+  set :host_authorization, { permitted_hosts: [] }
+end
+
 # [START gae_flex_pubsub_env]
 topic = pubsub.topic ENV["PUBSUB_TOPIC"]
 PUBSUB_VERIFICATION_TOKEN = ENV["PUBSUB_VERIFICATION_TOKEN"]

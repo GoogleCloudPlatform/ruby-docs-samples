@@ -19,7 +19,9 @@ require "capybara/cuprite"
 
 describe "Cloud Storage", type: :feature do
   before do
-    Capybara.current_driver = :cuprite
+    Capybara.register_driver :cuprite do |app|
+      Capybara::Cuprite::Driver.new(app, browser_options: {'no-sandbox': nil})
+    end
   end
   it "can upload and get public URL of uploaded file" do
     Capybara.app = Sinatra::Application
@@ -31,7 +33,7 @@ describe "Cloud Storage", type: :feature do
 
     uploaded_file_public_url = page.find("body").text
 
-    visit uploaded_file_public_url
-    expect(page).to have_content "This is the content of the test-upload.txt file"
+    page = Net::HTTP.get_response(URI(uploaded_file_public_url))
+    expect(page.body).to include "This is the content of the test-upload.txt file"
   end
 end
