@@ -18,6 +18,12 @@
 require "sinatra"
 require "faye/websocket"
 require "thin"
+# [END gae_flex_websockets]
+
+configure :development do
+  set :host_authorization, { permitted_hosts: [] }
+end
+# [START gae_flex_websockets]
 
 Faye::WebSocket.load_adapter "thin"
 
