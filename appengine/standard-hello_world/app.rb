@@ -14,6 +14,12 @@
 
 # [START gae_standard_quickstart]
 require "sinatra"
+# [END gae_standard_quickstart]
+configure :development do
+  set :host_authorization, { permitted_hosts: [] }
+end
+
+# [START gae_standard_quickstart]
 
 get "/" do
   "Hello world!"
