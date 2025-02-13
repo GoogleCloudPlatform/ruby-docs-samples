@@ -19,7 +19,7 @@ RSpec.feature "Cat Friends" do
   scenario "should display a list of cats" do
     visit root_path
 
-    expect(page).to have_content "Ms. Paws\t2"
-    expect(page).to have_content "Mr. Whiskers\t4"
+    expect(page).to have_content "Ms. Paws 2"
+    expect(page).to have_content "Mr. Whiskers 4"
   end
 end
