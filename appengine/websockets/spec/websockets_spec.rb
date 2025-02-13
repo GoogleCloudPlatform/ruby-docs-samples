@@ -21,6 +21,10 @@ Capybara.javascript_driver = :cuprite
 
 Capybara.app = Sinatra::Application
 
+Capybara.register_driver :cuprite do |app|
+  Capybara::Cuprite::Driver.new(app, browser_options: {'no-sandbox': nil})
+end
+
 Capybara.register_server :thin do |app, port, host|
   require "rack/handler/thin"
   Rack::Handler::Thin.run(app, :Port => port, :Host => host)
