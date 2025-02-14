@@ -13,7 +13,9 @@ require File.expand_path "../../../spec/e2e", __dir__
 # Checks for pending migration and applies them before tests are run.
 ActiveRecord::Migration.maintain_test_schema!
 
-Capybara.current_driver = :cuprite
+Capybara.register_driver :cuprite do |app|
+  Capybara::Cuprite::Driver.new(app, browser_options: {'no-sandbox': nil})
+end
 
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
