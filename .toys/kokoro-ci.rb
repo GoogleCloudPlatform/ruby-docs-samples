@@ -274,20 +274,10 @@ end
 
 ##
 # Installs the gcloud tool
+# gcloud installed from system packages https://github.com/googleapis/testing-infra-docker/pull/446
 #
 def install_gcloud_cli
   return if defined? @gcloud_cli_installed
-  puts "Installing gcloud cli", :bold
-  Dir.chdir "/tmp" do
-    exec ["wget", "-q", "https://dl.google.com/dl/cloudsdk/release/google-cloud-sdk.tar.gz"]
-    exec ["tar", "xzf", "google-cloud-sdk.tar.gz"]
-    mv "google-cloud-sdk", "/google-cloud-sdk"
-  end
-  exec ["/google-cloud-sdk/install.sh",
-        "--usage-reporting", "false",
-        "--path-update", "false",
-        "--command-completion", "false"]
-  ENV["PATH"] = "#{ENV['PATH']}:/google-cloud-sdk/bin"
   exec ["gcloud", "-q", "components", "update"]
   exec ["gcloud", "config", "set", "disable_prompts", "True"]
   exec ["gcloud", "config", "set", "project", assert_env("E2E_GOOGLE_CLOUD_PROJECT")]
