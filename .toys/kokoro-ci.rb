@@ -278,7 +278,6 @@ end
 #
 def install_gcloud_cli
   return if defined? @gcloud_cli_installed
-  exec ["gcloud", "-q", "components", "update"]
   exec ["gcloud", "config", "set", "disable_prompts", "True"]
   exec ["gcloud", "config", "set", "project", assert_env("E2E_GOOGLE_CLOUD_PROJECT")]
   exec ["gcloud", "config", "set", "app/promote_by_default",  "false"]
