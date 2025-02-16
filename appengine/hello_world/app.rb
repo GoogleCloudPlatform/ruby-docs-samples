@@ -16,7 +16,7 @@
 require "sinatra"
 
 # [END gae_flex_quickstart]
-# Allows all hosts in development.
+# Allows all hosts in development
 configure :development do
   set :host_authorization, { permitted_hosts: [] }
 end
