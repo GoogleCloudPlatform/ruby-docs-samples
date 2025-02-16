@@ -15,7 +15,7 @@
 # [START cloudrun_helloworld_dockerfile]
 # [START run_helloworld_dockerfile]
 
-# Use the official Ruby image.
+# Use the official Ruby images
 # https://hub.docker.com/_/ruby
 FROM ruby:3.2-buster
 
