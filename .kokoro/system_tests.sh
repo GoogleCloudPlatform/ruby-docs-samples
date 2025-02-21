@@ -17,7 +17,11 @@ source $KOKORO_GFILE_DIR/secrets.sh
 cd github/ruby-docs-samples/
 
 # Install tools
-gem install --no-document toys
+if [[ $KOKORO_RUBY_VERSION == "newest" ]]; then
+  gem install --no-document bundler toys
+else
+  gem install --no-document bundler:2.2.2 toys
+fi
 
 # Run the CI script
 toys kokoro-ci -v
