@@ -213,7 +213,6 @@ end
 #
 def start_cloud_sql_services
   if @products.include? "cloud-sql/mysql"
-    install_cloud_sql_proxy
     puts "Starting Cloud SQL Proxy for MySQL", :bold
     connection_name = assert_env "MYSQL_INSTANCE_CONNECTION_NAME"
     process = exec ["/bin/cloud_sql_proxy",
@@ -224,7 +223,6 @@ def start_cloud_sql_services
     @kill_on_cleanup << process
   end
   if @products.include? "cloud-sql/postgres"
-    install_cloud_sql_proxy
     puts "Starting Cloud SQL Proxy for Postgres", :bold
     connection_name = assert_env "POSTGRES_INSTANCE_CONNECTION_NAME"
     process = exec ["/bin/cloud_sql_proxy",
@@ -235,7 +233,6 @@ def start_cloud_sql_services
     @kill_on_cleanup << process
   end
   if @products.include? "cloud-sql/postgres"
-    install_cloud_sql_proxy
     puts "Starting Cloud SQL Proxy for SQL Server", :bold
     connection_name = assert_env "SQLSERVER_INSTANCE_CONNECTION_NAME"
     process = exec ["/bin/cloud_sql_proxy",
@@ -254,22 +251,6 @@ end
 #
 def start_memcached
   exec ["service", "memcached", "start"]
-end
-
-##
-# Download and install cloud_sql_proxy
-#
-def install_cloud_sql_proxy
-  return if defined? @cloud_sql_proxy_installed
-  puts "Installing Cloud SQL Proxy", :bold
-  Dir.chdir "/tmp" do
-    exec ["wget", "-q", "https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64"]
-    mv "cloud_sql_proxy.linux.amd64", "/bin/cloud_sql_proxy"
-  end
-  chmod "+x", "/bin/cloud_sql_proxy"
-  mkdir "/cloudsql"
-  chmod 0777, "/cloudsql"
-  @cloud_sql_proxy_installed = true
 end
 
 ##
