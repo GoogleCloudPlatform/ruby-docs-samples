@@ -37,6 +37,7 @@ RSpec.configure do |config|
     @mr_instance          = @spanner.instance @mr_instance_id
     @created_instance_ids = []
     @created_instance_config_ids = []
+    @created_instance_partitions_ids = []
     # A list of KMS key names to be used with CMEK
     @kms_key_names = [
       "projects/#{@project_id}/locations/us-central1/keyRings/spanner-test-keyring/cryptoKeys/spanner-test-cmek",
@@ -112,6 +113,13 @@ RSpec.configure do |config|
   def instance_config_path instance_config_id
     instance_admin_client.instance_config_path \
       project: @project_id, instance_config: instance_config_id
+  end
+
+  def instance_partition_path instance_id, instance_partition_id
+    instance_admin_client.instance_partition_path \
+      project: @project_id,
+      instance: instance_id,
+      instance_partition: instance_partition_id
   end
 
   def instance_path instance_id
