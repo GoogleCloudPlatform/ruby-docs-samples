@@ -15,5 +15,6 @@
 # [START functions_framework_version]
 source "https://rubygems.org"
 
+gem "base64", "~> 0.2"
 gem "functions_framework", "~> 1.4"
 # [END functions_framework_version]
