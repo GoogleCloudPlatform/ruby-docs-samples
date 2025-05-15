@@ -33,7 +33,7 @@ describe "functions_firebase_rtdb" do
 
       assert_includes err, "Function triggered by change to: #{source}"
       assert_includes err, "Admin?: false"
-      assert_includes err, 'Delta: {"foo"=>"bar"}'
+      assert_match(/Delta: \{"foo"\s?=>\s?"bar"\}/, err)
     end
   end
 end
