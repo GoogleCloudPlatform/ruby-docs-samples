@@ -58,7 +58,7 @@ end
 def run_cleanup
   exec ["gimmeproj", "-project", "cloud-samples-ruby-test-kokoro", "done", @project] unless @project.empty?
   @kill_on_cleanup.each do |process|
-    process.kill "SIGKILL"
+    process.kill "SIGKILL" rescue nil
   end
 end
 
