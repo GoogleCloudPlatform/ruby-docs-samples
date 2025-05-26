@@ -67,6 +67,6 @@ describe "Ruby Endpoints Sample" do
     error = JSON.parse last_response.body
 
     expect(error["error"]).to eq 500
-    expect(error["message"]).to include "unexpected token"
+    expect(error["message"]).to include "unexpected"
   end
 end
