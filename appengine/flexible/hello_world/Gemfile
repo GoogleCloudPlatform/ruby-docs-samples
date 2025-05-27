@@ -19,9 +19,12 @@ gem "sinatra"
 gem "webrick", "~> 1.8"
 
 # [END gae_flex_quickstart_dependencies]
-ruby "~>3.2"
+ruby "~>3.4"
 group :test do
   gem "rack-test"
   gem "rspec"
   gem "rspec_junit_formatter"
 end
+
+gem "puma", "~> 6.6"
+gem "rackup", "~> 2.2"

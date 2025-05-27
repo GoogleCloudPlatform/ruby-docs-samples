@@ -1,6 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    base64 (0.2.0)
     cloud_events (0.7.1)
     functions_framework (1.4.1)
       cloud_events (>= 0.7.0, < 2.a)
@@ -15,6 +16,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  base64 (~> 0.2)
   functions_framework (~> 1.4)
 
 BUNDLED WITH

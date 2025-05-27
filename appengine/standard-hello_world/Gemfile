@@ -24,3 +24,6 @@ group :test do
   gem "rspec"
   gem "rspec_junit_formatter"
 end
+
+gem "puma", "~> 6.6"
+gem "rackup", "~> 2.2"

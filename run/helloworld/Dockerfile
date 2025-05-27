@@ -17,7 +17,7 @@
 
 # Use the official Ruby image.
 # https://hub.docker.com/_/ruby
-FROM ruby:3.2-buster
+FROM ruby:3.4
 
 # Install production dependencies.
 WORKDIR /usr/src/app
