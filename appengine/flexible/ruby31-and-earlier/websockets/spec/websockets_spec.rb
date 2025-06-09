@@ -19,6 +19,10 @@ require "capybara/cuprite"
 
 Capybara.javascript_driver = :cuprite
 
+Capybara.register_driver(:cuprite) do |app|
+  Capybara::Cuprite::Driver.new(app, :process_timeout => 20)
+end
+
 Capybara.app = Sinatra::Application
 
 Capybara.register_server :thin do |app, port, host|

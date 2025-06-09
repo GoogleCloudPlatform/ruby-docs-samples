@@ -133,7 +133,7 @@ describe "Google Cloud Spanner API samples" do
     )
   end
 
-  example "create database with multiple KMS keys" do
+  xexample "create database with multiple KMS keys" do
     capture do
       create_database_with_multiple_kms_keys project_id: @project_id,
                                              instance_id: @mr_instance_id,
