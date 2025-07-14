@@ -4,6 +4,7 @@ source "https://rubygems.org"
 gem "faye-websocket"
 gem "sinatra"
 
+gem "rackup"
 gem "thin"
 # [END gae_flex_websocket_dependencies]
 
