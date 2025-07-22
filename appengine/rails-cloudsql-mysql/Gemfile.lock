@@ -329,7 +329,7 @@ GEM
     stackdriver-core (1.5.0)
       google-cloud-core (~> 1.2)
     stringio (3.1.0)
-    thor (1.2.2)
+    thor (1.4.0)
     tilt (2.3.0)
     timeout (0.4.3)
     tzinfo (2.0.6)
