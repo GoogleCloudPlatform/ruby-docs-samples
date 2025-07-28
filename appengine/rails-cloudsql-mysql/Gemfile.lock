@@ -208,7 +208,7 @@ GEM
     multi_json (1.15.0)
     mutex_m (0.2.0)
     mysql2 (0.5.5)
-    net-imap (0.3.8)
+    net-imap (0.3.9)
       date
       net-protocol
     net-pop (0.1.2)
