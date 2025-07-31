@@ -19,10 +19,10 @@ require "base64"
 require "google/cloud/pubsub"
 require "googleauth"
 
-pubsub = Google::Cloud::Pubsub.new
+pubsub = Google::Cloud::PubSub.new
 
 # [START gae_flex_pubsub_env]
-topic = pubsub.topic ENV["PUBSUB_TOPIC"]
+publisher = pubsub.publisher ENV["PUBSUB_TOPIC"]
 PUBSUB_VERIFICATION_TOKEN = ENV["PUBSUB_VERIFICATION_TOKEN"]
 # [END gae_flex_pubsub_env]
 
@@ -42,7 +42,7 @@ get "/" do
 end
 
 post "/publish" do
-  topic.publish params[:payload]
+  publisher.publish params[:payload]
 
   redirect "/", 303
 end

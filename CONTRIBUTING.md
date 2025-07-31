@@ -254,9 +254,9 @@ require "google/cloud/pubsub"
 
 ```ruby
 def send_notification message
-  topic = @pubsub.topic "notifications"
+  publisher = @pubsub.publisher "notifications"
 
-  topic.publish message
+  publisher.publish message
 end
 ```
 
@@ -264,8 +264,8 @@ end
 
 ```ruby
 def get_latest_notifications
-  subscription  = @pubsub.subscription "mobile-notifications"
-  messages      = subscription.pull
+  subscriber  = @pubsub.subscriber "mobile-notifications"
+  messages      = subscriber.pull
   notifications = messages.map { |msg| Notifiction.new msg.data }
 
   notifications
