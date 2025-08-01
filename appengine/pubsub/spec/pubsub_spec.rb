@@ -29,10 +29,16 @@ describe "PubSub", type: :feature do
     ENV["PUBSUB_TOPIC"] = "flexible-topic" unless ENV["PUBSUB_TOPIC"]
     ENV["PUBSUB_VERIFICATION_TOKEN"] = "abc123" unless ENV["PUBSUB_VERIFICATION_TOKEN"]
     @topic_name = ENV["PUBSUB_TOPIC"]
-    @pubsub = Google::Cloud::Pubsub.new
+    @pubsub = Google::Cloud::PubSub.new
+    @topic_admin = @pubsub.topic_admin
 
-    topic = @pubsub.topic @topic_name
-    @pubsub.create_topic @topic_name if topic.nil?
+    begin
+      @topic = @topic_admin.get_topic topic: @pubsub.topic_path(@topic_name)
+    rescue Google::Cloud::NotFoundError
+      @topic = nil
+    end
+
+    @topic_admin.create_topic name: @pubsub.topic_path(@topic_name) if @topic.nil?
     require_relative "../app.rb"
   end
 
@@ -90,8 +96,7 @@ describe "PubSub", type: :feature do
   end
 
   after :all do
-    topic = @pubsub.topic @topic_name
-    topic&.delete
+    @topic_admin.delete_topic topic: @topic.name if @topic
     Google::Auth::IDTokens.forget_sources!
   end
 end
