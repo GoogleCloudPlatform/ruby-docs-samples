@@ -19,7 +19,7 @@ assign_issues_by:
 - labels:
   - 'api: spanner'
   to:
-  - dazuma
+  - GoogleCloudPlatform/yoshi-ruby
 
 assign_prs_by:
 - labels:
@@ -38,4 +38,4 @@ assign_prs_by:
   - GoogleCloudPlatform/infra-db-sdk
 
 assign_issues:
-  - 'dazuma'
+  - GoogleCloudPlatform/cloud-samples-infra
