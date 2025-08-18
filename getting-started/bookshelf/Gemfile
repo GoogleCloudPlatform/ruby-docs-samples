@@ -23,7 +23,7 @@ gem "google-cloud-storage", "~> 1.10"
 gem "rails", "~> 7.0"
 
 gem "jquery-rails"
-gem 'sprockets-rails', :require => 'sprockets/railtie'
+gem "sprockets-rails", require: "sprockets/railtie"
 
 
 group :development, :test do
