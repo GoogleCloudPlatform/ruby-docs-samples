@@ -12,12 +12,5 @@
 # limitations under the License.
 
 Rails.application.routes.draw do
-  # Route root of application to BooksController#index action
-  root "books#index"
-
-  # Restful routes for BooksController
-  resources :books
-
-  get "/logs", to: "stackdriver#logs"
-  get "/errors", to: "stackdriver#errors"
+  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
