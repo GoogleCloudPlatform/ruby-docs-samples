@@ -49,10 +49,6 @@ def report_results
     puts failure, :red, :bold
   end
   puts "Search these logs for the red test names listed above to see details."
-  unless presubmit?
-    chmod "+x", "#{gfile_dir}/linux_amd64/flakybot"
-    exec ["#{gfile_dir}/linux_amd64/flakybot"]
-  end
 end
 
 def run_cleanup
