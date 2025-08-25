@@ -1,3 +1,4 @@
+#!/usr/bin/env ruby
 # Copyright 2019 Google LLC.
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -11,12 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Be sure to restart your server when you modify this file.
-
-# This file contains settings for ActionController::ParamsWrapper which
-# is enabled by default.
-
-# Enable parameter wrapping for JSON. You can disable this by setting :format to an empty array.
-ActiveSupport.on_load :action_controller do
-  wrap_parameters format: [:json]
+APP_ROOT = File.expand_path "..", __dir__
+Dir.chdir APP_ROOT do
+  begin
+    exec "yarnpkg", *ARGV
+  rescue Errno::ENOENT
+    warn "Yarn executable was not detected in the system."
+    warn "Download Yarn at https://yarnpkg.com/en/docs/install"
+    exit 1
+  end
 end

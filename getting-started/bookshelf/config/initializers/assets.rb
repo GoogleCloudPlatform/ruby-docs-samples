@@ -13,10 +13,15 @@
 
 # Be sure to restart your server when you modify this file.
 
-# This file contains settings for ActionController::ParamsWrapper which
-# is enabled by default.
+# Version of your assets, change this if you want to expire all your assets.
+Rails.application.config.assets.version = "1.0"
 
-# Enable parameter wrapping for JSON. You can disable this by setting :format to an empty array.
-ActiveSupport.on_load :action_controller do
-  wrap_parameters format: [:json]
-end
+# Add additional assets to the asset load path.
+# Rails.application.config.assets.paths << Emoji.images_path
+# Add Yarn node_modules folder to the asset load path.
+Rails.application.config.assets.paths << Rails.root.join("node_modules")
+
+# Precompile additional assets.
+# application.js, application.css, and all non-JS/CSS in the app/assets
+# folder are already added.
+# Rails.application.config.assets.precompile += %w( admin.js admin.css )
