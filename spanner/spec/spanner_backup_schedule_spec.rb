@@ -1,4 +1,4 @@
-# Copyright 2024 Google LLC
+# Copyright 2025 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -20,6 +20,13 @@ require_relative "../spanner_list_backup_schedules_config"
 require_relative "../spanner_update_backup_schedule_config"
 
 describe "Spanner schedule for backups:" do
+  before :all do
+    create_test_database @database_id
+  end
+
+  after :all do
+    cleanup_database_resources
+  end
   example "Create backup schedule" do
     capture do
       spanner_create_backup_schedule project_id: @project_id, instance_id: @instance_id, database_id: @database_id, backup_schedule_id: @backup_schedule_id
