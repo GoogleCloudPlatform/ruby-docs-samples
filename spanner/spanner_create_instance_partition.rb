@@ -13,11 +13,13 @@
 # limitations under the License.
 
 # [START spanner_create_instance_partition]
+#
+# Creates an instance partition.
+#
+# @param project_id [String] The ID of the Google Cloud project.
+# @param instance_id [String] The ID of the Spanner instance.
+# @param instance_partition_id [String] The ID of the Spanner instance partition.
 def spanner_create_instance_partition project_id:, instance_id:, instance_partition_id:
-  # project_id  = "Your Google Cloud project ID"
-  # instance_id = "Your Spanner instance ID"
-  # instance_partition_id = "Your Spanner instance partition ID"
-
   require "google/cloud/spanner/admin/instance"
 
   instance_admin_client = Google::Cloud::Spanner::Admin::Instance.instance_admin
