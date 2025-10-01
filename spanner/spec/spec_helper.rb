@@ -16,7 +16,6 @@ require "rspec"
 require "google/cloud/spanner"
 require "google/cloud/spanner/admin/instance"
 require "google/cloud/spanner/admin/database"
-require "retriable"
 require_relative "../spanner_samples"
 
 RSpec.configure do |config|
