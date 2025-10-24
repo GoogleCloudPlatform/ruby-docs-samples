@@ -51,10 +51,12 @@ class BooksController < ApplicationController
   def create
     @book = Book.new book_params
 
+    debugger
     if @book.create
       flash[:success] = "Added Book"
       redirect_to book_path(@book)
     else
+
       render :new
     end
   end
