@@ -370,7 +370,7 @@ DEPENDENCIES
   rspec-rails
   rspec_junit_formatter
   sass-rails (~> 6.0)
-  sqlite3 (~> 1.6)
+  sqlite3 (~> 1.6.6)
   tzinfo-data
   web-console (>= 4.2.0)
 
