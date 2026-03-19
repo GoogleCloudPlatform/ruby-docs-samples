@@ -148,14 +148,18 @@ end
 # Filter out products whose tests will not run on the current Ruby version
 #
 def filter_by_ruby_versions
+  rails_cloudsql = [
+    "appengine/rails-cloudsql-postgres",
+    "appengine/rails-cloudsql-mysql"
+  ]
+
   unless newest_ruby?
     # Spanner tests are too slow. Run only on newest.
     @products.delete "spanner"
     # run/rails uses Rails 7 and requires newest Ruby.
     @products.delete "run/rails"
     # Rails 7 cloud-sql samples require Ruby 3.2+, so run only on newest.
-    @products.delete "appengine/rails-cloudsql-postgres"
-    @products.delete "appengine/rails-cloudsql-mysql"
+    @products.delete_if { |dir| rails_cloudsql.include? dir }
   end
   if newest_ruby?
     # getting-started uses an old Rails and is incompatible with newest.
@@ -163,9 +167,7 @@ def filter_by_ruby_versions
     # appengine tests are slow and some use an old Rails. Run only on oldest,
     # except for rails-cloudsql which require newest Ruby because they use Rails 7.
     @products.delete_if do |dir|
-      dir.start_with?("appengine/") &&
-        dir != "appengine/rails-cloudsql-postgres" &&
-        dir != "appengine/rails-cloudsql-mysql"
+      dir.start_with?("appengine/") && !rails_cloudsql.include?(dir)
     end
   end
 end
@@ -265,7 +267,7 @@ def install_gcloud_cli
   return if defined? @gcloud_cli_installed
   exec ["gcloud", "config", "set", "disable_prompts", "True"]
   exec ["gcloud", "config", "set", "project", assert_env("E2E_GOOGLE_CLOUD_PROJECT")]
-  exec ["gcloud", "config", "set", "app/promote_by_default",  "false"]
+  exec ["gcloud", "config", "set", "app/promote_by_default", "false"]
   exec ["gcloud", "auth", "activate-service-account", "--key-file", gac_path]
   exec ["gcloud", "info"]
   @gcloud_cli_installed = true
@@ -291,7 +293,7 @@ end
 # Run tests in the given directory.
 #
 def test_product dir
-  is_e2e = !presubmit? && newest_ruby? || dir.start_with?("run/") || dir.start_with?("appengine/")
+  is_e2e = (!presubmit? && newest_ruby?) || dir.start_with?("run/") || dir.start_with?("appengine/")
   ENV["E2E"] = is_e2e.to_s
   ENV["TEST_DIR"] = dir
   start_time = Time.now.to_i
@@ -327,7 +329,7 @@ end
 #
 def test_minitest dir
   test_exec "MINITEST:#{dir}" do
-    test_files = Dir.glob("test/**/*_test.rb")
+    test_files = Dir.glob "test/**/*_test.rb"
     args = ["-Itest", "-w"]
     args += ["-", "--junit", "--junit-filename=sponge_log.xml"] unless presubmit?
     exec_ruby args, in: :controller do |controller|
@@ -347,7 +349,7 @@ def test_exec name, command = nil
   puts "**** RUNNING: #{name} ...", :cyan, :bold
   result =
     if command
-      exec(command)
+      exec command
     elsif block_given?
       yield
     end
@@ -379,7 +381,8 @@ end
 
 def presubmit?
   unless defined? @is_presubmit
-    @is_presubmit = (/system-tests/ =~ assert_env("KOKORO_BUILD_ARTIFACTS_SUBDIR")).nil?
+    dir = assert_env "KOKORO_BUILD_ARTIFACTS_SUBDIR"
+    @is_presubmit = (/system-tests/ =~ dir).nil?
   end
   @is_presubmit
 end
