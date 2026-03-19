@@ -153,12 +153,20 @@ def filter_by_ruby_versions
     @products.delete "spanner"
     # run/rails uses Rails 7 and requires newest Ruby.
     @products.delete "run/rails"
+    # Rails 7 cloud-sql samples require Ruby 3.2+, so run only on newest.
+    @products.delete "appengine/rails-cloudsql-postgres"
+    @products.delete "appengine/rails-cloudsql-mysql"
   end
   if newest_ruby?
     # getting-started uses an old Rails and is incompatible with newest.
     @products.delete_if { |dir| dir.start_with? "getting-started/" }
-    # appengine tests are slow and some use an old Rails. Run only on oldest.
-    @products.delete_if { |dir| dir.start_with? "appengine/" }
+    # appengine tests are slow and some use an old Rails. Run only on oldest,
+    # except for rails-cloudsql which require newest Ruby because they use Rails 7.
+    @products.delete_if do |dir|
+      dir.start_with?("appengine/") &&
+        dir != "appengine/rails-cloudsql-postgres" &&
+        dir != "appengine/rails-cloudsql-mysql"
+    end
   end
 end
 
