@@ -1,0 +1,58 @@
+# Copyright 2026 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# [START spanner_batch_write_at_least_once]
+require "google/cloud/spanner"
+
+##
+# This is a snippet for showcasing how to apply a batch of mutations groups.
+# All mutations in a group are applied atomically.
+#
+# @param project_id  [String] The ID of the Google Cloud project.
+# @param instance_id [String] The ID of the spanner instance.
+# @param database_id [String] The ID of the database.
+#
+def spanner_batch_write project_id:, instance_id:, database_id:
+  spanner = Google::Cloud::Spanner.new project: project_id
+  client  = spanner.client instance_id, database_id
+
+  results = client.batch_write do |b|
+    # First mutation group
+    b.mutation_group do |mg|
+      mg.upsert "Singers", [{ SingerId: 16, FirstName: "Scarlet", LastName: "Terry" }]
+    end
+
+    # Second mutation group
+    b.mutation_group do |mg|
+      mg.upsert "Singers", [
+        { SingerId: 17, FirstName: "Marc" },
+        { SingerId: 18, FirstName: "Catalina", LastName: "Smith" }
+      ]
+      mg.upsert "Albums", [
+        { SingerId: 17, AlbumId: 1, AlbumTitle: "Total Junk" },
+        { SingerId: 18, AlbumId: 2, AlbumTitle: "Go, Go, Go" }
+      ]
+    end
+  end
+
+  results.each do |response|
+    if response.ok?
+      puts "Mutation group indexes applied: #{response.indexes}"
+    else
+      puts "Mutation group failed to apply: #{response.indexes}"
+      puts "Error: #{response.status.message}"
+    end
+  end
+end
+# [END spanner_batch_write_at_least_once]
