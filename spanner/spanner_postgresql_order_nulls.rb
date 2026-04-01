@@ -43,35 +43,31 @@ def spanner_postgresql_order_nulls project_id:, instance_id:, database_id:
   # 3. NULL values can be ordered first or last by specifying NULLS FIRST or NULLS LAST in the
   #    ORDER BY clause.
 
-  ordered_names = []
   # This returns the singers in order Alice, Bruce, nil
   results = client.execute "SELECT FirstName FROM Singers ORDER BY FirstName"
-  results.rows.each do |row|
-    ordered_names << row[:firstname]
+  ordered_names = results.rows.map do |row|
+    row[:firstname]
   end
   puts "Result 1: #{ordered_names}"
 
-  ordered_names = []
   # This returns the singers in order nil, Bruce, Alice
   results = client.execute "SELECT FirstName FROM Singers ORDER BY FirstName DESC"
-  results.rows.each do |row|
-    ordered_names << row[:firstname]
+  ordered_names = results.rows.map do |row|
+    row[:firstname]
   end
   puts "Result 2: #{ordered_names}"
 
-  ordered_names = []
   # This returns the singers in order nil, Alice, Bruce
   results = client.execute "SELECT FirstName FROM Singers ORDER BY FirstName NULLS FIRST"
-  results.rows.each do |row|
-    ordered_names << row[:firstname]
+  ordered_names = results.rows.map do |row|
+    row[:firstname]
   end
   puts "Result 3: #{ordered_names}"
 
-  ordered_names = []
   # This returns the singers in order Alice, ̉Bruce, nil
   results = client.execute "SELECT FirstName FROM Singers ORDER BY FirstName NULLS LAST"
-  results.rows.each do |row|
-    ordered_names << row[:firstname]
+  ordered_names = results.rows.map do |row|
+    row[:firstname]
   end
   puts "Result 4: #{ordered_names}"
 end
