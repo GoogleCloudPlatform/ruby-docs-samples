@@ -17,6 +17,8 @@ source "https://rubygems.org"
 gem "functions_framework", "~> 1.4", ">= 1.4.1"
 
 group "test" do
+  gem "benchmark", "~> 0.4"
+  gem "cgi", "~> 0.5"
   gem "google-apis-kgsearch_v1", "~> 0.13"
   gem "google-cloud-bigquery", "~> 1.45"
   gem "google-cloud-firestore", "~> 2.13"

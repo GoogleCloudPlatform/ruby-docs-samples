@@ -34,8 +34,8 @@ def spanner_postgresql_identifier_case_sensitivity project_id:, instance_id:, da
   create_concerts_query = <<~QUERY
     CREATE TABLE Concerts (
       ConcertId bigint NOT NULL PRIMARY KEY,
-      \"Location\" varchar(1024) NOT NULL,
-      \"Time\"  timestamptz NOT NULL
+      "Location" varchar(1024) NOT NULL,
+      "Time"  timestamptz NOT NULL
     )
   QUERY
 

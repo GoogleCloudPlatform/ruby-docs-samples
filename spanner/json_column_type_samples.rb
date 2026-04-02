@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require_relative "./utils"
+require_relative "utils"
 
 def add_json_column project_id:, instance_id:, database_id:
   # [START spanner_add_json_column]

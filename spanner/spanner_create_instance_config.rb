@@ -27,9 +27,8 @@ def spanner_create_instance_config project_id:, user_config_name:, base_config_i
   # The replicas for the custom instance configuration must include all the replicas of the base
   # configuration, in addition to at least one from the list of optional replicas of the base
   # configuration.
-  custom_replicas = []
-  base_instance_config.replicas.each do |replica|
-    custom_replicas << replica
+  custom_replicas = base_instance_config.replicas.map do |replica|
+    replica
   end
   custom_replicas << base_instance_config.optional_replicas[0]
   custom_instance_config_id = instance_admin_client.instance_config_path \

@@ -3,6 +3,7 @@ source "https://rubygems.org"
 gem "sinatra", "~>3.1"
 
 group :test do
+  gem "ostruct"
   gem "rack-test"
   gem "rest-client"
   gem "rspec"
