@@ -1,8 +1,8 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    addressable (2.8.6)
-      public_suffix (>= 2.0.2, < 6.0)
+    addressable (2.9.0)
+      public_suffix (>= 2.0.2, < 8.0)
     base64 (0.2.0)
     diff-lcs (1.5.1)
     domain_name (0.6.20240107)
@@ -25,7 +25,7 @@ GEM
     net-http (0.4.1)
       uri
     netrc (0.11.0)
-    public_suffix (5.0.4)
+    public_suffix (7.0.5)
     rack (3.1.18)
     rack-protection (4.0.0)
       base64 (>= 0.1.0)
