@@ -27,7 +27,7 @@ RSpec.describe "Rollback Schema" do
     @pubsub = Google::Cloud::PubSub.new project_id: @project_id
     @schema_client = @pubsub.schema_service_client
     @schema_id = "test-schema-#{SecureRandom.hex(4)}"
-    @schema_path = "projects/#{@project_id}/schemas/#{@schema_id}"
+    @schema_path = @schema_client.schema_path project: @project_id, schema: @schema_id
 
     # Create schema (Revision 1)
     @definition_1 = "syntax = 'proto3'; message Message { string data = 1; }"
