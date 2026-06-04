@@ -24,8 +24,7 @@ RSpec.describe "Rollback Schema" do
       skip "GOOGLE_CLOUD_PROJECT not defined"
     end
 
-    @pubsub = Google::Cloud::PubSub.new project_id: @project_id
-    @schema_client = @pubsub.schema_service_client
+    @schema_client = Google::Cloud::PubSub::V1::SchemaService::Client.new
     @schema_id = "test-schema-#{SecureRandom.hex(4)}"
     @schema_path = @schema_client.schema_path project: @project_id, schema: @schema_id
 

@@ -20,8 +20,7 @@ def rollback_schema project_id:, schema_id:, revision_id:
   # schema_id = "your-schema-id"
   # revision_id = "your-revision-id"
 
-  pubsub = Google::Cloud::PubSub.new project_id: project_id
-  schema_client = pubsub.schema_service_client
+  schema_client = Google::Cloud::PubSub::V1::SchemaService::Client.new
 
   schema_path = schema_client.schema_path project: project_id, schema: schema_id
 
