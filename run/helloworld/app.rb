@@ -20,6 +20,10 @@ set :bind, "0.0.0.0"
 port = ENV["PORT"] || "8080"
 set :port, port
 
+# Sinatra 4.1+ enables HostAuthorization by default.
+# Explicitly permit localhost and Cloud Run domains.
+set :host_authorization, { permitted_hosts: [".run.app", "localhost"] }
+
 get "/" do
   name = ENV["NAME"] || "World"
   "Hello #{name}!"
