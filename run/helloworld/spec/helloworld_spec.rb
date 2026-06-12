@@ -25,13 +25,13 @@ describe "Hello World" do
 
   it "Service uses default NAME" do
     ENV["NAME"] = nil
-    get "/"
+    get "/", {}, { "HTTP_HOST" => "localhost"}
     expect(last_response.body).to eq("Hello World!")
   end
 
   it "Service uses override NAME" do
     ENV["NAME"] = "Cloud"
-    get "/"
+    get "/", {}, { "HTTP_HOST" => "localhost"}
     expect(last_response.body).to eq("Hello Cloud!")
   end
 
