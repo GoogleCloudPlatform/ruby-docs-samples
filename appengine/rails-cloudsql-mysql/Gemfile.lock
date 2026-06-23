@@ -109,11 +109,12 @@ GEM
     diff-lcs (1.5.0)
     drb (2.2.3)
     erubi (1.12.0)
-    faraday (2.7.11)
-      base64
-      faraday-net_http (>= 2.0, < 3.1)
-      ruby2_keywords (>= 0.0.4)
-    faraday-net_http (3.0.2)
+    faraday (2.14.3)
+      faraday-net_http (>= 2.0, < 3.5)
+      json
+      logger
+    faraday-net_http (3.4.4)
+      net-http (~> 0.5)
     faraday-retry (2.2.0)
       faraday (~> 2.0)
     ferrum (0.13)
@@ -192,6 +193,7 @@ GEM
     jbuilder (2.11.5)
       actionview (>= 5.0.0)
       activesupport (>= 5.0.0)
+    json (2.20.0)
     jwt (2.7.1)
     listen (3.8.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
@@ -213,6 +215,8 @@ GEM
     multi_json (1.15.0)
     mutex_m (0.3.0)
     mysql2 (0.5.5)
+    net-http (0.9.1)
+      uri (>= 0.11.1)
     net-imap (0.3.9)
       date
       net-protocol
@@ -302,7 +306,6 @@ GEM
     rspec-support (3.12.1)
     rspec_junit_formatter (0.6.0)
       rspec-core (>= 2, < 4, != 2.12.0)
-    ruby2_keywords (0.0.5)
     sass-rails (6.0.0)
       sassc-rails (~> 2.1, >= 2.1.1)
     sassc (2.4.0)
@@ -340,6 +343,7 @@ GEM
     timeout (0.4.3)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
+    uri (1.1.1)
     web-console (4.2.1)
       actionview (>= 6.0.0)
       activemodel (>= 6.0.0)
