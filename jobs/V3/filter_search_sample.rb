@@ -231,10 +231,10 @@ def job_discovery_compensation_search project_id:, company_name:, min_unit:, max
                                                domain:     "http://careers.google.com"
   # Search jobs that pay between min_unit and max_unit (USD/hour)
   compensation_range = jobs::CompensationRange.new max_compensation: (
-                                                     jobs::Money.new currency_code: "USD",
-                                                                     units:         max_unit,
-                                                                     nanos:         500_000_000
-                                                   ),
+    jobs::Money.new currency_code: "USD",
+                    units:         max_unit,
+                    nanos:         500_000_000
+  ),
                                                    min_compensation: (
                                                      jobs::Money.new currency_code: "USD",
                                                                      units:         min_unit,
