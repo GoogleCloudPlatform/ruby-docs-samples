@@ -1,8 +1,8 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    addressable (2.8.5)
-      public_suffix (>= 2.0.2, < 6.0)
+    addressable (2.9.0)
+      public_suffix (>= 2.0.2, < 8.0)
     base64 (0.1.1)
     cloud_events (0.7.1)
     concurrent-ruby (1.2.2)
@@ -51,7 +51,7 @@ GEM
     multi_json (1.15.0)
     nio4r (2.7.0)
     os (1.1.4)
-    public_suffix (5.0.3)
+    public_suffix (7.0.5)
     puma (6.4.2)
       nio4r (~> 2.0)
     rack (3.0.9.1)
