@@ -125,6 +125,7 @@ GEM
     multipart-post (2.3.0)
     nio4r (2.7.0)
     os (1.1.4)
+    ostruct (0.6.3)
     public_suffix (5.0.3)
     puma (6.4.2)
       nio4r (~> 2.0)
@@ -167,8 +168,9 @@ DEPENDENCIES
   minitest (~> 5.20)
   minitest-focus (~> 1.4)
   minitest-junit (~> 1.1)
+  ostruct
   rake (>= 13.0)
   slack-ruby-client (>= 2.0, < 3)
 
 BUNDLED WITH
-   2.4.10
+  4.0.10

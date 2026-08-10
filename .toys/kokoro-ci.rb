@@ -159,7 +159,7 @@ def filter_by_ruby_versions
     # run/rails uses Rails 7 and requires newest Ruby.
     @products.delete "run/rails"
     # Rails 7 cloud-sql samples require Ruby 3.2+, so run only on newest.
-    @products.delete_if { |dir| rails_cloudsql.include? dir }
+    @products -= rails_cloudsql
   end
   if newest_ruby?
     # getting-started uses an old Rails and is incompatible with newest.

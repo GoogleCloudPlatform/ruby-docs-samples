@@ -15,6 +15,7 @@
 source "https://rubygems.org"
 
 gem "functions_framework", "~> 1.4", ">= 1.4.1"
+gem "ostruct"
 
 group "test" do
   gem "google-apis-kgsearch_v1", "~> 0.13"
