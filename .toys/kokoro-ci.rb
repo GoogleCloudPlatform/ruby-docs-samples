@@ -208,7 +208,7 @@ end
 # Launch cloud sql proxy instances for cloud-sql tests
 #
 def start_cloud_sql_services
-  if @products.include? "cloud-sql/mysql"
+  if tests_product? "cloud-sql/mysql"
     puts "Starting Cloud SQL Proxy for MySQL", :bold
     connection_name = assert_env "MYSQL_INSTANCE_CONNECTION_NAME"
     process = exec ["/bin/cloud_sql_proxy",
@@ -218,7 +218,7 @@ def start_cloud_sql_services
     ENV["MYSQL_CLOUD_SQL_PROXY_PROCESS_ID"] = process.pid.to_s
     @kill_on_cleanup << process
   end
-  if @products.include? "cloud-sql/postgres"
+  if tests_product? "cloud-sql/postgres"
     puts "Starting Cloud SQL Proxy for Postgres", :bold
     connection_name = assert_env "POSTGRES_INSTANCE_CONNECTION_NAME"
     process = exec ["/bin/cloud_sql_proxy",
@@ -228,7 +228,7 @@ def start_cloud_sql_services
     ENV["POSTGRES_CLOUD_SQL_PROXY_PROCESS_ID"] = process.pid.to_s
     @kill_on_cleanup << process
   end
-  if @products.include? "cloud-sql/postgres"
+  if tests_product? "cloud-sql/sqlserver"
     puts "Starting Cloud SQL Proxy for SQL Server", :bold
     connection_name = assert_env "SQLSERVER_INSTANCE_CONNECTION_NAME"
     process = exec ["/bin/cloud_sql_proxy",
@@ -367,6 +367,13 @@ end
 
 def gac_path
   @gac_path ||= ENV["GOOGLE_APPLICATION_CREDENTIALS"]
+end
+
+# Products are the sample directories themselves, but samples can also be
+# nested underneath a product (for example cloud-sql/mysql/activerecord under
+# cloud-sql/mysql), so match on the directory prefix rather than the exact name.
+def tests_product? name
+  @products.any? { |dir| dir == name || dir.start_with?("#{name}/") }
 end
 
 def presubmit?
