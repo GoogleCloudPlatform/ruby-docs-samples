@@ -30,9 +30,8 @@ post "/" do
 
   puts "\nHEADERS:"
   headers = request.env.select { |k, _v| k.start_with? "HTTP_" }
-                       .collect { |key, val| [key.sub(/^HTTP_/, ""), val] }
-                       .collect { |key, val| "#{key}: #{val}" }
-                       .sort
+  headers = headers.collect { |key, val| [key.sub(/^HTTP_/, ""), val] }
+  headers = headers.collect { |key, val| "#{key}: #{val}" }.sort
   headers.each do |key, value|
     if key != "Authorization"
       puts "#{key}: #{value}<br>"
