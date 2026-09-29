@@ -15,12 +15,20 @@
 # This application acts as both the target function and relay function
 # for testing service-to-service authentication using Cloud Functions.
 
-require "functions_framework"
+require_relative "service_auth"
 
 FunctionsFramework.http "make_get_request_cloud-echo" do |_request|
   "Success!"
 end
 
 FunctionsFramework.http "make_get_request_cloud" do |_request|
-  "Success!"
+  target_url = ENV["TARGET_URL"]
+
+  if target_url.nil? || target_url.empty?
+    raise "TARGET_URL environment variable is missing"
+  end
+
+  writer = StringIO.new
+  make_get_request writer, target_url, target_url
+  writer.string
 end

@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START cloudrun_service_to_service_auth]
 require "net/http"
 require "uri"
 require "googleauth"
@@ -19,13 +20,17 @@ require "googleauth"
 def make_get_request writer, target_url, audience
   credentials = Google::Auth.get_application_default target_audience: audience
   token_info = credentials.fetch_access_token!
+  id_token = token_info["id_token"] if token_info
+  raise "ID token is missing from credentials. Ensure you are using a service account or credentials that support ID tokens." if id_token.nil?
 
-  uri = URI target_url
+  uri = URI(target_url)
   request = Net::HTTP::Get.new uri
 
-  request["Authorization"] = "Bearer #{token_info['id_token']}"
+  request["Authorization"] = "Bearer #{id_token}"
 
   response = Net::HTTP.start uri.hostname, uri.port, use_ssl: uri.scheme == "https" do |http|
+    http.open_timeout = 10
+    http.read_timeout = 10
     http.request request
   end
 
@@ -35,3 +40,5 @@ def make_get_request writer, target_url, audience
 rescue StandardError => e
   raise "Failed to make get request: #{e.message}"
 end
+
+# [END cloudrun_service_to_service_auth]
