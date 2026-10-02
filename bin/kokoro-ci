@@ -41,9 +41,9 @@ class KokoroCI
     @failures = []
     @project = ""
     @kill_on_cleanup = []
-    # During setup and cleanup, a failing command ends the run with that
-    # command's status. run_tests turns this off so that test failures are
-    # collected instead.
+    # During setup, a failing command ends the run with that command's
+    # status. run_tests turns this off so that test failures are collected
+    # instead, and run_cleanup turns it off so that every cleanup step runs.
     @exit_on_failure = true
   end
 
@@ -122,9 +122,10 @@ class KokoroCI
     puts "Search these logs for the red test names listed above to see details."
   end
 
-  # If setup failed, a failing `gimmeproj done` still exits immediately and
-  # skips the kills, as it did in the toys tool.
+  # Every step runs even if an earlier one fails. If setup failed, the toys
+  # tool exited at a failing `gimmeproj done` and skipped the kills.
   def run_cleanup
+    @exit_on_failure = false
     run ["gimmeproj", "-project", "cloud-samples-ruby-test-kokoro", "done", @project] unless @project.empty?
     @kill_on_cleanup.each do |pid|
       Process.kill "SIGKILL", pid if pid
