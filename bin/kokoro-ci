@@ -454,6 +454,8 @@ class KokoroCI
 
   ##
   # Run Ruby with the given arguments, and write the script to its stdin.
+  # If Ruby exits before it reads the whole script, the write fails with
+  # EPIPE, and Ruby's exit status reports the failure.
   #
   # @return [Process::Status, nil] The status, or nil if it could not start.
   #
@@ -461,8 +463,13 @@ class KokoroCI
     reader, writer = IO.pipe
     pid = start_process [RbConfig.ruby, *args], argv0: "ruby", log: "exec ruby: #{args.inspect}", in: reader
     reader.close
-    writer.write script if pid
-    writer.close
+    begin
+      writer.write script if pid
+    rescue Errno::EPIPE
+      nil
+    ensure
+      writer.close
+    end
     check_result pid && Process.wait2(pid).last
   end
 
