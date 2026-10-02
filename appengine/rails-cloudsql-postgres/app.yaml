@@ -18,6 +18,10 @@
 entrypoint: bundle exec rackup --port $PORT
 env: flex
 runtime: ruby
+
+# Needed to enable latest rubies 3.2 and 3.3
+runtime_config:
+  operating_system: "ubuntu22"
 # [END step_1]
 
 env_variables:
