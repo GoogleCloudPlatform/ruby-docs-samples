@@ -302,10 +302,10 @@ class KokoroCI
       ENV["POSTGRES_CLOUD_SQL_PROXY_PROCESS_ID"] = pid.to_s
       @kill_on_cleanup << pid
     end
-    # The toys tool checked for cloud-sql/postgres here, not cloud-sql/sqlserver.
-    # Kept as is: these cloud-sql directories are never products today, because
-    # their tests live one level deeper (e.g. cloud-sql/mysql/activerecord).
-    if @products.include? "cloud-sql/postgres"
+    # The toys tool checked for cloud-sql/postgres here. These cloud-sql
+    # directories are never products today, because their tests live one
+    # level deeper (e.g. cloud-sql/mysql/activerecord).
+    if @products.include? "cloud-sql/sqlserver"
       say "Starting Cloud SQL Proxy for SQL Server", :bold
       connection_name = assert_env "SQLSERVER_INSTANCE_CONNECTION_NAME"
       pid = run_background ["/bin/cloud_sql_proxy",
