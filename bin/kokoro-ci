@@ -247,7 +247,7 @@ class KokoroCI
     say "Changed paths:", :bold
     changed_paths.each { |changed_path| puts changed_path }
     # bin/ holds this script, which replaced the toys tool in .toys/.
-    infra_dirs = ["spec/", ".kokoro/", ".toys/", "bin/"]
+    infra_dirs = ["spec/", ".kokoro/", "bin/"]
     if changed_paths.any? { |changed_path| infra_dirs.any? { |dir| changed_path.start_with? dir } }
       # Spanner takes a long time, so omit it when testing infrastructure changes
       @products.delete "spanner"
