@@ -1,0 +1,577 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# Copyright 2026 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+require "fileutils"
+require "optparse"
+require "rbconfig"
+
+##
+# Runs the Kokoro tests. It leases a project from the gimmeproj pool, sets up
+# credentials and services, runs the global checks and the tests in each
+# selected sample directory, reports the failures, and returns the lease.
+#
+# This replaces `toys kokoro-ci` and takes the same flags. It uses only
+# default gems, so it runs with a plain `ruby` on any Ruby in the Kokoro
+# image. `.kokoro/system_tests.sh` runs it as `ruby bin/kokoro-ci -v`.
+#
+class KokoroCI
+  ROOT = File.expand_path "..", __dir__
+  STYLES = { bold: 1, red: 31, green: 32, cyan: 36 }.freeze
+
+  ##
+  # @param argv [Array<String>] The command line arguments.
+  #
+  def initialize argv
+    @verbosity = 0
+    parse_options! argv
+    @failures = []
+    @project = ""
+    @kill_on_cleanup = []
+    # During setup, a failing command ends the run with that command's
+    # status. run_tests turns this off so that test failures are collected
+    # instead, and run_cleanup turns it off so that every cleanup step runs.
+    @exit_on_failure = true
+  end
+
+  ##
+  # Run the tests, and exit with status 1 if any of them failed. The project
+  # lease is returned and the background processes are killed on every exit
+  # path: `exit` raises SystemExit and a signal such as SIGTERM raises
+  # SignalException, and both run the `ensure` clause.
+  #
+  def main
+    $stdout.sync = true
+    Dir.chdir ROOT
+    run_setup
+    run_tests
+    report_results
+    exit 1 unless @failures.empty?
+  ensure
+    run_cleanup
+  end
+
+  private
+
+  def parse_options! argv
+    parser = OptionParser.new
+    parser.banner = "Usage: bin/kokoro-ci [-v] [-q]\n\nRun Kokoro tests."
+    parser.separator ""
+    parser.on("-v", "--verbose", "Increase verbosity") { @verbosity += 1 }
+    parser.on("-q", "--quiet", "Decrease verbosity") { @verbosity -= 1 }
+    parser.on_tail "-h", "--help", "Show this help" do
+      puts parser
+      exit
+    end
+    # OptionParser's built-in --version exits 1; toys treated it as an unknown
+    # flag (exit 2).
+    parser.base.long.delete "version"
+    parser.parse! argv
+    raise OptionParser::ParseError, "extra arguments: #{argv.join ' '}" unless argv.empty?
+  rescue OptionParser::ParseError => e
+    warn e.message
+    warn "Run with --help for usage."
+    exit 2
+  end
+
+  ####
+  # Toplevel steps
+  ####
+
+  def run_setup
+    gimme_proj
+    setup_env
+    setup_workarounds
+    list_products
+    filter_by_ruby_versions
+    filter_by_changed_paths if presubmit?
+    start_app_engine_services
+    start_cloud_sql_services
+  end
+
+  def run_tests
+    @exit_on_failure = false
+    test_globals
+    @products.each do |dir|
+      test_product dir
+    end
+  end
+
+  def report_results
+    if @failures.empty?
+      say "ALL TESTS PASSED!", :green, :bold
+      return
+    end
+    say "Failures:", :red, :bold
+    @failures.each do |failure|
+      say failure, :red, :bold
+    end
+    puts "Search these logs for the red test names listed above to see details."
+  end
+
+  # Every step runs even if an earlier one fails. If setup failed, the toys
+  # tool exited at a failing `gimmeproj done` and skipped the kills.
+  def run_cleanup
+    @exit_on_failure = false
+    run ["gimmeproj", "-project", "cloud-samples-ruby-test-kokoro", "done", @project] unless @project.empty?
+    @kill_on_cleanup.each do |pid|
+      Process.kill "SIGKILL", pid if pid
+    rescue StandardError
+      nil
+    end
+  end
+
+  ####
+  # Steps related to setup
+  ####
+
+  ##
+  # Get a project from the project pool.
+  #
+  def gimme_proj
+    # These credentials are used by gimmeproj
+    ENV["GOOGLE_APPLICATION_CREDENTIALS"] = "#{keystore_dir}/71386_kokoro-cloud-samples-ruby-test-0"
+    say "Installing Gimmeproj", :bold
+    Dir.chdir "/tmp" do
+      run ["wget", "-q", "https://storage.googleapis.com/gimme-proj/linux_amd64/gimmeproj"]
+      FileUtils.mv "gimmeproj", "/bin/gimmeproj"
+    end
+    FileUtils.chmod "+x", "/bin/gimmeproj"
+    run ["/bin/gimmeproj", "version"]
+    say "Getting a project", :bold
+    @project = capture(["/bin/gimmeproj", "-project", "cloud-samples-ruby-test-kokoro", "lease", "60m"]).strip
+    error "gimmeproj lease failed" if @project.empty?
+    say "Running tests in project #{@project}", :bold
+  end
+
+  ##
+  # Set up most environment variables (projets and credentials) for tests
+  #
+  def setup_env
+    # Primary project
+    ENV["GOOGLE_CLOUD_PROJECT"] = @project
+    ENV["GOOGLE_APPLICATION_CREDENTIALS"] = "#{keystore_dir}/71386_kokoro-#{@project}"
+
+    # Secondary project
+    ENV["GOOGLE_CLOUD_PROJECT_SECONDARY"] = "cloud-samples-ruby-test-second"
+    ENV["GOOGLE_APPLICATION_CREDENTIALS_SECONDARY"] = "#{gfile_dir}/cloud-samples-ruby-test-second-ede32e88c59c.json"
+
+    # Special project for firestore
+    ENV["FIRESTORE_PROJECT_ID"] = "ruby-firestore-ci"
+    ENV["E2E_GOOGLE_CLOUD_PROJECT"] = "cloud-samples-ruby-test-kokoro"
+
+    # Database names mirror the main project name
+    ENV["POSTGRES_DATABASE"] = ENV["MYSQL_DATABASE"] = @project.tr "-", "_"
+
+    # Storage bucket names mirror the main projecct name
+    ENV["GOOGLE_CLOUD_STORAGE_BUCKET"] = "#{@project}-cloud-samples-ruby-bucket"
+    ENV["ALTERNATE_GOOGLE_CLOUD_STORAGE_BUCKET"] = "#{@project}-cloud-samples-ruby-bucket-alt"
+
+    # Single project for spanner
+    ENV["GOOGLE_CLOUD_SPANNER_TEST_INSTANCE"] = "ruby-test-instance"
+    ENV["GOOGLE_CLOUD_SPANNER_MR_TEST_INSTANCE"] = "ruby-mr-test-instance"
+    ENV["GOOGLE_CLOUD_SPANNER_PROJECT"] = "cloud-samples-ruby-test-0"
+
+    # Used by E2E tests
+    ENV["BUILD_ID"] = @build_id = assert_env("KOKORO_BUILD_ID")[-10..]
+  end
+
+  ##
+  # A few miscellaneous workarounds for weird issues
+  #
+  def setup_workarounds
+    # Temporary workaround for a known bundler+docker issue:
+    # https://github.com/bundler/bundler/issues/6154
+    ENV["BUNDLE_GEMFILE"] = ""
+
+    # Workaround for new security feature in git 2.35.2 (see https://github.blog/2022-04-12-git-security-vulnerability-announced/)
+    run ["git", "config", "--global", "--add", "safe.directory", ROOT]
+  end
+
+  ##
+  # Find all directories with tests, and set them in the `@products` variable.
+  #
+  def list_products
+    # Paths that look like tests for us to run but aren't.
+    # Currently, we include the rails tests for the run/rails tutorial.
+    omit_list = ["run/rails/test"]
+    @products = []
+    (Dir.glob("*/Gemfile") + Dir.glob("*/*/Gemfile")).each do |gemfile|
+      dir = File.dirname gemfile
+      if (File.directory?("#{dir}/test") && !omit_list.include?("#{dir}/test")) ||
+         (File.directory?("#{dir}/spec") && !omit_list.include?("#{dir}/spec")) ||
+         (File.executable?("#{dir}/bin/run_tests") && !omit_list.include?("#{dir}/bin/run_tests"))
+        @products << dir
+      end
+    end
+    puts "Found #{@products.size} total test directories"
+  end
+
+  ##
+  # Filter out products whose tests will not run on the current Ruby version
+  #
+  def filter_by_ruby_versions
+    unless newest_ruby?
+      # Spanner tests are too slow. Run only on newest.
+      @products.delete "spanner"
+      # run/rails uses Rails 7 and requires newest Ruby.
+      @products.delete "run/rails"
+    end
+    if newest_ruby?
+      # getting-started uses an old Rails and is incompatible with newest.
+      @products.delete_if { |dir| dir.start_with? "getting-started/" }
+      # appengine tests are slow and some use an old Rails. Run only on oldest.
+      @products.delete_if { |dir| dir.start_with? "appengine/" }
+    end
+  end
+
+  ##
+  # Filter out products that have no changed files. This method should be called
+  # in the presubmit case but not the nightly case.
+  #
+  def filter_by_changed_paths
+    base_sha = capture(["git", "merge-base", "HEAD", "main"]).strip
+    changed_paths = capture(["git", "--no-pager", "diff", "--name-only", "HEAD", base_sha]).split("\n")
+    say "Changed paths:", :bold
+    changed_paths.each { |changed_path| puts changed_path }
+    # bin/ holds this script, which replaced the toys tool in .toys/.
+    infra_dirs = ["spec/", ".kokoro/", "bin/"]
+    if changed_paths.any? { |changed_path| infra_dirs.any? { |dir| changed_path.start_with? dir } }
+      # Spanner takes a long time, so omit it when testing infrastructure changes
+      @products.delete "spanner"
+      say "Test drivers may have changed; running all tests except spanner.", :bold
+      return
+    end
+    say "Filtering tests based on what has changed...", :bold
+    @products.select! do |product_dir|
+      keep = changed_paths.any? { |changed_path| changed_path.start_with? "#{product_dir}/" }
+      if keep
+        puts "Keeping #{product_dir}"
+      else
+        puts "Omitting #{product_dir}"
+      end
+      keep
+    end
+  end
+
+  ##
+  # Install and run tools needed for app engine and cloud run tests.
+  #
+  def start_app_engine_services
+    return unless @products.any? { |dir| dir.start_with?("run/") || dir.start_with?("appengine/") }
+    say "Initializing app engine and cloud run tools", :bold
+    install_gcloud_cli
+    pid = run_background ["/bin/cloud_sql_proxy", "-dir=/cloudsql", "-credential_file=#{gac_path}"]
+    ENV["CLOUD_SQL_PROXY_PROCESS_ID"] = pid.to_s
+    @kill_on_cleanup << pid
+    start_memcached
+  end
+
+  ##
+  # Launch cloud sql proxy instances for cloud-sql tests
+  #
+  def start_cloud_sql_services
+    if @products.include? "cloud-sql/mysql"
+      say "Starting Cloud SQL Proxy for MySQL", :bold
+      connection_name = assert_env "MYSQL_INSTANCE_CONNECTION_NAME"
+      pid = run_background ["/bin/cloud_sql_proxy",
+                            "-instances=#{connection_name}=tcp:3306,#{connection_name}",
+                            "-dir=/cloudsql", "-credential_file=#{gac_path}"]
+      ENV["MYSQL_CLOUD_SQL_PROXY_PROCESS_ID"] = pid.to_s
+      @kill_on_cleanup << pid
+    end
+    if @products.include? "cloud-sql/postgres"
+      say "Starting Cloud SQL Proxy for Postgres", :bold
+      connection_name = assert_env "POSTGRES_INSTANCE_CONNECTION_NAME"
+      pid = run_background ["/bin/cloud_sql_proxy",
+                            "-instances=#{connection_name}=tcp:5432,#{connection_name}",
+                            "-dir=/cloudsql", "-credential_file=#{gac_path}"]
+      ENV["POSTGRES_CLOUD_SQL_PROXY_PROCESS_ID"] = pid.to_s
+      @kill_on_cleanup << pid
+    end
+    # The toys tool checked for cloud-sql/postgres here. These cloud-sql
+    # directories are never products today, because their tests live one
+    # level deeper (e.g. cloud-sql/mysql/activerecord).
+    if @products.include? "cloud-sql/sqlserver"
+      say "Starting Cloud SQL Proxy for SQL Server", :bold
+      connection_name = assert_env "SQLSERVER_INSTANCE_CONNECTION_NAME"
+      pid = run_background ["/bin/cloud_sql_proxy",
+                            "-instances=#{connection_name}=tcp:1433",
+                            "-credential_file=#{gac_path}"]
+      ENV["SQLSERVER_CLOUD_SQL_PROXY_PROCESS_ID"] = pid.to_s
+      @kill_on_cleanup << pid
+    end
+  end
+
+  ##
+  # Start memcached.
+  # TODO: This was used previously for an appengine/memcache test, but that
+  # samples seems not to exist anymore, so this may not be needed.
+  #
+  def start_memcached
+    run ["service", "memcached", "start"]
+  end
+
+  ##
+  # Installs the gcloud tool
+  # gcloud installed from system packages https://github.com/googleapis/testing-infra-docker/pull/446
+  #
+  def install_gcloud_cli
+    run ["gcloud", "config", "set", "disable_prompts", "True"]
+    run ["gcloud", "config", "set", "project", assert_env("E2E_GOOGLE_CLOUD_PROJECT")]
+    run ["gcloud", "config", "set", "app/promote_by_default", "false"]
+    run ["gcloud", "auth", "activate-service-account", "--key-file", gac_path]
+    run ["gcloud", "info"]
+  end
+
+  ####
+  # Steps related to test running
+  ####
+
+  ##
+  # Run global bundle and global rubocop
+  #
+  def test_globals
+    start_time = Time.now.to_i
+    if test_exec "BUNDLE:global", ["bundle", "update"]
+      test_exec "RUBOCOP:global", ["bundle", "exec", "rubocop"]
+    end
+    finish_time = Time.now.to_i
+    puts "Global tests took #{finish_time - start_time} seconds"
+  end
+
+  ##
+  # Run tests in the given directory.
+  #
+  def test_product dir
+    is_e2e = (!presubmit? && newest_ruby?) || dir.start_with?("run/") || dir.start_with?("appengine/")
+    ENV["E2E"] = is_e2e.to_s
+    ENV["TEST_DIR"] = dir
+    start_time = Time.now.to_i
+    Dir.chdir dir do
+      if test_exec "BUNDLE:#{dir}", ["bundle", "update"]
+        if File.executable? "bin/run_tests"
+          test_exec "RUN_TESTS:#{dir}", ["bin/run_tests"]
+        elsif File.directory? "spec"
+          test_rspec dir
+        elsif File.directory? "test"
+          test_minitest dir
+        else
+          test_exec "UNKNOWN_TESTER:#{dir}"
+        end
+      end
+    end
+    run ["bundle", "exec", "ruby", "spec/e2e_cleanup.rb", dir, @build_id] if is_e2e
+    finish_time = Time.now.to_i
+    puts "Tests for #{dir} took #{finish_time - start_time} seconds"
+  end
+
+  ##
+  # Run a rspec-based test.
+  #
+  def test_rspec dir
+    cmd = ["bundle", "exec", "rspec", "--format", "documentation"]
+    cmd += ["--format", "RspecJunitFormatter", "--out", "sponge_log.xml"] unless presubmit?
+    test_exec "SPEC:#{dir}", cmd
+  end
+
+  ##
+  # Run a minitest-based test.
+  #
+  def test_minitest dir
+    test_exec "MINITEST:#{dir}" do
+      test_files = Dir.glob "test/**/*_test.rb"
+      args = ["-Itest", "-w"]
+      args += ["-", "--junit", "--junit-filename=sponge_log.xml"] unless presubmit?
+      script = ["require 'bundler/setup'", "require 'minitest/autorun'"]
+      script += test_files.map { |path| "load '#{path}'" }
+      run_ruby args, script.map { |line| "#{line}\n" }.join
+    end
+  end
+
+  ##
+  # Perform a test and report its result.
+  #
+  def test_exec name, command = nil
+    say "**** RUNNING: #{name} ...", :cyan, :bold
+    result =
+      if command
+        run command
+      elsif block_given?
+        yield
+      end
+    if result&.success?
+      say "**** PASSED: #{name}", :green, :bold
+      true
+    else
+      say "**** FAILURE: #{name}", :red, :bold
+      @failures << name
+      false
+    end
+  end
+
+  ####
+  # Running commands. These stand in for the toys :exec mixin. Commands are
+  # never run through a shell, and each inherits stdin, stdout and stderr
+  # unless noted.
+  ####
+
+  ##
+  # Run a command and wait for it.
+  #
+  # @return [Process::Status, nil] The status, or nil if it could not start.
+  #
+  def run cmd
+    pid = start_process cmd
+    check_result pid && Process.wait2(pid).last
+  end
+
+  ##
+  # Run a command and return what it wrote to stdout.
+  #
+  def capture cmd
+    reader, writer = IO.pipe
+    pid = start_process cmd, out: writer
+    writer.close
+    output = reader.read
+    reader.close
+    check_result pid && Process.wait2(pid).last
+    output
+  end
+
+  ##
+  # Run Ruby with the given arguments, and write the script to its stdin.
+  # If Ruby exits before it reads the whole script, the write fails with
+  # EPIPE, and Ruby's exit status reports the failure.
+  #
+  # @return [Process::Status, nil] The status, or nil if it could not start.
+  #
+  def run_ruby args, script
+    reader, writer = IO.pipe
+    pid = start_process [RbConfig.ruby, *args], argv0: "ruby", log: "exec ruby: #{args.inspect}", in: reader
+    reader.close
+    begin
+      writer.write script if pid
+    rescue Errno::EPIPE
+      nil
+    ensure
+      writer.close
+    end
+    check_result pid && Process.wait2(pid).last
+  end
+
+  ##
+  # Start a command without waiting for it. Its stdin and stderr are
+  # connected to /dev/null. A detached thread reaps it when it exits.
+  #
+  # @return [Integer, nil] The pid, or nil if it could not start.
+  #
+  def run_background cmd
+    pid = start_process cmd, in: File::NULL, err: File::NULL
+    Process.detach pid if pid
+    pid
+  end
+
+  ##
+  # Log a command and spawn it. As in toys, each argument is converted with
+  # to_s first, so a nil argument is passed (and logged) as "".
+  #
+  # @return [Integer, nil] The pid, or nil if it could not start.
+  #
+  def start_process cmd, argv0: nil, log: nil, **opts
+    cmd = cmd.map(&:to_s)
+    log_info log || "exec: #{cmd.inspect}"
+    begin
+      Process.spawn [cmd.first, argv0 || cmd.first], *cmd.drop(1), **opts
+    rescue SystemCallError
+      nil
+    end
+  end
+
+  ##
+  # While @exit_on_failure is set, exit as toys did for `e: true`: with 127 if
+  # the command could not start, 128 plus the signal number if a signal ended
+  # it, or else its exit status.
+  #
+  def check_result status
+    if @exit_on_failure
+      exit 127 if status.nil?
+      exit 128 + status.termsig if status.signaled?
+      exit status.exitstatus unless status.success?
+    end
+    status
+  end
+
+  ####
+  # Helpers
+  ####
+
+  def keystore_dir
+    @keystore_dir ||= assert_env "KOKORO_KEYSTORE_DIR"
+  end
+
+  def gfile_dir
+    @gfile_dir ||= assert_env "KOKORO_GFILE_DIR"
+  end
+
+  def gac_path
+    @gac_path ||= ENV["GOOGLE_APPLICATION_CREDENTIALS"]
+  end
+
+  def presubmit?
+    unless defined? @is_presubmit
+      @is_presubmit = (/system-tests/ =~ assert_env("KOKORO_BUILD_ARTIFACTS_SUBDIR")).nil?
+    end
+    @is_presubmit
+  end
+
+  def newest_ruby?
+    unless defined? @is_newest_ruby
+      @is_newest_ruby = assert_env("KOKORO_RUBY_VERSION") == "newest"
+    end
+    @is_newest_ruby
+  end
+
+  def assert_env name
+    val = ENV[name]
+    error "Environment variable #{name} is not set" if val.nil?
+    error "Environment variable #{name} is empty" if val.empty?
+    val
+  end
+
+  def error msg
+    say msg, :red, :bold
+    exit 1
+  end
+
+  # Print a line to stdout. Styles are always applied, as they were with
+  # `include :terminal, styled: true` in the toys tool.
+  def say text, *styles
+    line = "#{text}\n"
+    line = "\e[#{styles.map { |style| STYLES.fetch style }.join ';'}m#{line}\e[0m" unless styles.empty?
+    $stdout.write line
+  end
+
+  # With -v, log each command to stderr in the format toys used.
+  def log_info message
+    return unless @verbosity.positive?
+    header = "[#{Time.now.strftime '%Y-%m-%d %H:%M:%S'}  INFO]"
+    header = "\e[96m#{header}\e[0m" if $stderr.tty? && !ENV["NO_COLOR"]
+    warn "#{header}  #{message}"
+  end
+end
+
+KokoroCI.new(ARGV).main
