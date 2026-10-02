@@ -3,19 +3,19 @@ GEM
   specs:
     addressable (2.8.5)
       public_suffix (>= 2.0.2, < 6.0)
-    base64 (0.1.1)
     cloud_events (0.7.1)
     declarative (0.0.20)
-    faraday (2.7.11)
-      base64
-      faraday-net_http (>= 2.0, < 3.1)
-      ruby2_keywords (>= 0.0.4)
+    faraday (2.14.1)
+      faraday-net_http (>= 2.0, < 3.5)
+      json
+      logger
     faraday-mashify (0.1.1)
       faraday (~> 2.0)
       hashie
     faraday-multipart (1.0.4)
       multipart-post (~> 2)
-    faraday-net_http (3.0.2)
+    faraday-net_http (3.4.2)
+      net-http (~> 0.5)
     functions_framework (1.4.1)
       cloud_events (>= 0.7.0, < 2.a)
       puma (>= 4.3.0, < 7.a)
@@ -40,10 +40,14 @@ GEM
       signet (>= 0.16, < 2.a)
     hashie (5.0.0)
     httpclient (2.8.3)
+    json (2.18.1)
     jwt (2.7.1)
+    logger (1.7.0)
     mini_mime (1.1.5)
     multi_json (1.15.0)
     multipart-post (2.3.0)
+    net-http (0.9.1)
+      uri (>= 0.11.1)
     nio4r (2.7.0)
     os (1.1.4)
     public_suffix (5.0.3)
@@ -57,7 +61,6 @@ GEM
     retriable (3.1.2)
     rexml (3.3.6)
       strscan
-    ruby2_keywords (0.0.5)
     signet (0.18.0)
       addressable (~> 2.8)
       faraday (>= 0.17.5, < 3.a)
@@ -72,6 +75,7 @@ GEM
     strscan (3.1.0)
     trailblazer-option (0.1.2)
     uber (0.1.0)
+    uri (1.1.1)
     webrick (1.8.1)
 
 PLATFORMS
