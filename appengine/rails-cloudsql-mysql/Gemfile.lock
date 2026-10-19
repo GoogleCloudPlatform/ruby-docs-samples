@@ -227,6 +227,7 @@ GEM
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     os (1.1.4)
+    ostruct (0.6.3)
     psych (5.1.2)
       stringio
     public_suffix (5.0.3)
@@ -364,6 +365,7 @@ DEPENDENCIES
   jbuilder (~> 2.11)
   listen (~> 3.8)
   mysql2 (~> 0.5.5)
+  ostruct
   puma (~> 6.3)
   rails (~> 7.0)
   rails-controller-testing
