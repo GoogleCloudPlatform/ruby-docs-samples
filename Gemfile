@@ -15,9 +15,13 @@
 source "https://rubygems.org"
 
 group :development, :test do
-  gem "google-style", "~> 1.26.1"
+  gem "benchmark", "~> 0.4"
+  gem "google-style", "~> 1.32.0"
   gem "minitest", "~> 5.16"
   gem "minitest-focus", "~> 1.1"
   gem "minitest-junit"
+  gem "ostruct", "~> 0.6.3"
   gem "rake", "~> 13.0"
+  gem "rubocop", "~> 1.57"
+  gem "tsort", "~> 0.2.0"
 end

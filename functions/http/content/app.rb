@@ -24,7 +24,7 @@ FunctionsFramework.http "http_content" do |request|
   case content_type
   # '{"name":"John"}'
   when "application/json"
-    name = (JSON.parse(request.body.read.to_s)["name"] rescue nil)
+    name = JSON.parse(request.body.read.to_s)["name"] rescue nil
   # "John", stored in a Buffer
   when "application/octet-stream"
     name = request.body.read.to_s # Convert buffer to a string
@@ -33,7 +33,7 @@ FunctionsFramework.http "http_content" do |request|
     name = request.body.read.to_s
   # "name=John" in the body of a POST request (not the URL)
   when "application/x-www-form-urlencoded"
-    name = (request.params["name"] rescue nil)
+    name = request.params["name"] rescue nil
   end
 
   name ||= "World"

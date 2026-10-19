@@ -97,7 +97,7 @@ class KGSearch
         { "title"      => name && description ? "#{name}: #{description}" : name,
           "title_link" => details.fetch("url", nil),
           "text"       => details.fetch("articleBody", nil),
-          "image_url"  => result.fetch("image", nil)&.fetch("contentUrl", nil) }
+          "image_url"  => result.dig("image", "contentUrl") }
       else
         { "text" => "No results match your query." }
       end

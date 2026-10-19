@@ -17,7 +17,7 @@
 
 # Use the official Ruby image.
 # https://hub.docker.com/_/ruby
-FROM ruby:3.4
+FROM ruby:4.0
 
 # Install production dependencies.
 WORKDIR /usr/src/app

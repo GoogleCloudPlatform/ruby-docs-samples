@@ -223,7 +223,8 @@ GEM
     net-smtp (0.3.3)
       net-protocol
     nio4r (2.5.9)
-    nokogiri (1.18.9-arm64-darwin)
+    nokogiri (1.18.9)
+      mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     os (1.1.4)
     ostruct (0.6.3)
@@ -354,7 +355,7 @@ GEM
     zeitwerk (2.6.11)
 
 PLATFORMS
-  arm64-darwin-24
+  ruby
 
 DEPENDENCIES
   appengine (~> 0.7)
@@ -374,9 +375,6 @@ DEPENDENCIES
   sqlite3 (~> 1.6)
   tzinfo-data
   web-console (>= 4.2.0)
-
-RUBY VERSION
-   ruby 3.4.5p51
 
 BUNDLED WITH
    2.4.19

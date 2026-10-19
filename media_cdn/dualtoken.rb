@@ -34,9 +34,8 @@ end
 #
 # @return [String] the aggregated string
 def header_names headers
-  header_names = []
-  headers.each do |header|
-    header_names.append header[:name]
+  header_names = headers.map do |header|
+    header[:name]
   end
   header_names.join ","
 end
@@ -49,9 +48,8 @@ end
 #
 # @return [String] the aggregated string
 def header_pairs headers
-  header_pairs = []
-  headers.each do |header|
-    header_pairs.append "#{header[:name]}=#{header[:value]}"
+  header_pairs = headers.map do |header|
+    "#{header[:name]}=#{header[:value]}"
   end
   header_pairs.join ","
 end
@@ -100,7 +98,6 @@ def sign_token(
   headers: nil,
   ip_ranges: nil
 )
-
   decoded_key = Base64.urlsafe_decode64 base64_key
   algo = signature_algorithm.downcase
 

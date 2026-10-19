@@ -15,6 +15,7 @@
 source "https://rubygems.org"
 
 gem "google-cloud-spanner"
+gem "mutex_m"
 
 group :test do
   gem "google-apis-iam_v1"

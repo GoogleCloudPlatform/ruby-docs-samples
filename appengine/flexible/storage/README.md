@@ -17,7 +17,7 @@ project id with `gcloud config list`.
 Create a Cloud Storage bucket for your project:
 
 ```
-$ gsutil mb gs://<your-project-id>
+$ gcloud storage buckets create gs://<your-project-id>
 ```
 
 ## Run

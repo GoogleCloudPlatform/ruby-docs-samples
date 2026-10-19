@@ -802,7 +802,7 @@ def query_nested_struct_field project_id:, instance_id:, database_id:
     "IN UNNEST(@song_info.ArtistNames)",
     params: { song_info: song_info_struct }
   ).rows.each do |row|
-    puts (row[:SingerId]), (row[:SongName])
+    puts row[:SingerId], row[:SongName]
   end
   # [END spanner_field_access_on_nested_struct_parameters]
 end
