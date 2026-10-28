@@ -17,4 +17,4 @@ source $KOKORO_GFILE_DIR/secrets.sh
 cd github/ruby-docs-samples/
 
 # Run the CI script
-toys kokoro-ci -v
+ruby bin/kokoro-ci -v
