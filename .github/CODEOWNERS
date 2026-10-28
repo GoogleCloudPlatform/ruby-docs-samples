@@ -9,10 +9,9 @@
 # explicitly taken by someone else.
 *                               @GoogleCloudPlatform/yoshi-ruby @GoogleCloudPlatform/cloud-samples-infra
 
-/cloud-sql/    @GoogleCloudPlatform/infra-db-sdk @GoogleCloudPlatform/yoshi-ruby
-/iot/          @GoogleCloudPlatform/api-iot @GoogleCloudPlatform/yoshi-ruby
-/jobs/         @GoogleCloudPlatform/ml-apis @GoogleCloudPlatform/yoshi-ruby
+/cloud-sql/    @GoogleCloudPlatform/infra-db-sdk @GoogleCloudPlatform/yoshi-ruby @GoogleCloudPlatform/cloud-samples-infra
+/jobs/         @GoogleCloudPlatform/ml-apis @GoogleCloudPlatform/yoshi-ruby @GoogleCloudPlatform/cloud-samples-infra
 
 # Self-service
 
-/appengine     @GoogleCloudPlatform/yoshi-ruby @GoogleCloudPlatform/serverless-runtimes
+/appengine     @GoogleCloudPlatform/yoshi-ruby @GoogleCloudPlatform/serverless-runtimes @GoogleCloudPlatform/cloud-samples-infra
