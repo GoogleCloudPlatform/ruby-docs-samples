@@ -229,6 +229,7 @@ GEM
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     os (1.1.4)
+    ostruct (0.6.3)
     pg (1.5.3)
     pp (0.6.2)
       prettyprint
@@ -371,6 +372,7 @@ DEPENDENCIES
   cuprite
   jbuilder (~> 2.11)
   listen (~> 3.8)
+  ostruct
   pg (~> 1.5)
   puma (~> 6.4)
   rails (~> 7.0)

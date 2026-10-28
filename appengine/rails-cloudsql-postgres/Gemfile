@@ -64,3 +64,5 @@ gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem "appengine", "~> 0.7"
 gem "pg", "~> 1.5"
 # [END gems]
+
+gem "ostruct"
