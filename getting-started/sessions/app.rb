@@ -16,7 +16,7 @@ require "sinatra"
 
 require_relative "firestore_session"
 
-use Rack::Session::FirestoreSession
+use Rack::Session::FirestoreSession, httponly: true, same_site: :lax, secure: production?
 
 set :greetings, ["Hello World", "Hallo Welt", "Ciao Mondo", "Salut le Monde", "Hola Mundo"]
 
