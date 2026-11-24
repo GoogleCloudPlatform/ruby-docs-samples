@@ -60,7 +60,12 @@ def validate_assertion assertion
   a_header = Base64.decode64 assertion.split(".")[0]
   key_id = JSON.parse(a_header)["kid"]
   cert = OpenSSL::PKey::EC.new settings.certificates[key_id]
-  info = JWT.decode assertion, cert, true, algorithm: "ES256", aud: settings.audience
+  info = JWT.decode assertion, cert, true,
+                    algorithm: "ES256",
+                    aud: settings.audience,
+                    verify_aud: true,
+                    iss: "https://cloud.google.com/iap",
+                    verify_iss: true
   [info[0]["email"], info[0]["sub"]]
 rescue StandardError => e
   puts "Failed to validate assertion: #{e}"

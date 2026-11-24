@@ -8,3 +8,8 @@ git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
 gem "jwt", "~> 2.2"
 gem "sinatra", "~> 2.0"
 # [END getting_started_requirements]
+
+group :development, :test do
+  gem "minitest", "~> 5.16"
+  gem "rack-test", "~> 2.1"
+end
