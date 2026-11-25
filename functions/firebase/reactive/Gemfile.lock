@@ -66,7 +66,7 @@ GEM
     public_suffix (5.0.3)
     puma (6.4.2)
       nio4r (~> 2.0)
-    rack (3.0.9.1)
+    rack (3.1.21)
     rbtree (0.4.6)
     ruby2_keywords (0.0.5)
     signet (0.18.0)
