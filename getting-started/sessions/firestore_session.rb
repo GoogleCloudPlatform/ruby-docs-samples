@@ -17,7 +17,7 @@ require "rack/session/abstract/id"
 
 module Rack
   module Session
-    class FirestoreSession < Abstract::Persisted
+    class FirestoreSession < Abstract::PersistedSecure
       def initialize app, options = {}
         super
 
@@ -26,23 +26,33 @@ module Rack
       end
 
       def find_session _req, session_id
-        return [generate_sid, {}] if session_id.nil?
+        return [generate_sid, {}] unless valid_session_id? session_id
 
-        doc = @col.doc session_id
-        fields = doc.get.fields || {}
-        [session_id, stringify_keys(fields)]
+        snapshot = @col.doc(session_id.private_id).get
+        return [generate_sid, {}] unless snapshot.exists?
+
+        [session_id, stringify_keys(snapshot.fields || {})]
       end
 
       def write_session _req, session_id, new_session, _opts
-        doc = @col.doc session_id
-        doc.set new_session, merge: true
+        session_id = generate_sid unless valid_session_id? session_id
+        doc = @col.doc session_id.private_id
+        doc.set stringify_keys(new_session)
         session_id
       end
 
-      def delete_session _req, session_id, _opts
-        doc = @col.doc session_id
-        doc.delete
-        generate_sid
+      def delete_session _req, session_id, opts
+        if valid_session_id? session_id
+          doc = @col.doc session_id.private_id
+          doc.delete
+        end
+        generate_sid unless opts && opts[:drop]
+      end
+
+      def valid_session_id? session_id
+        session_id.is_a?(SessionId) &&
+          session_id.public_id.is_a?(String) &&
+          !session_id.public_id.empty?
       end
 
       def stringify_keys hash
@@ -51,6 +61,8 @@ module Rack
           new_hash[k.to_s] =
             if v.is_a? Hash
               stringify_keys v
+            elsif v.is_a? Array
+              v.map { |el| el.is_a?(Hash) ? stringify_keys(el) : el }
             else
               v
             end
