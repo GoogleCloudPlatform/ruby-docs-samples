@@ -11,5 +11,6 @@ gem "sinatra", "~> 2.0"
 
 group :development, :test do
   gem "minitest", "~> 5.16"
+  gem "minitest-junit", "~> 1.1"
   gem "rack-test", "~> 2.1"
 end
