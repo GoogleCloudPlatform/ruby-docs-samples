@@ -24,7 +24,9 @@ end
 gem "rails", "~> 7.0"
 
 # Use sqlite3 as the database for Active Record
-gem "sqlite3", "~> 1.6"
+# Pin to 1.6.x for compatibility with Ruby 2.7.
+# This can be relaxed when we drop support for Ruby 2.7.
+gem "sqlite3", "~> 1.6.6"
 # Use Puma as the app server
 gem "puma", "~> 6.3"
 # Use SCSS for stylesheets
