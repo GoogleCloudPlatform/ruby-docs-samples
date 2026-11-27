@@ -1,8 +1,8 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    addressable (2.8.5)
-      public_suffix (>= 2.0.2, < 6.0)
+    addressable (2.9.0)
+      public_suffix (>= 2.0.2, < 8.0)
     declarative (0.0.20)
     diff-lcs (1.5.0)
     digest-crc (0.6.5)
@@ -51,7 +51,7 @@ GEM
     mini_mime (1.1.5)
     multi_json (1.15.0)
     os (1.1.4)
-    public_suffix (5.0.3)
+    public_suffix (7.0.5)
     rake (13.0.6)
     representable (3.2.0)
       declarative (< 0.1.0)
